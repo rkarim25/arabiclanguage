@@ -11,17 +11,30 @@
 <body>
 <main>
   <h1>Arabic Through Stories <span class="arabic" style="color:var(--accent)">العربية بالقصص</span></h1>
-  <p class="sub">Learn functional MSA through graded stories: listen, read, memorize, answer, write. Your progress is saved in this browser.</p>
+  <p class="sub">Learn functional MSA through graded stories: listen, read, memorize, answer, speak, write. Everything you do is tracked so your coach can target what you need.</p>
 
   <div class="stat-row">
     <div class="stat"><div class="n" id="statStories">0</div><div class="l">stories completed</div></div>
     <div class="stat"><div class="n" id="statWords">0</div><div class="l">words in your deck</div></div>
     <div class="stat"><div class="n" id="statDue">0</div><div class="l">reviews due now</div></div>
+    <div class="stat"><div class="n" id="statTime">0</div><div class="l">minutes studied</div></div>
+  </div>
+
+  <div class="card" id="coachCard" style="display:none;border-color:var(--accent)">
+    <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
+    <p id="coachNote" style="font-size:15px"></p>
+    <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
   </div>
 
   <div class="card" id="reviewNudge" style="display:none">
     <strong>📚 You have reviews waiting.</strong> Spaced repetition works best when you clear your due cards daily.
     <div style="margin-top:10px"><a href="review.html"><button class="primary">Start review session</button></a></div>
+  </div>
+
+  <div class="card" id="weakCard" style="display:none">
+    <h2>🎯 Your current weak spots</h2>
+    <p class="sub" style="margin-bottom:10px">Computed from your flashcard misses, word taps, and failed exercises.</p>
+    <ul id="weakList" style="margin:0;padding-left:20px;font-size:15px"></ul>
   </div>
 
   <h2>Level 1 — الأَسَاس (Foundation)</h2>
@@ -35,14 +48,48 @@
       <li><strong>اِقْرَأْ Read</strong> — read with vowels on, tap any word you don't know. Then turn vowels off and read again.</li>
       <li><strong>اِحْفَظْ Memorize</strong> — grade yourself on each flashcard honestly; missed words return sooner.</li>
       <li><strong>أَجِبْ Quiz</strong> — answer the comprehension questions without looking back.</li>
+      <li><strong>تَكَلَّمْ Speak</strong> — say every sentence aloud; the microphone checks how close you were.</li>
       <li><strong>اُكْتُبْ Write</strong> — dictation and translation. Writing is what locks vocabulary in.</li>
     </ol>
     <p style="font-size:13.5px;color:var(--muted);margin-bottom:0">Come back daily and clear the <a href="review.html">Review</a> queue — that's where memorization actually happens.</p>
   </div>
 
+  <div class="card" id="syncCard">
+    <h2>☁ Cloud sync & coaching</h2>
+    <p style="font-size:14px;color:var(--muted)" id="syncIntro">
+      Connect once and the site syncs your learning data to your private GitHub repo
+      (<code>arabic-learning-data</code>). Your coach analyzes it and posts notes back here.
+    </p>
+    <div id="syncSetup">
+      <details style="font-size:14px;margin-bottom:10px">
+        <summary style="cursor:pointer;color:var(--accent);font-weight:600">How to connect (one-time, ~2 minutes)</summary>
+        <ol style="padding-left:20px;margin:10px 0">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a> (sign in as rkarim25).</li>
+          <li>Token name: <code>arabic-site-sync</code>. Expiration: 1 year.</li>
+          <li>Repository access → <strong>Only select repositories</strong> → choose <code>arabic-learning-data</code>.</li>
+          <li>Permissions → Repository permissions → <strong>Contents: Read and write</strong>.</li>
+          <li>Generate, copy the token (starts with <code>github_pat_</code>), paste it below.</li>
+        </ol>
+      </details>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <button class="primary" id="btnConnect">Connect</button>
+      </div>
+    </div>
+    <div id="syncConnected" style="display:none">
+      <p style="font-size:14px">✅ Connected. <span id="lastSync" style="color:var(--muted)"></span></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="primary" id="btnSync">Sync now</button>
+        <button id="btnRestore">Restore from cloud</button>
+        <button id="btnDisconnect" class="small">Disconnect</button>
+      </div>
+      <p id="syncMsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
+    </div>
+  </div>
+
   <div class="card">
-    <h2>Backup</h2>
-    <p style="font-size:14px;color:var(--muted)">Progress lives in this browser only. Export a backup occasionally, or move progress to another device.</p>
+    <h2>Backup (manual)</h2>
+    <p style="font-size:14px;color:var(--muted)">Progress lives in this browser (and the cloud if connected). You can also export a file backup.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button id="btnExport">Export progress</button>
       <button id="btnImport">Import progress</button>
@@ -53,9 +100,12 @@
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
 <script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
 <script>
 renderNav("stories");
+trackPage("dashboard");
 
+/* story grid */
 const grid = document.getElementById("storyGrid");
 STORY_LIST.forEach(s => {
   const done = stepsDone(s.id);
@@ -74,15 +124,96 @@ STORY_LIST.forEach(s => {
   grid.appendChild(a);
 });
 
+/* stats */
 const completed = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
 document.getElementById("statStories").textContent = completed;
 document.getElementById("statWords").textContent = totalCards();
 const due = dueCards().length;
 document.getElementById("statDue").textContent = due;
 if (due > 0) document.getElementById("reviewNudge").style.display = "block";
+const totalSec = store.get(LOG_KEY, []).filter(x => x.e === "time").reduce((a, x) => a + x.sec, 0);
+document.getElementById("statTime").textContent = Math.round(totalSec / 60);
 
+/* weak spots */
+const weak = weakSpots(6).filter(([k, v]) => v.w >= 2);
+if (weak.length) {
+  document.getElementById("weakCard").style.display = "block";
+  const ul = document.getElementById("weakList");
+  weak.forEach(([k, v]) => {
+    const li = document.createElement("li");
+    const [kind, ...rest] = k.split(":");
+    const label = { card: "Flashcard you keep missing", word: "Word you keep tapping", sent: "Sentence you couldn't write", quiz: "Quiz question missed", speak: "Sentence hard to say" }[kind];
+    li.innerHTML = v.label
+      ? `${label}: <strong class="arabic" style="font-size:19px">${v.label}</strong>`
+      : `${label} <span style="color:var(--muted)">(${rest.join(" · ")})</span>`;
+    ul.appendChild(li);
+  });
+}
+
+/* sync UI */
+const setup = document.getElementById("syncSetup");
+const connected = document.getElementById("syncConnected");
+const syncMsg = document.getElementById("syncMsg");
+function refreshSyncUI() {
+  const has = !!getToken();
+  setup.style.display = has ? "none" : "block";
+  connected.style.display = has ? "block" : "none";
+  const last = store.get(SYNC_KEY, 0);
+  document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
+}
+refreshSyncUI();
+
+document.getElementById("btnConnect").onclick = async () => {
+  const t = document.getElementById("tokenInput").value.trim();
+  if (!t) return;
+  setToken(t);
+  try {
+    await syncNow();
+    refreshSyncUI();
+    loadCoach();
+    syncMsg.textContent = "";
+  } catch (e) {
+    setToken(null);
+    alert("Could not sync with that token. Check it has Contents read/write on arabic-learning-data.");
+  }
+  refreshSyncUI();
+};
+document.getElementById("btnSync").onclick = async () => {
+  syncMsg.textContent = "Syncing…";
+  try { const n = await syncNow(); syncMsg.textContent = `✓ Synced (${n} events).`; refreshSyncUI(); }
+  catch (e) { syncMsg.textContent = "✗ Sync failed — " + (e.message === "bad-token" ? "token invalid or expired." : "check your connection."); }
+};
+document.getElementById("btnRestore").onclick = async () => {
+  if (!confirm("Replace progress in THIS browser with the cloud copy?")) return;
+  try { await restoreFromCloud(); location.reload(); }
+  catch (e) { alert("No cloud data found yet."); }
+};
+document.getElementById("btnDisconnect").onclick = () => { setToken(null); refreshSyncUI(); };
+
+/* coach notes */
+async function loadCoach() {
+  if (!getToken()) return;
+  try {
+    const c = await fetchCoach();
+    if (!c || !c.note) return;
+    document.getElementById("coachCard").style.display = "block";
+    document.getElementById("coachDate").textContent = c.updated ? "· " + c.updated : "";
+    document.getElementById("coachNote").textContent = c.note;
+    const ul = document.getElementById("coachFocus");
+    ul.innerHTML = "";
+    (c.focus || []).forEach(f => {
+      const li = document.createElement("li");
+      li.textContent = f;
+      ul.appendChild(li);
+    });
+  } catch (e) { /* offline or bad token — skip */ }
+}
+loadCoach();
+autoSync();
+
+/* manual backup */
 document.getElementById("btnExport").onclick = () => {
-  const data = { progress: getProgress(), srs: getSrs(), exported: new Date().toISOString() };
+  const data = { progress: getProgress(), srs: getSrs(), log: store.get(LOG_KEY, []), exported: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -99,6 +230,7 @@ document.getElementById("importFile").onchange = (e) => {
       const d = JSON.parse(r.result);
       if (d.progress) store.set("ats-progress", d.progress);
       if (d.srs) store.set("ats-srs", d.srs);
+      if (d.log) store.set(LOG_KEY, d.log);
       location.reload();
     } catch (err) { alert("Could not read that file."); }
   };

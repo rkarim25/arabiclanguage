@@ -13,6 +13,7 @@ const STEPS = [
   { key: "read", ar: "اِقْرَأْ", en: "Read" },
   { key: "memorize", ar: "اِحْفَظْ", en: "Memorize" },
   { key: "quiz", ar: "أَجِبْ", en: "Quiz" },
+  { key: "speak", ar: "تَكَلَّمْ", en: "Speak" },
   { key: "write", ar: "اُكْتُبْ", en: "Write" },
 ];
 

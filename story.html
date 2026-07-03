@@ -20,6 +20,7 @@
 </main>
 
 <script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
 <script>
 renderNav("stories");
 
@@ -83,7 +84,8 @@ function markDone(step) {
 }
 
 function renderStep() {
-  ({ listen: renderListen, read: renderRead, memorize: renderMemorize, quiz: renderQuiz, write: renderWrite })[currentStep]();
+  trackPage(`${storyId}:${currentStep}`);
+  ({ listen: renderListen, read: renderRead, memorize: renderMemorize, quiz: renderQuiz, speak: renderSpeak, write: renderWrite })[currentStep]();
 }
 
 /* ============ LISTEN ============ */
@@ -112,6 +114,7 @@ function renderListen() {
     const li = document.createElement("li");
     li.innerHTML = `<button class="small">▸</button><span class="txt">${s.ar}</span>`;
     li.querySelector("button").onclick = () => {
+      logEvent({ e: "replay", story: storyId, s: i });
       highlight(i);
       speak(s.ar, rate(), () => highlight(-1));
     };
@@ -123,7 +126,7 @@ function renderListen() {
   document.getElementById("playAll").onclick = () => {
     let i = 0;
     const playNext = () => {
-      if (i >= story.sentences.length) { highlight(-1); markDone("listen"); return; }
+      if (i >= story.sentences.length) { highlight(-1); logEvent({ e: "listenall", story: storyId }); markDone("listen"); return; }
       highlight(i);
       speak(story.sentences[i].ar, rate(), () => { i++; playNext(); });
     };
@@ -170,6 +173,7 @@ function renderRead() {
         ws.textContent = tgT.checked ? w : stripTashkeel(w);
         ws.onclick = (ev) => {
           ev.stopPropagation();
+          logEvent({ e: "tap", story: storyId, w: stripTashkeel(w).replace(/[.،«»!؟]/g, "") });
           hidePop();
           pop = document.createElement("div");
           pop.className = "gloss-pop";
@@ -249,13 +253,21 @@ function renderMemorize() {
       </div>
     `;
     const card = document.getElementById("card");
+    let revealedAt = 0;
     card.onclick = () => {
+      revealedAt = Date.now();
       document.getElementById("back").style.display = "block";
       document.getElementById("hint").style.display = "none";
       document.getElementById("grades").style.visibility = "visible";
     };
-    document.getElementById("hear").onclick = (e) => { e.stopPropagation(); speak(stripTashkeel(v.ar) === v.ar ? v.ar : v.ar, 0.8); };
-    const grade = (g) => { gradeCard(`${storyId}:${i}`, g); graded.add(i); pos++; show(); };
+    document.getElementById("hear").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
+    const grade = (g) => {
+      gradeCard(`${storyId}:${i}`, g);
+      logEvent({ e: "review", card: `${storyId}:${i}`, g, ms: revealedAt ? Date.now() - revealedAt : null, src: "story" });
+      graded.add(i);
+      pos++;
+      show();
+    };
     area.querySelector(".again").onclick = () => grade("again");
     area.querySelector(".good").onclick = () => grade("good");
     area.querySelector(".easy").onclick = () => grade("easy");
@@ -277,7 +289,7 @@ function renderQuiz() {
   const area = document.getElementById("quizArea");
   let answered = 0, correct = 0;
 
-  story.questions.forEach((q) => {
+  story.questions.forEach((q, qi) => {
     const div = document.createElement("div");
     div.className = "quiz-q";
     div.innerHTML = `<div class="qt">${q.q} <span class="sent-play" style="font-size:15px">🔊</span></div><div class="quiz-opts"></div>`;
@@ -290,7 +302,9 @@ function renderQuiz() {
         if (div.dataset.done) return;
         div.dataset.done = "1";
         answered++;
-        if (oi === q.answer) { b.classList.add("correct"); correct++; }
+        const ok = oi === q.answer;
+        logEvent({ e: "quiz", story: storyId, q: qi, pick: oi, ok });
+        if (ok) { b.classList.add("correct"); correct++; }
         else {
           b.classList.add("wrong");
           opts.children[q.answer].classList.add("correct");
@@ -311,6 +325,85 @@ function renderQuiz() {
       opts.appendChild(b);
     });
     area.appendChild(div);
+  });
+}
+
+/* ============ SPEAK ============ */
+function renderSpeak() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const srNote = SR
+    ? `<p class="sub">Play each sentence, then press 🎤 and <strong>say it aloud</strong>. Speech recognition checks how close you were. Don't chase 100% — synthetic scoring is rough; saying every sentence out loud is what counts.</p>`
+    : `<div class="tts-warn">⚠ Speech recognition isn't available in this browser — use Chrome or Edge for automatic checking. For now: play each sentence, repeat it aloud, and rate yourself.</div>`;
+  body.innerHTML = `
+    <div class="card">
+      <h2>Speak — shadow every sentence</h2>
+      ${srNote}
+      <ol class="listen-list" id="speakList"></ol>
+      <div class="step-done-banner" id="doneBanner">✓ Speaking step complete — أحسنت!</div>
+    </div>
+  `;
+  if (stepsDone(storyId).speak) document.getElementById("doneBanner").classList.add("show");
+  const list = document.getElementById("speakList");
+  const attempted = new Set();
+  const checkAll = () => { if (attempted.size >= story.sentences.length) markDone("speak"); };
+
+  story.sentences.forEach((s, i) => {
+    const li = document.createElement("li");
+    li.style.flexWrap = "wrap";
+    li.innerHTML = `
+      <button class="small play">▸</button>
+      <span class="txt">${s.ar}</span>
+      ${SR ? `<button class="small mic">🎤</button>` : `<button class="small self-good">✓ said it</button><button class="small self-hard">✗ struggled</button>`}
+      <div class="check-result" style="flex-basis:100%"></div>
+    `;
+    const result = li.querySelector(".check-result");
+    li.querySelector(".play").onclick = () => speak(s.ar, 0.85);
+
+    if (SR) {
+      const mic = li.querySelector(".mic");
+      mic.onclick = () => {
+        stopSpeak();
+        const rec = new SR();
+        rec.lang = "ar-SA";
+        rec.interimResults = false;
+        mic.textContent = "🔴";
+        rec.onresult = (ev) => {
+          const heard = ev.results[0][0].transcript;
+          const target = normalizeAr(s.ar).split(" ");
+          const heardW = new Set(normalizeAr(heard).split(" "));
+          const hit = target.filter(w => heardW.has(w)).length;
+          const score = Math.round(hit / target.length * 100) / 100;
+          logEvent({ e: "speak", story: storyId, s: i, heard, score });
+          attempted.add(i);
+          result.className = "check-result " + (score >= 0.6 ? "ok" : "no");
+          result.innerHTML = `${score >= 0.8 ? "✓ Excellent" : score >= 0.6 ? "✓ Good" : "Keep practicing"} — matched ${hit}/${target.length} words. Heard: <span class="model">${heard}</span>`;
+          checkAll();
+        };
+        rec.onerror = (ev) => {
+          mic.textContent = "🎤";
+          result.className = "check-result no";
+          result.textContent = ev.error === "not-allowed"
+            ? "Microphone blocked — allow mic access in the address bar and try again."
+            : "Didn't catch that — try again, a bit louder.";
+        };
+        rec.onend = () => { mic.textContent = "🎤"; };
+        rec.start();
+      };
+    } else {
+      li.querySelector(".self-good").onclick = () => {
+        logEvent({ e: "speak-self", story: storyId, s: i, rate: "good" });
+        attempted.add(i);
+        result.className = "check-result ok"; result.textContent = "✓ noted";
+        checkAll();
+      };
+      li.querySelector(".self-hard").onclick = () => {
+        logEvent({ e: "speak-self", story: storyId, s: i, rate: "hard" });
+        attempted.add(i);
+        result.className = "check-result no"; result.textContent = "noted — replay and try again";
+        checkAll();
+      };
+    }
+    list.appendChild(li);
   });
 }
 
@@ -356,12 +449,14 @@ function renderWrite() {
     ex.querySelector(".check").onclick = () => {
       attempted.add("d" + di);
       const ok = normalizeAr(input.value) === normalizeAr(sent.ar);
+      logEvent({ e: "dict", story: storyId, i: si, typed: input.value, ok });
       result.className = "check-result " + (ok ? "ok" : "no");
       result.innerHTML = ok ? "✓ Correct! أحسنت" : `✗ Not quite — listen again, or reveal the answer.`;
       checkAllDone();
     };
     ex.querySelector(".reveal").onclick = () => {
       attempted.add("d" + di);
+      logEvent({ e: "dict-reveal", story: storyId, i: si, typed: input.value });
       result.className = "check-result ok";
       result.innerHTML = `<span class="model">${sent.ar}</span>${sent.en}`;
       checkAllDone();
@@ -388,6 +483,7 @@ function renderWrite() {
     ex.querySelector(".check").onclick = () => {
       attempted.add("t" + ti);
       const ok = normalizeAr(input.value) === normalizeAr(t.ar);
+      logEvent({ e: "trans", story: storyId, i: ti, typed: input.value, ok });
       result.className = "check-result " + (ok ? "ok" : "no");
       result.innerHTML = ok
         ? "✓ Matches the model answer! أحسنت"
@@ -396,6 +492,7 @@ function renderWrite() {
     };
     ex.querySelector(".reveal").onclick = () => {
       attempted.add("t" + ti);
+      logEvent({ e: "trans-reveal", story: storyId, i: ti, typed: input.value });
       result.className = "check-result ok";
       result.innerHTML = `<span class="model">${t.ar}</span>`;
       checkAllDone();

@@ -2,7 +2,11 @@
 
 A story-based MSA (Modern Standard Arabic) learning site: **https://rkarim25.github.io/arabiclanguage/**
 
-Each story is a 5-step lesson: **Listen → Read → Memorize → Quiz → Write**, with tap-to-gloss reading, a spaced-repetition flashcard deck, dictation via browser text-to-speech, and a phonetic Latin→Arabic keyboard for writing exercises.
+Each story is a 6-step lesson: **Listen → Read → Memorize → Quiz → Speak → Write**, with tap-to-gloss reading, a spaced-repetition flashcard deck, speech-recognition shadowing, dictation via browser text-to-speech, and a phonetic Latin→Arabic keyboard for writing exercises.
+
+## Learning analytics
+
+`js/tracker.js` logs every learning event (flashcard grades with response times, quiz answers, dictation/translation attempts including typed text, word taps, sentence replays, speech-recognition scores, time on task) to `localStorage` and syncs it to the private repo `rkarim25/arabic-learning-data` using a fine-grained PAT the user pastes into the dashboard (Contents read/write on that one repo only). The coach (Claude) analyzes that data on request and writes `coach.json` back, which the dashboard displays. See `ANALYSIS.md` in the data repo for the event schema and analysis protocol.
 
 ## Curriculum
 

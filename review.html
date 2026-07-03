@@ -19,8 +19,10 @@
 </main>
 
 <script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
 <script>
 renderNav("review");
+trackPage("review");
 
 const area = document.getElementById("flashArea");
 const count = document.getElementById("flashCount");
@@ -57,6 +59,7 @@ async function init() {
       count.textContent = "";
       area.innerHTML = `<p style="font-size:18px">🎉 Review complete — ${queue.length} cards done. <span class="arabic">أَحْسَنْت!</span></p>
         <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`;
+      autoSync();
       return;
     }
     const { key, v } = queue[pos];
@@ -76,7 +79,9 @@ async function init() {
         <button class="easy">✓✓ Easy</button>
       </div>
     `;
+    let revealedAt = 0;
     document.getElementById("card").onclick = () => {
+      revealedAt = Date.now();
       document.getElementById("back").style.display = "block";
       document.getElementById("hint").style.display = "none";
       document.getElementById("grades").style.visibility = "visible";
@@ -84,6 +89,7 @@ async function init() {
     document.getElementById("hear").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
     const grade = (g) => {
       gradeCard(key, g);
+      logEvent({ e: "review", card: key, g, ms: revealedAt ? Date.now() - revealedAt : null, src: "review" });
       if (g === "again") again.push({ key, v });
       pos++;
       show();
