@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phonetic Arabic Keyboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      width: 100%;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-size: 18px;
+      padding: 10px;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+    .toggle-container { margin-bottom: 10px; }
+    .copy-btn { padding: 6px 10px; margin-top: 10px; cursor: pointer; background-color: #4caf50; color: white; border: none; border-radius: 4px; }
+    .copy-btn:hover { background-color: #45a049; }
+    .keyboard-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .keyboard-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+    }
+    .key-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #f8f8f8;
+      min-width: 50px;
+      min-height: 50px;
+    }
+    .key-button span.latin { font-size: 12px; color: #555; }
+    .key-button span.arabic { font-size: 20px; color: #000; line-height: 1; }
+    .key-button:hover { background: #e0e0e0; }
+    #suggestions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .suggestion {
+      background: #eee;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .suggestion:hover { background: #ddd; }
+    #latinOutput { display: block; transition: all 0.2s ease; }
+    @media (max-width: 600px) {
+      .key-button { font-size: 12px; padding: 6px; min-width: 42px; min-height: 42px; }
+      .key-button span.arabic { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <p><a href="index.html" style="color:#0d7a5f;text-decoration:none">&larr; Arabic Through Stories</a></p>
+  <h2>Phonetic Arabic Keyboard</h2>
+
+  <div class="toggle-container">
+    <label><input type="checkbox" id="visualToggle" checked /> Show visual Latin aid</label>
+  </div>
+
+  <label>Type here (or use keyboard below):</label>
+  <textarea id="inputBox" placeholder="Type using phonetic Latin..."></textarea>
+
+  <label id="visualLabel" style="display: block;">Latin Input (Visualized):</label>
+  <textarea id="latinOutput" readonly></textarea>
+
+  <label>Arabic Output:</label>
+  <textarea id="arabicOutput" dir="rtl" readonly></textarea>
+
+  <button class="copy-btn" onclick="copyArabic()">Copy Arabic Text</button>
+
+  <div id="suggestions"></div>
+
+  <h3>Onscreen Keyboard</h3>
+  <div class="keyboard-layout" id="keyboard"></div>
+
+  <script>
+    const latinToArabic = {
+      A: "ا", aa: "آ", b: "ب", t: "ت", T: "ط", th: "ث",
+      j: "ج", H: "ح", h: "ه", kh: "خ", d: "د", D: "ض",
+      dh: "ذ", r: "ر", z: "ز", Z: "ظ", s: "س", S: "ص",
+      sh: "ش", gh: "غ", f: "ف", q: "ق", k: "ك", l: "ل",
+      m: "م", n: "ن", w: "و", y: "ي", Y: "ى", "3": "ع",
+      "'": "ء", "t:": "ة",
+      "A'": "أ", "a'": "إ", "w'": "ؤ", "y'": "ئ",
+      "(la)": "لا", laa: "لآ", "la'": "لإ", "lA'": "لأ",
+      a: "َ", i: "ِ", u: "ُ", "^": "ْ", "*": "ّ",
+      "a~": "ً", "i~": "ٍ", "u~": "ٌ",
+      "#3": "٣",
+      ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ"
+    };
+
+    const visualMap = {
+      A: "A", aa: "ā", b: "b", t: "t", T: "ṭ", th: "th",
+      j: "j", H: "ḥ", h: "h", kh: "kh", d: "d", D: "ḍ",
+      dh: "dh", r: "r", z: "z", Z: "ẓ", s: "s", S: "ṣ",
+      sh: "sh", gh: "gh", f: "f", q: "q", k: "k", l: "l",
+      m: "m", n: "n", w: "w", y: "y", Y: "ȳ",
+      "3": "ع", "'": "ء", "t:": "ṯ",
+      "A'": "أ", "a'": "إ", "w'": "ؤ", "y'": "ئ",
+      a: "a", i: "i", u: "u", "^": "ْ", "*": "ّ",
+      "a~": "ً", "i~": "ٍ", "u~": "ٌ",
+      "#3": "٣",
+      ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ"
+    };
+
+    const layout = [
+      ["A", "aa", "b", "t", "T", "th", "j", "H", "h", "kh"],
+      ["d", "D", "dh", "r", "z", "Z", "s", "S", "sh", "gh"],
+      ["f", "q", "k", "l", "m", "n", "w", "y", "Y", "3"],
+      ["'", "t:", "A'", "a'", "w'", "y'", "(la)", "laa", "la'", "lA'"] ,
+      ["a", "i", "u", "^", "*", "a~", "i~", "u~", "#3"],
+      [".", ",", ";", "?", "-"]
+    ];
+
+    const predictions = {
+      bism: "بسم", allah: "الله", rahman: "الرحمن", rahim: "الرحيم",
+      salam: "سلام", alaykum: "عليكم", alhamdulillah: "الحمدلله",
+      rabb: "رب", kitab: "كتاب", nur: "نور"
+    };
+
+    const inputBox = document.getElementById("inputBox");
+    const latinBox = document.getElementById("latinOutput");
+    const arabicBox = document.getElementById("arabicOutput");
+    const keyboard = document.getElementById("keyboard");
+    const toggle = document.getElementById("visualToggle");
+    const suggestionBox = document.getElementById("suggestions");
+
+    inputBox.addEventListener("input", () => {
+      updateOutputs();
+      showSuggestions();
+    });
+
+    toggle.addEventListener("change", () => {
+      renderKeyboard();
+      latinBox.style.display = toggle.checked ? "block" : "none";
+      document.getElementById("visualLabel").style.display = toggle.checked ? "block" : "none";
+    });
+
+    function updateOutputs() {
+      const input = inputBox.value;
+      latinBox.value = convertVisual(input);
+      arabicBox.value = convertArabic(input);
+    }
+
+    function showSuggestions() {
+      const words = inputBox.value.split(/\s+/);
+      const lastWord = words[words.length - 1].toLowerCase();
+      suggestionBox.innerHTML = "";
+      for (const key in predictions) {
+        if (key.startsWith(lastWord) && lastWord.length > 1) {
+          const btn = document.createElement("div");
+          btn.className = "suggestion";
+          btn.textContent = predictions[key];
+          btn.onclick = () => {
+            words[words.length - 1] = key;
+            inputBox.value = words.join(" ") + " ";
+            updateOutputs();
+            showSuggestions();
+          };
+          suggestionBox.appendChild(btn);
+        }
+      }
+    }
+
+    function convertArabic(text) {
+      let out = "";
+      let i = 0;
+      while (i < text.length) {
+        let matched = false;
+        for (let len = 4; len > 0; len--) {
+          const part = text.slice(i, i + len);
+          if (latinToArabic[part]) {
+            out += latinToArabic[part];
+            i += len;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          out += text[i];
+          i++;
+        }
+      }
+      return out;
+    }
+
+    function convertVisual(text) {
+      if (!toggle.checked) return text;
+      let out = "";
+      let i = 0;
+      while (i < text.length) {
+        let matched = false;
+        for (let len = 4; len > 0; len--) {
+          const part = text.slice(i, i + len);
+          if (visualMap[part]) {
+            out += visualMap[part];
+            i += len;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          out += text[i];
+          i++;
+        }
+      }
+      return out;
+    }
+
+    function copyArabic() {
+      navigator.clipboard.writeText(arabicBox.value)
+        .then(() => alert("Arabic text copied!"))
+        .catch(() => alert("Failed to copy."));
+    }
+
+    function insert(k) {
+      inputBox.value += k;
+      updateOutputs();
+      showSuggestions();
+    }
+
+    function renderKeyboard() {
+      keyboard.innerHTML = "";
+      layout.forEach(row => {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "keyboard-row";
+        row.forEach(key => {
+          const btn = document.createElement("button");
+          btn.className = "key-button";
+          const latin = toggle.checked ? (visualMap[key] || key) : key;
+          const arabic = latinToArabic[key] || "";
+          btn.innerHTML = `<span class="latin">${latin}</span><span class="arabic">${arabic}</span>`;
+          btn.onclick = () => insert(key);
+          rowDiv.appendChild(btn);
+        });
+        keyboard.appendChild(rowDiv);
+      });
+    }
+
+    renderKeyboard();
+  </script>
+</body>
+</html>

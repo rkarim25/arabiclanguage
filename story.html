@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+  <div id="header"></div>
+  <div class="steps" id="stepTabs"></div>
+  <div id="stepBody"></div>
+  <div class="next-row">
+    <a href="index.html"><button>← All stories</button></a>
+    <button class="primary" id="nextStepBtn">Next step →</button>
+  </div>
+</main>
+
+<script src="js/app.js"></script>
+<script>
+renderNav("stories");
+
+const params = new URLSearchParams(location.search);
+const storyId = params.get("id") || "story-01";
+let story = null;
+let currentStep = "listen";
+
+const header = document.getElementById("header");
+const tabs = document.getElementById("stepTabs");
+const body = document.getElementById("stepBody");
+const nextBtn = document.getElementById("nextStepBtn");
+
+loadStory(storyId).then(s => {
+  story = s;
+  document.title = `${s.titleEn} — Arabic Through Stories`;
+  header.innerHTML = `
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>${s.titleEn}</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">${s.titleAr}</span>
+    </h1>
+    <p class="sub">Level ${s.level} · ${s.vocab.length} vocabulary words · Grammar: ${s.grammar}</p>
+  `;
+  const done = stepsDone(storyId);
+  const firstUndone = STEPS.find(st => !done[st.key]);
+  currentStep = firstUndone ? firstUndone.key : "listen";
+  renderTabs();
+  renderStep();
+}).catch(e => {
+  body.innerHTML = `<div class="card">Could not load this story. <a href="index.html">Back to stories</a></div>`;
+});
+
+function renderTabs() {
+  const done = stepsDone(storyId);
+  tabs.innerHTML = "";
+  STEPS.forEach(st => {
+    const b = document.createElement("button");
+    b.className = (st.key === currentStep ? "active " : "") + (done[st.key] ? "done" : "");
+    b.innerHTML = `<span class="ar">${st.ar}</span><span>${done[st.key] ? "✓ " : ""}${st.en}</span>`;
+    b.onclick = () => { currentStep = st.key; stopSpeak(); renderTabs(); renderStep(); };
+    tabs.appendChild(b);
+  });
+  const idx = STEPS.findIndex(s => s.key === currentStep);
+  nextBtn.style.visibility = idx === STEPS.length - 1 ? "hidden" : "visible";
+}
+
+nextBtn.onclick = () => {
+  const idx = STEPS.findIndex(s => s.key === currentStep);
+  if (idx < STEPS.length - 1) {
+    currentStep = STEPS[idx + 1].key;
+    stopSpeak(); renderTabs(); renderStep();
+    window.scrollTo({ top: 0 });
+  }
+};
+
+function markDone(step) {
+  setStepDone(storyId, step);
+  renderTabs();
+  const banner = document.getElementById("doneBanner");
+  if (banner) banner.classList.add("show");
+}
+
+function renderStep() {
+  ({ listen: renderListen, read: renderRead, memorize: renderMemorize, quiz: renderQuiz, write: renderWrite })[currentStep]();
+}
+
+/* ============ LISTEN ============ */
+function renderListen() {
+  const warn = hasArabicVoice() ? "" :
+    `<div class="tts-warn">⚠ No Arabic voice found in this browser yet. On Windows, Edge and Chrome usually include one (voices can take a second to load — try pressing play). If audio stays silent, open this site in Microsoft Edge.</div>`;
+  body.innerHTML = `
+    <div class="card">
+      <h2>Listen first — before reading</h2>
+      <p class="sub" style="margin-bottom:14px">Play the whole story and just listen. Then use ▸ on each line to repeat sentences you missed.</p>
+      ${warn}
+      <div class="listen-controls">
+        <button class="primary" id="playAll">▶ Play whole story</button>
+        <button id="stopBtn">■ Stop</button>
+        <label style="font-size:13px;color:var(--muted)">Speed <input type="range" id="rate" min="0.5" max="1.1" step="0.05" value="0.85"></label>
+      </div>
+      <ol class="listen-list" id="listenList"></ol>
+      <div class="step-done-banner" id="doneBanner">✓ Listening step complete</div>
+    </div>
+  `;
+  if (stepsDone(storyId).listen) document.getElementById("doneBanner").classList.add("show");
+  const list = document.getElementById("listenList");
+  const rate = () => parseFloat(document.getElementById("rate").value);
+
+  story.sentences.forEach((s, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<button class="small">▸</button><span class="txt">${s.ar}</span>`;
+    li.querySelector("button").onclick = () => {
+      highlight(i);
+      speak(s.ar, rate(), () => highlight(-1));
+    };
+    list.appendChild(li);
+  });
+  function highlight(i) {
+    [...list.children].forEach((li, j) => li.classList.toggle("playing", j === i));
+  }
+  document.getElementById("playAll").onclick = () => {
+    let i = 0;
+    const playNext = () => {
+      if (i >= story.sentences.length) { highlight(-1); markDone("listen"); return; }
+      highlight(i);
+      speak(story.sentences[i].ar, rate(), () => { i++; playNext(); });
+    };
+    stopSpeak();
+    playNext();
+  };
+  document.getElementById("stopBtn").onclick = () => { stopSpeak(); highlight(-1); };
+}
+
+/* ============ READ ============ */
+function renderRead() {
+  body.innerHTML = `
+    <div class="card">
+      <h2>Read — tap any word for its meaning</h2>
+      <div class="toggles">
+        <label><input type="checkbox" id="tgTashkeel" checked> Vowel marks (تشكيل)</label>
+        <label><input type="checkbox" id="tgTrans"> English translation</label>
+      </div>
+      <div class="story-text" id="storyText"></div>
+      <div class="ex-row" style="margin-top:18px">
+        <button class="primary" id="readDone">I've read it — mark complete ✓</button>
+      </div>
+      <div class="step-done-banner" id="doneBanner">✓ Reading step complete. Now read it once more with vowels OFF.</div>
+    </div>
+  `;
+  if (stepsDone(storyId).read) document.getElementById("doneBanner").classList.add("show");
+  const el = document.getElementById("storyText");
+  const tgT = document.getElementById("tgTashkeel");
+  const tgE = document.getElementById("tgTrans");
+
+  let pop = null;
+  function hidePop() { if (pop) { pop.remove(); pop = null; } }
+  document.addEventListener("scroll", hidePop);
+
+  function render() {
+    hidePop();
+    el.innerHTML = "";
+    story.sentences.forEach((s) => {
+      const span = document.createElement("span");
+      span.className = "sent";
+      s.words.forEach(([w, g], wi) => {
+        const ws = document.createElement("span");
+        ws.className = "w";
+        ws.textContent = tgT.checked ? w : stripTashkeel(w);
+        ws.onclick = (ev) => {
+          ev.stopPropagation();
+          hidePop();
+          pop = document.createElement("div");
+          pop.className = "gloss-pop";
+          pop.innerHTML = `<div class="g-ar">${w.replace(/[.،«»!؟]/g, "")}</div><div>${g}</div>`;
+          document.body.appendChild(pop);
+          const r = ws.getBoundingClientRect();
+          pop.style.left = Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, r.left + r.width / 2 - pop.offsetWidth / 2)) + "px";
+          pop.style.top = (r.top - pop.offsetHeight - 8) + "px";
+          setTimeout(hidePop, 2600);
+        };
+        span.appendChild(ws);
+        if (wi < s.words.length - 1) span.appendChild(document.createTextNode(" "));
+      });
+      const play = document.createElement("span");
+      play.className = "sent-play";
+      play.textContent = "🔊";
+      play.onclick = () => speak(s.ar, 0.85);
+      span.appendChild(play);
+      el.appendChild(span);
+      if (tgE.checked) {
+        const en = document.createElement("span");
+        en.className = "en-line";
+        en.textContent = s.en;
+        el.appendChild(en);
+      }
+    });
+  }
+  document.addEventListener("click", hidePop);
+  tgT.onchange = render;
+  tgE.onchange = render;
+  render();
+  document.getElementById("readDone").onclick = () => markDone("read");
+}
+
+/* ============ MEMORIZE ============ */
+function renderMemorize() {
+  body.innerHTML = `
+    <div class="card flash-wrap">
+      <h2 style="text-align:left">Memorize — flashcards with spaced repetition</h2>
+      <p class="sub" style="text-align:left">Tap the card to reveal. Grade yourself honestly — “Again” brings it back in minutes, “Good” tomorrow, “Easy” in 3 days. Graded words join your <a href="review.html">daily review deck</a>.</p>
+      <div class="flash-count" id="flashCount"></div>
+      <div id="flashArea"></div>
+      <div class="step-done-banner" id="doneBanner">✓ All ${story.vocab.length} words graded — they're in your review deck now.</div>
+    </div>
+  `;
+  if (stepsDone(storyId).memorize) document.getElementById("doneBanner").classList.add("show");
+
+  const queue = story.vocab.map((v, i) => ({ v, i }));
+  const graded = new Set(Object.keys(getSrs()).filter(k => k.startsWith(storyId + ":")).map(k => parseInt(k.split(":")[1])));
+  let pos = 0;
+  const area = document.getElementById("flashArea");
+  const count = document.getElementById("flashCount");
+
+  function show() {
+    if (pos >= queue.length) {
+      area.innerHTML = `<p style="font-size:16px">🎉 Deck finished for this pass.</p>
+        <div class="ex-row" style="justify-content:center"><button id="restart">Go through again</button></div>`;
+      document.getElementById("restart").onclick = () => { pos = 0; show(); };
+      if (graded.size >= story.vocab.length) markDone("memorize");
+      return;
+    }
+    const { v, i } = queue[pos];
+    count.textContent = `Card ${pos + 1} of ${queue.length}`;
+    area.innerHTML = `
+      <div class="flashcard" id="card">
+        <div class="front">${v.ar}</div>
+        <div class="back" id="back" style="display:none">${v.en}${v.note ? `<div class="note">${v.note}</div>` : ""}</div>
+        <div class="hint" id="hint">tap to reveal · 🔊 to hear</div>
+      </div>
+      <div class="ex-row" style="justify-content:center;margin-bottom:14px">
+        <button class="small" id="hear">🔊 Hear it</button>
+      </div>
+      <div class="grade-row" id="grades" style="visibility:hidden">
+        <button class="again">✗ Again</button>
+        <button class="good">✓ Good</button>
+        <button class="easy">✓✓ Easy</button>
+      </div>
+    `;
+    const card = document.getElementById("card");
+    card.onclick = () => {
+      document.getElementById("back").style.display = "block";
+      document.getElementById("hint").style.display = "none";
+      document.getElementById("grades").style.visibility = "visible";
+    };
+    document.getElementById("hear").onclick = (e) => { e.stopPropagation(); speak(stripTashkeel(v.ar) === v.ar ? v.ar : v.ar, 0.8); };
+    const grade = (g) => { gradeCard(`${storyId}:${i}`, g); graded.add(i); pos++; show(); };
+    area.querySelector(".again").onclick = () => grade("again");
+    area.querySelector(".good").onclick = () => grade("good");
+    area.querySelector(".easy").onclick = () => grade("easy");
+  }
+  show();
+}
+
+/* ============ QUIZ ============ */
+function renderQuiz() {
+  body.innerHTML = `
+    <div class="card">
+      <h2>Comprehension — answer without looking back</h2>
+      <div id="quizArea"></div>
+      <div class="quiz-score" id="quizScore"></div>
+      <div class="step-done-banner" id="doneBanner">✓ Quiz passed</div>
+    </div>
+  `;
+  if (stepsDone(storyId).quiz) document.getElementById("doneBanner").classList.add("show");
+  const area = document.getElementById("quizArea");
+  let answered = 0, correct = 0;
+
+  story.questions.forEach((q) => {
+    const div = document.createElement("div");
+    div.className = "quiz-q";
+    div.innerHTML = `<div class="qt">${q.q} <span class="sent-play" style="font-size:15px">🔊</span></div><div class="quiz-opts"></div>`;
+    div.querySelector(".sent-play").onclick = () => speak(q.q, 0.85);
+    const opts = div.querySelector(".quiz-opts");
+    q.options.forEach((o, oi) => {
+      const b = document.createElement("button");
+      b.textContent = o;
+      b.onclick = () => {
+        if (div.dataset.done) return;
+        div.dataset.done = "1";
+        answered++;
+        if (oi === q.answer) { b.classList.add("correct"); correct++; }
+        else {
+          b.classList.add("wrong");
+          opts.children[q.answer].classList.add("correct");
+        }
+        if (answered === story.questions.length) {
+          const s = document.getElementById("quizScore");
+          s.textContent = `Score: ${correct} / ${story.questions.length}` + (correct >= 4 ? " — ممتاز! 🎉" : " — re-read the story and try again.");
+          if (correct >= 4) markDone("quiz");
+          else {
+            const retry = document.createElement("button");
+            retry.textContent = "Try again";
+            retry.style.marginInlineStart = "10px";
+            retry.onclick = renderQuiz;
+            s.appendChild(retry);
+          }
+        }
+      };
+      opts.appendChild(b);
+    });
+    area.appendChild(div);
+  });
+}
+
+/* ============ WRITE ============ */
+function renderWrite() {
+  body.innerHTML = `
+    <div class="card">
+      <h2>Write — dictation & translation</h2>
+      <p class="sub">Vowel marks are optional in your answers — spelling is what's checked. Use the phonetic keyboard if you can't type Arabic.</p>
+      <div id="writeArea"></div>
+      <div class="step-done-banner" id="doneBanner">✓ Writing step complete — story finished! 🎉</div>
+    </div>
+  `;
+  if (stepsDone(storyId).write) document.getElementById("doneBanner").classList.add("show");
+  const area = document.getElementById("writeArea");
+  const total = story.dictation.length + story.translate.length;
+  const attempted = new Set();
+
+  function checkAllDone() { if (attempted.size >= total) markDone("write"); }
+
+  story.dictation.forEach((si, di) => {
+    const sent = story.sentences[si];
+    const ex = document.createElement("div");
+    ex.className = "exercise";
+    ex.innerHTML = `
+      <div class="ex-label">Dictation ${di + 1} of ${story.dictation.length}</div>
+      <div class="ex-row">
+        <button>🔊 Play sentence</button>
+        <button class="small">🐢 Slow</button>
+      </div>
+      <input class="answer-ar" placeholder="اكتب ما تسمع..." style="margin-top:10px">
+      <div class="ex-row">
+        <button class="primary check">Check</button>
+        <button class="small reveal">Show answer</button>
+      </div>
+      <div class="check-result"></div>
+    `;
+    const [playBtn, slowBtn] = ex.querySelectorAll(".ex-row button");
+    playBtn.onclick = () => speak(sent.ar, 0.85);
+    slowBtn.onclick = () => speak(sent.ar, 0.6);
+    const input = ex.querySelector(".answer-ar");
+    const result = ex.querySelector(".check-result");
+    ex.querySelector(".check").onclick = () => {
+      attempted.add("d" + di);
+      const ok = normalizeAr(input.value) === normalizeAr(sent.ar);
+      result.className = "check-result " + (ok ? "ok" : "no");
+      result.innerHTML = ok ? "✓ Correct! أحسنت" : `✗ Not quite — listen again, or reveal the answer.`;
+      checkAllDone();
+    };
+    ex.querySelector(".reveal").onclick = () => {
+      attempted.add("d" + di);
+      result.className = "check-result ok";
+      result.innerHTML = `<span class="model">${sent.ar}</span>${sent.en}`;
+      checkAllDone();
+    };
+    attachPhoneticInput(ex, input);
+    area.appendChild(ex);
+  });
+
+  story.translate.forEach((t, ti) => {
+    const ex = document.createElement("div");
+    ex.className = "exercise";
+    ex.innerHTML = `
+      <div class="ex-label">Translate ${ti + 1} of ${story.translate.length}</div>
+      <p style="margin:4px 0 8px;font-size:16px">“${t.en}”</p>
+      <input class="answer-ar" placeholder="اكتب بالعربية...">
+      <div class="ex-row">
+        <button class="primary check">Check</button>
+        <button class="small reveal">Show model answer</button>
+      </div>
+      <div class="check-result"></div>
+    `;
+    const input = ex.querySelector(".answer-ar");
+    const result = ex.querySelector(".check-result");
+    ex.querySelector(".check").onclick = () => {
+      attempted.add("t" + ti);
+      const ok = normalizeAr(input.value) === normalizeAr(t.ar);
+      result.className = "check-result " + (ok ? "ok" : "no");
+      result.innerHTML = ok
+        ? "✓ Matches the model answer! أحسنت"
+        : `Different from the model — that can still be fine in Arabic. Compare:<span class="model">${t.ar}</span>`;
+      checkAllDone();
+    };
+    ex.querySelector(".reveal").onclick = () => {
+      attempted.add("t" + ti);
+      result.className = "check-result ok";
+      result.innerHTML = `<span class="model">${t.ar}</span>`;
+      checkAllDone();
+    };
+    attachPhoneticInput(ex, input);
+    area.appendChild(ex);
+  });
+}
+</script>
+</body>
+</html>

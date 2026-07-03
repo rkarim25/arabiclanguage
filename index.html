@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arabic Through Stories — العربية بالقصص</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+  <h1>Arabic Through Stories <span class="arabic" style="color:var(--accent)">العربية بالقصص</span></h1>
+  <p class="sub">Learn functional MSA through graded stories: listen, read, memorize, answer, write. Your progress is saved in this browser.</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n" id="statStories">0</div><div class="l">stories completed</div></div>
+    <div class="stat"><div class="n" id="statWords">0</div><div class="l">words in your deck</div></div>
+    <div class="stat"><div class="n" id="statDue">0</div><div class="l">reviews due now</div></div>
+  </div>
+
+  <div class="card" id="reviewNudge" style="display:none">
+    <strong>📚 You have reviews waiting.</strong> Spaced repetition works best when you clear your due cards daily.
+    <div style="margin-top:10px"><a href="review.html"><button class="primary">Start review session</button></a></div>
+  </div>
+
+  <h2>Level 1 — الأَسَاس (Foundation)</h2>
+  <p class="sub">Present tense, daily life, family. Upper-beginner: assumes you can read the Arabic script.</p>
+  <div class="story-grid" id="storyGrid"></div>
+
+  <div class="card" style="margin-top:26px">
+    <h2>How to use each story</h2>
+    <ol style="margin:0; padding-left:20px; font-size:14.5px">
+      <li><strong>اِسْتَمِعْ Listen</strong> — play the story before reading. Listen twice; catch what you can.</li>
+      <li><strong>اِقْرَأْ Read</strong> — read with vowels on, tap any word you don't know. Then turn vowels off and read again.</li>
+      <li><strong>اِحْفَظْ Memorize</strong> — grade yourself on each flashcard honestly; missed words return sooner.</li>
+      <li><strong>أَجِبْ Quiz</strong> — answer the comprehension questions without looking back.</li>
+      <li><strong>اُكْتُبْ Write</strong> — dictation and translation. Writing is what locks vocabulary in.</li>
+    </ol>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:0">Come back daily and clear the <a href="review.html">Review</a> queue — that's where memorization actually happens.</p>
+  </div>
+
+  <div class="card">
+    <h2>Backup</h2>
+    <p style="font-size:14px;color:var(--muted)">Progress lives in this browser only. Export a backup occasionally, or move progress to another device.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button id="btnExport">Export progress</button>
+      <button id="btnImport">Import progress</button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+    </div>
+  </div>
+</main>
+<footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
+
+<script src="js/app.js"></script>
+<script>
+renderNav("stories");
+
+const grid = document.getElementById("storyGrid");
+STORY_LIST.forEach(s => {
+  const done = stepsDone(s.id);
+  const nDone = STEPS.filter(st => done[st.key]).length;
+  const pct = Math.round(nDone / STEPS.length * 100);
+  const a = document.createElement("a");
+  a.className = "story-card" + (s.locked ? " locked" : "");
+  a.href = s.locked ? "#" : `story.html?id=${s.id}`;
+  a.innerHTML = `
+    <div class="num">Story ${s.n}${s.locked ? " · locked" : ""}</div>
+    <div class="title-ar">${s.titleAr}</div>
+    <div class="title-en">${s.titleEn}</div>
+    <div class="progress-bar"><div style="width:${s.locked ? 0 : pct}%"></div></div>
+    <div class="meta">${s.locked ? "Added in the next batch" : (pct === 100 ? "✓ Completed" : pct > 0 ? pct + "% complete" : (s.desc || ""))}</div>
+  `;
+  grid.appendChild(a);
+});
+
+const completed = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
+document.getElementById("statStories").textContent = completed;
+document.getElementById("statWords").textContent = totalCards();
+const due = dueCards().length;
+document.getElementById("statDue").textContent = due;
+if (due > 0) document.getElementById("reviewNudge").style.display = "block";
+
+document.getElementById("btnExport").onclick = () => {
+  const data = { progress: getProgress(), srs: getSrs(), exported: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "arabic-stories-progress.json";
+  a.click();
+};
+document.getElementById("btnImport").onclick = () => document.getElementById("importFile").click();
+document.getElementById("importFile").onchange = (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (d.progress) store.set("ats-progress", d.progress);
+      if (d.srs) store.set("ats-srs", d.srs);
+      location.reload();
+    } catch (err) { alert("Could not read that file."); }
+  };
+  r.readAsText(f);
+};
+</script>
+</body>
+</html>
