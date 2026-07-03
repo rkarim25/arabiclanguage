@@ -5,81 +5,624 @@
   "titleEn": "At the Market",
   "grammar": "Adjective agreement, لِأَنَّ (because), مُنْذُ (since/for)",
   "sentences": [
-    { "ar": "كُلَّ يَوْمِ سَبْتٍ أَذْهَبُ إِلَى السُّوقِ مَعَ أُمِّي.", "en": "Every Saturday I go to the market with my mother.",
-      "words": [["كُلَّ","every"],["يَوْمِ سَبْتٍ","Saturday"],["أَذْهَبُ","I go"],["إِلَى","to"],["السُّوقِ","the market"],["مَعَ","with"],["أُمِّي.","my mother"]] },
-    { "ar": "السُّوقُ قَرِيبٌ مِنْ بَيْتِنَا، نَمْشِي إِلَيْهِ فِي عَشْرِ دَقَائِقَ.", "en": "The market is near our house; we walk to it in ten minutes.",
-      "words": [["السُّوقُ","the market"],["قَرِيبٌ","near"],["مِنْ","to (with قريب)"],["بَيْتِنَا،","our house"],["نَمْشِي","we walk"],["إِلَيْهِ","to it"],["فِي","in"],["عَشْرِ","ten"],["دَقَائِقَ.","minutes"]] },
-    { "ar": "نَشْتَرِي الخُضَارَ وَالفَوَاكِهَ الطَّازَجَةَ.", "en": "We buy fresh vegetables and fruits.",
-      "words": [["نَشْتَرِي","we buy"],["الخُضَارَ","the vegetables"],["وَالفَوَاكِهَ","and the fruits"],["الطَّازَجَةَ.","fresh"]] },
-    { "ar": "أُمِّي تَخْتَارُ الطَّمَاطِمَ وَالبَصَلَ وَالخِيَارَ.", "en": "My mother chooses the tomatoes, the onions, and the cucumbers.",
-      "words": [["أُمِّي","my mother"],["تَخْتَارُ","she chooses"],["الطَّمَاطِمَ","the tomatoes"],["وَالبَصَلَ","and the onions"],["وَالخِيَارَ.","and the cucumbers"]] },
-    { "ar": "وَأَنَا أَحْمِلُ السَّلَّةَ الثَّقِيلَةَ.", "en": "And I carry the heavy basket.",
-      "words": [["وَأَنَا","and I"],["أَحْمِلُ","I carry"],["السَّلَّةَ","the basket"],["الثَّقِيلَةَ.","heavy"]] },
-    { "ar": "البَائِعُ رَجُلٌ طَيِّبٌ يَعْرِفُ أُمِّي مُنْذُ سَنَوَاتٍ.", "en": "The seller is a kind man who has known my mother for years.",
-      "words": [["البَائِعُ","the seller"],["رَجُلٌ","a man"],["طَيِّبٌ","kind, good"],["يَعْرِفُ","he knows"],["أُمِّي","my mother"],["مُنْذُ","since / for"],["سَنَوَاتٍ.","years"]] },
-    { "ar": "يَقُولُ لَنَا: «اليَوْمَ التُّفَّاحُ رَخِيصٌ وَالعِنَبُ لَذِيذٌ!»", "en": "He says to us: \"Today the apples are cheap and the grapes are delicious!\"",
-      "words": [["يَقُولُ","he says"],["لَنَا:","to us"],["«اليَوْمَ","today"],["التُّفَّاحُ","the apples"],["رَخِيصٌ","cheap"],["وَالعِنَبُ","and the grapes"],["لَذِيذٌ!»","delicious"]] },
-    { "ar": "أُمِّي تَسْأَلُ عَنِ السِّعْرِ ثُمَّ تَدْفَعُ النُّقُودَ.", "en": "My mother asks about the price, then pays the money.",
-      "words": [["أُمِّي","my mother"],["تَسْأَلُ","she asks"],["عَنِ","about"],["السِّعْرِ","the price"],["ثُمَّ","then"],["تَدْفَعُ","she pays"],["النُّقُودَ.","the money"]] },
-    { "ar": "أَحْيَانًا نَشْتَرِي السَّمَكَ مِنْ آخِرِ السُّوقِ.", "en": "Sometimes we buy fish from the far end of the market.",
-      "words": [["أَحْيَانًا","sometimes"],["نَشْتَرِي","we buy"],["السَّمَكَ","the fish"],["مِنْ","from"],["آخِرِ","the end of"],["السُّوقِ.","the market"]] },
-    { "ar": "قَبْلَ الرُّجُوعِ نَشْرَبُ عَصِيرَ البُرْتُقَالِ البَارِدَ.", "en": "Before returning we drink cold orange juice.",
-      "words": [["قَبْلَ","before"],["الرُّجُوعِ","the returning"],["نَشْرَبُ","we drink"],["عَصِيرَ","the juice of"],["البُرْتُقَالِ","the orange"],["البَارِدَ.","cold"]] },
-    { "ar": "أُحِبُّ السُّوقَ لِأَنَّهُ مَلِيءٌ بِالأَلْوَانِ وَالأَصْوَاتِ.", "en": "I love the market because it is full of colors and sounds.",
-      "words": [["أُحِبُّ","I love"],["السُّوقَ","the market"],["لِأَنَّهُ","because it"],["مَلِيءٌ","full"],["بِالأَلْوَانِ","of the colors"],["وَالأَصْوَاتِ.","and the sounds"]] }
+    {
+      "ar": "كُلَّ يَوْمِ سَبْتٍ أَذْهَبُ إِلَى السُّوقِ مَعَ أُمِّي.",
+      "en": "Every Saturday I go to the market with my mother.",
+      "words": [
+        [
+          "كُلَّ",
+          "every"
+        ],
+        [
+          "يَوْمِ سَبْتٍ",
+          "Saturday"
+        ],
+        [
+          "أَذْهَبُ",
+          "I go"
+        ],
+        [
+          "إِلَى",
+          "to"
+        ],
+        [
+          "السُّوقِ",
+          "the market"
+        ],
+        [
+          "مَعَ",
+          "with"
+        ],
+        [
+          "أُمِّي.",
+          "my mother"
+        ]
+      ]
+    },
+    {
+      "ar": "السُّوقُ قَرِيبٌ مِنْ بَيْتِنَا، نَمْشِي إِلَيْهِ فِي عَشْرِ دَقَائِقَ.",
+      "en": "The market is near our house; we walk to it in ten minutes.",
+      "words": [
+        [
+          "السُّوقُ",
+          "the market"
+        ],
+        [
+          "قَرِيبٌ",
+          "near"
+        ],
+        [
+          "مِنْ",
+          "to (with قريب)"
+        ],
+        [
+          "بَيْتِنَا،",
+          "our house"
+        ],
+        [
+          "نَمْشِي",
+          "we walk"
+        ],
+        [
+          "إِلَيْهِ",
+          "to it"
+        ],
+        [
+          "فِي",
+          "in"
+        ],
+        [
+          "عَشْرِ",
+          "ten"
+        ],
+        [
+          "دَقَائِقَ.",
+          "minutes"
+        ]
+      ]
+    },
+    {
+      "ar": "نَشْتَرِي الخُضَارَ وَالفَوَاكِهَ الطَّازَجَةَ.",
+      "en": "We buy fresh vegetables and fruits.",
+      "words": [
+        [
+          "نَشْتَرِي",
+          "we buy"
+        ],
+        [
+          "الخُضَارَ",
+          "the vegetables"
+        ],
+        [
+          "وَالفَوَاكِهَ",
+          "and the fruits"
+        ],
+        [
+          "الطَّازَجَةَ.",
+          "fresh"
+        ]
+      ]
+    },
+    {
+      "ar": "أُمِّي تَخْتَارُ الطَّمَاطِمَ وَالبَصَلَ وَالخِيَارَ.",
+      "en": "My mother chooses the tomatoes, the onions, and the cucumbers.",
+      "words": [
+        [
+          "أُمِّي",
+          "my mother"
+        ],
+        [
+          "تَخْتَارُ",
+          "she chooses"
+        ],
+        [
+          "الطَّمَاطِمَ",
+          "the tomatoes"
+        ],
+        [
+          "وَالبَصَلَ",
+          "and the onions"
+        ],
+        [
+          "وَالخِيَارَ.",
+          "and the cucumbers"
+        ]
+      ]
+    },
+    {
+      "ar": "وَأَنَا أَحْمِلُ السَّلَّةَ الثَّقِيلَةَ.",
+      "en": "And I carry the heavy basket.",
+      "words": [
+        [
+          "وَأَنَا",
+          "and I"
+        ],
+        [
+          "أَحْمِلُ",
+          "I carry"
+        ],
+        [
+          "السَّلَّةَ",
+          "the basket"
+        ],
+        [
+          "الثَّقِيلَةَ.",
+          "heavy"
+        ]
+      ]
+    },
+    {
+      "ar": "البَائِعُ رَجُلٌ طَيِّبٌ يَعْرِفُ أُمِّي مُنْذُ سَنَوَاتٍ.",
+      "en": "The seller is a kind man who has known my mother for years.",
+      "words": [
+        [
+          "البَائِعُ",
+          "the seller"
+        ],
+        [
+          "رَجُلٌ",
+          "a man"
+        ],
+        [
+          "طَيِّبٌ",
+          "kind, good"
+        ],
+        [
+          "يَعْرِفُ",
+          "he knows"
+        ],
+        [
+          "أُمِّي",
+          "my mother"
+        ],
+        [
+          "مُنْذُ",
+          "since / for"
+        ],
+        [
+          "سَنَوَاتٍ.",
+          "years"
+        ]
+      ]
+    },
+    {
+      "ar": "يَقُولُ لَنَا: «اليَوْمَ التُّفَّاحُ رَخِيصٌ وَالعِنَبُ لَذِيذٌ!»",
+      "en": "He says to us: \"Today the apples are cheap and the grapes are delicious!\"",
+      "words": [
+        [
+          "يَقُولُ",
+          "he says"
+        ],
+        [
+          "لَنَا:",
+          "to us"
+        ],
+        [
+          "«اليَوْمَ",
+          "today"
+        ],
+        [
+          "التُّفَّاحُ",
+          "the apples"
+        ],
+        [
+          "رَخِيصٌ",
+          "cheap"
+        ],
+        [
+          "وَالعِنَبُ",
+          "and the grapes"
+        ],
+        [
+          "لَذِيذٌ!»",
+          "delicious"
+        ]
+      ]
+    },
+    {
+      "ar": "أُمِّي تَسْأَلُ عَنِ السِّعْرِ ثُمَّ تَدْفَعُ النُّقُودَ.",
+      "en": "My mother asks about the price, then pays the money.",
+      "words": [
+        [
+          "أُمِّي",
+          "my mother"
+        ],
+        [
+          "تَسْأَلُ",
+          "she asks"
+        ],
+        [
+          "عَنِ",
+          "about"
+        ],
+        [
+          "السِّعْرِ",
+          "the price"
+        ],
+        [
+          "ثُمَّ",
+          "then"
+        ],
+        [
+          "تَدْفَعُ",
+          "she pays"
+        ],
+        [
+          "النُّقُودَ.",
+          "the money"
+        ]
+      ]
+    },
+    {
+      "ar": "أَحْيَانًا نَشْتَرِي السَّمَكَ مِنْ آخِرِ السُّوقِ.",
+      "en": "Sometimes we buy fish from the far end of the market.",
+      "words": [
+        [
+          "أَحْيَانًا",
+          "sometimes"
+        ],
+        [
+          "نَشْتَرِي",
+          "we buy"
+        ],
+        [
+          "السَّمَكَ",
+          "the fish"
+        ],
+        [
+          "مِنْ",
+          "from"
+        ],
+        [
+          "آخِرِ",
+          "the end of"
+        ],
+        [
+          "السُّوقِ.",
+          "the market"
+        ]
+      ]
+    },
+    {
+      "ar": "قَبْلَ الرُّجُوعِ نَشْرَبُ عَصِيرَ البُرْتُقَالِ البَارِدَ.",
+      "en": "Before returning we drink cold orange juice.",
+      "words": [
+        [
+          "قَبْلَ",
+          "before"
+        ],
+        [
+          "الرُّجُوعِ",
+          "the returning"
+        ],
+        [
+          "نَشْرَبُ",
+          "we drink"
+        ],
+        [
+          "عَصِيرَ",
+          "the juice of"
+        ],
+        [
+          "البُرْتُقَالِ",
+          "the orange"
+        ],
+        [
+          "البَارِدَ.",
+          "cold"
+        ]
+      ]
+    },
+    {
+      "ar": "أُحِبُّ السُّوقَ لِأَنَّهُ مَلِيءٌ بِالأَلْوَانِ وَالأَصْوَاتِ.",
+      "en": "I love the market because it is full of colors and sounds.",
+      "words": [
+        [
+          "أُحِبُّ",
+          "I love"
+        ],
+        [
+          "السُّوقَ",
+          "the market"
+        ],
+        [
+          "لِأَنَّهُ",
+          "because it"
+        ],
+        [
+          "مَلِيءٌ",
+          "full"
+        ],
+        [
+          "بِالأَلْوَانِ",
+          "of the colors"
+        ],
+        [
+          "وَالأَصْوَاتِ.",
+          "and the sounds"
+        ]
+      ]
+    }
   ],
   "vocab": [
-    { "ar": "سُوق", "en": "market" },
-    { "ar": "يَوْم السَّبْت", "en": "Saturday" },
-    { "ar": "يَمْشِي", "en": "he walks", "note": "from مَشَى — to walk" },
-    { "ar": "دَقِيقَة", "en": "minute", "note": "plural: دَقَائِق" },
-    { "ar": "يَشْتَرِي", "en": "he buys", "note": "from اِشْتَرَى — to buy" },
-    { "ar": "خُضَار", "en": "vegetables" },
-    { "ar": "فَوَاكِه", "en": "fruits", "note": "singular: فَاكِهَة" },
-    { "ar": "طَازَج", "en": "fresh" },
-    { "ar": "يَخْتَارُ", "en": "he chooses", "note": "from اِخْتَارَ — to choose" },
-    { "ar": "طَمَاطِم", "en": "tomatoes" },
-    { "ar": "بَصَل", "en": "onions" },
-    { "ar": "خِيَار", "en": "cucumbers" },
-    { "ar": "يَحْمِلُ", "en": "he carries", "note": "from حَمَلَ — to carry" },
-    { "ar": "سَلَّة", "en": "basket" },
-    { "ar": "ثَقِيل", "en": "heavy" },
-    { "ar": "بَائِع", "en": "seller, vendor" },
-    { "ar": "رَجُل", "en": "man" },
-    { "ar": "طَيِّب", "en": "kind, good" },
-    { "ar": "يَعْرِفُ", "en": "he knows", "note": "from عَرَفَ — to know" },
-    { "ar": "مُنْذُ", "en": "since, for (a period)" },
-    { "ar": "سَنَة", "en": "year", "note": "plural: سَنَوَات" },
-    { "ar": "يَقُولُ", "en": "he says", "note": "from قَالَ — to say" },
-    { "ar": "تُفَّاح", "en": "apples" },
-    { "ar": "رَخِيص", "en": "cheap" },
-    { "ar": "عِنَب", "en": "grapes" },
-    { "ar": "لَذِيذ", "en": "delicious" },
-    { "ar": "يَسْأَلُ", "en": "he asks", "note": "from سَأَلَ — to ask" },
-    { "ar": "سِعْر", "en": "price" },
-    { "ar": "يَدْفَعُ", "en": "he pays; he pushes", "note": "from دَفَعَ" },
-    { "ar": "نُقُود", "en": "money" },
-    { "ar": "أَحْيَانًا", "en": "sometimes" },
-    { "ar": "سَمَك", "en": "fish" },
-    { "ar": "آخِر", "en": "end (of); last" },
-    { "ar": "عَصِير", "en": "juice" },
-    { "ar": "بُرْتُقَال", "en": "orange(s)" },
-    { "ar": "بَارِد", "en": "cold" },
-    { "ar": "مَلِيء بِ", "en": "full of" },
-    { "ar": "لَوْن", "en": "color", "note": "plural: أَلْوَان" },
-    { "ar": "صَوْت", "en": "sound, voice", "note": "plural: أَصْوَات" }
+    {
+      "ar": "سُوق",
+      "en": "market",
+      "tr": "sūq"
+    },
+    {
+      "ar": "يَوْم السَّبْت",
+      "en": "Saturday",
+      "tr": "yawm as-sabt"
+    },
+    {
+      "ar": "يَمْشِي",
+      "en": "he walks",
+      "note": "from مَشَى — to walk",
+      "tr": "yamshī"
+    },
+    {
+      "ar": "دَقِيقَة",
+      "en": "minute",
+      "note": "plural: دَقَائِق",
+      "tr": "daqīqa"
+    },
+    {
+      "ar": "يَشْتَرِي",
+      "en": "he buys",
+      "note": "from اِشْتَرَى — to buy",
+      "tr": "yashtarī"
+    },
+    {
+      "ar": "خُضَار",
+      "en": "vegetables",
+      "tr": "khuḍār"
+    },
+    {
+      "ar": "فَوَاكِه",
+      "en": "fruits",
+      "note": "singular: فَاكِهَة",
+      "tr": "fawākih"
+    },
+    {
+      "ar": "طَازَج",
+      "en": "fresh",
+      "tr": "ṭāzaj"
+    },
+    {
+      "ar": "يَخْتَارُ",
+      "en": "he chooses",
+      "note": "from اِخْتَارَ — to choose",
+      "tr": "yakhtāru"
+    },
+    {
+      "ar": "طَمَاطِم",
+      "en": "tomatoes",
+      "tr": "ṭamāṭim"
+    },
+    {
+      "ar": "بَصَل",
+      "en": "onions",
+      "tr": "baṣal"
+    },
+    {
+      "ar": "خِيَار",
+      "en": "cucumbers",
+      "tr": "khiyār"
+    },
+    {
+      "ar": "يَحْمِلُ",
+      "en": "he carries",
+      "note": "from حَمَلَ — to carry",
+      "tr": "yaḥmilu"
+    },
+    {
+      "ar": "سَلَّة",
+      "en": "basket",
+      "tr": "salla"
+    },
+    {
+      "ar": "ثَقِيل",
+      "en": "heavy",
+      "tr": "thaqīl"
+    },
+    {
+      "ar": "بَائِع",
+      "en": "seller, vendor",
+      "tr": "bāʾiʿ"
+    },
+    {
+      "ar": "رَجُل",
+      "en": "man",
+      "tr": "rajul"
+    },
+    {
+      "ar": "طَيِّب",
+      "en": "kind, good",
+      "tr": "ṭayyib"
+    },
+    {
+      "ar": "يَعْرِفُ",
+      "en": "he knows",
+      "note": "from عَرَفَ — to know",
+      "tr": "yaʿrifu"
+    },
+    {
+      "ar": "مُنْذُ",
+      "en": "since, for (a period)",
+      "tr": "mundhu"
+    },
+    {
+      "ar": "سَنَة",
+      "en": "year",
+      "note": "plural: سَنَوَات",
+      "tr": "sana"
+    },
+    {
+      "ar": "يَقُولُ",
+      "en": "he says",
+      "note": "from قَالَ — to say",
+      "tr": "yaqūlu"
+    },
+    {
+      "ar": "تُفَّاح",
+      "en": "apples",
+      "tr": "tuffāḥ"
+    },
+    {
+      "ar": "رَخِيص",
+      "en": "cheap",
+      "tr": "rakhīṣ"
+    },
+    {
+      "ar": "عِنَب",
+      "en": "grapes",
+      "tr": "ʿinab"
+    },
+    {
+      "ar": "لَذِيذ",
+      "en": "delicious",
+      "tr": "ladhīdh"
+    },
+    {
+      "ar": "يَسْأَلُ",
+      "en": "he asks",
+      "note": "from سَأَلَ — to ask",
+      "tr": "yasʾalu"
+    },
+    {
+      "ar": "سِعْر",
+      "en": "price",
+      "tr": "siʿr"
+    },
+    {
+      "ar": "يَدْفَعُ",
+      "en": "he pays; he pushes",
+      "note": "from دَفَعَ",
+      "tr": "yadfaʿu"
+    },
+    {
+      "ar": "نُقُود",
+      "en": "money",
+      "tr": "nuqūd"
+    },
+    {
+      "ar": "أَحْيَانًا",
+      "en": "sometimes",
+      "tr": "aḥyānan"
+    },
+    {
+      "ar": "سَمَك",
+      "en": "fish",
+      "tr": "samak"
+    },
+    {
+      "ar": "آخِر",
+      "en": "end (of); last",
+      "tr": "ākhir"
+    },
+    {
+      "ar": "عَصِير",
+      "en": "juice",
+      "tr": "ʿaṣīr"
+    },
+    {
+      "ar": "بُرْتُقَال",
+      "en": "orange(s)",
+      "tr": "burtuqāl"
+    },
+    {
+      "ar": "بَارِد",
+      "en": "cold",
+      "tr": "bārid"
+    },
+    {
+      "ar": "مَلِيء بِ",
+      "en": "full of",
+      "tr": "malīʾ bi"
+    },
+    {
+      "ar": "لَوْن",
+      "en": "color",
+      "note": "plural: أَلْوَان",
+      "tr": "lawn"
+    },
+    {
+      "ar": "صَوْت",
+      "en": "sound, voice",
+      "note": "plural: أَصْوَات",
+      "tr": "ṣawt"
+    }
   ],
   "questions": [
-    { "q": "مَتَى يَذْهَبُ الكَاتِبُ إِلَى السُّوقِ؟", "options": ["كُلَّ يَوْمِ جُمُعَةٍ", "كُلَّ يَوْمِ سَبْتٍ", "كُلَّ صَبَاحٍ", "فِي نِهَايَةِ الشَّهْرِ"], "answer": 1 },
-    { "q": "كَيْفَ يَذْهَبَانِ إِلَى السُّوقِ؟", "options": ["بِالسَّيَّارَةِ", "بِالحَافِلَةِ", "مَشْيًا عَلَى الأَقْدَامِ", "بِالدَّرَّاجَةِ"], "answer": 2 },
-    { "q": "مَاذَا يَحْمِلُ الكَاتِبُ؟", "options": ["السَّلَّةَ الثَّقِيلَةَ", "الخُضَارَ", "النُّقُودَ", "السَّمَكَ"], "answer": 0 },
-    { "q": "مَاذَا يَقُولُ البَائِعُ؟", "options": ["السَّمَكُ طَازَجٌ", "التُّفَّاحُ رَخِيصٌ وَالعِنَبُ لَذِيذٌ", "السُّوقُ مُغْلَقٌ", "الأَسْعَارُ غَالِيَةٌ"], "answer": 1 },
-    { "q": "مَاذَا يَشْرَبَانِ قَبْلَ الرُّجُوعِ؟", "options": ["الشَّايَ", "القَهْوَةَ", "عَصِيرَ البُرْتُقَالِ البَارِدَ", "الحَلِيبَ"], "answer": 2 }
+    {
+      "q": "مَتَى يَذْهَبُ الكَاتِبُ إِلَى السُّوقِ؟",
+      "options": [
+        "كُلَّ يَوْمِ جُمُعَةٍ",
+        "كُلَّ يَوْمِ سَبْتٍ",
+        "كُلَّ صَبَاحٍ",
+        "فِي نِهَايَةِ الشَّهْرِ"
+      ],
+      "answer": 1
+    },
+    {
+      "q": "كَيْفَ يَذْهَبَانِ إِلَى السُّوقِ؟",
+      "options": [
+        "بِالسَّيَّارَةِ",
+        "بِالحَافِلَةِ",
+        "مَشْيًا عَلَى الأَقْدَامِ",
+        "بِالدَّرَّاجَةِ"
+      ],
+      "answer": 2
+    },
+    {
+      "q": "مَاذَا يَحْمِلُ الكَاتِبُ؟",
+      "options": [
+        "السَّلَّةَ الثَّقِيلَةَ",
+        "الخُضَارَ",
+        "النُّقُودَ",
+        "السَّمَكَ"
+      ],
+      "answer": 0
+    },
+    {
+      "q": "مَاذَا يَقُولُ البَائِعُ؟",
+      "options": [
+        "السَّمَكُ طَازَجٌ",
+        "التُّفَّاحُ رَخِيصٌ وَالعِنَبُ لَذِيذٌ",
+        "السُّوقُ مُغْلَقٌ",
+        "الأَسْعَارُ غَالِيَةٌ"
+      ],
+      "answer": 1
+    },
+    {
+      "q": "مَاذَا يَشْرَبَانِ قَبْلَ الرُّجُوعِ؟",
+      "options": [
+        "الشَّايَ",
+        "القَهْوَةَ",
+        "عَصِيرَ البُرْتُقَالِ البَارِدَ",
+        "الحَلِيبَ"
+      ],
+      "answer": 2
+    }
   ],
-  "dictation": [2, 4, 7],
+  "dictation": [
+    2,
+    4,
+    7
+  ],
   "translate": [
-    { "en": "We buy vegetables and fruits.", "ar": "نَشْتَرِي الخُضَارَ وَالفَوَاكِهَ." },
-    { "en": "The market is near our house.", "ar": "السُّوقُ قَرِيبٌ مِنْ بَيْتِنَا." },
-    { "en": "Sometimes we drink cold orange juice.", "ar": "أَحْيَانًا نَشْرَبُ عَصِيرَ البُرْتُقَالِ البَارِدَ." }
+    {
+      "en": "We buy vegetables and fruits.",
+      "ar": "نَشْتَرِي الخُضَارَ وَالفَوَاكِهَ."
+    },
+    {
+      "en": "The market is near our house.",
+      "ar": "السُّوقُ قَرِيبٌ مِنْ بَيْتِنَا."
+    },
+    {
+      "en": "Sometimes we drink cold orange juice.",
+      "ar": "أَحْيَانًا نَشْرَبُ عَصِيرَ البُرْتُقَالِ البَارِدَ."
+    }
   ]
 }

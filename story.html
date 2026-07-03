@@ -45,8 +45,13 @@ loadStory(storyId).then(s => {
     <p class="sub">Level ${s.level} · ${s.vocab.length} vocabulary words · Grammar: ${s.grammar}</p>
   `;
   const done = stepsDone(storyId);
-  const firstUndone = STEPS.find(st => !done[st.key]);
-  currentStep = firstUndone ? firstUndone.key : "listen";
+  const wanted = params.get("step");
+  if (wanted && STEPS.some(st => st.key === wanted)) {
+    currentStep = wanted;
+  } else {
+    const firstUndone = STEPS.find(st => !done[st.key]);
+    currentStep = firstUndone ? firstUndone.key : "listen";
+  }
   renderTabs();
   renderStep();
 }).catch(e => {
@@ -140,7 +145,7 @@ function renderListen() {
 function renderRead() {
   body.innerHTML = `
     <div class="card">
-      <h2>Read — tap any word for its meaning</h2>
+      <h2>Read — tap any word to hear it and see its meaning</h2>
       <div class="toggles">
         <label><input type="checkbox" id="tgTashkeel" checked> Vowel marks (تشكيل)</label>
         <label><input type="checkbox" id="tgTrans"> English translation</label>
@@ -174,6 +179,7 @@ function renderRead() {
         ws.onclick = (ev) => {
           ev.stopPropagation();
           logEvent({ e: "tap", story: storyId, w: stripTashkeel(w).replace(/[.،«»!؟]/g, "") });
+          speak(w.replace(/[.،«»!؟]/g, ""), 0.8);
           hidePop();
           pop = document.createElement("div");
           pop.className = "gloss-pop";
@@ -208,17 +214,89 @@ function renderRead() {
   document.getElementById("readDone").onclick = () => markDone("read");
 }
 
-/* ============ MEMORIZE ============ */
+/* ============ MEMORIZE (vocabulary table) ============ */
 function renderMemorize() {
   body.innerHTML = `
+    <div class="card">
+      <h2>Vocabulary — ${story.vocab.length} words</h2>
+      <p class="sub">Study the list, use 🔊 to hear each word. Then switch on <strong>Test me</strong> — the English hides, and you tap a row only when you need the answer (tapped rows count as “missed” so they come back sooner).</p>
+      <div class="toggles">
+        <label><input type="checkbox" id="tgTest"> Test me (hide English)</label>
+        <label><input type="checkbox" id="tgTr" checked> Transliteration</label>
+      </div>
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+          <tbody id="vtBody"></tbody>
+        </table>
+      </div>
+      <div class="ex-row" style="margin-top:16px">
+        <button class="primary" id="vtDone">✓ Done studying — add these words to my review deck</button>
+        <button class="small" id="cardMode">prefer flashcards?</button>
+      </div>
+      <div class="step-done-banner" id="doneBanner">✓ Words added — they'll come back in <a href="review.html">Review</a> on a spaced schedule.</div>
+    </div>
+  `;
+  if (stepsDone(storyId).memorize) document.getElementById("doneBanner").classList.add("show");
+
+  const tbody = document.getElementById("vtBody");
+  const tgTest = document.getElementById("tgTest");
+  const tgTr = document.getElementById("tgTr");
+  const missed = new Set();
+
+  story.vocab.forEach((v, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${v.en}${v.note ? `<span class="note-inline">${v.note}</span>` : ""}</td>
+      <td class="ar-cell">${v.ar}</td>
+      <td><span class="row-speak" title="hear it">🔊</span></td>
+      <td class="tr-cell">${v.tr || ""}</td>
+    `;
+    tr.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
+    const enCell = tr.querySelector(".en-cell");
+    enCell.onclick = () => {
+      if (enCell.classList.contains("veiled")) {
+        enCell.classList.remove("veiled");
+        missed.add(i);
+        logEvent({ e: "vocab-reveal", story: storyId, i });
+      }
+    };
+    tbody.appendChild(tr);
+  });
+
+  function applyToggles() {
+    [...tbody.children].forEach((tr) => {
+      const enCell = tr.querySelector(".en-cell");
+      if (tgTest.checked) enCell.classList.add("veiled");
+      else enCell.classList.remove("veiled");
+      tr.querySelector(".tr-cell").style.visibility = tgTr.checked ? "visible" : "hidden";
+    });
+  }
+  tgTest.onchange = applyToggles;
+  tgTr.onchange = applyToggles;
+  applyToggles();
+
+  document.getElementById("vtDone").onclick = () => {
+    const keys = story.vocab.map((v, i) => `${storyId}:${i}`);
+    const added = seedCards(keys);
+    // words you needed to peek at start back sooner
+    missed.forEach(i => gradeCard(`${storyId}:${i}`, "again"));
+    logEvent({ e: "vocab-studied", story: storyId, added, missed: [...missed] });
+    markDone("memorize");
+  };
+  document.getElementById("cardMode").onclick = renderFlashcards;
+}
+
+function renderFlashcards() {
+  body.innerHTML = `
     <div class="card flash-wrap">
-      <h2 style="text-align:left">Memorize — flashcards with spaced repetition</h2>
-      <p class="sub" style="text-align:left">Tap the card to reveal. Grade yourself honestly — “Again” brings it back in minutes, “Good” tomorrow, “Easy” in 3 days. Graded words join your <a href="review.html">daily review deck</a>.</p>
+      <h2 style="text-align:left">Flashcards <button class="small" id="tableMode" style="float:right">back to table</button></h2>
       <div class="flash-count" id="flashCount"></div>
       <div id="flashArea"></div>
       <div class="step-done-banner" id="doneBanner">✓ All ${story.vocab.length} words graded — they're in your review deck now.</div>
     </div>
   `;
+  document.getElementById("tableMode").onclick = renderMemorize;
   if (stepsDone(storyId).memorize) document.getElementById("doneBanner").classList.add("show");
 
   const queue = story.vocab.map((v, i) => ({ v, i }));

@@ -280,6 +280,40 @@ button.primary:disabled:hover { background: var(--accent); }
 .step-done-banner.show { display: block; }
 .next-row { display: flex; justify-content: space-between; margin-top: 20px; }
 
+/* ---------- Vocabulary table ---------- */
+.vocab-table-wrap { overflow-x: auto; }
+.vocab-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.vocab-table th {
+  background: var(--accent); color: #fff; text-align: left;
+  padding: 8px 12px; font-weight: 600; font-size: 13.5px;
+}
+.vocab-table th.ar-col { text-align: right; }
+.vocab-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.vocab-table tr:nth-child(even) td { background: #f2ede4; }
+.vocab-table td.ar-cell {
+  direction: rtl; text-align: right; font-family: var(--font-ar);
+  font-size: 24px; white-space: nowrap;
+}
+.vocab-table td.tr-cell { color: var(--muted); font-style: italic; white-space: nowrap; }
+.vocab-table td.en-cell { min-width: 140px; }
+.vocab-table .note-inline { display: block; font-size: 12px; color: var(--muted); font-style: normal; }
+.vocab-table .row-speak { cursor: pointer; user-select: none; font-size: 15px; }
+.vocab-table td.veiled { cursor: pointer; }
+.vocab-table td.veiled > * { visibility: hidden; }
+.vocab-table td.veiled { background: repeating-linear-gradient(45deg, #eee7db, #eee7db 6px, #f5f0e8 6px, #f5f0e8 12px) !important; border-radius: 4px; }
+
+/* ---------- What now ---------- */
+.whatnow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.whatnow a {
+  display: block; text-decoration: none; color: var(--ink);
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  background: var(--card); transition: transform .12s, box-shadow .12s;
+}
+.whatnow a:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.08); border-color: var(--accent); }
+.whatnow .wn-icon { font-size: 22px; }
+.whatnow .wn-title { font-weight: 600; font-size: 14.5px; margin: 4px 0 2px; }
+.whatnow .wn-desc { font-size: 12.5px; color: var(--muted); }
+
 footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px 0; }
 footer a { color: var(--accent); }
 

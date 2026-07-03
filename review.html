@@ -11,10 +11,9 @@
 <body>
 <main>
   <h1>Daily Review <span class="arabic" style="color:var(--accent)">المُرَاجَعَة اليَوْمِيَّة</span></h1>
-  <p class="sub">Every word you've graded in the stories comes back here on a spaced schedule. Clear this queue daily and the vocabulary sticks.</p>
-  <div class="card flash-wrap" id="reviewCard">
-    <div class="flash-count" id="flashCount"></div>
-    <div id="flashArea">Loading…</div>
+  <p class="sub">Words come back on a spaced schedule. Look at the Arabic, recall the meaning, reveal, and mark only what you missed — missed words return sooner.</p>
+  <div class="card" id="reviewCard">
+    <div id="reviewArea">Loading…</div>
   </div>
 </main>
 
@@ -24,50 +23,130 @@
 renderNav("review");
 trackPage("review");
 
-const area = document.getElementById("flashArea");
-const count = document.getElementById("flashCount");
+const area = document.getElementById("reviewArea");
 
 async function init() {
   const due = dueCards(); // keys like "story-01:5"
   if (due.length === 0) {
     const t = totalCards();
     area.innerHTML = t === 0
-      ? `<p>Your deck is empty. Grade flashcards inside a <a href="index.html">story</a> first — they'll appear here for review.</p>`
+      ? `<p>Your deck is empty. Study the vocabulary list inside a <a href="index.html">story</a> first — those words appear here for review.</p>`
       : `<p style="font-size:18px">✅ Nothing due right now — all ${t} words are scheduled. Come back tomorrow!</p>`;
     return;
   }
 
-  // load vocab content for the stories involved
   const storyIds = [...new Set(due.map(k => k.split(":")[0]))];
   const stories = {};
   await Promise.all(storyIds.map(async id => { stories[id] = await loadStory(id); }));
 
-  // shuffle deterministically enough
   const queue = due.map(k => {
     const [sid, idx] = k.split(":");
     return { key: k, v: stories[sid].vocab[parseInt(idx)] };
   }).filter(c => c.v).sort(() => 0.5 - Math.random());
 
+  renderTable(queue);
+}
+
+/* ---------- table review (default): reveal, mark only misses ---------- */
+function renderTable(queue) {
+  area.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <strong>${queue.length} word${queue.length > 1 ? "s" : ""} due</strong>
+      <div style="display:flex;gap:8px">
+        <button class="small" id="revealAll">Reveal all</button>
+        <button class="small" id="cardMode">card mode</button>
+      </div>
+    </div>
+    <div class="toggles"><label><input type="checkbox" id="tgTr"> Transliteration</label></div>
+    <div class="vocab-table-wrap">
+      <table class="vocab-table">
+        <thead><tr><th class="ar-col" style="text-align:right">Arabic</th><th></th><th>Transliteration</th><th>English</th><th>missed?</th></tr></thead>
+        <tbody id="rvBody"></tbody>
+      </table>
+    </div>
+    <div class="ex-row" style="margin-top:16px">
+      <button class="primary" id="finish">✓ Finish — I knew everything except the marked ones</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted)">Tap a row to reveal its English. Mark ✗ only on words you got wrong — they'll come back within minutes/tomorrow; the rest move further out.</p>
+  `;
+  const tbody = document.getElementById("rvBody");
+  const missed = new Set();
+
+  queue.forEach(({ key, v }, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="ar-cell">${v.ar}</td>
+      <td><span class="row-speak" title="hear it">🔊</span></td>
+      <td class="tr-cell" style="visibility:hidden">${v.tr || ""}</td>
+      <td class="en-cell veiled"><span>${v.en}${v.note ? `<span class="note-inline">${v.note}</span>` : ""}</span></td>
+      <td><button class="small miss" style="border-color:var(--red);color:var(--red)">✗</button></td>
+    `;
+    tr.querySelector(".row-speak").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
+    const enCell = tr.querySelector(".en-cell");
+    tr.onclick = () => enCell.classList.remove("veiled");
+    const missBtn = tr.querySelector(".miss");
+    missBtn.onclick = (e) => {
+      e.stopPropagation();
+      enCell.classList.remove("veiled");
+      if (missed.has(key)) {
+        missed.delete(key);
+        missBtn.style.background = "";
+        missBtn.textContent = "✗";
+      } else {
+        missed.add(key);
+        missBtn.style.background = "var(--red-soft)";
+        missBtn.textContent = "✗ missed";
+      }
+    };
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("tgTr").onchange = (e) => {
+    [...tbody.children].forEach(tr => tr.querySelector(".tr-cell").style.visibility = e.target.checked ? "visible" : "hidden");
+  };
+  document.getElementById("revealAll").onclick = () => {
+    [...tbody.querySelectorAll(".en-cell")].forEach(c => c.classList.remove("veiled"));
+  };
+  document.getElementById("cardMode").onclick = () => renderCards(queue);
+  document.getElementById("finish").onclick = () => {
+    queue.forEach(({ key }) => {
+      const g = missed.has(key) ? "again" : "good";
+      gradeCard(key, g);
+      logEvent({ e: "review", card: key, g, src: "table" });
+    });
+    area.innerHTML = `<p style="font-size:18px">🎉 Review complete — ${queue.length} words done, ${missed.size} to revisit. <span class="arabic">أَحْسَنْت!</span></p>
+      <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`;
+    autoSync();
+  };
+}
+
+/* ---------- card mode (optional) ---------- */
+function renderCards(queue) {
   let pos = 0, again = [];
+  area.innerHTML = `<div class="flash-wrap">
+    <div style="text-align:right"><button class="small" id="tableMode">back to table</button></div>
+    <div class="flash-count" id="flashCount"></div>
+    <div id="flashArea"></div>
+  </div>`;
+  document.getElementById("tableMode").onclick = () => renderTable(queue.slice(pos).concat(again));
+  const flashArea = document.getElementById("flashArea");
+  const count = document.getElementById("flashCount");
+
   function show() {
     if (pos >= queue.length) {
-      if (again.length) {
-        queue.push(...again.splice(0));
-        show();
-        return;
-      }
+      if (again.length) { queue.push(...again.splice(0)); show(); return; }
       count.textContent = "";
-      area.innerHTML = `<p style="font-size:18px">🎉 Review complete — ${queue.length} cards done. <span class="arabic">أَحْسَنْت!</span></p>
+      flashArea.innerHTML = `<p style="font-size:18px">🎉 Review complete. <span class="arabic">أَحْسَنْت!</span></p>
         <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`;
       autoSync();
       return;
     }
     const { key, v } = queue[pos];
     count.textContent = `${pos + 1} / ${queue.length}` + (again.length ? ` (+${again.length} to retry)` : "");
-    area.innerHTML = `
+    flashArea.innerHTML = `
       <div class="flashcard" id="card">
         <div class="front">${v.ar}</div>
-        <div class="back" id="back" style="display:none">${v.en}${v.note ? `<div class="note">${v.note}</div>` : ""}</div>
+        <div class="back" id="back" style="display:none">${v.en}${v.tr ? `<div style="color:var(--muted);font-style:italic;font-size:15px">${v.tr}</div>` : ""}${v.note ? `<div class="note">${v.note}</div>` : ""}</div>
         <div class="hint" id="hint">tap to reveal · 🔊 to hear</div>
       </div>
       <div class="ex-row" style="justify-content:center;margin-bottom:14px">
@@ -94,12 +173,13 @@ async function init() {
       pos++;
       show();
     };
-    area.querySelector(".again").onclick = () => grade("again");
-    area.querySelector(".good").onclick = () => grade("good");
-    area.querySelector(".easy").onclick = () => grade("easy");
+    flashArea.querySelector(".again").onclick = () => grade("again");
+    flashArea.querySelector(".good").onclick = () => grade("good");
+    flashArea.querySelector(".easy").onclick = () => grade("easy");
   }
   show();
 }
+
 init();
 </script>
 </body>

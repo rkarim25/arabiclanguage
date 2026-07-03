@@ -55,6 +55,71 @@ function dueCards() {
   return Object.keys(srs).filter(k => srs[k].due <= now);
 }
 function totalCards() { return Object.keys(getSrs()).length; }
+function seedCards(keys) {
+  // add new words to the deck at box 1 (due tomorrow) without per-card grading
+  const srs = getSrs();
+  let added = 0;
+  keys.forEach(k => {
+    if (!srs[k]) { srs[k] = { box: 1, due: Date.now() + DAY }; added++; }
+  });
+  store.set("ats-srs", srs);
+  return added;
+}
+
+/* ---------- "What now?" suggestions ---------- */
+function suggestNext() {
+  const out = [];
+  const due = dueCards().length;
+  if (due > 0) out.push({
+    icon: "📚", title: `Review ${due} due word${due > 1 ? "s" : ""}`,
+    desc: "Quick table review — mark only what you missed", href: "review.html",
+  });
+  // next incomplete story/step
+  for (const s of STORY_LIST) {
+    if (s.locked) continue;
+    const done = stepsDone(s.id);
+    const next = STEPS.find(st => !done[st.key]);
+    if (next) {
+      const started = STEPS.some(st => done[st.key]);
+      out.push({
+        icon: started ? "▶" : "✨",
+        title: `${started ? "Continue" : "Start"} “${s.titleEn}” — ${next.en}`,
+        desc: `Story ${s.n}: ${next.ar} ${next.en.toLowerCase()} step`,
+        href: `story.html?id=${s.id}&step=${next.key}`,
+      });
+      break;
+    }
+  }
+  // reinforce: story with most trouble signals in the log; else re-shadow last completed
+  const log = store.get("ats-log", []);
+  const trouble = {};
+  log.forEach(x => {
+    const sid = x.story || (x.card && x.card.split(":")[0]);
+    if (!sid) return;
+    if (x.e === "replay" || (x.e === "review" && x.g === "again") || (x.e === "speak" && x.score < 0.6) ||
+        ((x.e === "dict" || x.e === "trans" || x.e === "quiz") && x.ok === false)) {
+      trouble[sid] = (trouble[sid] || 0) + 1;
+    }
+  });
+  const worst = Object.entries(trouble).sort((a, b) => b[1] - a[1])[0];
+  const completedStories = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key]));
+  if (worst && STORY_LIST.some(s => s.id === worst[0])) {
+    const s = STORY_LIST.find(s => s.id === worst[0]);
+    out.push({
+      icon: "🎤", title: `Strengthen “${s.titleEn}”`,
+      desc: "Shadow it out loud — this story has your most trouble spots",
+      href: `story.html?id=${s.id}&step=speak`,
+    });
+  } else if (completedStories.length) {
+    const s = completedStories[completedStories.length - 1];
+    out.push({
+      icon: "👁", title: `Re-read “${s.titleEn}” without vowels`,
+      desc: "Reading bare text is the real-world skill",
+      href: `story.html?id=${s.id}&step=read`,
+    });
+  }
+  return out.slice(0, 3);
+}
 
 /* ---------- Arabic text utils ---------- */
 function stripTashkeel(s) {

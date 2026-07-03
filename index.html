@@ -20,6 +20,11 @@
     <div class="stat"><div class="n" id="statTime">0</div><div class="l">minutes studied</div></div>
   </div>
 
+  <div class="card" style="border-color:var(--accent)">
+    <h2>▶ What now? Pick any — they all move you forward</h2>
+    <div class="whatnow" id="whatNow"></div>
+  </div>
+
   <div class="card" id="coachCard" style="display:none;border-color:var(--accent)">
     <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
     <p id="coachNote" style="font-size:15px"></p>
@@ -122,6 +127,15 @@ STORY_LIST.forEach(s => {
     <div class="meta">${s.locked ? "Added in the next batch" : (pct === 100 ? "✓ Completed" : pct > 0 ? pct + "% complete" : (s.desc || ""))}</div>
   `;
   grid.appendChild(a);
+});
+
+/* what now */
+const wn = document.getElementById("whatNow");
+suggestNext().forEach(s => {
+  const a = document.createElement("a");
+  a.href = s.href;
+  a.innerHTML = `<div class="wn-icon">${s.icon}</div><div class="wn-title">${s.title}</div><div class="wn-desc">${s.desc}</div>`;
+  wn.appendChild(a);
 });
 
 /* stats */
