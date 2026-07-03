@@ -317,8 +317,41 @@ button.primary:disabled:hover { background: var(--accent); }
 footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px 0; }
 footer a { color: var(--accent); }
 
+/* ---------- Mobile ---------- */
 @media (max-width: 600px) {
-  .story-text { font-size: 25px; }
-  .flashcard .front { font-size: 36px; }
-  main { padding: 18px 12px 60px; }
+  main { padding: 14px 10px 60px; }
+  h1 { font-size: 21px; }
+  h2 { font-size: 17px; }
+  nav { padding: 8px 10px; gap: 6px; }
+  nav .brand { font-size: 0; gap: 0; }           /* keep only the Arabic wordmark */
+  nav .brand .ar { font-size: 19px; }
+  nav a.link { padding: 6px 8px; font-size: 13px; }
+  .story-text { font-size: 24px; line-height: 2.2; }
+  .flashcard .front { font-size: 34px; }
+  .steps { gap: 4px; }
+  .steps button { min-width: 30%; padding: 8px 4px; font-size: 11.5px; }
+  .steps button .ar { font-size: 15px; }
+  .stat { padding: 10px 12px; min-width: 100px; }
+  .stat .n { font-size: 21px; }
+  .whatnow { grid-template-columns: 1fr; }
+  .vocab-table th, .vocab-table td { padding: 6px 8px; }
+  .vocab-table td.ar-cell { font-size: 20px; }
+  .vocab-table { font-size: 14px; }
+  .fill-input { width: 100%; min-width: 110px; font-size: 20px; }
+  .answer-ar { font-size: 20px; }
+  .listen-list .txt { font-size: 20px; }
+  .quiz-q .qt { font-size: 20px; }
+  .quiz-opts button { font-size: 17px; }
+  button { padding: 8px 12px; }
+  .kb-row button { min-width: 34px; padding: 5px 4px; }
+  .story-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .story-card { padding: 12px; }
+  .story-card .title-ar { font-size: 22px; }
+  .fam-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+
+/* generous touch targets everywhere */
+@media (pointer: coarse) {
+  button, .row-speak, .sent-play, .w { min-height: 34px; }
+  .vocab-table .row-speak { font-size: 19px; padding: 4px; }
 }

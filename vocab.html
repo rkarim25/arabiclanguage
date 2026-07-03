@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -49,13 +50,17 @@ renderNav("vocab");
 trackPage("vocab");
 
 const content = document.getElementById("content");
-let FAMS = null;
+let FAMS = null, CORE = null;
 
-fetch("data/families.json").then(r => r.json()).then(d => {
-  FAMS = d.families;
+Promise.all([
+  fetch("data/families.json").then(r => r.json()),
+  fetch("data/quran-core.json").then(r => r.json()),
+]).then(([f, c]) => {
+  FAMS = f.families;
+  CORE = c.words;
   const params = new URLSearchParams(location.search);
   const famId = params.get("fam");
-  const fam = FAMS.find(f => f.id === famId);
+  const fam = FAMS.find(x => x.id === famId);
   if (fam) renderFamily(fam, params.get("mode") || "study");
   else renderList();
 });
@@ -66,10 +71,44 @@ function renderList() {
   trackPage("vocab:list");
   content.innerHTML = `
     <h1>Vocab Lab <span class="arabic" style="color:var(--accent)">مُخْتَبَر المُفْرَدَات</span></h1>
-    <p class="sub">One story word opens a whole <strong>root family</strong> — the connected forms you'll actually hear in the Quran.
-    Study the family, then <strong>fill in the sheet</strong> from memory and check your answers.</p>
+    <p class="sub">Everything here is ordered by <strong>frequency</strong> — the words you'll meet most often, first. No wasted memorization.</p>
+    <div class="card" style="border-color:var(--accent)" id="sheetCard">
+      <h2>📝 Today's sheet — your 3-minute micro-lesson</h2>
+      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review, your recent misses, then the next most-frequent Quran words you haven't met. Fill the column, check, done — misses come back by themselves.</p>
+      <div id="sheetArea">Building your sheet…</div>
+    </div>
+    <h2 style="margin-top:24px">📖 The Quran core — most frequent words first</h2>
+    <p class="sub">These ≈60 words are the highest-yield vocabulary in existence for understanding recitation. They flow into Today's Sheet a few at a time.</p>
+    <div class="card">
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th></tr></thead>
+          <tbody id="coreBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <h2 style="margin-top:24px">🌿 Root families</h2>
+    <p class="sub">One story word opens a whole root — study the family, then fill in the sheet from memory.</p>
     <div class="fam-grid" id="famGrid"></div>
   `;
+  /* core table */
+  const srs = getSrs();
+  const coreBody = document.getElementById("coreBody");
+  CORE.forEach((w, i) => {
+    const tr = document.createElement("tr");
+    const st = srs[`qc:${i}`];
+    tr.innerHTML = `
+      <td style="color:var(--muted);font-size:12px">${i + 1}</td>
+      <td class="en-cell">${w.en}${st ? ` <span style="color:var(--accent);font-size:11px">✓ box ${st.box}</span>` : ""}</td>
+      <td class="ar-cell">${w.ar}</td>
+      <td><span class="row-speak">🔊</span></td>
+      <td class="tr-cell">${w.tr}</td>
+      <td style="color:var(--muted);font-size:12px;white-space:nowrap">≈${w.n}×</td>
+    `;
+    tr.querySelector(".row-speak").onclick = () => speak(w.ar, 0.8);
+    coreBody.appendChild(tr);
+  });
+  /* families */
   const grid = document.getElementById("famGrid");
   FAMS.forEach(f => {
     const div = document.createElement("div");
@@ -82,6 +121,126 @@ function renderList() {
     div.onclick = () => { history.pushState({}, "", `vocab.html?fam=${f.id}`); renderFamily(f, "study"); };
     grid.appendChild(div);
   });
+  renderSheet();
+}
+
+/* ---------- Today's Sheet ---------- */
+let sheetMode = "understand"; // understand: Ar→En (Quran comprehension) | produce: En→Ar (speaking)
+let sheetItems = null;
+
+async function buildSheetItems() {
+  const due = dueCards();
+  const items = (await resolveCards(due.slice(0, 8))).map(x => ({ ...x, isNew: false }));
+  const srs = getSrs();
+  for (let i = 0; i < CORE.length && items.length < 10; i++) {
+    const key = `qc:${i}`;
+    if (!srs[key]) items.push({ key, v: { ar: CORE[i].ar, en: CORE[i].en, tr: CORE[i].tr, note: `≈${CORE[i].n}× in the Quran` }, isNew: true });
+  }
+  return items;
+}
+
+async function renderSheet() {
+  const area = document.getElementById("sheetArea");
+  if (!sheetItems) sheetItems = await buildSheetItems();
+  if (!sheetItems.length) { area.innerHTML = "<p>Nothing to study right now — well done. Come back tomorrow!</p>"; return; }
+  area.innerHTML = `
+    <div class="toggles" style="margin-bottom:10px">
+      <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
+      <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Produce (English → عربي)</label>
+    </div>
+    <div class="vocab-table-wrap">
+      <table class="vocab-table"><tbody id="shBody"></tbody></table>
+    </div>
+    <div class="ex-row" style="margin-top:12px">
+      <button class="primary" id="shCheck">✓ Check the sheet</button>
+      ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨ Phonetic keyboard</button>' : ""}
+    </div>
+    <div class="quiz-score" id="shScore"></div>
+  `;
+  area.querySelectorAll("input[name=shMode]").forEach(r => r.onchange = () => { sheetMode = r.value; renderSheet(); });
+  const tbody = document.getElementById("shBody");
+  let lastFocused = null;
+  tbody.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
+
+  sheetItems.forEach(({ key, v, isNew }, i) => {
+    const tr = document.createElement("tr");
+    if (sheetMode === "understand") {
+      tr.innerHTML = `
+        <td class="ar-cell">${v.ar}</td>
+        <td><span class="row-speak">🔊</span></td>
+        <td class="tr-cell">${v.tr || ""}</td>
+        <td style="min-width:150px"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:13px;direction:ltr;display:none"></span></td>
+      `;
+    } else {
+      tr.innerHTML = `
+        <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
+        <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span></td>
+        <td class="tr-cell">${v.tr || ""}</td>
+      `;
+    }
+    const spk = tr.querySelector(".row-speak");
+    if (spk) spk.onclick = () => speak(v.ar, 0.8);
+    tbody.appendChild(tr);
+  });
+
+  if (sheetMode === "produce") {
+    document.getElementById("shKb").onclick = () => mountKbDock(() => lastFocused);
+  }
+
+  document.getElementById("shCheck").onclick = () => {
+    let right = 0;
+    sheetItems.forEach(({ key, v }, i) => {
+      const input = tbody.querySelector(`input[data-i="${i}"]`);
+      const ans = tbody.querySelectorAll(".correct-answer")[i];
+      const ok = sheetMode === "understand"
+        ? fuzzyEn(input.value, v.en)
+        : normalizeAr(input.value) === normalizeAr(v.ar);
+      input.classList.remove("ok", "no");
+      input.classList.add(ok ? "ok" : "no");
+      if (ok) { right++; ans.style.display = "none"; }
+      else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
+      gradeCard(key, ok ? "good" : "again");
+      logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
+    });
+    document.getElementById("shScore").textContent =
+      `Score: ${right} / ${sheetItems.length}` +
+      (right === sheetItems.length ? " — ممتاز! 🎉" : " — the red ones come back automatically.");
+    logEvent({ e: "sheet-done", mode: sheetMode, score: right, total: sheetItems.length });
+    autoSync();
+  };
+}
+
+/* shared phonetic keyboard dock */
+let _kbMounted = false;
+function mountKbDock(getTarget) {
+  const dock = document.getElementById("kbDock");
+  if (_kbMounted) { dock.firstChild.style.display = dock.firstChild.style.display === "none" ? "block" : "none"; return; }
+  _kbMounted = true;
+  const kbWrap = document.createElement("div");
+  kbWrap.className = "card";
+  kbWrap.style.padding = "10px";
+  KB_LAYOUT.forEach(r => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "kb-row";
+    r.forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
+      b.onmousedown = (e) => e.preventDefault();
+      b.onclick = () => { const t = getTarget(); if (t) { t.value += LATIN_TO_AR[k]; t.focus(); } };
+      rowDiv.appendChild(b);
+    });
+    kbWrap.appendChild(rowDiv);
+  });
+  const extra = document.createElement("div");
+  extra.className = "kb-row";
+  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
+  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { const t = getTarget(); if (t) { t.value += " "; t.focus(); } };
+  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
+  del.onmousedown = e => e.preventDefault(); del.onclick = () => { const t = getTarget(); if (t) { t.value = t.value.slice(0, -1); t.focus(); } };
+  extra.appendChild(sp); extra.appendChild(del);
+  kbWrap.appendChild(extra);
+  dock.appendChild(kbWrap);
 }
 
 function renderFamily(fam, mode) {
@@ -196,40 +355,7 @@ function renderFill(fam) {
     [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
   };
 
-  /* phonetic keyboard dock, inserts into last focused input */
-  const dock = document.getElementById("kbDock");
-  dock.innerHTML = "";
-  const kbWrap = document.createElement("div");
-  kbWrap.className = "card";
-  kbWrap.style.display = "none";
-  kbWrap.style.padding = "10px";
-  const rows = document.createElement("div");
-  KB_LAYOUT.forEach(r => {
-    const rowDiv = document.createElement("div");
-    rowDiv.className = "kb-row";
-    r.forEach(k => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
-      b.onmousedown = (e) => e.preventDefault(); // keep focus on input
-      b.onclick = () => { if (lastFocused) { lastFocused.value += LATIN_TO_AR[k]; lastFocused.focus(); } };
-      rowDiv.appendChild(b);
-    });
-    rows.appendChild(rowDiv);
-  });
-  const extra = document.createElement("div");
-  extra.className = "kb-row";
-  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
-  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { if (lastFocused) { lastFocused.value += " "; lastFocused.focus(); } };
-  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
-  del.onmousedown = e => e.preventDefault(); del.onclick = () => { if (lastFocused) { lastFocused.value = lastFocused.value.slice(0, -1); lastFocused.focus(); } };
-  extra.appendChild(sp); extra.appendChild(del);
-  rows.appendChild(extra);
-  kbWrap.appendChild(rows);
-  dock.appendChild(kbWrap);
-  document.getElementById("kbToggle").onclick = () => {
-    kbWrap.style.display = kbWrap.style.display === "none" ? "block" : "none";
-  };
+  document.getElementById("kbToggle").onclick = () => mountKbDock(() => lastFocused);
 
   document.getElementById("checkAll").onclick = () => {
     let right = 0;

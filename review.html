@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
   <title>Daily Review — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,29 +36,7 @@ async function init() {
     return;
   }
 
-  const srcIds = [...new Set(due.map(k => k.split(":")[0]))];
-  const stories = {};
-  let families = null;
-  await Promise.all(srcIds.map(async id => {
-    if (id.startsWith("fam-")) {
-      if (!families) families = (await (await fetch("data/families.json")).json()).families;
-    } else {
-      stories[id] = await loadStory(id);
-    }
-  }));
-
-  const queue = due.map(k => {
-    const [sid, idx] = k.split(":");
-    let v = null;
-    if (sid.startsWith("fam-")) {
-      const fam = (families || []).find(f => "fam-" + f.id === sid);
-      const m = fam && fam.members[parseInt(idx)];
-      if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "root " + fam.root };
-    } else {
-      v = stories[sid] && stories[sid].vocab[parseInt(idx)];
-    }
-    return { key: k, v };
-  }).filter(c => c.v).sort(() => 0.5 - Math.random());
+  const queue = (await resolveCards(due)).sort(() => 0.5 - Math.random());
 
   renderTable(queue);
 }

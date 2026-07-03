@@ -1,0 +1,70 @@
+{
+  "surahs": [
+    {
+      "id": "fatiha",
+      "name": "الفَاتِحَة",
+      "nameEn": "Al-Fatiha — The Opening",
+      "why": "You recite this at least 17 times a day in prayer. Understanding it word-by-word transforms every salah.",
+      "verses": [
+        { "ref": "1:1", "ar": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "en": "In the name of Allah, the Most Gracious, the Most Merciful.",
+          "words": [["بِسْمِ","bismi","in the name of"],["اللَّهِ","allāhi","Allah"],["الرَّحْمَٰنِ","ar-raḥmāni","the Most Gracious"],["الرَّحِيمِ","ar-raḥīmi","the Most Merciful"]] },
+        { "ref": "1:2", "ar": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "en": "All praise is for Allah, Lord of the worlds.",
+          "words": [["الْحَمْدُ","al-ḥamdu","all praise"],["لِلَّهِ","lillāhi","is for Allah"],["رَبِّ","rabbi","Lord of"],["الْعَالَمِينَ","al-ʿālamīna","the worlds"]] },
+        { "ref": "1:3", "ar": "الرَّحْمَٰنِ الرَّحِيمِ", "en": "The Most Gracious, the Most Merciful.",
+          "words": [["الرَّحْمَٰنِ","ar-raḥmāni","the Most Gracious"],["الرَّحِيمِ","ar-raḥīmi","the Most Merciful"]] },
+        { "ref": "1:4", "ar": "مَالِكِ يَوْمِ الدِّينِ", "en": "Master of the Day of Judgment.",
+          "words": [["مَالِكِ","māliki","Master of"],["يَوْمِ","yawmi","the Day of"],["الدِّينِ","ad-dīni","Judgment; Recompense"]] },
+        { "ref": "1:5", "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "en": "You alone we worship, and You alone we ask for help.",
+          "words": [["إِيَّاكَ","iyyāka","You alone"],["نَعْبُدُ","naʿbudu","we worship"],["وَإِيَّاكَ","wa-iyyāka","and You alone"],["نَسْتَعِينُ","nastaʿīnu","we ask for help"]] },
+        { "ref": "1:6", "ar": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "en": "Guide us to the straight path.",
+          "words": [["اهْدِنَا","ihdinā","guide us"],["الصِّرَاطَ","aṣ-ṣirāṭa","the path"],["الْمُسْتَقِيمَ","al-mustaqīma","the straight"]] },
+        { "ref": "1:7", "ar": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "en": "The path of those You have blessed — not of those who earned anger, nor of the astray.",
+          "words": [["صِرَاطَ","ṣirāṭa","the path of"],["الَّذِينَ","alladhīna","those who"],["أَنْعَمْتَ","anʿamta","You have blessed"],["عَلَيْهِمْ","ʿalayhim","upon them"],["غَيْرِ","ghayri","not of"],["الْمَغْضُوبِ","al-maghḍūbi","those who earned anger"],["عَلَيْهِمْ","ʿalayhim","upon them"],["وَلَا","wa-lā","and not"],["الضَّالِّينَ","aḍ-ḍāllīna","the astray"]] }
+      ]
+    },
+    {
+      "id": "ikhlas",
+      "name": "الإِخْلَاص",
+      "nameEn": "Al-Ikhlas — Sincerity",
+      "why": "Equal to a third of the Quran in reward, and built entirely from top-frequency words: قل، هو، الله، لم، يكن، له.",
+      "verses": [
+        { "ref": "112:1", "ar": "قُلْ هُوَ اللَّهُ أَحَدٌ", "en": "Say: He is Allah, the One.",
+          "words": [["قُلْ","qul","say!"],["هُوَ","huwa","He is"],["اللَّهُ","allāhu","Allah"],["أَحَدٌ","aḥadun","One; unique"]] },
+        { "ref": "112:2", "ar": "اللَّهُ الصَّمَدُ", "en": "Allah, the Eternal Refuge.",
+          "words": [["اللَّهُ","allāhu","Allah"],["الصَّمَدُ","aṣ-ṣamadu","the Eternal Refuge"]] },
+        { "ref": "112:3", "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ", "en": "He neither begets nor is born.",
+          "words": [["لَمْ","lam","(He) did not"],["يَلِدْ","yalid","beget"],["وَلَمْ","wa-lam","nor was"],["يُولَدْ","yūlad","He born"]] },
+        { "ref": "112:4", "ar": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", "en": "And there is none comparable to Him.",
+          "words": [["وَلَمْ","wa-lam","and (there) is not"],["يَكُن","yakun","is"],["لَّهُ","lahu","to Him"],["كُفُوًا","kufuwan","comparable; equal"],["أَحَدٌ","aḥadun","anyone"]] }
+      ]
+    },
+    {
+      "id": "asr",
+      "name": "العَصْر",
+      "nameEn": "Al-Asr — Time",
+      "why": "Three verses containing the Quran's core message — and its highest-frequency structures: إنّ، الذين، آمنوا، عملوا، الحق.",
+      "verses": [
+        { "ref": "103:1", "ar": "وَالْعَصْرِ", "en": "By Time!",
+          "words": [["وَالْعَصْرِ","wal-ʿaṣri","by Time (an oath)"]] },
+        { "ref": "103:2", "ar": "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "en": "Indeed, mankind is in loss.",
+          "words": [["إِنَّ","inna","indeed"],["الْإِنسَانَ","al-insāna","mankind"],["لَفِي","la-fī","is surely in"],["خُسْرٍ","khusrin","loss"]] },
+        { "ref": "103:3", "ar": "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ", "en": "Except those who believe, do righteous deeds, urge one another to truth, and urge one another to patience.",
+          "words": [["إِلَّا","illā","except"],["الَّذِينَ","alladhīna","those who"],["آمَنُوا","āmanū","believed"],["وَعَمِلُوا","wa-ʿamilū","and did"],["الصَّالِحَاتِ","aṣ-ṣāliḥāti","righteous deeds"],["وَتَوَاصَوْا","wa-tawāṣaw","and urged one another"],["بِالْحَقِّ","bil-ḥaqqi","to the truth"],["وَتَوَاصَوْا","wa-tawāṣaw","and urged one another"],["بِالصَّبْرِ","biṣ-ṣabri","to patience"]] }
+      ]
+    },
+    {
+      "id": "kawthar",
+      "name": "الكَوْثَر",
+      "nameEn": "Al-Kawthar — Abundance",
+      "why": "The shortest surah — and you already know فَصَلِّ and لِرَبِّكَ from your word families.",
+      "verses": [
+        { "ref": "108:1", "ar": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ", "en": "Indeed, We have given you al-Kawthar.",
+          "words": [["إِنَّا","innā","indeed We"],["أَعْطَيْنَاكَ","aʿṭaynāka","We gave you"],["الْكَوْثَرَ","al-kawthara","al-Kawthar; abundance"]] },
+        { "ref": "108:2", "ar": "فَصَلِّ لِرَبِّكَ وَانْحَرْ", "en": "So pray to your Lord and sacrifice.",
+          "words": [["فَصَلِّ","fa-ṣalli","so pray"],["لِرَبِّكَ","li-rabbika","to your Lord"],["وَانْحَرْ","wanḥar","and sacrifice"]] },
+        { "ref": "108:3", "ar": "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ", "en": "Indeed, your enemy is the one cut off.",
+          "words": [["إِنَّ","inna","indeed"],["شَانِئَكَ","shāniʾaka","your hater; enemy"],["هُوَ","huwa","he is"],["الْأَبْتَرُ","al-abtaru","the one cut off"]] }
+      ]
+    }
+  ]
+}

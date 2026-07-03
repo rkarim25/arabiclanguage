@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <title>Quran — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
+    .verse-block:last-child { border-bottom: none; }
+    .verse-ar { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 32px; line-height: 2.1; }
+    .verse-ref { color: var(--amber); font-weight: 600; font-size: 12px; }
+    .verse-en { color: var(--muted); font-size: 14px; margin: 6px 0 10px; }
+    .wbw { width: 100%; border-collapse: collapse; font-size: 14px; direction: rtl; }
+    .wbw td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .wbw .w-ar { font-family: var(--font-ar); font-size: 24px; white-space: nowrap; cursor: pointer; }
+    .wbw .w-tr { color: var(--muted); font-style: italic; direction: ltr; text-align: left; }
+    .wbw .w-en { direction: ltr; text-align: left; min-width: 130px; }
+    .wbw input { width: 100%; min-width: 110px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 14px; }
+    .wbw input.ok { border-color: var(--accent); background: var(--accent-soft); }
+    .wbw input.no { border-color: var(--red); background: var(--red-soft); }
+    .wbw .true-en { display: block; color: var(--accent); font-size: 12.5px; }
+    @media (max-width: 600px) { .verse-ar { font-size: 25px; } .wbw .w-ar { font-size: 20px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div id="content">Loading…</div>
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
+<script>
+renderNav("quran");
+trackPage("quran");
+
+const content = document.getElementById("content");
+let DATA = null;
+
+fetch("data/verses.json").then(r => r.json()).then(d => {
+  DATA = d.surahs;
+  const params = new URLSearchParams(location.search);
+  const s = DATA.find(x => x.id === params.get("s"));
+  if (s) renderSurah(s, params.get("mode") || "study");
+  else renderList();
+});
+
+function surahDone(id, step) { return !!stepsDone("q-" + id)[step]; }
+
+function renderList() {
+  trackPage("quran:list");
+  content.innerHTML = `
+    <h1>Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
+    <p class="sub">Word-by-word surahs you hear recited constantly. Study each word, then test yourself by filling in the meanings.
+    These use the Quran's highest-frequency vocabulary — every word here pays off across the whole mushaf.</p>
+    <div class="story-grid" id="sGrid"></div>
+    <div class="card" style="margin-top:20px">
+      <p style="margin:0;font-size:13.5px;color:var(--muted)">🔊 uses your browser's voice — an approximation for study.
+      For tajwīd and beauty, follow along with a real reciter; after these lessons you'll understand what you hear.</p>
+    </div>
+  `;
+  const grid = document.getElementById("sGrid");
+  DATA.forEach(s => {
+    const a = document.createElement("a");
+    a.className = "story-card";
+    a.href = `quran.html?s=${s.id}`;
+    const words = s.verses.reduce((n, v) => n + v.words.length, 0);
+    a.innerHTML = `
+      <div class="num">${s.verses.length} verses · ${words} words ${surahDone(s.id, "test") ? "· ✓ tested" : surahDone(s.id, "study") ? "· studied" : ""}</div>
+      <div class="title-ar">${s.name}</div>
+      <div class="title-en">${s.nameEn}</div>
+      <div class="meta">${s.why}</div>
+    `;
+    grid.appendChild(a);
+  });
+}
+
+function renderSurah(s, mode) {
+  trackPage(`quran:${s.id}:${mode}`);
+  window.scrollTo({ top: 0 });
+  content.innerHTML = `
+    <p><a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a></p>
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>${s.nameEn}</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">سُورَة ${s.name}</span>
+    </h1>
+    <p class="sub">${s.why}</p>
+    <div class="steps" style="max-width:400px">
+      <button id="mStudy" class="${mode === "study" ? "active" : ""}${surahDone(s.id, "study") ? " done" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
+      <button id="mTest" class="${mode === "test" ? "active" : ""}${surahDone(s.id, "test") ? " done" : ""}"><span class="ar">اِخْتَبِرْ</span><span>Test meanings</span></button>
+    </div>
+    <div class="card">
+      <div class="listen-controls">
+        <button class="primary" id="playAll">▶ Play the surah</button>
+        <button id="stopBtn">■ Stop</button>
+        <label style="font-size:13px;color:var(--muted)">Speed <input type="range" id="rate" min="0.5" max="1.0" step="0.05" value="0.75"></label>
+      </div>
+      <div id="verses"></div>
+      ${mode === "test" ? `<div class="ex-row" style="margin-top:14px"><button class="primary" id="checkAll">✓ Check my answers</button></div><div class="quiz-score" id="score"></div>` : `<div class="ex-row" style="margin-top:14px"><button class="primary" id="toTest">I know these — test me →</button></div>`}
+    </div>
+  `;
+  document.getElementById("mStudy").onclick = () => renderSurah(s, "study");
+  document.getElementById("mTest").onclick = () => renderSurah(s, "test");
+  const rate = () => parseFloat(document.getElementById("rate").value);
+
+  const versesEl = document.getElementById("verses");
+  s.verses.forEach((v, vi) => {
+    const block = document.createElement("div");
+    block.className = "verse-block";
+    block.innerHTML = `
+      <div class="verse-ref">${v.ref}</div>
+      <div class="verse-ar">${v.ar} <span class="sent-play">🔊</span></div>
+      <div class="verse-en" style="display:${mode === "study" ? "block" : "none"}">${v.en}</div>
+      <table class="wbw"><tbody></tbody></table>
+    `;
+    block.querySelector(".sent-play").onclick = () => speak(v.ar, rate());
+    const tbody = block.querySelector("tbody");
+    v.words.forEach(([ar, tr, en], wi) => {
+      const row = document.createElement("tr");
+      if (mode === "study") {
+        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en}</td>`;
+      } else {
+        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
+      }
+      row.querySelector(".w-ar").onclick = () => { speak(ar, 0.75); logEvent({ e: "qtap", surah: s.id, ref: v.ref, w: wi }); };
+      tbody.appendChild(row);
+    });
+    versesEl.appendChild(block);
+  });
+
+  document.getElementById("playAll").onclick = () => {
+    let i = 0;
+    const next = () => {
+      if (i >= s.verses.length) { logEvent({ e: "qlisten", surah: s.id }); return; }
+      speak(s.verses[i].ar, rate(), () => { i++; next(); });
+    };
+    stopSpeak(); next();
+  };
+  document.getElementById("stopBtn").onclick = stopSpeak;
+
+  if (mode === "study") {
+    document.getElementById("toTest").onclick = () => {
+      setStepDone("q-" + s.id, "study");
+      renderSurah(s, "test");
+    };
+  } else {
+    document.getElementById("checkAll").onclick = () => {
+      let right = 0, total = 0;
+      s.verses.forEach((v, vi) => {
+        v.words.forEach(([ar, tr, en], wi) => {
+          total++;
+          const input = versesEl.querySelector(`input[data-v="${vi}"][data-w="${wi}"]`);
+          const trueEn = input.nextElementSibling;
+          const ok = fuzzyEn(input.value, en);
+          input.classList.remove("ok", "no");
+          input.classList.add(ok ? "ok" : "no");
+          trueEn.style.display = ok ? "none" : "block";
+          trueEn.textContent = en;
+          if (ok) right++;
+          logEvent({ e: "qfill", surah: s.id, ref: v.ref, w: wi, ar: stripTashkeel(ar), typed: input.value, ok });
+          gradeCard(`qw:${s.id}:${vi}:${wi}`, ok ? "good" : "again");
+        });
+      });
+      document.getElementById("score").textContent = `Score: ${right} / ${total}` + (right === total ? " — ما شاء الله! 🎉" : " — missed words go to your Review deck.");
+      setStepDone("q-" + s.id, "test");
+      logEvent({ e: "qtest-done", surah: s.id, score: right, total });
+      autoSync();
+    };
+  }
+}
+</script>
+</body>
+</html>

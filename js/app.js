@@ -86,12 +86,28 @@ function seedCards(keys) {
 }
 
 /* ---------- "What now?" suggestions ---------- */
+const QURAN_SURAHS = [
+  { id: "fatiha", name: "Al-Fatiha", ar: "الفاتحة" },
+  { id: "ikhlas", name: "Al-Ikhlas", ar: "الإخلاص" },
+  { id: "asr", name: "Al-Asr", ar: "العصر" },
+  { id: "kawthar", name: "Al-Kawthar", ar: "الكوثر" },
+];
+
 function suggestNext() {
   const out = [];
   const due = dueCards().length;
-  if (due > 0) out.push({
-    icon: "📚", title: `Review ${due} due word${due > 1 ? "s" : ""}`,
-    desc: "Quick table review — mark only what you missed", href: "review.html",
+  // 1. Today's sheet — the 3-minute micro-lesson, always available
+  out.push({
+    icon: "📝", title: "Today's sheet" + (due ? ` (${due} due)` : ""),
+    desc: "Auto-picked words — fill one column, check, done",
+    href: "vocab.html?sheet=1",
+  });
+  // 2. Next surah not yet tested
+  const nextSurah = QURAN_SURAHS.find(s => !stepsDone("q-" + s.id).test);
+  if (nextSurah) out.push({
+    icon: "📖", title: `Surah ${nextSurah.name}`,
+    desc: "Word-by-word — understand it as it's recited",
+    href: `quran.html?s=${nextSurah.id}`,
   });
   // next incomplete story/step
   for (const s of STORY_LIST) {
@@ -226,6 +242,7 @@ function renderNav(active) {
     <span class="spacer"></span>
     <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Stories</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
+    <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;
@@ -291,4 +308,63 @@ async function loadStory(id) {
   const res = await fetch(`data/${id}.json`);
   if (!res.ok) throw new Error("Story not found: " + id);
   return res.json();
+}
+
+/* ---------- fuzzy English answer matching ----------
+   Accepts an answer if it shares a meaningful word with the gloss. */
+const _EN_STOP = new Set(["he", "she", "it", "they", "we", "you", "i", "the", "a", "an", "of", "is", "are", "was", "were", "to", "in", "and", "for", "with", "his", "her", "their", "its", "who", "that", "this", "one", "be", "been", "do", "did", "does", "will", "shall"]);
+function fuzzyEn(typed, gloss) {
+  const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w));
+  const t = norm(typed), g = norm(gloss);
+  if (!typed.trim()) return false;
+  if (!g.length || !t.length) {
+    // gloss or answer is all function-words ("in", "he is"): compare raw parts
+    const parts = gloss.toLowerCase().split(/[;,\/]/).map(x => x.trim().replace(/[!.?]/g, ""));
+    return parts.includes(typed.trim().toLowerCase().replace(/[!.?]/g, ""));
+  }
+  return t.some(w => g.includes(w));
+}
+
+/* ---------- universal SRS card content resolver ----------
+   Keys: "story-01:5", "fam-qwl:3", "qc:12", "qw:fatiha:2:1" */
+async function resolveCards(keys) {
+  const needStories = new Set();
+  let needFams = false, needCore = false, needVerses = false;
+  keys.forEach(k => {
+    const sid = k.split(":")[0];
+    if (sid === "qc") needCore = true;
+    else if (sid === "qw") needVerses = true;
+    else if (sid.startsWith("fam-")) needFams = true;
+    else needStories.add(sid);
+  });
+  const stories = {};
+  const [fams, core, verses] = await Promise.all([
+    needFams ? fetch("data/families.json").then(r => r.json()).then(d => d.families) : null,
+    needCore ? fetch("data/quran-core.json").then(r => r.json()).then(d => d.words) : null,
+    needVerses ? fetch("data/verses.json").then(r => r.json()).then(d => d.surahs) : null,
+    Promise.all([...needStories].map(async id => {
+      try { stories[id] = await loadStory(id); } catch (e) { /* removed story */ }
+    })),
+  ]);
+  return keys.map(k => {
+    const p = k.split(":");
+    let v = null;
+    if (p[0] === "qc") {
+      const w = core && core[parseInt(p[1])];
+      if (w) v = { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` };
+    } else if (p[0] === "qw") {
+      const s = verses && verses.find(x => x.id === p[1]);
+      const wd = s && s.verses[parseInt(p[2])] && s.verses[parseInt(p[2])].words[parseInt(p[3])];
+      if (wd) v = { ar: wd[0], tr: wd[1], en: wd[2], note: `from ${s.nameEn.split("—")[0].trim()} ${s.verses[parseInt(p[2])].ref}` };
+    } else if (p[0].startsWith("fam-")) {
+      const fam = fams && fams.find(f => "fam-" + f.id === p[0]);
+      const m = fam && fam.members[parseInt(p[1])];
+      if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "root " + fam.root };
+    } else {
+      const st = stories[p[0]];
+      const w = st && st.vocab[parseInt(p[1])];
+      if (w) v = { ar: w.ar, en: w.en, tr: w.tr, note: w.note };
+    }
+    return v ? { key: k, v } : null;
+  }).filter(Boolean);
 }
