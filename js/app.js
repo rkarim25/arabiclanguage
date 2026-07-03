@@ -91,15 +91,18 @@ const QURAN_SURAHS = [
   { id: "ikhlas", name: "Al-Ikhlas", ar: "الإخلاص" },
   { id: "asr", name: "Al-Asr", ar: "العصر" },
   { id: "kawthar", name: "Al-Kawthar", ar: "الكوثر" },
+  { id: "nas", name: "An-Nas", ar: "الناس" },
+  { id: "falaq", name: "Al-Falaq", ar: "الفلق" },
+  { id: "qadr", name: "Al-Qadr", ar: "القدر" },
 ];
 
 function suggestNext() {
   const out = [];
   const due = dueCards().length;
-  // 1. Today's sheet — the 3-minute micro-lesson, always available
+  // 1. Vocab Learn — the always-right micro-lesson, as short or long as wanted
   out.push({
-    icon: "📝", title: "Today's sheet" + (due ? ` (${due} due)` : ""),
-    desc: "Auto-picked words — fill one column, check, done",
+    icon: "📝", title: "Vocab Learn" + (due ? ` (${due} due)` : ""),
+    desc: "Auto-picked, frequency-first — fill a column, check, continue or stop",
     href: "vocab.html?sheet=1",
   });
   // 2. Next surah not yet tested
@@ -125,6 +128,14 @@ function suggestNext() {
       break;
     }
   }
+  // next grammar pattern not yet tested
+  const GRAMMAR_IDS = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron"];
+  const nextG = GRAMMAR_IDS.find(g => !stepsDone("gr-" + g).test);
+  if (nextG) out.push({
+    icon: "🧩", title: "Grammar pattern: " + nextG,
+    desc: "One practical pattern, three verses, 1-minute test",
+    href: `grammar.html?g=${nextG}`,
+  });
   // next unfinished root family (Quranic vocab in connected sets)
   const nextFam = FAMILY_LIST.find(f => !stepsDone("fam-" + f.id).fill);
   if (nextFam) out.push({
@@ -243,6 +254,7 @@ function renderNav(active) {
     <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Stories</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
+    <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;

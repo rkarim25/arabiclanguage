@@ -23,6 +23,9 @@
     .wbw input.ok { border-color: var(--accent); background: var(--accent-soft); }
     .wbw input.no { border-color: var(--red); background: var(--red-soft); }
     .wbw .true-en { display: block; color: var(--accent); font-size: 12.5px; }
+    .wbw .g-btn { cursor: pointer; color: var(--amber); font-size: 13px; user-select: none; }
+    .wbw .g-row td { background: var(--amber-soft); font-size: 13px; direction: ltr; text-align: left; color: var(--ink); line-height: 1.5; }
+    .wbw .g-row .g-root { color: var(--amber); font-weight: 600; display: block; margin-top: 4px; }
     @media (max-width: 600px) { .verse-ar { font-size: 25px; } .wbw .w-ar { font-size: 20px; } }
   </style>
 </head>
@@ -87,7 +90,7 @@ function renderSurah(s, mode) {
       <span>${s.nameEn}</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">سُورَة ${s.name}</span>
     </h1>
-    <p class="sub">${s.why}</p>
+    <p class="sub">${s.why}${s.n ? ` · <a href="https://rkarim25.github.io/Quran/#/${s.n}" target="_blank" style="color:var(--accent)">Read with tafsir on your Quran site ↗</a>` : ""}</p>
     <div class="steps" style="max-width:400px">
       <button id="mStudy" class="${mode === "study" ? "active" : ""}${surahDone(s.id, "study") ? " done" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
       <button id="mTest" class="${mode === "test" ? "active" : ""}${surahDone(s.id, "test") ? " done" : ""}"><span class="ar">اِخْتَبِرْ</span><span>Test meanings</span></button>
@@ -118,15 +121,29 @@ function renderSurah(s, mode) {
     `;
     block.querySelector(".sent-play").onclick = () => speak(v.ar, rate());
     const tbody = block.querySelector("tbody");
-    v.words.forEach(([ar, tr, en], wi) => {
+    v.words.forEach((word, wi) => {
+      const [ar, tr, en, grammar, root] = word;
       const row = document.createElement("tr");
+      const gBtn = grammar ? `<span class="g-btn" title="grammar note">ⓘ نحو</span>` : "";
       if (mode === "study") {
-        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en}</td>`;
+        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}</td>`;
       } else {
         row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
       }
       row.querySelector(".w-ar").onclick = () => { speak(ar, 0.75); logEvent({ e: "qtap", surah: s.id, ref: v.ref, w: wi }); };
       tbody.appendChild(row);
+      if (grammar && mode === "study") {
+        const gRow = document.createElement("tr");
+        gRow.className = "g-row";
+        gRow.style.display = "none";
+        gRow.innerHTML = `<td colspan="3">${grammar}${root ? `<span class="g-root">root: ${root}</span>` : ""}</td>`;
+        tbody.appendChild(gRow);
+        row.querySelector(".g-btn").onclick = (e) => {
+          e.stopPropagation();
+          gRow.style.display = gRow.style.display === "none" ? "table-row" : "none";
+          logEvent({ e: "gview", surah: s.id, ref: v.ref, w: wi });
+        };
+      }
     });
     versesEl.appendChild(block);
   });

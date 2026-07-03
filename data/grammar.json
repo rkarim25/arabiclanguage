@@ -1,0 +1,132 @@
+{
+  "patterns": [
+    {
+      "id": "inna",
+      "ar": "إِنَّ",
+      "name": "inna — the certainty opener",
+      "what": "إِنَّ starts a sentence with force: 'indeed / truly'. It's everywhere in the Quran. Practical rule: after إِنَّ the noun takes -a (accusative): إِنَّ اللهَ، إِنَّ الإِنسَانَ. With pronouns it fuses: إِنَّهُ (indeed he), إِنَّا (indeed we), إِنَّكَ (indeed you).",
+      "examples": [
+        { "ar": "إِنَّ اللَّهَ غَفُورٌ رَحِيمٌ", "en": "Indeed Allah is Forgiving, Merciful." },
+        { "ar": "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "en": "Indeed mankind is in loss. (103:2)" },
+        { "ar": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ", "en": "Indeed We gave you al-Kawthar. (108:1)" }
+      ],
+      "test": [
+        { "prompt": "'___ Allah is with the patient.' — write the opener", "ar": "إِنَّ", "hint": "inna" },
+        { "prompt": "'Indeed We (fused form, as in 108:1)'", "ar": "إِنَّا", "hint": "innā" },
+        { "prompt": "'Indeed he (fused form)'", "ar": "إِنَّهُ", "hint": "innahu" }
+      ]
+    },
+    {
+      "id": "alladhina",
+      "ar": "الَّذِينَ",
+      "name": "alladhina — 'those who'",
+      "what": "الَّذِي (who, m.), الَّتِي (who, f.), الَّذِينَ (those who) glue a description onto a noun. The Quran's most famous phrase: الَّذِينَ آمَنُوا 'those who believe'. Hear الذين and expect a description of a group to follow.",
+      "examples": [
+        { "ar": "الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ", "en": "Those who believe and do righteous deeds. (103:3)" },
+        { "ar": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ", "en": "The path of those You have blessed. (1:7)" },
+        { "ar": "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ فِيهِ هُدًى لِّلْمُتَّقِينَ", "en": "…a guidance for those mindful of Allah. (2:2)" }
+      ],
+      "test": [
+        { "prompt": "'___ believe' — those who", "ar": "الَّذِينَ", "hint": "alladhīna" },
+        { "prompt": "'the man WHO...' (masculine singular)", "ar": "الَّذِي", "hint": "alladhī" },
+        { "prompt": "Complete the famous phrase: الَّذِينَ ___ (they believed)", "ar": "آمَنُوا", "hint": "āmanū" }
+      ]
+    },
+    {
+      "id": "idafa",
+      "ar": "الإِضَافَة",
+      "name": "idafa — possession by pairing",
+      "what": "Arabic says 'the Lord of the worlds' by just putting two nouns together: رَبِّ الْعَالَمِينَ. No word for 'of'! First noun never takes ال; the second one usually does. You already know: يَوْمِ الدِّينِ (Day of Judgment), بَيْتِ اللهِ (house of Allah).",
+      "examples": [
+        { "ar": "رَبِّ الْعَالَمِينَ", "en": "Lord of the worlds. (1:2)" },
+        { "ar": "مَالِكِ يَوْمِ الدِّينِ", "en": "Master of the Day of Judgment. (1:4)" },
+        { "ar": "أَهْل الْبَيْت", "en": "the people of the house" }
+      ],
+      "test": [
+        { "prompt": "'Lord of the worlds' (1:2)", "ar": "رَبِّ الْعَالَمِينَ", "hint": "rabbi l-ʿālamīn" },
+        { "prompt": "'the Day of Judgment' (1:4, two words after مالك)", "ar": "يَوْمِ الدِّينِ", "hint": "yawmi d-dīn" },
+        { "prompt": "'the people of the house'", "ar": "أَهْل الْبَيْت", "hint": "ahl al-bayt" }
+      ]
+    },
+    {
+      "id": "pronouns",
+      "ar": "الضَّمَائِر",
+      "name": "attached pronouns — my, your, his, their",
+      "what": "Arabic attaches its pronouns to the END of words: ـِي my (رَبِّي my Lord), ـكَ your (رَبُّكَ your Lord), ـهُ his/him (لَهُ to him), ـهُمْ their/them (عَلَيْهِمْ upon them), ـنَا our/us (اهْدِنَا guide us). Master these five endings and huge amounts of Quran unlock.",
+      "examples": [
+        { "ar": "فَصَلِّ لِرَبِّكَ", "en": "So pray to YOUR Lord. (108:2)" },
+        { "ar": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "en": "Guide US to the straight path. (1:6)" },
+        { "ar": "أَنْعَمْتَ عَلَيْهِمْ", "en": "You have blessed THEM. (1:7)" }
+      ],
+      "test": [
+        { "prompt": "'my Lord'", "ar": "رَبِّي", "hint": "rabbī" },
+        { "prompt": "'your Lord' (to a man)", "ar": "رَبُّكَ", "hint": "rabbuka" },
+        { "prompt": "'upon them'", "ar": "عَلَيْهِمْ", "hint": "ʿalayhim" }
+      ]
+    },
+    {
+      "id": "tenses",
+      "ar": "فَعَلَ / يَفْعَلُ",
+      "name": "past vs present — the two verb shapes",
+      "what": "Past: the root alone — قَالَ he said, خَلَقَ he created, عَلِمَ he knew. Present: add يَـ for 'he' — يَقُولُ he says, يَخْلُقُ he creates, يَعْلَمُ he knows. For 'they' in the past add ـُوا: قَالُوا they said, آمَنُوا they believed. Recognize these two shapes and you can tell WHEN everything happens.",
+      "examples": [
+        { "ar": "قَالَ رَبُّكُمْ / يَقُولُ الَّذِينَ", "en": "your Lord SAID / those who SAY" },
+        { "ar": "خَلَقَ الْإِنسَانَ", "en": "He CREATED man. (96:2)" },
+        { "ar": "آمَنُوا وَعَمِلُوا", "en": "they BELIEVED and they DID (103:3)" }
+      ],
+      "test": [
+        { "prompt": "'he says' (present of قَالَ)", "ar": "يَقُولُ", "hint": "yaqūlu" },
+        { "prompt": "'they said' (past, plural)", "ar": "قَالُوا", "hint": "qālū" },
+        { "prompt": "'he knows' (present of عَلِمَ)", "ar": "يَعْلَمُ", "hint": "yaʿlamu" }
+      ]
+    },
+    {
+      "id": "negation",
+      "ar": "لَا / مَا / لَمْ / لَنْ",
+      "name": "the four ways to say 'not'",
+      "what": "لَا + present = doesn't/don't (لَا يَعْلَمُونَ they don't know). مَا + past = didn't (مَا كَانَ he was not). لَمْ + short present = didn't, emphatic (لَمْ يَلِدْ He did not beget). لَنْ + present = will never (لَن تَفْعَلُوا you will never do). When you hear any of these, the sentence flips negative.",
+      "examples": [
+        { "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ", "en": "He did not beget nor was He born. (112:3)" },
+        { "ar": "لَا رَيْبَ فِيهِ", "en": "There is no doubt in it. (2:2)" },
+        { "ar": "يَوْمَ لَا يَنفَعُ مَالٌ", "en": "The Day when wealth will not benefit. (26:88)" }
+      ],
+      "test": [
+        { "prompt": "'He did not beget' (112:3, two words)", "ar": "لَمْ يَلِدْ", "hint": "lam yalid" },
+        { "prompt": "'no doubt' (2:2, two words)", "ar": "لَا رَيْبَ", "hint": "lā rayba" },
+        { "prompt": "Which particle negates the PAST with a normal verb? ('he did not...')", "ar": "مَا", "hint": "mā" }
+      ]
+    },
+    {
+      "id": "connectors",
+      "ar": "وَ / فَـ / ثُمَّ",
+      "name": "the connectors — and, so, then",
+      "what": "وَ = and (glued to the next word: وَعَمِلُوا 'and they did'). فَـ = so/then, immediate result (فَصَلِّ 'so pray'). ثُمَّ = then, after a while. Recitation flows on these three — hearing them tells you how ideas link.",
+      "examples": [
+        { "ar": "فَصَلِّ لِرَبِّكَ وَانْحَرْ", "en": "SO pray to your Lord AND sacrifice. (108:2)" },
+        { "ar": "آمَنُوا وَعَمِلُوا الصَّالِحَاتِ", "en": "they believed AND did righteous deeds. (103:3)" },
+        { "ar": "ثُمَّ أَشْرَبُ القَهْوَةَ", "en": "THEN I drink coffee. (your story!)" }
+      ],
+      "test": [
+        { "prompt": "'SO pray' (108:2, one fused word)", "ar": "فَصَلِّ", "hint": "fa-ṣalli" },
+        { "prompt": "'and they did' (one fused word)", "ar": "وَعَمِلُوا", "hint": "wa-ʿamilū" },
+        { "prompt": "'then / after a while'", "ar": "ثُمَّ", "hint": "thumma" }
+      ]
+    },
+    {
+      "id": "prep-pron",
+      "ar": "لَهُ / فِيهِ / مِنْهُ",
+      "name": "preposition + pronoun fusions",
+      "what": "Prepositions fuse with pronouns constantly: لِـ+هُ = لَهُ (to him/His), فِي+هِ = فِيهِ (in it), مِنْ+هُ = مِنْهُ (from it), بِـ+هِ = بِهِ (by it), عَلَى+هِ = عَلَيْهِ (upon him), لَـ+هُمْ = لَهُمْ (for them). These tiny fused words carry the Quran's sentences — learn to hear them as units.",
+      "examples": [
+        { "ar": "لَا رَيْبَ فِيهِ", "en": "no doubt IN IT. (2:2)" },
+        { "ar": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", "en": "and there is none comparable TO HIM. (112:4)" },
+        { "ar": "لَهُمْ أَجْرٌ عَظِيمٌ", "en": "FOR THEM is a great reward." }
+      ],
+      "test": [
+        { "prompt": "'in it'", "ar": "فِيهِ", "hint": "fīhi" },
+        { "prompt": "'to Him / He has'", "ar": "لَهُ", "hint": "lahu" },
+        { "prompt": "'upon him'", "ar": "عَلَيْهِ", "hint": "ʿalayhi" }
+      ]
+    }
+  ]
+}

@@ -16,10 +16,11 @@
   Everything is ordered by frequency — you only ever study the words that pay off most — and everything you do is tracked so your coach targets what you need.</p>
 
   <div class="stat-row">
-    <div class="stat"><div class="n" id="statStories">0</div><div class="l">stories completed</div></div>
+    <div class="stat" style="border-color:var(--accent)"><div class="n" id="statCoverage">0%</div><div class="l">of common Quran usage in training</div></div>
     <div class="stat"><div class="n" id="statWords">0</div><div class="l">words in your deck</div></div>
     <div class="stat"><div class="n" id="statDue">0</div><div class="l">reviews due now</div></div>
     <div class="stat"><div class="n" id="statTime">0</div><div class="l">minutes studied</div></div>
+    <div class="stat"><div class="n" id="statStories">0</div><div class="l">stories completed</div></div>
   </div>
 
   <div class="card" style="border-color:var(--accent)">
@@ -162,6 +163,17 @@ document.getElementById("statDue").textContent = due;
 if (due > 0) document.getElementById("reviewNudge").style.display = "block";
 const totalSec = store.get(LOG_KEY, []).filter(x => x.e === "time").reduce((a, x) => a + x.sec, 0);
 document.getElementById("statTime").textContent = Math.round(totalSec / 60);
+
+/* Quran coverage: share of common-word occurrences whose words are in training */
+fetch("data/quran-core.json").then(r => r.json()).then(d => {
+  const srs = getSrs();
+  let covered = 0, total = 0;
+  d.words.forEach((w, i) => {
+    total += w.n;
+    if (srs[`qc:${i}`]) covered += w.n;
+  });
+  document.getElementById("statCoverage").textContent = Math.round(covered / total * 100) + "%";
+}).catch(() => {});
 
 /* weak spots */
 const weak = weakSpots(6).filter(([k, v]) => v.w >= 2);

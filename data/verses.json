@@ -1,70 +1,1137 @@
 {
-  "surahs": [
+ "surahs": [
+  {
+   "id": "fatiha",
+   "name": "الفَاتِحَة",
+   "nameEn": "Al-Fatiha — The Opening",
+   "why": "You recite this at least 17 times a day in prayer. Understanding it word-by-word transforms every salah.",
+   "verses": [
     {
-      "id": "fatiha",
-      "name": "الفَاتِحَة",
-      "nameEn": "Al-Fatiha — The Opening",
-      "why": "You recite this at least 17 times a day in prayer. Understanding it word-by-word transforms every salah.",
-      "verses": [
-        { "ref": "1:1", "ar": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "en": "In the name of Allah, the Most Gracious, the Most Merciful.",
-          "words": [["بِسْمِ","bismi","in the name of"],["اللَّهِ","allāhi","Allah"],["الرَّحْمَٰنِ","ar-raḥmāni","the Most Gracious"],["الرَّحِيمِ","ar-raḥīmi","the Most Merciful"]] },
-        { "ref": "1:2", "ar": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "en": "All praise is for Allah, Lord of the worlds.",
-          "words": [["الْحَمْدُ","al-ḥamdu","all praise"],["لِلَّهِ","lillāhi","is for Allah"],["رَبِّ","rabbi","Lord of"],["الْعَالَمِينَ","al-ʿālamīna","the worlds"]] },
-        { "ref": "1:3", "ar": "الرَّحْمَٰنِ الرَّحِيمِ", "en": "The Most Gracious, the Most Merciful.",
-          "words": [["الرَّحْمَٰنِ","ar-raḥmāni","the Most Gracious"],["الرَّحِيمِ","ar-raḥīmi","the Most Merciful"]] },
-        { "ref": "1:4", "ar": "مَالِكِ يَوْمِ الدِّينِ", "en": "Master of the Day of Judgment.",
-          "words": [["مَالِكِ","māliki","Master of"],["يَوْمِ","yawmi","the Day of"],["الدِّينِ","ad-dīni","Judgment; Recompense"]] },
-        { "ref": "1:5", "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "en": "You alone we worship, and You alone we ask for help.",
-          "words": [["إِيَّاكَ","iyyāka","You alone"],["نَعْبُدُ","naʿbudu","we worship"],["وَإِيَّاكَ","wa-iyyāka","and You alone"],["نَسْتَعِينُ","nastaʿīnu","we ask for help"]] },
-        { "ref": "1:6", "ar": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "en": "Guide us to the straight path.",
-          "words": [["اهْدِنَا","ihdinā","guide us"],["الصِّرَاطَ","aṣ-ṣirāṭa","the path"],["الْمُسْتَقِيمَ","al-mustaqīma","the straight"]] },
-        { "ref": "1:7", "ar": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "en": "The path of those You have blessed — not of those who earned anger, nor of the astray.",
-          "words": [["صِرَاطَ","ṣirāṭa","the path of"],["الَّذِينَ","alladhīna","those who"],["أَنْعَمْتَ","anʿamta","You have blessed"],["عَلَيْهِمْ","ʿalayhim","upon them"],["غَيْرِ","ghayri","not of"],["الْمَغْضُوبِ","al-maghḍūbi","those who earned anger"],["عَلَيْهِمْ","ʿalayhim","upon them"],["وَلَا","wa-lā","and not"],["الضَّالِّينَ","aḍ-ḍāllīna","the astray"]] }
+     "ref": "1:1",
+     "ar": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+     "en": "In the name of Allah, the Most Gracious, the Most Merciful.",
+     "words": [
+      [
+       "بِسْمِ",
+       "bismi",
+       "in the name of"
+      ],
+      [
+       "اللَّهِ",
+       "allāhi",
+       "Allah"
+      ],
+      [
+       "الرَّحْمَٰنِ",
+       "ar-raḥmāni",
+       "the Most Gracious"
+      ],
+      [
+       "الرَّحِيمِ",
+       "ar-raḥīmi",
+       "the Most Merciful"
       ]
+     ]
     },
     {
-      "id": "ikhlas",
-      "name": "الإِخْلَاص",
-      "nameEn": "Al-Ikhlas — Sincerity",
-      "why": "Equal to a third of the Quran in reward, and built entirely from top-frequency words: قل، هو، الله، لم، يكن، له.",
-      "verses": [
-        { "ref": "112:1", "ar": "قُلْ هُوَ اللَّهُ أَحَدٌ", "en": "Say: He is Allah, the One.",
-          "words": [["قُلْ","qul","say!"],["هُوَ","huwa","He is"],["اللَّهُ","allāhu","Allah"],["أَحَدٌ","aḥadun","One; unique"]] },
-        { "ref": "112:2", "ar": "اللَّهُ الصَّمَدُ", "en": "Allah, the Eternal Refuge.",
-          "words": [["اللَّهُ","allāhu","Allah"],["الصَّمَدُ","aṣ-ṣamadu","the Eternal Refuge"]] },
-        { "ref": "112:3", "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ", "en": "He neither begets nor is born.",
-          "words": [["لَمْ","lam","(He) did not"],["يَلِدْ","yalid","beget"],["وَلَمْ","wa-lam","nor was"],["يُولَدْ","yūlad","He born"]] },
-        { "ref": "112:4", "ar": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", "en": "And there is none comparable to Him.",
-          "words": [["وَلَمْ","wa-lam","and (there) is not"],["يَكُن","yakun","is"],["لَّهُ","lahu","to Him"],["كُفُوًا","kufuwan","comparable; equal"],["أَحَدٌ","aḥadun","anyone"]] }
+     "ref": "1:2",
+     "ar": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+     "en": "All praise is for Allah, Lord of the worlds.",
+     "words": [
+      [
+       "الْحَمْدُ",
+       "al-ḥamdu",
+       "all praise"
+      ],
+      [
+       "لِلَّهِ",
+       "lillāhi",
+       "is for Allah"
+      ],
+      [
+       "رَبِّ",
+       "rabbi",
+       "Lord of"
+      ],
+      [
+       "الْعَالَمِينَ",
+       "al-ʿālamīna",
+       "the worlds"
       ]
+     ]
     },
     {
-      "id": "asr",
-      "name": "العَصْر",
-      "nameEn": "Al-Asr — Time",
-      "why": "Three verses containing the Quran's core message — and its highest-frequency structures: إنّ، الذين، آمنوا، عملوا، الحق.",
-      "verses": [
-        { "ref": "103:1", "ar": "وَالْعَصْرِ", "en": "By Time!",
-          "words": [["وَالْعَصْرِ","wal-ʿaṣri","by Time (an oath)"]] },
-        { "ref": "103:2", "ar": "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "en": "Indeed, mankind is in loss.",
-          "words": [["إِنَّ","inna","indeed"],["الْإِنسَانَ","al-insāna","mankind"],["لَفِي","la-fī","is surely in"],["خُسْرٍ","khusrin","loss"]] },
-        { "ref": "103:3", "ar": "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ", "en": "Except those who believe, do righteous deeds, urge one another to truth, and urge one another to patience.",
-          "words": [["إِلَّا","illā","except"],["الَّذِينَ","alladhīna","those who"],["آمَنُوا","āmanū","believed"],["وَعَمِلُوا","wa-ʿamilū","and did"],["الصَّالِحَاتِ","aṣ-ṣāliḥāti","righteous deeds"],["وَتَوَاصَوْا","wa-tawāṣaw","and urged one another"],["بِالْحَقِّ","bil-ḥaqqi","to the truth"],["وَتَوَاصَوْا","wa-tawāṣaw","and urged one another"],["بِالصَّبْرِ","biṣ-ṣabri","to patience"]] }
+     "ref": "1:3",
+     "ar": "الرَّحْمَٰنِ الرَّحِيمِ",
+     "en": "The Most Gracious, the Most Merciful.",
+     "words": [
+      [
+       "الرَّحْمَٰنِ",
+       "ar-raḥmāni",
+       "the Most Gracious"
+      ],
+      [
+       "الرَّحِيمِ",
+       "ar-raḥīmi",
+       "the Most Merciful"
       ]
+     ]
     },
     {
-      "id": "kawthar",
-      "name": "الكَوْثَر",
-      "nameEn": "Al-Kawthar — Abundance",
-      "why": "The shortest surah — and you already know فَصَلِّ and لِرَبِّكَ from your word families.",
-      "verses": [
-        { "ref": "108:1", "ar": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ", "en": "Indeed, We have given you al-Kawthar.",
-          "words": [["إِنَّا","innā","indeed We"],["أَعْطَيْنَاكَ","aʿṭaynāka","We gave you"],["الْكَوْثَرَ","al-kawthara","al-Kawthar; abundance"]] },
-        { "ref": "108:2", "ar": "فَصَلِّ لِرَبِّكَ وَانْحَرْ", "en": "So pray to your Lord and sacrifice.",
-          "words": [["فَصَلِّ","fa-ṣalli","so pray"],["لِرَبِّكَ","li-rabbika","to your Lord"],["وَانْحَرْ","wanḥar","and sacrifice"]] },
-        { "ref": "108:3", "ar": "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ", "en": "Indeed, your enemy is the one cut off.",
-          "words": [["إِنَّ","inna","indeed"],["شَانِئَكَ","shāniʾaka","your hater; enemy"],["هُوَ","huwa","he is"],["الْأَبْتَرُ","al-abtaru","the one cut off"]] }
+     "ref": "1:4",
+     "ar": "مَالِكِ يَوْمِ الدِّينِ",
+     "en": "Master of the Day of Judgment.",
+     "words": [
+      [
+       "مَالِكِ",
+       "māliki",
+       "Master of"
+      ],
+      [
+       "يَوْمِ",
+       "yawmi",
+       "the Day of"
+      ],
+      [
+       "الدِّينِ",
+       "ad-dīni",
+       "Judgment; Recompense"
       ]
+     ]
+    },
+    {
+     "ref": "1:5",
+     "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+     "en": "You alone we worship, and You alone we ask for help.",
+     "words": [
+      [
+       "إِيَّاكَ",
+       "iyyāka",
+       "You alone"
+      ],
+      [
+       "نَعْبُدُ",
+       "naʿbudu",
+       "we worship"
+      ],
+      [
+       "وَإِيَّاكَ",
+       "wa-iyyāka",
+       "and You alone"
+      ],
+      [
+       "نَسْتَعِينُ",
+       "nastaʿīnu",
+       "we ask for help"
+      ]
+     ]
+    },
+    {
+     "ref": "1:6",
+     "ar": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+     "en": "Guide us to the straight path.",
+     "words": [
+      [
+       "اهْدِنَا",
+       "ihdinā",
+       "guide us"
+      ],
+      [
+       "الصِّرَاطَ",
+       "aṣ-ṣirāṭa",
+       "the path"
+      ],
+      [
+       "الْمُسْتَقِيمَ",
+       "al-mustaqīma",
+       "the straight"
+      ]
+     ]
+    },
+    {
+     "ref": "1:7",
+     "ar": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+     "en": "The path of those You have blessed — not of those who earned anger, nor of the astray.",
+     "words": [
+      [
+       "صِرَاطَ",
+       "ṣirāṭa",
+       "the path of"
+      ],
+      [
+       "الَّذِينَ",
+       "alladhīna",
+       "those who"
+      ],
+      [
+       "أَنْعَمْتَ",
+       "anʿamta",
+       "You have blessed"
+      ],
+      [
+       "عَلَيْهِمْ",
+       "ʿalayhim",
+       "upon them"
+      ],
+      [
+       "غَيْرِ",
+       "ghayri",
+       "not of"
+      ],
+      [
+       "الْمَغْضُوبِ",
+       "al-maghḍūbi",
+       "those who earned anger"
+      ],
+      [
+       "عَلَيْهِمْ",
+       "ʿalayhim",
+       "upon them"
+      ],
+      [
+       "وَلَا",
+       "wa-lā",
+       "and not"
+      ],
+      [
+       "الضَّالِّينَ",
+       "aḍ-ḍāllīna",
+       "the astray"
+      ]
+     ]
     }
-  ]
+   ],
+   "n": 1
+  },
+  {
+   "id": "ikhlas",
+   "name": "الإِخْلَاص",
+   "nameEn": "Al-Ikhlas — Sincerity",
+   "why": "Equal to a third of the Quran in reward, and built entirely from top-frequency words: قل، هو، الله، لم، يكن، له.",
+   "verses": [
+    {
+     "ref": "112:1",
+     "ar": "قُلْ هُوَ اللَّهُ أَحَدٌ",
+     "en": "Say: He is Allah, the One.",
+     "words": [
+      [
+       "قُلْ",
+       "qul",
+       "say!"
+      ],
+      [
+       "هُوَ",
+       "huwa",
+       "He is"
+      ],
+      [
+       "اللَّهُ",
+       "allāhu",
+       "Allah"
+      ],
+      [
+       "أَحَدٌ",
+       "aḥadun",
+       "One; unique"
+      ]
+     ]
+    },
+    {
+     "ref": "112:2",
+     "ar": "اللَّهُ الصَّمَدُ",
+     "en": "Allah, the Eternal Refuge.",
+     "words": [
+      [
+       "اللَّهُ",
+       "allāhu",
+       "Allah"
+      ],
+      [
+       "الصَّمَدُ",
+       "aṣ-ṣamadu",
+       "the Eternal Refuge"
+      ]
+     ]
+    },
+    {
+     "ref": "112:3",
+     "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+     "en": "He neither begets nor is born.",
+     "words": [
+      [
+       "لَمْ",
+       "lam",
+       "(He) did not"
+      ],
+      [
+       "يَلِدْ",
+       "yalid",
+       "beget"
+      ],
+      [
+       "وَلَمْ",
+       "wa-lam",
+       "nor was"
+      ],
+      [
+       "يُولَدْ",
+       "yūlad",
+       "He born"
+      ]
+     ]
+    },
+    {
+     "ref": "112:4",
+     "ar": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+     "en": "And there is none comparable to Him.",
+     "words": [
+      [
+       "وَلَمْ",
+       "wa-lam",
+       "and (there) is not"
+      ],
+      [
+       "يَكُن",
+       "yakun",
+       "is"
+      ],
+      [
+       "لَّهُ",
+       "lahu",
+       "to Him"
+      ],
+      [
+       "كُفُوًا",
+       "kufuwan",
+       "comparable; equal"
+      ],
+      [
+       "أَحَدٌ",
+       "aḥadun",
+       "anyone"
+      ]
+     ]
+    }
+   ],
+   "n": 112
+  },
+  {
+   "id": "asr",
+   "name": "العَصْر",
+   "nameEn": "Al-Asr — Time",
+   "why": "Three verses containing the Quran's core message — and its highest-frequency structures: إنّ، الذين، آمنوا، عملوا، الحق.",
+   "verses": [
+    {
+     "ref": "103:1",
+     "ar": "وَالْعَصْرِ",
+     "en": "By Time!",
+     "words": [
+      [
+       "وَالْعَصْرِ",
+       "wal-ʿaṣri",
+       "by Time (an oath)"
+      ]
+     ]
+    },
+    {
+     "ref": "103:2",
+     "ar": "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+     "en": "Indeed, mankind is in loss.",
+     "words": [
+      [
+       "إِنَّ",
+       "inna",
+       "indeed"
+      ],
+      [
+       "الْإِنسَانَ",
+       "al-insāna",
+       "mankind"
+      ],
+      [
+       "لَفِي",
+       "la-fī",
+       "is surely in"
+      ],
+      [
+       "خُسْرٍ",
+       "khusrin",
+       "loss"
+      ]
+     ]
+    },
+    {
+     "ref": "103:3",
+     "ar": "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ",
+     "en": "Except those who believe, do righteous deeds, urge one another to truth, and urge one another to patience.",
+     "words": [
+      [
+       "إِلَّا",
+       "illā",
+       "except"
+      ],
+      [
+       "الَّذِينَ",
+       "alladhīna",
+       "those who"
+      ],
+      [
+       "آمَنُوا",
+       "āmanū",
+       "believed"
+      ],
+      [
+       "وَعَمِلُوا",
+       "wa-ʿamilū",
+       "and did"
+      ],
+      [
+       "الصَّالِحَاتِ",
+       "aṣ-ṣāliḥāti",
+       "righteous deeds"
+      ],
+      [
+       "وَتَوَاصَوْا",
+       "wa-tawāṣaw",
+       "and urged one another"
+      ],
+      [
+       "بِالْحَقِّ",
+       "bil-ḥaqqi",
+       "to the truth"
+      ],
+      [
+       "وَتَوَاصَوْا",
+       "wa-tawāṣaw",
+       "and urged one another"
+      ],
+      [
+       "بِالصَّبْرِ",
+       "biṣ-ṣabri",
+       "to patience"
+      ]
+     ]
+    }
+   ],
+   "n": 103
+  },
+  {
+   "id": "kawthar",
+   "name": "الكَوْثَر",
+   "nameEn": "Al-Kawthar — Abundance",
+   "why": "The shortest surah — and you already know فَصَلِّ and لِرَبِّكَ from your word families.",
+   "verses": [
+    {
+     "ref": "108:1",
+     "ar": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+     "en": "Indeed, We have given you al-Kawthar.",
+     "words": [
+      [
+       "إِنَّا",
+       "innā",
+       "indeed We"
+      ],
+      [
+       "أَعْطَيْنَاكَ",
+       "aʿṭaynāka",
+       "We gave you"
+      ],
+      [
+       "الْكَوْثَرَ",
+       "al-kawthara",
+       "al-Kawthar; abundance"
+      ]
+     ]
+    },
+    {
+     "ref": "108:2",
+     "ar": "فَصَلِّ لِرَبِّكَ وَانْحَرْ",
+     "en": "So pray to your Lord and sacrifice.",
+     "words": [
+      [
+       "فَصَلِّ",
+       "fa-ṣalli",
+       "so pray"
+      ],
+      [
+       "لِرَبِّكَ",
+       "li-rabbika",
+       "to your Lord"
+      ],
+      [
+       "وَانْحَرْ",
+       "wanḥar",
+       "and sacrifice"
+      ]
+     ]
+    },
+    {
+     "ref": "108:3",
+     "ar": "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ",
+     "en": "Indeed, your enemy is the one cut off.",
+     "words": [
+      [
+       "إِنَّ",
+       "inna",
+       "indeed"
+      ],
+      [
+       "شَانِئَكَ",
+       "shāniʾaka",
+       "your hater; enemy"
+      ],
+      [
+       "هُوَ",
+       "huwa",
+       "he is"
+      ],
+      [
+       "الْأَبْتَرُ",
+       "al-abtaru",
+       "the one cut off"
+      ]
+     ]
+    }
+   ],
+   "n": 108
+  },
+  {
+   "id": "nas",
+   "n": 114,
+   "name": "النَّاس",
+   "nameEn": "An-Nas — Mankind",
+   "why": "The Quran's final surah, recited daily for protection — six short verses around one root: النَّاس.",
+   "verses": [
+    {
+     "ref": "114:1",
+     "ar": "قُل اَعُوذُ بِرَبِّ النَّاسِ",
+     "en": "Say: I seek refuge in the Rabb of humanity—the One who owns and cares for every human being, regardless of tribe, passport, or status.",
+     "words": [
+      [
+       "قُل",
+       "qul",
+       "say!",
+       "A command (imperative) verb addressed to a single male: \"you, say!\" The base verb is qāla / yaqūlu (\"to say\"). In the command form the weak middle letter drops out, leaving the short, clipped qul ending in a silent consonant — the bare, urgent form of an order.",
+       "ق-و-ل (q-w-l) — to say, to speak"
+      ],
+      [
+       "اَعُوذُ",
+       "a--ʿūdhu",
+       "I (do) seek refuge",
+       "A present-tense verb in the first person singular: \"I seek refuge\" (right now / continually). The a- prefix marks the doer as \"I.\" The final -u ending is the ordinary present-tense (indicative) marker, signalling a plain, ongoing statement of fact rather than a command or a wish.",
+       "ع-و-ذ (ʿ-w-dh) — to seek refuge, to take shelter / protection"
+      ],
+      [
+       "بِرَبِّ",
+       "bi-rabbi",
+       "in / with Lord / Sustainer",
+       "A particle bi- (\"in, with, by\") attached to the front of the noun rabb. The bi- here conveys taking hold of Allah for protection (\"I take refuge IN the Lord\"). Any noun governed by bi- must take the genitive case, which is why rabb ends in -i (rabbi);…",
+       "ر-ب-ب (r-b-b) — to nurture, sustain, master, bring up"
+      ],
+      [
+       "النَّاسِ",
+       "al--nāsi",
+       "the (of) mankind / people",
+       "The definite article al- (\"the\") prefixed to the noun nās (\"people\"). Because nās begins with a \"solar\" letter (n), the l of the article is not pronounced; instead the noun's own initial n is doubled, so the pair is read an-nās (the doubling is shown by the shadda on the noun).…",
+       "أ-ن-س (ʼ-n-s) — humankind, people; human sociability / familiarity (nās is a contraction of unās, with the hamza dropped in common usage); some lexicographers alternatively relate it to ن-و-س, n-w-s, \"to sway, move about\""
+      ]
+     ]
+    },
+    {
+     "ref": "114:2",
+     "ar": "مَلِكِ النَّـاسِ",
+     "en": "The Sovereign of humanity—whose authority no government, corporation, or algorithm can override.",
+     "words": [
+      [
+       "مَلِكِ",
+       "maliki",
+       "King / Sovereign / Master",
+       "A noun standing in apposition to 'Rabbi' (Lord) from the previous verse, so it shares the same role. The final -i ending is genitive (the majrūr case): here it does two jobs at once —…",
+       "م-ل-ك (m-l-k) — ownership, dominion, kingship, sovereign authority"
+      ],
+      [
+       "النَّـاسِ",
+       "al-n--āsi",
+       "the (definite article 'al-', its 'l' assimilated into the following 'n') people / mankind (the stem 'nās')",
+       "A definite noun: the prefix 'al-' is 'the', but its 'l' is not pronounced — it merges into the doubled 'n' of 'nās' (so 'an-nās', not 'al-nās'), 'n' being a sun letter. The final -i ending is genitive, marking it as the second part of the possessive construct (the muḍāf ilayhi): 'King OF mankind'.",
+       "أ-ن-س (a-n-s) — sociability, companionship, humanity; the mainstream derivation, where 'al-nās' is held to be a contraction of 'al-unās' (people). (A minority instead trace it to ن-و-س, n-w-s, 'to sway'.)"
+      ]
+     ]
+    },
+    {
+     "ref": "114:3",
+     "ar": "اِلٰهِ النَّاسِ",
+     "en": "The One humanity truly worships, whether they admit it or not—since whatever people give their ultimate fear, love, and obedience to becomes, in practice, what they serve.",
+     "words": [
+      [
+       "اِلٰهِ",
+       "ilāh--i",
+       "god / deity (the one worthy of worship) of (genitive ending linking to the next word)",
+       "A singular masculine noun in the genitive case, functioning as the possessed term (muḍāf) of a possessive construction (iḍāfa) — it continues the chain begun in the previous verses, standing in apposition to 'Lord' and 'King'.…",
+       "أ-ل-ه (ʾ-l-h) — worship, divinity; the quality of being the one deserving of worship"
+      ],
+      [
+       "النَّاسِ",
+       "al- (here pronounced 'an-')-nās--i",
+       "the (definite article) people / mankind (genitive ending)",
+       "A definite collective noun ('the people / mankind') in the genitive case, functioning as the possessor (muḍāf ilayhi) of the preceding word. The prefix al- is 'the'; its 'l' assimilates into the following 'n' (a sun letter), which is why it is pronounced an-nās and written with a doubled n (shadda).…",
+       "ن-و-س (n-w-s) — to move/stir about; the sense behind nās, 'humankind, people' (the stronger majority view derives it from أ-ن-س, ʾ-n-s, relating to companionship and being human)"
+      ]
+     ]
+    },
+    {
+     "ref": "114:4",
+     "ar": "مِنۡ شَرِّ الۡوَسۡوَاسِ الۡخَنَّاسِ",
+     "en": "From the evil of the whisperer who withdraws—the insidious voice that plants doubt, vanity, rage, or despair and then retreats, leaving you to think the thought was entirely your own.",
+     "words": [
+      [
+       "مِنۡ",
+       "min",
+       "from",
+       "This is a non-inflecting preposition (it never changes its ending). It governs the noun after it and forces that noun into the genitive case — which is why the next word 'sharr' takes an -i ending (sharri). Think of it as 'from' pulling whatever follows into a 'from-the-X' relationship."
+      ],
+      [
+       "شَرِّ",
+       "sharr--i",
+       "evil / harm (of) — genitive ending",
+       "The final -i ending is genitive, and it is doing two jobs at once. First, it is genitive because the preposition 'min' before it requires that case ('from the evil').…",
+       "ش-ر-ر (sh-r-r) — evil, badness, harm"
+      ],
+      [
+       "الۡوَسۡوَاسِ",
+       "al--waswās--i",
+       "the constant whisperer (of) — genitive ending",
+       "The prefix 'al-' is 'the', and its 'l' is pronounced clearly here: waw (و) is a 'lunar' letter, so there is no assimilation — you say 'al-waswās' with an audible l. The word is built from the four-consonant (quadriliteral) root w-s-w-s, which is itself a reduplication (the pair w-s repeated).…",
+       "و-س-و-س (w-s-w-s) — to whisper, to insinuate faint promptings"
+      ],
+      [
+       "الۡخَنَّاسِ",
+       "al--khannās--i",
+       "the one who repeatedly withdraws/slinks away genitive ending",
+       "The prefix 'al-' is 'the', and its 'l' is pronounced clearly: khāʾ (خ) is a 'lunar' letter, so there is no assimilation — you say 'al-khannās' with an audible l.…",
+       "خ-ن-س (kh-n-s) — to draw back, recede, slink away furtively"
+      ]
+     ]
+    },
+    {
+     "ref": "114:5",
+     "ar": "الَّذِىۡ يُوَسۡوِسُ فِىۡ صُدُوۡرِ النَّاسِ",
+     "en": "Who whispers into the hearts of people—among jinn and among humans—through suggestion, propaganda, envy, and the quiet narratives that reshape conscience without announcement.",
+     "words": [
+      [
+       "الَّذِىۡ",
+       "alladhī",
+       "who / the one who (relative pronoun)",
+       "This is a masculine singular relative pronoun, used here for a male/singular referent (the whisperer). It is a single fused, indivisible word — not a noun carrying a detachable \"al-\" article. The doubled l (shown by the shadda on لّ) belongs to the pronoun itself.…"
+      ],
+      [
+       "يُوَسۡوِسُ",
+       "yu---waswisu",
+       "he / it (present-tense \"he does\" marker) whisper, insinuate",
+       "This is a present/ongoing-tense verb, third-person masculine singular: \"he whispers / keeps whispering.\" The yu- prefix marks \"he,\" and the final -u ending shows the verb is in its base (indicative) state, signalling a real, habitual, continuing action — this is what the whisperer constantly does.…",
+       "و-س-و-س (w-s-w-s) — whispering, faint insinuating suggestion; a quadriliteral root formed by reduplicating the unit و-س"
+      ],
+      [
+       "فِىۡ",
+       "fī",
+       "in / within / into",
+       "An indeclinable preposition: its form never changes. Grammatically it puts the noun that follows it (\"breasts\") into the genitive case, which is why that next word carries an -i ending. It conveys containment — the thoughts are cast within the inner self."
+      ],
+      [
+       "صُدُوۡرِ",
+       "ṣudūr--i",
+       "chests / breasts (plural) of (genitive ending, linking to the next word)",
+       "This is the plural of ṣadr (\"chest\"). It carries a final -i ending for two reasons working together: it follows the preposition \"in\" (fī), and it is the first part of a possessive link (\"chests OF…\"). That -i tells you it is genitive and that the next word completes the phrase — \"the chests of mankind.\"",
+       "ص-د-ر (ṣ-d-r) — chest, breast; the inner front of a person"
+      ],
+      [
+       "النَّاسِ",
+       "an-n---āsi",
+       "the (definite article; its \"l\" sound merges into the following n) people / humankind (with genitive -i ending)",
+       "A definite collective noun, \"the people / mankind.\" The al- (\"the\") is written but its \"l\" sound assimilates into the following n, so it is pronounced an-nās. The final -i ending is genitive: it completes the possessive phrase begun by the previous word, giving \"the chests OF mankind.\"",
+       "أ-ن-س (ʾ-n-s) — the standard root, from أَنِسَ (to be sociable/intimate); the initial hamza is dropped in an-nās. (A minority view derives it from ن-و-س, n-w-s, \"to sway/move,\" but أ-ن-س is the dominant classical view.)"
+      ]
+     ]
+    },
+    {
+     "ref": "114:6",
+     "ar": "مِنَ الۡجِنَّةِ وَالۡنَّاسِ",
+     "en": "From among jinn and mankind—reminding you that harm is not only supernatural; people, too, can whisper corruption into a community, a family, or a soul.",
+     "words": [
+      [
+       "مِنَ",
+       "mina",
+       "from / of",
+       "A preposition (a small linking word). It is normally just 'min', but here the silent ending is voiced as 'mina' (with a final -a) to ease pronunciation before the following word, which begins with the joining-hamza of 'al-'.…"
+      ],
+      [
+       "الۡجِنَّةِ",
+       "l--jinati",
+       "the jinn-kind",
+       "A noun made definite by the prefix 'al-' ('the'). The final -i ending is the genitive case, triggered by the preposition 'min' before it ('from the jinn'). The -ah/-at ending marks it as a collective noun naming the whole category rather than one individual.…",
+       "ج-ن-ن (j-n-n) — to cover, conceal, hide (jinn are so named because they are hidden from sight)"
+      ],
+      [
+       "وَالۡنَّاسِ",
+       "wa--l--nāsi",
+       "and the mankind / people",
+       "Built from 'wa-' ('and') joined to the definite noun 'al-nās' ('the people'). Because it is linked by 'and' to the earlier genitive 'al-jinnah', it shares the same genitive case, shown by the final -i ending ('...and mankind'). In speech the 'l' of 'al-' assimilates into the 'n', so it sounds like 'an-nās'.",
+       "ن-و-س / أ-ن-س (n-w-s / ʾ-n-s) — humankind, people; relating to human sociability and movement"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "falaq",
+   "n": 113,
+   "name": "الفَلَق",
+   "nameEn": "Al-Falaq — Daybreak",
+   "why": "One of the two protection surahs you recite morning and evening.",
+   "verses": [
+    {
+     "ref": "113:1",
+     "ar": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+     "en": "Say: I seek refuge in the Rabb of the breaking dawn—the One who brings light after the deepest darkness, when fear feels loudest and the night feels endless.",
+     "words": [
+      [
+       "قُلْ",
+       "qul",
+       "say! (command to one male)",
+       "A command verb (imperative) addressed to a single male. The root is q-w-l ('to say'), whose middle weak letter (و) drops in the command, leaving the short form qul. There is no extra suffix: the bare form with its final silent l is itself the order 'you (one person), say'.",
+       "ق-و-ل (q-w-l) — to say, to speak"
+      ],
+      [
+       "أَعُوذُ",
+       "a--ʿūdhu",
+       "I (the doer) seek refuge / take shelter",
+       "A present-tense verb from the root ʿ-w-dh ('to seek protection'). The a- prefix marks the doer as 'I', so it means 'I seek refuge' (right now / habitually). The final -u ending is the normal present-tense indicative vowel, showing a plain statement of fact ('I do seek refuge'), not a wish or command.",
+       "ع-و-ذ (ʿ-w-dh) — to seek refuge, to take shelter"
+      ],
+      [
+       "بِرَبِّ",
+       "bi-rabbi",
+       "in / with (taking hold of) Lord, Master and Sustainer",
+       "Two pieces joined: the attached preposition bi- ('in / with / by means of') plus the noun rabb ('Lord'). Two things act on rabb at once. First, sitting after the preposition bi- forces it into the genitive case, shown by the final -i (rabbi).…",
+       "ر-ب-ب (r-b-b) — to nurture, master, sustain"
+      ],
+      [
+       "الْفَلَقِ",
+       "al--falaqi",
+       "the daybreak, the cleaving-open of dawn",
+       "The definite article al- ('the') joined to the noun falaq ('daybreak'). It is the second term of the possessive pairing 'Lord OF the daybreak', so it takes the genitive case, shown by the final -i ending (falaqi). The word is a noun built on the root meaning 'to split', picturing dawn as light splitting the dark.",
+       "ف-ل-ق (f-l-q) — to split, cleave, break open"
+      ]
+     ]
+    },
+    {
+     "ref": "113:2",
+     "ar": "مِنۡ شَرِّ مَا خَلَقَ",
+     "en": "From the evil of what He created—recognizing that creation itself is not evil, but that harm can emerge from what He made when misused or when its darker potentials are unleashed.",
+     "words": [
+      [
+       "مِنۡ",
+       "min",
+       "from / out of",
+       "This is an indeclinable preposition (it never changes form). It governs the following noun and puts it in the genitive case — which is why the next word, sharr, ends in -i (sharri). It expresses \"starting-point\" or source: the evil one is fleeing away from."
+      ],
+      [
+       "شَرِّ",
+       "sharr--i",
+       "evil / harm (genitive ending: \"of\")",
+       "A noun in the genitive case. It is genitive for one reason only: it follows the preposition min (\"from\"), which always puts the word after it in the genitive. Sharr is also the first term (the possessed word, mudaf) of a possessive phrase — \"the evil OF what He created\" —…",
+       "ش-ر-ر (sh-r-r) — to be evil / wicked / harmful"
+      ],
+      [
+       "مَا",
+       "mā",
+       "what / that which",
+       "An indeclinable relative pronoun (its form never changes). Grammatically it is the second term of the possessive phrase begun by sharr — the possessor — so it carries the sense \"of\": \"the evil of [mā] = the evil of that which…\" It then needs a verb to define it, supplied by the next word."
+      ],
+      [
+       "خَلَقَ",
+       "khalaqa",
+       "He created",
+       "A past-tense verb, third-person masculine singular: the built-in subject is \"he\" (here, Allah). The final -a is the standard past-tense ending for \"he did\" — no extra subject word is needed. The phrase functions as the relative clause defining mā: \"what He created.\"",
+       "خ-ل-ق (kh-l-q) — to create / originate / bring into being"
+      ]
+     ]
+    },
+    {
+     "ref": "113:3",
+     "ar": "وَمِنْ شَرِّ غَاسِقٍ اِذَا وَقَبَ",
+     "en": "And from the evil of darkness when it settles—literal night and the inner night of despair, rumination, and the thoughts that grow when you are alone with your screen or your fears.",
+     "words": [
+      [
+       "وَمِنْ",
+       "wa-min",
+       "and from / out of",
+       "Two pieces joined together. The wa- is a connector meaning 'and', tying this verse to the request for refuge in the verse before. min is a preposition meaning 'from', marking the source or origin of the evil. A preposition like min puts the noun after it into the genitive case, which is why the next word ends in -i.",
+       "— (particles; no triliteral root)"
+      ],
+      [
+       "شَرِّ",
+       "sharri",
+       "evil / harm of",
+       "A noun meaning 'evil'. Its final -i ending is genitive for two reasons at once: it follows the preposition min ('from the evil…'), and it is the first term (the possessed word) of a possessive pairing ('the evil OF darkness') — so it leans on the next word to complete the sense.",
+       "ش-ر-ر (sh-r-r) — evil, badness, harm"
+      ],
+      [
+       "غَاسِقٍ",
+       "ghāsiqin",
+       "(a) darkening one / gathering darkness",
+       "An active participle — literally 'one that grows dark' — used here as a noun for the darkening night. It is the second term of the possessive pairing 'the evil OF darkness' (the possessor word), and that role is exactly what puts it in the genitive case — shown by the -i in its ending.…",
+       "غ-س-ق (gh-s-q) — to grow dark, darkness pouring in"
+      ],
+      [
+       "اِذَا",
+       "idhā",
+       "when / at the time that",
+       "A time word meaning 'when', normally pointing to something expected to happen. It introduces the following verb and pins the danger to a specific moment — the night is feared precisely 'when' it does what comes next. It has no case ending of its own.",
+       "— (particle of time; no triliteral root)"
+      ],
+      [
+       "وَقَبَ",
+       "waqaba",
+       "it settled in / overspread",
+       "A past-tense verb, 'he/it spread/settled in', with a built-in 'he/it' subject referring back to the darkening night. The final -a is the normal past-tense ending for this form. Though past in form, after idhā ('when') it reads as a recurring action: 'whenever it spreads'.",
+       "و-ق-ب (w-q-b) — to set in, sink in, overspread"
+      ]
+     ]
+    },
+    {
+     "ref": "113:4",
+     "ar": "وَمِنْ شَرِّ النَفّٰثٰتِ فِى العُقَدِ",
+     "en": "And from the evil of those who blow on knots—those who secretly work harm through envy, manipulation, or hidden schemes meant to undo your peace.",
+     "words": [
+      [
+       "وَمِنْ",
+       "wa-min",
+       "and from / part of",
+       "Two joined particles. The wa- prefix is a connector meaning 'and', tying this phrase to the earlier 'I seek refuge ... from ...'. 'min' is a preposition meaning 'from', and it forces the noun after it (sharri) into the genitive case, which is why that next word ends in -i.…"
+      ],
+      [
+       "شَرِّ",
+       "sharr--i",
+       "evil / harm (of) — possessive/genitive ending",
+       "A noun. The final -i ending is genitive for two reasons at once: it comes right after the preposition 'min' ('from the evil...'), and it begins a possessive chain (iḍāfa) with the following word, giving the sense 'the evil OF the blowers'. The doubled 'r' (shadda) is part of the stem, not a grammatical ending.",
+       "ش-ر-ر (sh-r-r) — evil, badness, harm"
+      ],
+      [
+       "النَفّٰثٰتِ",
+       "al--naffāthāt--i",
+       "the women who blow much/repeatedly (of) — genitive ending",
+       "A definite noun: 'al-' means 'the'. The stem belongs to the intensive faʿʿāl family (doubled middle letter), which signals doing something a lot or habitually. Its feminine singular base is naffātha (pattern faʿʿāla, ending in -a) = 'a woman who blows much';…",
+       "ن-ف-ث (n-f-th) — to blow, to spit/breathe out softly"
+      ],
+      [
+       "فِى",
+       "fī",
+       "in / into / upon",
+       "A preposition meaning 'in' or 'into'. It governs the next word, putting 'the knots' into the genitive case (the -i ending you see there). A preposition has no tense or person; it simply links the action of blowing to its object."
+      ],
+      [
+       "العُقَدِ",
+       "al--ʿuqad--i",
+       "the knots genitive ending (object of 'in')",
+       "A definite plural noun: 'al-' means 'the', and 'ʿuqad' is the plural of ʿuqda ('a knot'), so it means 'the knots'. The final -i ending is genitive because the word is the object of the preposition 'fī' ('in/upon the knots').…",
+       "ع-ق-د (ʿ-q-d) — to tie, bind, knot"
+      ]
+     ]
+    },
+    {
+     "ref": "113:5",
+     "ar": "وَمِنۡ شَرِّ حَاسِدٍ اِذَا حَسَدَ",
+     "en": "And from the evil of an envier when he envies—when someone resents your blessings, your stability, or your faith and wishes them gone.",
+     "words": [
+      [
+       "وَمِنۡ",
+       "wa-min",
+       "and from / out of",
+       "Written as one word in the text (wamin) but built from two pieces. \"wa-\" is the connector \"and,\" tying this verse to the earlier ones. \"min\" is a preposition meaning \"from\"; here it marks the source of evil one takes refuge against.…"
+      ],
+      [
+       "شَرِّ",
+       "sharri",
+       "evil of",
+       "A noun in the genitive case, shown by its final \"-i.\" The \"-i\" ending appears for two reasons at once: it follows the preposition \"min\" (\"from\"), and it is the first half of a possessive pair (\"the evil OF an envier\"), linking it to the following word. So \"sharri ḥāsidin\" reads \"the evil of an envier.\"",
+       "ش-ر-ر (sh-r-r) — evil, badness, harm"
+      ],
+      [
+       "حَاسِدٍ",
+       "ḥāsidin",
+       "an envier",
+       "An active participle (the \"-ā-\" after the first root letter is the doer pattern, like \"-er\" in English: one who envies = an envier). Its final \"-in\" is genitive plus nunation (the \"n\" sound marks it as indefinite, \"an\" envier, not \"the\" envier).…",
+       "ح-س-د (ḥ-s-d) — envy, jealousy"
+      ],
+      [
+       "اِذَا",
+       "idhā",
+       "when / whenever",
+       "A time particle meaning \"when / at the time that.\" It does not change its form (it has no case ending). It introduces the following verb and sets the condition: protection is sought from the envier precisely \"when\" the next action happens."
+      ],
+      [
+       "حَسَدَ",
+       "ḥasada",
+       "he envied / he envies",
+       "A past-tense verb, \"he envied,\" with the bare \"-a\" ending that marks the basic third-person masculine singular (\"he\"). After the time-word \"idhā\" (\"when\"), this past-tense form carries a general, timeless sense — \"whenever he envies\" — rather than a single completed event.…",
+       "ح-س-د (ḥ-s-d) — envy, jealousy"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "qadr",
+   "n": 97,
+   "name": "القَدْر",
+   "nameEn": "Al-Qadr — The Decree",
+   "why": "The night worth more than a thousand months — recited constantly in Ramadan.",
+   "verses": [
+    {
+     "ref": "97:1",
+     "ar": "اِنَّنَا اَنۡزَلۡـنَاـهُ فِىۡ لَيۡلَةِ الۡقَدۡرِ",
+     "en": "We sent it—the Qur'an—down on the Night of Decree, Laylat al-Qadr—",
+     "words": [
+      [
+       "اِنَّنَا",
+       "inna--nā",
+       "indeed / truly (strong emphasis) we (attached pronoun, the divine 'We')",
+       "'Inna' is an emphasis-particle placed at the head of a sentence to assert it firmly; render it as 'indeed' or 'most certainly'. The attached '-nā' is the pronoun 'we', referring to Allah in the majestic plural — not a literal numerical plural but a marker of supreme greatness.…",
+       "— (emphasis particle + attached pronoun; no triliteral root)"
+      ],
+      [
+       "اَنۡزَلۡـنَاـهُ",
+       "anzal--nā--hu",
+       "sent down / caused to descend (Form IV) we (subject: Allah, majestic plural) it / him (object: the Qur'an)",
+       "A past-tense verb. The pattern 'an-' (Form IV, from the root n-z-l 'to come down') is causative: it turns 'to descend' into 'to send/bring down'. The '-nā' ending marks the doer as 'we' (Allah, in the plural of majesty) and shows the action is completed (past). The final '-hu' is the object 'it', i.e.…",
+       "ن-ز-ل (n-z-l) — to descend, come down"
+      ],
+      [
+       "فِىۡ",
+       "fī",
+       "in / during / within",
+       "A preposition meaning 'in' or 'during'. It governs the noun that follows and puts it in the genitive case — which is why the next word 'laylat' takes its genitive ending. It frames the timing: the sending-down happened within this night.",
+       "— (preposition; no triliteral root)"
+      ],
+      [
+       "لَيۡلَةِ",
+       "laylati",
+       "night (of)",
+       "A feminine noun, 'night'. Its final '-i' (genitive) is governed by the preceding preposition 'fī' ('in') — that alone sets the case. This word is also the first term (mudaf) of a possessive construction ('the Night OF the Power');…",
+       "ل-ي-ل (l-y-l) — night"
+      ],
+      [
+       "الۡقَدۡرِ",
+       "al--qadri",
+       "the (definite article) power / decree / measuring-out / high worth",
+       "'al-' is the definite article 'the'. The noun 'qadr' carries a final '-i' (genitive) because it is the second term (mudaf ilayh) of the possessive construction begun by 'laylat' — it is the thing possessed ('the Night OF the Power'). The '-i' ending here marks that 'of' relationship.…",
+       "ق-د-ر (q-d-r) — to measure, decree, apportion; power, capability, worth"
+      ]
+     ]
+    },
+    {
+     "ref": "97:2",
+     "ar": "وَمَا اَدۡرٰٮكَ مَا لَيۡلَةُ الۡقَدۡرِ",
+     "en": "And what will explain to you what the Night of Decree is?",
+     "words": [
+      [
+       "وَمَا",
+       "wa-mā",
+       "and what",
+       "Two pieces joined: the prefix wa- is the connector \"and,\" linking this verse to the one before. The word mā here is an interrogative, \"what,\" used not for real inquiry but rhetorically to stress the greatness of what follows. It has no case ending of its own; it stands as the subject of the question."
+      ],
+      [
+       "اَدۡرٰٮكَ",
+       "adrā--ka",
+       "made (someone) know / caused to realize you (single male)",
+       "A past-tense verb in Form IV (the a-…-ā shape), which makes the meaning causative: not merely \"to know\" but \"to make someone know.\" The verb is 3rd-person masculine singular (\"it/he made known\"), its subject being the implied \"what.\" Its closing weak letter is written as an undotted yā (ٮ) before the suffix —…",
+       "د-ر-ي (d-r-y) — to know, to be aware"
+      ],
+      [
+       "مَا",
+       "mā",
+       "what",
+       "Again the interrogative mā, \"what,\" beginning the inner question \"what is the Night of Qadr?\" It is invariable and carries no case vowel. In the clause mā laylatu l-qadr, the standard parsing makes mā the subject (mubtadaʾ) and laylatu l-qadr the predicate (khabar);…"
+      ],
+      [
+       "لَيۡلَةُ",
+       "laylat--u",
+       "night (nominative ending)",
+       "A feminine singular noun. The final -u ending is the nominative (subject) case, marking it as the topic of the question \"what is the Night…\" The word is in the construct (possessive) state with what follows, so its closing -t is pronounced, linking it to the next word: \"the Night OF…\"",
+       "ل-ي-ل (l-y-l) — night"
+      ],
+      [
+       "الۡقَدۡرِ",
+       "al--qadr--i",
+       "the power / decree / measuring-out / worth (genitive ending)",
+       "Made of the definite article al- (\"the\") plus the noun qadr. The final -i ending is the genitive case: it is governed by the preceding word \"Night,\" completing the possessive link \"the Night OF Power/Decree.\" The article makes it a specific, known thing — the Decree, not just any decree.",
+       "ق-د-ر (q-d-r) — to measure out, ordain; power, worth"
+      ]
+     ]
+    },
+    {
+     "ref": "97:3",
+     "ar": "لَيۡلَةُ القَدۡرِ خَيۡرٌ مِّن اَلۡفِ شَهۡرٍ",
+     "en": "The Night of Decree is better than a thousand months—sincere worship that night outweighs decades of ordinary time.",
+     "words": [
+      [
+       "لَيۡلَةُ",
+       "laylat--u",
+       "night (nominative ending: marks the subject)",
+       "A feminine singular noun, and the first term of a construct (idafa) with the following 'al-Qadr', so the pair means 'Night of the Decree'. The final -u is nominative because the whole construct phrase is the subject of the sentence (the thing described as 'better').…",
+       "ل-ي-ل (l-y-l) — night, the dark hours"
+      ],
+      [
+       "القَدۡرِ",
+       "al--qadr--i",
+       "the decree / measure / worth (genitive ending: 'of...')",
+       "A masculine noun with the definite article 'al-' ('the'). The final -i is genitive, which is what makes the phrase mean 'Night OF the Decree', completing the construct (idafa) with 'laylatu' before it. The genitive is triggered because the noun is the second term of the construct ('Night of ___').",
+       "ق-د-ر (q-d-r) — to measure out, decree, determine; also power and worth"
+      ],
+      [
+       "خَيۡرٌ",
+       "khayr--un",
+       "good / better (indefinite nominative ending, with tanwin)",
+       "An elative/comparative noun ('better, more excellent') serving as the predicate — the word that completes 'The Night... is ___'. The final -un is nominative with tanwin (the doubled-vowel 'n' sound), marking it as indefinite ('better', not 'the better') and agreeing in case with the subject it describes.…",
+       "خ-ي-ر (kh-y-r) — goodness, that which is good or preferable"
+      ],
+      [
+       "مِّن",
+       "min",
+       "than / from",
+       "A preposition. On its own 'min' usually means 'from', but after a comparative word like 'khayrun' ('better') it means 'than'. It governs the noun after it, forcing that noun into the genitive (which is why the next word, alfi, ends in -i); 'min' itself does not change form.…",
+       "— (particle; no triliteral root)"
+      ],
+      [
+       "اَلۡفِ",
+       "alf--i",
+       "a thousand (genitive ending, after 'than')",
+       "A noun meaning 'thousand'. The final -i is genitive because it directly follows the preposition 'min' ('than'), which always puts the next word into the genitive. It is itself the first term of a construct with the following word, so it reads 'a thousand OF months'.",
+       "ا-ل-ف (ʾ-l-f) — a thousand; also the sense of joining/being numerous"
+      ],
+      [
+       "شَهۡرٍ",
+       "shahr--in",
+       "month (indefinite genitive ending, with tanwin)",
+       "A masculine singular noun. The final -in is genitive with tanwin: genitive because it is the second term of the construct after 'alf' ('a thousand of ___'), and the tanwin ('n' sound) marks it as indefinite.…",
+       "ش-ه-ر (sh-h-r) — month; the lunar month, linked to 'making visible' (the new moon)"
+      ]
+     ]
+    },
+    {
+     "ref": "97:4",
+     "ar": "تَنَزَّلُ الۡمَلٰٓئِكَةُ وَالرُّوۡحُ فِيۡهَا بِاِذۡنِ رَبِّهِمۡ مِّنۡ كُلِّ اَمۡرٍ",
+     "en": "On it the angels and the Spirit—Jibril—descend by their Lord's permission with every decreed matter—",
+     "words": [
+      [
+       "تَنَزَّلُ",
+       "tanazzalu",
+       "they descend repeatedly / come down in waves",
+       "A present/future-tense verb in Form V (tafaʿʿala), here تَنَزَّلَ. Form V is built by prefixing ta- to the doubled-middle stem (nazzala), and that ta- is part of the verb pattern itself, not a personal pronoun-prefix; the doubled middle root letter gives the sense 'come down again and again, in abundance'.…",
+       "ن-ز-ل (n-z-l) — coming down, descending"
+      ],
+      [
+       "الۡمَلٰٓئِكَةُ",
+       "al--malāikatu",
+       "the angels",
+       "A definite plural noun: 'al-' means 'the'. It is the doer (subject) of the verb 'descend', which is why it carries the -u ending — the -u marks the nominative, the case used for the one performing the action. The noun is the broken plural of malak, 'angel'.",
+       "م-ل-ك (m-l-k) — message-bearing, sending; an angel is a bearer of Allah's command"
+      ],
+      [
+       "وَالرُّوۡحُ",
+       "wa--l-rūḥu",
+       "and the Spirit",
+       "'wa-' is the joining word 'and'. The noun 'the Spirit' is also a subject of 'descend' (alongside 'the angels'), so it too takes the -u nominative ending. Note the sun-letter rule: the 'l' of al- assimilates into the following 'r', so it is pronounced 'ar-rūḥu' (written الرُّوۡحُ with a shadda on the r).",
+       "ر-و-ح (r-w-ḥ) — spirit, breath of life, relief"
+      ],
+      [
+       "فِيۡهَا",
+       "fī-hā",
+       "in / during it (referring to the Night, feminine)",
+       "A preposition 'in/during' with an attached pronoun '-hā' meaning 'it'. The -hā is feminine because it refers back to 'the Night' (laylah), which is grammatically feminine in Arabic — hence 'in it' = 'in that night'. Attached pronouns after a preposition stay fixed in form and take no case ending.",
+       "— (preposition; no triliteral root)"
+      ],
+      [
+       "بِاِذۡنِ",
+       "bi--idhni",
+       "by / with permission, leave, authorization",
+       "The prefix 'bi-' means 'by/with' and shows the means. Because 'bi-' is a preposition, the noun after it takes the genitive -i ending: 'idhni' ('permission'). That same -i also links it to the next word, so it reads 'by the permission OF...' — 'idhni' is in a possessive chain with 'their Lord' that follows.",
+       "ا-ذ-ن (ʾ-dh-n) — granting permission, giving leave (also: ear, listening)"
+      ],
+      [
+       "رَبِّهِمۡ",
+       "rabbi-him",
+       "Lord, Master, Sustainer their (referring to the angels)",
+       "A noun 'Lord' with the attached pronoun '-him' ('their'), referring to the angels and the Spirit. The base word shows the genitive -i ('rabbi') because it completes the chain begun by 'bi-idhni' — literally 'by the permission OF the Lord OF them' = 'by their Lord's permission'.…",
+       "ر-ب-ب (r-b-b) — lordship, nurturing, sustaining, ownership"
+      ],
+      [
+       "مِّنۡ",
+       "min",
+       "from / with / concerning",
+       "A preposition. Its basic sense is 'from', but in this verse it functions to mean 'with / on account of / concerning' every matter — it ties the descent to the decrees being brought down. As a preposition it has no ending of its own, but it forces the next word into the genitive.…",
+       "— (preposition; no triliteral root)"
+      ],
+      [
+       "كُلِّ",
+       "kulli",
+       "every / each / all",
+       "A quantifier meaning 'every/all'. It carries the genitive -i ending ('kulli') for two reasons: it follows the preposition 'min', and it is itself joined in a possessive chain to the next word — 'every OF matter' = 'every matter'. The -i is the link-and-after-preposition case.",
+       "ك-ل-ل (k-l-l) — totality, completeness, the whole"
+      ],
+      [
+       "اَمۡرٍ",
+       "amrin",
+       "matter / affair / command",
+       "A singular indefinite noun completing 'kulli' ('every matter'). The ending is -in (written with two kasras, tanwīn): the -i shows it is genitive (because it finishes the 'every OF...' chain), and the final -n ('tanwīn') marks it as indefinite — 'a matter / any matter' rather than 'the matter'.…",
+       "ا-م-ر (ʾ-m-r) — commanding, ordering; an affair or matter"
+      ]
+     ]
+    },
+    {
+     "ref": "97:5",
+     "ar": "سَلٰمٌ هِىَ حَتّٰى مَطۡلَعِ الۡفَجۡرِ",
+     "en": "Peace it is until the breaking of dawn—mercy without turmoil until morning comes.",
+     "words": [
+      [
+       "سَلٰمٌ",
+       "salām--un",
+       "peace, safety, soundness a / some (indefinite nominative marker)",
+       "A singular indefinite noun. The final -un ending (called tanwīn, the 'n' sound on the end) marks it as indefinite — 'peace' in general, not 'the peace.' That -un is also the nominative case, which signals that this word is the predicate placed first for emphasis: 'Peace it is' — i.e., the whole night IS peace.",
+       "س-ل-م (s-l-m) — peace, safety, soundness, being free from fault or harm"
+      ],
+      [
+       "هِىَ",
+       "hiya",
+       "she / it (feminine)",
+       "A detached subject pronoun, third-person feminine singular ('it,' referring to the feminine noun 'night'). It is fixed in form and does not change for case. Coming after the predicate salāmun, the natural English order is 'It is peace,' though the Arabic fronts 'peace' for emphasis.",
+       "— (pronoun; no root)"
+      ],
+      [
+       "حَتّٰى",
+       "ḥattā",
+       "until, up to",
+       "A particle of limit/end-point. Here it works like a preposition of 'until,' so the noun after it takes the genitive case (you can see this in the -i ending on the following word). It tells you when the night's peace reaches its boundary.",
+       "— (particle; no root)"
+      ],
+      [
+       "مَطۡلَعِ",
+       "maṭlaʿ--i",
+       "place/time of rising or emergence of (genitive case ending)",
+       "A noun of place/time built on the mīm- pattern (ma- prefix), meaning 'the point at which (something) rises.' Its final -i ending is genitive, caused by 'until' before it ('until the rising...'). It is also in a possessive link (iḍāfa) with the next word: 'the rising OF the dawn.'",
+       "ط-ل-ع (ṭ-l-ʿ) — to rise, come up, appear, emerge (as the sun or a star)"
+      ],
+      [
+       "الۡفَجۡرِ",
+       "l--fajr--i",
+       "the dawn, daybreak of (genitive case ending)",
+       "The definite article al- ('the') plus the noun 'dawn.' The final -i ending is genitive because this word is the second part of a possessive pair (iḍāfa): 'the rising of the dawn.' So it specifies exactly what is rising — the dawn.",
+       "ف-ج-ر (f-j-r) — to break/split open; hence the dawn that 'splits' the darkness"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
 }

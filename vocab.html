@@ -73,8 +73,8 @@ function renderList() {
     <h1>Vocab Lab <span class="arabic" style="color:var(--accent)">مُخْتَبَر المُفْرَدَات</span></h1>
     <p class="sub">Everything here is ordered by <strong>frequency</strong> — the words you'll meet most often, first. No wasted memorization.</p>
     <div class="card" style="border-color:var(--accent)" id="sheetCard">
-      <h2>📝 Today's sheet — your 3-minute micro-lesson</h2>
-      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review, your recent misses, then the next most-frequent Quran words you haven't met. Fill the column, check, done — misses come back by themselves.</p>
+      <h2>📝 Vocab Learn — as short or long as you like</h2>
+      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review first, then the next most-frequent words you haven't met. Fill the column, check, and either stop there or keep going — misses come back by themselves.</p>
       <div id="sheetArea">Building your sheet…</div>
     </div>
     <h2 style="margin-top:24px">📖 The Quran core — most frequent words first</h2>
@@ -124,25 +124,38 @@ function renderList() {
   renderSheet();
 }
 
-/* ---------- Today's Sheet ---------- */
+/* ---------- Vocab Learn: endless auto-picked batches ---------- */
 let sheetMode = "understand"; // understand: Ar→En (Quran comprehension) | produce: En→Ar (speaking)
-let sheetItems = null;
+let sheetItems = null;   // current batch
+let pool = null;         // full ordered queue: due → new core → new family forms
+let poolPos = 0;
+let sessionDone = 0;
+const BATCH = 10;
 
-async function buildSheetItems() {
+async function buildPool() {
   const due = dueCards();
-  const items = (await resolveCards(due.slice(0, 8))).map(x => ({ ...x, isNew: false }));
+  const items = (await resolveCards(due)).map(x => ({ ...x, isNew: false }));
   const srs = getSrs();
-  for (let i = 0; i < CORE.length && items.length < 10; i++) {
+  // next new words, most frequent first
+  CORE.forEach((w, i) => {
     const key = `qc:${i}`;
-    if (!srs[key]) items.push({ key, v: { ar: CORE[i].ar, en: CORE[i].en, tr: CORE[i].tr, note: `≈${CORE[i].n}× in the Quran` }, isNew: true });
-  }
+    if (!srs[key]) items.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` }, isNew: true, fam: w.fam });
+  });
+  // then unlearned root-family forms (linked words in one go)
+  FAMS.forEach(f => {
+    f.members.forEach((m, i) => {
+      const key = `fam-${f.id}:${i}`;
+      if (!srs[key]) items.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: "root " + f.root }, isNew: true });
+    });
+  });
   return items;
 }
 
 async function renderSheet() {
   const area = document.getElementById("sheetArea");
-  if (!sheetItems) sheetItems = await buildSheetItems();
-  if (!sheetItems.length) { area.innerHTML = "<p>Nothing to study right now — well done. Come back tomorrow!</p>"; return; }
+  if (!pool) { pool = await buildPool(); poolPos = 0; }
+  if (!sheetItems) { sheetItems = pool.slice(poolPos, poolPos + BATCH); poolPos += sheetItems.length; }
+  if (!sheetItems.length) { area.innerHTML = `<p>🎉 You've worked through everything available — ${sessionDone} words this session. New content lands with your next coaching update.</p>`; return; }
   area.innerHTML = `
     <div class="toggles" style="margin-bottom:10px">
       <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
@@ -202,11 +215,19 @@ async function renderSheet() {
       gradeCard(key, ok ? "good" : "again");
       logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
     });
-    document.getElementById("shScore").textContent =
+    sessionDone += sheetItems.length;
+    document.getElementById("shScore").innerHTML =
       `Score: ${right} / ${sheetItems.length}` +
-      (right === sheetItems.length ? " — ممتاز! 🎉" : " — the red ones come back automatically.");
+      (right === sheetItems.length ? " — ممتاز! 🎉" : " — the red ones come back automatically.") +
+      `<div class="ex-row" style="margin-top:10px">
+        <button class="primary" id="shMore">＋ Keep going (next ${Math.min(BATCH, pool.length - poolPos)})</button>
+        <span style="font-size:13px;color:var(--muted);align-self:center">${sessionDone} words this session — stopping here is fine too</span>
+      </div>`;
     logEvent({ e: "sheet-done", mode: sheetMode, score: right, total: sheetItems.length });
     autoSync();
+    const more = document.getElementById("shMore");
+    if (pool.length - poolPos <= 0) more.style.display = "none";
+    else more.onclick = () => { sheetItems = null; renderSheet(); window.scrollTo({ top: document.getElementById("sheetCard").offsetTop - 60 }); };
   };
 }
 
