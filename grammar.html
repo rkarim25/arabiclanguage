@@ -107,6 +107,9 @@ function renderPattern(p) {
   const ta = document.getElementById("testArea");
   let lastFocused = null;
   ta.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
+  ta.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); document.getElementById("gCheck").click(); }
+  });
   p.test.forEach((t, i) => {
     const div = document.createElement("div");
     div.className = "gt";

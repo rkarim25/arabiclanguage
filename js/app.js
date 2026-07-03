@@ -129,12 +129,21 @@ function suggestNext() {
     }
   }
   // next grammar pattern not yet tested
-  const GRAMMAR_IDS = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron"];
-  const nextG = GRAMMAR_IDS.find(g => !stepsDone("gr-" + g).test);
+  const GRAMMAR_LIST = [
+    ["inna", "إِنَّ — the certainty opener"],
+    ["alladhina", "الَّذِينَ — 'those who'"],
+    ["idafa", "الإضافة — possession by pairing"],
+    ["pronouns", "attached pronouns — my/your/his"],
+    ["tenses", "past vs present verb shapes"],
+    ["negation", "لا / ما / لم / لن — saying 'not'"],
+    ["connectors", "وَ / فَـ / ثُمَّ — and, so, then"],
+    ["prep-pron", "لَهُ / فِيهِ — fused prepositions"],
+  ];
+  const nextG = GRAMMAR_LIST.find(([g]) => !stepsDone("gr-" + g).test);
   if (nextG) out.push({
-    icon: "🧩", title: "Grammar pattern: " + nextG,
+    icon: "🧩", title: "Grammar: " + nextG[1],
     desc: "One practical pattern, three verses, 1-minute test",
-    href: `grammar.html?g=${nextG}`,
+    href: `grammar.html?g=${nextG[0]}`,
   });
   // next unfinished root family (Quranic vocab in connected sets)
   const nextFam = FAMILY_LIST.find(f => !stepsDone("fam-" + f.id).fill);

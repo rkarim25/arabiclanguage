@@ -31,8 +31,8 @@ async function init() {
   if (due.length === 0) {
     const t = totalCards();
     area.innerHTML = t === 0
-      ? `<p>Your deck is empty. Study the vocabulary list inside a <a href="index.html">story</a> first — those words appear here for review.</p>`
-      : `<p style="font-size:18px">✅ Nothing due right now — all ${t} words are scheduled. Come back tomorrow!</p>`;
+      ? `<p>Your deck is empty. Do a round of <a href="vocab.html?sheet=1">Vocab Learn</a> or study a <a href="index.html">story</a> — every word you meet appears here on a spaced schedule.</p>`
+      : `<p style="font-size:18px">✅ Nothing due right now — all ${t} words are scheduled. Want more anyway? <a href="vocab.html?sheet=1">Vocab Learn</a> always has the next most-useful words.</p>`;
     return;
   }
 

@@ -174,6 +174,9 @@ async function renderSheet() {
   const tbody = document.getElementById("shBody");
   let lastFocused = null;
   tbody.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
+  tbody.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); document.getElementById("shCheck").click(); }
+  });
 
   sheetItems.forEach(({ key, v, isNew }, i) => {
     const tr = document.createElement("tr");
@@ -200,7 +203,10 @@ async function renderSheet() {
     document.getElementById("shKb").onclick = () => mountKbDock(() => lastFocused);
   }
 
+  let batchChecked = false;
   document.getElementById("shCheck").onclick = () => {
+    if (batchChecked) return; // don't double-grade on repeat Enter/click
+    batchChecked = true;
     let right = 0;
     sheetItems.forEach(({ key, v }, i) => {
       const input = tbody.querySelector(`input[data-i="${i}"]`);

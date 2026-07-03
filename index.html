@@ -34,11 +34,6 @@
     <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
   </div>
 
-  <div class="card" id="reviewNudge" style="display:none">
-    <strong>📚 You have reviews waiting.</strong> Spaced repetition works best when you clear your due cards daily.
-    <div style="margin-top:10px"><a href="review.html"><button class="primary">Start review session</button></a></div>
-  </div>
-
   <div class="card" id="weakCard" style="display:none">
     <h2>🎯 Your current weak spots</h2>
     <p class="sub" style="margin-bottom:10px">Computed from your flashcard misses, word taps, and failed exercises.</p>
@@ -158,9 +153,7 @@ suggestNext().forEach(s => {
 const completed = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
 document.getElementById("statStories").textContent = completed;
 document.getElementById("statWords").textContent = totalCards();
-const due = dueCards().length;
-document.getElementById("statDue").textContent = due;
-if (due > 0) document.getElementById("reviewNudge").style.display = "block";
+document.getElementById("statDue").textContent = dueCards().length;
 const totalSec = store.get(LOG_KEY, []).filter(x => x.e === "time").reduce((a, x) => a + x.sec, 0);
 document.getElementById("statTime").textContent = Math.round(totalSec / 60);
 
