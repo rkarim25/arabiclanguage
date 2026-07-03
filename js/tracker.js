@@ -1,11 +1,14 @@
-/* Learning analytics: append-only event log in localStorage + sync to the
-   private GitHub repo rkarim25/arabic-learning-data (fine-grained PAT).
-   Claude reads that repo in chat sessions to analyze weaknesses and writes
-   coach.json back, which the dashboard displays. */
+/* Learning analytics: append-only event log in localStorage, synced to the cloud.
+   Primary backend: Cloudflare Worker (arabic-sync) with Google sign-in — data in KV.
+   Fallback backend: private GitHub repo rkarim25/arabic-learning-data via fine-grained PAT.
+   Claude reads the store from chat sessions (wrangler kv / gh api) to coach. */
 
 const LOG_KEY = "ats-log";
-const TOKEN_KEY = "ats-token";
+const TOKEN_KEY = "ats-token";     // GitHub PAT (fallback method)
+const SESSION_KEY = "ats-session"; // Worker session token (Google method)
+const GCLIENT_KEY = "ats-gclient"; // locally pasted Google client ID (bootstrap)
 const SYNC_KEY = "ats-lastsync";
+const WORKER_URL = "https://arabic-sync.rkarim88.workers.dev";
 const DATA_REPO = "rkarim25/arabic-learning-data";
 const DATA_FILE = "learning-data.json";
 
@@ -36,13 +39,59 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", flushTime);
 
-/* ---------- GitHub sync ---------- */
+/* ---------- credentials ---------- */
 function getToken() { return store.get(TOKEN_KEY, null); }
 function setToken(t) { store.set(TOKEN_KEY, t); }
+function getSession() { return store.get(SESSION_KEY, null); }
+function setSession(s) { store.set(SESSION_KEY, s); }
+function syncMethod() { return getSession() ? "google" : (getToken() ? "github" : null); }
 
 function _b64enc(s) { return btoa(unescape(encodeURIComponent(s))); }
 function _b64dec(s) { return decodeURIComponent(escape(atob(s.replace(/\s/g, "")))); }
 
+function _evKey(x) {
+  return x.t + "|" + x.e + "|" + (x.card || x.w || x.page || x.fam || "") + "|" + (x.q ?? x.s ?? x.i ?? "");
+}
+function _mergeRemoteLog(remote) {
+  let log = store.get(LOG_KEY, []);
+  if (remote && Array.isArray(remote.log)) {
+    const seen = new Set(log.map(_evKey));
+    remote.log.forEach(x => { if (!seen.has(_evKey(x))) log.push(x); });
+    log.sort((a, b) => a.t - b.t);
+    store.set(LOG_KEY, log);
+  }
+  return log;
+}
+function _payload(log) {
+  return { progress: getProgress(), srs: getSrs(), log, savedAt: Date.now() };
+}
+
+/* ---------- Worker (Google) backend ---------- */
+async function wReq(path, opts = {}) {
+  const session = getSession();
+  return fetch(WORKER_URL + path, {
+    ...opts,
+    headers: { ...(session ? { Authorization: "Bearer " + session } : {}), ...(opts.headers || {}) },
+  });
+}
+
+async function workerSync() {
+  let remote = null;
+  const r = await wReq("/data");
+  if (r.status === 200) remote = await r.json();
+  else if (r.status === 401) { setSession(null); throw new Error("session-expired"); }
+  const log = _mergeRemoteLog(remote);
+  const put = await wReq("/sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(_payload(log)),
+  });
+  if (!put.ok) throw new Error("sync-failed-" + put.status);
+  store.set(SYNC_KEY, Date.now());
+  return log.length;
+}
+
+/* ---------- GitHub PAT backend (fallback) ---------- */
 async function ghReq(path, opts = {}) {
   const token = getToken();
   if (!token) throw new Error("no-token");
@@ -56,12 +105,7 @@ async function ghReq(path, opts = {}) {
   });
 }
 
-function _evKey(x) {
-  return x.t + "|" + x.e + "|" + (x.card || x.w || x.page || "") + "|" + (x.q ?? x.s ?? x.i ?? "");
-}
-
-async function syncNow() {
-  flushTime();
+async function githubSync() {
   let sha = null, remote = null;
   const r = await ghReq(`contents/${DATA_FILE}`);
   if (r.status === 200) {
@@ -71,31 +115,32 @@ async function syncNow() {
   } else if (r.status === 401 || r.status === 403) {
     throw new Error("bad-token");
   }
-  // merge remote log into local (append-only union) so multiple devices don't clobber
-  let log = store.get(LOG_KEY, []);
-  if (remote && Array.isArray(remote.log)) {
-    const seen = new Set(log.map(_evKey));
-    remote.log.forEach(x => { if (!seen.has(_evKey(x))) log.push(x); });
-    log.sort((a, b) => a.t - b.t);
-    store.set(LOG_KEY, log);
-  }
-  const payload = { progress: getProgress(), srs: getSrs(), log, savedAt: Date.now() };
+  const log = _mergeRemoteLog(remote);
   const put = await ghReq(`contents/${DATA_FILE}`, {
     method: "PUT",
     body: JSON.stringify({
       message: "sync " + new Date().toISOString(),
-      content: _b64enc(JSON.stringify(payload)),
+      content: _b64enc(JSON.stringify(_payload(log))),
       ...(sha ? { sha } : {}),
     }),
   });
   if (!put.ok) throw new Error("sync-failed-" + put.status);
   store.set(SYNC_KEY, Date.now());
-  return payload.log.length;
+  return log.length;
+}
+
+/* ---------- unified API ---------- */
+async function syncNow() {
+  flushTime();
+  const m = syncMethod();
+  if (m === "google") return workerSync();
+  if (m === "github") return githubSync();
+  throw new Error("not-connected");
 }
 
 let _syncing = false;
 async function autoSync() {
-  if (!getToken() || _syncing) return;
+  if (!syncMethod() || _syncing) return;
   const last = store.get(SYNC_KEY, 0);
   if (Date.now() - last < 3 * 60 * 1000) return; // at most every 3 min
   _syncing = true;
@@ -104,6 +149,12 @@ async function autoSync() {
 }
 
 async function fetchCoach() {
+  if (syncMethod() === "google") {
+    const r = await wReq("/coach");
+    if (!r.ok) return null;
+    const c = await r.json();
+    return c && c.note ? c : null;
+  }
   const r = await ghReq("contents/coach.json");
   if (r.status !== 200) return null;
   const j = await r.json();
@@ -111,12 +162,44 @@ async function fetchCoach() {
 }
 
 async function restoreFromCloud() {
-  const r = await ghReq(`contents/${DATA_FILE}`);
-  if (r.status !== 200) throw new Error("no-cloud-data");
-  const remote = JSON.parse(_b64dec((await r.json()).content));
+  let remote;
+  if (syncMethod() === "google") {
+    const r = await wReq("/data");
+    if (r.status !== 200) throw new Error("no-cloud-data");
+    remote = await r.json();
+  } else {
+    const r = await ghReq(`contents/${DATA_FILE}`);
+    if (r.status !== 200) throw new Error("no-cloud-data");
+    remote = JSON.parse(_b64dec((await r.json()).content));
+  }
   if (remote.progress) store.set("ats-progress", remote.progress);
   if (remote.srs) store.set("ats-srs", remote.srs);
   if (remote.log) store.set(LOG_KEY, remote.log);
+}
+
+/* ---------- Google sign-in helpers (index page) ---------- */
+async function getGoogleClientId() {
+  try {
+    const r = await fetch(WORKER_URL + "/config");
+    const c = await r.json();
+    if (c.clientId) return c.clientId;
+  } catch (e) { /* offline */ }
+  return store.get(GCLIENT_KEY, null);
+}
+
+async function googleLogin(credential) {
+  const r = await fetch(WORKER_URL + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ credential }),
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e.error || "login-failed");
+  }
+  const { session } = await r.json();
+  setSession(session);
+  return session;
 }
 
 /* ---------- local mini-analysis for the dashboard ---------- */
@@ -130,6 +213,7 @@ function weakSpots(limit) {
   log.forEach(x => {
     if (x.e === "review" && x.g === "again") bump("card:" + x.card, null, 3);
     if (x.e === "tap") bump("word:" + x.w, x.w, 1);
+    if (x.e === "fill" && x.ok === false) bump("fill:" + x.fam + ":" + x.i, null, 2);
     if ((x.e === "dict" || x.e === "trans") && x.ok === false) bump("sent:" + x.story + ":" + x.i, null, 2);
     if (x.e === "quiz" && x.ok === false) bump("quiz:" + x.story + ":" + x.q, null, 2);
     if (x.e === "speak" && typeof x.score === "number" && x.score < 0.6) bump("speak:" + x.story + ":" + x.s, null, 2);

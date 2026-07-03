@@ -1,0 +1,11 @@
+name = "arabic-sync"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+kv_namespaces = [
+  { binding = "ARABIC_SYNC", id = "9532d5717021486a92f75efb6d7b8a94" }
+]
+
+[vars]
+ALLOWED_EMAIL = "rkarim88@gmail.com"
+ALLOWED_ORIGIN = "https://rkarim25.github.io"

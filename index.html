@@ -62,27 +62,40 @@
   <div class="card" id="syncCard">
     <h2>☁ Cloud sync & coaching</h2>
     <p style="font-size:14px;color:var(--muted)" id="syncIntro">
-      Connect once and the site syncs your learning data to your private GitHub repo
-      (<code>arabic-learning-data</code>). Your coach analyzes it and posts notes back here.
+      Sign in once and the site backs up your learning data to the cloud automatically.
+      Your coach analyzes it and posts notes back here.
     </p>
     <div id="syncSetup">
-      <details style="font-size:14px;margin-bottom:10px">
-        <summary style="cursor:pointer;color:var(--accent);font-weight:600">How to connect (one-time, ~2 minutes)</summary>
-        <ol style="padding-left:20px;margin:10px 0">
-          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a> (sign in as rkarim25).</li>
-          <li>Token name: <code>arabic-site-sync</code>. Expiration: 1 year.</li>
-          <li>Repository access → <strong>Only select repositories</strong> → choose <code>arabic-learning-data</code>.</li>
-          <li>Permissions → Repository permissions → <strong>Contents: Read and write</strong>.</li>
-          <li>Generate, copy the token (starts with <code>github_pat_</code>), paste it below.</li>
+      <div id="gsiButton" style="margin-bottom:10px"></div>
+      <div id="gsiPending" style="display:none;font-size:14px">
+        <p style="margin-top:0"><strong>Google sign-in needs one first-time setup</strong> (Google requires it — ~3 minutes):</p>
+        <ol style="padding-left:20px;margin:8px 0">
+          <li>Open <a href="https://console.cloud.google.com/apis/credentials" target="_blank">console.cloud.google.com/apis/credentials</a> (log in with rkarim88@gmail.com; create a project if asked).</li>
+          <li><strong>Create credentials → OAuth client ID</strong> (if prompted, configure the consent screen: External, app name "Arabic Stories", your email — then back to Create credentials).</li>
+          <li>Application type: <strong>Web application</strong>. Name: <code>arabic-stories</code>.</li>
+          <li>Authorized JavaScript origins → add: <code>https://rkarim25.github.io</code></li>
+          <li>Create, copy the <strong>Client ID</strong> (ends in <code>.apps.googleusercontent.com</code>), paste below.</li>
         </ol>
-      </details>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-        <button class="primary" id="btnConnect">Connect</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="gclientInput" placeholder="....apps.googleusercontent.com" style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px">
+          <button class="primary" id="btnGclient">Save & show sign-in</button>
+        </div>
       </div>
+      <details style="font-size:13px;margin-top:12px">
+        <summary style="cursor:pointer;color:var(--muted)">Alternative: connect with a GitHub token instead</summary>
+        <ol style="padding-left:20px;margin:10px 0">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a>.</li>
+          <li>Repository access → Only select repositories → <code>arabic-learning-data</code>; Permissions → Contents: Read and write.</li>
+          <li>Generate and paste the token below.</li>
+        </ol>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+          <button class="primary" id="btnConnect">Connect</button>
+        </div>
+      </details>
     </div>
     <div id="syncConnected" style="display:none">
-      <p style="font-size:14px">✅ Connected. <span id="lastSync" style="color:var(--muted)"></span></p>
+      <p style="font-size:14px">✅ Connected via <strong id="syncMethodLabel"></strong>. <span id="lastSync" style="color:var(--muted)"></span></p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="primary" id="btnSync">Sync now</button>
         <button id="btnRestore">Restore from cloud</button>
@@ -156,7 +169,7 @@ if (weak.length) {
   weak.forEach(([k, v]) => {
     const li = document.createElement("li");
     const [kind, ...rest] = k.split(":");
-    const label = { card: "Flashcard you keep missing", word: "Word you keep tapping", sent: "Sentence you couldn't write", quiz: "Quiz question missed", speak: "Sentence hard to say" }[kind];
+    const label = { card: "Word you keep missing", word: "Word you keep tapping", fill: "Family form you couldn't write", sent: "Sentence you couldn't write", quiz: "Quiz question missed", speak: "Sentence hard to say" }[kind];
     li.innerHTML = v.label
       ? `${label}: <strong class="arabic" style="font-size:19px">${v.label}</strong>`
       : `${label} <span style="color:var(--muted)">(${rest.join(" · ")})</span>`;
@@ -169,13 +182,54 @@ const setup = document.getElementById("syncSetup");
 const connected = document.getElementById("syncConnected");
 const syncMsg = document.getElementById("syncMsg");
 function refreshSyncUI() {
-  const has = !!getToken();
-  setup.style.display = has ? "none" : "block";
-  connected.style.display = has ? "block" : "none";
+  const m = syncMethod();
+  setup.style.display = m ? "none" : "block";
+  connected.style.display = m ? "block" : "none";
+  if (m) document.getElementById("syncMethodLabel").textContent = m === "google" ? "Google" : "GitHub token";
   const last = store.get(SYNC_KEY, 0);
   document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
 }
 refreshSyncUI();
+
+/* Google sign-in */
+async function initGoogleSignin() {
+  if (syncMethod()) return;
+  const clientId = await getGoogleClientId();
+  if (!clientId) {
+    document.getElementById("gsiPending").style.display = "block";
+    return;
+  }
+  document.getElementById("gsiPending").style.display = "none";
+  const s = document.createElement("script");
+  s.src = "https://accounts.google.com/gsi/client";
+  s.onload = () => {
+    google.accounts.id.initialize({
+      client_id: clientId,
+      callback: async (resp) => {
+        try {
+          await googleLogin(resp.credential);
+          await syncNow();
+          refreshSyncUI();
+          loadCoach();
+        } catch (e) {
+          alert(e.message === "email-not-allowed"
+            ? "That Google account isn't allowed — sign in as rkarim88@gmail.com."
+            : "Sign-in failed: " + e.message);
+        }
+      },
+    });
+    google.accounts.id.renderButton(document.getElementById("gsiButton"), { theme: "outline", size: "large", text: "signin_with" });
+  };
+  document.head.appendChild(s);
+}
+initGoogleSignin();
+
+document.getElementById("btnGclient").onclick = () => {
+  const v = document.getElementById("gclientInput").value.trim();
+  if (!v.endsWith(".apps.googleusercontent.com")) { alert("That doesn't look like a Google Client ID."); return; }
+  store.set(GCLIENT_KEY, v);
+  initGoogleSignin();
+};
 
 document.getElementById("btnConnect").onclick = async () => {
   const t = document.getElementById("tokenInput").value.trim();
@@ -202,7 +256,7 @@ document.getElementById("btnRestore").onclick = async () => {
   try { await restoreFromCloud(); location.reload(); }
   catch (e) { alert("No cloud data found yet."); }
 };
-document.getElementById("btnDisconnect").onclick = () => { setToken(null); refreshSyncUI(); };
+document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); refreshSyncUI(); initGoogleSignin(); };
 
 /* coach notes */
 async function loadCoach() {

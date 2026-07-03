@@ -8,6 +8,25 @@ const STORY_LIST = [
   { id: "story-05", level: 1, n: 5, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
 ];
 
+/* Root-family manifest (full data in data/families.json) */
+const FAMILY_LIST = [
+  { id: "qwl", root: "ق و ل", hint: "to say — the Quran's most frequent verb" },
+  { id: "qra", root: "ق ر أ", hint: "to read/recite — root of القرآن" },
+  { id: "ktb", root: "ك ت ب", hint: "to write/decree — الكتاب" },
+  { id: "3lm", root: "ع ل م", hint: "to know — عليم، علّم" },
+  { id: "3ml", root: "ع م ل", hint: "to do — deeds" },
+  { id: "akl", root: "أ ك ل", hint: "to eat" },
+  { id: "shrb", root: "ش ر ب", hint: "to drink" },
+  { id: "dhhb", root: "ذ هـ ب", hint: "to go" },
+  { id: "slw", root: "ص ل و", hint: "prayer" },
+  { id: "hbb", root: "ح ب ب", hint: "to love" },
+  { id: "sal", root: "س أ ل", hint: "to ask" },
+  { id: "ywm", root: "ي و م", hint: "day — يوم الدين" },
+  { id: "hyy", root: "ح ي ي", hint: "life — الحيّ" },
+  { id: "klm", root: "ك ل م", hint: "to speak — كلمة" },
+  { id: "byt", root: "ب ي ت", hint: "house — البيت" },
+];
+
 const STEPS = [
   { key: "listen", ar: "اِسْتَمِعْ", en: "Listen" },
   { key: "read", ar: "اِقْرَأْ", en: "Read" },
@@ -90,6 +109,13 @@ function suggestNext() {
       break;
     }
   }
+  // next unfinished root family (Quranic vocab in connected sets)
+  const nextFam = FAMILY_LIST.find(f => !stepsDone("fam-" + f.id).fill);
+  if (nextFam) out.push({
+    icon: "🌿", title: `Word family: ${nextFam.root}`,
+    desc: `${nextFam.hint} — study the family, then fill the sheet`,
+    href: `vocab.html?fam=${nextFam.id}`,
+  });
   // reinforce: story with most trouble signals in the log; else re-shadow last completed
   const log = store.get("ats-log", []);
   const trouble = {};
@@ -118,7 +144,7 @@ function suggestNext() {
       href: `story.html?id=${s.id}&step=read`,
     });
   }
-  return out.slice(0, 3);
+  return out.slice(0, 4);
 }
 
 /* ---------- Arabic text utils ---------- */
@@ -199,6 +225,7 @@ function renderNav(active) {
     <a class="brand" href="index.html"><span class="ar">العربية بالقصص</span><span>Arabic Through Stories</span></a>
     <span class="spacer"></span>
     <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Stories</a>
+    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;

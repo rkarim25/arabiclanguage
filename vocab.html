@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocab Lab — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .fam-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 16px; cursor: pointer; transition: transform .12s;
+    }
+    .fam-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .fam-card .root { font-family: var(--font-ar); font-size: 30px; color: var(--accent); direction: rtl; }
+    .fam-card .theme { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+    .fam-card .meta { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .verse-card {
+      background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 16px; margin-top: 10px;
+    }
+    .verse-card .v-ar { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 26px; line-height: 2; }
+    .verse-card .v-en { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .verse-card .v-ref { font-size: 12px; color: var(--amber); font-weight: 600; }
+    .fill-input {
+      direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 22px;
+      border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; width: 180px;
+      background: #fffdf9;
+    }
+    .fill-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+    .fill-input.ok { border-color: var(--accent); background: var(--accent-soft); }
+    .fill-input.no { border-color: var(--red); background: var(--red-soft); }
+    .correct-answer { font-family: var(--font-ar); font-size: 20px; color: var(--accent); direction: rtl; display: block; }
+    #kbDock { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <div id="content">Loading…</div>
+  <div id="kbDock"></div>
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
+<script>
+renderNav("vocab");
+trackPage("vocab");
+
+const content = document.getElementById("content");
+let FAMS = null;
+
+fetch("data/families.json").then(r => r.json()).then(d => {
+  FAMS = d.families;
+  const params = new URLSearchParams(location.search);
+  const famId = params.get("fam");
+  const fam = FAMS.find(f => f.id === famId);
+  if (fam) renderFamily(fam, params.get("mode") || "study");
+  else renderList();
+});
+
+function famDone(id) { return !!stepsDone("fam-" + id).fill; }
+
+function renderList() {
+  trackPage("vocab:list");
+  content.innerHTML = `
+    <h1>Vocab Lab <span class="arabic" style="color:var(--accent)">مُخْتَبَر المُفْرَدَات</span></h1>
+    <p class="sub">One story word opens a whole <strong>root family</strong> — the connected forms you'll actually hear in the Quran.
+    Study the family, then <strong>fill in the sheet</strong> from memory and check your answers.</p>
+    <div class="fam-grid" id="famGrid"></div>
+  `;
+  const grid = document.getElementById("famGrid");
+  FAMS.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "fam-card";
+    div.innerHTML = `
+      <div class="root">${f.root}</div>
+      <div class="theme">${f.theme}</div>
+      <div class="meta">${f.members.length} forms · from “${f.storyRef.ar}” ${famDone(f.id) ? "· ✓ sheet done" : ""}</div>
+    `;
+    div.onclick = () => { history.pushState({}, "", `vocab.html?fam=${f.id}`); renderFamily(f, "study"); };
+    grid.appendChild(div);
+  });
+}
+
+function renderFamily(fam, mode) {
+  trackPage(`vocab:${fam.id}:${mode}`);
+  window.scrollTo({ top: 0 });
+  content.innerHTML = `
+    <p><a href="vocab.html" style="color:var(--accent);text-decoration:none">← All families</a></p>
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Root family</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">${fam.root}</span>
+    </h1>
+    <p class="sub">${fam.theme}. You met <strong class="arabic" style="font-size:19px">${fam.storyRef.ar}</strong> in
+      <a href="story.html?id=${fam.storyRef.story}">the story</a> — now own the whole family.</p>
+    <div class="steps" style="max-width:400px">
+      <button id="mStudy" class="${mode === "study" ? "active" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
+      <button id="mFill" class="${mode === "fill" ? "active" : ""}"><span class="ar">اِمْلَأْ</span><span>Fill the sheet${famDone(fam.id) ? " ✓" : ""}</span></button>
+    </div>
+    <div id="famBody"></div>
+  `;
+  document.getElementById("mStudy").onclick = () => renderFamily(fam, "study");
+  document.getElementById("mFill").onclick = () => renderFamily(fam, "fill");
+  (mode === "fill" ? renderFill : renderStudy)(fam);
+}
+
+/* ---------- Study ---------- */
+function renderStudy(fam) {
+  const body = document.getElementById("famBody");
+  body.innerHTML = `
+    <div class="card">
+      <h2>The family — say each one aloud</h2>
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+          <tbody id="vtBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>In the Quran <span class="arabic" style="color:var(--accent)">في القُرْآن</span></h2>
+      <p class="sub" style="margin-bottom:6px">Real verses using this root. (🔊 is synthetic — for tajwīd, listen to a reciter.)</p>
+      <div id="verses"></div>
+    </div>
+    <div class="ex-row">
+      <button class="primary" id="toFill">I've studied it — fill the sheet →</button>
+    </div>
+  `;
+  const tbody = document.getElementById("vtBody");
+  fam.members.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${m.en}</td>
+      <td class="ar-cell">${m.ar}</td>
+      <td><span class="row-speak" title="hear it">🔊</span></td>
+      <td class="tr-cell">${m.tr}</td>
+    `;
+    tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
+    tbody.appendChild(tr);
+  });
+  const verses = document.getElementById("verses");
+  fam.quran.forEach(v => {
+    const div = document.createElement("div");
+    div.className = "verse-card";
+    div.innerHTML = `
+      <div class="v-ar">${v.ar} <span class="sent-play">🔊</span></div>
+      <div class="v-en">${v.en}</div>
+      <div class="v-ref">Quran ${v.ref}</div>
+    `;
+    div.querySelector(".sent-play").onclick = () => speak(v.ar, 0.75);
+    verses.appendChild(div);
+  });
+  document.getElementById("toFill").onclick = () => renderFamily(fam, "fill");
+}
+
+/* ---------- Fill the sheet ---------- */
+function renderFill(fam) {
+  const body = document.getElementById("famBody");
+  body.innerHTML = `
+    <div class="card">
+      <h2>Fill in the Arabic, then check</h2>
+      <div class="toggles">
+        <label><input type="checkbox" id="tgTr" checked> Transliteration hints</label>
+      </div>
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>English</th><th class="ar-col">Arabic — type it</th><th>Transliteration</th></tr></thead>
+          <tbody id="fillBody"></tbody>
+        </table>
+      </div>
+      <div class="ex-row" style="margin-top:14px">
+        <button class="primary" id="checkAll">✓ Check my answers</button>
+        <button class="small" id="kbToggle">⌨ Phonetic keyboard</button>
+      </div>
+      <div class="quiz-score" id="fillScore"></div>
+      <p style="font-size:13px;color:var(--muted)">Vowel marks optional — spelling is what's checked. Type Arabic directly, use the phonetic keyboard, or your <a href="keyboard.html" target="_blank">keyboard tool</a>.</p>
+    </div>
+  `;
+  const tbody = document.getElementById("fillBody");
+  let lastFocused = null;
+
+  fam.members.forEach((m, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${m.en}</td>
+      <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span></td>
+      <td class="tr-cell">${m.tr}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  tbody.addEventListener("focusin", e => { if (e.target.classList.contains("fill-input")) lastFocused = e.target; });
+
+  document.getElementById("tgTr").onchange = (e) => {
+    [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
+  };
+
+  /* phonetic keyboard dock, inserts into last focused input */
+  const dock = document.getElementById("kbDock");
+  dock.innerHTML = "";
+  const kbWrap = document.createElement("div");
+  kbWrap.className = "card";
+  kbWrap.style.display = "none";
+  kbWrap.style.padding = "10px";
+  const rows = document.createElement("div");
+  KB_LAYOUT.forEach(r => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "kb-row";
+    r.forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
+      b.onmousedown = (e) => e.preventDefault(); // keep focus on input
+      b.onclick = () => { if (lastFocused) { lastFocused.value += LATIN_TO_AR[k]; lastFocused.focus(); } };
+      rowDiv.appendChild(b);
+    });
+    rows.appendChild(rowDiv);
+  });
+  const extra = document.createElement("div");
+  extra.className = "kb-row";
+  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
+  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { if (lastFocused) { lastFocused.value += " "; lastFocused.focus(); } };
+  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
+  del.onmousedown = e => e.preventDefault(); del.onclick = () => { if (lastFocused) { lastFocused.value = lastFocused.value.slice(0, -1); lastFocused.focus(); } };
+  extra.appendChild(sp); extra.appendChild(del);
+  rows.appendChild(extra);
+  kbWrap.appendChild(rows);
+  dock.appendChild(kbWrap);
+  document.getElementById("kbToggle").onclick = () => {
+    kbWrap.style.display = kbWrap.style.display === "none" ? "block" : "none";
+  };
+
+  document.getElementById("checkAll").onclick = () => {
+    let right = 0;
+    fam.members.forEach((m, i) => {
+      const input = tbody.querySelector(`input[data-i="${i}"]`);
+      const answer = tbody.querySelectorAll(".correct-answer")[i];
+      const ok = normalizeAr(input.value) === normalizeAr(m.ar);
+      input.classList.remove("ok", "no");
+      input.classList.add(ok ? "ok" : "no");
+      if (ok) { right++; answer.style.display = "none"; }
+      else { answer.style.display = "block"; answer.textContent = m.ar; }
+      logEvent({ e: "fill", fam: fam.id, i, typed: input.value, ok });
+      gradeCard(`fam-${fam.id}:${i}`, ok ? "good" : "again");
+    });
+    const score = document.getElementById("fillScore");
+    score.textContent = `Score: ${right} / ${fam.members.length}` + (right === fam.members.length ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
+    setStepDone("fam-" + fam.id, "fill");
+    logEvent({ e: "fill-done", fam: fam.id, score: right, total: fam.members.length });
+    autoSync();
+  };
+}
+</script>
+</body>
+</html>
