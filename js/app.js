@@ -51,20 +51,33 @@ const EVERYDAY_LIST = [
 const UMRAH_GROUPS = ["directions", "haram", "shopping", "medical", "hotel-taxi", "help"];
 const MASJID_GROUPS = ["masjid", "khutba"];
 
-/* daily listening menu — real input trains the ear; one pick per day */
-const LISTEN_MENU = [
-  { title: "Friday khutbah from the Haram (subtitled)", q: "خطبة الجمعة من الحرم المكي مترجمة" },
-  { title: "Al-Fatiha word-by-word recitation", q: "سورة الفاتحة word by word" },
-  { title: "Slow MSA conversation practice", q: "slow arabic conversation practice beginner MSA" },
-  { title: "Stories of the Prophets (Arabic, subtitled)", q: "قصص الأنبياء مترجم بالعربية" },
-  { title: "Short surah tafsir in simple Arabic", q: "تفسير سورة الإخلاص مبسط" },
-  { title: "Easy Arabic street interviews", q: "easy arabic street interviews" },
-  { title: "Umrah vlog in Arabic (subtitled)", q: "العمرة خطوة بخطوة بالعربية" },
-];
-function todaysListen() {
-  const day = Math.floor(Date.now() / 86400000);
-  const pick = LISTEN_MENU[day % LISTEN_MENU.length];
-  return { ...pick, url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(pick.q) };
+/* Contextual listening: recommended only when your learning has unlocked it —
+   e.g. you passed a surah's test, so now hear it recited for real. */
+function listenSuggestion() {
+  const srs = getSrs();
+  const learntCount = prefix => Object.keys(srs).filter(k => k.startsWith(prefix) && isLearnt(k)).length;
+  const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+  // 1. Most recent surah you've tested: hear it recited — you'll understand it now
+  const passed = QURAN_SURAHS.filter(s => stepsDone("q-" + s.id).test);
+  if (passed.length) {
+    const s = passed[passed.length - 1];
+    return { title: `Hear Surah ${s.name} recited — you understand it now`, desc: "Follow a real reciter; catch every word you just learnt", url: yt(`سورة ${s.ar} تلاوة`) };
+  }
+  // 2. Khutbah phrases learnt → listen to a real khutbah
+  if (learntCount("ev-khutba:") >= 5) {
+    return { title: "Listen to a Haram khutbah (subtitled)", desc: "You know the stock phrases — catch them live", url: yt("خطبة الجمعة من الحرم المكي مترجمة") };
+  }
+  // 3. Umrah kit half-learnt → Umrah vlog in Arabic
+  const umrahLearnt = UMRAH_GROUPS.reduce((a, g) => a + learntCount(`ev-${g}:`), 0);
+  if (umrahLearnt >= 25) {
+    return { title: "Watch an Umrah vlog in Arabic", desc: "Your Umrah vocabulary in its real setting", url: yt("العمرة خطوة بخطوة بالعربية") };
+  }
+  // 4. Opener kit mostly learnt → slow conversation
+  const openerLearnt = ["greetings", "questions", "glue"].reduce((a, g) => a + learntCount(`ev-${g}:`), 0);
+  if (openerLearnt >= 15) {
+    return { title: "Listen: slow MSA conversations", desc: "Your opener kit, spoken at real (slow) speed", url: yt("slow arabic conversation practice MSA") };
+  }
+  return null; // nothing unlocked yet — no listening homework
 }
 
 const STEPS = [
@@ -325,13 +338,9 @@ function suggestNext() {
     desc: "Word-by-word — understand it as it's recited",
     href: `quran.html?s=${nextSurah.id}`,
   });
-  // 3. Today's listening pick — real input trains the ear for khutbahs and recitation
-  const lp = todaysListen();
-  out.push({
-    icon: "🎧", title: "Listen (10 min): " + lp.title,
-    desc: "Today's pick on YouTube — catch the words you know",
-    href: lp.url,
-  });
+  // 3. Contextual listening — only when your learning has unlocked something worth hearing
+  const lp = listenSuggestion();
+  if (lp) out.push({ icon: "🎧", title: lp.title, desc: lp.desc, href: lp.url });
   // next incomplete story/step
   for (const s of STORY_LIST) {
     if (s.locked) continue;
