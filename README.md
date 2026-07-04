@@ -59,7 +59,7 @@ All localStorage, synced to the cloud (see Infrastructure):
 - **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js`. Curriculum plan: 5 levels × 8 stories (L1 present tense → L5 functional MSA/media); recycle weak vocab and Quranic structures.
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
 
-Deploy = commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
+Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes — prevents fresh-HTML/stale-script cache skew, which breaks the milestone panel), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
 ## Infrastructure
 
