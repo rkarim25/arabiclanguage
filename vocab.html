@@ -33,13 +33,18 @@
     .fill-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
     .correct-answer { font-family: var(--font-ar); font-size: 20px; color: var(--accent); direction: rtl; display: block; }
     #kbDock { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; }
-    .bucket-bar { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; direction: ltr; }
-    .bucket-bar button { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+    .bucket-bar { display: inline-flex; gap: 3px; margin-top: 4px; direction: ltr; }
+    .bucket-bar button { font-size: 12px; padding: 1px 8px; border-radius: 999px; color: var(--muted); }
     .bucket-bar button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
     .bucket-bar button.sel.never { background: var(--red); border-color: var(--red); }
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
     .chips button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .show-btn { color: var(--muted); }
+    .drill-stage { text-align: center; padding: 20px 0; }
+    .drill-stage .d-en { font-size: 22px; font-weight: 600; margin-bottom: 14px; }
+    .drill-stage .d-note { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .drill-fb { min-height: 56px; margin-top: 12px; font-size: 15px; }
     @media (max-width: 600px) { .fill-input { width: 100%; } }
   </style>
 </head>
@@ -53,10 +58,10 @@
 <script src="js/tracker.js"></script>
 <script>
 renderNav("vocab");
-trackPage("vocab");
 
 const content = document.getElementById("content");
 let FAMS = null, CORE = null, EV = null;
+let labView = "learn";
 
 Promise.all([
   fetch("data/families.json").then(r => r.json()),
@@ -71,60 +76,90 @@ Promise.all([
   const ev = EV.find(x => x.id === params.get("ev"));
   if (fam) renderGroup(fam, params.get("mode") || "study", "fam-");
   else if (ev) renderGroup(ev, params.get("mode") || "study", "ev-");
-  else renderList();
+  else renderList(params.get("view") || "learn");
 });
 
 function groupDone(prefix, id) { return !!stepsDone(prefix + id).fill; }
 
-/* ================= list view ================= */
-function renderList() {
-  trackPage("vocab:list");
+/* ================= tabbed Vocab Lab ================= */
+const LAB_TABS = [
+  ["learn", "📝 Learn"],
+  ["roots", "🌿 Roots"],
+  ["everyday", "🗣 Everyday"],
+  ["core", "📖 Core"],
+  ["browse", "🗂 Browse"],
+];
+
+function renderList(view) {
+  labView = view || labView;
+  trackPage("vocab:" + labView);
   content.innerHTML = `
     <h1>Vocab Lab <span class="arabic" style="color:var(--accent)">مُخْتَبَر المُفْرَدَات</span></h1>
-    <p class="sub">Everything here is ordered by <strong>frequency</strong> — the words you'll meet most often, first. No wasted memorization.</p>
+    <div class="seg-row">
+      <div class="seg" id="labTabs">${LAB_TABS.map(([id, label]) =>
+        `<button class="${labView === id ? "sel" : ""}" data-v="${id}">${label}</button>`).join("")}</div>
+    </div>
+    <div id="labBody"></div>
+  `;
+  content.querySelectorAll("#labTabs button").forEach(b =>
+    b.onclick = () => { history.replaceState({}, "", "vocab.html?view=" + b.dataset.v); renderList(b.dataset.v); });
+  const body = document.getElementById("labBody");
+  ({ learn: renderLearnView, roots: renderRootsView, everyday: renderEverydayView, core: renderCoreView, browse: renderBrowseView })[labView](body);
+}
 
+/* ---------- Learn view ---------- */
+function renderLearnView(body) {
+  body.innerHTML = `
     <div class="card" style="border-color:var(--accent)" id="sheetCard">
-      <h2>📝 Vocab Learn — as short or long as you like</h2>
-      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review first, then the next most-frequent Quran and everyday words. Fill the column, check, then bucket each word: <strong>know</strong>, <strong>repeat</strong>, <strong>later</strong>, or <strong>don't repeat</strong>.</p>
       <div id="sheetArea">Building your sheet…</div>
-    </div>
+    </div>`;
+  renderSheet();
+}
 
-    <div class="card" id="browseCard">
-      <h2>🗂 All your words, by bucket</h2>
-      <p class="sub" style="margin-bottom:10px">Filter by category and bucket — including <strong>unmarked</strong> (never studied) and <strong>don't repeat</strong> (change your mind any time). Practice exactly what you select.</p>
-      <div class="chips" id="catChips"></div>
-      <div class="chips" id="bucketChips"></div>
-      <div class="ex-row" style="margin-bottom:10px">
-        <button class="primary" id="practiceBucket">📝 Practice this bucket</button>
-        <span id="bucketCount" style="font-size:13px;color:var(--muted);align-self:center"></span>
-      </div>
-      <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
-        <table class="vocab-table"><tbody id="browseBody"></tbody></table>
-      </div>
-    </div>
+/* ---------- Roots view ---------- */
+function renderRootsView(body) {
+  body.innerHTML = `
+    <p class="sub">One root unlocks a whole family of Quranic forms — study, drill, master. This is the fastest multiplier for your vocabulary.</p>
+    <div class="fam-grid" id="famGrid"></div>`;
+  const grid = document.getElementById("famGrid");
+  FAMS.forEach(f => grid.appendChild(groupCard(f, "fam-", f.root, `${f.members.length} forms · from “${f.storyRef.ar}”`)));
+}
 
-    <h2 style="margin-top:24px">📖 The Quran core — most frequent words first</h2>
-    <p class="sub">These ≈60 words are the highest-yield vocabulary for understanding recitation. Study right here — 🔊 to hear, then mark each word: <strong>know</strong> means learnt. They also flow into Vocab Learn (choose "Quran only" there to focus).</p>
+/* ---------- Everyday view ---------- */
+function renderEverydayView(body) {
+  body.innerHTML = `
+    <p class="sub">The words real conversation runs on, in connected clusters — study, drill, master.</p>
+    <div class="fam-grid" id="evGrid"></div>`;
+  const grid = document.getElementById("evGrid");
+  EV.forEach(g => grid.appendChild(groupCard(g, "ev-", g.title, `${g.members.length} words`)));
+}
+
+function groupCard(obj, prefix, arTitle, metaText) {
+  const div = document.createElement("div");
+  div.className = "fam-card";
+  div.innerHTML = `
+    <div class="root">${arTitle}</div>
+    <div class="theme">${obj.theme}</div>
+    <div class="meta">${metaText} ${groupDone(prefix, obj.id) ? "· ✓" : ""}</div>
+  `;
+  const q = prefix === "fam-" ? "fam" : "ev";
+  div.onclick = () => { history.pushState({}, "", `vocab.html?${q}=${obj.id}`); renderGroup(obj, "study", prefix); };
+  return div;
+}
+
+/* ---------- Core view ---------- */
+function renderCoreView(body) {
+  body.innerHTML = `
+    <p class="sub">The ≈60 highest-frequency Quran words — maximum comprehension per word. 🔊 to hear, ✓ to mark learnt.</p>
     <div class="card">
-      <div class="vocab-table-wrap" style="max-height:480px;overflow-y:auto">
+      <div class="vocab-table-wrap" style="max-height:520px;overflow-y:auto">
         <table class="vocab-table">
           <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th><th>learnt?</th></tr></thead>
           <tbody id="coreBody"></tbody>
         </table>
       </div>
-    </div>
-
-    <h2 style="margin-top:24px">🗣 Everyday Arabic — linked clusters for speaking</h2>
-    <p class="sub">The words real conversation runs on, learned in connected groups.</p>
-    <div class="fam-grid" id="evGrid"></div>
-
-    <h2 style="margin-top:24px">🌿 Quranic root families</h2>
-    <p class="sub">One story word opens a whole root — study the family, then fill in the sheet from memory.</p>
-    <div class="fam-grid" id="famGrid"></div>
-  `;
-
-  /* core table */
-  const srs = getSrs();
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ know · ↻ repeat soon · ⏳ much later · ✗ don't repeat</p>
+    </div>`;
   const coreBody = document.getElementById("coreBody");
   CORE.forEach((w, i) => {
     const tr = document.createElement("tr");
@@ -141,35 +176,13 @@ function renderList() {
     coreBody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), `qc:${i}`);
   });
-
-  /* grids */
-  const famGrid = document.getElementById("famGrid");
-  FAMS.forEach(f => famGrid.appendChild(groupCard(f, "fam-", f.root, `${f.members.length} forms · from “${f.storyRef.ar}”`)));
-  const evGrid = document.getElementById("evGrid");
-  EV.forEach(g => evGrid.appendChild(groupCard(g, "ev-", g.title, `${g.members.length} words`)));
-
-  renderSheet();
-  initBrowse();
 }
 
-function groupCard(obj, prefix, arTitle, metaText) {
-  const div = document.createElement("div");
-  div.className = "fam-card";
-  div.innerHTML = `
-    <div class="root">${arTitle}</div>
-    <div class="theme">${obj.theme}</div>
-    <div class="meta">${metaText} ${groupDone(prefix, obj.id) ? "· ✓ sheet done" : ""}</div>
-  `;
-  const q = prefix === "fam-" ? "fam" : "ev";
-  div.onclick = () => { history.pushState({}, "", `vocab.html?${q}=${obj.id}`); renderGroup(obj, "study", prefix); };
-  return div;
-}
-
-/* ================= Vocab Learn: endless auto-picked batches ================= */
-let sheetMode = "understand"; // understand: Ar→En | produce: En→Ar
-let sheetSrc = store.get("ats-sheet-src", "mixed"); // mixed | quran | msa
-let sheetItems = null;   // current batch
-let pool = null;         // ordered queue
+/* ================= Vocab Learn sheet ================= */
+let sheetMode = "understand";
+let sheetSrc = store.get("ats-sheet-src", "mixed");
+let sheetItems = null;
+let pool = null;
 let poolPos = 0;
 let sessionDone = 0;
 let poolLabel = "auto";
@@ -206,11 +219,8 @@ async function buildPool() {
   if (sheetSrc === "quran") fresh = [...newQc, ...newFam];
   else if (sheetSrc === "msa") fresh = [...newEv, ...newStory, ...newFam];
   else {
-    // interleave: 5 Quran-core + 5 everyday per batch of new words — both goals advance together
     const mixed = [];
-    while (newQc.length || newEv.length) {
-      mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
-    }
+    while (newQc.length || newEv.length) mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
     fresh = [...mixed, ...newFam, ...newStory];
   }
   return [...items, ...fresh];
@@ -221,36 +231,37 @@ async function renderSheet() {
   if (!area) return;
   if (!pool) { pool = await buildPool(); poolPos = 0; poolLabel = "auto"; }
   if (!sheetItems) { sheetItems = pool.slice(poolPos, poolPos + BATCH); poolPos += sheetItems.length; }
-  if (!sheetItems.length) { area.innerHTML = `<p>🎉 You've worked through everything in this queue — ${sessionDone} words this session.</p>`; return; }
+  if (!sheetItems.length) { area.innerHTML = `<p>🎉 Everything in this queue is done — ${sessionDone} words this session.</p>`; return; }
+  const seg = (id, opts, cur) => `<div class="seg" id="${id}">${opts.map(([v, l]) =>
+    `<button class="${cur === v ? "sel" : ""}" data-v="${v}">${l}</button>`).join("")}</div>`;
   area.innerHTML = `
-    ${poolLabel !== "auto" ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing bucket: ${poolLabel} (${pool.length} words) — <a href="vocab.html?sheet=1" style="color:var(--accent)">back to auto</a></p>` : `
-    <div class="toggles" style="margin-bottom:6px">
-      <label><input type="radio" name="shSrc" value="mixed" ${sheetSrc === "mixed" ? "checked" : ""}> Mixed</label>
-      <label><input type="radio" name="shSrc" value="quran" ${sheetSrc === "quran" ? "checked" : ""}> 📖 Quran only</label>
-      <label><input type="radio" name="shSrc" value="msa" ${sheetSrc === "msa" ? "checked" : ""}> 🗣 Everyday MSA only</label>
-    </div>`}
-    <div class="toggles" style="margin-bottom:10px">
-      <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
-      <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Write (English → عربي)</label>
-    </div>
-    <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Type your answer, or just recall and hit <strong>show</strong> — then bucket the word: <strong>know / repeat / later / don't repeat</strong>. Shown words aren't marked wrong; you're the judge. Practice out loud in the <a href="speaking.html" style="color:var(--accent)">Speaking section</a>.</p>
+    ${poolLabel !== "auto"
+      ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing: ${poolLabel} (${pool.length}) — <a href="vocab.html?view=learn" style="color:var(--accent)">back to auto</a></p>`
+      : `<div class="seg-row">
+          ${seg("segSrc", [["mixed", "Mixed"], ["quran", "📖 Quran"], ["msa", "🗣 MSA"]], sheetSrc)}
+          ${seg("segMode", [["understand", "Understand"], ["produce", "Write"]], sheetMode)}
+        </div>`}
     <div class="vocab-table-wrap">
       <table class="vocab-table"><tbody id="shBody"></tbody></table>
     </div>
     <div class="ex-row" style="margin-top:12px">
-      <button class="primary" id="shCheck">✓ Check the sheet</button>
+      <button class="primary" id="shCheck">✓ Check</button>
       <button id="shShowAll">👁 Show all</button>
-      ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨ Phonetic keyboard</button>' : ""}
+      ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨</button>' : ""}
+      <span style="font-size:12px;color:var(--muted);align-self:center">✓ know · ↻ repeat · ⏳ later · ✗ never</span>
     </div>
     <div class="quiz-score" id="shScore"></div>
   `;
-  area.querySelectorAll("input[name=shMode]").forEach(r => r.onchange = () => { sheetMode = r.value; renderSheet(); });
-  area.querySelectorAll("input[name=shSrc]").forEach(r => r.onchange = () => {
-    sheetSrc = r.value;
+  const segSrc = document.getElementById("segSrc");
+  if (segSrc) segSrc.querySelectorAll("button").forEach(b => b.onclick = () => {
+    sheetSrc = b.dataset.v;
     store.set("ats-sheet-src", sheetSrc);
     pool = null; sheetItems = null;
     renderSheet();
   });
+  const segMode = document.getElementById("segMode");
+  if (segMode) segMode.querySelectorAll("button").forEach(b => b.onclick = () => { sheetMode = b.dataset.v; renderSheet(); });
+
   const tbody = document.getElementById("shBody");
   let lastFocused = null;
   tbody.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
@@ -285,7 +296,7 @@ async function renderSheet() {
         <td><span class="row-speak">🔊</span></td>
         <td class="tr-cell">${v.tr || ""}</td>
         <td style="min-width:150px">
-          <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning... or just recall" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
+          <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning…" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
           <span class="shown-answer" style="display:none;font-size:14px"></span>
           <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
       `;
@@ -303,7 +314,6 @@ async function renderSheet() {
     if (spk) spk.onclick = () => speak(v.ar, 0.8);
     tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
-    // buckets available immediately — mark words with or without answering
     mountBucketBar(tr.querySelector(".bucket-slot"), key);
   });
 
@@ -313,7 +323,8 @@ async function renderSheet() {
   };
 
   if (sheetMode === "produce") {
-    document.getElementById("shKb").onclick = () => mountKbDock(() => lastFocused);
+    const kb = document.getElementById("shKb");
+    if (kb) kb.onclick = () => mountKbDock(() => lastFocused);
   }
 
   function showBatchScore(right, graded) {
@@ -321,17 +332,17 @@ async function renderSheet() {
     sessionDone += sheetItems.length;
     document.getElementById("shScore").innerHTML =
       (graded === 0
-        ? "Self-studied — bucket each word above (know / repeat / later / don't repeat)."
+        ? "Self-studied — bucket each word above."
         : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉" : " — the red ones come back automatically.")) +
       `<div class="ex-row" style="margin-top:10px">
         <button class="primary" id="shMore">＋ Keep going (next ${Math.min(BATCH, pool.length - poolPos)})</button>
-        <span style="font-size:13px;color:var(--muted);align-self:center">${sessionDone} words this session — stopping here is fine too</span>
+        <span style="font-size:13px;color:var(--muted);align-self:center">${sessionDone} words this session</span>
       </div>`;
-    logEvent({ e: "sheet-done", mode: sheetMode, score: right, total: sheetItems.length });
+    logEvent({ e: "sheet-done", mode: sheetMode, score: right, total: graded });
     autoSync();
     const more = document.getElementById("shMore");
     if (pool.length - poolPos <= 0) more.style.display = "none";
-    else more.onclick = () => { sheetItems = null; renderSheet(); const sc = document.getElementById("sheetCard"); if (sc) window.scrollTo({ top: sc.offsetTop - 60 }); };
+    else more.onclick = () => { sheetItems = null; renderSheet(); window.scrollTo({ top: 0 }); };
   }
 
   let batchChecked = false;
@@ -340,20 +351,17 @@ async function renderSheet() {
     batchChecked = true;
     let right = 0, graded = 0;
     sheetItems.forEach(({ key, v }, i) => {
-      if (revealed.has(i)) return; // shown words are self-judged via buckets, never marked wrong
+      if (revealed.has(i)) return;
       graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const ans = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = sheetMode === "understand"
-        ? fuzzyEn(input.value, v.en)
-        : arMatch(input.value, v.ar);
+      const ok = sheetMode === "understand" ? fuzzyEn(input.value, v.en) : arMatch(input.value, v.ar);
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
       if (ok) { right++; ans.style.display = "none"; }
       else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
       gradeCard(key, ok ? "good" : "again");
       logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
-      // refresh the bucket bar (a test result replaces a stale explicit mark)
       mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
     });
     showBatchScore(right, graded);
@@ -369,6 +377,7 @@ function mountBucketBar(slot, key) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = b.label;
+    btn.title = b.name;
     if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
     btn.onclick = () => {
       setBucket(key, b.id);
@@ -383,10 +392,10 @@ function mountBucketBar(slot, key) {
   slot.appendChild(bar);
 }
 
-/* ================= browse by bucket ================= */
+/* ================= Browse view ================= */
 let catalog = null;
 let browseFilter = "unmarked";
-let browseCat = "all"; // all | quran | msa
+let browseCat = "all";
 
 async function buildCatalog() {
   const items = [];
@@ -399,7 +408,6 @@ async function buildCatalog() {
       st.vocab.forEach((w, i) => items.push({ key: `${s.id}:${i}`, v: { ar: w.ar, en: w.en, tr: w.tr, note: s.titleEn } }));
     } catch (e) {}
   }
-  // any remaining SRS keys (e.g. verse words from Quran tests)
   const have = new Set(items.map(x => x.key));
   const extra = Object.keys(getSrs()).filter(k => !have.has(k));
   (await resolveCards(extra)).forEach(x => items.push(x));
@@ -427,10 +435,23 @@ function filterCatalog() {
   });
 }
 
-async function initBrowse() {
+async function renderBrowseView(body) {
+  body.innerHTML = `
+    <div class="card">
+      <p class="sub" style="margin-bottom:10px">Every word, filterable by category and bucket. Practice exactly what you select — including unmarked and don't-repeat.</p>
+      <div class="chips" id="catChips"></div>
+      <div class="chips" id="bucketChips"></div>
+      <div class="ex-row" style="margin-bottom:10px">
+        <button class="primary" id="practiceBucket">📝 Practice this selection</button>
+        <span id="bucketCount" style="font-size:13px;color:var(--muted);align-self:center"></span>
+      </div>
+      <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
+        <table class="vocab-table"><tbody id="browseBody"></tbody></table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ know · ↻ repeat soon · ⏳ much later · ✗ don't repeat</p>
+    </div>`;
   if (!catalog) catalog = await buildCatalog();
   const chips = document.getElementById("bucketChips");
-  if (!chips) return;
   const catChips = document.getElementById("catChips");
 
   function refresh() {
@@ -476,6 +497,7 @@ async function initBrowse() {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = b.label;
+        btn.title = b.name;
         const cur = bucketOf(key);
         if (b.id === cur && cur !== "unmarked") btn.classList.add("sel", b.id === "never" ? "never" : "x");
         btn.onclick = () => {
@@ -490,7 +512,7 @@ async function initBrowse() {
     });
     if (rows.length > 200) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="5" style="color:var(--muted);font-size:13px">…and ${rows.length - 200} more — practice the bucket to work through them.</td>`;
+      tr.innerHTML = `<td colspan="5" style="color:var(--muted);font-size:13px">…and ${rows.length - 200} more — practice the selection to work through them.</td>`;
       tbody.appendChild(tr);
     }
   }
@@ -502,10 +524,9 @@ async function initBrowse() {
     pool = rows.map(x => ({ ...x, isNew: false }));
     poolPos = 0;
     sheetItems = null;
-    poolLabel = FILTERS.find(([id]) => id === browseFilter)[1];
-    renderSheet();
-    const sc = document.getElementById("sheetCard");
-    if (sc) window.scrollTo({ top: sc.offsetTop - 60, behavior: "smooth" });
+    poolLabel = FILTERS.find(([id]) => id === browseFilter)[1] + (browseCat !== "all" ? ` · ${browseCat}` : "");
+    renderList("learn");
+    window.scrollTo({ top: 0 });
   };
 }
 
@@ -515,22 +536,25 @@ function renderGroup(obj, mode, prefix) {
   window.scrollTo({ top: 0 });
   const arTitle = obj.root || obj.title;
   const label = prefix === "fam-" ? "Root family" : "Everyday cluster";
+  const backView = prefix === "fam-" ? "roots" : "everyday";
   content.innerHTML = `
-    <p><a href="vocab.html" style="color:var(--accent);text-decoration:none">← Vocab Lab</a></p>
+    <p><a href="vocab.html?view=${backView}" style="color:var(--accent);text-decoration:none">← Vocab Lab</a></p>
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>${label}</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">${arTitle}</span>
     </h1>
-    <p class="sub">${obj.theme}${obj.storyRef ? `. You met <strong class="arabic" style="font-size:19px">${obj.storyRef.ar}</strong> in <a href="story.html?id=${obj.storyRef.story}">the story</a> — now own the whole family.` : ""}</p>
-    <div class="steps" style="max-width:400px">
+    <p class="sub">${obj.theme}${obj.storyRef ? `. You met <strong class="arabic" style="font-size:19px">${obj.storyRef.ar}</strong> in <a href="story.html?id=${obj.storyRef.story}">the story</a>.` : ""}</p>
+    <div class="steps" style="max-width:480px">
       <button id="mStudy" class="${mode === "study" ? "active" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
-      <button id="mFill" class="${mode === "fill" ? "active" : ""}"><span class="ar">اِمْلَأْ</span><span>Fill the sheet${groupDone(prefix, obj.id) ? " ✓" : ""}</span></button>
+      <button id="mFill" class="${mode === "fill" ? "active" : ""}"><span class="ar">اِمْلَأْ</span><span>Fill${groupDone(prefix, obj.id) ? " ✓" : ""}</span></button>
+      <button id="mDrill" class="${mode === "drill" ? "active" : ""}"><span class="ar">تَدْرِيب</span><span>Drill</span></button>
     </div>
     <div id="famBody"></div>
   `;
   document.getElementById("mStudy").onclick = () => renderGroup(obj, "study", prefix);
   document.getElementById("mFill").onclick = () => renderGroup(obj, "fill", prefix);
-  (mode === "fill" ? renderGroupFill : renderGroupStudy)(obj, prefix);
+  document.getElementById("mDrill").onclick = () => renderGroup(obj, "drill", prefix);
+  ({ study: renderGroupStudy, fill: renderGroupFill, drill: renderGroupDrill })[mode](obj, prefix);
 }
 
 function renderGroupStudy(obj, prefix) {
@@ -548,11 +572,11 @@ function renderGroupStudy(obj, prefix) {
     ${obj.quran ? `
     <div class="card">
       <h2>In the Quran <span class="arabic" style="color:var(--accent)">في القُرْآن</span></h2>
-      <p class="sub" style="margin-bottom:6px">Real verses using this root. (🔊 is synthetic — for tajwīd, listen to a reciter.)</p>
       <div id="verses"></div>
     </div>` : ""}
     <div class="ex-row">
-      <button class="primary" id="toFill">I've studied it — fill the sheet →</button>
+      <button class="primary" id="toDrill">Drill me on these →</button>
+      <button id="toFill">fill the sheet instead</button>
     </div>
   `;
   const tbody = document.getElementById("vtBody");
@@ -581,6 +605,7 @@ function renderGroupStudy(obj, prefix) {
       verses.appendChild(div);
     });
   }
+  document.getElementById("toDrill").onclick = () => renderGroup(obj, "drill", prefix);
   document.getElementById("toFill").onclick = () => renderGroup(obj, "fill", prefix);
 }
 
@@ -599,12 +624,11 @@ function renderGroupFill(obj, prefix) {
         </table>
       </div>
       <div class="ex-row" style="margin-top:14px">
-        <button class="primary" id="checkAll">✓ Check my answers</button>
+        <button class="primary" id="checkAll">✓ Check</button>
         <button id="fillShowAll">👁 Show all</button>
-        <button class="small" id="kbToggle">⌨ Phonetic keyboard</button>
+        <button class="small" id="kbToggle">⌨</button>
       </div>
       <div class="quiz-score" id="fillScore"></div>
-      <p style="font-size:13px;color:var(--muted)">Type it, or recall and hit <strong>show</strong> — shown words aren't marked wrong; bucket them yourself.</p>
     </div>
   `;
   const tbody = document.getElementById("fillBody");
@@ -642,6 +666,7 @@ function renderGroupFill(obj, prefix) {
     obj.members.forEach((m, i) => showRow(i, true));
     logEvent({ e: "reveal-all", fam: prefix + obj.id, n: obj.members.length });
   };
+
   tbody.addEventListener("focusin", e => { if (e.target.classList.contains("fill-input")) lastFocused = e.target; });
   tbody.addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); document.getElementById("checkAll").click(); }
@@ -658,7 +683,7 @@ function renderGroupFill(obj, prefix) {
     checked = true;
     let right = 0, graded = 0;
     obj.members.forEach((m, i) => {
-      if (revealed.has(i)) return; // shown words are self-judged via buckets
+      if (revealed.has(i)) return;
       graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const answer = tbody.querySelectorAll(".correct-answer")[i];
@@ -680,6 +705,87 @@ function renderGroupFill(obj, prefix) {
     logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: graded });
     autoSync();
   };
+}
+
+/* ---------- Drill: rapid-fire mastery of a family/cluster ---------- */
+function renderGroupDrill(obj, prefix) {
+  const body = document.getElementById("famBody");
+  const order = obj.members.map((m, i) => i).sort(() => 0.5 - Math.random());
+  let pos = 0, right = 0;
+  const misses = [];
+  const t0 = Date.now();
+
+  body.innerHTML = `
+    <div class="card">
+      <h2>Drill — rapid fire until it's automatic</h2>
+      <p class="sub" style="margin-bottom:8px">English flashes up — type the Arabic and hit Enter. No hints. Misses repeat at the end.</p>
+      <div class="drill-stage" id="stage"></div>
+      <div class="ex-row" style="justify-content:center">
+        <button class="small" id="kbToggle">⌨ keyboard</button>
+      </div>
+    </div>
+  `;
+  const stage = document.getElementById("stage");
+  let currentInput = null;
+  document.getElementById("kbToggle").onclick = () => mountKbDock(() => currentInput);
+
+  function ask() {
+    if (pos >= order.length) return finish();
+    const i = order[pos];
+    const m = obj.members[i];
+    stage.innerHTML = `
+      <div style="font-size:12px;color:var(--muted)">${pos + 1} / ${order.length}</div>
+      <div class="d-en">${m.en}</div>
+      <input class="fill-input" id="dIn" autocomplete="off" style="width:240px">
+      <div class="ex-row" style="justify-content:center;margin-top:10px"><button class="primary" id="dGo">✓</button></div>
+      <div class="drill-fb" id="dFb"></div>
+    `;
+    const input = document.getElementById("dIn");
+    currentInput = input;
+    input.focus();
+    const submit = () => {
+      const key = `${prefix}${obj.id}:${i}`;
+      const ok = arMatch(input.value, m.ar);
+      gradeCard(key, ok ? "good" : "again");
+      logEvent({ e: "drill", fam: prefix + obj.id, i, typed: input.value, ok });
+      if (ok) right++;
+      else misses.push(i);
+      document.getElementById("dFb").innerHTML = ok
+        ? `<span style="color:var(--accent);font-weight:700;font-size:18px">✓</span>`
+        : `<span class="arabic" style="font-size:26px" dir="rtl">${m.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span> <span style="color:var(--muted);font-size:13px">${m.tr}</span>`;
+      const spk = document.getElementById("dFb").querySelector(".row-speak");
+      if (spk) spk.onclick = () => speak(m.ar, 0.8);
+      if (ok) speak(m.ar, 0.9);
+      pos++;
+      setTimeout(ask, ok ? 700 : 2200);
+    };
+    input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+    document.getElementById("dGo").onclick = submit;
+  }
+
+  function finish() {
+    const secs = Math.round((Date.now() - t0) / 1000);
+    setStepDone(prefix + obj.id, "drill");
+    logEvent({ e: "drill-done", fam: prefix + obj.id, score: right, total: order.length, secs, misses: misses.length });
+    autoSync();
+    stage.innerHTML = `
+      <div style="font-size:22px;font-weight:700">${right} / ${order.length} in ${secs}s ${right === order.length ? "— ممتاز! 🎉" : ""}</div>
+      ${misses.length ? `<p style="font-size:14px;color:var(--muted)">Missed: ${misses.map(i => `<span class="arabic" style="font-size:19px">${obj.members[i].ar}</span>`).join("، ")}</p>` : ""}
+      <div class="ex-row" style="justify-content:center;margin-top:10px">
+        ${misses.length ? `<button class="primary" id="dMisses">Drill the misses (${misses.length})</button>` : ""}
+        <button id="dAgain">Drill all again</button>
+      </div>
+    `;
+    const dm = document.getElementById("dMisses");
+    if (dm) dm.onclick = () => {
+      order.length = 0; order.push(...misses.sort(() => 0.5 - Math.random()));
+      misses.length = 0; pos = 0; right = 0;
+      ask();
+    };
+    document.getElementById("dAgain").onclick = () => renderGroup(obj, "drill", prefix);
+  }
+
+  ask();
 }
 
 /* ================= shared phonetic keyboard dock ================= */

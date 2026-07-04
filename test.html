@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <title>Milestone Test — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .t-row td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+    .t-prompt-ar { font-family: var(--font-ar); font-size: 26px; direction: rtl; text-align: right; }
+    .t-input-en { width: 100%; min-width: 140px; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 14px; }
+    .pass-banner { border-radius: 12px; padding: 14px 18px; font-size: 16px; font-weight: 600; margin-top: 14px; }
+    .pass-banner.ok { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    .pass-banner.no { background: var(--red-soft); color: var(--red); border: 1px solid var(--red); }
+  </style>
+</head>
+<body>
+<main>
+  <div id="content">Loading…</div>
+  <div id="kbDock"></div>
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
+<script>
+renderNav("");
+trackPage("test");
+
+const TEST_DEFS = {
+  top20: { title: "Top 20 Quran words", src: "qc", range: [0, 20] },
+  top40: { title: "Top 40 Quran words", src: "qc", range: [0, 40] },
+  core60: { title: "The full Quran core (60 words)", src: "qc", range: [0, 60] },
+  opener: { title: "Conversation opener kit", src: "ev", groups: ["greetings", "questions", "glue"] },
+  survival: { title: "Survival vocabulary (all everyday words)", src: "ev", groups: "all" },
+};
+const PASS = 0.85;
+
+const content = document.getElementById("content");
+const params = new URLSearchParams(location.search);
+const msId = params.get("ms");
+const def = TEST_DEFS[msId];
+
+if (!def) {
+  content.innerHTML = `<div class="card"><h2>Milestone tests</h2><p>Pick a test from your <a href="index.html">dashboard milestones</a>.</p></div>`;
+} else {
+  init();
+}
+
+async function init() {
+  let items = [];
+  if (def.src === "qc") {
+    const core = (await (await fetch("data/quran-core.json")).json()).words;
+    items = core.slice(def.range[0], def.range[1]).map((w, i) => ({ key: `qc:${def.range[0] + i}`, ar: w.ar, en: w.en, tr: w.tr }));
+  } else {
+    const groups = (await (await fetch("data/everyday.json")).json()).groups;
+    const use = def.groups === "all" ? groups : groups.filter(g => def.groups.includes(g.id));
+    use.forEach(g => g.members.forEach((m, i) => items.push({ key: `ev-${g.id}:${i}`, ar: m.ar, en: m.en, tr: m.tr })));
+  }
+  renderIntro(items);
+}
+
+function renderIntro(items) {
+  const passed = stepsDone("ms-" + msId).passed;
+  content.innerHTML = `
+    <p><a href="index.html" style="color:var(--accent);text-decoration:none">← Dashboard</a></p>
+    <h1>Milestone test <span class="arabic" style="color:var(--accent)">اِخْتِبَار</span></h1>
+    <div class="card">
+      <h2>${def.title} — ${items.length} words ${passed ? '<span style="color:var(--accent);font-size:14px">✓ certified</span>' : ""}</h2>
+      <p style="font-size:14.5px">Half the words ask for the <strong>meaning</strong> (Arabic → English), half ask you to <strong>write the Arabic</strong> (no transliteration hints). Pass mark: <strong>${Math.round(PASS * 100)}%</strong>.</p>
+      <ul style="font-size:14px;padding-left:20px">
+        <li><strong>Mock test</strong> — practice run, take it as often as you like, nothing recorded except for coaching.</li>
+        <li><strong>Official test</strong> — one sitting; ≥${Math.round(PASS * 100)}% certifies the milestone on your dashboard.</li>
+      </ul>
+      <div class="ex-row">
+        <button id="btnMock">📝 Mock test</button>
+        <button class="primary" id="btnOfficial">🏅 Official test</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("btnMock").onclick = () => renderTest(items, "mock");
+  document.getElementById("btnOfficial").onclick = () => renderTest(items, "official");
+}
+
+function renderTest(items, mode) {
+  trackPage(`test:${msId}:${mode}`);
+  window.scrollTo({ top: 0 });
+  // shuffle and assign alternating directions
+  const qs = [...items].sort(() => 0.5 - Math.random()).map((it, i) => ({ ...it, dir: i % 2 ? "produce" : "understand" }));
+  content.innerHTML = `
+    <p><a href="test.html?ms=${msId}" style="color:var(--accent);text-decoration:none">← Test menu</a></p>
+    <h1>${def.title} — ${mode === "official" ? "🏅 Official" : "📝 Mock"}</h1>
+    <div class="card">
+      <div class="vocab-table-wrap">
+        <table class="vocab-table"><tbody id="tBody"></tbody></table>
+      </div>
+      <div class="ex-row" style="margin-top:14px">
+        <button class="primary" id="tCheck">✓ Submit</button>
+        <button class="small" id="tKb">⌨ Phonetic keyboard</button>
+      </div>
+      <div id="tResult"></div>
+    </div>
+  `;
+  const tbody = document.getElementById("tBody");
+  let lastFocused = null;
+  tbody.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
+
+  qs.forEach((q, i) => {
+    const tr = document.createElement("tr");
+    tr.className = "t-row";
+    if (q.dir === "understand") {
+      tr.innerHTML = `
+        <td class="t-prompt-ar">${q.ar} <span class="row-speak" style="font-size:14px;cursor:pointer">🔊</span></td>
+        <td style="min-width:170px"><input class="t-input-en" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:13px;direction:ltr;color:var(--ink);display:none"></span></td>
+      `;
+      tr.querySelector(".row-speak").onclick = () => speak(q.ar, 0.8);
+    } else {
+      tr.innerHTML = `
+        <td style="font-size:14.5px">${q.en}</td>
+        <td style="text-align:right;min-width:170px"><input class="fill-input" style="width:100%" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span></td>
+      `;
+    }
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("tKb").onclick = () => mountKbDock(() => lastFocused);
+
+  let submitted = false;
+  document.getElementById("tCheck").onclick = () => {
+    if (submitted) return;
+    submitted = true;
+    let right = 0;
+    qs.forEach((q, i) => {
+      const input = tbody.querySelector(`input[data-i="${i}"]`);
+      const ans = tbody.querySelectorAll(".correct-answer")[i];
+      const ok = q.dir === "understand" ? fuzzyEn(input.value, q.en) : arMatch(input.value, q.ar);
+      input.classList.add(ok ? "ok" : "no");
+      if (!ok) { ans.style.display = "block"; ans.textContent = q.dir === "understand" ? q.en : q.ar; }
+      if (ok) right++;
+      gradeCard(q.key, ok ? "good" : "again");
+      logEvent({ e: "mstest-q", ms: msId, mode, key: q.key, dir: q.dir, typed: input.value, ok });
+    });
+    const pct = right / qs.length;
+    const pass = pct >= PASS;
+    if (mode === "official" && pass) setStepDone("ms-" + msId, "passed");
+    logEvent({ e: "mstest", ms: msId, mode, score: right, total: qs.length, pass });
+    autoSync();
+    document.getElementById("tResult").innerHTML = `
+      <div class="pass-banner ${pass ? "ok" : "no"}">
+        ${right} / ${qs.length} (${Math.round(pct * 100)}%) —
+        ${mode === "official"
+          ? (pass ? "PASSED — milestone certified! 🏅 It now shows on your dashboard." : `Not this time — you need ${Math.round(PASS * 100)}%. The misses are back in your review queue; take a mock, then retry.`)
+          : (pass ? "You'd pass the official test — take it now!" : "Keep practicing — misses have gone into your review queue.")}
+      </div>
+      <div class="ex-row" style="margin-top:10px">
+        ${mode === "mock" && pass ? `<button class="primary" id="goOfficial">🏅 Take the official test</button>` : ""}
+        <a href="index.html"><button>← Dashboard</button></a>
+        <button class="small" id="retry">try again</button>
+      </div>`;
+    const go = document.getElementById("goOfficial");
+    if (go) go.onclick = () => renderTest(items, "official");
+    document.getElementById("retry").onclick = () => renderTest(items, mode);
+  };
+}
+
+/* shared phonetic keyboard dock */
+let _kbMounted = false;
+function mountKbDock(getTarget) {
+  const dock = document.getElementById("kbDock");
+  if (_kbMounted) { dock.firstChild.style.display = dock.firstChild.style.display === "none" ? "block" : "none"; return; }
+  _kbMounted = true;
+  const kbWrap = document.createElement("div");
+  kbWrap.className = "card";
+  kbWrap.style.padding = "10px";
+  KB_LAYOUT.forEach(r => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "kb-row";
+    r.forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
+      b.onmousedown = (e) => e.preventDefault();
+      b.onclick = () => { const t = getTarget(); if (t) { t.value += LATIN_TO_AR[k]; t.focus(); } };
+      rowDiv.appendChild(b);
+    });
+    kbWrap.appendChild(rowDiv);
+  });
+  const extra = document.createElement("div");
+  extra.className = "kb-row";
+  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
+  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { const t = getTarget(); if (t) { t.value += " "; t.focus(); } };
+  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
+  del.onmousedown = e => e.preventDefault(); del.onclick = () => { const t = getTarget(); if (t) { t.value = t.value.slice(0, -1); t.focus(); } };
+  extra.appendChild(sp); extra.appendChild(del);
+  kbWrap.appendChild(extra);
+  dock.appendChild(kbWrap);
+}
+</script>
+</body>
+</html>

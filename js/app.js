@@ -93,10 +93,10 @@ function totalCards() { return Object.keys(getSrs()).length; }
 /* ---------- explicit buckets: know / repeat / later / never ---------- */
 const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
 const BUCKETS = [
-  { id: "know", label: "✓ know", days: 30, box: 5 },
-  { id: "repeat", label: "↻ repeat", days: 0, box: 0 },      // due in 10 min
-  { id: "later", label: "⏳ later", days: 7, box: 3 },
-  { id: "never", label: "✗ don't repeat", days: null, box: 5 },
+  { id: "know", label: "✓", name: "know — learnt (30d check)", days: 30, box: 5 },
+  { id: "repeat", label: "↻", name: "repeat — see it again soon", days: 0, box: 0 },
+  { id: "later", label: "⏳", name: "repeat much later (7d)", days: 7, box: 3 },
+  { id: "never", label: "✗", name: "don't repeat", days: null, box: 5 },
 ];
 function setBucket(key, b) {
   const srs = getSrs();
@@ -182,15 +182,15 @@ async function computeMilestones() {
     { title: "Al-Fatiha, word by word", why: "You understand every word of every rak'ah you pray — 17+ times a day.",
       have: surahTested("fatiha"), need: 1, unit: "test", link: "quran.html?s=fatiha" },
     { title: "Top 20 Quran words learnt", why: `Just 20 words ≈ ${covTop(20)}% of every word in the Quran.`,
-      have: Math.min(coreLearntN, 20), need: 20, unit: "words", link: "vocab.html?sheet=1" },
+      have: Math.min(coreLearntN, 20), need: 20, unit: "words", link: "vocab.html?sheet=1", test: "top20" },
     { title: "The protection surahs", why: "Al-Ikhlas, Al-Falaq, An-Nas — understood as recited, morning and evening.",
       have: protTested, need: 3, unit: "tests", link: "quran.html" },
     { title: "Top 40 Quran words learnt", why: `≈${covTop(40)}% of all Quranic text recognizable on hearing.`,
-      have: Math.min(coreLearntN, 40), need: 40, unit: "words", link: "vocab.html?sheet=1" },
+      have: Math.min(coreLearntN, 40), need: 40, unit: "words", link: "vocab.html?sheet=1", test: "top40" },
     { title: "All 7 surahs tested", why: "Everything you commonly hear recited — understood word by word.",
       have: allSurahsTested, need: QURAN_SURAHS.length, unit: "tests", link: "quran.html" },
     { title: "Full core + all root families", why: `All 60 core words (≈${covTop(60)}% of the Quran) plus 15 roots and their derived forms.`,
-      have: coreLearntN + famFilled, need: 60 + FAMILY_LIST.length, unit: "words", link: "vocab.html" },
+      have: coreLearntN + famFilled, need: 60 + FAMILY_LIST.length, unit: "words", link: "vocab.html", test: "core60" },
   ];
 
   const evLearnt = g => everyday.find(x => x.id === g).members.filter((m, i) => isLearnt(`ev-${g}:${i}`)).length;
@@ -206,13 +206,13 @@ async function computeMilestones() {
 
   const msa = [
     { title: "Conversation opener kit", why: "Greetings, question words and glue words — you can start, ask, and connect.",
-      have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings" },
+      have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings", test: "opener" },
     { title: "First story mastered", why: "My Day: all six skills done and its vocabulary learnt — you can retell a full narrative.",
       have: s1Steps + s1Words, need: 6 + 35, unit: "steps+words", link: "story.html?id=story-01" },
     { title: "15 speaking prompts ready", why: "Fifteen real sentences you can produce on demand — actual speech.",
       have: promptsReady, need: 15, unit: "prompts", link: "speaking.html" },
     { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the 10 clusters — shops, food, time, people.`,
-      have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html" },
+      have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html", test: "survival" },
     { title: "All 3 stories + 150 MSA words", why: "Comfortable with connected everyday narrative — ready for level 2 stories.",
       have: storiesComplete + Math.min(msaLearnt, 150), need: 3 + 150, unit: "stories+words", link: "index.html" },
   ];

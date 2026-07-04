@@ -311,6 +311,18 @@ input.no { border-color: var(--red) !important; background: var(--red-soft) !imp
 .vocab-table td.veiled > * { visibility: hidden; }
 .vocab-table td.veiled { background: repeating-linear-gradient(45deg, #eee7db, #eee7db 6px, #f5f0e8 6px, #f5f0e8 12px) !important; border-radius: 4px; }
 
+/* ---------- Segmented controls (sleek selectors) ---------- */
+.seg {
+  display: inline-flex; border: 1px solid var(--border); border-radius: 999px;
+  overflow: hidden; background: var(--card); vertical-align: middle;
+}
+.seg button {
+  border: none; border-radius: 0; padding: 6px 13px; font-size: 12.5px;
+  background: transparent; color: var(--muted);
+}
+.seg button.sel { background: var(--accent); color: #fff; }
+.seg-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+
 /* ---------- What now ---------- */
 .whatnow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .whatnow a {
