@@ -22,7 +22,8 @@
     .wbw input { width: 100%; min-width: 110px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 14px; }
     .wbw input.ok { border-color: var(--accent); background: var(--accent-soft); }
     .wbw input.no { border-color: var(--red); background: var(--red-soft); }
-    .wbw .true-en { display: block; color: var(--accent); font-size: 12.5px; }
+    .wbw .true-en { display: block; color: var(--ink); font-weight: 600; font-size: 13px; }
+    .wbw .true-en::before { content: "✗ "; color: var(--red); font-weight: 700; }
     .wbw .g-btn { cursor: pointer; color: var(--amber); font-size: 13px; user-select: none; }
     .wbw .g-row td { background: var(--amber-soft); font-size: 13px; direction: ltr; text-align: left; color: var(--ink); line-height: 1.5; }
     .wbw .g-row .g-root { color: var(--amber); font-weight: 600; display: block; margin-top: 4px; }

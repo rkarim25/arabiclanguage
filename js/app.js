@@ -332,17 +332,77 @@ async function loadStory(id) {
 }
 
 /* ---------- fuzzy English answer matching ----------
-   Accepts an answer if it shares a meaningful word with the gloss. */
+   Accepts an answer if it shares a meaningful word (or synonym) with the gloss. */
 const _EN_STOP = new Set(["he", "she", "it", "they", "we", "you", "i", "the", "a", "an", "of", "is", "are", "was", "were", "to", "in", "and", "for", "with", "his", "her", "their", "its", "who", "that", "this", "one", "be", "been", "do", "did", "does", "will", "shall"]);
+const _SYN_GROUPS = [
+  ["indeed", "truly", "certainly", "surely", "verily"],
+  ["from", "of"],
+  ["said", "say", "says", "saying", "tell", "speak"],
+  ["upon", "on", "over"],
+  ["no", "not", "none", "never", "dont", "doesnt", "didnt", "isnt"],
+  ["what", "which"],
+  ["every", "all", "each"],
+  ["lord", "master"],
+  ["people", "mankind", "humanity", "humankind", "nation", "folk", "men"],
+  ["book", "scripture"],
+  ["path", "way", "road"],
+  ["was", "were", "been", "existed"],
+  ["except", "but", "unless", "besides", "only"],
+  ["to", "towards", "toward"],
+  ["punishment", "torment", "penalty"],
+  ["earth", "land", "ground"],
+  ["sky", "heaven", "heavens"],
+  ["great", "tremendous", "mighty", "greatest", "big", "grand", "immense"],
+  ["merciful", "mercy"],
+  ["forgiving", "forgiver", "forgiveness"],
+  ["knowing", "knower", "knows", "knew", "knowledge", "aware"],
+  ["wise", "wisdom"],
+  ["created", "creates", "create", "creation", "creator", "made"],
+  ["came", "come", "comes", "arrived"],
+  ["gave", "give", "gives", "given"],
+  ["believed", "believe", "believers", "believing", "faith", "faithful"],
+  ["disbelieved", "disbelieve", "disbelievers", "rejected", "denied"],
+  ["soul", "self", "selves", "souls"],
+  ["thing", "something"],
+  ["truth", "true", "right", "real"],
+  ["messenger", "apostle"],
+  ["signs", "sign", "verses", "verse"],
+  ["fire", "hellfire", "hell"],
+  ["garden", "paradise", "gardens"],
+  ["guidance", "guide", "guides", "guided"],
+  ["prayer", "pray", "prays", "prayers", "salah", "salat"],
+  ["life", "living", "alive", "live", "lives"],
+  ["death", "dying", "die", "dies", "dead"],
+  ["deeds", "deed", "works", "work", "actions", "acts", "done"],
+  ["good", "better", "goodness"],
+  ["servants", "servant", "slaves", "slave", "worshippers"],
+  ["command", "order", "matter", "affair"],
+  ["between", "among", "amid"],
+  ["after", "afterwards"],
+  ["then", "thereafter", "afterwards"],
+  ["when", "if", "whenever"],
+  ["day", "days"],
+  ["worldly", "world", "dunya"],
+  ["hereafter", "afterlife"],
+];
+const _SYN = {};
+_SYN_GROUPS.forEach((grp, gi) => grp.forEach(w => { _SYN[w] = gi; }));
+function _canon(w) { return _SYN[w] !== undefined ? "~" + _SYN[w] : w; }
+
 function fuzzyEn(typed, gloss) {
-  const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w));
-  const t = norm(typed), g = norm(gloss);
   if (!typed.trim()) return false;
-  if (!g.length || !t.length) {
-    // gloss or answer is all function-words ("in", "he is"): compare raw parts
-    const parts = gloss.toLowerCase().split(/[;,\/]/).map(x => x.trim().replace(/[!.?]/g, ""));
-    return parts.includes(typed.trim().toLowerCase().replace(/[!.?]/g, ""));
+  const raw = s => s.toLowerCase().replace(/[!.?'’]/g, "").trim();
+  const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w)).map(_canon);
+  const t = norm(typed), g = norm(gloss);
+  // exact match against any gloss part always wins ("he was" for "he was; it was")
+  const parts = gloss.toLowerCase().split(/[;,\/]/).map(x => raw(x));
+  if (parts.includes(raw(typed))) return true;
+  if (!t.length) {
+    // answer was all function-words ("was", "in"): accept if it appears inside the gloss
+    const r = raw(typed);
+    return r.length > 0 && gloss.toLowerCase().includes(r);
   }
+  if (!g.length) return false; // handled by the exact-part check above
   return t.some(w => g.includes(w));
 }
 

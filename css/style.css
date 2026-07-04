@@ -280,6 +280,15 @@ button.primary:disabled:hover { background: var(--accent); }
 .step-done-banner.show { display: block; }
 .next-row { display: flex; justify-content: space-between; margin-top: 20px; }
 
+/* ---------- Answer checking (any input) ---------- */
+input.ok { border-color: var(--accent) !important; background: var(--accent-soft) !important; }
+input.no { border-color: var(--red) !important; background: var(--red-soft) !important; }
+.correct-answer {
+  display: block; margin-top: 4px; font-size: 14px;
+  color: var(--ink); font-weight: 600;
+}
+.correct-answer::before { content: "✗ "; color: var(--red); font-weight: 700; }
+
 /* ---------- Vocabulary table ---------- */
 .vocab-table-wrap { overflow-x: auto; }
 .vocab-table { width: 100%; border-collapse: collapse; font-size: 15px; }
