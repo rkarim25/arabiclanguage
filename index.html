@@ -67,22 +67,7 @@
         <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
         <button class="primary" id="btnCodeLogin">Sign in</button>
       </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Your email + your sync code (your coach gave it to you in chat — ask there any time to reset it). Sign in once per device and everything stays in sync.</p>
-      <div id="gsiButton" style="margin-bottom:10px"></div>
-      <div id="gsiPending" style="display:none;font-size:14px">
-        <p style="margin-top:0"><strong>Google sign-in needs one first-time setup</strong> (Google requires it — ~3 minutes):</p>
-        <ol style="padding-left:20px;margin:8px 0">
-          <li>Open <a href="https://console.cloud.google.com/apis/credentials" target="_blank">console.cloud.google.com/apis/credentials</a> (log in with rkarim88@gmail.com; create a project if asked).</li>
-          <li><strong>Create credentials → OAuth client ID</strong> (if prompted, configure the consent screen: External, app name "Arabic Stories", your email — then back to Create credentials).</li>
-          <li>Application type: <strong>Web application</strong>. Name: <code>arabic-stories</code>.</li>
-          <li>Authorized JavaScript origins → add: <code>https://rkarim25.github.io</code></li>
-          <li>Create, copy the <strong>Client ID</strong> (ends in <code>.apps.googleusercontent.com</code>), paste below.</li>
-        </ol>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input id="gclientInput" placeholder="....apps.googleusercontent.com" style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px">
-          <button class="primary" id="btnGclient">Save & show sign-in</button>
-        </div>
-      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Everything is already set up — this box only appears on a device that hasn't signed in yet. Enter your email + sync code once and this becomes a status line. (Ask your coach in chat to reset the code any time.)</p>
       <details style="font-size:13px;margin-top:12px">
         <summary style="cursor:pointer;color:var(--muted)">Alternative: connect with a GitHub token instead</summary>
         <ol style="padding-left:20px;margin:10px 0">
@@ -154,11 +139,12 @@ suggestNext().forEach(s => {
 });
 
 /* milestones */
-function msTrackHtml(icon, name, ladder) {
+function msTrackHtml(icon, name, ladder, pctLine) {
   const doneList = ladder.filter(m => m.have >= m.need);
   const next = ladder.find(m => m.have < m.need);
   let html = `<div style="margin-bottom:16px">
-    <div style="font-weight:700;font-size:15px">${icon} ${name} — milestone ${doneList.length + (next ? 1 : 0)} of ${ladder.length}</div>`;
+    <div style="font-weight:700;font-size:15px">${icon} ${name} — milestone ${doneList.length + (next ? 1 : 0)} of ${ladder.length}
+      <span style="font-weight:600;color:var(--accent);font-size:13px;margin-left:6px">${pctLine}</span></div>`;
   if (doneList.length) {
     html += `<div style="font-size:12.5px;color:var(--accent);margin:2px 0">${doneList.map(m =>
       "✓ " + m.title + (m.test ? (stepsDone("ms-" + m.test).passed ? " 🏅" : ` <a href="test.html?ms=${m.test}" style="color:var(--amber)">take the official test</a>`) : "")
@@ -182,10 +168,10 @@ function msTrackHtml(icon, name, ladder) {
 
 computeMilestones().then(ms => {
   document.getElementById("msTracks").innerHTML =
-    msTrackHtml("📖", "Quran", ms.quran) + msTrackHtml("🗣", "Everyday MSA", ms.msa);
+    msTrackHtml("📖", "Quran", ms.quran, `you understand ≈${ms.coverage}% of all Quranic words`) +
+    msTrackHtml("🗣", "Everyday MSA", ms.msa, `≈${ms.convPct}% of the conversation core`);
   document.getElementById("msStats").textContent =
-    `${ms.totalLearnt} words learnt · ${ms.coverage}% of all Quranic text covered by your learnt core words · ` +
-    `${dueCards().length} due for review · ${activeMinutes()} active minutes (measured from your actual interactions — open tabs count nothing)`;
+    `${ms.totalLearnt} words learnt · ${dueCards().length} due for review · ${activeMinutes()} active minutes (measured from your actual interactions — open tabs count nothing)`;
 }).catch(() => {
   document.getElementById("msTracks").textContent = "Couldn't load milestone data.";
 });
@@ -240,46 +226,6 @@ document.getElementById("btnCodeLogin").onclick = async () => {
   btn.textContent = "Sign in";
 };
 
-/* Google sign-in */
-async function initGoogleSignin() {
-  if (syncMethod()) return;
-  const clientId = await getGoogleClientId();
-  if (!clientId) {
-    document.getElementById("gsiPending").style.display = "block";
-    return;
-  }
-  document.getElementById("gsiPending").style.display = "none";
-  const s = document.createElement("script");
-  s.src = "https://accounts.google.com/gsi/client";
-  s.onload = () => {
-    google.accounts.id.initialize({
-      client_id: clientId,
-      callback: async (resp) => {
-        try {
-          await googleLogin(resp.credential);
-          await syncNow();
-          refreshSyncUI();
-          loadCoach();
-        } catch (e) {
-          alert(e.message === "email-not-allowed"
-            ? "That Google account isn't allowed — sign in as rkarim88@gmail.com."
-            : "Sign-in failed: " + e.message);
-        }
-      },
-    });
-    google.accounts.id.renderButton(document.getElementById("gsiButton"), { theme: "outline", size: "large", text: "signin_with" });
-  };
-  document.head.appendChild(s);
-}
-initGoogleSignin();
-
-document.getElementById("btnGclient").onclick = () => {
-  const v = document.getElementById("gclientInput").value.trim();
-  if (!v.endsWith(".apps.googleusercontent.com")) { alert("That doesn't look like a Google Client ID."); return; }
-  store.set(GCLIENT_KEY, v);
-  initGoogleSignin();
-};
-
 document.getElementById("btnConnect").onclick = async () => {
   const t = document.getElementById("tokenInput").value.trim();
   if (!t) return;
@@ -305,7 +251,7 @@ document.getElementById("btnRestore").onclick = async () => {
   try { await restoreFromCloud(); location.reload(); }
   catch (e) { alert("No cloud data found yet."); }
 };
-document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); refreshSyncUI(); initGoogleSignin(); };
+document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); refreshSyncUI(); };
 
 /* coach notes */
 async function loadCoach() {

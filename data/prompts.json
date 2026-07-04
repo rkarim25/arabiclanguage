@@ -32,6 +32,26 @@
     { "en": "My mother is a teacher.", "ar": "أُمِّي مُعَلِّمَةٌ", "keys": ["story-02:13", "story-02:14"] },
     { "en": "I love my family very much.", "ar": "أُحِبُّ عَائِلَتِي كَثِيرًا", "keys": ["ev-want-need:6", "story-01:28"] },
     { "en": "The fish is delicious.", "ar": "السَّمَكُ لَذِيذٌ", "keys": ["story-03:31", "story-03:25"] },
-    { "en": "The market is far from here.", "ar": "السُّوقُ بَعِيدٌ", "keys": ["story-03:0", "ev-opposites:4"] }
+    { "en": "The market is far from here.", "ar": "السُّوقُ بَعِيدٌ", "keys": ["story-03:0", "ev-opposites:4"] },
+    { "en": "Where is the gate?", "ar": "أَيْنَ البَابُ؟", "keys": ["ev-questions:2", "ev-directions:3"] },
+    { "en": "How do I get to the Haram?", "ar": "كَيْفَ أَصِلُ إِلَى الحَرَمِ؟", "keys": ["ev-directions:9", "ev-haram:0"] },
+    { "en": "Right or left?", "ar": "يَمِين أَوْ يَسَار؟", "keys": ["ev-directions:0", "ev-directions:1"] },
+    { "en": "The exit is upstairs.", "ar": "المَخْرَجُ فَوْق", "keys": ["ev-directions:8", "ev-directions:5"] },
+    { "en": "Where is the tawaf area?", "ar": "أَيْنَ المَطَافُ؟", "keys": ["ev-questions:2", "ev-haram:9"] },
+    { "en": "I want Zamzam water.", "ar": "أُرِيدُ زَمْزَم", "keys": ["ev-want-need:0", "ev-haram:5"] },
+    { "en": "How much is this?", "ar": "بِكَمْ هَذَا؟", "keys": ["ev-shopping:0"] },
+    { "en": "Too expensive — lower the price!", "ar": "غَالٍ جِدًّا، نَزِّلِ السِّعْرَ", "keys": ["ev-shopping:1", "ev-shopping:2"] },
+    { "en": "Do you have dates?", "ar": "هَلْ عِنْدَكَ تَمْرٌ؟", "keys": ["ev-shopping:3", "ev-shopping:6"] },
+    { "en": "I'll take it, thank you.", "ar": "آخُذُهُ، شُكْرًا", "keys": ["ev-shopping:8", "ev-greetings:4"] },
+    { "en": "I need a doctor.", "ar": "أَحْتَاجُ طَبِيبًا", "keys": ["ev-medical:0"] },
+    { "en": "Where is the pharmacy?", "ar": "أَيْنَ الصَّيْدَلِيَّةُ؟", "keys": ["ev-questions:2", "ev-medical:1"] },
+    { "en": "I am sick and I need medicine.", "ar": "أَنَا مَرِيضٌ وَأَحْتَاجُ إِلَى دَوَاءٍ", "keys": ["ev-people:0", "ev-medical:3", "ev-want-need:1", "ev-medical:2"] },
+    { "en": "Take me to the hotel.", "ar": "خُذْنِي إِلَى الفُنْدُقِ", "keys": ["ev-hotel-taxi:3", "ev-hotel-taxi:0"] },
+    { "en": "Stop here, please.", "ar": "قِفْ هُنَا مِنْ فَضْلِكَ", "keys": ["ev-hotel-taxi:4", "ev-greetings:6"] },
+    { "en": "How much is the fare to the airport?", "ar": "كَمِ الأُجْرَةُ إِلَى المَطَارِ؟", "keys": ["ev-hotel-taxi:5", "ev-hotel-taxi:8"] },
+    { "en": "Help me — I am lost!", "ar": "سَاعِدْنِي، أَنَا تَائِهٌ", "keys": ["ev-help:0", "ev-help:1"] },
+    { "en": "Speak slowly, please.", "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ", "keys": ["ev-help:5", "ev-greetings:6"] },
+    { "en": "Repeat please — I don't speak Arabic well.", "ar": "أَعِدْ مِنْ فَضْلِكَ، لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا", "keys": ["ev-help:6", "ev-help:7"] },
+    { "en": "Where is the police?", "ar": "أَيْنَ الشُّرْطَةُ؟", "keys": ["ev-questions:2", "ev-help:3"] }
   ]
 }

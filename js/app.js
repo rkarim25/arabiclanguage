@@ -1,9 +1,9 @@
 /* Shared core: story manifest, storage, SRS scheduler, TTS, Arabic text utils, phonetic input */
 
 const STORY_LIST = [
-  { id: "story-01", level: 1, n: 1, titleAr: "يَوْمِي", titleEn: "My Day", desc: "A simple daily routine, morning to night." },
-  { id: "story-02", level: 1, n: 2, titleAr: "عَائِلَتِي وَبَيْتُنَا", titleEn: "My Family and Our Home", desc: "Ahmad introduces his family and house." },
-  { id: "story-03", level: 1, n: 3, titleAr: "فِي السُّوقِ", titleEn: "At the Market", desc: "Saturday shopping with mother." },
+  { id: "story-01", level: 1, n: 1, titleAr: "يَوْمِي", titleEn: "My Day", desc: "A simple daily routine, morning to night.", words: 35 },
+  { id: "story-02", level: 1, n: 2, titleAr: "عَائِلَتِي وَبَيْتُنَا", titleEn: "My Family and Our Home", desc: "Ahmad introduces his family and house.", words: 35 },
+  { id: "story-03", level: 1, n: 3, titleAr: "فِي السُّوقِ", titleEn: "At the Market", desc: "Saturday shopping with mother.", words: 39 },
   { id: "story-04", level: 1, n: 4, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
   { id: "story-05", level: 1, n: 5, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
 ];
@@ -39,7 +39,14 @@ const EVERYDAY_LIST = [
   { id: "glue", title: "كَلِمَات الرَّبْط", hint: "yes, no, but, because" },
   { id: "commands", title: "أَوَامِر يَوْمِيَّة", hint: "give me, take, come" },
   { id: "food", title: "الطَّعَام وَالشَّرَاب", hint: "food & drink" },
+  { id: "directions", title: "الاِتِّجَاهَات", hint: "Umrah: directions & navigating" },
+  { id: "haram", title: "فِي الحَرَم", hint: "Umrah: the rites & places" },
+  { id: "shopping", title: "التَّسَوُّق", hint: "Umrah: shopping & bargaining" },
+  { id: "medical", title: "الصِّحَّة وَالصَّيْدَلِيَّة", hint: "Umrah: medical & pharmacy" },
+  { id: "hotel-taxi", title: "الفُنْدُق وَالمُوَاصَلَات", hint: "Umrah: hotel, taxi, transport" },
+  { id: "help", title: "المُسَاعَدَة", hint: "Umrah: asking for help" },
 ];
+const UMRAH_GROUPS = ["directions", "haram", "shopping", "medical", "hotel-taxi", "help"];
 
 const STEPS = [
   { key: "listen", ar: "اِسْتَمِعْ", en: "Listen" },
@@ -197,28 +204,36 @@ async function computeMilestones() {
   const evTotalLearnt = everyday.reduce((a, g) => a + g.members.filter((m, i) => isLearnt(`ev-${g.id}:${i}`)).length, 0);
   const evTotal = everyday.reduce((a, g) => a + g.members.length, 0);
   const openerHave = evLearnt("greetings") + evLearnt("questions") + evLearnt("glue");
+  const umrahHave = UMRAH_GROUPS.reduce((a, g) => a + evLearnt(g), 0);
+  const umrahTotal = UMRAH_GROUPS.reduce((a, g) => a + everyday.find(x => x.id === g).members.length, 0);
   const s1Steps = STEPS.filter(st => stepsDone("story-01")[st.key]).length;
   const s1Words = Array.from({ length: 35 }, (x, i) => isLearnt(`story-01:${i}`)).filter(Boolean).length;
   const storiesComplete = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
-  const msaLearnt = evTotalLearnt + ["story-01", "story-02", "story-03"].reduce((a, sid) =>
+  const storyLearnt = ["story-01", "story-02", "story-03"].reduce((a, sid) =>
     a + Object.keys(getSrs()).filter(k => k.startsWith(sid + ":") && isLearnt(k)).length, 0);
+  const msaLearnt = evTotalLearnt + storyLearnt;
+  const storyTotal = STORY_LIST.filter(s => !s.locked).reduce((a, s) => a + (s.words || 0), 0);
+  // conversational coverage: share of the site's conversation core (everyday + story vocab) learnt
+  const convPct = Math.round(msaLearnt / (evTotal + storyTotal) * 100);
   const promptsReady = prompts.filter(p => p.keys.every(k => isLearnt(k))).length;
 
   const msa = [
     { title: "Conversation opener kit", why: "Greetings, question words and glue words — you can start, ask, and connect.",
       have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings", test: "opener" },
+    { title: "Umrah-ready kit", why: `Directions, the Haram, shopping, medical, taxi, asking for help — ${umrahTotal} words to live your whole trip in Arabic.`,
+      have: umrahHave, need: umrahTotal, unit: "words", link: "vocab.html?view=everyday", test: "umrah" },
     { title: "First story mastered", why: "My Day: all six skills done and its vocabulary learnt — you can retell a full narrative.",
       have: s1Steps + s1Words, need: 6 + 35, unit: "steps+words", link: "story.html?id=story-01" },
-    { title: "15 speaking prompts ready", why: "Fifteen real sentences you can produce on demand — actual speech.",
-      have: promptsReady, need: 15, unit: "prompts", link: "speaking.html" },
-    { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the 10 clusters — shops, food, time, people.`,
+    { title: "20 speaking prompts ready", why: "Twenty real sentences — including the Umrah scenarios — you can produce on demand.",
+      have: promptsReady, need: 20, unit: "prompts", link: "speaking.html" },
+    { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the ${everyday.length} clusters — shops, food, time, people, the whole journey.`,
       have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html", test: "survival" },
     { title: "All 3 stories + 150 MSA words", why: "Comfortable with connected everyday narrative — ready for level 2 stories.",
       have: storiesComplete + Math.min(msaLearnt, 150), need: 3 + 150, unit: "stories+words", link: "index.html" },
   ];
 
   const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
-  return { quran, msa, coverage, totalLearnt };
+  return { quran, msa, coverage, convPct, totalLearnt };
 }
 
 /* pace: words learnt per active minute, from real data */

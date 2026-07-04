@@ -157,6 +157,108 @@
         { "ar": "عَطْشَان", "tr": "ʿaṭshān", "en": "thirsty" },
         { "ar": "الحِسَاب", "tr": "al-ḥisāb", "en": "the bill" }
       ]
+    },
+    {
+      "id": "directions",
+      "title": "الاِتِّجَاهَات",
+      "theme": "Umrah: directions & navigating — find any gate, floor or exit",
+      "members": [
+        { "ar": "يَمِين", "tr": "yamīn", "en": "right" },
+        { "ar": "يَسَار", "tr": "yasār", "en": "left" },
+        { "ar": "عَلَى طُول", "tr": "ʿalā ṭūl", "en": "straight ahead" },
+        { "ar": "بَاب", "tr": "bāb", "en": "gate; door" },
+        { "ar": "الدَّوْر", "tr": "ad-dawr", "en": "the floor, level" },
+        { "ar": "فَوْق", "tr": "fawq", "en": "upstairs; above" },
+        { "ar": "تَحْت", "tr": "taḥt", "en": "downstairs; below" },
+        { "ar": "مَدْخَل", "tr": "madkhal", "en": "entrance" },
+        { "ar": "مَخْرَج", "tr": "makhraj", "en": "exit" },
+        { "ar": "كَيْفَ أَصِلُ إِلَى", "tr": "kayfa aṣilu ilā", "en": "how do I get to…?" }
+      ]
+    },
+    {
+      "id": "haram",
+      "title": "فِي الحَرَم",
+      "theme": "Umrah: inside the Haram — the rites and the places",
+      "members": [
+        { "ar": "الحَرَم", "tr": "al-ḥaram", "en": "the Sanctuary (Haram)" },
+        { "ar": "الكَعْبَة", "tr": "al-kaʿba", "en": "the Kaaba" },
+        { "ar": "الطَّوَاف", "tr": "aṭ-ṭawāf", "en": "tawaf — circling the Kaaba" },
+        { "ar": "السَّعْي", "tr": "as-saʿy", "en": "sa'i — walking Safa to Marwa" },
+        { "ar": "الصَّفَا وَالمَرْوَة", "tr": "aṣ-ṣafā wal-marwa", "en": "Safa and Marwa" },
+        { "ar": "زَمْزَم", "tr": "zamzam", "en": "Zamzam water" },
+        { "ar": "العُمْرَة", "tr": "al-ʿumra", "en": "Umrah" },
+        { "ar": "الإِحْرَام", "tr": "al-iḥrām", "en": "ihram (the pilgrim state/garments)" },
+        { "ar": "مَقَام إِبْرَاهِيم", "tr": "maqām ibrāhīm", "en": "the Station of Ibrahim" },
+        { "ar": "المَطَاف", "tr": "al-maṭāf", "en": "the tawaf area" }
+      ]
+    },
+    {
+      "id": "shopping",
+      "title": "التَّسَوُّق",
+      "theme": "Umrah: shopping & bargaining — souks, dates and gifts",
+      "members": [
+        { "ar": "بِكَمْ هَذَا؟", "tr": "bikam hādhā?", "en": "how much is this?" },
+        { "ar": "غَالٍ جِدًّا", "tr": "ghālin jiddan", "en": "too expensive" },
+        { "ar": "نَزِّلِ السِّعْرَ", "tr": "nazzil as-siʿr", "en": "lower the price" },
+        { "ar": "هَلْ عِنْدَكَ", "tr": "hal ʿindaka", "en": "do you have…?" },
+        { "ar": "أُرِيدُ أَنْ أَشْتَرِيَ", "tr": "urīdu an ashtariya", "en": "I want to buy" },
+        { "ar": "هَدِيَّة", "tr": "hadiyya", "en": "gift" },
+        { "ar": "تَمْر", "tr": "tamr", "en": "dates" },
+        { "ar": "مَقَاس", "tr": "maqās", "en": "size" },
+        { "ar": "آخُذُهُ", "tr": "ākhudhuhu", "en": "I'll take it" },
+        { "ar": "مَجَّانًا", "tr": "majjānan", "en": "for free" }
+      ]
+    },
+    {
+      "id": "medical",
+      "title": "الصِّحَّة وَالصَّيْدَلِيَّة",
+      "theme": "Umrah: medical help & the pharmacy",
+      "members": [
+        { "ar": "أَحْتَاجُ طَبِيبًا", "tr": "aḥtāju ṭabīban", "en": "I need a doctor" },
+        { "ar": "صَيْدَلِيَّة", "tr": "ṣaydaliyya", "en": "pharmacy" },
+        { "ar": "دَوَاء", "tr": "dawāʾ", "en": "medicine" },
+        { "ar": "مَرِيض", "tr": "marīḍ", "en": "sick, ill" },
+        { "ar": "أَلَم", "tr": "alam", "en": "pain" },
+        { "ar": "حَرَارَة", "tr": "ḥarāra", "en": "fever" },
+        { "ar": "يُؤْلِمُنِي", "tr": "yuʾlimunī", "en": "it hurts me" },
+        { "ar": "حَسَّاسِيَّة", "tr": "ḥassāsiyya", "en": "allergy" },
+        { "ar": "إِسْعَاف", "tr": "isʿāf", "en": "ambulance" },
+        { "ar": "عِنْدِي سُكَّرِيّ", "tr": "ʿindī sukkarī", "en": "I'm diabetic" }
+      ]
+    },
+    {
+      "id": "hotel-taxi",
+      "title": "الفُنْدُق وَالمُوَاصَلَات",
+      "theme": "Umrah: hotel, taxi & getting around",
+      "members": [
+        { "ar": "فُنْدُق", "tr": "funduq", "en": "hotel" },
+        { "ar": "حَجْز", "tr": "ḥajz", "en": "reservation, booking" },
+        { "ar": "مِفْتَاح", "tr": "miftāḥ", "en": "key" },
+        { "ar": "خُذْنِي إِلَى", "tr": "khudhnī ilā", "en": "take me to…" },
+        { "ar": "قِفْ هُنَا", "tr": "qif hunā", "en": "stop here" },
+        { "ar": "كَمِ الأُجْرَة؟", "tr": "kam al-ujra?", "en": "how much is the fare?" },
+        { "ar": "مَحَطَّة", "tr": "maḥaṭṭa", "en": "station" },
+        { "ar": "حَافِلَة", "tr": "ḥāfila", "en": "bus" },
+        { "ar": "مَطَار", "tr": "maṭār", "en": "airport" },
+        { "ar": "أَمْتِعَة", "tr": "amtiʿa", "en": "luggage" }
+      ]
+    },
+    {
+      "id": "help",
+      "title": "المُسَاعَدَة",
+      "theme": "Umrah: asking for help & emergencies",
+      "members": [
+        { "ar": "سَاعِدْنِي", "tr": "sāʿidnī", "en": "help me!" },
+        { "ar": "أَنَا تَائِه", "tr": "anā tāʾih", "en": "I'm lost" },
+        { "ar": "جَوَاز سَفَرِي", "tr": "jawāz safarī", "en": "my passport" },
+        { "ar": "شُرْطَة", "tr": "shurṭa", "en": "police" },
+        { "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّة؟", "tr": "hal tatakallamu l-injlīziyya?", "en": "do you speak English?" },
+        { "ar": "تَكَلَّمْ بِبُطْءٍ", "tr": "takallam bibuṭʾ", "en": "speak slowly" },
+        { "ar": "أَعِدْ مِنْ فَضْلِكَ", "tr": "aʿid min faḍlik", "en": "repeat, please" },
+        { "ar": "لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا", "tr": "lā atakallamu l-ʿarabiyya jayyidan", "en": "I don't speak Arabic well" },
+        { "ar": "مَفْقُود", "tr": "mafqūd", "en": "lost, missing" },
+        { "ar": "طَوَارِئ", "tr": "ṭawāriʾ", "en": "emergency" }
+      ]
     }
   ]
 }

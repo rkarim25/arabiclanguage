@@ -27,7 +27,8 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 | `vocab.html` | **Vocab Learn** (endless auto-picked fill-sheets: due → new frequency-core → family forms), the 60-word Quran core table, 15 root-family lessons (study table + fill-the-sheet test) |
 | `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar notes + tafsir link) then fill-the-meanings test |
 | `grammar.html` | 8 practical patterns taught through known verses, typed 1-minute tests |
-| `speaking.html` | Speaking section: word drill by bucket/source chips (say the Arabic, mic-checked, bucket bars) + sentence shadowing across all stories and surahs |
+| `speaking.html` | Speaking section: word drill by bucket/source chips (say the Arabic, mic-checked, bucket bars) + "say it in Arabic" prompts ranked by known vocab (`data/prompts.json`) + sentence shadowing across all stories and surahs |
+| `test.html?ms=<id>` | Milestone tests (mock + official, 85% pass certifies as `ms-<id>` step `passed`): top20/top40/core60 (Quran core ranges), opener/survival (everyday sets) |
 | `story.html?id=story-NN` | 6-step story lessons: Listen, Read (tap word = audio+gloss), Memorize (vocab table), Quiz, Speak (speech-recognition shadowing), Write (dictation + translation) |
 | `review.html` | Spaced-repetition queue, table mode (reveal + mark misses) with card mode opt-in |
 | `keyboard.html` | Reza's original phonetic Latin→Arabic keyboard tool (mapping also lives in `js/app.js`) |
