@@ -19,4 +19,12 @@ fs.readdirSync(root).filter(f => f.endsWith(".html")).forEach(f => {
   });
   if (html !== before) { fs.writeFileSync(p, html, "utf8"); changed++; }
 });
-console.log(`stamped v=${v} into ${changed} pages`);
+
+// stamp the service-worker cache name too — a deploy must always retire the old offline cache
+const swPath = path.join(root, "sw.js");
+if (fs.existsSync(swPath)) {
+  const sw = fs.readFileSync(swPath, "utf8").replace(/const CACHE = "ats-[a-z0-9]*"/, `const CACHE = "ats-${v}"`);
+  fs.writeFileSync(swPath, sw, "utf8");
+  changed++;
+}
+console.log(`stamped v=${v} into ${changed} files (pages + sw.js)`);

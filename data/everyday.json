@@ -5,15 +5,51 @@
       "title": "التَّحِيَّات",
       "theme": "Greetings & politeness — the first things out of your mouth",
       "members": [
-        { "ar": "السَّلَامُ عَلَيْكُمْ", "tr": "as-salāmu ʿalaykum", "en": "peace be upon you (hello)" },
-        { "ar": "وَعَلَيْكُمُ السَّلَام", "tr": "wa-ʿalaykumu s-salām", "en": "and upon you peace (the reply)" },
-        { "ar": "صَبَاح الخَيْر", "tr": "ṣabāḥ al-khayr", "en": "good morning" },
-        { "ar": "مَسَاء الخَيْر", "tr": "masāʾ al-khayr", "en": "good evening" },
-        { "ar": "شُكْرًا", "tr": "shukran", "en": "thank you" },
-        { "ar": "عَفْوًا", "tr": "ʿafwan", "en": "you're welcome; excuse me" },
-        { "ar": "مِنْ فَضْلِكَ", "tr": "min faḍlika", "en": "please" },
-        { "ar": "آسِف", "tr": "āsif", "en": "sorry" },
-        { "ar": "مَعَ السَّلَامَة", "tr": "maʿa s-salāma", "en": "goodbye" }
+        {
+          "ar": "السَّلَامُ عَلَيْكُمْ",
+          "tr": "as-salāmu ʿalaykum",
+          "en": "peace be upon you (hello)"
+        },
+        {
+          "ar": "وَعَلَيْكُمُ السَّلَام",
+          "tr": "wa-ʿalaykumu s-salām",
+          "en": "and upon you peace (the reply)"
+        },
+        {
+          "ar": "صَبَاح الخَيْر",
+          "tr": "ṣabāḥ al-khayr",
+          "en": "good morning"
+        },
+        {
+          "ar": "مَسَاء الخَيْر",
+          "tr": "masāʾ al-khayr",
+          "en": "good evening"
+        },
+        {
+          "ar": "شُكْرًا",
+          "tr": "shukran",
+          "en": "thank you"
+        },
+        {
+          "ar": "عَفْوًا",
+          "tr": "ʿafwan",
+          "en": "you're welcome; excuse me"
+        },
+        {
+          "ar": "مِنْ فَضْلِكَ",
+          "tr": "min faḍlika",
+          "en": "please"
+        },
+        {
+          "ar": "آسِف",
+          "tr": "āsif",
+          "en": "sorry"
+        },
+        {
+          "ar": "مَعَ السَّلَامَة",
+          "tr": "maʿa s-salāma",
+          "en": "goodbye"
+        }
       ]
     },
     {
@@ -21,15 +57,54 @@
       "title": "أَدَوَات الاِسْتِفْهَام",
       "theme": "Question words — unlock every conversation",
       "members": [
-        { "ar": "مَاذَا", "tr": "mādhā", "en": "what?" },
-        { "ar": "مَنْ", "tr": "man", "en": "who?" },
-        { "ar": "أَيْنَ", "tr": "ayna", "en": "where?" },
-        { "ar": "مَتَى", "tr": "matā", "en": "when?" },
-        { "ar": "كَيْفَ", "tr": "kayfa", "en": "how?" },
-        { "ar": "لِمَاذَا", "tr": "limādhā", "en": "why?" },
-        { "ar": "كَمْ", "tr": "kam", "en": "how many? how much?" },
-        { "ar": "هَلْ", "tr": "hal", "en": "(opens a yes/no question)" },
-        { "ar": "أَيّ", "tr": "ayy", "en": "which?" }
+        {
+          "ar": "مَاذَا",
+          "tr": "mādhā",
+          "en": "what?",
+          "hear": "إيش؟ — ēsh"
+        },
+        {
+          "ar": "مَنْ",
+          "tr": "man",
+          "en": "who?"
+        },
+        {
+          "ar": "أَيْنَ",
+          "tr": "ayna",
+          "en": "where?",
+          "hear": "وين؟ — wēn"
+        },
+        {
+          "ar": "مَتَى",
+          "tr": "matā",
+          "en": "when?"
+        },
+        {
+          "ar": "كَيْفَ",
+          "tr": "kayfa",
+          "en": "how?"
+        },
+        {
+          "ar": "لِمَاذَا",
+          "tr": "limādhā",
+          "en": "why?",
+          "hear": "ليش؟ — lēsh"
+        },
+        {
+          "ar": "كَمْ",
+          "tr": "kam",
+          "en": "how many? how much?"
+        },
+        {
+          "ar": "هَلْ",
+          "tr": "hal",
+          "en": "(opens a yes/no question)"
+        },
+        {
+          "ar": "أَيّ",
+          "tr": "ayy",
+          "en": "which?"
+        }
       ]
     },
     {
@@ -37,16 +112,56 @@
       "title": "الأَرْقَام",
       "theme": "Numbers 1–10",
       "members": [
-        { "ar": "وَاحِد", "tr": "wāḥid", "en": "one" },
-        { "ar": "اِثْنَان", "tr": "ithnān", "en": "two" },
-        { "ar": "ثَلَاثَة", "tr": "thalātha", "en": "three" },
-        { "ar": "أَرْبَعَة", "tr": "arbaʿa", "en": "four" },
-        { "ar": "خَمْسَة", "tr": "khamsa", "en": "five" },
-        { "ar": "سِتَّة", "tr": "sitta", "en": "six" },
-        { "ar": "سَبْعَة", "tr": "sabʿa", "en": "seven" },
-        { "ar": "ثَمَانِيَة", "tr": "thamāniya", "en": "eight" },
-        { "ar": "تِسْعَة", "tr": "tisʿa", "en": "nine" },
-        { "ar": "عَشَرَة", "tr": "ʿashara", "en": "ten" }
+        {
+          "ar": "وَاحِد",
+          "tr": "wāḥid",
+          "en": "one"
+        },
+        {
+          "ar": "اِثْنَان",
+          "tr": "ithnān",
+          "en": "two"
+        },
+        {
+          "ar": "ثَلَاثَة",
+          "tr": "thalātha",
+          "en": "three"
+        },
+        {
+          "ar": "أَرْبَعَة",
+          "tr": "arbaʿa",
+          "en": "four"
+        },
+        {
+          "ar": "خَمْسَة",
+          "tr": "khamsa",
+          "en": "five"
+        },
+        {
+          "ar": "سِتَّة",
+          "tr": "sitta",
+          "en": "six"
+        },
+        {
+          "ar": "سَبْعَة",
+          "tr": "sabʿa",
+          "en": "seven"
+        },
+        {
+          "ar": "ثَمَانِيَة",
+          "tr": "thamāniya",
+          "en": "eight"
+        },
+        {
+          "ar": "تِسْعَة",
+          "tr": "tisʿa",
+          "en": "nine"
+        },
+        {
+          "ar": "عَشَرَة",
+          "tr": "ʿashara",
+          "en": "ten"
+        }
       ]
     },
     {
@@ -54,15 +169,51 @@
       "title": "كَلِمَات الوَقْت",
       "theme": "Time words — now, today, tomorrow",
       "members": [
-        { "ar": "الآن", "tr": "al-ān", "en": "now" },
-        { "ar": "اليَوْم", "tr": "al-yawm", "en": "today" },
-        { "ar": "غَدًا", "tr": "ghadan", "en": "tomorrow" },
-        { "ar": "أَمْسِ", "tr": "amsi", "en": "yesterday" },
-        { "ar": "دَائِمًا", "tr": "dāʾiman", "en": "always" },
-        { "ar": "أَحْيَانًا", "tr": "aḥyānan", "en": "sometimes" },
-        { "ar": "قَرِيبًا", "tr": "qarīban", "en": "soon" },
-        { "ar": "مُبَكِّرًا", "tr": "mubakkiran", "en": "early" },
-        { "ar": "مُتَأَخِّرًا", "tr": "mutaʾakhkhiran", "en": "late" }
+        {
+          "ar": "الآن",
+          "tr": "al-ān",
+          "en": "now"
+        },
+        {
+          "ar": "اليَوْم",
+          "tr": "al-yawm",
+          "en": "today"
+        },
+        {
+          "ar": "غَدًا",
+          "tr": "ghadan",
+          "en": "tomorrow"
+        },
+        {
+          "ar": "أَمْسِ",
+          "tr": "amsi",
+          "en": "yesterday"
+        },
+        {
+          "ar": "دَائِمًا",
+          "tr": "dāʾiman",
+          "en": "always"
+        },
+        {
+          "ar": "أَحْيَانًا",
+          "tr": "aḥyānan",
+          "en": "sometimes"
+        },
+        {
+          "ar": "قَرِيبًا",
+          "tr": "qarīban",
+          "en": "soon"
+        },
+        {
+          "ar": "مُبَكِّرًا",
+          "tr": "mubakkiran",
+          "en": "early"
+        },
+        {
+          "ar": "مُتَأَخِّرًا",
+          "tr": "mutaʾakhkhiran",
+          "en": "late"
+        }
       ]
     },
     {
@@ -70,14 +221,48 @@
       "title": "أُرِيد وَأَحْتَاج",
       "theme": "Wanting, needing, being able — the engine of speaking",
       "members": [
-        { "ar": "أُرِيدُ", "tr": "urīdu", "en": "I want" },
-        { "ar": "أَحْتَاجُ إِلَى", "tr": "aḥtāju ilā", "en": "I need" },
-        { "ar": "أَسْتَطِيعُ", "tr": "astaṭīʿu", "en": "I can, I am able" },
-        { "ar": "يَجِبُ أَنْ", "tr": "yajibu an", "en": "I must; it is necessary that" },
-        { "ar": "أَعْرِفُ", "tr": "aʿrifu", "en": "I know" },
-        { "ar": "أَفْهَمُ", "tr": "afhamu", "en": "I understand" },
-        { "ar": "أُحِبُّ", "tr": "uḥibbu", "en": "I like; I love" },
-        { "ar": "أَظُنُّ", "tr": "aẓunnu", "en": "I think" }
+        {
+          "ar": "أُرِيدُ",
+          "tr": "urīdu",
+          "en": "I want",
+          "hear": "أبغى — abgha"
+        },
+        {
+          "ar": "أَحْتَاجُ إِلَى",
+          "tr": "aḥtāju ilā",
+          "en": "I need"
+        },
+        {
+          "ar": "أَسْتَطِيعُ",
+          "tr": "astaṭīʿu",
+          "en": "I can, I am able",
+          "hear": "أقدر — agdar"
+        },
+        {
+          "ar": "يَجِبُ أَنْ",
+          "tr": "yajibu an",
+          "en": "I must; it is necessary that"
+        },
+        {
+          "ar": "أَعْرِفُ",
+          "tr": "aʿrifu",
+          "en": "I know"
+        },
+        {
+          "ar": "أَفْهَمُ",
+          "tr": "afhamu",
+          "en": "I understand"
+        },
+        {
+          "ar": "أُحِبُّ",
+          "tr": "uḥibbu",
+          "en": "I like; I love"
+        },
+        {
+          "ar": "أَظُنُّ",
+          "tr": "aẓunnu",
+          "en": "I think"
+        }
       ]
     },
     {
@@ -85,16 +270,56 @@
       "title": "النَّاس وَالضَّمَائِر",
       "theme": "People & pronouns",
       "members": [
-        { "ar": "أَنَا", "tr": "ana", "en": "I" },
-        { "ar": "أَنْتَ", "tr": "anta", "en": "you (to a man)" },
-        { "ar": "أَنْتِ", "tr": "anti", "en": "you (to a woman)" },
-        { "ar": "هُوَ", "tr": "huwa", "en": "he" },
-        { "ar": "هِيَ", "tr": "hiya", "en": "she" },
-        { "ar": "نَحْنُ", "tr": "naḥnu", "en": "we" },
-        { "ar": "هُمْ", "tr": "hum", "en": "they" },
-        { "ar": "رَجُل", "tr": "rajul", "en": "man" },
-        { "ar": "اِمْرَأَة", "tr": "imraʾa", "en": "woman" },
-        { "ar": "صَدِيق", "tr": "ṣadīq", "en": "friend" }
+        {
+          "ar": "أَنَا",
+          "tr": "ana",
+          "en": "I"
+        },
+        {
+          "ar": "أَنْتَ",
+          "tr": "anta",
+          "en": "you (to a man)"
+        },
+        {
+          "ar": "أَنْتِ",
+          "tr": "anti",
+          "en": "you (to a woman)"
+        },
+        {
+          "ar": "هُوَ",
+          "tr": "huwa",
+          "en": "he"
+        },
+        {
+          "ar": "هِيَ",
+          "tr": "hiya",
+          "en": "she"
+        },
+        {
+          "ar": "نَحْنُ",
+          "tr": "naḥnu",
+          "en": "we"
+        },
+        {
+          "ar": "هُمْ",
+          "tr": "hum",
+          "en": "they"
+        },
+        {
+          "ar": "رَجُل",
+          "tr": "rajul",
+          "en": "man"
+        },
+        {
+          "ar": "اِمْرَأَة",
+          "tr": "imraʾa",
+          "en": "woman"
+        },
+        {
+          "ar": "صَدِيق",
+          "tr": "ṣadīq",
+          "en": "friend"
+        }
       ]
     },
     {
@@ -102,13 +327,41 @@
       "title": "الأَضْدَاد",
       "theme": "Adjective opposites — learned in pairs, remembered forever",
       "members": [
-        { "ar": "جَدِيد / قَدِيم", "tr": "jadīd / qadīm", "en": "new / old" },
-        { "ar": "جَيِّد / سَيِّئ", "tr": "jayyid / sayyiʾ", "en": "good / bad" },
-        { "ar": "سَهْل / صَعْب", "tr": "sahl / ṣaʿb", "en": "easy / difficult" },
-        { "ar": "سَرِيع / بَطِيء", "tr": "sarīʿ / baṭīʾ", "en": "fast / slow" },
-        { "ar": "قَرِيب / بَعِيد", "tr": "qarīb / baʿīd", "en": "near / far" },
-        { "ar": "غَالٍ / رَخِيص", "tr": "ghālin / rakhīṣ", "en": "expensive / cheap" },
-        { "ar": "حَارّ / بَارِد", "tr": "ḥārr / bārid", "en": "hot / cold" }
+        {
+          "ar": "جَدِيد / قَدِيم",
+          "tr": "jadīd / qadīm",
+          "en": "new / old"
+        },
+        {
+          "ar": "جَيِّد / سَيِّئ",
+          "tr": "jayyid / sayyiʾ",
+          "en": "good / bad"
+        },
+        {
+          "ar": "سَهْل / صَعْب",
+          "tr": "sahl / ṣaʿb",
+          "en": "easy / difficult"
+        },
+        {
+          "ar": "سَرِيع / بَطِيء",
+          "tr": "sarīʿ / baṭīʾ",
+          "en": "fast / slow"
+        },
+        {
+          "ar": "قَرِيب / بَعِيد",
+          "tr": "qarīb / baʿīd",
+          "en": "near / far"
+        },
+        {
+          "ar": "غَالٍ / رَخِيص",
+          "tr": "ghālin / rakhīṣ",
+          "en": "expensive / cheap"
+        },
+        {
+          "ar": "حَارّ / بَارِد",
+          "tr": "ḥārr / bārid",
+          "en": "hot / cold"
+        }
       ]
     },
     {
@@ -116,15 +369,51 @@
       "title": "كَلِمَات الرَّبْط",
       "theme": "Conversation glue — yes, no, maybe, but, because",
       "members": [
-        { "ar": "نَعَمْ", "tr": "naʿam", "en": "yes" },
-        { "ar": "طَبْعًا", "tr": "ṭabʿan", "en": "of course" },
-        { "ar": "مُمْكِن", "tr": "mumkin", "en": "possible; maybe" },
-        { "ar": "رُبَّمَا", "tr": "rubbamā", "en": "perhaps" },
-        { "ar": "لَكِنْ", "tr": "lākin", "en": "but" },
-        { "ar": "لِأَنَّ", "tr": "liʾanna", "en": "because" },
-        { "ar": "إِذَنْ", "tr": "idhan", "en": "so, in that case" },
-        { "ar": "يَعْنِي", "tr": "yaʿnī", "en": "meaning...; I mean" },
-        { "ar": "طَيِّب", "tr": "ṭayyib", "en": "okay, fine" }
+        {
+          "ar": "نَعَمْ",
+          "tr": "naʿam",
+          "en": "yes"
+        },
+        {
+          "ar": "طَبْعًا",
+          "tr": "ṭabʿan",
+          "en": "of course"
+        },
+        {
+          "ar": "مُمْكِن",
+          "tr": "mumkin",
+          "en": "possible; maybe"
+        },
+        {
+          "ar": "رُبَّمَا",
+          "tr": "rubbamā",
+          "en": "perhaps"
+        },
+        {
+          "ar": "لَكِنْ",
+          "tr": "lākin",
+          "en": "but"
+        },
+        {
+          "ar": "لِأَنَّ",
+          "tr": "liʾanna",
+          "en": "because"
+        },
+        {
+          "ar": "إِذَنْ",
+          "tr": "idhan",
+          "en": "so, in that case"
+        },
+        {
+          "ar": "يَعْنِي",
+          "tr": "yaʿnī",
+          "en": "meaning...; I mean"
+        },
+        {
+          "ar": "طَيِّب",
+          "tr": "ṭayyib",
+          "en": "okay, fine"
+        }
       ]
     },
     {
@@ -132,14 +421,46 @@
       "title": "أَوَامِر يَوْمِيَّة",
       "theme": "Daily commands — give me, take, come, look",
       "members": [
-        { "ar": "أَعْطِنِي", "tr": "aʿṭinī", "en": "give me" },
-        { "ar": "خُذْ", "tr": "khudh", "en": "take!" },
-        { "ar": "تَعَالَ", "tr": "taʿāla", "en": "come!" },
-        { "ar": "اِذْهَبْ", "tr": "idhhab", "en": "go!" },
-        { "ar": "اُنْظُرْ", "tr": "unẓur", "en": "look!" },
-        { "ar": "اِسْمَعْ", "tr": "ismaʿ", "en": "listen!" },
-        { "ar": "قُلْ لِي", "tr": "qul lī", "en": "tell me" },
-        { "ar": "اِنْتَظِرْ", "tr": "intaẓir", "en": "wait!" }
+        {
+          "ar": "أَعْطِنِي",
+          "tr": "aʿṭinī",
+          "en": "give me"
+        },
+        {
+          "ar": "خُذْ",
+          "tr": "khudh",
+          "en": "take!"
+        },
+        {
+          "ar": "تَعَالَ",
+          "tr": "taʿāla",
+          "en": "come!"
+        },
+        {
+          "ar": "اِذْهَبْ",
+          "tr": "idhhab",
+          "en": "go!"
+        },
+        {
+          "ar": "اُنْظُرْ",
+          "tr": "unẓur",
+          "en": "look!"
+        },
+        {
+          "ar": "اِسْمَعْ",
+          "tr": "ismaʿ",
+          "en": "listen!"
+        },
+        {
+          "ar": "قُلْ لِي",
+          "tr": "qul lī",
+          "en": "tell me"
+        },
+        {
+          "ar": "اِنْتَظِرْ",
+          "tr": "intaẓir",
+          "en": "wait!"
+        }
       ]
     },
     {
@@ -147,15 +468,51 @@
       "title": "الطَّعَام وَالشَّرَاب",
       "theme": "Food & drink essentials",
       "members": [
-        { "ar": "مَاء", "tr": "māʾ", "en": "water" },
-        { "ar": "لَحْم", "tr": "laḥm", "en": "meat" },
-        { "ar": "دَجَاج", "tr": "dajāj", "en": "chicken" },
-        { "ar": "أَرُزّ", "tr": "aruzz", "en": "rice" },
-        { "ar": "حَلِيب", "tr": "ḥalīb", "en": "milk" },
-        { "ar": "فَاكِهَة", "tr": "fākiha", "en": "fruit" },
-        { "ar": "جَائِع", "tr": "jāʾiʿ", "en": "hungry" },
-        { "ar": "عَطْشَان", "tr": "ʿaṭshān", "en": "thirsty" },
-        { "ar": "الحِسَاب", "tr": "al-ḥisāb", "en": "the bill" }
+        {
+          "ar": "مَاء",
+          "tr": "māʾ",
+          "en": "water"
+        },
+        {
+          "ar": "لَحْم",
+          "tr": "laḥm",
+          "en": "meat"
+        },
+        {
+          "ar": "دَجَاج",
+          "tr": "dajāj",
+          "en": "chicken"
+        },
+        {
+          "ar": "أَرُزّ",
+          "tr": "aruzz",
+          "en": "rice"
+        },
+        {
+          "ar": "حَلِيب",
+          "tr": "ḥalīb",
+          "en": "milk"
+        },
+        {
+          "ar": "فَاكِهَة",
+          "tr": "fākiha",
+          "en": "fruit"
+        },
+        {
+          "ar": "جَائِع",
+          "tr": "jāʾiʿ",
+          "en": "hungry"
+        },
+        {
+          "ar": "عَطْشَان",
+          "tr": "ʿaṭshān",
+          "en": "thirsty"
+        },
+        {
+          "ar": "الحِسَاب",
+          "tr": "al-ḥisāb",
+          "en": "the bill"
+        }
       ]
     },
     {
@@ -163,16 +520,57 @@
       "title": "الاِتِّجَاهَات",
       "theme": "Umrah: directions & navigating — find any gate, floor or exit",
       "members": [
-        { "ar": "يَمِين", "tr": "yamīn", "en": "right" },
-        { "ar": "يَسَار", "tr": "yasār", "en": "left" },
-        { "ar": "عَلَى طُول", "tr": "ʿalā ṭūl", "en": "straight ahead" },
-        { "ar": "بَاب", "tr": "bāb", "en": "gate; door" },
-        { "ar": "الدَّوْر", "tr": "ad-dawr", "en": "the floor, level" },
-        { "ar": "فَوْق", "tr": "fawq", "en": "upstairs; above" },
-        { "ar": "تَحْت", "tr": "taḥt", "en": "downstairs; below" },
-        { "ar": "مَدْخَل", "tr": "madkhal", "en": "entrance" },
-        { "ar": "مَخْرَج", "tr": "makhraj", "en": "exit" },
-        { "ar": "كَيْفَ أَصِلُ إِلَى", "tr": "kayfa aṣilu ilā", "en": "how do I get to…?" }
+        {
+          "ar": "يَمِين",
+          "tr": "yamīn",
+          "en": "right"
+        },
+        {
+          "ar": "يَسَار",
+          "tr": "yasār",
+          "en": "left"
+        },
+        {
+          "ar": "عَلَى طُول",
+          "tr": "ʿalā ṭūl",
+          "en": "straight ahead"
+        },
+        {
+          "ar": "بَاب",
+          "tr": "bāb",
+          "en": "gate; door"
+        },
+        {
+          "ar": "الدَّوْر",
+          "tr": "ad-dawr",
+          "en": "the floor, level"
+        },
+        {
+          "ar": "فَوْق",
+          "tr": "fawq",
+          "en": "upstairs; above"
+        },
+        {
+          "ar": "تَحْت",
+          "tr": "taḥt",
+          "en": "downstairs; below"
+        },
+        {
+          "ar": "مَدْخَل",
+          "tr": "madkhal",
+          "en": "entrance"
+        },
+        {
+          "ar": "مَخْرَج",
+          "tr": "makhraj",
+          "en": "exit"
+        },
+        {
+          "ar": "كَيْفَ أَصِلُ إِلَى",
+          "tr": "kayfa aṣilu ilā",
+          "en": "how do I get to…?",
+          "hear": "كيف أروح لـ…؟ — kēf arūḥ la…"
+        }
       ]
     },
     {
@@ -180,16 +578,56 @@
       "title": "فِي الحَرَم",
       "theme": "Umrah: inside the Haram — the rites and the places",
       "members": [
-        { "ar": "الحَرَم", "tr": "al-ḥaram", "en": "the Sanctuary (Haram)" },
-        { "ar": "الكَعْبَة", "tr": "al-kaʿba", "en": "the Kaaba" },
-        { "ar": "الطَّوَاف", "tr": "aṭ-ṭawāf", "en": "tawaf — circling the Kaaba" },
-        { "ar": "السَّعْي", "tr": "as-saʿy", "en": "sa'i — walking Safa to Marwa" },
-        { "ar": "الصَّفَا وَالمَرْوَة", "tr": "aṣ-ṣafā wal-marwa", "en": "Safa and Marwa" },
-        { "ar": "زَمْزَم", "tr": "zamzam", "en": "Zamzam water" },
-        { "ar": "العُمْرَة", "tr": "al-ʿumra", "en": "Umrah" },
-        { "ar": "الإِحْرَام", "tr": "al-iḥrām", "en": "ihram (the pilgrim state/garments)" },
-        { "ar": "مَقَام إِبْرَاهِيم", "tr": "maqām ibrāhīm", "en": "the Station of Ibrahim" },
-        { "ar": "المَطَاف", "tr": "al-maṭāf", "en": "the tawaf area" }
+        {
+          "ar": "الحَرَم",
+          "tr": "al-ḥaram",
+          "en": "the Sanctuary (Haram)"
+        },
+        {
+          "ar": "الكَعْبَة",
+          "tr": "al-kaʿba",
+          "en": "the Kaaba"
+        },
+        {
+          "ar": "الطَّوَاف",
+          "tr": "aṭ-ṭawāf",
+          "en": "tawaf — circling the Kaaba"
+        },
+        {
+          "ar": "السَّعْي",
+          "tr": "as-saʿy",
+          "en": "sa'i — walking Safa to Marwa"
+        },
+        {
+          "ar": "الصَّفَا وَالمَرْوَة",
+          "tr": "aṣ-ṣafā wal-marwa",
+          "en": "Safa and Marwa"
+        },
+        {
+          "ar": "زَمْزَم",
+          "tr": "zamzam",
+          "en": "Zamzam water"
+        },
+        {
+          "ar": "العُمْرَة",
+          "tr": "al-ʿumra",
+          "en": "Umrah"
+        },
+        {
+          "ar": "الإِحْرَام",
+          "tr": "al-iḥrām",
+          "en": "ihram (the pilgrim state/garments)"
+        },
+        {
+          "ar": "مَقَام إِبْرَاهِيم",
+          "tr": "maqām ibrāhīm",
+          "en": "the Station of Ibrahim"
+        },
+        {
+          "ar": "المَطَاف",
+          "tr": "al-maṭāf",
+          "en": "the tawaf area"
+        }
       ]
     },
     {
@@ -197,16 +635,60 @@
       "title": "التَّسَوُّق",
       "theme": "Umrah: shopping & bargaining — souks, dates and gifts",
       "members": [
-        { "ar": "بِكَمْ هَذَا؟", "tr": "bikam hādhā?", "en": "how much is this?" },
-        { "ar": "غَالٍ جِدًّا", "tr": "ghālin jiddan", "en": "too expensive" },
-        { "ar": "نَزِّلِ السِّعْرَ", "tr": "nazzil as-siʿr", "en": "lower the price" },
-        { "ar": "هَلْ عِنْدَكَ", "tr": "hal ʿindaka", "en": "do you have…?" },
-        { "ar": "أُرِيدُ أَنْ أَشْتَرِيَ", "tr": "urīdu an ashtariya", "en": "I want to buy" },
-        { "ar": "هَدِيَّة", "tr": "hadiyya", "en": "gift" },
-        { "ar": "تَمْر", "tr": "tamr", "en": "dates" },
-        { "ar": "مَقَاس", "tr": "maqās", "en": "size" },
-        { "ar": "آخُذُهُ", "tr": "ākhudhuhu", "en": "I'll take it" },
-        { "ar": "مَجَّانًا", "tr": "majjānan", "en": "for free" }
+        {
+          "ar": "بِكَمْ هَذَا؟",
+          "tr": "bikam hādhā?",
+          "en": "how much is this?",
+          "hear": "بكم هادا؟ — bikam hāda"
+        },
+        {
+          "ar": "غَالٍ جِدًّا",
+          "tr": "ghālin jiddan",
+          "en": "too expensive",
+          "hear": "غالي مرة — ghāli marra"
+        },
+        {
+          "ar": "نَزِّلِ السِّعْرَ",
+          "tr": "nazzil as-siʿr",
+          "en": "lower the price",
+          "hear": "نزّل شوي — nazzil shwayy"
+        },
+        {
+          "ar": "هَلْ عِنْدَكَ",
+          "tr": "hal ʿindaka",
+          "en": "do you have…?",
+          "hear": "عندك…؟ — ʿindak…?"
+        },
+        {
+          "ar": "أُرِيدُ أَنْ أَشْتَرِيَ",
+          "tr": "urīdu an ashtariya",
+          "en": "I want to buy"
+        },
+        {
+          "ar": "هَدِيَّة",
+          "tr": "hadiyya",
+          "en": "gift"
+        },
+        {
+          "ar": "تَمْر",
+          "tr": "tamr",
+          "en": "dates"
+        },
+        {
+          "ar": "مَقَاس",
+          "tr": "maqās",
+          "en": "size"
+        },
+        {
+          "ar": "آخُذُهُ",
+          "tr": "ākhudhuhu",
+          "en": "I'll take it"
+        },
+        {
+          "ar": "مَجَّانًا",
+          "tr": "majjānan",
+          "en": "for free"
+        }
       ]
     },
     {
@@ -214,16 +696,57 @@
       "title": "الصِّحَّة وَالصَّيْدَلِيَّة",
       "theme": "Umrah: medical help & the pharmacy",
       "members": [
-        { "ar": "أَحْتَاجُ طَبِيبًا", "tr": "aḥtāju ṭabīban", "en": "I need a doctor" },
-        { "ar": "صَيْدَلِيَّة", "tr": "ṣaydaliyya", "en": "pharmacy" },
-        { "ar": "دَوَاء", "tr": "dawāʾ", "en": "medicine" },
-        { "ar": "مَرِيض", "tr": "marīḍ", "en": "sick, ill" },
-        { "ar": "أَلَم", "tr": "alam", "en": "pain" },
-        { "ar": "حَرَارَة", "tr": "ḥarāra", "en": "fever" },
-        { "ar": "يُؤْلِمُنِي", "tr": "yuʾlimunī", "en": "it hurts me" },
-        { "ar": "حَسَّاسِيَّة", "tr": "ḥassāsiyya", "en": "allergy" },
-        { "ar": "إِسْعَاف", "tr": "isʿāf", "en": "ambulance" },
-        { "ar": "عِنْدِي سُكَّرِيّ", "tr": "ʿindī sukkarī", "en": "I'm diabetic" }
+        {
+          "ar": "أَحْتَاجُ طَبِيبًا",
+          "tr": "aḥtāju ṭabīban",
+          "en": "I need a doctor",
+          "hear": "أبغى دكتور — abgha duktōr"
+        },
+        {
+          "ar": "صَيْدَلِيَّة",
+          "tr": "ṣaydaliyya",
+          "en": "pharmacy"
+        },
+        {
+          "ar": "دَوَاء",
+          "tr": "dawāʾ",
+          "en": "medicine"
+        },
+        {
+          "ar": "مَرِيض",
+          "tr": "marīḍ",
+          "en": "sick, ill"
+        },
+        {
+          "ar": "أَلَم",
+          "tr": "alam",
+          "en": "pain"
+        },
+        {
+          "ar": "حَرَارَة",
+          "tr": "ḥarāra",
+          "en": "fever"
+        },
+        {
+          "ar": "يُؤْلِمُنِي",
+          "tr": "yuʾlimunī",
+          "en": "it hurts me"
+        },
+        {
+          "ar": "حَسَّاسِيَّة",
+          "tr": "ḥassāsiyya",
+          "en": "allergy"
+        },
+        {
+          "ar": "إِسْعَاف",
+          "tr": "isʿāf",
+          "en": "ambulance"
+        },
+        {
+          "ar": "عِنْدِي سُكَّرِيّ",
+          "tr": "ʿindī sukkarī",
+          "en": "I'm diabetic"
+        }
       ]
     },
     {
@@ -231,16 +754,59 @@
       "title": "الفُنْدُق وَالمُوَاصَلَات",
       "theme": "Umrah: hotel, taxi & getting around",
       "members": [
-        { "ar": "فُنْدُق", "tr": "funduq", "en": "hotel" },
-        { "ar": "حَجْز", "tr": "ḥajz", "en": "reservation, booking" },
-        { "ar": "مِفْتَاح", "tr": "miftāḥ", "en": "key" },
-        { "ar": "خُذْنِي إِلَى", "tr": "khudhnī ilā", "en": "take me to…" },
-        { "ar": "قِفْ هُنَا", "tr": "qif hunā", "en": "stop here" },
-        { "ar": "كَمِ الأُجْرَة؟", "tr": "kam al-ujra?", "en": "how much is the fare?" },
-        { "ar": "مَحَطَّة", "tr": "maḥaṭṭa", "en": "station" },
-        { "ar": "حَافِلَة", "tr": "ḥāfila", "en": "bus" },
-        { "ar": "مَطَار", "tr": "maṭār", "en": "airport" },
-        { "ar": "أَمْتِعَة", "tr": "amtiʿa", "en": "luggage" }
+        {
+          "ar": "فُنْدُق",
+          "tr": "funduq",
+          "en": "hotel"
+        },
+        {
+          "ar": "حَجْز",
+          "tr": "ḥajz",
+          "en": "reservation, booking"
+        },
+        {
+          "ar": "مِفْتَاح",
+          "tr": "miftāḥ",
+          "en": "key"
+        },
+        {
+          "ar": "خُذْنِي إِلَى",
+          "tr": "khudhnī ilā",
+          "en": "take me to…",
+          "hear": "ودّيني — waddīni"
+        },
+        {
+          "ar": "قِفْ هُنَا",
+          "tr": "qif hunā",
+          "en": "stop here",
+          "hear": "وقّف هنا — waggif hina"
+        },
+        {
+          "ar": "كَمِ الأُجْرَة؟",
+          "tr": "kam al-ujra?",
+          "en": "how much is the fare?",
+          "hear": "بكم التوصيلة؟ — bikam at-tawṣīla"
+        },
+        {
+          "ar": "مَحَطَّة",
+          "tr": "maḥaṭṭa",
+          "en": "station"
+        },
+        {
+          "ar": "حَافِلَة",
+          "tr": "ḥāfila",
+          "en": "bus"
+        },
+        {
+          "ar": "مَطَار",
+          "tr": "maṭār",
+          "en": "airport"
+        },
+        {
+          "ar": "أَمْتِعَة",
+          "tr": "amtiʿa",
+          "en": "luggage"
+        }
       ]
     },
     {
@@ -248,16 +814,59 @@
       "title": "المُسَاعَدَة",
       "theme": "Umrah: asking for help & emergencies",
       "members": [
-        { "ar": "سَاعِدْنِي", "tr": "sāʿidnī", "en": "help me!" },
-        { "ar": "أَنَا تَائِه", "tr": "anā tāʾih", "en": "I'm lost" },
-        { "ar": "جَوَاز سَفَرِي", "tr": "jawāz safarī", "en": "my passport" },
-        { "ar": "شُرْطَة", "tr": "shurṭa", "en": "police" },
-        { "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّة؟", "tr": "hal tatakallamu l-injlīziyya?", "en": "do you speak English?" },
-        { "ar": "تَكَلَّمْ بِبُطْءٍ", "tr": "takallam bibuṭʾ", "en": "speak slowly" },
-        { "ar": "أَعِدْ مِنْ فَضْلِكَ", "tr": "aʿid min faḍlik", "en": "repeat, please" },
-        { "ar": "لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا", "tr": "lā atakallamu l-ʿarabiyya jayyidan", "en": "I don't speak Arabic well" },
-        { "ar": "مَفْقُود", "tr": "mafqūd", "en": "lost, missing" },
-        { "ar": "طَوَارِئ", "tr": "ṭawāriʾ", "en": "emergency" }
+        {
+          "ar": "سَاعِدْنِي",
+          "tr": "sāʿidnī",
+          "en": "help me!"
+        },
+        {
+          "ar": "أَنَا تَائِه",
+          "tr": "anā tāʾih",
+          "en": "I'm lost",
+          "hear": "أنا ضايع — ana ḍāyiʿ"
+        },
+        {
+          "ar": "جَوَاز سَفَرِي",
+          "tr": "jawāz safarī",
+          "en": "my passport"
+        },
+        {
+          "ar": "شُرْطَة",
+          "tr": "shurṭa",
+          "en": "police"
+        },
+        {
+          "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّة؟",
+          "tr": "hal tatakallamu l-injlīziyya?",
+          "en": "do you speak English?"
+        },
+        {
+          "ar": "تَكَلَّمْ بِبُطْءٍ",
+          "tr": "takallam bibuṭʾ",
+          "en": "speak slowly",
+          "hear": "على مهلك — ʿala mahlak"
+        },
+        {
+          "ar": "أَعِدْ مِنْ فَضْلِكَ",
+          "tr": "aʿid min faḍlik",
+          "en": "repeat, please",
+          "hear": "مرة ثانية — marra thānya"
+        },
+        {
+          "ar": "لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا",
+          "tr": "lā atakallamu l-ʿarabiyya jayyidan",
+          "en": "I don't speak Arabic well"
+        },
+        {
+          "ar": "مَفْقُود",
+          "tr": "mafqūd",
+          "en": "lost, missing"
+        },
+        {
+          "ar": "طَوَارِئ",
+          "tr": "ṭawāriʾ",
+          "en": "emergency"
+        }
       ]
     },
     {
@@ -265,16 +874,56 @@
       "title": "فِي المَسْجِد",
       "theme": "What the imam says — line up, prayer calls, janazah",
       "members": [
-        { "ar": "اِسْتَوُوا", "tr": "istawū", "en": "straighten up! (the lines)" },
-        { "ar": "اِعْتَدِلُوا", "tr": "iʿtadilū", "en": "align yourselves!" },
-        { "ar": "سَوُّوا صُفُوفَكُمْ", "tr": "sawwū ṣufūfakum", "en": "straighten your rows" },
-        { "ar": "سُدُّوا الخَلَل", "tr": "suddū l-khalal", "en": "close the gaps" },
-        { "ar": "تَقَدَّمُوا", "tr": "taqaddamū", "en": "move forward!" },
-        { "ar": "أَتِمُّوا الصَّفَّ الأَوَّل", "tr": "atimmū ṣ-ṣaff al-awwal", "en": "complete the first row" },
-        { "ar": "الإِقَامَة", "tr": "al-iqāma", "en": "the iqama (call to start prayer)" },
-        { "ar": "قَدْ قَامَتِ الصَّلَاة", "tr": "qad qāmati ṣ-ṣalāh", "en": "the prayer has begun (from the iqama)" },
-        { "ar": "الصَّلَاةُ جَامِعَة", "tr": "aṣ-ṣalātu jāmiʿa", "en": "congregational prayer is gathering (special-prayer call)" },
-        { "ar": "صَلَاةُ الجِنَازَة", "tr": "ṣalāt al-jināza", "en": "the funeral (janazah) prayer" }
+        {
+          "ar": "اِسْتَوُوا",
+          "tr": "istawū",
+          "en": "straighten up! (the lines)"
+        },
+        {
+          "ar": "اِعْتَدِلُوا",
+          "tr": "iʿtadilū",
+          "en": "align yourselves!"
+        },
+        {
+          "ar": "سَوُّوا صُفُوفَكُمْ",
+          "tr": "sawwū ṣufūfakum",
+          "en": "straighten your rows"
+        },
+        {
+          "ar": "سُدُّوا الخَلَل",
+          "tr": "suddū l-khalal",
+          "en": "close the gaps"
+        },
+        {
+          "ar": "تَقَدَّمُوا",
+          "tr": "taqaddamū",
+          "en": "move forward!"
+        },
+        {
+          "ar": "أَتِمُّوا الصَّفَّ الأَوَّل",
+          "tr": "atimmū ṣ-ṣaff al-awwal",
+          "en": "complete the first row"
+        },
+        {
+          "ar": "الإِقَامَة",
+          "tr": "al-iqāma",
+          "en": "the iqama (call to start prayer)"
+        },
+        {
+          "ar": "قَدْ قَامَتِ الصَّلَاة",
+          "tr": "qad qāmati ṣ-ṣalāh",
+          "en": "the prayer has begun (from the iqama)"
+        },
+        {
+          "ar": "الصَّلَاةُ جَامِعَة",
+          "tr": "aṣ-ṣalātu jāmiʿa",
+          "en": "congregational prayer is gathering (special-prayer call)"
+        },
+        {
+          "ar": "صَلَاةُ الجِنَازَة",
+          "tr": "ṣalāt al-jināza",
+          "en": "the funeral (janazah) prayer"
+        }
       ]
     },
     {
@@ -282,16 +931,56 @@
       "title": "خُطْبَة الجُمُعَة",
       "theme": "Friday khutbah stock phrases — you hear these every single week",
       "members": [
-        { "ar": "إِنَّ الحَمْدَ لِلَّه", "tr": "inna l-ḥamda lillāh", "en": "indeed all praise is for Allah (khutbah opener)" },
-        { "ar": "أَمَّا بَعْدُ", "tr": "ammā baʿd", "en": "and now, to the point…" },
-        { "ar": "اِتَّقُوا اللَّه", "tr": "ittaqū llāh", "en": "be mindful of Allah!" },
-        { "ar": "عِبَادَ اللَّه", "tr": "ʿibāda llāh", "en": "O servants of Allah" },
-        { "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا", "tr": "yā ayyuhā lladhīna āmanū", "en": "O you who believe" },
-        { "ar": "قَالَ رَسُولُ اللَّه ﷺ", "tr": "qāla rasūlu llāh", "en": "the Messenger of Allah ﷺ said" },
-        { "ar": "صَلُّوا عَلَى النَّبِيّ", "tr": "ṣallū ʿalā n-nabiyy", "en": "send blessings upon the Prophet" },
-        { "ar": "أَقُولُ قَوْلِي هَذَا", "tr": "aqūlu qawlī hādhā", "en": "I say these words of mine… (closing)" },
-        { "ar": "أَسْتَغْفِرُ اللَّه", "tr": "astaghfiru llāh", "en": "I seek Allah's forgiveness" },
-        { "ar": "رَحِمَكُمُ اللَّه", "tr": "raḥimakumu llāh", "en": "may Allah have mercy on you" }
+        {
+          "ar": "إِنَّ الحَمْدَ لِلَّه",
+          "tr": "inna l-ḥamda lillāh",
+          "en": "indeed all praise is for Allah (khutbah opener)"
+        },
+        {
+          "ar": "أَمَّا بَعْدُ",
+          "tr": "ammā baʿd",
+          "en": "and now, to the point…"
+        },
+        {
+          "ar": "اِتَّقُوا اللَّه",
+          "tr": "ittaqū llāh",
+          "en": "be mindful of Allah!"
+        },
+        {
+          "ar": "عِبَادَ اللَّه",
+          "tr": "ʿibāda llāh",
+          "en": "O servants of Allah"
+        },
+        {
+          "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا",
+          "tr": "yā ayyuhā lladhīna āmanū",
+          "en": "O you who believe"
+        },
+        {
+          "ar": "قَالَ رَسُولُ اللَّه ﷺ",
+          "tr": "qāla rasūlu llāh",
+          "en": "the Messenger of Allah ﷺ said"
+        },
+        {
+          "ar": "صَلُّوا عَلَى النَّبِيّ",
+          "tr": "ṣallū ʿalā n-nabiyy",
+          "en": "send blessings upon the Prophet"
+        },
+        {
+          "ar": "أَقُولُ قَوْلِي هَذَا",
+          "tr": "aqūlu qawlī hādhā",
+          "en": "I say these words of mine… (closing)"
+        },
+        {
+          "ar": "أَسْتَغْفِرُ اللَّه",
+          "tr": "astaghfiru llāh",
+          "en": "I seek Allah's forgiveness"
+        },
+        {
+          "ar": "رَحِمَكُمُ اللَّه",
+          "tr": "raḥimakumu llāh",
+          "en": "may Allah have mercy on you"
+        }
       ]
     }
   ]

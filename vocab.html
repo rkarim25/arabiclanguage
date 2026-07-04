@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mr6qy02o">
+  <link rel="stylesheet" href="css/style.css?v=mr6s9mxd">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -54,23 +57,25 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mr6qy02o"></script>
-<script src="js/tracker.js?v=mr6qy02o"></script>
+<script src="js/app.js?v=mr6s9mxd"></script>
+<script src="js/tracker.js?v=mr6s9mxd"></script>
 <script>
 renderNav("vocab");
 
 const content = document.getElementById("content");
-let FAMS = null, CORE = null, EV = null;
+let FAMS = null, CORE = null, EV = null, VERSES = null;
 let labView = "learn";
 
 Promise.all([
   fetch("data/families.json").then(r => r.json()),
   fetch("data/quran-core.json").then(r => r.json()),
   fetch("data/everyday.json").then(r => r.json()),
-]).then(([f, c, e]) => {
+  fetch("data/verses.json").then(r => r.json()),
+]).then(([f, c, e, v]) => {
   FAMS = f.families;
   CORE = c.words;
   EV = e.groups;
+  VERSES = v.surahs;
   const params = new URLSearchParams(location.search);
   const fam = FAMS.find(x => x.id === params.get("fam"));
   const ev = EV.find(x => x.id === params.get("ev"));
@@ -188,10 +193,32 @@ let sessionDone = 0;
 let poolLabel = "auto";
 const BATCH = 10;
 
+/* A matured word gets re-tested INSIDE a real ayah — isolated-row recognition
+   overestimates what you'd catch in actual recitation. Studied surahs first. */
+function findVerseCtx(ar) {
+  const t = normalizeAr(ar);
+  if (!t || !VERSES) return null;
+  const ordered = [...VERSES].sort((a, b) =>
+    (stepsDone("q-" + b.id).study || stepsDone("q-" + b.id).test ? 1 : 0) - (stepsDone("q-" + a.id).study || stepsDone("q-" + a.id).test ? 1 : 0));
+  for (const s of ordered) for (const v of s.verses) {
+    for (let wi = 0; wi < v.words.length; wi++) {
+      if (normalizeAr(v.words[wi][0]) === t) {
+        return { n: s.n, ayah: parseInt(v.ref.split(":")[1]), ref: v.ref, words: v.words, wi, surah: s.name };
+      }
+    }
+  }
+  return null;
+}
+
 async function buildPool() {
   const inSrc = key => sheetSrc === "mixed" || catsOf(key).includes(sheetSrc);
   const due = dueCards().filter(inSrc);
   const items = (await resolveCards(due)).map(x => ({ ...x, isNew: false }));
+  const srsNow = getSrs();
+  items.forEach(x => {
+    const e = srsNow[x.key];
+    if (x.key.startsWith("qc:") && e && e.box >= 3) x.ctx = findVerseCtx(x.v.ar);
+  });
   const srs = getSrs();
   const newQc = [], newEv = [], newFam = [], newStory = [];
   CORE.forEach((w, i) => {
@@ -239,8 +266,11 @@ async function renderSheet() {
       ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing: ${poolLabel} (${pool.length}) — <a href="vocab.html?view=learn" style="color:var(--accent)">back to auto</a></p>`
       : `<div class="seg-row">
           ${seg("segSrc", [["mixed", "Mixed"], ["quran", "📖 Quran"], ["msa", "🗣 MSA"]], sheetSrc)}
-          ${seg("segMode", [["understand", "Understand"], ["produce", "Write"]], sheetMode)}
+          ${seg("segMode", [["understand", "Understand"], ["produce", "Write"], ["ears", "🎧 Ears"]], sheetMode)}
         </div>`}
+    ${sheetMode === "ears" ? (hasArabicVoice()
+      ? `<p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">🎧 Sound only — play each word, write the meaning. The Arabic appears after you check. This is the skill both your goals actually need.</p>`
+      : `<p style="font-size:12.5px;color:var(--red);margin:8px 0 0">This device has no Arabic voice installed, so Ears mode can't play words — on Android/iPhone it usually works in Chrome/Safari; on desktop, Edge has one built in.</p>`) : ""}
     <div class="vocab-table-wrap">
       <table class="vocab-table"><tbody id="shBody"></tbody></table>
     </div>
@@ -278,6 +308,8 @@ async function renderSheet() {
     const shown = row.querySelector(".shown-answer");
     if (sheetMode === "understand") {
       shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}`;
+    } else if (sheetMode === "ears") {
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span style="font-weight:600">${v.en}</span>${v.tr ? ` <span style="color:var(--muted);font-size:12px">${v.tr}</span>` : ""}`;
     } else {
       shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
       shown.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
@@ -288,15 +320,29 @@ async function renderSheet() {
     if (!quiet) logEvent({ e: "reveal", key, mode: sheetMode });
   }
 
-  sheetItems.forEach(({ key, v, isNew }, i) => {
+  sheetItems.forEach((item, i) => {
+    const { key, v, isNew, ctx } = item;
     const tr = document.createElement("tr");
     if (sheetMode === "understand") {
+      const arCell = ctx
+        ? `<td class="ar-cell" style="font-size:21px;line-height:1.9">${ctx.words.map((w, wi) =>
+            wi === ctx.wi ? `<strong style="color:var(--accent)">${w[0]}</strong>` : w[0]).join(" ")}
+           <div style="font-size:11px;color:var(--amber);font-family:var(--font-ui)">in context — the highlighted word (${ctx.ref})</div></td>`
+        : `<td class="ar-cell">${v.ar}</td>`;
       tr.innerHTML = `
-        <td class="ar-cell">${v.ar}</td>
+        ${arCell}
         <td><span class="row-speak">🔊</span></td>
         <td class="tr-cell">${v.tr || ""}</td>
         <td style="min-width:150px">
           <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning…" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
+          <span class="shown-answer" style="display:none;font-size:14px"></span>
+          <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
+      `;
+    } else if (sheetMode === "ears") {
+      tr.innerHTML = `
+        <td style="white-space:nowrap"><button class="small ears-play" data-i="${i}">🔊 play</button></td>
+        <td style="min-width:150px">
+          <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="what did it mean?" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
           <span class="shown-answer" style="display:none;font-size:14px"></span>
           <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
       `;
@@ -311,7 +357,9 @@ async function renderSheet() {
       `;
     }
     const spk = tr.querySelector(".row-speak");
-    if (spk) spk.onclick = () => speak(v.ar, 0.8);
+    if (spk) spk.onclick = () => ctx ? playRecitation([{ n: ctx.n, ayah: ctx.ayah }]) : speak(v.ar, 0.8);
+    const ears = tr.querySelector(".ears-play");
+    if (ears) ears.onclick = () => speak(v.ar, 0.8);
     tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), key);
@@ -355,10 +403,16 @@ async function renderSheet() {
       graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const ans = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = sheetMode === "understand" ? fuzzyEn(input.value, v.en) : arMatch(input.value, v.ar);
+      const ok = sheetMode === "produce" ? arMatch(input.value, v.ar) : fuzzyEn(input.value, v.en);
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
-      if (ok) { right++; ans.style.display = "none"; }
+      if (ok && sheetMode !== "ears") { right++; ans.style.display = "none"; }
+      else if (sheetMode === "ears") {
+        // ears: always reveal the Arabic after the check — he heard it, now he sees it
+        if (ok) right++;
+        ans.style.display = "block";
+        ans.innerHTML = `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span>${ok ? "" : ` — ${v.en}`}`;
+      }
       else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
       gradeCard(key, ok ? "good" : "again");
       logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
@@ -580,17 +634,25 @@ function renderGroupStudy(obj, prefix) {
     </div>
   `;
   const tbody = document.getElementById("vtBody");
+  let anyHear = false;
   obj.members.forEach(m => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="en-cell">${m.en}</td>
-      <td class="ar-cell">${m.ar}</td>
+      <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13.5px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
       <td><span class="row-speak" title="hear it">🔊</span></td>
       <td class="tr-cell">${m.tr}</td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
     tbody.appendChild(tr);
+    if (m.hear) anyHear = true;
   });
+  if (anyHear) {
+    const note = document.createElement("p");
+    note.style.cssText = "font-size:12.5px;color:var(--muted);margin:8px 0 0";
+    note.innerHTML = "🗣 = what you'll actually hear on the street in Makkah (Hijazi). Say the MSA form — everyone understands it — but train your ears on the street form so the answer doesn't surprise you.";
+    tbody.closest(".card").appendChild(note);
+  }
   if (obj.quran) {
     const verses = document.getElementById("verses");
     obj.quran.forEach(v => {

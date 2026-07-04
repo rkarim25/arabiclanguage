@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mr6qy02o">
+  <link rel="stylesheet" href="css/style.css?v=mr6s9mxd">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -35,8 +38,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mr6qy02o"></script>
-<script src="js/tracker.js?v=mr6qy02o"></script>
+<script src="js/app.js?v=mr6s9mxd"></script>
+<script src="js/tracker.js?v=mr6s9mxd"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -49,6 +52,7 @@ fetch("data/verses.json").then(r => r.json()).then(d => {
   const params = new URLSearchParams(location.search);
   const s = DATA.find(x => x.id === params.get("s"));
   if (s) renderSurah(s, params.get("mode") || "study");
+  else if (params.get("listen")) renderListenQueue();
   else renderList();
 });
 
@@ -60,10 +64,13 @@ function renderList() {
     <h1>Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
     <p class="sub">Word-by-word surahs you hear recited constantly. Study each word, then test yourself by filling in the meanings.
     These use the Quran's highest-frequency vocabulary — every word here pays off across the whole mushaf.</p>
+    <div class="card" style="border-color:var(--accent);margin-bottom:16px">
+      <p style="margin:0;font-size:14.5px">🔁 <a href="quran.html?listen=1" style="color:var(--accent);font-weight:600">Listen queue</a> —
+      real recitation of every surah you've studied, back to back. Zero clicks once it starts.</p>
+    </div>
     <div class="story-grid" id="sGrid"></div>
     <div class="card" style="margin-top:20px">
-      <p style="margin:0;font-size:13.5px;color:var(--muted)">🔊 uses your browser's voice — an approximation for study.
-      For tajwīd and beauty, follow along with a real reciter; after these lessons you'll understand what you hear.</p>
+      <p style="margin:0;font-size:13.5px;color:var(--muted)">▶ Real recitation streams a real qari (Alafasy) verse by verse; 🔊 uses your browser's voice — an approximation for studying single words.</p>
     </div>
   `;
   const grid = document.getElementById("sGrid");
@@ -82,6 +89,67 @@ function renderList() {
   });
 }
 
+/* Listen queue: real recitation of the surahs you've already studied — repeated
+   listening to KNOWN text is how recitation comprehension becomes automatic. */
+function renderListenQueue() {
+  trackPage("quran:listen-queue");
+  const studied = DATA.filter(s => { const d = stepsDone("q-" + s.id); return d.study || d.test; });
+  const queue = studied.length ? studied : [];
+  content.innerHTML = `
+    <p><a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a></p>
+    <h1>Listen queue <span class="arabic" style="color:var(--accent)">اِسْتَمِعْ وَافْهَمْ</span></h1>
+    <p class="sub">Real recitation (Mishary Alafasy) of the surahs you've studied, back to back.
+    You already know these words — let your ears catch up with your eyes. Good while walking, commuting, or before sleep.</p>
+    ${queue.length ? `
+    <div class="card">
+      <div class="listen-controls" style="margin-bottom:10px">
+        <button class="primary" id="qPlay">▶ Play my queue (${queue.length} surah${queue.length > 1 ? "s" : ""})</button>
+        <button id="qStop">■ Stop</button>
+      </div>
+      <div id="qList"></div>
+    </div>` : `
+    <div class="card">
+      <p style="margin:0">Nothing in your queue yet — the queue holds surahs you've <strong>studied</strong>, so every word you hear is one you know.
+      <a href="quran.html" style="color:var(--accent)">Study your first surah</a> (Al-Fatiha takes ~10 minutes) and it appears here.</p>
+    </div>`}
+  `;
+  if (!queue.length) return;
+  const list = document.getElementById("qList");
+  queue.forEach((s, i) => {
+    const row = document.createElement("div");
+    row.id = "q-row-" + i;
+    row.style.cssText = "display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border-bottom:1px dashed var(--border);border-radius:8px";
+    row.innerHTML = `<span>${s.nameEn.split("—")[0].trim()} <span style="color:var(--muted);font-size:12px">· ${s.verses.length} verses${stepsDone("q-" + s.id).test ? " · ✓ tested" : ""}</span></span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">${s.name}</span>`;
+    list.appendChild(row);
+  });
+  const items = [];
+  queue.forEach((s, qi) => s.verses.forEach(v => items.push({ n: s.n, ayah: parseInt(v.ref.split(":")[1]), qi, sid: s.id })));
+  let lastSurah = null;
+  document.getElementById("qPlay").onclick = () => {
+    logEvent({ e: "listen-click", title: "Listen queue" });
+    playRecitation(items,
+      it => {
+        if (it.qi !== lastSurah) {
+          if (lastSurah !== null) logEvent({ e: "rlisten", surah: items.find(x => x.qi === lastSurah).sid });
+          lastSurah = it.qi;
+        }
+        queue.forEach((s, i) => { document.getElementById("q-row-" + i).style.background = i === it.qi ? "var(--accent-soft)" : ""; });
+      },
+      err => {
+        queue.forEach((s, i) => { document.getElementById("q-row-" + i).style.background = ""; });
+        if (!err && lastSurah !== null) logEvent({ e: "rlisten", surah: queue[lastSurah].id });
+        lastSurah = null;
+        if (err === "audio-failed") alert("Recitation audio didn't load — check your connection (it streams from everyayah.com).");
+        autoSync();
+      });
+  };
+  document.getElementById("qStop").onclick = () => {
+    stopRecitation();
+    queue.forEach((s, i) => { document.getElementById("q-row-" + i).style.background = ""; });
+  };
+}
+
 function renderSurah(s, mode) {
   trackPage(`quran:${s.id}:${mode}`);
   window.scrollTo({ top: 0 });
@@ -98,9 +166,10 @@ function renderSurah(s, mode) {
     </div>
     <div class="card">
       <div class="listen-controls">
-        <button class="primary" id="playAll">▶ Play the surah</button>
+        <button class="primary" id="playRec">▶ Real recitation</button>
+        <button id="playAll">▶ Browser voice</button>
         <button id="stopBtn">■ Stop</button>
-        <label style="font-size:13px;color:var(--muted)">Speed <input type="range" id="rate" min="0.5" max="1.0" step="0.05" value="0.75"></label>
+        <label style="font-size:13px;color:var(--muted)">Voice speed <input type="range" id="rate" min="0.5" max="1.0" step="0.05" value="0.75"></label>
       </div>
       <div id="verses"></div>
       ${mode === "test" ? `<div class="ex-row" style="margin-top:14px"><button class="primary" id="checkAll">✓ Check my answers</button></div><div class="quiz-score" id="score"></div>` : `<div class="ex-row" style="margin-top:14px"><button class="primary" id="toTest">I know these — test me →</button></div>`}
@@ -155,9 +224,23 @@ function renderSurah(s, mode) {
       if (i >= s.verses.length) { logEvent({ e: "qlisten", surah: s.id }); return; }
       speak(s.verses[i].ar, rate(), () => { i++; next(); });
     };
-    stopSpeak(); next();
+    stopRecitation(); stopSpeak(); next();
   };
-  document.getElementById("stopBtn").onclick = stopSpeak;
+  document.getElementById("playRec").onclick = () => {
+    const blocks = versesEl.querySelectorAll(".verse-block");
+    const items = s.verses.map(v => ({ n: s.n, ayah: parseInt(v.ref.split(":")[1]) }));
+    playRecitation(items,
+      (it, i) => {
+        blocks.forEach(b => b.style.background = "");
+        if (blocks[i]) { blocks[i].style.background = "var(--accent-soft)"; blocks[i].scrollIntoView({ block: "center", behavior: "smooth" }); }
+      },
+      err => {
+        blocks.forEach(b => b.style.background = "");
+        if (!err) logEvent({ e: "rlisten", surah: s.id });
+        else if (err === "audio-failed") alert("Recitation audio didn't load — check your connection (it streams from everyayah.com).");
+      });
+  };
+  document.getElementById("stopBtn").onclick = () => { stopSpeak(); stopRecitation(); };
 
   if (mode === "study") {
     document.getElementById("toTest").onclick = () => {

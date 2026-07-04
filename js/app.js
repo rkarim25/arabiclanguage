@@ -227,7 +227,7 @@ async function computeMilestones() {
       have: protTested, need: 3, unit: "tests", link: "quran.html" },
     { title: "Top 40 Quran words learnt", why: `≈${covTop(40)}% of all Quranic text recognizable on hearing.`,
       have: Math.min(coreLearntN, 40), need: 40, unit: "words", link: "vocab.html?sheet=1", test: "top40" },
-    { title: "All 7 surahs tested", why: "Everything you commonly hear recited — understood word by word.",
+    { title: `All ${QURAN_SURAHS.length} surahs tested`, why: "Everything you commonly hear recited — understood word by word.",
       have: allSurahsTested, need: QURAN_SURAHS.length, unit: "tests", link: "quran.html" },
     { title: "Full core + all root families", why: `All 60 core words (≈${covTop(60)}% of the Quran) plus 15 roots and their derived forms.`,
       have: coreLearntN + famFilled, need: 60 + FAMILY_LIST.length, unit: "words", link: "vocab.html", test: "core60" },
@@ -286,7 +286,7 @@ async function computeMilestones() {
 
   const goalStages = {
     quran: [
-      { title: "Your salah, fully understood", detail: "all 7 short surahs tested + top 60 core words — every word you recite daily",
+      { title: "Your salah, fully understood", detail: `all ${QURAN_SURAHS.length} short surahs tested + top 60 core words — every word you recite daily`,
         have: allSurahsTested * 10 + coreLearntN, need: QURAN_SURAHS.length * 10 + 60 },
       { title: "Follow familiar passages", detail: "≈300 lemmas ≈ 7 of every 10 words in a typical surah recognized — you can follow recitation of passages you've studied",
         have: quranLemmas, need: 300 },
@@ -379,14 +379,19 @@ function paceEta(remaining, unit) {
 }
 
 /* ---------- "What now?" suggestions ---------- */
+/* Ordered memorized-first: mapping meaning onto surahs already known by heart
+   is the cheapest acquisition there is. Keep in sync with data/verses.json. */
 const QURAN_SURAHS = [
-  { id: "fatiha", name: "Al-Fatiha", ar: "الفاتحة" },
-  { id: "ikhlas", name: "Al-Ikhlas", ar: "الإخلاص" },
-  { id: "asr", name: "Al-Asr", ar: "العصر" },
-  { id: "kawthar", name: "Al-Kawthar", ar: "الكوثر" },
-  { id: "nas", name: "An-Nas", ar: "الناس" },
-  { id: "falaq", name: "Al-Falaq", ar: "الفلق" },
-  { id: "qadr", name: "Al-Qadr", ar: "القدر" },
+  { id: "fatiha", name: "Al-Fatiha", ar: "الفاتحة", n: 1 },
+  { id: "ikhlas", name: "Al-Ikhlas", ar: "الإخلاص", n: 112 },
+  { id: "falaq", name: "Al-Falaq", ar: "الفلق", n: 113 },
+  { id: "nas", name: "An-Nas", ar: "الناس", n: 114 },
+  { id: "kawthar", name: "Al-Kawthar", ar: "الكوثر", n: 108 },
+  { id: "asr", name: "Al-Asr", ar: "العصر", n: 103 },
+  { id: "nasr", name: "An-Nasr", ar: "النصر", n: 110 },
+  { id: "qadr", name: "Al-Qadr", ar: "القدر", n: 97 },
+  { id: "kafirun", name: "Al-Kafirun", ar: "الكافرون", n: 109 },
+  { id: "masad", name: "Al-Masad", ar: "المسد", n: 111 },
 ];
 
 function suggestNext() {
@@ -408,6 +413,13 @@ function suggestNext() {
   // 3. Contextual listening — only when your learning has unlocked something worth hearing
   const lp = listenSuggestion();
   if (lp) out.push({ icon: "🎧", title: lp.title, desc: lp.desc, href: lp.url });
+  // 3b. Listen queue — real recitation of studied surahs; costs zero study minutes
+  const studiedSurahs = QURAN_SURAHS.filter(s => { const d = stepsDone("q-" + s.id); return d.study || d.test; });
+  if (studiedSurahs.length) out.push({
+    icon: "🔁", title: `Listen queue — ${studiedSurahs.length} surah${studiedSurahs.length > 1 ? "s" : ""} you've studied`,
+    desc: "Real recitation of text you already understand — perfect while walking or commuting",
+    href: "quran.html?listen=1",
+  });
   // next incomplete story/step
   for (const s of STORY_LIST) {
     if (s.locked) continue;
@@ -522,6 +534,35 @@ function speak(text, rate, onend) {
   speechSynthesis.speak(u);
 }
 function stopSpeak() { if (window.speechSynthesis) speechSynthesis.cancel(); }
+
+/* ---------- real recitation audio (everyayah.com, Alafasy) ----------
+   TTS is for study words; recitation is the real thing — the goal is to
+   understand the Quran AS RECITED, so listening practice uses a real qari. */
+const RECITER_BASE = "https://everyayah.com/data/Alafasy_64kbps/";
+function recitationUrl(surahN, ayah) {
+  const p = x => String(x).padStart(3, "0");
+  return RECITER_BASE + p(surahN) + p(ayah) + ".mp3";
+}
+let _recAudio = null;
+function stopRecitation() {
+  if (_recAudio) { _recAudio.onended = null; _recAudio.pause(); _recAudio = null; }
+}
+/* items: [{n, ayah, ...}]; onEach(item, i) fires as each ayah starts; onDone(err?) at the end */
+function playRecitation(items, onEach, onDone) {
+  stopRecitation(); stopSpeak();
+  let i = 0;
+  const next = () => {
+    if (i >= items.length) { _recAudio = null; if (onDone) onDone(); return; }
+    const it = items[i];
+    if (onEach) onEach(it, i);
+    const a = new Audio(recitationUrl(it.n, it.ayah));
+    _recAudio = a;
+    a.onended = () => { i++; next(); };
+    a.onerror = () => { _recAudio = null; if (onDone) onDone("audio-failed"); };
+    a.play().catch(() => { _recAudio = null; if (onDone) onDone("blocked"); });
+  };
+  next();
+}
 
 /* ---------- Phonetic Latin -> Arabic (from the rkarim25 keyboard) ---------- */
 const LATIN_TO_AR = {
@@ -758,4 +799,9 @@ async function resolveCards(keys) {
     }
     return v ? { key: k, v } : null;
   }).filter(Boolean);
+}
+
+/* ---------- offline (PWA) ---------- */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => { /* http or unsupported — site works without it */ });
 }

@@ -24,8 +24,8 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 | Page | What it does |
 |---|---|
 | `index.html` | Dashboard: Quran-coverage stat, "What now?" suggestions, coach's notes, weak spots, story grid, cloud-sync setup |
-| `vocab.html` | **Vocab Learn** (endless auto-picked fill-sheets: due → new frequency-core → family forms), the 60-word Quran core table, 15 root-family lessons (study table + fill-the-sheet test) |
-| `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar notes + tafsir link) then fill-the-meanings test |
+| `vocab.html` | **Vocab Learn** (endless auto-picked fill-sheets: due → new frequency-core → family forms) with three modes — Understand (Arabic→meaning), Write (meaning→Arabic), **🎧 Ears (sound only → meaning; the Arabic appears after checking)** — plus verse-context rows (box-3+ `qc:` words re-tested highlighted inside a real ayah), the Quran core table, 15 root-family lessons; everyday study tables show 🗣 Hijazi street variants (`hear` field) on Umrah-critical phrases |
+| `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar notes + tafsir link) then fill-the-meanings test. **▶ Real recitation** streams Alafasy from everyayah.com verse by verse (highlight follows). `quran.html?listen=1` = **Listen queue**: recitation of all studied surahs back to back (logs `rlisten`) |
 | `grammar.html` | 8 practical patterns taught through known verses, typed 1-minute tests |
 | `speaking.html` | Speaking section: word drill by bucket/source chips (say the Arabic, mic-checked, bucket bars) + "say it in Arabic" prompts ranked by known vocab (`data/prompts.json`) + sentence shadowing across all stories and surahs |
 | `test.html?ms=<id>` | Milestone tests (mock + official, 85% pass certifies as `ms-<id>` step `passed`): top20/top40/core60 (Quran core ranges), opener/survival (everyday sets) |
@@ -33,7 +33,9 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 | `review.html` | Spaced-repetition queue, table mode (reveal + mark misses) with card mode opt-in |
 | `keyboard.html` | Reza's original phonetic Latin→Arabic keyboard tool (mapping also lives in `js/app.js`) |
 
-Shared code: `js/app.js` (manifests, SRS, TTS, phonetic input, `resolveCards`, `suggestNext`, `fuzzyEn`), `js/tracker.js` (event log, time tracking, cloud sync, Google login helpers, `weakSpots`).
+Shared code: `js/app.js` (manifests, SRS, TTS, recitation audio (`playRecitation`/`recitationUrl`, everyayah.com Alafasy), phonetic input, `resolveCards`, `suggestNext`, `fuzzyEn`, service-worker registration), `js/tracker.js` (event log, active-time tracking, cloud sync, login helpers, `weakSpots`, `activeMinutes`).
+
+**Offline (PWA):** `sw.js` (network-first, cache fallback — can never serve stale code while online; works offline from the last good copy) + `manifest.webmanifest` + `icons/`. He can "Add to Home Screen" and study in the Haram with no signal. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire automatically.
 
 ## Data model
 
@@ -52,14 +54,14 @@ All localStorage, synced to the cloud (see Infrastructure):
 
 ## Content pipelines (how Claude adds material)
 
-- **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, and add it to `QURAN_SURAHS` in `js/app.js`. Recommended next: 110, 111, 109, 106, 105; Ayat al-Kursi needs a verse-range feature.
+- **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, **and add it to `QURAN_SURAHS` in `js/app.js` — this step was once forgotten (commit 3a5afe4 added 3 surahs to verses.json only), which silently hides them from What-now, milestones, and the listen queue. Treat gen-surah + QURAN_SURAHS as one atomic change.** Done: 1, 97, 103, 108-114. Recommended next: 106, 105; Ayat al-Kursi needs a verse-range feature. Memorized-first: Reza knows Fatiha + a few short ones by heart, so surahs already in his memory are the highest-value lessons.
 - **Quran core words**: append to `data/quran-core.json` toward the top ~300 lemmas, keeping frequency order among *new* entries (existing indices frozen).
 - **Root families**: add to `data/families.json` + `FAMILY_LIST` in `js/app.js`. Pick roots from Reza's weak words. Include 4-7 Quranic forms + 2 real verses each.
-- **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words.
+- **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words. Members may carry a `hear` field (`"وين؟ — wēn"`) = the Hijazi street form rendered as a 🗣 line in study tables — use sparingly, Umrah-critical phrases only.
 - **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js`. Curriculum plan: 5 levels × 8 stories (L1 present tense → L5 functional MSA/media); recycle weak vocab and Quranic structures.
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
 
-Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes — prevents fresh-HTML/stale-script cache skew, which breaks the milestone panel), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
+Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
 ## Infrastructure
 
@@ -69,6 +71,11 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 - **Fallback data store**: private repo `rkarim25/arabic-learning-data` (`learning-data.json`, `coach.json`, `ANALYSIS.md` = event schema + analysis guide). Used when Reza connects via GitHub PAT instead of Google.
 - **Auth available to Claude sessions**: `gh` CLI (account rkarim25) and `wrangler` (OAuth, account 3554b8ca31b3e9df1709eca7448169aa) are both logged in on Reza's machine.
 - **Reza's one-time setup (may still be pending)**: Google OAuth client ID creation + sign-in on the dashboard. Until done, his data stays in-browser and there is nothing to analyze.
+
+## Analysis honesty notes
+
+- **Minutes**: use interaction-timestamp chaining (what `activeMinutes()` does — gaps ≤3 min chain, isolated events ≈30 s), NOT sums of `time` events. `time` events logged before 2026-07-04 predate idle detection and are inflated (a left-open tab once logged 10+ hours on vocab:list).
+- **Listening**: `rlisten` (a surah fully played in real recitation) and `listen-click` events are the listening record; `sheet` events with `mode:"ears"` are audio-recognition tests — track their accuracy separately from text modes, the gap between text% and ears% is the real "understand as recited" measure.
 
 ## The coaching loop
 
