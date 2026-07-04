@@ -121,6 +121,17 @@ function arMatch(typed, target) {
   if (t === normalizeAr(target)) return true;
   return target.split("/").some(p => normalizeAr(p) === t);
 }
+/* accept a spoken transcript if it contains the target (or either half of a pair) */
+function speakMatch(heard, target) {
+  const h = normalizeAr(heard);
+  if (!h) return false;
+  if (arMatch(heard, target)) return true;
+  const hw = new Set(h.split(" "));
+  return target.split("/").some(p => {
+    const tw = normalizeAr(p).split(" ").filter(Boolean);
+    return tw.length && tw.every(w => hw.has(w));
+  });
+}
 
 function seedCards(keys) {
   // add new words to the deck at box 1 (due tomorrow) without per-card grading
@@ -319,6 +330,7 @@ function renderNav(active) {
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
+    <a class="link ${active === "speaking" ? "active" : ""}" href="speaking.html">Speak</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;

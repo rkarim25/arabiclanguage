@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <title>Speaking — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
+    .chips button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .bucket-bar { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; direction: ltr; }
+    .bucket-bar button { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+    .bucket-bar button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .bucket-bar button.sel.never { background: var(--red); border-color: var(--red); }
+    .shadow-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 4px; border-bottom: 1px dashed var(--border); flex-wrap: wrap; }
+    .shadow-row .txt { flex: 1; min-width: 200px; direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 24px; line-height: 1.9; }
+    .shadow-row .res { flex-basis: 100%; font-size: 13.5px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Speaking <span class="arabic" style="color:var(--accent)">تَكَلَّمْ</span></h1>
+  <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked.</p>
+
+  <div class="card" style="border-color:var(--accent)">
+    <h2>🎤 Word drill — say the Arabic</h2>
+    <p class="sub" style="margin-bottom:10px">Pick which words to drill. <strong>Auto</strong> serves due words first, then your repeat bucket, then new ones.</p>
+    <div class="chips" id="drillChips"></div>
+    <div id="drillArea">Loading…</div>
+  </div>
+
+  <div class="card">
+    <h2>🗣 Shadow sentences — listen, then say it back</h2>
+    <p class="sub" style="margin-bottom:10px">Whole sentences build fluency: play ▸, repeat aloud with 🎤. Pick a story or surah.</p>
+    <div class="chips" id="shadowChips"></div>
+    <div id="shadowArea"></div>
+  </div>
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/tracker.js"></script>
+<script>
+renderNav("speaking");
+trackPage("speaking");
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const BATCH = 10;
+
+/* ================= word drill ================= */
+let CORE = null, EV = null, FAMS = null, catalog = null;
+let drillFilter = "auto";
+let drillPool = null, drillPos = 0, drillDone = 0;
+
+const DRILL_FILTERS = [
+  ["auto", "Auto"],
+  ["due", "Due now"],
+  ["repeat", "Repeat"],
+  ["later", "Later"],
+  ["unmarked", "Unmarked"],
+  ["know", "Know"],
+  ["never", "Don't repeat"],
+];
+
+async function buildCatalog() {
+  const items = [];
+  CORE.forEach((w, i) => items.push({ key: `qc:${i}`, v: { ar: w.ar, en: w.en, tr: w.tr } }));
+  EV.forEach(g => g.members.forEach((m, i) => items.push({ key: `ev-${g.id}:${i}`, v: { ar: m.ar, en: m.en, tr: m.tr } })));
+  FAMS.forEach(f => f.members.forEach((m, i) => items.push({ key: `fam-${f.id}:${i}`, v: { ar: m.ar, en: m.en, tr: m.tr } })));
+  for (const s of STORY_LIST.filter(s => !s.locked)) {
+    try {
+      const st = await loadStory(s.id);
+      st.vocab.forEach((w, i) => items.push({ key: `${s.id}:${i}`, v: { ar: w.ar, en: w.en, tr: w.tr } }));
+    } catch (e) {}
+  }
+  return items;
+}
+
+function drillCandidates() {
+  const now = Date.now();
+  const srs = getSrs();
+  if (drillFilter === "auto") {
+    const due = catalog.filter(({ key }) => { const e = srs[key]; return e && e.due <= now && bucketOf(key) !== "never"; });
+    const rep = catalog.filter(({ key }) => bucketOf(key) === "repeat" && !due.some(d => d.key === key));
+    const fresh = catalog.filter(({ key }) => bucketOf(key) === "unmarked");
+    return [...due, ...rep, ...fresh];
+  }
+  if (drillFilter === "due") return catalog.filter(({ key }) => { const e = srs[key]; return e && e.due <= now && bucketOf(key) !== "never"; });
+  return catalog.filter(({ key }) => bucketOf(key) === drillFilter);
+}
+
+function renderDrillChips() {
+  const chips = document.getElementById("drillChips");
+  chips.innerHTML = "";
+  DRILL_FILTERS.forEach(([id, label]) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    if (id === drillFilter) b.classList.add("sel");
+    b.onclick = () => { drillFilter = id; drillPool = null; renderDrillChips(); renderDrill(); };
+    chips.appendChild(b);
+  });
+}
+
+function renderDrill() {
+  const area = document.getElementById("drillArea");
+  if (!drillPool) { drillPool = drillCandidates(); drillPos = 0; }
+  const batch = drillPool.slice(drillPos, drillPos + BATCH);
+  if (!batch.length) {
+    area.innerHTML = `<p>${drillPool.length ? `🎉 Drilled all ${drillPool.length} words here — ${drillDone} this session.` : "Nothing in this bucket right now."}</p>`;
+    return;
+  }
+  drillPos += batch.length;
+  area.innerHTML = `
+    ${!SR ? `<div class="tts-warn">⚠ No speech recognition in this browser — use Chrome or Edge for automatic checking. For now: reveal and rate yourself.</div>` : ""}
+    <div class="vocab-table-wrap"><table class="vocab-table"><tbody id="drillBody"></tbody></table></div>
+    <div class="quiz-score" id="drillScore"></div>
+  `;
+  const tbody = document.getElementById("drillBody");
+  const attempted = new Set();
+  let right = 0;
+
+  function finishRow(i, key, ok, resultHtml) {
+    if (attempted.has(i)) return;
+    attempted.add(i);
+    if (ok) right++;
+    const row = tbody.children[i];
+    row.querySelector(".res").innerHTML = resultHtml;
+    const ans = row.querySelector(".correct-answer");
+    if (!ok) {
+      ans.style.display = "block";
+      ans.innerHTML = `${batch[i].v.ar} <span class="row-speak" style="cursor:pointer">🔊</span>`;
+      ans.querySelector(".row-speak").onclick = () => speak(batch[i].v.ar, 0.75);
+    }
+    gradeCard(key, ok ? "good" : "again");
+    mountBucketBar(row.querySelector(".bucket-slot"), key);
+    if (attempted.size === batch.length) {
+      drillDone += batch.length;
+      document.getElementById("drillScore").innerHTML =
+        `Score: ${right} / ${batch.length} — ${drillDone} words spoken this session.` +
+        (drillPool.length - drillPos > 0 ? `<div class="ex-row" style="margin-top:10px"><button class="primary" id="drillMore">＋ Keep going (next ${Math.min(BATCH, drillPool.length - drillPos)})</button></div>` : "");
+      logEvent({ e: "drill-done", filter: drillFilter, score: right, total: batch.length });
+      autoSync();
+      const more = document.getElementById("drillMore");
+      if (more) more.onclick = renderDrill;
+    }
+  }
+
+  batch.forEach(({ key, v }, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${v.en}</td>
+      <td>${SR ? `<button class="small mic">🎤 say it</button>` : `<button class="small reveal">👁 reveal</button>`}</td>
+      <td style="min-width:150px"><span class="res" style="font-size:13.5px"></span><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
+      <td class="tr-cell">${v.tr || ""}</td>
+    `;
+    tbody.appendChild(tr);
+    mountBucketBar(tr.querySelector(".bucket-slot"), key);
+
+    if (SR) {
+      const mic = tr.querySelector(".mic");
+      mic.onclick = () => {
+        stopSpeak();
+        const rec = new SR();
+        rec.lang = "ar-SA";
+        rec.interimResults = false;
+        mic.textContent = "🔴 listening…";
+        rec.onresult = (ev) => {
+          const heard = ev.results[0][0].transcript;
+          const ok = speakMatch(heard, v.ar);
+          logEvent({ e: "vspeak", key, heard, ok });
+          finishRow(i, key, ok, ok
+            ? `<span style="color:var(--accent);font-weight:600">✓ ${heard}</span>`
+            : `<span style="color:var(--red)">heard: ${heard}</span>`);
+        };
+        rec.onerror = (ev) => {
+          mic.textContent = "🎤 say it";
+          tr.querySelector(".res").innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
+        };
+        rec.onend = () => { if (!attempted.has(i)) mic.textContent = "🎤 say it"; else mic.disabled = true; };
+        rec.start();
+      };
+    } else {
+      tr.querySelector(".reveal").onclick = () => {
+        const res = tr.querySelector(".res");
+        res.innerHTML = `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>
+          <button class="small self-ok">✓ said it</button> <button class="small self-no">✗ struggled</button>`;
+        res.querySelector(".row-speak").onclick = () => speak(v.ar, 0.75);
+        res.querySelector(".self-ok").onclick = () => { logEvent({ e: "vspeak-self", key, ok: true }); finishRow(i, key, true, `<span style="color:var(--accent)">✓ noted</span>`); };
+        res.querySelector(".self-no").onclick = () => { logEvent({ e: "vspeak-self", key, ok: false }); finishRow(i, key, false, `<span style="color:var(--red)">noted — practice it</span>`); };
+      };
+    }
+  });
+}
+
+function mountBucketBar(slot, key) {
+  if (!slot) return;
+  const bar = document.createElement("div");
+  bar.className = "bucket-bar";
+  const current = bucketOf(key);
+  BUCKETS.forEach(b => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = b.label;
+    if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    btn.onclick = () => {
+      setBucket(key, b.id);
+      logEvent({ e: "bucket", key, b: b.id, src: "speaking" });
+      [...bar.children].forEach(c => c.classList.remove("sel", "never"));
+      btn.classList.add("sel");
+      if (b.id === "never") btn.classList.add("never");
+    };
+    bar.appendChild(btn);
+  });
+  slot.innerHTML = "";
+  slot.appendChild(bar);
+}
+
+/* ================= sentence shadowing ================= */
+let VERSES = null;
+let shadowSel = null;
+
+function shadowSources() {
+  return [
+    ...STORY_LIST.filter(s => !s.locked).map(s => ({ id: s.id, label: s.titleEn, kind: "story" })),
+    ...QURAN_SURAHS.map(s => ({ id: s.id, label: s.name, kind: "surah" })),
+  ];
+}
+
+function renderShadowChips() {
+  const chips = document.getElementById("shadowChips");
+  chips.innerHTML = "";
+  shadowSources().forEach(src => {
+    const b = document.createElement("button");
+    b.textContent = src.label;
+    if (shadowSel && shadowSel.id === src.id) b.classList.add("sel");
+    b.onclick = () => { shadowSel = src; renderShadowChips(); renderShadow(); };
+    chips.appendChild(b);
+  });
+}
+
+async function renderShadow() {
+  const area = document.getElementById("shadowArea");
+  if (!shadowSel) { area.innerHTML = `<p style="font-size:14px;color:var(--muted)">Pick a source above.</p>`; return; }
+  area.innerHTML = "Loading…";
+  let sentences;
+  if (shadowSel.kind === "story") {
+    const st = await loadStory(shadowSel.id);
+    sentences = st.sentences.map(s => s.ar);
+  } else {
+    if (!VERSES) VERSES = (await (await fetch("data/verses.json")).json()).surahs;
+    sentences = VERSES.find(s => s.id === shadowSel.id).verses.map(v => v.ar);
+  }
+  area.innerHTML = "";
+  sentences.forEach((ar, i) => {
+    const row = document.createElement("div");
+    row.className = "shadow-row";
+    row.innerHTML = `
+      <button class="small play">▸</button>
+      <span class="txt">${ar}</span>
+      ${SR ? `<button class="small mic">🎤</button>` : ""}
+      <div class="res"></div>
+    `;
+    row.querySelector(".play").onclick = () => speak(ar, 0.8);
+    if (SR) {
+      const mic = row.querySelector(".mic");
+      mic.onclick = () => {
+        stopSpeak();
+        const rec = new SR();
+        rec.lang = "ar-SA";
+        rec.interimResults = false;
+        mic.textContent = "🔴";
+        rec.onresult = (ev) => {
+          const heard = ev.results[0][0].transcript;
+          const target = normalizeAr(ar).split(" ");
+          const heardW = new Set(normalizeAr(heard).split(" "));
+          const hit = target.filter(w => heardW.has(w)).length;
+          const score = Math.round(hit / target.length * 100) / 100;
+          logEvent(shadowSel.kind === "story"
+            ? { e: "speak", story: shadowSel.id, s: i, heard, score }
+            : { e: "qspeak", surah: shadowSel.id, s: i, heard, score });
+          row.querySelector(".res").innerHTML = `<span style="color:${score >= 0.6 ? "var(--accent)" : "var(--red)"}">${score >= 0.8 ? "✓ Excellent" : score >= 0.6 ? "✓ Good" : "Keep practicing"} — ${hit}/${target.length} words. Heard: ${heard}</span>`;
+        };
+        rec.onerror = (ev) => {
+          mic.textContent = "🎤";
+          row.querySelector(".res").innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
+        };
+        rec.onend = () => { mic.textContent = "🎤"; };
+        rec.start();
+      };
+    }
+    area.appendChild(row);
+  });
+}
+
+/* ================= init ================= */
+Promise.all([
+  fetch("data/quran-core.json").then(r => r.json()),
+  fetch("data/everyday.json").then(r => r.json()),
+  fetch("data/families.json").then(r => r.json()),
+]).then(async ([c, e, f]) => {
+  CORE = c.words;
+  EV = e.groups;
+  FAMS = f.families;
+  catalog = await buildCatalog();
+  renderDrillChips();
+  renderDrill();
+  renderShadowChips();
+  renderShadow();
+});
+</script>
+</body>
+</html>
