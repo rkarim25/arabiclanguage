@@ -220,7 +220,7 @@ async function computeMilestones() {
   const quran = [
     { title: "Al-Fatiha, word by word", why: "You understand every word of every rak'ah you pray — 17+ times a day.",
       have: surahTested("fatiha"), need: 1, unit: "test", link: "quran.html?s=fatiha" },
-    { title: "Top 20 Quran words learnt", why: `Just 20 words ≈ ${covTop(20)}% of every word in the Quran.`,
+    { title: "Top 20 Quran words learnt", why: `You'll recognize ≈${covTop(20)}% of all Quranic words — familiar faces everywhere (recognition first; the surah tests measure real understanding).`,
       have: Math.min(coreLearntN, 20), need: 20, unit: "words", link: "vocab.html?sheet=1", test: "top20" },
     { title: "The protection surahs", why: "Al-Ikhlas, Al-Falaq, An-Nas — understood as recited, morning and evening.",
       have: protTested, need: 3, unit: "tests", link: "quran.html" },
@@ -269,17 +269,41 @@ async function computeMilestones() {
 
   const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
 
-  /* ---- the long view: weeks to the two big goals, at measured pace ----
-     Conversational Arabic ≈ a 300-word speaking core (everyday + stories + expansions).
-     Understanding any surah as recited ≈ the 300 highest-frequency lemmas + root
-     families, which cover ~80% of typical surah text; the rest comes from the
-     word-by-word surah work. Both targets are content the coach keeps adding. */
-  const CONV_TARGET = 300, QURAN_TARGET = 300;
+  /* ---- the long view: HONEST staged goals ----
+     Recognizing X% of words is a leading indicator, not comprehension; surah
+     tests measure real understanding. 300 words = transactional exchanges,
+     NOT free conversation (that's ~2,000+ words plus real listening/speaking
+     hours — Arabic is one of the hardest languages for English speakers, and
+     these stages say so instead of pretending otherwise). */
   const famLearnt = Object.keys(getSrs()).filter(k => k.startsWith("fam-") && isLearnt(k)).length;
   const quranLemmas = coreLearntN + famLearnt;
-  const goals = { convRemaining: Math.max(0, CONV_TARGET - msaLearnt), quranRemaining: Math.max(0, QURAN_TARGET - quranLemmas), convTarget: CONV_TARGET, quranTarget: QURAN_TARGET };
+  const grammarDone = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron"]
+    .filter(g => stepsDone("gr-" + g).test).length;
+  const log = store.get("ats-log", []);
+  const spokenAttempts = log.filter(x => ["speak", "qspeak", "vspeak", "vspeak-self", "prompt"].includes(x.e)).length;
+  const listenClicks = log.filter(x => x.e === "listen-click").length;
 
-  return { quran, msa, coverage, convPct, totalLearnt, goals };
+  const goalStages = {
+    quran: [
+      { title: "Your salah, fully understood", detail: "all 7 short surahs tested + top 60 core words — every word you recite daily",
+        have: allSurahsTested * 10 + coreLearntN, need: QURAN_SURAHS.length * 10 + 60 },
+      { title: "Follow familiar passages", detail: "≈300 lemmas ≈ 7 of every 10 words in a typical surah recognized — you can follow recitation of passages you've studied",
+        have: quranLemmas, need: 300 },
+      { title: "Follow most recitation", detail: "≈800 lemmas + the grammar patterns ≈ 9 of 10 words — unfamiliar surahs become followable (plus regular recitation listening)",
+        have: quranLemmas + grammarDone * 5, need: 800 + 40 },
+    ],
+    conv: [
+      { title: "Umrah-transactional Arabic", detail: "the full everyday core (incl. Umrah & masjid clusters) + 20 spoken prompts — you handle set scenarios: taxi, shop, pharmacy, asking help",
+        have: evTotalLearnt + promptsReady, need: evTotal + 20 },
+      { title: "Basic conversation (≈A2)", detail: "≈1,000 words + steady speaking practice — simple exchanges on familiar topics beyond scripts",
+        have: msaLearnt, need: 1000 },
+      { title: "Free conversation (B1+)", detail: "≈2,500 words + ~150 hours of real listening & speaking — understanding conversation happening around you; the honest long game",
+        have: msaLearnt, need: 2500 },
+    ],
+    spokenAttempts, listenClicks,
+  };
+
+  return { quran, msa, coverage, convPct, totalLearnt, goalStages };
 }
 
 /* study rhythm measured from the log: words/min and min/day */

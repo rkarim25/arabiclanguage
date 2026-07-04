@@ -168,18 +168,45 @@ function msTrackHtml(icon, name, ladder, pctLine) {
   return html + "</div>";
 }
 
+function fmtEta(remaining) {
+  const e = weeksTo(remaining);
+  if (e.weeks <= 8) return `≈${e.weeks} week${e.weeks > 1 ? "s" : ""}`;
+  const months = Math.round(e.weeks / 4.345);
+  return `≈${months} month${months > 1 ? "s" : ""}`;
+}
+function stageLines(stages) {
+  let reachedCurrent = false;
+  return stages.map(st => {
+    const done = st.have >= st.need;
+    let status;
+    if (done) status = `<span style="color:var(--accent);font-weight:600">✓ reached</span>`;
+    else {
+      const eta = fmtEta(st.need - st.have);
+      status = !reachedCurrent
+        ? `<strong style="color:var(--accent)">${eta} away</strong> <span style="color:var(--muted)">(${st.have}/${st.need})</span>`
+        : `<span style="color:var(--muted)">${eta} after that</span>`;
+      reachedCurrent = true;
+    }
+    return `<div style="font-size:13px;margin-top:5px">${done ? "✓" : "•"} <strong>${st.title}</strong> — ${status}
+      <div style="font-size:12px;color:var(--muted)">${st.detail}</div></div>`;
+  }).join("");
+}
+
 computeMilestones().then(ms => {
-  const convEta = weeksTo(ms.goals.convRemaining);
-  const quranEta = weeksTo(ms.goals.quranRemaining);
-  const r = convEta.rhythm;
+  const r = studyRhythm();
   document.getElementById("msTracks").innerHTML =
-    msTrackHtml("📖", "Quran", ms.quran, `you understand ≈${ms.coverage}% of all Quranic words`) +
+    msTrackHtml("📖", "Quran", ms.quran, `you recognize ≈${ms.coverage}% of all Quranic words`) +
     msTrackHtml("🗣", "Everyday MSA", ms.msa, `≈${ms.convPct}% of the conversation core`) +
     `<div style="border-top:1px dashed var(--border);padding-top:10px;margin-top:4px">
-      <div style="font-weight:700;font-size:14px">🔭 The long view — at your rhythm of ~${r.minPerDay} min/day${r.early ? " (early estimate, firms up as you study)" : ""}</div>
-      <div style="font-size:13.5px;margin-top:4px">🗣 <strong>Conversational Arabic</strong> (≈${ms.goals.convTarget}-word speaking core): ${ms.goals.convRemaining === 0 ? "✓ reached!" : `≈<strong>${convEta.weeks} week${convEta.weeks > 1 ? "s" : ""}</strong> away`}</div>
-      <div style="font-size:13.5px">📖 <strong>Understanding any surah as recited</strong> (≈${ms.goals.quranTarget} top lemmas + families ≈ 80% of typical surah text): ${ms.goals.quranRemaining === 0 ? "✓ reached!" : `≈<strong>${quranEta.weeks} week${quranEta.weeks > 1 ? "s" : ""}</strong> away`}</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:3px">More minutes per day shortens these linearly. When a 🎧 listening suggestion appears below, your learning has unlocked it — take it; real audio builds the ear word lists can't. New core words and surahs arrive automatically via coaching updates.</div>
+      <div style="font-weight:700;font-size:14px">🔭 The honest long view — at your rhythm of ~${r.minPerDay} min/day${r.early ? " (early estimate, firms up as you study)" : ""}</div>
+      <div style="font-weight:600;font-size:13px;margin-top:8px">📖 Understanding the Quran as recited</div>
+      ${stageLines(ms.goalStages.quran)}
+      <div style="font-weight:600;font-size:13px;margin-top:10px">🗣 Speaking & understanding conversation</div>
+      ${stageLines(ms.goalStages.conv)}
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">
+        Straight talk: word counts are the ETAs above; the top stages also need real listening and speaking hours — no shortcut exists, which is why the 🎧 and Speak suggestions matter (so far: ${ms.goalStages.spokenAttempts} spoken attempts, ${ms.goalStages.listenClicks} listening sessions logged).
+        Recognition % is a leading indicator; the surah and milestone tests measure true understanding. More minutes per day shortens everything linearly. Content for the higher stages arrives automatically via coaching updates.
+      </div>
     </div>`;
   document.getElementById("msStats").textContent =
     `${ms.totalLearnt} words learnt · ${dueCards().length} due for review · ${activeMinutes()} active minutes (measured from your actual interactions — open tabs count nothing)`;
