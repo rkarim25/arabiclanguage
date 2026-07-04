@@ -209,12 +209,13 @@ async function renderSheet() {
       <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
       <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Write (English → عربي)</label>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Bucket any word directly — <strong>know / repeat / later / don't repeat</strong> — with or without answering. Want to practice out loud? Use the <a href="speaking.html" style="color:var(--accent)">Speaking section</a>.</p>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Type your answer, or just recall and hit <strong>show</strong> — then bucket the word: <strong>know / repeat / later / don't repeat</strong>. Shown words aren't marked wrong; you're the judge. Practice out loud in the <a href="speaking.html" style="color:var(--accent)">Speaking section</a>.</p>
     <div class="vocab-table-wrap">
       <table class="vocab-table"><tbody id="shBody"></tbody></table>
     </div>
     <div class="ex-row" style="margin-top:12px">
       <button class="primary" id="shCheck">✓ Check the sheet</button>
+      <button id="shShowAll">👁 Show all</button>
       ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨ Phonetic keyboard</button>' : ""}
     </div>
     <div class="quiz-score" id="shScore"></div>
@@ -227,6 +228,25 @@ async function renderSheet() {
     if (e.key === "Enter") { e.preventDefault(); document.getElementById("shCheck").click(); }
   });
 
+  const revealed = new Set();
+  function showRow(i, quiet) {
+    if (revealed.has(i)) return;
+    revealed.add(i);
+    const { key, v } = sheetItems[i];
+    const row = tbody.children[i];
+    const shown = row.querySelector(".shown-answer");
+    if (sheetMode === "understand") {
+      shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}`;
+    } else {
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
+      shown.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
+    }
+    shown.style.display = "block";
+    const btn = row.querySelector(".show-btn");
+    if (btn) btn.style.display = "none";
+    if (!quiet) logEvent({ e: "reveal", key, mode: sheetMode });
+  }
+
   sheetItems.forEach(({ key, v, isNew }, i) => {
     const tr = document.createElement("tr");
     if (sheetMode === "understand") {
@@ -234,31 +254,45 @@ async function renderSheet() {
         <td class="ar-cell">${v.ar}</td>
         <td><span class="row-speak">🔊</span></td>
         <td class="tr-cell">${v.tr || ""}</td>
-        <td style="min-width:150px"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
+        <td style="min-width:150px">
+          <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning... or just recall" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
+          <span class="shown-answer" style="display:none;font-size:14px"></span>
+          <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
       `;
     } else {
       tr.innerHTML = `
         <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
-        <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
+        <td style="text-align:right">
+          <div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><button class="small show-btn" data-i="${i}">show</button><input class="fill-input" data-i="${i}" autocomplete="off"></div>
+          <span class="shown-answer" style="display:none"></span>
+          <span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
         <td class="tr-cell">${v.tr || ""}</td>
       `;
     }
     const spk = tr.querySelector(".row-speak");
     if (spk) spk.onclick = () => speak(v.ar, 0.8);
+    tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
     // buckets available immediately — mark words with or without answering
     mountBucketBar(tr.querySelector(".bucket-slot"), key);
   });
 
+  document.getElementById("shShowAll").onclick = () => {
+    sheetItems.forEach((x, i) => showRow(i, true));
+    logEvent({ e: "reveal-all", mode: sheetMode, n: sheetItems.length });
+  };
+
   if (sheetMode === "produce") {
     document.getElementById("shKb").onclick = () => mountKbDock(() => lastFocused);
   }
 
-  function showBatchScore(right) {
+  function showBatchScore(right, graded) {
+    if (graded === undefined) graded = sheetItems.length;
     sessionDone += sheetItems.length;
     document.getElementById("shScore").innerHTML =
-      `Score: ${right} / ${sheetItems.length}` +
-      (right === sheetItems.length ? " — ممتاز! 🎉" : " — the red ones come back automatically.") +
+      (graded === 0
+        ? "Self-studied — bucket each word above (know / repeat / later / don't repeat)."
+        : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉" : " — the red ones come back automatically.")) +
       `<div class="ex-row" style="margin-top:10px">
         <button class="primary" id="shMore">＋ Keep going (next ${Math.min(BATCH, pool.length - poolPos)})</button>
         <span style="font-size:13px;color:var(--muted);align-self:center">${sessionDone} words this session — stopping here is fine too</span>
@@ -274,8 +308,10 @@ async function renderSheet() {
   document.getElementById("shCheck").onclick = () => {
     if (batchChecked) return;
     batchChecked = true;
-    let right = 0;
+    let right = 0, graded = 0;
     sheetItems.forEach(({ key, v }, i) => {
+      if (revealed.has(i)) return; // shown words are self-judged via buckets, never marked wrong
+      graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const ans = tbody.querySelectorAll(".correct-answer")[i];
       const ok = sheetMode === "understand"
@@ -290,7 +326,7 @@ async function renderSheet() {
       // refresh the bucket bar (a test result replaces a stale explicit mark)
       mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
     });
-    showBatchScore(right);
+    showBatchScore(right, graded);
   };
 }
 
@@ -519,24 +555,48 @@ function renderGroupFill(obj, prefix) {
       </div>
       <div class="ex-row" style="margin-top:14px">
         <button class="primary" id="checkAll">✓ Check my answers</button>
+        <button id="fillShowAll">👁 Show all</button>
         <button class="small" id="kbToggle">⌨ Phonetic keyboard</button>
       </div>
       <div class="quiz-score" id="fillScore"></div>
-      <p style="font-size:13px;color:var(--muted)">Vowel marks optional — spelling is what's checked. After checking, bucket each word.</p>
+      <p style="font-size:13px;color:var(--muted)">Type it, or recall and hit <strong>show</strong> — shown words aren't marked wrong; bucket them yourself.</p>
     </div>
   `;
   const tbody = document.getElementById("fillBody");
   let lastFocused = null;
+  const revealed = new Set();
+
+  function showRow(i, quiet) {
+    if (revealed.has(i)) return;
+    revealed.add(i);
+    const row = tbody.children[i];
+    const shown = row.querySelector(".shown-answer");
+    shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${obj.members[i].ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
+    shown.querySelector(".row-speak").onclick = () => speak(obj.members[i].ar, 0.8);
+    shown.style.display = "block";
+    row.querySelector(".show-btn").style.display = "none";
+    if (!quiet) logEvent({ e: "reveal", key: `${prefix}${obj.id}:${i}` });
+  }
 
   obj.members.forEach((m, i) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="en-cell">${m.en}</td>
-      <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
+      <td style="text-align:right">
+        <div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><button class="small show-btn">show</button><input class="fill-input" data-i="${i}" autocomplete="off"></div>
+        <span class="shown-answer" style="display:none"></span>
+        <span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
       <td class="tr-cell">${m.tr}</td>
     `;
+    tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
+    mountBucketBar(tr.querySelector(".bucket-slot"), `${prefix}${obj.id}:${i}`);
   });
+
+  document.getElementById("fillShowAll").onclick = () => {
+    obj.members.forEach((m, i) => showRow(i, true));
+    logEvent({ e: "reveal-all", fam: prefix + obj.id, n: obj.members.length });
+  };
   tbody.addEventListener("focusin", e => { if (e.target.classList.contains("fill-input")) lastFocused = e.target; });
   tbody.addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); document.getElementById("checkAll").click(); }
@@ -551,8 +611,10 @@ function renderGroupFill(obj, prefix) {
   document.getElementById("checkAll").onclick = () => {
     if (checked) return;
     checked = true;
-    let right = 0;
+    let right = 0, graded = 0;
     obj.members.forEach((m, i) => {
+      if (revealed.has(i)) return; // shown words are self-judged via buckets
+      graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const answer = tbody.querySelectorAll(".correct-answer")[i];
       const key = `${prefix}${obj.id}:${i}`;
@@ -566,9 +628,11 @@ function renderGroupFill(obj, prefix) {
       mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
     });
     const score = document.getElementById("fillScore");
-    score.textContent = `Score: ${right} / ${obj.members.length}` + (right === obj.members.length ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
+    score.textContent = graded === 0
+      ? "Self-studied — bucket each word above."
+      : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
     setStepDone(prefix + obj.id, "fill");
-    logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: obj.members.length });
+    logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: graded });
     autoSync();
   };
 }
