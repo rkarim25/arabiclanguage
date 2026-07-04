@@ -21,6 +21,14 @@ const META = {
   111: { id: "masad",   name: "المَسَد", nameEn: "Al-Masad — The Palm Fibre", why: "Short narrative verses with past-tense verbs (تبّ، أغنى، كسب) — a story you already know, told in five lines." },
   113: { id: "falaq",   name: "الفَلَق", nameEn: "Al-Falaq — Daybreak", why: "One of the two protection surahs you recite morning and evening." },
   114: { id: "nas",     name: "النَّاس", nameEn: "An-Nas — Mankind", why: "The Quran's final surah, recited daily for protection — six short verses around one root: النَّاس." },
+  106: { id: "quraysh", name: "قُرَيْش", nameEn: "Quraysh — The Tribe", why: "Paired with Al-Fil in recitation — worship the Lord of this House, who feeds against hunger and secures against fear. You will stand at 'this House'." },
+  105: { id: "fil",     name: "الفِيل", nameEn: "Al-Fil — The Elephant", why: "The army that came for the Kaaba — five verses of vivid past-tense narrative (أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ)." },
+};
+
+/* Verse-range lessons: a famous passage rather than a whole surah, e.g. Ayat
+   al-Kursi = "2:255". Key = "<surah>:<from>[-<to>]". */
+const RANGE_META = {
+  "2:255": { id: "kursi", name: "آيَة الكُرْسِيّ", nameEn: "Ayat al-Kursi — The Throne Verse", why: "The greatest verse in the Quran — recited after every salah and before sleep. One long verse, and you already know half its words: الله، لا، إلا، هو، الحي، ما، في، السماوات، الأرض، من، عند، يعلم." },
 };
 
 function clampSentence(s, max = 220) {
@@ -31,14 +39,16 @@ function clampSentence(s, max = 220) {
   return (stop > 60 ? cut.slice(0, stop + 1) : cut).trim() + "…";
 }
 
-function genSurah(n) {
-  const meta = META[n];
-  if (!meta) throw new Error(`No META for surah ${n} — add name/nameEn/why to the META map first.`);
+function genSurah(n, range) {
+  const meta = range ? RANGE_META[range.key] : META[n];
+  if (!meta) throw new Error(`No META for ${range ? range.key : "surah " + n} — add name/nameEn/why to the ${range ? "RANGE_META" : "META"} map first.`);
   const wbw = JSON.parse(fs.readFileSync(`${QP}/ai_wbw/surah_${n}.json`, "utf8"));
   let trans = {};
   try { trans = JSON.parse(fs.readFileSync(`${QP}/ai_translations/surah_${n}.json`, "utf8")).ayahs || {}; } catch (e) {}
 
-  const verses = Object.keys(wbw).sort((a, b) => +a - +b).map(ayah => {
+  const ayahs = Object.keys(wbw).sort((a, b) => +a - +b)
+    .filter(a => !range || (+a >= range.from && +a <= range.to));
+  const verses = ayahs.map(ayah => {
     const words = Object.keys(wbw[ayah]).sort((a, b) => +a - +b).map(w => {
       const it = wbw[ayah][w];
       const ar = it.parts.map(p => p.ar).join("");
@@ -61,20 +71,24 @@ function genSurah(n) {
   return { id: meta.id, n, name: meta.name, nameEn: meta.nameEn, why: meta.why, verses };
 }
 
-const targets = process.argv.slice(2).map(Number).filter(Boolean);
-if (!targets.length) { console.error("Usage: node scripts/gen-surah.js <surah numbers...>"); process.exit(1); }
+const targets = process.argv.slice(2).filter(Boolean);
+if (!targets.length) { console.error("Usage: node scripts/gen-surah.js <surah numbers or ranges like 2:255 or 2:255-257 ...>"); process.exit(1); }
 
 const data = JSON.parse(fs.readFileSync(OUT, "utf8"));
 // annotate existing surahs with their numbers so the site can link to the Quran reader
 const NUM = Object.fromEntries(Object.entries(META).map(([n, m]) => [m.id, +n]));
 data.surahs.forEach(s => { if (!s.n && NUM[s.id]) s.n = NUM[s.id]; });
 
-targets.forEach(n => {
-  const s = genSurah(n);
+targets.forEach(t => {
+  const m = String(t).match(/^(\d+):(\d+)(?:-(\d+))?$/);
+  const n = m ? +m[1] : Number(t);
+  const range = m ? { key: `${m[1]}:${m[2]}${m[3] ? "-" + m[3] : ""}`, from: +m[2], to: +(m[3] || m[2]) } : null;
+  if (!n) { console.error(`skipping unparseable target: ${t}`); return; }
+  const s = genSurah(n, range);
   const i = data.surahs.findIndex(x => x.id === s.id);
   if (i >= 0) data.surahs[i] = { ...data.surahs[i], n: s.n, verses: data.surahs[i].verses };
   else data.surahs.push(s);
-  console.log(`surah ${n} (${s.id}): ${s.verses.length} verses, ${s.verses.reduce((a, v) => a + v.words.length, 0)} words ${i >= 0 ? "(kept hand-authored verses, added n)" : "(generated)"}`);
+  console.log(`${range ? range.key : "surah " + n} (${s.id}): ${s.verses.length} verses, ${s.verses.reduce((a, v) => a + v.words.length, 0)} words ${i >= 0 ? "(kept hand-authored verses, added n)" : "(generated)"}`);
 });
 
 fs.writeFileSync(OUT, JSON.stringify(data, null, 1) + "\n", "utf8");

@@ -10,7 +10,7 @@
   <title>Grammar — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mr6s9mxd">
+  <link rel="stylesheet" href="css/style.css?v=mr6wcr9v">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -35,8 +35,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mr6s9mxd"></script>
-<script src="js/tracker.js?v=mr6s9mxd"></script>
+<script src="js/app.js?v=mr6wcr9v"></script>
+<script src="js/tracker.js?v=mr6wcr9v"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -47,6 +47,7 @@ let PATTERNS = null;
 fetch("data/grammar.json").then(r => r.json()).then(d => {
   PATTERNS = d.patterns;
   const params = new URLSearchParams(location.search);
+  if (params.get("g") === "verbears") return renderVerbEars();
   const p = PATTERNS.find(x => x.id === params.get("g"));
   if (p) renderPattern(p);
   else renderList();
@@ -59,6 +60,10 @@ function renderList() {
   content.innerHTML = `
     <h1>Practical Grammar <span class="arabic" style="color:var(--accent)">قَوَاعِد عَمَلِيَّة</span></h1>
     <p class="sub">No tables to memorize. Eight patterns that carry most Quranic sentences — each taught through verses you already know, with a 1-minute test. Deeper notes appear word-by-word inside the <a href="quran.html">Quran lessons</a> (ⓘ نحو).</p>
+    <div class="card" style="border-color:var(--accent);margin-bottom:16px">
+      <p style="margin:0;font-size:14.5px">🎧 <a href="grammar.html?g=verbears" style="color:var(--accent);font-weight:600">Who's acting?</a> —
+      hear a verb form, name the person (he / they / we / I…). For following recitation at speed, verb endings ARE the grammar. ${gDone("verbears") ? "✓ passed" : ""}</p>
+    </div>
     <div class="g-grid" id="gGrid"></div>
   `;
   const grid = document.getElementById("gGrid");
@@ -138,11 +143,117 @@ function renderPattern(p) {
       else { ans.style.display = "block"; ans.textContent = t.ar; }
       logEvent({ e: "gfill", g: p.id, i, typed: input.value, ok });
     });
-    document.getElementById("gScore").textContent = `Score: ${right} / ${p.test.length}` + (right === p.test.length ? " — ممتاز! 🎉" : " — re-read the pattern and try again any time.");
+    let scoreMsg = `Score: ${right} / ${p.test.length}` + (right === p.test.length ? " — ممتاز! 🎉" : " — re-read the pattern and try again any time.");
+    if (right >= Math.ceil(p.test.length * 0.6)) {
+      // pattern learnt once is pattern forgotten — its chunks join the spaced-review deck
+      const added = seedCards(p.test.map((t, i) => `gt:${p.id}:${i}`));
+      if (added) scoreMsg += ` These ${added} pattern chunks will now resurface in your Review on a spaced schedule.`;
+    }
+    document.getElementById("gScore").textContent = scoreMsg;
     setStepDone("gr-" + p.id, "test");
     logEvent({ e: "gtest-done", g: p.id, score: right, total: p.test.length });
     autoSync();
   };
+}
+
+/* ================= Who's acting? — verb endings by ear =================
+   Hear a conjugated verb, name the doer. The endings (-a/-at/-ū/-nā/-tu/-ta,
+   ya-/ta-/na-/a-) carry who's acting in every Quranic sentence — recognizing
+   them at recitation speed matters more than any paradigm table. */
+const VE_PERSONS = [
+  ["he", "هُوَ"], ["she", "هِيَ"], ["they", "هُمْ"], ["we", "نَحْنُ"], ["I", "أَنَا"], ["you", "أَنْتَ"],
+];
+const VE_TU_TA = "The -tu/-ta pair differ only in the final vowel: ‑تُ = I, ‑تَ = you.";
+const VE_VERBS = [
+  { en: "said", past: { he: "قَالَ", she: "قَالَتْ", they: "قَالُوا", we: "قُلْنَا", I: "قُلْتُ", you: "قُلْتَ" },
+    pres: { he: "يَقُولُ", they: "يَقُولُونَ", we: "نَقُولُ", I: "أَقُولُ", shey: "تَقُولُ" } },
+  { en: "wrote", past: { he: "كَتَبَ", she: "كَتَبَتْ", they: "كَتَبُوا", we: "كَتَبْنَا", I: "كَتَبْتُ", you: "كَتَبْتَ" },
+    pres: { he: "يَكْتُبُ", they: "يَكْتُبُونَ", we: "نَكْتُبُ", I: "أَكْتُبُ", shey: "تَكْتُبُ" } },
+  { en: "did", past: { he: "عَمِلَ", she: "عَمِلَتْ", they: "عَمِلُوا", we: "عَمِلْنَا", I: "عَمِلْتُ", you: "عَمِلْتَ" },
+    pres: { he: "يَعْمَلُ", they: "يَعْمَلُونَ", we: "نَعْمَلُ", I: "أَعْمَلُ", shey: "تَعْمَلُ" } },
+  { en: "heard", past: { he: "سَمِعَ", she: "سَمِعَتْ", they: "سَمِعُوا", we: "سَمِعْنَا", I: "سَمِعْتُ", you: "سَمِعْتَ" },
+    pres: { he: "يَسْمَعُ", they: "يَسْمَعُونَ", we: "نَسْمَعُ", I: "أَسْمَعُ", shey: "تَسْمَعُ" } },
+  { en: "went", past: { he: "ذَهَبَ", she: "ذَهَبَتْ", they: "ذَهَبُوا", we: "ذَهَبْنَا", I: "ذَهَبْتُ", you: "ذَهَبْتَ" },
+    pres: { he: "يَذْهَبُ", they: "يَذْهَبُونَ", we: "نَذْهَبُ", I: "أَذْهَبُ", shey: "تَذْهَبُ" } },
+  { en: "knew", past: { he: "عَلِمَ", she: "عَلِمَتْ", they: "عَلِمُوا", we: "عَلِمْنَا", I: "عَلِمْتُ", you: "عَلِمْتَ" },
+    pres: { he: "يَعْلَمُ", they: "يَعْلَمُونَ", we: "نَعْلَمُ", I: "أَعْلَمُ", shey: "تَعْلَمُ" } },
+];
+function veItems() {
+  const items = [];
+  VE_VERBS.forEach(v => {
+    Object.entries(v.past).forEach(([who, ar]) => {
+      const accept = who === "I" || who === "you" ? ["I", "you"] : [who];
+      items.push({ ar, who: accept, en: `${who} ${v.en}`, tense: "past", note: who === "I" || who === "you" ? VE_TU_TA : "" });
+    });
+    const base = { said: "say", wrote: "write", did: "do", heard: "hear", went: "go", knew: "know" }[v.en];
+    const third = { said: "says", wrote: "writes", did: "does", heard: "hears", went: "goes", knew: "knows" }[v.en];
+    Object.entries(v.pres).forEach(([who, ar]) => {
+      const accept = who === "shey" ? ["she", "you"] : [who];
+      const en = who === "he" ? `he ${third}` : who === "shey" ? `she ${third} / you ${base}` : `${who} ${base}`;
+      items.push({ ar, who: accept, en, tense: "present", note: who === "shey" ? "تَـ… serves both she and you — context decides." : "" });
+    });
+  });
+  return items;
+}
+function renderVerbEars() {
+  trackPage("grammar:verbears");
+  const hasVoice = hasArabicVoice();
+  const ROUNDS = 12;
+  const order = veItems().sort(() => 0.5 - Math.random()).slice(0, ROUNDS);
+  let pos = 0, right = 0;
+  content.innerHTML = `
+    <p><a href="grammar.html" style="color:var(--accent);text-decoration:none">← All patterns</a></p>
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Who's acting?</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">مَنِ الفَاعِل؟</span>
+    </h1>
+    <p class="sub">${hasVoice
+      ? "You'll HEAR a verb — no text. Name the doer. The ending tells you: ‑َ he · ‑َتْ she · ‑ُوا they · ‑نَا we · ‑تُ I · ‑تَ you; up front: يـ he/they · تـ she/you · نـ we · أ I."
+      : "No Arabic voice on this device, so you'll READ the forms instead — the endings still tell you everything."}</p>
+    <div class="card"><div class="drill-stage" id="veStage" style="text-align:center;padding:20px 0"></div></div>
+  `;
+  const stage = document.getElementById("veStage");
+  function ask() {
+    if (pos >= order.length) return finish();
+    const it = order[pos];
+    stage.innerHTML = `
+      <div style="font-size:12px;color:var(--muted)">${pos + 1} / ${order.length} · ${it.tense}</div>
+      ${hasVoice
+        ? `<button class="primary" id="vePlay" style="font-size:18px;margin:12px 0">🔊 Play the verb</button>`
+        : `<div class="arabic" style="font-size:34px;margin:12px 0" dir="rtl">${it.ar}</div>`}
+      <div class="ex-row" style="justify-content:center;flex-wrap:wrap" id="veBtns">
+        ${VE_PERSONS.map(([id, ar]) => `<button data-w="${id}" style="min-width:86px">${id} <span class="arabic" style="font-size:16px">${ar}</span></button>`).join("")}
+      </div>
+      <div class="drill-fb" id="veFb" style="min-height:64px;margin-top:12px;font-size:15px"></div>
+    `;
+    const play = document.getElementById("vePlay");
+    if (play) { play.onclick = () => speak(it.ar, 0.75); speak(it.ar, 0.75); }
+    document.querySelectorAll("#veBtns button").forEach(b => b.onclick = () => {
+      const ok = it.who.includes(b.dataset.w);
+      if (ok) right++;
+      logEvent({ e: "vdrill", ar: stripTashkeel(it.ar), picked: b.dataset.w, ok });
+      document.getElementById("veFb").innerHTML =
+        `${ok ? '<span style="color:var(--accent);font-weight:700;font-size:18px">✓</span>' : '<span style="color:var(--red);font-weight:700;font-size:18px">✗</span>'}
+         <span class="arabic" style="font-size:26px" dir="rtl">${it.ar}</span> — ${it.en}
+         ${it.note ? `<div style="font-size:12.5px;color:var(--muted)">${it.note}</div>` : ""}`;
+      document.querySelectorAll("#veBtns button").forEach(x => x.disabled = true);
+      pos++;
+      setTimeout(ask, ok ? 1100 : 2600);
+    });
+  }
+  function finish() {
+    const pass = right >= Math.ceil(order.length * 0.8);
+    if (pass) setStepDone("gr-verbears", "test");
+    logEvent({ e: "vdrill-done", score: right, total: order.length });
+    autoSync();
+    stage.innerHTML = `
+      <div style="font-size:22px;font-weight:700">${right} / ${order.length} ${pass ? "— ممتاز! 🎉 Your ears know the endings." : ""}</div>
+      ${pass ? "" : `<p style="font-size:14px;color:var(--muted)">80% passes. The endings: ‑َ he · ‑َتْ she · ‑ُوا they · ‑نَا we · ‑تُ I · ‑تَ you.</p>`}
+      <div class="ex-row" style="justify-content:center;margin-top:10px"><button class="primary" id="veAgain">Drill again</button></div>
+    `;
+    document.getElementById("veAgain").onclick = renderVerbEars;
+  }
+  ask();
 }
 
 /* shared phonetic keyboard dock (same as Vocab Lab) */

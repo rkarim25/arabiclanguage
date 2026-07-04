@@ -4,8 +4,9 @@ const STORY_LIST = [
   { id: "story-01", level: 1, n: 1, titleAr: "يَوْمِي", titleEn: "My Day", desc: "A simple daily routine, morning to night.", words: 35 },
   { id: "story-02", level: 1, n: 2, titleAr: "عَائِلَتِي وَبَيْتُنَا", titleEn: "My Family and Our Home", desc: "Ahmad introduces his family and house.", words: 35 },
   { id: "story-03", level: 1, n: 3, titleAr: "فِي السُّوقِ", titleEn: "At the Market", desc: "Saturday shopping with mother.", words: 39 },
-  { id: "story-04", level: 1, n: 4, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
-  { id: "story-05", level: 1, n: 5, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
+  { id: "story-04", level: 1, n: 4, titleAr: "يَوْمُ الجُمُعَةِ", titleEn: "Friday", desc: "Ghusl, the walk to the masjid, the khutbah, the prayer.", words: 38 },
+  { id: "story-05", level: 1, n: 5, titleAr: "فِي المَطْعَمِ", titleEn: "At the Restaurant", desc: "Your first full dialogue — ordering dinner, start to bill.", words: 32 },
+  { id: "story-06", level: 1, n: 6, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
 ];
 
 /* Root-family manifest (full data in data/families.json) */
@@ -149,7 +150,7 @@ function setBucket(key, b) {
 /* categories (not mutually exclusive): every word is Quran and/or MSA */
 function catsOf(key) {
   const sid = key.split(":")[0];
-  if (sid === "qc" || sid === "qw") return ["quran"];
+  if (sid === "qc" || sid === "qw" || sid === "gt") return ["quran"];
   if (sid.startsWith("fam-")) return ["quran", "msa"]; // Quranic roots used in MSA too
   return ["msa"]; // everyday clusters and story vocabulary
 }
@@ -217,6 +218,7 @@ async function computeMilestones() {
   const surahTested = id => stepsDone("q-" + id).test ? 1 : 0;
   const protTested = surahTested("ikhlas") + surahTested("falaq") + surahTested("nas");
   const allSurahsTested = QURAN_SURAHS.filter(s => stepsDone("q-" + s.id).test).length;
+  const coldListened = QURAN_SURAHS.filter(s => stepsDone("q-" + s.id).listen).length;
 
   const quran = [
     { title: "Al-Fatiha, word by word", why: "You understand every word of every rak'ah you pray — 17+ times a day.",
@@ -227,6 +229,8 @@ async function computeMilestones() {
       have: protTested, need: 3, unit: "tests", link: "quran.html" },
     { title: "Top 40 Quran words learnt", why: `≈${covTop(40)}% of all Quranic text recognizable on hearing.`,
       have: Math.min(coreLearntN, 40), need: 40, unit: "words", link: "vocab.html?sheet=1", test: "top40" },
+    { title: "3 surahs certified by ear", why: "The cold-listen test: real recitation, no text, you pick each verse's meaning — the goal itself, measured honestly.",
+      have: Math.min(coldListened, 3), need: 3, unit: "tests", link: "quran.html" },
     { title: `All ${QURAN_SURAHS.length} surahs tested`, why: "Everything you commonly hear recited — understood word by word.",
       have: allSurahsTested, need: QURAN_SURAHS.length, unit: "tests", link: "quran.html" },
     { title: "Full core + all root families", why: `All 60 core words (≈${covTop(60)}% of the Quran) plus 15 roots and their derived forms.`,
@@ -242,8 +246,8 @@ async function computeMilestones() {
   const s1Steps = STEPS.filter(st => stepsDone("story-01")[st.key]).length;
   const s1Words = Array.from({ length: 35 }, (x, i) => isLearnt(`story-01:${i}`)).filter(Boolean).length;
   const storiesComplete = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
-  const storyLearnt = ["story-01", "story-02", "story-03"].reduce((a, sid) =>
-    a + Object.keys(getSrs()).filter(k => k.startsWith(sid + ":") && isLearnt(k)).length, 0);
+  const storyLearnt = STORY_LIST.filter(s => !s.locked).reduce((a, s) =>
+    a + Object.keys(getSrs()).filter(k => k.startsWith(s.id + ":") && isLearnt(k)).length, 0);
   const msaLearnt = evTotalLearnt + storyLearnt;
   const storyTotal = STORY_LIST.filter(s => !s.locked).reduce((a, s) => a + (s.words || 0), 0);
   // conversational coverage: share of the site's conversation core (everyday + story vocab) learnt
@@ -264,8 +268,8 @@ async function computeMilestones() {
       have: promptsReady, need: 20, unit: "prompts", link: "speaking.html" },
     { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the ${everyday.length} clusters — shops, food, time, people, the whole journey.`,
       have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html", test: "survival" },
-    { title: "All 3 stories + 150 MSA words", why: "Comfortable with connected everyday narrative — ready for level 2 stories.",
-      have: storiesComplete + Math.min(msaLearnt, 150), need: 3 + 150, unit: "stories+words", link: "index.html" },
+    { title: `All ${STORY_LIST.filter(s => !s.locked).length} stories + 150 MSA words`, why: "Comfortable with connected everyday narrative and dialogue — ready for level 2.",
+      have: storiesComplete + Math.min(msaLearnt, 150), need: STORY_LIST.filter(s => !s.locked).length + 150, unit: "stories+words", link: "index.html" },
   ];
 
   const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
@@ -278,7 +282,7 @@ async function computeMilestones() {
      these stages say so instead of pretending otherwise). */
   const famLearnt = Object.keys(getSrs()).filter(k => k.startsWith("fam-") && isLearnt(k)).length;
   const quranLemmas = coreLearntN + famLearnt;
-  const grammarDone = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron"]
+  const grammarDone = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron", "verbears"]
     .filter(g => stepsDone("gr-" + g).test).length;
   const log = store.get("ats-log", []);
   const spokenAttempts = log.filter(x => ["speak", "qspeak", "vspeak", "vspeak-self", "prompt"].includes(x.e)).length;
@@ -286,8 +290,8 @@ async function computeMilestones() {
 
   const goalStages = {
     quran: [
-      { title: "Your salah, fully understood", detail: `all ${QURAN_SURAHS.length} short surahs tested + top 60 core words — every word you recite daily`,
-        have: allSurahsTested * 10 + coreLearntN, need: QURAN_SURAHS.length * 10 + 60 },
+      { title: "Your salah, fully understood", detail: "the 7 salah surahs tested + top 60 core words — every word you recite daily (a fixed bar: new lessons never move it)",
+        have: SALAH_SURAH_IDS.filter(id => stepsDone("q-" + id).test).length * 10 + coreLearntN, need: SALAH_SURAH_IDS.length * 10 + 60 },
       { title: "Follow familiar passages", detail: "≈300 lemmas ≈ 7 of every 10 words in a typical surah recognized — you can follow recitation of passages you've studied",
         have: quranLemmas, need: 300 },
       { title: "Follow most recitation", detail: "≈800 lemmas + the grammar patterns ≈ 9 of 10 words — unfamiliar surahs become followable (plus regular recitation listening)",
@@ -319,6 +323,7 @@ async function computeMilestones() {
   log.forEach(x => {
     if (x.e === "mstest" && x.pass) history.push({ t: x.t, label: `${x.mode === "official" ? "🏅 Certified" : "📝 Mock passed"}: ${TEST_TITLES[x.ms] || x.ms} — ${x.score}/${x.total}` });
     if (x.e === "qtest-done") history.push({ t: x.t, label: `📖 Surah ${surahName(x.surah)} word-meanings test — ${x.score}/${x.total}` });
+    if (x.e === "qlisten-test") history.push({ t: x.t, label: `${x.pass ? "🎧 Certified by ear" : "🎧 Cold listen attempt"}: Surah ${surahName(x.surah)} — ${x.score}/${x.total}` });
     if (x.e === "drill-done") history.push({ t: x.t, label: `⚡ Drilled ${groupName(x.fam)} — ${x.score}/${x.total} in ${x.secs}s` });
     if (x.e === "gtest-done" && x.score === x.total) history.push({ t: x.t, label: `🧩 Grammar pattern "${x.g}" — ${x.score}/${x.total}` });
   });
@@ -392,14 +397,25 @@ const QURAN_SURAHS = [
   { id: "qadr", name: "Al-Qadr", ar: "القدر", n: 97 },
   { id: "kafirun", name: "Al-Kafirun", ar: "الكافرون", n: 109 },
   { id: "masad", name: "Al-Masad", ar: "المسد", n: 111 },
+  { id: "quraysh", name: "Quraysh", ar: "قريش", n: 106 },
+  { id: "fil", name: "Al-Fil", ar: "الفيل", n: 105 },
+  { id: "kursi", name: "Ayat al-Kursi", ar: "آية الكرسي", n: 2 },
 ];
+/* The salah bar is FIXED — adding new lessons must never move this goalpost. */
+const SALAH_SURAH_IDS = ["fatiha", "ikhlas", "falaq", "nas", "kawthar", "asr", "qadr"];
 
 function suggestNext() {
   const out = [];
   const due = dueCards().length;
-  // 1. Vocab Learn — the always-right micro-lesson, as short or long as wanted
+  // 0. The one-button day: zero decisions, just start
   out.push({
-    icon: "📝", title: "Vocab Learn" + (due ? ` (${due} due)` : ""),
+    icon: "▶", title: "Start my 5 minutes" + (due ? ` (${due} due)` : ""),
+    desc: "One tap: due reviews → a few new words → an ears round. It stops by itself.",
+    href: "vocab.html?today=1",
+  });
+  // 1. Vocab Learn — pick your own lane when you want more control
+  out.push({
+    icon: "📝", title: "Vocab Learn",
     desc: "Auto-picked, frequency-first — fill a column, check, continue or stop",
     href: "vocab.html?sheet=1",
   });
@@ -446,6 +462,7 @@ function suggestNext() {
     ["negation", "لا / ما / لم / لن — saying 'not'"],
     ["connectors", "وَ / فَـ / ثُمَّ — and, so, then"],
     ["prep-pron", "لَهُ / فِيهِ — fused prepositions"],
+    ["verbears", "🎧 who's acting? — verb endings by ear"],
   ];
   const nextG = GRAMMAR_LIST.find(([g]) => !stepsDone("gr-" + g).test);
   if (nextG) out.push({
@@ -755,21 +772,23 @@ function fuzzyEn(typed, gloss) {
    Keys: "story-01:5", "fam-qwl:3", "qc:12", "qw:fatiha:2:1" */
 async function resolveCards(keys) {
   const needStories = new Set();
-  let needFams = false, needCore = false, needVerses = false, needEv = false;
+  let needFams = false, needCore = false, needVerses = false, needEv = false, needGrammar = false;
   keys.forEach(k => {
     const sid = k.split(":")[0];
     if (sid === "qc") needCore = true;
     else if (sid === "qw") needVerses = true;
+    else if (sid === "gt") needGrammar = true;
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;
     else needStories.add(sid);
   });
   const stories = {};
-  const [fams, core, verses, everyday] = await Promise.all([
+  const [fams, core, verses, everyday, grammar] = await Promise.all([
     needFams ? fetch("data/families.json").then(r => r.json()).then(d => d.families) : null,
     needCore ? fetch("data/quran-core.json").then(r => r.json()).then(d => d.words) : null,
     needVerses ? fetch("data/verses.json").then(r => r.json()).then(d => d.surahs) : null,
     needEv ? fetch("data/everyday.json").then(r => r.json()).then(d => d.groups) : null,
+    needGrammar ? fetch("data/grammar.json").then(r => r.json()).then(d => d.patterns) : null,
     Promise.all([...needStories].map(async id => {
       try { stories[id] = await loadStory(id); } catch (e) { /* removed story */ }
     })),
@@ -777,7 +796,12 @@ async function resolveCards(keys) {
   return keys.map(k => {
     const p = k.split(":");
     let v = null;
-    if (p[0] === "qc") {
+    if (p[0] === "gt") {
+      // grammar chunk: see the Arabic pattern piece, recall what it does
+      const pat = grammar && grammar.find(x => x.id === p[1]);
+      const t = pat && pat.test[parseInt(p[2])];
+      if (t) v = { ar: t.ar, en: `${t.prompt}${t.hint ? ` (${t.hint})` : ""}`, tr: "", note: "grammar — " + pat.name };
+    } else if (p[0] === "qc") {
       const w = core && core[parseInt(p[1])];
       if (w) v = { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` };
     } else if (p[0] === "qw") {

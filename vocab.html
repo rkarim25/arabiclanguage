@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mr6s9mxd">
+  <link rel="stylesheet" href="css/style.css?v=mr6wcr9v">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +57,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mr6s9mxd"></script>
-<script src="js/tracker.js?v=mr6s9mxd"></script>
+<script src="js/app.js?v=mr6wcr9v"></script>
+<script src="js/tracker.js?v=mr6wcr9v"></script>
 <script>
 renderNav("vocab");
 
@@ -81,8 +81,61 @@ Promise.all([
   const ev = EV.find(x => x.id === params.get("ev"));
   if (fam) renderGroup(fam, params.get("mode") || "study", "fam-");
   else if (ev) renderGroup(ev, params.get("mode") || "study", "ev-");
+  else if (params.get("today")) startToday(0);
   else renderList(params.get("view") || "learn");
 });
+
+/* ================= one-button day =================
+   "Start my 5 minutes": due review → a few new words → an ears round.
+   Zero decisions — the sequence is picked automatically and just stops. */
+let TODAY = null;
+const TODAY_STAGES = [
+  { id: "review", label: "Review what's due", mode: "understand" },
+  { id: "new", label: "A few new words", mode: "understand" },
+  { id: "ears", label: "Ears round", mode: "ears" },
+];
+async function buildTodayPool(stageId) {
+  if (stageId === "review") {
+    return (await resolveCards(dueCards().slice(0, 10))).map(x => ({ ...x, isNew: false }));
+  }
+  if (stageId === "new") {
+    const all = await buildPool();
+    return all.filter(x => x.isNew).slice(0, 5);
+  }
+  const srs = getSrs();
+  const keys = Object.keys(srs).filter(k => srs[k].box >= 1 && srs[k].b !== "never")
+    .sort(() => 0.5 - Math.random()).slice(0, 5);
+  return (await resolveCards(keys)).map(x => ({ ...x, isNew: false }));
+}
+async function startToday(stage) {
+  TODAY = { stage };
+  const st = TODAY_STAGES[stage];
+  if (st.id === "ears" && !hasArabicVoice()) return finishToday(); // no voice — end gracefully
+  const p = await buildTodayPool(st.id);
+  if (!p.length) {
+    if (stage < TODAY_STAGES.length - 1) return startToday(stage + 1);
+    return finishToday();
+  }
+  sheetMode = st.mode;
+  pool = p; poolPos = 0; sheetItems = null;
+  poolLabel = `▶ Today, step ${stage + 1} of ${TODAY_STAGES.length} — ${st.label}`;
+  renderList("learn");
+  window.scrollTo({ top: 0 });
+}
+function finishToday() {
+  TODAY = null;
+  logEvent({ e: "today-done" });
+  autoSync();
+  renderList("learn");
+  const area = document.getElementById("sheetArea");
+  if (area) area.innerHTML = `
+    <p style="font-size:20px;font-weight:700">🕌 That's your five minutes — done. <span class="arabic">أَحْسَنْت!</span></p>
+    <p style="color:var(--muted)">Same again after the next salah. Every round like this pulls every milestone date closer.</p>
+    <div class="ex-row">
+      <a href="index.html"><button class="primary">Back to the dashboard</button></a>
+      <a href="vocab.html?view=learn"><button>Keep going anyway</button></a>
+    </div>`;
+}
 
 function groupDone(prefix, id) { return !!stepsDone(prefix + id).fill; }
 
@@ -389,7 +442,12 @@ async function renderSheet() {
     logEvent({ e: "sheet-done", mode: sheetMode, score: right, total: graded });
     autoSync();
     const more = document.getElementById("shMore");
-    if (pool.length - poolPos <= 0) more.style.display = "none";
+    if (TODAY) {
+      const last = TODAY.stage >= TODAY_STAGES.length - 1;
+      more.style.display = "";
+      more.textContent = last ? "✓ Finish today's round" : "Next step →";
+      more.onclick = () => last ? finishToday() : startToday(TODAY.stage + 1);
+    } else if (pool.length - poolPos <= 0) more.style.display = "none";
     else more.onclick = () => { sheetItems = null; renderSheet(); window.scrollTo({ top: 0 }); };
   }
 

@@ -1,112 +1,917 @@
 {
-  "about": "The highest-frequency words in the Quran, ordered by approximate occurrence count. Learning these first gives maximum comprehension per word memorized — the top ~300 lemmas cover the large majority of all Quranic text.",
-  "words": [
-    { "ar": "مِنْ", "tr": "min", "en": "from; of", "n": 3226 },
-    { "ar": "اللَّه", "tr": "Allāh", "en": "Allah", "n": 2699 },
-    { "ar": "مَا", "tr": "mā", "en": "what; not", "n": 2199 },
-    { "ar": "لَا", "tr": "lā", "en": "no; not", "n": 1809 },
-    { "ar": "قَالَ", "tr": "qāla", "en": "he said", "n": 1722, "fam": "qwl" },
-    { "ar": "فِي", "tr": "fī", "en": "in", "n": 1701 },
-    { "ar": "إِنَّ", "tr": "inna", "en": "indeed; truly", "n": 1682 },
-    { "ar": "عَلَى", "tr": "ʿalā", "en": "upon; on", "n": 1445 },
-    { "ar": "كَانَ", "tr": "kāna", "en": "he was; it was", "n": 1358 },
-    { "ar": "الَّذِينَ", "tr": "alladhīna", "en": "those who", "n": 1080 },
-    { "ar": "رَبّ", "tr": "rabb", "en": "Lord", "n": 975 },
-    { "ar": "إِلَى", "tr": "ilā", "en": "to; towards", "n": 742 },
-    { "ar": "إِلَّا", "tr": "illā", "en": "except; but", "n": 663 },
-    { "ar": "يَوْم", "tr": "yawm", "en": "day", "n": 475, "fam": "ywm" },
-    { "ar": "أَرْض", "tr": "arḍ", "en": "earth; land", "n": 461 },
-    { "ar": "إِذَا", "tr": "idhā", "en": "when; if", "n": 423 },
-    { "ar": "قَوْم", "tr": "qawm", "en": "people; nation", "n": 383 },
-    { "ar": "آيَات", "tr": "āyāt", "en": "signs; verses", "n": 382 },
-    { "ar": "كُلّ", "tr": "kull", "en": "every; all", "n": 358 },
-    { "ar": "ثُمَّ", "tr": "thumma", "en": "then; afterwards", "n": 338 },
-    { "ar": "قُلْ", "tr": "qul", "en": "say!", "n": 332, "fam": "qwl" },
-    { "ar": "عَذَاب", "tr": "ʿadhāb", "en": "punishment", "n": 322 },
-    { "ar": "كِتَاب", "tr": "kitāb", "en": "book; scripture", "n": 319, "fam": "ktb" },
-    { "ar": "سَمَاء", "tr": "samāʾ", "en": "sky; heaven", "n": 310 },
-    { "ar": "نَفْس", "tr": "nafs", "en": "soul; self", "n": 295 },
-    { "ar": "كَفَرُوا", "tr": "kafarū", "en": "they disbelieved", "n": 289 },
-    { "ar": "شَيْء", "tr": "shayʾ", "en": "thing", "n": 283 },
-    { "ar": "عِبَاد", "tr": "ʿibād", "en": "servants (of Allah)", "n": 275 },
-    { "ar": "آمَنُوا", "tr": "āmanū", "en": "they believed", "n": 263 },
-    { "ar": "حَقّ", "tr": "ḥaqq", "en": "truth; right", "n": 247 },
-    { "ar": "بَيْن", "tr": "bayna", "en": "between", "n": 245 },
-    { "ar": "النَّاس", "tr": "an-nās", "en": "mankind; the people", "n": 241 },
-    { "ar": "قَبْل", "tr": "qabl", "en": "before", "n": 242 },
-    { "ar": "رَسُول", "tr": "rasūl", "en": "messenger", "n": 236 },
-    { "ar": "جَاءَ", "tr": "jāʾa", "en": "he came", "n": 236 },
-    { "ar": "أُولَٰئِكَ", "tr": "ulāʾika", "en": "those; they are the ones", "n": 204 },
-    { "ar": "عِنْد", "tr": "ʿinda", "en": "with; at; in the sight of", "n": 197 },
-    { "ar": "بَعْد", "tr": "baʿda", "en": "after", "n": 196 },
-    { "ar": "هَٰذَا", "tr": "hādhā", "en": "this", "n": 190 },
-    { "ar": "خَيْر", "tr": "khayr", "en": "good; better", "n": 186 },
-    { "ar": "خَلَقَ", "tr": "khalaqa", "en": "he created", "n": 184 },
-    { "ar": "سَبِيل", "tr": "sabīl", "en": "way; path", "n": 176 },
-    { "ar": "أَمْر", "tr": "amr", "en": "command; matter", "n": 166 },
-    { "ar": "مَوْت", "tr": "mawt", "en": "death", "n": 165 },
-    { "ar": "عَلِيم", "tr": "ʿalīm", "en": "All-Knowing", "n": 162, "fam": "3lm" },
-    { "ar": "آتَى", "tr": "ātā", "en": "he gave", "n": 274 },
-    { "ar": "جَنَّة", "tr": "janna", "en": "garden; Paradise", "n": 147 },
-    { "ar": "نَار", "tr": "nār", "en": "fire", "n": 145 },
-    { "ar": "لَعَلَّ", "tr": "laʿalla", "en": "so that perhaps; that you may", "n": 129 },
-    { "ar": "دُنْيَا", "tr": "dunyā", "en": "the worldly life", "n": 115, "fam": "hyy" },
-    { "ar": "آخِرَة", "tr": "ākhira", "en": "the Hereafter", "n": 115 },
-    { "ar": "رَحِيم", "tr": "raḥīm", "en": "Most Merciful", "n": 115 },
-    { "ar": "عَظِيم", "tr": "ʿaẓīm", "en": "great; tremendous", "n": 107 },
-    { "ar": "عَزِيز", "tr": "ʿazīz", "en": "Almighty; Exalted", "n": 99 },
-    { "ar": "حَكِيم", "tr": "ḥakīm", "en": "All-Wise", "n": 97 },
-    { "ar": "غَفُور", "tr": "ghafūr", "en": "Oft-Forgiving", "n": 91 },
-    { "ar": "هُدًى", "tr": "hudan", "en": "guidance", "n": 85 },
-    { "ar": "صَلَاة", "tr": "ṣalāh", "en": "prayer", "n": 83, "fam": "slw" },
-    { "ar": "مُؤْمِنُون", "tr": "muʾminūn", "en": "believers", "n": 202 },
-    { "ar": "صَالِحَات", "tr": "ṣāliḥāt", "en": "righteous deeds", "n": 62, "fam": "3ml" },
-    { "ar": "مَنْ", "tr": "man", "en": "who; whoever", "n": 606 },
-    { "ar": "أَنْ", "tr": "an", "en": "that; to", "n": 578 },
-    { "ar": "عَلِمَ", "tr": "ʿalima", "en": "he knew", "n": 518, "fam": "3lm" },
-    { "ar": "هُوَ", "tr": "huwa", "en": "he; He", "n": 481 },
-    { "ar": "ذَٰلِكَ", "tr": "dhālika", "en": "that", "n": 478 },
-    { "ar": "قَدْ", "tr": "qad", "en": "indeed; already", "n": 406 },
-    { "ar": "إِنْ", "tr": "in", "en": "if", "n": 403 },
-    { "ar": "لَمْ", "tr": "lam", "en": "did not", "n": 353 },
-    { "ar": "جَعَلَ", "tr": "jaʿala", "en": "he made; placed", "n": 346 },
-    { "ar": "الَّذِي", "tr": "alladhī", "en": "who; the one who", "n": 304 },
-    { "ar": "عَمِلَ", "tr": "ʿamila", "en": "he did; worked", "n": 276, "fam": "3ml" },
-    { "ar": "أَخَذَ", "tr": "akhadha", "en": "he took; seized", "n": 273 },
-    { "ar": "رَأَى", "tr": "raʾā", "en": "he saw", "n": 271 },
-    { "ar": "إِذْ", "tr": "idh", "en": "when; (remember) when", "n": 239 },
-    { "ar": "شَاءَ", "tr": "shāʾa", "en": "he willed; wished", "n": 236 },
-    { "ar": "دَعَا", "tr": "daʿā", "en": "he called upon; prayed to", "n": 170 },
-    { "ar": "مِثْل", "tr": "mithl", "en": "like; similar to", "n": 169 },
-    { "ar": "اتَّقَىٰ", "tr": "ittaqā", "en": "he was mindful (of Allah); feared Allah", "n": 166 },
-    { "ar": "بَعْض", "tr": "baʿḍ", "en": "some; part of", "n": 157 },
-    { "ar": "غَيْر", "tr": "ghayr", "en": "other than; not", "n": 154 },
-    { "ar": "حَتَّىٰ", "tr": "ḥattā", "en": "until", "n": 142 },
-    { "ar": "اتَّبَعَ", "tr": "ittabaʿa", "en": "he followed", "n": 140 },
-    { "ar": "أَرَادَ", "tr": "arāda", "en": "he wanted; intended", "n": 139 },
-    { "ar": "أَمْ", "tr": "am", "en": "or (in a question)", "n": 137 },
-    { "ar": "قَلْب", "tr": "qalb", "en": "heart", "n": 132 },
-    { "ar": "بَلْ", "tr": "bal", "en": "rather; nay", "n": 127 },
-    { "ar": "أَهْل", "tr": "ahl", "en": "people of; family", "n": 127 },
-    { "ar": "وَعَدَ", "tr": "waʿada", "en": "he promised", "n": 124 },
-    { "ar": "خَافَ", "tr": "khāfa", "en": "he feared", "n": 124 },
-    { "ar": "يَد", "tr": "yad", "en": "hand", "n": 120 },
-    { "ar": "رَحْمَة", "tr": "raḥma", "en": "mercy", "n": 114 },
-    { "ar": "ضَلَّ", "tr": "ḍalla", "en": "he went astray", "n": 113 },
-    { "ar": "لَنْ", "tr": "lan", "en": "will not (future)", "n": 106 },
-    { "ar": "عِلْم", "tr": "ʿilm", "en": "knowledge", "n": 105, "fam": "3lm" },
-    { "ar": "أَجْر", "tr": "ajr", "en": "reward", "n": 105 },
-    { "ar": "هَلْ", "tr": "hal", "en": "is...? (question word)", "n": 93 },
-    { "ar": "كَيْفَ", "tr": "kayfa", "en": "how", "n": 83 },
-    { "ar": "أَوَّل", "tr": "awwal", "en": "first", "n": 82 },
-    { "ar": "حَيَاة", "tr": "ḥayāh", "en": "life", "n": 76, "fam": "hyy" },
-    { "ar": "نَبِيّ", "tr": "nabiyy", "en": "prophet", "n": 75 },
-    { "ar": "كَثِير", "tr": "kathīr", "en": "many; much", "n": 74 },
-    { "ar": "مَلَائِكَة", "tr": "malāʾika", "en": "angels", "n": 73 },
-    { "ar": "قَلِيل", "tr": "qalīl", "en": "few; little", "n": 71 },
-    { "ar": "مَاء", "tr": "māʾ", "en": "water", "n": 63 },
-    { "ar": "سَمِيع", "tr": "samīʿ", "en": "All-Hearing", "n": 45 },
-    { "ar": "قَدِير", "tr": "qadīr", "en": "All-Powerful", "n": 45 },
-    { "ar": "بَصِير", "tr": "baṣīr", "en": "All-Seeing", "n": 42 }
-  ]
+ "about": "The highest-frequency words in the Quran, ordered by approximate occurrence count. Learning these first gives maximum comprehension per word memorized — the top ~300 lemmas cover the large majority of all Quranic text.",
+ "words": [
+  {
+   "ar": "مِنْ",
+   "tr": "min",
+   "en": "from; of",
+   "n": 3226
+  },
+  {
+   "ar": "اللَّه",
+   "tr": "Allāh",
+   "en": "Allah",
+   "n": 2699
+  },
+  {
+   "ar": "مَا",
+   "tr": "mā",
+   "en": "what; not",
+   "n": 2199
+  },
+  {
+   "ar": "لَا",
+   "tr": "lā",
+   "en": "no; not",
+   "n": 1809
+  },
+  {
+   "ar": "قَالَ",
+   "tr": "qāla",
+   "en": "he said",
+   "n": 1722,
+   "fam": "qwl"
+  },
+  {
+   "ar": "فِي",
+   "tr": "fī",
+   "en": "in",
+   "n": 1701
+  },
+  {
+   "ar": "إِنَّ",
+   "tr": "inna",
+   "en": "indeed; truly",
+   "n": 1682
+  },
+  {
+   "ar": "عَلَى",
+   "tr": "ʿalā",
+   "en": "upon; on",
+   "n": 1445
+  },
+  {
+   "ar": "كَانَ",
+   "tr": "kāna",
+   "en": "he was; it was",
+   "n": 1358
+  },
+  {
+   "ar": "الَّذِينَ",
+   "tr": "alladhīna",
+   "en": "those who",
+   "n": 1080
+  },
+  {
+   "ar": "رَبّ",
+   "tr": "rabb",
+   "en": "Lord",
+   "n": 975
+  },
+  {
+   "ar": "إِلَى",
+   "tr": "ilā",
+   "en": "to; towards",
+   "n": 742
+  },
+  {
+   "ar": "إِلَّا",
+   "tr": "illā",
+   "en": "except; but",
+   "n": 663
+  },
+  {
+   "ar": "يَوْم",
+   "tr": "yawm",
+   "en": "day",
+   "n": 475,
+   "fam": "ywm"
+  },
+  {
+   "ar": "أَرْض",
+   "tr": "arḍ",
+   "en": "earth; land",
+   "n": 461
+  },
+  {
+   "ar": "إِذَا",
+   "tr": "idhā",
+   "en": "when; if",
+   "n": 423
+  },
+  {
+   "ar": "قَوْم",
+   "tr": "qawm",
+   "en": "people; nation",
+   "n": 383
+  },
+  {
+   "ar": "آيَات",
+   "tr": "āyāt",
+   "en": "signs; verses",
+   "n": 382
+  },
+  {
+   "ar": "كُلّ",
+   "tr": "kull",
+   "en": "every; all",
+   "n": 358
+  },
+  {
+   "ar": "ثُمَّ",
+   "tr": "thumma",
+   "en": "then; afterwards",
+   "n": 338
+  },
+  {
+   "ar": "قُلْ",
+   "tr": "qul",
+   "en": "say!",
+   "n": 332,
+   "fam": "qwl"
+  },
+  {
+   "ar": "عَذَاب",
+   "tr": "ʿadhāb",
+   "en": "punishment",
+   "n": 322
+  },
+  {
+   "ar": "كِتَاب",
+   "tr": "kitāb",
+   "en": "book; scripture",
+   "n": 319,
+   "fam": "ktb"
+  },
+  {
+   "ar": "سَمَاء",
+   "tr": "samāʾ",
+   "en": "sky; heaven",
+   "n": 310
+  },
+  {
+   "ar": "نَفْس",
+   "tr": "nafs",
+   "en": "soul; self",
+   "n": 295
+  },
+  {
+   "ar": "كَفَرُوا",
+   "tr": "kafarū",
+   "en": "they disbelieved",
+   "n": 289
+  },
+  {
+   "ar": "شَيْء",
+   "tr": "shayʾ",
+   "en": "thing",
+   "n": 283
+  },
+  {
+   "ar": "عِبَاد",
+   "tr": "ʿibād",
+   "en": "servants (of Allah)",
+   "n": 275
+  },
+  {
+   "ar": "آمَنُوا",
+   "tr": "āmanū",
+   "en": "they believed",
+   "n": 263
+  },
+  {
+   "ar": "حَقّ",
+   "tr": "ḥaqq",
+   "en": "truth; right",
+   "n": 247
+  },
+  {
+   "ar": "بَيْن",
+   "tr": "bayna",
+   "en": "between",
+   "n": 245
+  },
+  {
+   "ar": "النَّاس",
+   "tr": "an-nās",
+   "en": "mankind; the people",
+   "n": 241
+  },
+  {
+   "ar": "قَبْل",
+   "tr": "qabl",
+   "en": "before",
+   "n": 242
+  },
+  {
+   "ar": "رَسُول",
+   "tr": "rasūl",
+   "en": "messenger",
+   "n": 236
+  },
+  {
+   "ar": "جَاءَ",
+   "tr": "jāʾa",
+   "en": "he came",
+   "n": 236
+  },
+  {
+   "ar": "أُولَٰئِكَ",
+   "tr": "ulāʾika",
+   "en": "those; they are the ones",
+   "n": 204
+  },
+  {
+   "ar": "عِنْد",
+   "tr": "ʿinda",
+   "en": "with; at; in the sight of",
+   "n": 197
+  },
+  {
+   "ar": "بَعْد",
+   "tr": "baʿda",
+   "en": "after",
+   "n": 196
+  },
+  {
+   "ar": "هَٰذَا",
+   "tr": "hādhā",
+   "en": "this",
+   "n": 190
+  },
+  {
+   "ar": "خَيْر",
+   "tr": "khayr",
+   "en": "good; better",
+   "n": 186
+  },
+  {
+   "ar": "خَلَقَ",
+   "tr": "khalaqa",
+   "en": "he created",
+   "n": 184
+  },
+  {
+   "ar": "سَبِيل",
+   "tr": "sabīl",
+   "en": "way; path",
+   "n": 176
+  },
+  {
+   "ar": "أَمْر",
+   "tr": "amr",
+   "en": "command; matter",
+   "n": 166
+  },
+  {
+   "ar": "مَوْت",
+   "tr": "mawt",
+   "en": "death",
+   "n": 165
+  },
+  {
+   "ar": "عَلِيم",
+   "tr": "ʿalīm",
+   "en": "All-Knowing",
+   "n": 162,
+   "fam": "3lm"
+  },
+  {
+   "ar": "آتَى",
+   "tr": "ātā",
+   "en": "he gave",
+   "n": 274
+  },
+  {
+   "ar": "جَنَّة",
+   "tr": "janna",
+   "en": "garden; Paradise",
+   "n": 147
+  },
+  {
+   "ar": "نَار",
+   "tr": "nār",
+   "en": "fire",
+   "n": 145
+  },
+  {
+   "ar": "لَعَلَّ",
+   "tr": "laʿalla",
+   "en": "so that perhaps; that you may",
+   "n": 129
+  },
+  {
+   "ar": "دُنْيَا",
+   "tr": "dunyā",
+   "en": "the worldly life",
+   "n": 115,
+   "fam": "hyy"
+  },
+  {
+   "ar": "آخِرَة",
+   "tr": "ākhira",
+   "en": "the Hereafter",
+   "n": 115
+  },
+  {
+   "ar": "رَحِيم",
+   "tr": "raḥīm",
+   "en": "Most Merciful",
+   "n": 115
+  },
+  {
+   "ar": "عَظِيم",
+   "tr": "ʿaẓīm",
+   "en": "great; tremendous",
+   "n": 107
+  },
+  {
+   "ar": "عَزِيز",
+   "tr": "ʿazīz",
+   "en": "Almighty; Exalted",
+   "n": 99
+  },
+  {
+   "ar": "حَكِيم",
+   "tr": "ḥakīm",
+   "en": "All-Wise",
+   "n": 97
+  },
+  {
+   "ar": "غَفُور",
+   "tr": "ghafūr",
+   "en": "Oft-Forgiving",
+   "n": 91
+  },
+  {
+   "ar": "هُدًى",
+   "tr": "hudan",
+   "en": "guidance",
+   "n": 85
+  },
+  {
+   "ar": "صَلَاة",
+   "tr": "ṣalāh",
+   "en": "prayer",
+   "n": 83,
+   "fam": "slw"
+  },
+  {
+   "ar": "مُؤْمِنُون",
+   "tr": "muʾminūn",
+   "en": "believers",
+   "n": 202
+  },
+  {
+   "ar": "صَالِحَات",
+   "tr": "ṣāliḥāt",
+   "en": "righteous deeds",
+   "n": 62,
+   "fam": "3ml"
+  },
+  {
+   "ar": "مَنْ",
+   "tr": "man",
+   "en": "who; whoever",
+   "n": 606
+  },
+  {
+   "ar": "أَنْ",
+   "tr": "an",
+   "en": "that; to",
+   "n": 578
+  },
+  {
+   "ar": "عَلِمَ",
+   "tr": "ʿalima",
+   "en": "he knew",
+   "n": 518,
+   "fam": "3lm"
+  },
+  {
+   "ar": "هُوَ",
+   "tr": "huwa",
+   "en": "he; He",
+   "n": 481
+  },
+  {
+   "ar": "ذَٰلِكَ",
+   "tr": "dhālika",
+   "en": "that",
+   "n": 478
+  },
+  {
+   "ar": "قَدْ",
+   "tr": "qad",
+   "en": "indeed; already",
+   "n": 406
+  },
+  {
+   "ar": "إِنْ",
+   "tr": "in",
+   "en": "if",
+   "n": 403
+  },
+  {
+   "ar": "لَمْ",
+   "tr": "lam",
+   "en": "did not",
+   "n": 353
+  },
+  {
+   "ar": "جَعَلَ",
+   "tr": "jaʿala",
+   "en": "he made; placed",
+   "n": 346
+  },
+  {
+   "ar": "الَّذِي",
+   "tr": "alladhī",
+   "en": "who; the one who",
+   "n": 304
+  },
+  {
+   "ar": "عَمِلَ",
+   "tr": "ʿamila",
+   "en": "he did; worked",
+   "n": 276,
+   "fam": "3ml"
+  },
+  {
+   "ar": "أَخَذَ",
+   "tr": "akhadha",
+   "en": "he took; seized",
+   "n": 273
+  },
+  {
+   "ar": "رَأَى",
+   "tr": "raʾā",
+   "en": "he saw",
+   "n": 271
+  },
+  {
+   "ar": "إِذْ",
+   "tr": "idh",
+   "en": "when; (remember) when",
+   "n": 239
+  },
+  {
+   "ar": "شَاءَ",
+   "tr": "shāʾa",
+   "en": "he willed; wished",
+   "n": 236
+  },
+  {
+   "ar": "دَعَا",
+   "tr": "daʿā",
+   "en": "he called upon; prayed to",
+   "n": 170
+  },
+  {
+   "ar": "مِثْل",
+   "tr": "mithl",
+   "en": "like; similar to",
+   "n": 169
+  },
+  {
+   "ar": "اتَّقَىٰ",
+   "tr": "ittaqā",
+   "en": "he was mindful (of Allah); feared Allah",
+   "n": 166
+  },
+  {
+   "ar": "بَعْض",
+   "tr": "baʿḍ",
+   "en": "some; part of",
+   "n": 157
+  },
+  {
+   "ar": "غَيْر",
+   "tr": "ghayr",
+   "en": "other than; not",
+   "n": 154
+  },
+  {
+   "ar": "حَتَّىٰ",
+   "tr": "ḥattā",
+   "en": "until",
+   "n": 142
+  },
+  {
+   "ar": "اتَّبَعَ",
+   "tr": "ittabaʿa",
+   "en": "he followed",
+   "n": 140
+  },
+  {
+   "ar": "أَرَادَ",
+   "tr": "arāda",
+   "en": "he wanted; intended",
+   "n": 139
+  },
+  {
+   "ar": "أَمْ",
+   "tr": "am",
+   "en": "or (in a question)",
+   "n": 137
+  },
+  {
+   "ar": "قَلْب",
+   "tr": "qalb",
+   "en": "heart",
+   "n": 132
+  },
+  {
+   "ar": "بَلْ",
+   "tr": "bal",
+   "en": "rather; nay",
+   "n": 127
+  },
+  {
+   "ar": "أَهْل",
+   "tr": "ahl",
+   "en": "people of; family",
+   "n": 127
+  },
+  {
+   "ar": "وَعَدَ",
+   "tr": "waʿada",
+   "en": "he promised",
+   "n": 124
+  },
+  {
+   "ar": "خَافَ",
+   "tr": "khāfa",
+   "en": "he feared",
+   "n": 124
+  },
+  {
+   "ar": "يَد",
+   "tr": "yad",
+   "en": "hand",
+   "n": 120
+  },
+  {
+   "ar": "رَحْمَة",
+   "tr": "raḥma",
+   "en": "mercy",
+   "n": 114
+  },
+  {
+   "ar": "ضَلَّ",
+   "tr": "ḍalla",
+   "en": "he went astray",
+   "n": 113
+  },
+  {
+   "ar": "لَنْ",
+   "tr": "lan",
+   "en": "will not (future)",
+   "n": 106
+  },
+  {
+   "ar": "عِلْم",
+   "tr": "ʿilm",
+   "en": "knowledge",
+   "n": 105,
+   "fam": "3lm"
+  },
+  {
+   "ar": "أَجْر",
+   "tr": "ajr",
+   "en": "reward",
+   "n": 105
+  },
+  {
+   "ar": "هَلْ",
+   "tr": "hal",
+   "en": "is...? (question word)",
+   "n": 93
+  },
+  {
+   "ar": "كَيْفَ",
+   "tr": "kayfa",
+   "en": "how",
+   "n": 83
+  },
+  {
+   "ar": "أَوَّل",
+   "tr": "awwal",
+   "en": "first",
+   "n": 82
+  },
+  {
+   "ar": "حَيَاة",
+   "tr": "ḥayāh",
+   "en": "life",
+   "n": 76,
+   "fam": "hyy"
+  },
+  {
+   "ar": "نَبِيّ",
+   "tr": "nabiyy",
+   "en": "prophet",
+   "n": 75
+  },
+  {
+   "ar": "كَثِير",
+   "tr": "kathīr",
+   "en": "many; much",
+   "n": 74
+  },
+  {
+   "ar": "مَلَائِكَة",
+   "tr": "malāʾika",
+   "en": "angels",
+   "n": 73
+  },
+  {
+   "ar": "قَلِيل",
+   "tr": "qalīl",
+   "en": "few; little",
+   "n": 71
+  },
+  {
+   "ar": "مَاء",
+   "tr": "māʾ",
+   "en": "water",
+   "n": 63
+  },
+  {
+   "ar": "سَمِيع",
+   "tr": "samīʿ",
+   "en": "All-Hearing",
+   "n": 45
+  },
+  {
+   "ar": "قَدِير",
+   "tr": "qadīr",
+   "en": "All-Powerful",
+   "n": 45
+  },
+  {
+   "ar": "بَصِير",
+   "tr": "baṣīr",
+   "en": "All-Seeing",
+   "n": 42
+  },
+  {
+   "ar": "أَنْزَلَ",
+   "tr": "anzala",
+   "en": "he sent down (revelation, rain)",
+   "n": 190
+  },
+  {
+   "ar": "كَذَّبَ",
+   "tr": "kadhdhaba",
+   "en": "he denied; called it a lie",
+   "n": 176
+  },
+  {
+   "ar": "عَبَدَ",
+   "tr": "ʿabada",
+   "en": "he worshipped",
+   "n": 143
+  },
+  {
+   "ar": "رَزَقَ",
+   "tr": "razaqa",
+   "en": "he provided for",
+   "n": 123
+  },
+  {
+   "ar": "مُبِين",
+   "tr": "mubīn",
+   "en": "clear; evident",
+   "n": 119
+  },
+  {
+   "ar": "ظَلَمَ",
+   "tr": "ẓalama",
+   "en": "he wronged",
+   "n": 110
+  },
+  {
+   "ar": "ذَكَرَ",
+   "tr": "dhakara",
+   "en": "he remembered; mentioned",
+   "n": 110
+  },
+  {
+   "ar": "وَجَدَ",
+   "tr": "wajada",
+   "en": "he found",
+   "n": 107
+  },
+  {
+   "ar": "صَبَرَ",
+   "tr": "ṣabara",
+   "en": "he was patient",
+   "n": 103
+  },
+  {
+   "ar": "سَأَلَ",
+   "tr": "saʾala",
+   "en": "he asked",
+   "n": 100
+  },
+  {
+   "ar": "أَخْرَجَ",
+   "tr": "akhraja",
+   "en": "he brought out",
+   "n": 99
+  },
+  {
+   "ar": "قَتَلَ",
+   "tr": "qatala",
+   "en": "he killed",
+   "n": 93
+  },
+  {
+   "ar": "دِين",
+   "tr": "dīn",
+   "en": "religion; the Judgment",
+   "n": 92
+  },
+  {
+   "ar": "نَصَرَ",
+   "tr": "naṣara",
+   "en": "he helped (to victory)",
+   "n": 90
+  },
+  {
+   "ar": "شَيْطَان",
+   "tr": "shayṭān",
+   "en": "Satan; devil",
+   "n": 88
+  },
+  {
+   "ar": "مَال",
+   "tr": "māl",
+   "en": "wealth; money",
+   "n": 86
+  },
+  {
+   "ar": "فَضْل",
+   "tr": "faḍl",
+   "en": "bounty; grace",
+   "n": 84
+  },
+  {
+   "ar": "خَالِدُونَ",
+   "tr": "khālidūn",
+   "en": "abiding forever",
+   "n": 83
+  },
+  {
+   "ar": "لَيْل",
+   "tr": "layl",
+   "en": "night",
+   "n": 80
+  },
+  {
+   "ar": "أَصْحَاب",
+   "tr": "aṣḥāb",
+   "en": "companions; people of",
+   "n": 78
+  },
+  {
+   "ar": "دَخَلَ",
+   "tr": "dakhala",
+   "en": "he entered",
+   "n": 78
+  },
+  {
+   "ar": "وَجْه",
+   "tr": "wajh",
+   "en": "face",
+   "n": 72
+  },
+  {
+   "ar": "أَلِيم",
+   "tr": "alīm",
+   "en": "painful",
+   "n": 72
+  },
+  {
+   "ar": "قِيَامَة",
+   "tr": "qiyāma",
+   "en": "the Resurrection",
+   "n": 70
+  },
+  {
+   "ar": "قُرْآن",
+   "tr": "qurʾān",
+   "en": "the Quran; recitation",
+   "n": 70
+  },
+  {
+   "ar": "أَطَاعَ",
+   "tr": "aṭāʿa",
+   "en": "he obeyed",
+   "n": 70
+  },
+  {
+   "ar": "أَوْحَى",
+   "tr": "awḥā",
+   "en": "he revealed; inspired",
+   "n": 70
+  },
+  {
+   "ar": "غَفَرَ",
+   "tr": "ghafara",
+   "en": "he forgave",
+   "n": 65
+  },
+  {
+   "ar": "سَجَدَ",
+   "tr": "sajada",
+   "en": "he prostrated",
+   "n": 64
+  },
+  {
+   "ar": "تَابَ",
+   "tr": "tāba",
+   "en": "he repented; turned back",
+   "n": 63
+  },
+  {
+   "ar": "كَسَبَ",
+   "tr": "kasaba",
+   "en": "he earned",
+   "n": 62
+  },
+  {
+   "ar": "نِسَاء",
+   "tr": "nisāʾ",
+   "en": "women",
+   "n": 59
+  },
+  {
+   "ar": "ضَرَبَ",
+   "tr": "ḍaraba",
+   "en": "he struck; set forth (an example)",
+   "n": 58
+  },
+  {
+   "ar": "نَهَار",
+   "tr": "nahār",
+   "en": "daytime",
+   "n": 57
+  },
+  {
+   "ar": "عَيْن",
+   "tr": "ʿayn",
+   "en": "eye; spring",
+   "n": 57
+  },
+  {
+   "ar": "ظَنَّ",
+   "tr": "ẓanna",
+   "en": "he thought; assumed",
+   "n": 56
+  },
+  {
+   "ar": "رِزْق",
+   "tr": "rizq",
+   "en": "provision",
+   "n": 55
+  },
+  {
+   "ar": "يَعْقِلُونَ",
+   "tr": "yaʿqilūn",
+   "en": "they use reason",
+   "n": 49
+  },
+  {
+   "ar": "سَاعَة",
+   "tr": "sāʿa",
+   "en": "the Hour",
+   "n": 48
+  },
+  {
+   "ar": "نُور",
+   "tr": "nūr",
+   "en": "light",
+   "n": 43
+  },
+  {
+   "ar": "حَمْد",
+   "tr": "ḥamd",
+   "en": "praise",
+   "n": 43
+  },
+  {
+   "ar": "سَلَام",
+   "tr": "salām",
+   "en": "peace",
+   "n": 42
+  },
+  {
+   "ar": "زَكَاة",
+   "tr": "zakāh",
+   "en": "almsgiving",
+   "n": 32
+  }
+ ]
 }

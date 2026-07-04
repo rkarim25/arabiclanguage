@@ -1,0 +1,614 @@
+{
+ "id": "story-04",
+ "level": 1,
+ "titleAr": "يَوْمُ الجُمُعَةِ",
+ "titleEn": "Friday",
+ "grammar": "Present tense (المضارع), لِأَنَّ because, ordinals (الأَوَّل)",
+ "sentences": [
+  {
+   "ar": "اليَوْمَ يَوْمُ الجُمُعَةِ.",
+   "en": "Today is Friday.",
+   "words": [
+    [
+     "اليَوْمَ",
+     "today"
+    ],
+    [
+     "يَوْمُ",
+     "the day of"
+    ],
+    [
+     "الجُمُعَةِ.",
+     "Friday"
+    ]
+   ]
+  },
+  {
+   "ar": "أَسْتَيْقِظُ مُبَكِّرًا وَأَغْتَسِلُ.",
+   "en": "I wake up early and bathe.",
+   "words": [
+    [
+     "أَسْتَيْقِظُ",
+     "I wake up"
+    ],
+    [
+     "مُبَكِّرًا",
+     "early"
+    ],
+    [
+     "وَأَغْتَسِلُ.",
+     "and I bathe (ghusl)"
+    ]
+   ]
+  },
+  {
+   "ar": "أَلْبَسُ ثَوْبًا نَظِيفًا وَأَضَعُ العِطْرَ.",
+   "en": "I put on a clean garment and put on perfume.",
+   "words": [
+    [
+     "أَلْبَسُ",
+     "I put on"
+    ],
+    [
+     "ثَوْبًا",
+     "a garment"
+    ],
+    [
+     "نَظِيفًا",
+     "clean"
+    ],
+    [
+     "وَأَضَعُ",
+     "and I put on"
+    ],
+    [
+     "العِطْرَ.",
+     "the perfume"
+    ]
+   ]
+  },
+  {
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ مَاشِيًا.",
+   "en": "I go to the masjid on foot.",
+   "words": [
+    [
+     "أَذْهَبُ",
+     "I go"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "المَسْجِدِ",
+     "the masjid"
+    ],
+    [
+     "مَاشِيًا.",
+     "walking / on foot"
+    ]
+   ]
+  },
+  {
+   "ar": "أَجْلِسُ فِي الصَّفِّ الأَوَّلِ وَأَقْرَأُ القُرْآنَ.",
+   "en": "I sit in the first row and read the Quran.",
+   "words": [
+    [
+     "أَجْلِسُ",
+     "I sit"
+    ],
+    [
+     "فِي",
+     "in"
+    ],
+    [
+     "الصَّفِّ",
+     "the row"
+    ],
+    [
+     "الأَوَّلِ",
+     "the first"
+    ],
+    [
+     "وَأَقْرَأُ",
+     "and I read"
+    ],
+    [
+     "القُرْآنَ.",
+     "the Quran"
+    ]
+   ]
+  },
+  {
+   "ar": "يَصْعَدُ الخَطِيبُ المِنْبَرَ وَيَقُولُ: السَّلَامُ عَلَيْكُمْ.",
+   "en": "The khatib ascends the minbar and says: peace be upon you.",
+   "words": [
+    [
+     "يَصْعَدُ",
+     "he ascends"
+    ],
+    [
+     "الخَطِيبُ",
+     "the khatib (speaker)"
+    ],
+    [
+     "المِنْبَرَ",
+     "the minbar (pulpit)"
+    ],
+    [
+     "وَيَقُولُ:",
+     "and he says"
+    ],
+    [
+     "السَّلَامُ",
+     "peace"
+    ],
+    [
+     "عَلَيْكُمْ.",
+     "be upon you"
+    ]
+   ]
+  },
+  {
+   "ar": "أَسْتَمِعُ إِلَى الخُطْبَةِ جَيِّدًا.",
+   "en": "I listen to the khutbah attentively.",
+   "words": [
+    [
+     "أَسْتَمِعُ",
+     "I listen"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "الخُطْبَةِ",
+     "the khutbah (sermon)"
+    ],
+    [
+     "جَيِّدًا.",
+     "well / attentively"
+    ]
+   ]
+  },
+  {
+   "ar": "يَتَكَلَّمُ الخَطِيبُ عَنِ الصَّبْرِ وَالشُّكْرِ.",
+   "en": "The khatib speaks about patience and gratitude.",
+   "words": [
+    [
+     "يَتَكَلَّمُ",
+     "he speaks"
+    ],
+    [
+     "الخَطِيبُ",
+     "the khatib"
+    ],
+    [
+     "عَنِ",
+     "about"
+    ],
+    [
+     "الصَّبْرِ",
+     "patience"
+    ],
+    [
+     "وَالشُّكْرِ.",
+     "and gratitude"
+    ]
+   ]
+  },
+  {
+   "ar": "أَفْهَمُ بَعْضَ الكَلِمَاتِ لِأَنِّي أَتَعَلَّمُ العَرَبِيَّةَ.",
+   "en": "I understand some of the words because I am learning Arabic.",
+   "words": [
+    [
+     "أَفْهَمُ",
+     "I understand"
+    ],
+    [
+     "بَعْضَ",
+     "some of"
+    ],
+    [
+     "الكَلِمَاتِ",
+     "the words"
+    ],
+    [
+     "لِأَنِّي",
+     "because I"
+    ],
+    [
+     "أَتَعَلَّمُ",
+     "am learning"
+    ],
+    [
+     "العَرَبِيَّةَ.",
+     "Arabic"
+    ]
+   ]
+  },
+  {
+   "ar": "نُصَلِّي الجُمُعَةَ رَكْعَتَيْنِ خَلْفَ الإِمَامِ.",
+   "en": "We pray Jumu'ah — two rak'ahs — behind the imam.",
+   "words": [
+    [
+     "نُصَلِّي",
+     "we pray"
+    ],
+    [
+     "الجُمُعَةَ",
+     "the Friday prayer"
+    ],
+    [
+     "رَكْعَتَيْنِ",
+     "two rak'ahs"
+    ],
+    [
+     "خَلْفَ",
+     "behind"
+    ],
+    [
+     "الإِمَامِ.",
+     "the imam"
+    ]
+   ]
+  },
+  {
+   "ar": "بَعْدَ الصَّلَاةِ أُسَلِّمُ عَلَى إِخْوَانِي.",
+   "en": "After the prayer I greet my brothers.",
+   "words": [
+    [
+     "بَعْدَ",
+     "after"
+    ],
+    [
+     "الصَّلَاةِ",
+     "the prayer"
+    ],
+    [
+     "أُسَلِّمُ",
+     "I give salam"
+    ],
+    [
+     "عَلَى",
+     "to / upon"
+    ],
+    [
+     "إِخْوَانِي.",
+     "my brothers"
+    ]
+   ]
+  },
+  {
+   "ar": "يَوْمُ الجُمُعَةِ أَجْمَلُ يَوْمٍ فِي الأُسْبُوعِ.",
+   "en": "Friday is the most beautiful day of the week.",
+   "words": [
+    [
+     "يَوْمُ",
+     "the day of"
+    ],
+    [
+     "الجُمُعَةِ",
+     "Friday"
+    ],
+    [
+     "أَجْمَلُ",
+     "the most beautiful"
+    ],
+    [
+     "يَوْمٍ",
+     "day"
+    ],
+    [
+     "فِي",
+     "in"
+    ],
+    [
+     "الأُسْبُوعِ.",
+     "the week"
+    ]
+   ]
+  }
+ ],
+ "vocab": [
+  {
+   "ar": "الجُمُعَة",
+   "en": "Friday",
+   "tr": "al-jumu'a",
+   "note": "from ج-م-ع to gather — the day the community gathers"
+  },
+  {
+   "ar": "مُبَكِّرًا",
+   "en": "early",
+   "tr": "mubakkiran",
+   "note": ""
+  },
+  {
+   "ar": "أَغْتَسِلُ",
+   "en": "I bathe (ghusl)",
+   "tr": "aghtasilu",
+   "note": "the Friday ghusl — from غ-س-ل to wash, like أَغْسِلُ in story 1"
+  },
+  {
+   "ar": "أَلْبَسُ",
+   "en": "I put on, wear",
+   "tr": "albasu",
+   "note": ""
+  },
+  {
+   "ar": "ثَوْب",
+   "en": "garment, thobe",
+   "tr": "thawb",
+   "note": ""
+  },
+  {
+   "ar": "نَظِيف",
+   "en": "clean",
+   "tr": "nazif",
+   "note": ""
+  },
+  {
+   "ar": "أَضَعُ",
+   "en": "I put, place",
+   "tr": "ada'u",
+   "note": ""
+  },
+  {
+   "ar": "عِطْر",
+   "en": "perfume",
+   "tr": "'itr",
+   "note": ""
+  },
+  {
+   "ar": "مَسْجِد",
+   "en": "masjid, mosque",
+   "tr": "masjid",
+   "note": "place of سُجُود (prostration) — root س-ج-د"
+  },
+  {
+   "ar": "مَاشِيًا",
+   "en": "on foot, walking",
+   "tr": "mashiyan",
+   "note": ""
+  },
+  {
+   "ar": "أَجْلِسُ",
+   "en": "I sit",
+   "tr": "ajlisu",
+   "note": ""
+  },
+  {
+   "ar": "صَفّ",
+   "en": "row, line",
+   "tr": "saff",
+   "note": "the imam says: سَوُّوا صُفُوفَكُمْ — straighten your rows"
+  },
+  {
+   "ar": "الأَوَّل",
+   "en": "the first",
+   "tr": "al-awwal",
+   "note": "Quran core word"
+  },
+  {
+   "ar": "أَقْرَأُ",
+   "en": "I read, recite",
+   "tr": "aqra'u",
+   "note": "root ق-ر-أ — the same root as القُرْآن"
+  },
+  {
+   "ar": "القُرْآن",
+   "en": "the Quran",
+   "tr": "al-qur'an",
+   "note": ""
+  },
+  {
+   "ar": "يَصْعَدُ",
+   "en": "he ascends, goes up",
+   "tr": "yas'adu",
+   "note": ""
+  },
+  {
+   "ar": "خَطِيب",
+   "en": "khatib, preacher",
+   "tr": "khatib",
+   "note": "the one who gives the خُطْبَة"
+  },
+  {
+   "ar": "مِنْبَر",
+   "en": "minbar, pulpit",
+   "tr": "minbar",
+   "note": ""
+  },
+  {
+   "ar": "يَقُولُ",
+   "en": "he says",
+   "tr": "yaqulu",
+   "note": "root ق-و-ل — the Quran's most frequent verb"
+  },
+  {
+   "ar": "أَسْتَمِعُ",
+   "en": "I listen",
+   "tr": "astami'u",
+   "note": "root س-م-ع — like سَمِيع, the All-Hearing"
+  },
+  {
+   "ar": "خُطْبَة",
+   "en": "khutbah, sermon",
+   "tr": "khutba",
+   "note": ""
+  },
+  {
+   "ar": "جَيِّدًا",
+   "en": "well, attentively",
+   "tr": "jayyidan",
+   "note": ""
+  },
+  {
+   "ar": "يَتَكَلَّمُ",
+   "en": "he speaks",
+   "tr": "yatakallamu",
+   "note": "root ك-ل-م — like كَلِمَة, word"
+  },
+  {
+   "ar": "عَنْ",
+   "en": "about",
+   "tr": "'an",
+   "note": ""
+  },
+  {
+   "ar": "صَبْر",
+   "en": "patience",
+   "tr": "sabr",
+   "note": "Quran core — إِنَّ اللَّهَ مَعَ الصَّابِرِينَ"
+  },
+  {
+   "ar": "شُكْر",
+   "en": "gratitude, thanks",
+   "tr": "shukr",
+   "note": "as in شُكْرًا — thank you"
+  },
+  {
+   "ar": "أَفْهَمُ",
+   "en": "I understand",
+   "tr": "afhamu",
+   "note": ""
+  },
+  {
+   "ar": "كَلِمَات",
+   "en": "words",
+   "tr": "kalimat",
+   "note": "plural of كَلِمَة"
+  },
+  {
+   "ar": "لِأَنَّ",
+   "en": "because",
+   "tr": "li'anna",
+   "note": "لِـ + أَنَّ — behaves like إِنَّ"
+  },
+  {
+   "ar": "أَتَعَلَّمُ",
+   "en": "I learn, am learning",
+   "tr": "ata'allamu",
+   "note": "root ع-ل-م — like عَلِيم and عِلْم"
+  },
+  {
+   "ar": "نُصَلِّي",
+   "en": "we pray",
+   "tr": "nusalli",
+   "note": "root ص-ل-و — like صَلَاة"
+  },
+  {
+   "ar": "رَكْعَتَيْنِ",
+   "en": "two rak'ahs",
+   "tr": "rak'atayn",
+   "note": "the ـَيْنِ ending = two of something"
+  },
+  {
+   "ar": "خَلْفَ",
+   "en": "behind",
+   "tr": "khalfa",
+   "note": ""
+  },
+  {
+   "ar": "إِمَام",
+   "en": "imam",
+   "tr": "imam",
+   "note": ""
+  },
+  {
+   "ar": "أُسَلِّمُ عَلَى",
+   "en": "I greet (give salam to)",
+   "tr": "usallimu 'ala",
+   "note": "root س-ل-م — like السَّلَام"
+  },
+  {
+   "ar": "إِخْوَان",
+   "en": "brothers",
+   "tr": "ikhwan",
+   "note": ""
+  },
+  {
+   "ar": "أَجْمَل",
+   "en": "most beautiful",
+   "tr": "ajmal",
+   "note": "from جَمِيل — the أَفْعَل shape makes 'most / more'"
+  },
+  {
+   "ar": "أُسْبُوع",
+   "en": "week",
+   "tr": "usbu'",
+   "note": ""
+  }
+ ],
+ "questions": [
+  {
+   "q": "مَاذَا يَفْعَلُ الكَاتِبُ قَبْلَ الذَّهَابِ إِلَى المَسْجِدِ؟",
+   "options": [
+    "يَغْتَسِلُ وَيَلْبَسُ ثَوْبًا نَظِيفًا",
+    "يَنَامُ",
+    "يُشَاهِدُ التِّلْفَازَ",
+    "يَأْكُلُ العَشَاءَ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "كَيْفَ يَذْهَبُ إِلَى المَسْجِدِ؟",
+   "options": [
+    "مَاشِيًا",
+    "بِالسَّيَّارَةِ",
+    "بِالحَافِلَةِ",
+    "بِالقِطَارِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "أَيْنَ يَجْلِسُ فِي المَسْجِدِ؟",
+   "options": [
+    "فِي الصَّفِّ الأَوَّلِ",
+    "فِي الصَّفِّ الأَخِيرِ",
+    "خَارِجَ المَسْجِدِ",
+    "فِي البَيْتِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "عَنْ مَاذَا يَتَكَلَّمُ الخَطِيبُ؟",
+   "options": [
+    "عَنِ الصَّبْرِ وَالشُّكْرِ",
+    "عَنِ الطَّعَامِ",
+    "عَنِ السُّوقِ",
+    "عَنِ السَّفَرِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "لِمَاذَا يَفْهَمُ بَعْضَ الكَلِمَاتِ؟",
+   "options": [
+    "لِأَنَّهُ يَتَعَلَّمُ العَرَبِيَّةَ",
+    "لِأَنَّهُ نَائِمٌ",
+    "لِأَنَّ الخُطْبَةَ بِالإِنْجْلِيزِيَّةِ",
+    "لِأَنَّهُ لَا يَسْتَمِعُ"
+   ],
+   "answer": 0
+  }
+ ],
+ "dictation": [
+  0,
+  3,
+  10
+ ],
+ "translate": [
+  {
+   "en": "I go to the masjid on foot.",
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ مَاشِيًا."
+  },
+  {
+   "en": "I listen to the khutbah.",
+   "ar": "أَسْتَمِعُ إِلَى الخُطْبَةِ."
+  },
+  {
+   "en": "After the prayer I greet my brothers.",
+   "ar": "بَعْدَ الصَّلَاةِ أُسَلِّمُ عَلَى إِخْوَانِي."
+  }
+ ]
+}

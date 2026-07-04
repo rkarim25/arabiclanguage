@@ -1,0 +1,590 @@
+{
+ "id": "story-05",
+ "level": 1,
+ "titleAr": "فِي المَطْعَمِ",
+ "titleEn": "At the Restaurant",
+ "grammar": "Dialogue: أُرِيدُ / عِنْدَنَا, polite requests with مِنْ فَضْلِكَ",
+ "sentences": [
+  {
+   "ar": "نَدْخُلُ مَطْعَمًا عَرَبِيًّا فِي المَسَاءِ.",
+   "en": "We enter an Arab restaurant in the evening.",
+   "words": [
+    [
+     "نَدْخُلُ",
+     "we enter"
+    ],
+    [
+     "مَطْعَمًا",
+     "a restaurant"
+    ],
+    [
+     "عَرَبِيًّا",
+     "Arab"
+    ],
+    [
+     "فِي",
+     "in"
+    ],
+    [
+     "المَسَاءِ.",
+     "the evening"
+    ]
+   ]
+  },
+  {
+   "ar": "النَّادِلُ: أَهْلًا وَسَهْلًا! تَفَضَّلُوا.",
+   "en": "The waiter: welcome! Please come in.",
+   "words": [
+    [
+     "النَّادِلُ:",
+     "the waiter"
+    ],
+    [
+     "أَهْلًا",
+     "welcome"
+    ],
+    [
+     "وَسَهْلًا!",
+     "(and welcome)"
+    ],
+    [
+     "تَفَضَّلُوا.",
+     "please, come in"
+    ]
+   ]
+  },
+  {
+   "ar": "أَنَا: السَّلَامُ عَلَيْكُمْ، طَاوِلَةٌ لِشَخْصَيْنِ مِنْ فَضْلِكَ.",
+   "en": "Me: peace be upon you — a table for two, please.",
+   "words": [
+    [
+     "أَنَا:",
+     "me"
+    ],
+    [
+     "السَّلَامُ عَلَيْكُمْ،",
+     "peace be upon you"
+    ],
+    [
+     "طَاوِلَةٌ",
+     "a table"
+    ],
+    [
+     "لِشَخْصَيْنِ",
+     "for two people"
+    ],
+    [
+     "مِنْ فَضْلِكَ.",
+     "please"
+    ]
+   ]
+  },
+  {
+   "ar": "النَّادِلُ: هَذِهِ القَائِمَةُ. مَاذَا تُرِيدُونَ؟",
+   "en": "The waiter: here is the menu. What would you like?",
+   "words": [
+    [
+     "النَّادِلُ:",
+     "the waiter"
+    ],
+    [
+     "هَذِهِ",
+     "this is"
+    ],
+    [
+     "القَائِمَةُ.",
+     "the menu"
+    ],
+    [
+     "مَاذَا",
+     "what"
+    ],
+    [
+     "تُرِيدُونَ؟",
+     "do you (pl.) want"
+    ]
+   ]
+  },
+  {
+   "ar": "أَنَا: مَاذَا عِنْدَكُمُ اليَوْمَ؟",
+   "en": "Me: what do you have today?",
+   "words": [
+    [
+     "أَنَا:",
+     "me"
+    ],
+    [
+     "مَاذَا",
+     "what"
+    ],
+    [
+     "عِنْدَكُمُ",
+     "do you (pl.) have"
+    ],
+    [
+     "اليَوْمَ؟",
+     "today"
+    ]
+   ]
+  },
+  {
+   "ar": "النَّادِلُ: عِنْدَنَا دَجَاجٌ مَشْوِيٌّ وَأَرُزٌّ وَسَلَطَةٌ.",
+   "en": "The waiter: we have grilled chicken, rice, and salad.",
+   "words": [
+    [
+     "النَّادِلُ:",
+     "the waiter"
+    ],
+    [
+     "عِنْدَنَا",
+     "we have"
+    ],
+    [
+     "دَجَاجٌ",
+     "chicken"
+    ],
+    [
+     "مَشْوِيٌّ",
+     "grilled"
+    ],
+    [
+     "وَأَرُزٌّ",
+     "and rice"
+    ],
+    [
+     "وَسَلَطَةٌ.",
+     "and salad"
+    ]
+   ]
+  },
+  {
+   "ar": "أَنَا: أُرِيدُ الدَّجَاجَ مَعَ الأَرُزِّ، وَمَاءً بَارِدًا.",
+   "en": "Me: I want the chicken with the rice, and cold water.",
+   "words": [
+    [
+     "أَنَا:",
+     "me"
+    ],
+    [
+     "أُرِيدُ",
+     "I want"
+    ],
+    [
+     "الدَّجَاجَ",
+     "the chicken"
+    ],
+    [
+     "مَعَ",
+     "with"
+    ],
+    [
+     "الأَرُزِّ،",
+     "the rice"
+    ],
+    [
+     "وَمَاءً",
+     "and water"
+    ],
+    [
+     "بَارِدًا.",
+     "cold"
+    ]
+   ]
+  },
+  {
+   "ar": "صَدِيقِي يُرِيدُ سَمَكًا وَشَايًا بِالنَّعْنَاعِ.",
+   "en": "My friend wants fish and mint tea.",
+   "words": [
+    [
+     "صَدِيقِي",
+     "my friend"
+    ],
+    [
+     "يُرِيدُ",
+     "wants"
+    ],
+    [
+     "سَمَكًا",
+     "fish"
+    ],
+    [
+     "وَشَايًا",
+     "and tea"
+    ],
+    [
+     "بِالنَّعْنَاعِ.",
+     "with mint"
+    ]
+   ]
+  },
+  {
+   "ar": "النَّادِلُ: حَاضِر، دَقَائِقُ قَلِيلَةٌ فَقَطْ.",
+   "en": "The waiter: right away — just a few minutes.",
+   "words": [
+    [
+     "النَّادِلُ:",
+     "the waiter"
+    ],
+    [
+     "حَاضِر،",
+     "right away / at your service"
+    ],
+    [
+     "دَقَائِقُ",
+     "minutes"
+    ],
+    [
+     "قَلِيلَةٌ",
+     "few"
+    ],
+    [
+     "فَقَطْ.",
+     "only"
+    ]
+   ]
+  },
+  {
+   "ar": "الطَّعَامُ لَذِيذٌ جِدًّا، الحَمْدُ لِلَّهِ.",
+   "en": "The food is very delicious, praise be to Allah.",
+   "words": [
+    [
+     "الطَّعَامُ",
+     "the food"
+    ],
+    [
+     "لَذِيذٌ",
+     "delicious"
+    ],
+    [
+     "جِدًّا،",
+     "very"
+    ],
+    [
+     "الحَمْدُ",
+     "praise be"
+    ],
+    [
+     "لِلَّهِ.",
+     "to Allah"
+    ]
+   ]
+  },
+  {
+   "ar": "أَنَا: الحِسَابَ مِنْ فَضْلِكَ. كَمِ المَجْمُوعُ؟",
+   "en": "Me: the bill, please. How much is the total?",
+   "words": [
+    [
+     "أَنَا:",
+     "me"
+    ],
+    [
+     "الحِسَابَ",
+     "the bill"
+    ],
+    [
+     "مِنْ فَضْلِكَ.",
+     "please"
+    ],
+    [
+     "كَمِ",
+     "how much"
+    ],
+    [
+     "المَجْمُوعُ؟",
+     "is the total"
+    ]
+   ]
+  },
+  {
+   "ar": "النَّادِلُ: خَمْسُونَ رِيَالًا. شُكْرًا، وَإِلَى اللِّقَاءِ!",
+   "en": "The waiter: fifty riyals. Thank you, and see you again!",
+   "words": [
+    [
+     "النَّادِلُ:",
+     "the waiter"
+    ],
+    [
+     "خَمْسُونَ",
+     "fifty"
+    ],
+    [
+     "رِيَالًا.",
+     "riyals"
+    ],
+    [
+     "شُكْرًا،",
+     "thank you"
+    ],
+    [
+     "وَإِلَى اللِّقَاءِ!",
+     "and see you again"
+    ]
+   ]
+  }
+ ],
+ "vocab": [
+  {
+   "ar": "نَدْخُلُ",
+   "en": "we enter",
+   "tr": "nadkhulu",
+   "note": "root د-خ-ل — like دَخَلَ in your Quran core"
+  },
+  {
+   "ar": "مَطْعَم",
+   "en": "restaurant",
+   "tr": "mat'am",
+   "note": "place of طَعَام (food) — the مَـ prefix makes places"
+  },
+  {
+   "ar": "نَادِل",
+   "en": "waiter",
+   "tr": "nadil",
+   "note": ""
+  },
+  {
+   "ar": "أَهْلًا وَسَهْلًا",
+   "en": "welcome!",
+   "tr": "ahlan wa-sahlan",
+   "note": "the standard warm welcome"
+  },
+  {
+   "ar": "تَفَضَّلْ / تَفَضَّلُوا",
+   "en": "please, go ahead",
+   "tr": "tafaddal / tafaddalu",
+   "note": "said when offering anything — a seat, food, entry"
+  },
+  {
+   "ar": "طَاوِلَة",
+   "en": "table",
+   "tr": "tawila",
+   "note": ""
+  },
+  {
+   "ar": "شَخْص",
+   "en": "person",
+   "tr": "shakhs",
+   "note": "لِشَخْصَيْنِ = for two people (the two-ending again)"
+  },
+  {
+   "ar": "مِنْ فَضْلِكَ",
+   "en": "please",
+   "tr": "min fadlika",
+   "note": "literally: of your bounty — فَضْل is a Quran core word"
+  },
+  {
+   "ar": "قَائِمَة",
+   "en": "menu, list",
+   "tr": "qa'ima",
+   "note": ""
+  },
+  {
+   "ar": "تُرِيدُونَ",
+   "en": "you (pl.) want",
+   "tr": "turiduna",
+   "note": "from أَرَادَ — Quran core verb"
+  },
+  {
+   "ar": "عِنْدَنَا",
+   "en": "we have",
+   "tr": "'indana",
+   "note": "عِنْد + نَا — 'at us'; عِنْدَكُمْ = you have"
+  },
+  {
+   "ar": "دَجَاج",
+   "en": "chicken",
+   "tr": "dajaj",
+   "note": ""
+  },
+  {
+   "ar": "مَشْوِيّ",
+   "en": "grilled",
+   "tr": "mashwi",
+   "note": ""
+  },
+  {
+   "ar": "أَرُزّ",
+   "en": "rice",
+   "tr": "aruzz",
+   "note": ""
+  },
+  {
+   "ar": "سَلَطَة",
+   "en": "salad",
+   "tr": "salata",
+   "note": ""
+  },
+  {
+   "ar": "مَعَ",
+   "en": "with",
+   "tr": "ma'a",
+   "note": ""
+  },
+  {
+   "ar": "بَارِد",
+   "en": "cold",
+   "tr": "barid",
+   "note": "opposite of حَارّ (hot) — from your opposites cluster"
+  },
+  {
+   "ar": "صَدِيق",
+   "en": "friend",
+   "tr": "sadiq",
+   "note": "صَدِيقِي = my friend"
+  },
+  {
+   "ar": "سَمَك",
+   "en": "fish",
+   "tr": "samak",
+   "note": ""
+  },
+  {
+   "ar": "شَاي",
+   "en": "tea",
+   "tr": "shay",
+   "note": ""
+  },
+  {
+   "ar": "نَعْنَاع",
+   "en": "mint",
+   "tr": "na'na'",
+   "note": "شاي بالنعناع — the drink of the Hijaz"
+  },
+  {
+   "ar": "حَاضِر",
+   "en": "right away, at your service",
+   "tr": "hadir",
+   "note": "what service staff say to mean 'consider it done'"
+  },
+  {
+   "ar": "دَقِيقَة",
+   "en": "minute",
+   "tr": "daqiqa",
+   "note": "plural دَقَائِق"
+  },
+  {
+   "ar": "فَقَطْ",
+   "en": "only, just",
+   "tr": "faqat",
+   "note": ""
+  },
+  {
+   "ar": "لَذِيذ",
+   "en": "delicious",
+   "tr": "ladhidh",
+   "note": ""
+  },
+  {
+   "ar": "جِدًّا",
+   "en": "very",
+   "tr": "jiddan",
+   "note": ""
+  },
+  {
+   "ar": "الحَمْدُ لِلَّهِ",
+   "en": "praise be to Allah",
+   "tr": "al-hamdu li-llah",
+   "note": "حَمْد is in your Quran core — and in الفاتحة"
+  },
+  {
+   "ar": "حِسَاب",
+   "en": "bill; account",
+   "tr": "hisab",
+   "note": "the same word as يَوْم الحِسَاب — the Day of Reckoning"
+  },
+  {
+   "ar": "مَجْمُوع",
+   "en": "total",
+   "tr": "majmu'",
+   "note": "root ج-م-ع to gather — like الجُمُعَة"
+  },
+  {
+   "ar": "خَمْسُونَ",
+   "en": "fifty",
+   "tr": "khamsuna",
+   "note": "from خَمْسَة five"
+  },
+  {
+   "ar": "رِيَال",
+   "en": "riyal",
+   "tr": "riyal",
+   "note": ""
+  },
+  {
+   "ar": "إِلَى اللِّقَاءِ",
+   "en": "see you; until we meet",
+   "tr": "ila l-liqa'",
+   "note": ""
+  }
+ ],
+ "questions": [
+  {
+   "q": "مَتَى يَدْخُلُونَ المَطْعَمَ؟",
+   "options": [
+    "فِي المَسَاءِ",
+    "فِي الصَّبَاحِ",
+    "فِي اللَّيْلِ",
+    "بَعْدَ الفَجْرِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "مَاذَا يُرِيدُ الكَاتِبُ؟",
+   "options": [
+    "الدَّجَاجَ مَعَ الأَرُزِّ",
+    "سَمَكًا فَقَطْ",
+    "سَلَطَةً فَقَطْ",
+    "شَايًا بِالحَلِيبِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "مَاذَا يَشْرَبُ صَدِيقُهُ؟",
+   "options": [
+    "شَايًا بِالنَّعْنَاعِ",
+    "مَاءً بَارِدًا",
+    "قَهْوَةً",
+    "عَصِيرًا"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "كَيْفَ الطَّعَامُ؟",
+   "options": [
+    "لَذِيذٌ جِدًّا",
+    "بَارِدٌ",
+    "غَالٍ",
+    "قَلِيلٌ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "كَمِ المَجْمُوعُ؟",
+   "options": [
+    "خَمْسُونَ رِيَالًا",
+    "عَشَرَةُ رِيَالَاتٍ",
+    "مِئَةُ رِيَالٍ",
+    "عِشْرُونَ رِيَالًا"
+   ],
+   "answer": 0
+  }
+ ],
+ "dictation": [
+  2,
+  6,
+  10
+ ],
+ "translate": [
+  {
+   "en": "A table for two, please.",
+   "ar": "طَاوِلَةٌ لِشَخْصَيْنِ مِنْ فَضْلِكَ."
+  },
+  {
+   "en": "I want chicken with rice.",
+   "ar": "أُرِيدُ دَجَاجًا مَعَ الأَرُزِّ."
+  },
+  {
+   "en": "The bill, please.",
+   "ar": "الحِسَابَ مِنْ فَضْلِكَ."
+  }
+ ]
+}

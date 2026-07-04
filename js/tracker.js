@@ -69,6 +69,30 @@ function _mergeRemoteLog(remote) {
   }
   return log;
 }
+/* Merge remote learning state into local BEFORE pushing. Without this, a fresh
+   device (or iOS evicting localStorage) would push empty srs/progress over the
+   cloud copy — last-writer-wins data loss. Rules: an explicit local bucket is
+   the newest user intent and is kept; "never" (don't-repeat) always wins;
+   otherwise the higher box (or later due) is the truth. Progress steps union. */
+function _mergeRemoteState(remote) {
+  if (!remote) return;
+  const srs = getSrs();
+  Object.entries(remote.srs || {}).forEach(([k, r]) => {
+    const l = srs[k];
+    if (!l) { srs[k] = r; return; }
+    if (r.b === "never" && l.b !== "never") { srs[k] = r; return; }
+    if (l.b) return; // explicit local mark (know/repeat/later/never) = latest intent on this device
+    if (r.box > l.box || (r.box === l.box && r.due > l.due)) srs[k] = r;
+  });
+  store.set("ats-srs", srs);
+  const p = getProgress();
+  Object.entries(remote.progress || {}).forEach(([id, u]) => {
+    p[id] = p[id] || { steps: {} };
+    Object.keys((u && u.steps) || {}).forEach(s => { p[id].steps[s] = true; });
+  });
+  store.set("ats-progress", p);
+}
+
 function _payload(log) {
   return { progress: getProgress(), srs: getSrs(), log, savedAt: Date.now() };
 }
@@ -87,6 +111,7 @@ async function workerSync() {
   const r = await wReq("/data");
   if (r.status === 200) remote = await r.json();
   else if (r.status === 401) { setSession(null); throw new Error("session-expired"); }
+  _mergeRemoteState(remote);
   const log = _mergeRemoteLog(remote);
   const put = await wReq("/sync", {
     method: "POST",
@@ -122,6 +147,7 @@ async function githubSync() {
   } else if (r.status === 401 || r.status === 403) {
     throw new Error("bad-token");
   }
+  _mergeRemoteState(remote);
   const log = _mergeRemoteLog(remote);
   const put = await ghReq(`contents/${DATA_FILE}`, {
     method: "PUT",
