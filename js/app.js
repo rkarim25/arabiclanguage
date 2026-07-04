@@ -45,8 +45,27 @@ const EVERYDAY_LIST = [
   { id: "medical", title: "الصِّحَّة وَالصَّيْدَلِيَّة", hint: "Umrah: medical & pharmacy" },
   { id: "hotel-taxi", title: "الفُنْدُق وَالمُوَاصَلَات", hint: "Umrah: hotel, taxi, transport" },
   { id: "help", title: "المُسَاعَدَة", hint: "Umrah: asking for help" },
+  { id: "masjid", title: "فِي المَسْجِد", hint: "what the imam says — lines, iqama, janazah" },
+  { id: "khutba", title: "خُطْبَة الجُمُعَة", hint: "Friday khutbah stock phrases" },
 ];
 const UMRAH_GROUPS = ["directions", "haram", "shopping", "medical", "hotel-taxi", "help"];
+const MASJID_GROUPS = ["masjid", "khutba"];
+
+/* daily listening menu — real input trains the ear; one pick per day */
+const LISTEN_MENU = [
+  { title: "Friday khutbah from the Haram (subtitled)", q: "خطبة الجمعة من الحرم المكي مترجمة" },
+  { title: "Al-Fatiha word-by-word recitation", q: "سورة الفاتحة word by word" },
+  { title: "Slow MSA conversation practice", q: "slow arabic conversation practice beginner MSA" },
+  { title: "Stories of the Prophets (Arabic, subtitled)", q: "قصص الأنبياء مترجم بالعربية" },
+  { title: "Short surah tafsir in simple Arabic", q: "تفسير سورة الإخلاص مبسط" },
+  { title: "Easy Arabic street interviews", q: "easy arabic street interviews" },
+  { title: "Umrah vlog in Arabic (subtitled)", q: "العمرة خطوة بخطوة بالعربية" },
+];
+function todaysListen() {
+  const day = Math.floor(Date.now() / 86400000);
+  const pick = LISTEN_MENU[day % LISTEN_MENU.length];
+  return { ...pick, url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(pick.q) };
+}
 
 const STEPS = [
   { key: "listen", ar: "اِسْتَمِعْ", en: "Listen" },
@@ -222,6 +241,9 @@ async function computeMilestones() {
       have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings", test: "opener" },
     { title: "Umrah-ready kit", why: `Directions, the Haram, shopping, medical, taxi, asking for help — ${umrahTotal} words to live your whole trip in Arabic.`,
       have: umrahHave, need: umrahTotal, unit: "words", link: "vocab.html?view=everyday", test: "umrah" },
+    { title: "Masjid ears", why: "The imam's instructions and khutbah stock phrases — understand what's said around you in the masjid every week.",
+      have: MASJID_GROUPS.reduce((a, g) => a + evLearnt(g), 0), need: MASJID_GROUPS.reduce((a, g) => a + everyday.find(x => x.id === g).members.length, 0),
+      unit: "words", link: "vocab.html?ev=masjid", test: "masjid" },
     { title: "First story mastered", why: "My Day: all six skills done and its vocabulary learnt — you can retell a full narrative.",
       have: s1Steps + s1Words, need: 6 + 35, unit: "steps+words", link: "story.html?id=story-01" },
     { title: "20 speaking prompts ready", why: "Twenty real sentences — including the Umrah scenarios — you can produce on demand.",
@@ -233,7 +255,37 @@ async function computeMilestones() {
   ];
 
   const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
-  return { quran, msa, coverage, convPct, totalLearnt };
+
+  /* ---- the long view: weeks to the two big goals, at measured pace ----
+     Conversational Arabic ≈ a 300-word speaking core (everyday + stories + expansions).
+     Understanding any surah as recited ≈ the 300 highest-frequency lemmas + root
+     families, which cover ~80% of typical surah text; the rest comes from the
+     word-by-word surah work. Both targets are content the coach keeps adding. */
+  const CONV_TARGET = 300, QURAN_TARGET = 300;
+  const famLearnt = Object.keys(getSrs()).filter(k => k.startsWith("fam-") && isLearnt(k)).length;
+  const quranLemmas = coreLearntN + famLearnt;
+  const goals = { convRemaining: Math.max(0, CONV_TARGET - msaLearnt), quranRemaining: Math.max(0, QURAN_TARGET - quranLemmas), convTarget: CONV_TARGET, quranTarget: QURAN_TARGET };
+
+  return { quran, msa, coverage, convPct, totalLearnt, goals };
+}
+
+/* study rhythm measured from the log: words/min and min/day */
+function studyRhythm() {
+  const log = store.get("ats-log", []);
+  const days = new Set(log.filter(x => x.e !== "time").map(x => new Date(x.t).toDateString())).size;
+  const mins = typeof activeMinutes === "function" ? activeMinutes() : 0;
+  const learnt = Object.keys(getSrs()).filter(isLearnt).length;
+  const early = mins < 15 || learnt < 10 || days < 2;
+  return {
+    wordsPerMin: early ? 1.0 : Math.max(0.2, learnt / mins),
+    minPerDay: days ? Math.max(5, Math.round(mins / days)) : 10,
+    early,
+  };
+}
+function weeksTo(remainingWords) {
+  const r = studyRhythm();
+  const days = remainingWords / (r.wordsPerMin * r.minPerDay);
+  return { weeks: Math.max(1, Math.round(days / 7)), rhythm: r };
 }
 
 /* pace: words learnt per active minute, from real data */
@@ -272,6 +324,13 @@ function suggestNext() {
     icon: "📖", title: `Surah ${nextSurah.name}`,
     desc: "Word-by-word — understand it as it's recited",
     href: `quran.html?s=${nextSurah.id}`,
+  });
+  // 3. Today's listening pick — real input trains the ear for khutbahs and recitation
+  const lp = todaysListen();
+  out.push({
+    icon: "🎧", title: "Listen (10 min): " + lp.title,
+    desc: "Today's pick on YouTube — catch the words you know",
+    href: lp.url,
   });
   // next incomplete story/step
   for (const s of STORY_LIST) {
@@ -348,7 +407,7 @@ function suggestNext() {
       href: `story.html?id=${s.id}&step=read`,
     });
   }
-  return out.slice(0, 4);
+  return out.slice(0, 5);
 }
 
 /* ---------- Arabic text utils ---------- */

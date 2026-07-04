@@ -259,6 +259,40 @@
         { "ar": "مَفْقُود", "tr": "mafqūd", "en": "lost, missing" },
         { "ar": "طَوَارِئ", "tr": "ṭawāriʾ", "en": "emergency" }
       ]
+    },
+    {
+      "id": "masjid",
+      "title": "فِي المَسْجِد",
+      "theme": "What the imam says — line up, prayer calls, janazah",
+      "members": [
+        { "ar": "اِسْتَوُوا", "tr": "istawū", "en": "straighten up! (the lines)" },
+        { "ar": "اِعْتَدِلُوا", "tr": "iʿtadilū", "en": "align yourselves!" },
+        { "ar": "سَوُّوا صُفُوفَكُمْ", "tr": "sawwū ṣufūfakum", "en": "straighten your rows" },
+        { "ar": "سُدُّوا الخَلَل", "tr": "suddū l-khalal", "en": "close the gaps" },
+        { "ar": "تَقَدَّمُوا", "tr": "taqaddamū", "en": "move forward!" },
+        { "ar": "أَتِمُّوا الصَّفَّ الأَوَّل", "tr": "atimmū ṣ-ṣaff al-awwal", "en": "complete the first row" },
+        { "ar": "الإِقَامَة", "tr": "al-iqāma", "en": "the iqama (call to start prayer)" },
+        { "ar": "قَدْ قَامَتِ الصَّلَاة", "tr": "qad qāmati ṣ-ṣalāh", "en": "the prayer has begun (from the iqama)" },
+        { "ar": "الصَّلَاةُ جَامِعَة", "tr": "aṣ-ṣalātu jāmiʿa", "en": "congregational prayer is gathering (special-prayer call)" },
+        { "ar": "صَلَاةُ الجِنَازَة", "tr": "ṣalāt al-jināza", "en": "the funeral (janazah) prayer" }
+      ]
+    },
+    {
+      "id": "khutba",
+      "title": "خُطْبَة الجُمُعَة",
+      "theme": "Friday khutbah stock phrases — you hear these every single week",
+      "members": [
+        { "ar": "إِنَّ الحَمْدَ لِلَّه", "tr": "inna l-ḥamda lillāh", "en": "indeed all praise is for Allah (khutbah opener)" },
+        { "ar": "أَمَّا بَعْدُ", "tr": "ammā baʿd", "en": "and now, to the point…" },
+        { "ar": "اِتَّقُوا اللَّه", "tr": "ittaqū llāh", "en": "be mindful of Allah!" },
+        { "ar": "عِبَادَ اللَّه", "tr": "ʿibāda llāh", "en": "O servants of Allah" },
+        { "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا", "tr": "yā ayyuhā lladhīna āmanū", "en": "O you who believe" },
+        { "ar": "قَالَ رَسُولُ اللَّه ﷺ", "tr": "qāla rasūlu llāh", "en": "the Messenger of Allah ﷺ said" },
+        { "ar": "صَلُّوا عَلَى النَّبِيّ", "tr": "ṣallū ʿalā n-nabiyy", "en": "send blessings upon the Prophet" },
+        { "ar": "أَقُولُ قَوْلِي هَذَا", "tr": "aqūlu qawlī hādhā", "en": "I say these words of mine… (closing)" },
+        { "ar": "أَسْتَغْفِرُ اللَّه", "tr": "astaghfiru llāh", "en": "I seek Allah's forgiveness" },
+        { "ar": "رَحِمَكُمُ اللَّه", "tr": "raḥimakumu llāh", "en": "may Allah have mercy on you" }
+      ]
     }
   ]
 }
