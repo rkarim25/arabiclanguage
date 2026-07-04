@@ -207,12 +207,14 @@ async function renderSheet() {
     ${poolLabel !== "auto" ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing bucket: ${poolLabel} (${pool.length} words) — <a href="vocab.html?sheet=1" style="color:var(--accent)">back to auto</a></p>` : ""}
     <div class="toggles" style="margin-bottom:10px">
       <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
-      <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Produce (English → عربي)</label>
+      <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Write (English → عربي)</label>
+      <label><input type="radio" name="shMode" value="speak" ${sheetMode === "speak" ? "checked" : ""}> 🎤 Speak (English → say it)</label>
     </div>
+    ${sheetMode === "speak" ? `<p style="font-size:13px;color:var(--muted);margin:0 0 8px">Tap 🎤 and say the Arabic out loud. Works best in Chrome/Edge; allow microphone access when asked.</p>` : ""}
     <div class="vocab-table-wrap">
       <table class="vocab-table"><tbody id="shBody"></tbody></table>
     </div>
-    <div class="ex-row" style="margin-top:12px">
+    <div class="ex-row" style="margin-top:12px" ${sheetMode === "speak" ? 'hidden' : ""}>
       <button class="primary" id="shCheck">✓ Check the sheet</button>
       ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨ Phonetic keyboard</button>' : ""}
     </div>
@@ -226,6 +228,7 @@ async function renderSheet() {
     if (e.key === "Enter") { e.preventDefault(); document.getElementById("shCheck").click(); }
   });
 
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   sheetItems.forEach(({ key, v, isNew }, i) => {
     const tr = document.createElement("tr");
     if (sheetMode === "understand") {
@@ -235,10 +238,17 @@ async function renderSheet() {
         <td class="tr-cell">${v.tr || ""}</td>
         <td style="min-width:150px"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
       `;
-    } else {
+    } else if (sheetMode === "produce") {
       tr.innerHTML = `
         <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
         <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
+        <td class="tr-cell">${v.tr || ""}</td>
+      `;
+    } else { // speak
+      tr.innerHTML = `
+        <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
+        <td>${SR ? `<button class="small mic" data-i="${i}">🎤 say it</button>` : `<button class="small reveal" data-i="${i}">👁 reveal</button>`}</td>
+        <td style="min-width:150px"><span class="speak-result" style="font-size:13.5px"></span><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
         <td class="tr-cell">${v.tr || ""}</td>
       `;
     }
@@ -251,26 +261,7 @@ async function renderSheet() {
     document.getElementById("shKb").onclick = () => mountKbDock(() => lastFocused);
   }
 
-  let batchChecked = false;
-  document.getElementById("shCheck").onclick = () => {
-    if (batchChecked) return;
-    batchChecked = true;
-    let right = 0;
-    sheetItems.forEach(({ key, v }, i) => {
-      const input = tbody.querySelector(`input[data-i="${i}"]`);
-      const ans = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = sheetMode === "understand"
-        ? fuzzyEn(input.value, v.en)
-        : arMatch(input.value, v.ar);
-      input.classList.remove("ok", "no");
-      input.classList.add(ok ? "ok" : "no");
-      if (ok) { right++; ans.style.display = "none"; }
-      else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
-      gradeCard(key, ok ? "good" : "again");
-      logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
-      // bucket bar: override the automatic grade with your own verdict
-      mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
-    });
+  function showBatchScore(right) {
     sessionDone += sheetItems.length;
     document.getElementById("shScore").innerHTML =
       `Score: ${right} / ${sheetItems.length}` +
@@ -284,7 +275,106 @@ async function renderSheet() {
     const more = document.getElementById("shMore");
     if (pool.length - poolPos <= 0) more.style.display = "none";
     else more.onclick = () => { sheetItems = null; renderSheet(); const sc = document.getElementById("sheetCard"); if (sc) window.scrollTo({ top: sc.offsetTop - 60 }); };
-  };
+  }
+
+  if (sheetMode !== "speak") {
+    let batchChecked = false;
+    document.getElementById("shCheck").onclick = () => {
+      if (batchChecked) return;
+      batchChecked = true;
+      let right = 0;
+      sheetItems.forEach(({ key, v }, i) => {
+        const input = tbody.querySelector(`input[data-i="${i}"]`);
+        const ans = tbody.querySelectorAll(".correct-answer")[i];
+        const ok = sheetMode === "understand"
+          ? fuzzyEn(input.value, v.en)
+          : arMatch(input.value, v.ar);
+        input.classList.remove("ok", "no");
+        input.classList.add(ok ? "ok" : "no");
+        if (ok) { right++; ans.style.display = "none"; }
+        else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
+        gradeCard(key, ok ? "good" : "again");
+        logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
+        // bucket bar: override the automatic grade with your own verdict
+        mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
+      });
+      showBatchScore(right);
+    };
+  } else {
+    /* ---- speak mode: per-row microphone, instant feedback ---- */
+    const attempted = new Set();
+    let right = 0;
+    function finishRow(i, key, ok, resultHtml) {
+      if (attempted.has(i)) return;
+      attempted.add(i);
+      if (ok) right++;
+      const row = tbody.children[i];
+      const res = row.querySelector(".speak-result");
+      res.innerHTML = resultHtml;
+      const ans = row.querySelector(".correct-answer");
+      if (!ok) {
+        ans.style.display = "block";
+        ans.innerHTML = `${sheetItems[i].v.ar} <span class="row-speak" style="cursor:pointer">🔊</span>`;
+        ans.querySelector(".row-speak").onclick = () => speak(sheetItems[i].v.ar, 0.75);
+      }
+      gradeCard(key, ok ? "good" : "again");
+      mountBucketBar(row.querySelector(".bucket-slot"), key);
+      if (attempted.size === sheetItems.length) showBatchScore(right);
+    }
+    if (SR) {
+      tbody.querySelectorAll(".mic").forEach(mic => {
+        mic.onclick = () => {
+          const i = parseInt(mic.dataset.i);
+          const { key, v } = sheetItems[i];
+          stopSpeak();
+          const rec = new SR();
+          rec.lang = "ar-SA";
+          rec.interimResults = false;
+          mic.textContent = "🔴 listening…";
+          rec.onresult = (ev) => {
+            const heard = ev.results[0][0].transcript;
+            const ok = speakMatch(heard, v.ar);
+            logEvent({ e: "vspeak", key, heard, ok });
+            finishRow(i, key, ok, ok
+              ? `<span style="color:var(--accent);font-weight:600">✓ ${heard}</span>`
+              : `<span style="color:var(--red)">heard: ${heard}</span>`);
+          };
+          rec.onerror = (ev) => {
+            mic.textContent = "🎤 say it";
+            const res = tbody.children[i].querySelector(".speak-result");
+            res.innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
+          };
+          rec.onend = () => { if (!attempted.has(i)) mic.textContent = "🎤 say it"; else mic.disabled = true; };
+          rec.start();
+        };
+      });
+    } else {
+      tbody.querySelectorAll(".reveal").forEach(btn => {
+        btn.onclick = () => {
+          const i = parseInt(btn.dataset.i);
+          const { key, v } = sheetItems[i];
+          const res = tbody.children[i].querySelector(".speak-result");
+          res.innerHTML = `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>
+            <button class="small self-ok">✓ said it</button> <button class="small self-no">✗ struggled</button>`;
+          res.querySelector(".row-speak").onclick = () => speak(v.ar, 0.75);
+          res.querySelector(".self-ok").onclick = () => { logEvent({ e: "vspeak-self", key, ok: true }); finishRow(i, key, true, `<span style="color:var(--accent)">✓ noted</span>`); };
+          res.querySelector(".self-no").onclick = () => { logEvent({ e: "vspeak-self", key, ok: false }); finishRow(i, key, false, `<span style="color:var(--red)">noted — practice it</span>`); };
+        };
+      });
+    }
+  }
+}
+
+/* accept the spoken transcript if it contains the target (or either half of a pair) */
+function speakMatch(heard, target) {
+  const h = normalizeAr(heard);
+  if (!h) return false;
+  if (arMatch(heard, target)) return true;
+  const hw = new Set(h.split(" "));
+  return target.split("/").some(p => {
+    const tw = normalizeAr(p).split(" ").filter(Boolean);
+    return tw.length && tw.every(w => hw.has(w));
+  });
 }
 
 function mountBucketBar(slot, key) {
