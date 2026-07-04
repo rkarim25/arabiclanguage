@@ -16,15 +16,18 @@
   Everything is ordered by frequency — you only ever study the words that pay off most — and everything you do is tracked so your coach targets what you need.</p>
 
   <div class="card" style="border-color:var(--accent)">
-    <h2>🎯 Milestones — where you are and what's next</h2>
-    <div id="msTracks">Working out your position…</div>
-    <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
-  </div>
-
-  <div class="card" style="border-color:var(--accent)">
     <h2>▶ What now? Pick any — they all move you forward</h2>
     <div class="whatnow" id="whatNow"></div>
   </div>
+
+  <details class="card">
+    <summary style="cursor:pointer;list-style-position:outside">
+      <span style="font-weight:700;font-size:17px">🎯 Milestones &amp; the long view</span>
+      <span id="msSummary" style="font-size:13px;color:var(--accent);font-weight:600;margin-left:6px">…</span>
+    </summary>
+    <div id="msTracks" style="margin-top:12px">Working out your position…</div>
+    <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
+  </details>
 
   <div class="card" id="coachCard" style="display:none;border-color:var(--accent)">
     <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
@@ -194,6 +197,10 @@ function stageLines(stages) {
 
 computeMilestones().then(ms => {
   const r = studyRhythm();
+  const nextQ = ms.quran.find(m => m.have < m.need);
+  const nextM = ms.msa.find(m => m.have < m.need);
+  document.getElementById("msSummary").textContent =
+    `📖 ${ms.coverage}% recognized · 🗣 ${ms.convPct}% of the core · next: ${(nextQ || nextM || { title: "all done!" }).title}`;
   document.getElementById("msTracks").innerHTML =
     msTrackHtml("📖", "Quran", ms.quran, `you recognize ≈${ms.coverage}% of all Quranic words`) +
     msTrackHtml("🗣", "Everyday MSA", ms.msa, `≈${ms.convPct}% of the conversation core`) +
