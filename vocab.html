@@ -31,10 +31,16 @@
       background: #fffdf9;
     }
     .fill-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
-    .fill-input.ok { border-color: var(--accent); background: var(--accent-soft); }
-    .fill-input.no { border-color: var(--red); background: var(--red-soft); }
     .correct-answer { font-family: var(--font-ar); font-size: 20px; color: var(--accent); direction: rtl; display: block; }
     #kbDock { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; }
+    .bucket-bar { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; direction: ltr; }
+    .bucket-bar button { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+    .bucket-bar button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .bucket-bar button.sel.never { background: var(--red); border-color: var(--red); }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
+    .chips button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+    @media (max-width: 600px) { .fill-input { width: 100%; } }
   </style>
 </head>
 <body>
@@ -50,47 +56,72 @@ renderNav("vocab");
 trackPage("vocab");
 
 const content = document.getElementById("content");
-let FAMS = null, CORE = null;
+let FAMS = null, CORE = null, EV = null;
 
 Promise.all([
   fetch("data/families.json").then(r => r.json()),
   fetch("data/quran-core.json").then(r => r.json()),
-]).then(([f, c]) => {
+  fetch("data/everyday.json").then(r => r.json()),
+]).then(([f, c, e]) => {
   FAMS = f.families;
   CORE = c.words;
+  EV = e.groups;
   const params = new URLSearchParams(location.search);
-  const famId = params.get("fam");
-  const fam = FAMS.find(x => x.id === famId);
-  if (fam) renderFamily(fam, params.get("mode") || "study");
+  const fam = FAMS.find(x => x.id === params.get("fam"));
+  const ev = EV.find(x => x.id === params.get("ev"));
+  if (fam) renderGroup(fam, params.get("mode") || "study", "fam-");
+  else if (ev) renderGroup(ev, params.get("mode") || "study", "ev-");
   else renderList();
 });
 
-function famDone(id) { return !!stepsDone("fam-" + id).fill; }
+function groupDone(prefix, id) { return !!stepsDone(prefix + id).fill; }
 
+/* ================= list view ================= */
 function renderList() {
   trackPage("vocab:list");
   content.innerHTML = `
     <h1>Vocab Lab <span class="arabic" style="color:var(--accent)">مُخْتَبَر المُفْرَدَات</span></h1>
     <p class="sub">Everything here is ordered by <strong>frequency</strong> — the words you'll meet most often, first. No wasted memorization.</p>
+
     <div class="card" style="border-color:var(--accent)" id="sheetCard">
       <h2>📝 Vocab Learn — as short or long as you like</h2>
-      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review first, then the next most-frequent words you haven't met. Fill the column, check, and either stop there or keep going — misses come back by themselves.</p>
+      <p class="sub" style="margin-bottom:10px">Picked automatically: words due for review first, then the next most-frequent Quran and everyday words. Fill the column, check, then bucket each word: <strong>know</strong>, <strong>repeat</strong>, <strong>later</strong>, or <strong>don't repeat</strong>.</p>
       <div id="sheetArea">Building your sheet…</div>
     </div>
+
+    <div class="card" id="browseCard">
+      <h2>🗂 All your words, by bucket</h2>
+      <p class="sub" style="margin-bottom:10px">Pick a bucket to see those words — including <strong>unmarked</strong> (never studied) and <strong>don't repeat</strong> (change your mind any time). Practice exactly the bucket you choose.</p>
+      <div class="chips" id="bucketChips"></div>
+      <div class="ex-row" style="margin-bottom:10px">
+        <button class="primary" id="practiceBucket">📝 Practice this bucket</button>
+        <span id="bucketCount" style="font-size:13px;color:var(--muted);align-self:center"></span>
+      </div>
+      <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
+        <table class="vocab-table"><tbody id="browseBody"></tbody></table>
+      </div>
+    </div>
+
     <h2 style="margin-top:24px">📖 The Quran core — most frequent words first</h2>
-    <p class="sub">These ≈60 words are the highest-yield vocabulary in existence for understanding recitation. They flow into Today's Sheet a few at a time.</p>
+    <p class="sub">These ≈60 words are the highest-yield vocabulary for understanding recitation. They flow into Vocab Learn a few at a time.</p>
     <div class="card">
-      <div class="vocab-table-wrap">
+      <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
         <table class="vocab-table">
           <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th></tr></thead>
           <tbody id="coreBody"></tbody>
         </table>
       </div>
     </div>
-    <h2 style="margin-top:24px">🌿 Root families</h2>
+
+    <h2 style="margin-top:24px">🗣 Everyday Arabic — linked clusters for speaking</h2>
+    <p class="sub">The words real conversation runs on, learned in connected groups.</p>
+    <div class="fam-grid" id="evGrid"></div>
+
+    <h2 style="margin-top:24px">🌿 Quranic root families</h2>
     <p class="sub">One story word opens a whole root — study the family, then fill in the sheet from memory.</p>
     <div class="fam-grid" id="famGrid"></div>
   `;
+
   /* core table */
   const srs = getSrs();
   const coreBody = document.getElementById("coreBody");
@@ -99,7 +130,7 @@ function renderList() {
     const st = srs[`qc:${i}`];
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:12px">${i + 1}</td>
-      <td class="en-cell">${w.en}${st ? ` <span style="color:var(--accent);font-size:11px">✓ box ${st.box}</span>` : ""}</td>
+      <td class="en-cell">${w.en}${st ? ` <span style="color:var(--accent);font-size:11px">✓ ${bucketOf(`qc:${i}`)}</span>` : ""}</td>
       <td class="ar-cell">${w.ar}</td>
       <td><span class="row-speak">🔊</span></td>
       <td class="tr-cell">${w.tr}</td>
@@ -108,55 +139,72 @@ function renderList() {
     tr.querySelector(".row-speak").onclick = () => speak(w.ar, 0.8);
     coreBody.appendChild(tr);
   });
-  /* families */
-  const grid = document.getElementById("famGrid");
-  FAMS.forEach(f => {
-    const div = document.createElement("div");
-    div.className = "fam-card";
-    div.innerHTML = `
-      <div class="root">${f.root}</div>
-      <div class="theme">${f.theme}</div>
-      <div class="meta">${f.members.length} forms · from “${f.storyRef.ar}” ${famDone(f.id) ? "· ✓ sheet done" : ""}</div>
-    `;
-    div.onclick = () => { history.pushState({}, "", `vocab.html?fam=${f.id}`); renderFamily(f, "study"); };
-    grid.appendChild(div);
-  });
+
+  /* grids */
+  const famGrid = document.getElementById("famGrid");
+  FAMS.forEach(f => famGrid.appendChild(groupCard(f, "fam-", f.root, `${f.members.length} forms · from “${f.storyRef.ar}”`)));
+  const evGrid = document.getElementById("evGrid");
+  EV.forEach(g => evGrid.appendChild(groupCard(g, "ev-", g.title, `${g.members.length} words`)));
+
   renderSheet();
+  initBrowse();
 }
 
-/* ---------- Vocab Learn: endless auto-picked batches ---------- */
-let sheetMode = "understand"; // understand: Ar→En (Quran comprehension) | produce: En→Ar (speaking)
+function groupCard(obj, prefix, arTitle, metaText) {
+  const div = document.createElement("div");
+  div.className = "fam-card";
+  div.innerHTML = `
+    <div class="root">${arTitle}</div>
+    <div class="theme">${obj.theme}</div>
+    <div class="meta">${metaText} ${groupDone(prefix, obj.id) ? "· ✓ sheet done" : ""}</div>
+  `;
+  const q = prefix === "fam-" ? "fam" : "ev";
+  div.onclick = () => { history.pushState({}, "", `vocab.html?${q}=${obj.id}`); renderGroup(obj, "study", prefix); };
+  return div;
+}
+
+/* ================= Vocab Learn: endless auto-picked batches ================= */
+let sheetMode = "understand"; // understand: Ar→En | produce: En→Ar
 let sheetItems = null;   // current batch
-let pool = null;         // full ordered queue: due → new core → new family forms
+let pool = null;         // ordered queue
 let poolPos = 0;
 let sessionDone = 0;
+let poolLabel = "auto";
 const BATCH = 10;
 
 async function buildPool() {
   const due = dueCards();
   const items = (await resolveCards(due)).map(x => ({ ...x, isNew: false }));
   const srs = getSrs();
-  // next new words, most frequent first
+  const newQc = [], newEv = [], newFam = [];
   CORE.forEach((w, i) => {
     const key = `qc:${i}`;
-    if (!srs[key]) items.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` }, isNew: true, fam: w.fam });
+    if (!srs[key]) newQc.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` }, isNew: true });
   });
-  // then unlearned root-family forms (linked words in one go)
-  FAMS.forEach(f => {
-    f.members.forEach((m, i) => {
-      const key = `fam-${f.id}:${i}`;
-      if (!srs[key]) items.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: "root " + f.root }, isNew: true });
-    });
-  });
-  return items;
+  EV.forEach(g => g.members.forEach((m, i) => {
+    const key = `ev-${g.id}:${i}`;
+    if (!srs[key]) newEv.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: g.theme.split("—")[0].trim() }, isNew: true });
+  }));
+  FAMS.forEach(f => f.members.forEach((m, i) => {
+    const key = `fam-${f.id}:${i}`;
+    if (!srs[key]) newFam.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: "root " + f.root }, isNew: true });
+  }));
+  // interleave: 5 Quran-core + 5 everyday per batch of new words — both goals advance together
+  const mixed = [];
+  while (newQc.length || newEv.length) {
+    mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
+  }
+  return [...items, ...mixed, ...newFam];
 }
 
 async function renderSheet() {
   const area = document.getElementById("sheetArea");
-  if (!pool) { pool = await buildPool(); poolPos = 0; }
+  if (!area) return;
+  if (!pool) { pool = await buildPool(); poolPos = 0; poolLabel = "auto"; }
   if (!sheetItems) { sheetItems = pool.slice(poolPos, poolPos + BATCH); poolPos += sheetItems.length; }
-  if (!sheetItems.length) { area.innerHTML = `<p>🎉 You've worked through everything available — ${sessionDone} words this session. New content lands with your next coaching update.</p>`; return; }
+  if (!sheetItems.length) { area.innerHTML = `<p>🎉 You've worked through everything in this queue — ${sessionDone} words this session.</p>`; return; }
   area.innerHTML = `
+    ${poolLabel !== "auto" ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing bucket: ${poolLabel} (${pool.length} words) — <a href="vocab.html?sheet=1" style="color:var(--accent)">back to auto</a></p>` : ""}
     <div class="toggles" style="margin-bottom:10px">
       <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
       <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Produce (English → عربي)</label>
@@ -185,12 +233,12 @@ async function renderSheet() {
         <td class="ar-cell">${v.ar}</td>
         <td><span class="row-speak">🔊</span></td>
         <td class="tr-cell">${v.tr || ""}</td>
-        <td style="min-width:150px"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span></td>
+        <td style="min-width:150px"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning..." autocomplete="off"><span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
       `;
     } else {
       tr.innerHTML = `
         <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
-        <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span></td>
+        <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
         <td class="tr-cell">${v.tr || ""}</td>
       `;
     }
@@ -205,7 +253,7 @@ async function renderSheet() {
 
   let batchChecked = false;
   document.getElementById("shCheck").onclick = () => {
-    if (batchChecked) return; // don't double-grade on repeat Enter/click
+    if (batchChecked) return;
     batchChecked = true;
     let right = 0;
     sheetItems.forEach(({ key, v }, i) => {
@@ -213,13 +261,15 @@ async function renderSheet() {
       const ans = tbody.querySelectorAll(".correct-answer")[i];
       const ok = sheetMode === "understand"
         ? fuzzyEn(input.value, v.en)
-        : normalizeAr(input.value) === normalizeAr(v.ar);
+        : arMatch(input.value, v.ar);
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
       if (ok) { right++; ans.style.display = "none"; }
       else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
       gradeCard(key, ok ? "good" : "again");
       logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
+      // bucket bar: override the automatic grade with your own verdict
+      mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
     });
     sessionDone += sheetItems.length;
     document.getElementById("shScore").innerHTML =
@@ -233,11 +283,290 @@ async function renderSheet() {
     autoSync();
     const more = document.getElementById("shMore");
     if (pool.length - poolPos <= 0) more.style.display = "none";
-    else more.onclick = () => { sheetItems = null; renderSheet(); window.scrollTo({ top: document.getElementById("sheetCard").offsetTop - 60 }); };
+    else more.onclick = () => { sheetItems = null; renderSheet(); const sc = document.getElementById("sheetCard"); if (sc) window.scrollTo({ top: sc.offsetTop - 60 }); };
   };
 }
 
-/* shared phonetic keyboard dock */
+function mountBucketBar(slot, key) {
+  if (!slot) return;
+  const bar = document.createElement("div");
+  bar.className = "bucket-bar";
+  const current = bucketOf(key);
+  BUCKETS.forEach(b => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = b.label;
+    if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    btn.onclick = () => {
+      setBucket(key, b.id);
+      logEvent({ e: "bucket", key, b: b.id });
+      [...bar.children].forEach(c => c.classList.remove("sel", "never"));
+      btn.classList.add("sel");
+      if (b.id === "never") btn.classList.add("never");
+    };
+    bar.appendChild(btn);
+  });
+  slot.innerHTML = "";
+  slot.appendChild(bar);
+}
+
+/* ================= browse by bucket ================= */
+let catalog = null;
+let browseFilter = "unmarked";
+
+async function buildCatalog() {
+  const items = [];
+  CORE.forEach((w, i) => items.push({ key: `qc:${i}`, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× Quran` } }));
+  EV.forEach(g => g.members.forEach((m, i) => items.push({ key: `ev-${g.id}:${i}`, v: { ar: m.ar, en: m.en, tr: m.tr, note: g.theme.split("—")[0].trim() } })));
+  FAMS.forEach(f => f.members.forEach((m, i) => items.push({ key: `fam-${f.id}:${i}`, v: { ar: m.ar, en: m.en, tr: m.tr, note: "root " + f.root } })));
+  for (const s of STORY_LIST.filter(s => !s.locked)) {
+    try {
+      const st = await loadStory(s.id);
+      st.vocab.forEach((w, i) => items.push({ key: `${s.id}:${i}`, v: { ar: w.ar, en: w.en, tr: w.tr, note: s.titleEn } }));
+    } catch (e) {}
+  }
+  // any remaining SRS keys (e.g. verse words from Quran tests)
+  const have = new Set(items.map(x => x.key));
+  const extra = Object.keys(getSrs()).filter(k => !have.has(k));
+  (await resolveCards(extra)).forEach(x => items.push(x));
+  return items;
+}
+
+const FILTERS = [
+  ["unmarked", "Unmarked"],
+  ["due", "Due now"],
+  ["repeat", "Repeat"],
+  ["later", "Later"],
+  ["know", "Know"],
+  ["never", "Don't repeat"],
+];
+
+function filterCatalog() {
+  const now = Date.now();
+  const srs = getSrs();
+  return catalog.filter(({ key }) => {
+    if (browseFilter === "due") { const e = srs[key]; return e && e.due <= now && bucketOf(key) !== "never"; }
+    return bucketOf(key) === browseFilter;
+  });
+}
+
+async function initBrowse() {
+  if (!catalog) catalog = await buildCatalog();
+  const chips = document.getElementById("bucketChips");
+  if (!chips) return;
+
+  function refresh() {
+    chips.innerHTML = "";
+    FILTERS.forEach(([id, label]) => {
+      const n = id === "due"
+        ? catalog.filter(({ key }) => { const e = getSrs()[key]; return e && e.due <= Date.now() && bucketOf(key) !== "never"; }).length
+        : catalog.filter(({ key }) => bucketOf(key) === id).length;
+      const b = document.createElement("button");
+      b.textContent = `${label} (${n})`;
+      if (id === browseFilter) b.classList.add("sel");
+      b.onclick = () => { browseFilter = id; refresh(); };
+      chips.appendChild(b);
+    });
+    const rows = filterCatalog();
+    document.getElementById("bucketCount").textContent = rows.length ? `${rows.length} words` : "nothing here";
+    const tbody = document.getElementById("browseBody");
+    tbody.innerHTML = "";
+    rows.slice(0, 200).forEach(({ key, v }) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="ar-cell">${v.ar}</td>
+        <td><span class="row-speak">🔊</span></td>
+        <td class="tr-cell">${v.tr || ""}</td>
+        <td class="en-cell">${v.en}<span class="note-inline">${v.note || ""}</span></td>
+        <td><div class="bucket-slot"></div></td>
+      `;
+      tr.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
+      const slot = tr.querySelector(".bucket-slot");
+      const bar = document.createElement("div");
+      bar.className = "bucket-bar";
+      BUCKETS.forEach(b => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = b.label;
+        const cur = bucketOf(key);
+        if (b.id === cur && cur !== "unmarked") btn.classList.add("sel", b.id === "never" ? "never" : "x");
+        btn.onclick = () => {
+          setBucket(key, b.id);
+          logEvent({ e: "bucket", key, b: b.id, src: "browse" });
+          refresh();
+        };
+        bar.appendChild(btn);
+      });
+      slot.appendChild(bar);
+      tbody.appendChild(tr);
+    });
+    if (rows.length > 200) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="5" style="color:var(--muted);font-size:13px">…and ${rows.length - 200} more — practice the bucket to work through them.</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+  refresh();
+
+  document.getElementById("practiceBucket").onclick = () => {
+    const rows = filterCatalog();
+    if (!rows.length) return;
+    pool = rows.map(x => ({ ...x, isNew: false }));
+    poolPos = 0;
+    sheetItems = null;
+    poolLabel = FILTERS.find(([id]) => id === browseFilter)[1];
+    renderSheet();
+    const sc = document.getElementById("sheetCard");
+    if (sc) window.scrollTo({ top: sc.offsetTop - 60, behavior: "smooth" });
+  };
+}
+
+/* ================= family / everyday group lessons ================= */
+function renderGroup(obj, mode, prefix) {
+  trackPage(`vocab:${prefix}${obj.id}:${mode}`);
+  window.scrollTo({ top: 0 });
+  const arTitle = obj.root || obj.title;
+  const label = prefix === "fam-" ? "Root family" : "Everyday cluster";
+  content.innerHTML = `
+    <p><a href="vocab.html" style="color:var(--accent);text-decoration:none">← Vocab Lab</a></p>
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>${label}</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">${arTitle}</span>
+    </h1>
+    <p class="sub">${obj.theme}${obj.storyRef ? `. You met <strong class="arabic" style="font-size:19px">${obj.storyRef.ar}</strong> in <a href="story.html?id=${obj.storyRef.story}">the story</a> — now own the whole family.` : ""}</p>
+    <div class="steps" style="max-width:400px">
+      <button id="mStudy" class="${mode === "study" ? "active" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
+      <button id="mFill" class="${mode === "fill" ? "active" : ""}"><span class="ar">اِمْلَأْ</span><span>Fill the sheet${groupDone(prefix, obj.id) ? " ✓" : ""}</span></button>
+    </div>
+    <div id="famBody"></div>
+  `;
+  document.getElementById("mStudy").onclick = () => renderGroup(obj, "study", prefix);
+  document.getElementById("mFill").onclick = () => renderGroup(obj, "fill", prefix);
+  (mode === "fill" ? renderGroupFill : renderGroupStudy)(obj, prefix);
+}
+
+function renderGroupStudy(obj, prefix) {
+  const body = document.getElementById("famBody");
+  body.innerHTML = `
+    <div class="card">
+      <h2>${prefix === "fam-" ? "The family" : "The cluster"} — say each one aloud</h2>
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+          <tbody id="vtBody"></tbody>
+        </table>
+      </div>
+    </div>
+    ${obj.quran ? `
+    <div class="card">
+      <h2>In the Quran <span class="arabic" style="color:var(--accent)">في القُرْآن</span></h2>
+      <p class="sub" style="margin-bottom:6px">Real verses using this root. (🔊 is synthetic — for tajwīd, listen to a reciter.)</p>
+      <div id="verses"></div>
+    </div>` : ""}
+    <div class="ex-row">
+      <button class="primary" id="toFill">I've studied it — fill the sheet →</button>
+    </div>
+  `;
+  const tbody = document.getElementById("vtBody");
+  obj.members.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${m.en}</td>
+      <td class="ar-cell">${m.ar}</td>
+      <td><span class="row-speak" title="hear it">🔊</span></td>
+      <td class="tr-cell">${m.tr}</td>
+    `;
+    tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
+    tbody.appendChild(tr);
+  });
+  if (obj.quran) {
+    const verses = document.getElementById("verses");
+    obj.quran.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "verse-card";
+      div.innerHTML = `
+        <div class="v-ar">${v.ar} <span class="sent-play">🔊</span></div>
+        <div class="v-en">${v.en}</div>
+        <div class="v-ref">Quran ${v.ref}</div>
+      `;
+      div.querySelector(".sent-play").onclick = () => speak(v.ar, 0.75);
+      verses.appendChild(div);
+    });
+  }
+  document.getElementById("toFill").onclick = () => renderGroup(obj, "fill", prefix);
+}
+
+function renderGroupFill(obj, prefix) {
+  const body = document.getElementById("famBody");
+  body.innerHTML = `
+    <div class="card">
+      <h2>Fill in the Arabic, then check</h2>
+      <div class="toggles">
+        <label><input type="checkbox" id="tgTr" checked> Transliteration hints</label>
+      </div>
+      <div class="vocab-table-wrap">
+        <table class="vocab-table">
+          <thead><tr><th>English</th><th class="ar-col">Arabic — type it</th><th>Transliteration</th></tr></thead>
+          <tbody id="fillBody"></tbody>
+        </table>
+      </div>
+      <div class="ex-row" style="margin-top:14px">
+        <button class="primary" id="checkAll">✓ Check my answers</button>
+        <button class="small" id="kbToggle">⌨ Phonetic keyboard</button>
+      </div>
+      <div class="quiz-score" id="fillScore"></div>
+      <p style="font-size:13px;color:var(--muted)">Vowel marks optional — spelling is what's checked. After checking, bucket each word.</p>
+    </div>
+  `;
+  const tbody = document.getElementById("fillBody");
+  let lastFocused = null;
+
+  obj.members.forEach((m, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="en-cell">${m.en}</td>
+      <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
+      <td class="tr-cell">${m.tr}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  tbody.addEventListener("focusin", e => { if (e.target.classList.contains("fill-input")) lastFocused = e.target; });
+  tbody.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); document.getElementById("checkAll").click(); }
+  });
+
+  document.getElementById("tgTr").onchange = (e) => {
+    [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
+  };
+  document.getElementById("kbToggle").onclick = () => mountKbDock(() => lastFocused);
+
+  let checked = false;
+  document.getElementById("checkAll").onclick = () => {
+    if (checked) return;
+    checked = true;
+    let right = 0;
+    obj.members.forEach((m, i) => {
+      const input = tbody.querySelector(`input[data-i="${i}"]`);
+      const answer = tbody.querySelectorAll(".correct-answer")[i];
+      const key = `${prefix}${obj.id}:${i}`;
+      const ok = arMatch(input.value, m.ar);
+      input.classList.remove("ok", "no");
+      input.classList.add(ok ? "ok" : "no");
+      if (ok) { right++; answer.style.display = "none"; }
+      else { answer.style.display = "block"; answer.textContent = m.ar; }
+      logEvent({ e: "fill", fam: prefix + obj.id, i, typed: input.value, ok });
+      gradeCard(key, ok ? "good" : "again");
+      mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
+    });
+    const score = document.getElementById("fillScore");
+    score.textContent = `Score: ${right} / ${obj.members.length}` + (right === obj.members.length ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
+    setStepDone(prefix + obj.id, "fill");
+    logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: obj.members.length });
+    autoSync();
+  };
+}
+
+/* ================= shared phonetic keyboard dock ================= */
 let _kbMounted = false;
 function mountKbDock(getTarget) {
   const dock = document.getElementById("kbDock");
@@ -268,141 +597,6 @@ function mountKbDock(getTarget) {
   extra.appendChild(sp); extra.appendChild(del);
   kbWrap.appendChild(extra);
   dock.appendChild(kbWrap);
-}
-
-function renderFamily(fam, mode) {
-  trackPage(`vocab:${fam.id}:${mode}`);
-  window.scrollTo({ top: 0 });
-  content.innerHTML = `
-    <p><a href="vocab.html" style="color:var(--accent);text-decoration:none">← All families</a></p>
-    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span>Root family</span>
-      <span class="arabic" style="color:var(--accent)" dir="rtl">${fam.root}</span>
-    </h1>
-    <p class="sub">${fam.theme}. You met <strong class="arabic" style="font-size:19px">${fam.storyRef.ar}</strong> in
-      <a href="story.html?id=${fam.storyRef.story}">the story</a> — now own the whole family.</p>
-    <div class="steps" style="max-width:400px">
-      <button id="mStudy" class="${mode === "study" ? "active" : ""}"><span class="ar">اُدْرُسْ</span><span>Study</span></button>
-      <button id="mFill" class="${mode === "fill" ? "active" : ""}"><span class="ar">اِمْلَأْ</span><span>Fill the sheet${famDone(fam.id) ? " ✓" : ""}</span></button>
-    </div>
-    <div id="famBody"></div>
-  `;
-  document.getElementById("mStudy").onclick = () => renderFamily(fam, "study");
-  document.getElementById("mFill").onclick = () => renderFamily(fam, "fill");
-  (mode === "fill" ? renderFill : renderStudy)(fam);
-}
-
-/* ---------- Study ---------- */
-function renderStudy(fam) {
-  const body = document.getElementById("famBody");
-  body.innerHTML = `
-    <div class="card">
-      <h2>The family — say each one aloud</h2>
-      <div class="vocab-table-wrap">
-        <table class="vocab-table">
-          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
-          <tbody id="vtBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <h2>In the Quran <span class="arabic" style="color:var(--accent)">في القُرْآن</span></h2>
-      <p class="sub" style="margin-bottom:6px">Real verses using this root. (🔊 is synthetic — for tajwīd, listen to a reciter.)</p>
-      <div id="verses"></div>
-    </div>
-    <div class="ex-row">
-      <button class="primary" id="toFill">I've studied it — fill the sheet →</button>
-    </div>
-  `;
-  const tbody = document.getElementById("vtBody");
-  fam.members.forEach(m => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="en-cell">${m.en}</td>
-      <td class="ar-cell">${m.ar}</td>
-      <td><span class="row-speak" title="hear it">🔊</span></td>
-      <td class="tr-cell">${m.tr}</td>
-    `;
-    tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
-    tbody.appendChild(tr);
-  });
-  const verses = document.getElementById("verses");
-  fam.quran.forEach(v => {
-    const div = document.createElement("div");
-    div.className = "verse-card";
-    div.innerHTML = `
-      <div class="v-ar">${v.ar} <span class="sent-play">🔊</span></div>
-      <div class="v-en">${v.en}</div>
-      <div class="v-ref">Quran ${v.ref}</div>
-    `;
-    div.querySelector(".sent-play").onclick = () => speak(v.ar, 0.75);
-    verses.appendChild(div);
-  });
-  document.getElementById("toFill").onclick = () => renderFamily(fam, "fill");
-}
-
-/* ---------- Fill the sheet ---------- */
-function renderFill(fam) {
-  const body = document.getElementById("famBody");
-  body.innerHTML = `
-    <div class="card">
-      <h2>Fill in the Arabic, then check</h2>
-      <div class="toggles">
-        <label><input type="checkbox" id="tgTr" checked> Transliteration hints</label>
-      </div>
-      <div class="vocab-table-wrap">
-        <table class="vocab-table">
-          <thead><tr><th>English</th><th class="ar-col">Arabic — type it</th><th>Transliteration</th></tr></thead>
-          <tbody id="fillBody"></tbody>
-        </table>
-      </div>
-      <div class="ex-row" style="margin-top:14px">
-        <button class="primary" id="checkAll">✓ Check my answers</button>
-        <button class="small" id="kbToggle">⌨ Phonetic keyboard</button>
-      </div>
-      <div class="quiz-score" id="fillScore"></div>
-      <p style="font-size:13px;color:var(--muted)">Vowel marks optional — spelling is what's checked. Type Arabic directly, use the phonetic keyboard, or your <a href="keyboard.html" target="_blank">keyboard tool</a>.</p>
-    </div>
-  `;
-  const tbody = document.getElementById("fillBody");
-  let lastFocused = null;
-
-  fam.members.forEach((m, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="en-cell">${m.en}</td>
-      <td style="text-align:right"><input class="fill-input" data-i="${i}" autocomplete="off"><span class="correct-answer" style="display:none"></span></td>
-      <td class="tr-cell">${m.tr}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  tbody.addEventListener("focusin", e => { if (e.target.classList.contains("fill-input")) lastFocused = e.target; });
-
-  document.getElementById("tgTr").onchange = (e) => {
-    [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
-  };
-
-  document.getElementById("kbToggle").onclick = () => mountKbDock(() => lastFocused);
-
-  document.getElementById("checkAll").onclick = () => {
-    let right = 0;
-    fam.members.forEach((m, i) => {
-      const input = tbody.querySelector(`input[data-i="${i}"]`);
-      const answer = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = normalizeAr(input.value) === normalizeAr(m.ar);
-      input.classList.remove("ok", "no");
-      input.classList.add(ok ? "ok" : "no");
-      if (ok) { right++; answer.style.display = "none"; }
-      else { answer.style.display = "block"; answer.textContent = m.ar; }
-      logEvent({ e: "fill", fam: fam.id, i, typed: input.value, ok });
-      gradeCard(`fam-${fam.id}:${i}`, ok ? "good" : "again");
-    });
-    const score = document.getElementById("fillScore");
-    score.textContent = `Score: ${right} / ${fam.members.length}` + (right === fam.members.length ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
-    setStepDone("fam-" + fam.id, "fill");
-    logEvent({ e: "fill-done", fam: fam.id, score: right, total: fam.members.length });
-    autoSync();
-  };
 }
 </script>
 </body>

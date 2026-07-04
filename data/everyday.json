@@ -1,0 +1,162 @@
+{
+  "groups": [
+    {
+      "id": "greetings",
+      "title": "التَّحِيَّات",
+      "theme": "Greetings & politeness — the first things out of your mouth",
+      "members": [
+        { "ar": "السَّلَامُ عَلَيْكُمْ", "tr": "as-salāmu ʿalaykum", "en": "peace be upon you (hello)" },
+        { "ar": "وَعَلَيْكُمُ السَّلَام", "tr": "wa-ʿalaykumu s-salām", "en": "and upon you peace (the reply)" },
+        { "ar": "صَبَاح الخَيْر", "tr": "ṣabāḥ al-khayr", "en": "good morning" },
+        { "ar": "مَسَاء الخَيْر", "tr": "masāʾ al-khayr", "en": "good evening" },
+        { "ar": "شُكْرًا", "tr": "shukran", "en": "thank you" },
+        { "ar": "عَفْوًا", "tr": "ʿafwan", "en": "you're welcome; excuse me" },
+        { "ar": "مِنْ فَضْلِكَ", "tr": "min faḍlika", "en": "please" },
+        { "ar": "آسِف", "tr": "āsif", "en": "sorry" },
+        { "ar": "مَعَ السَّلَامَة", "tr": "maʿa s-salāma", "en": "goodbye" }
+      ]
+    },
+    {
+      "id": "questions",
+      "title": "أَدَوَات الاِسْتِفْهَام",
+      "theme": "Question words — unlock every conversation",
+      "members": [
+        { "ar": "مَاذَا", "tr": "mādhā", "en": "what?" },
+        { "ar": "مَنْ", "tr": "man", "en": "who?" },
+        { "ar": "أَيْنَ", "tr": "ayna", "en": "where?" },
+        { "ar": "مَتَى", "tr": "matā", "en": "when?" },
+        { "ar": "كَيْفَ", "tr": "kayfa", "en": "how?" },
+        { "ar": "لِمَاذَا", "tr": "limādhā", "en": "why?" },
+        { "ar": "كَمْ", "tr": "kam", "en": "how many? how much?" },
+        { "ar": "هَلْ", "tr": "hal", "en": "(opens a yes/no question)" },
+        { "ar": "أَيّ", "tr": "ayy", "en": "which?" }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "الأَرْقَام",
+      "theme": "Numbers 1–10",
+      "members": [
+        { "ar": "وَاحِد", "tr": "wāḥid", "en": "one" },
+        { "ar": "اِثْنَان", "tr": "ithnān", "en": "two" },
+        { "ar": "ثَلَاثَة", "tr": "thalātha", "en": "three" },
+        { "ar": "أَرْبَعَة", "tr": "arbaʿa", "en": "four" },
+        { "ar": "خَمْسَة", "tr": "khamsa", "en": "five" },
+        { "ar": "سِتَّة", "tr": "sitta", "en": "six" },
+        { "ar": "سَبْعَة", "tr": "sabʿa", "en": "seven" },
+        { "ar": "ثَمَانِيَة", "tr": "thamāniya", "en": "eight" },
+        { "ar": "تِسْعَة", "tr": "tisʿa", "en": "nine" },
+        { "ar": "عَشَرَة", "tr": "ʿashara", "en": "ten" }
+      ]
+    },
+    {
+      "id": "time",
+      "title": "كَلِمَات الوَقْت",
+      "theme": "Time words — now, today, tomorrow",
+      "members": [
+        { "ar": "الآن", "tr": "al-ān", "en": "now" },
+        { "ar": "اليَوْم", "tr": "al-yawm", "en": "today" },
+        { "ar": "غَدًا", "tr": "ghadan", "en": "tomorrow" },
+        { "ar": "أَمْسِ", "tr": "amsi", "en": "yesterday" },
+        { "ar": "دَائِمًا", "tr": "dāʾiman", "en": "always" },
+        { "ar": "أَحْيَانًا", "tr": "aḥyānan", "en": "sometimes" },
+        { "ar": "قَرِيبًا", "tr": "qarīban", "en": "soon" },
+        { "ar": "مُبَكِّرًا", "tr": "mubakkiran", "en": "early" },
+        { "ar": "مُتَأَخِّرًا", "tr": "mutaʾakhkhiran", "en": "late" }
+      ]
+    },
+    {
+      "id": "want-need",
+      "title": "أُرِيد وَأَحْتَاج",
+      "theme": "Wanting, needing, being able — the engine of speaking",
+      "members": [
+        { "ar": "أُرِيدُ", "tr": "urīdu", "en": "I want" },
+        { "ar": "أَحْتَاجُ إِلَى", "tr": "aḥtāju ilā", "en": "I need" },
+        { "ar": "أَسْتَطِيعُ", "tr": "astaṭīʿu", "en": "I can, I am able" },
+        { "ar": "يَجِبُ أَنْ", "tr": "yajibu an", "en": "I must; it is necessary that" },
+        { "ar": "أَعْرِفُ", "tr": "aʿrifu", "en": "I know" },
+        { "ar": "أَفْهَمُ", "tr": "afhamu", "en": "I understand" },
+        { "ar": "أُحِبُّ", "tr": "uḥibbu", "en": "I like; I love" },
+        { "ar": "أَظُنُّ", "tr": "aẓunnu", "en": "I think" }
+      ]
+    },
+    {
+      "id": "people",
+      "title": "النَّاس وَالضَّمَائِر",
+      "theme": "People & pronouns",
+      "members": [
+        { "ar": "أَنَا", "tr": "ana", "en": "I" },
+        { "ar": "أَنْتَ", "tr": "anta", "en": "you (to a man)" },
+        { "ar": "أَنْتِ", "tr": "anti", "en": "you (to a woman)" },
+        { "ar": "هُوَ", "tr": "huwa", "en": "he" },
+        { "ar": "هِيَ", "tr": "hiya", "en": "she" },
+        { "ar": "نَحْنُ", "tr": "naḥnu", "en": "we" },
+        { "ar": "هُمْ", "tr": "hum", "en": "they" },
+        { "ar": "رَجُل", "tr": "rajul", "en": "man" },
+        { "ar": "اِمْرَأَة", "tr": "imraʾa", "en": "woman" },
+        { "ar": "صَدِيق", "tr": "ṣadīq", "en": "friend" }
+      ]
+    },
+    {
+      "id": "opposites",
+      "title": "الأَضْدَاد",
+      "theme": "Adjective opposites — learned in pairs, remembered forever",
+      "members": [
+        { "ar": "جَدِيد / قَدِيم", "tr": "jadīd / qadīm", "en": "new / old" },
+        { "ar": "جَيِّد / سَيِّئ", "tr": "jayyid / sayyiʾ", "en": "good / bad" },
+        { "ar": "سَهْل / صَعْب", "tr": "sahl / ṣaʿb", "en": "easy / difficult" },
+        { "ar": "سَرِيع / بَطِيء", "tr": "sarīʿ / baṭīʾ", "en": "fast / slow" },
+        { "ar": "قَرِيب / بَعِيد", "tr": "qarīb / baʿīd", "en": "near / far" },
+        { "ar": "غَالٍ / رَخِيص", "tr": "ghālin / rakhīṣ", "en": "expensive / cheap" },
+        { "ar": "حَارّ / بَارِد", "tr": "ḥārr / bārid", "en": "hot / cold" }
+      ]
+    },
+    {
+      "id": "glue",
+      "title": "كَلِمَات الرَّبْط",
+      "theme": "Conversation glue — yes, no, maybe, but, because",
+      "members": [
+        { "ar": "نَعَمْ", "tr": "naʿam", "en": "yes" },
+        { "ar": "طَبْعًا", "tr": "ṭabʿan", "en": "of course" },
+        { "ar": "مُمْكِن", "tr": "mumkin", "en": "possible; maybe" },
+        { "ar": "رُبَّمَا", "tr": "rubbamā", "en": "perhaps" },
+        { "ar": "لَكِنْ", "tr": "lākin", "en": "but" },
+        { "ar": "لِأَنَّ", "tr": "liʾanna", "en": "because" },
+        { "ar": "إِذَنْ", "tr": "idhan", "en": "so, in that case" },
+        { "ar": "يَعْنِي", "tr": "yaʿnī", "en": "meaning...; I mean" },
+        { "ar": "طَيِّب", "tr": "ṭayyib", "en": "okay, fine" }
+      ]
+    },
+    {
+      "id": "commands",
+      "title": "أَوَامِر يَوْمِيَّة",
+      "theme": "Daily commands — give me, take, come, look",
+      "members": [
+        { "ar": "أَعْطِنِي", "tr": "aʿṭinī", "en": "give me" },
+        { "ar": "خُذْ", "tr": "khudh", "en": "take!" },
+        { "ar": "تَعَالَ", "tr": "taʿāla", "en": "come!" },
+        { "ar": "اِذْهَبْ", "tr": "idhhab", "en": "go!" },
+        { "ar": "اُنْظُرْ", "tr": "unẓur", "en": "look!" },
+        { "ar": "اِسْمَعْ", "tr": "ismaʿ", "en": "listen!" },
+        { "ar": "قُلْ لِي", "tr": "qul lī", "en": "tell me" },
+        { "ar": "اِنْتَظِرْ", "tr": "intaẓir", "en": "wait!" }
+      ]
+    },
+    {
+      "id": "food",
+      "title": "الطَّعَام وَالشَّرَاب",
+      "theme": "Food & drink essentials",
+      "members": [
+        { "ar": "مَاء", "tr": "māʾ", "en": "water" },
+        { "ar": "لَحْم", "tr": "laḥm", "en": "meat" },
+        { "ar": "دَجَاج", "tr": "dajāj", "en": "chicken" },
+        { "ar": "أَرُزّ", "tr": "aruzz", "en": "rice" },
+        { "ar": "حَلِيب", "tr": "ḥalīb", "en": "milk" },
+        { "ar": "فَاكِهَة", "tr": "fākiha", "en": "fruit" },
+        { "ar": "جَائِع", "tr": "jāʾiʿ", "en": "hungry" },
+        { "ar": "عَطْشَان", "tr": "ʿaṭshān", "en": "thirsty" },
+        { "ar": "الحِسَاب", "tr": "al-ḥisāb", "en": "the bill" }
+      ]
+    }
+  ]
+}

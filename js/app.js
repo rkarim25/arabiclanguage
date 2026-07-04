@@ -27,6 +27,20 @@ const FAMILY_LIST = [
   { id: "byt", root: "ب ي ت", hint: "house — البيت" },
 ];
 
+/* Everyday-Arabic clusters (full data in data/everyday.json) */
+const EVERYDAY_LIST = [
+  { id: "greetings", title: "التَّحِيَّات", hint: "greetings & politeness" },
+  { id: "questions", title: "أَدَوَات الاِسْتِفْهَام", hint: "question words" },
+  { id: "numbers", title: "الأَرْقَام", hint: "numbers 1–10" },
+  { id: "time", title: "كَلِمَات الوَقْت", hint: "now, today, tomorrow" },
+  { id: "want-need", title: "أُرِيد وَأَحْتَاج", hint: "want, need, can" },
+  { id: "people", title: "النَّاس وَالضَّمَائِر", hint: "people & pronouns" },
+  { id: "opposites", title: "الأَضْدَاد", hint: "adjective opposites in pairs" },
+  { id: "glue", title: "كَلِمَات الرَّبْط", hint: "yes, no, but, because" },
+  { id: "commands", title: "أَوَامِر يَوْمِيَّة", hint: "give me, take, come" },
+  { id: "food", title: "الطَّعَام وَالشَّرَاب", hint: "food & drink" },
+];
+
 const STEPS = [
   { key: "listen", ar: "اِسْتَمِعْ", en: "Listen" },
   { key: "read", ar: "اِقْرَأْ", en: "Read" },
@@ -62,6 +76,7 @@ function getSrs() { return store.get("ats-srs", {}); }
 function gradeCard(key, grade) {
   const srs = getSrs();
   const c = srs[key] || { box: 0, due: 0 };
+  delete c.b; // an actual test result replaces any explicit bucket mark
   if (grade === "again") { c.box = 0; c.due = Date.now() + 10 * 60 * 1000; }
   else if (grade === "good") { c.box = Math.min(c.box + 1, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
   else { c.box = Math.min(c.box + 2, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
@@ -74,6 +89,39 @@ function dueCards() {
   return Object.keys(srs).filter(k => srs[k].due <= now);
 }
 function totalCards() { return Object.keys(getSrs()).length; }
+
+/* ---------- explicit buckets: know / repeat / later / never ---------- */
+const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
+const BUCKETS = [
+  { id: "know", label: "✓ know", days: 30, box: 5 },
+  { id: "repeat", label: "↻ repeat", days: 0, box: 0 },      // due in 10 min
+  { id: "later", label: "⏳ later", days: 7, box: 3 },
+  { id: "never", label: "✗ don't repeat", days: null, box: 5 },
+];
+function setBucket(key, b) {
+  const srs = getSrs();
+  const def = BUCKETS.find(x => x.id === b);
+  if (!def) return;
+  const due = b === "never" ? NEVER_DUE : (b === "repeat" ? Date.now() + 10 * 60 * 1000 : Date.now() + def.days * DAY);
+  srs[key] = { box: def.box, due, b };
+  store.set("ats-srs", srs);
+}
+function bucketOf(key) {
+  const e = getSrs()[key];
+  if (!e) return "unmarked";
+  if (e.b) return e.b;
+  if (e.box >= 4) return "know";
+  if (e.box >= 2) return "later";
+  return "repeat";
+}
+/* Arabic answer match that also accepts either half of a "X / Y" pair */
+function arMatch(typed, target) {
+  const t = normalizeAr(typed);
+  if (!t) return false;
+  if (t === normalizeAr(target)) return true;
+  return target.split("/").some(p => normalizeAr(p) === t);
+}
+
 function seedCards(keys) {
   // add new words to the deck at box 1 (due tomorrow) without per-card grading
   const srs = getSrs();
@@ -151,6 +199,13 @@ function suggestNext() {
     icon: "🌿", title: `Word family: ${nextFam.root}`,
     desc: `${nextFam.hint} — study the family, then fill the sheet`,
     href: `vocab.html?fam=${nextFam.id}`,
+  });
+  // next everyday cluster (speaking side)
+  const nextEv = EVERYDAY_LIST.find(g => !stepsDone("ev-" + g.id).fill);
+  if (nextEv) out.push({
+    icon: "🗣", title: `Everyday: ${nextEv.title}`,
+    desc: `${nextEv.hint} — linked words for real conversation`,
+    href: `vocab.html?ev=${nextEv.id}`,
   });
   // reinforce: story with most trouble signals in the log; else re-shadow last completed
   const log = store.get("ats-log", []);
@@ -410,19 +465,21 @@ function fuzzyEn(typed, gloss) {
    Keys: "story-01:5", "fam-qwl:3", "qc:12", "qw:fatiha:2:1" */
 async function resolveCards(keys) {
   const needStories = new Set();
-  let needFams = false, needCore = false, needVerses = false;
+  let needFams = false, needCore = false, needVerses = false, needEv = false;
   keys.forEach(k => {
     const sid = k.split(":")[0];
     if (sid === "qc") needCore = true;
     else if (sid === "qw") needVerses = true;
     else if (sid.startsWith("fam-")) needFams = true;
+    else if (sid.startsWith("ev-")) needEv = true;
     else needStories.add(sid);
   });
   const stories = {};
-  const [fams, core, verses] = await Promise.all([
+  const [fams, core, verses, everyday] = await Promise.all([
     needFams ? fetch("data/families.json").then(r => r.json()).then(d => d.families) : null,
     needCore ? fetch("data/quran-core.json").then(r => r.json()).then(d => d.words) : null,
     needVerses ? fetch("data/verses.json").then(r => r.json()).then(d => d.surahs) : null,
+    needEv ? fetch("data/everyday.json").then(r => r.json()).then(d => d.groups) : null,
     Promise.all([...needStories].map(async id => {
       try { stories[id] = await loadStory(id); } catch (e) { /* removed story */ }
     })),
@@ -441,6 +498,10 @@ async function resolveCards(keys) {
       const fam = fams && fams.find(f => "fam-" + f.id === p[0]);
       const m = fam && fam.members[parseInt(p[1])];
       if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "root " + fam.root };
+    } else if (p[0].startsWith("ev-")) {
+      const g = everyday && everyday.find(x => "ev-" + x.id === p[0]);
+      const m = g && g.members[parseInt(p[1])];
+      if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "everyday: " + g.theme.split("—")[0].trim() };
     } else {
       const st = stories[p[0]];
       const w = st && st.vocab[parseInt(p[1])];
