@@ -224,6 +224,25 @@ async function googleLogin(credential) {
   return session;
 }
 
+/* ---------- honest study minutes ----------
+   Derived from the timestamps of real interactions (answers, reveals,
+   plays, grades) — an open tab generates no events, so it counts nothing.
+   Consecutive events ≤3 min apart chain into a session; isolated events
+   count ~30s each. */
+function activeMinutes() {
+  const ts = store.get(LOG_KEY, [])
+    .filter(x => x.e !== "time")
+    .map(x => x.t)
+    .sort((a, b) => a - b);
+  if (!ts.length) return 0;
+  let sec = 30;
+  for (let i = 1; i < ts.length; i++) {
+    const gap = (ts[i] - ts[i - 1]) / 1000;
+    sec += gap <= 180 ? gap : 30;
+  }
+  return Math.round(sec / 60);
+}
+
 /* ---------- local mini-analysis for the dashboard ---------- */
 function weakSpots(limit) {
   const log = store.get(LOG_KEY, []);

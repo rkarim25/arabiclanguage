@@ -152,6 +152,85 @@ function seedCards(keys) {
   return added;
 }
 
+/* ---------- milestones ----------
+   A word is "learnt" when you marked it know / don't-repeat, or it has
+   climbed to box 2+ by being answered correctly over time. */
+function isLearnt(key) {
+  const e = getSrs()[key];
+  return !!e && (e.b === "know" || e.b === "never" || e.box >= 2);
+}
+
+const QURAN_TOKENS = 77430; // total words in the Quran
+
+async function computeMilestones() {
+  const [core, everyday, prompts] = await Promise.all([
+    fetch("data/quran-core.json").then(r => r.json()).then(d => d.words),
+    fetch("data/everyday.json").then(r => r.json()).then(d => d.groups),
+    fetch("data/prompts.json").then(r => r.json()).then(d => d.prompts),
+  ]);
+
+  const coreLearnt = core.map((w, i) => isLearnt(`qc:${i}`));
+  const coreLearntN = coreLearnt.filter(Boolean).length;
+  const coverage = Math.round(core.reduce((a, w, i) => a + (coreLearnt[i] ? w.n : 0), 0) / QURAN_TOKENS * 100);
+  const covTop = n => Math.round(core.slice(0, n).reduce((a, w) => a + w.n, 0) / QURAN_TOKENS * 100);
+  const famFilled = FAMILY_LIST.filter(f => stepsDone("fam-" + f.id).fill).length;
+  const surahTested = id => stepsDone("q-" + id).test ? 1 : 0;
+  const protTested = surahTested("ikhlas") + surahTested("falaq") + surahTested("nas");
+  const allSurahsTested = QURAN_SURAHS.filter(s => stepsDone("q-" + s.id).test).length;
+
+  const quran = [
+    { title: "Al-Fatiha, word by word", why: "You understand every word of every rak'ah you pray — 17+ times a day.",
+      have: surahTested("fatiha"), need: 1, unit: "test", link: "quran.html?s=fatiha" },
+    { title: "Top 20 Quran words learnt", why: `Just 20 words ≈ ${covTop(20)}% of every word in the Quran.`,
+      have: Math.min(coreLearntN, 20), need: 20, unit: "words", link: "vocab.html?sheet=1" },
+    { title: "The protection surahs", why: "Al-Ikhlas, Al-Falaq, An-Nas — understood as recited, morning and evening.",
+      have: protTested, need: 3, unit: "tests", link: "quran.html" },
+    { title: "Top 40 Quran words learnt", why: `≈${covTop(40)}% of all Quranic text recognizable on hearing.`,
+      have: Math.min(coreLearntN, 40), need: 40, unit: "words", link: "vocab.html?sheet=1" },
+    { title: "All 7 surahs tested", why: "Everything you commonly hear recited — understood word by word.",
+      have: allSurahsTested, need: QURAN_SURAHS.length, unit: "tests", link: "quran.html" },
+    { title: "Full core + all root families", why: `All 60 core words (≈${covTop(60)}% of the Quran) plus 15 roots and their derived forms.`,
+      have: coreLearntN + famFilled, need: 60 + FAMILY_LIST.length, unit: "words", link: "vocab.html" },
+  ];
+
+  const evLearnt = g => everyday.find(x => x.id === g).members.filter((m, i) => isLearnt(`ev-${g}:${i}`)).length;
+  const evTotalLearnt = everyday.reduce((a, g) => a + g.members.filter((m, i) => isLearnt(`ev-${g.id}:${i}`)).length, 0);
+  const evTotal = everyday.reduce((a, g) => a + g.members.length, 0);
+  const openerHave = evLearnt("greetings") + evLearnt("questions") + evLearnt("glue");
+  const s1Steps = STEPS.filter(st => stepsDone("story-01")[st.key]).length;
+  const s1Words = Array.from({ length: 35 }, (x, i) => isLearnt(`story-01:${i}`)).filter(Boolean).length;
+  const storiesComplete = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDone(s.id)[st.key])).length;
+  const msaLearnt = evTotalLearnt + ["story-01", "story-02", "story-03"].reduce((a, sid) =>
+    a + Object.keys(getSrs()).filter(k => k.startsWith(sid + ":") && isLearnt(k)).length, 0);
+  const promptsReady = prompts.filter(p => p.keys.every(k => isLearnt(k))).length;
+
+  const msa = [
+    { title: "Conversation opener kit", why: "Greetings, question words and glue words — you can start, ask, and connect.",
+      have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings" },
+    { title: "First story mastered", why: "My Day: all six skills done and its vocabulary learnt — you can retell a full narrative.",
+      have: s1Steps + s1Words, need: 6 + 35, unit: "steps+words", link: "story.html?id=story-01" },
+    { title: "15 speaking prompts ready", why: "Fifteen real sentences you can produce on demand — actual speech.",
+      have: promptsReady, need: 15, unit: "prompts", link: "speaking.html" },
+    { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the 10 clusters — shops, food, time, people.`,
+      have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html" },
+    { title: "All 3 stories + 150 MSA words", why: "Comfortable with connected everyday narrative — ready for level 2 stories.",
+      have: storiesComplete + Math.min(msaLearnt, 150), need: 3 + 150, unit: "stories+words", link: "index.html" },
+  ];
+
+  const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
+  return { quran, msa, coverage, totalLearnt };
+}
+
+/* pace: words learnt per active minute, from real data */
+function paceEta(remaining, unit) {
+  const mins = typeof activeMinutes === "function" ? activeMinutes() : 0;
+  const learnt = Object.keys(getSrs()).filter(isLearnt).length;
+  const early = mins < 8 || learnt < 5;
+  const wordsPerMin = early ? 1.0 : Math.max(0.2, learnt / mins);
+  const perUnitMin = unit === "test" || unit === "tests" ? 8 : (1 / wordsPerMin);
+  return { min: Math.max(1, Math.ceil(remaining * perUnitMin)), early };
+}
+
 /* ---------- "What now?" suggestions ---------- */
 const QURAN_SURAHS = [
   { id: "fatiha", name: "Al-Fatiha", ar: "الفاتحة" },
