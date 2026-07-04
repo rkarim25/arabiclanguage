@@ -115,6 +115,7 @@ function getSrs() { return store.get("ats-srs", {}); }
 function gradeCard(key, grade) {
   const srs = getSrs();
   const c = srs[key] || { box: 0, due: 0 };
+  if (c.b === "never") return; // "don't repeat" is explicit — a batch check must not resurrect the card
   delete c.b; // an actual test result replaces any explicit bucket mark
   if (grade === "again") { c.box = 0; c.due = Date.now() + 10 * 60 * 1000; }
   else if (grade === "good") { c.box = Math.min(c.box + 1, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }

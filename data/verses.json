@@ -1132,6 +1132,588 @@
      ]
     }
    ]
+  },
+  {
+   "id": "kafirun",
+   "n": 109,
+   "name": "الكَافِرُون",
+   "nameEn": "Al-Kafirun — The Disbelievers",
+   "why": "Six verses built almost entirely from one root (ع-ب-د, worship) and the negations لا وما — pure high-frequency grammar practice.",
+   "verses": [
+    {
+     "ref": "109:1",
+     "ar": "قُلۡ يٰۤاَيُّهَا الۡكٰفِرُوۡنَ",
+     "en": "Say to them: O you who reject what Allah revealed—this is not a negotiation of shared gods.",
+     "words": [
+      [
+       "قُلۡ",
+       "qul",
+       "say! (command to one person)",
+       "This is a command (imperative) verb addressed to a single male — \"you, say!\" The vowels have been stripped down to the bare command form (the underlying root vowel is dropped and the final letter carries a silent sukūn, shown by the small circle), which is the normal shape of a direct order in Arabic.…",
+       "ق-و-ل (q-w-l) — to say, to speak, to utter"
+      ],
+      [
+       "يٰۤاَيُّهَا",
+       "yā-ayyu-hā",
+       "O! (call to get attention) you/one (the word the call lands on) (particle of alerting; sharpens the call)",
+       "This is a vocative construction — the way you call out to someone. \"yā\" is the call-word \"O\"; \"ayyu\" is a noun that the call actually lands on and that introduces the named group to follow; \"hā\" is a particle of alerting (ḥarf tanbīh) tacked on to rouse the addressee's attention —…",
+       "— (particles of address; no triliteral root)"
+      ],
+      [
+       "الۡكٰفِرُوۡنَ",
+       "al--kāfirū-na",
+       "the ones who reject faith / cover up the truth (plural ending: more than two males)",
+       "This is \"the\" plus an active participle — a doer-word meaning \"the ones who disbelieve.\" The \"-ūna\" ending marks it as a sound masculine plural (three or more males) and is the nominative form (\"-ūna\" rather than \"-īna\").…",
+       "ك-ف-ر (k-f-r) — to cover, conceal; hence to reject or deny faith"
+      ]
+     ]
+    },
+    {
+     "ref": "109:2",
+     "ar": "لَا اَعۡبُدُ مَا تَعۡبُدُوۡنَ",
+     "en": "I do not worship what you worship—my devotion is not directed toward the powers, idols, or priorities you treat as ultimate.",
+     "words": [
+      [
+       "لَا",
+       "lā",
+       "not",
+       "This is the negating word 'not'. It comes directly before the verb that follows and cancels it, giving the sense 'I do not / I will not'. It has no ending of its own to parse — it is a fixed particle. Negating the present-tense verb after it conveys a settled, continuous refusal."
+      ],
+      [
+       "اَعۡبُدُ",
+       "a--ʿbudu",
+       "I (do) worship / serve",
+       "A present-tense verb. The a- prefix at the front marks the doer as 'I' (first person singular). The final -u ending is the indicative mood, meaning the action is stated as a plain, ongoing fact ('I worship'), not a command or wish. Coming after lā, it reads 'I do not worship'.",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, submit as a devoted servant"
+      ],
+      [
+       "مَا",
+       "mā",
+       "what / that which",
+       "A relative word meaning 'what' or 'that which'. It is the object of the verb before it ('I worship [what]') and at the same time sets up the verb after it ('what you worship'). It is a fixed particle with no case ending to parse."
+      ],
+      [
+       "تَعۡبُدُوۡنَ",
+       "ta--ʿbudu--ūna",
+       "you (do) worship / serve (masculine plural) you all",
+       "A present-tense verb addressed to a group. The ta- prefix marks the doer as 'you', and the -ūna ending is a single, indivisible suffix that makes the subject masculine plural ('you all') while also marking the indicative mood, stating the action as a fact ('you worship').…",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, submit as a devoted servant"
+      ]
+     ]
+    },
+    {
+     "ref": "109:3",
+     "ar": "وَلَا اَنْـتُمْ عٰبِدُوۡنَ مَا اَعْبُدُ",
+     "en": "Nor do you worship what I worship—you have not surrendered to Allah alone as I have been commanded to do.",
+     "words": [
+      [
+       "وَلَا",
+       "wa-lā",
+       "and not",
+       "Two particles fused together. 'wa-' is the conjunction 'and', linking this verse to the one before. 'lā' is the negating particle 'not'; placed before a noun sentence here, it denies the statement as a whole. Neither word changes form for case or tense — particles are fixed."
+      ],
+      [
+       "اَنْـتُمْ",
+       "antum",
+       "you (plural, masculine)",
+       "A standalone subject pronoun, second person masculine plural. The '-tum' part is the marker for 'you all (men)'. As a pronoun it is indeclinable — it never takes case endings; it simply functions here as the subject of the sentence, with 'worshippers' as the predicate."
+      ],
+      [
+       "عٰبِدُوۡنَ",
+       "ʿābid--ūna",
+       "worshipper / one who worships (masculine plural ending)",
+       "An active participle, masculine plural. The '-ūna' ending marks it as plural, masculine, and in the nominative (subject) case — fitting because it is the predicate describing 'you' (antum). The participle form (shape ʿābid) names the doer of the act.…",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, devote oneself"
+      ],
+      [
+       "مَا",
+       "mā",
+       "what / that which",
+       "A relative pronoun meaning 'what' or 'that which'. It heads a relative clause completed by the verb that follows (mā aʿbudu = 'that which I worship'). It is fixed in form — no case ending. The whole relative clause it introduces, not the word mā by itself, serves as the object of 'worshippers'."
+      ],
+      [
+       "اَعْبُدُ",
+       "a--ʿbudu",
+       "I (do) worship",
+       "A present-tense verb, first person singular. The 'a-' prefix means 'I' (the one doing the action). The final '-u' ending marks the indicative mood — a plain, ongoing statement of fact ('I worship', habitually and presently), not a command or a negated/subjunctive form. With 'mā' it forms 'what I worship'.",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, devote oneself"
+      ]
+     ]
+    },
+    {
+     "ref": "109:4",
+     "ar": "وَلَا اَنَا عَابِدٌ مَّا عَبَدْتُّمْ",
+     "en": "I will never worship what you worship—no social pressure, no compromise for peace at the price of shirk, will change that.",
+     "words": [
+      [
+       "وَلَا",
+       "wa-lā",
+       "and not",
+       "Two particles fused into one word. The prefix wa- means \"and\" and ties this verse to the one before it. lā is the negation \"not\"; here it negates the noun-based (nominal) sentence that follows (\"I am not a worshipper of...\"), giving an absolute, ongoing denial rather than a one-time \"I did not.\""
+      ],
+      [
+       "اَنَا",
+       "anā",
+       "I (am)",
+       "An independent subject pronoun (\"I\"), not attached to any verb. It is indeclinable, so its ending never changes for case. Placed here as the subject (mubtadaʾ) of a nominal sentence (\"I [am] a worshipper...\"), its presence adds emphasis and contrast: \"I, on my side.\""
+      ],
+      [
+       "عَابِدٌ",
+       "ʿābid--un",
+       "worshipper / one who worships a (indefinite marker)",
+       "An active participle (the \"-er\" form) on the pattern fāʿil, meaning \"a worshipper / one worshipping.\" The final -un is nunation carrying the -u (nominative) vowel: the -u marks it as the predicate (khabar) of the nominal sentence (\"I [am] a worshipper\"), and the -n shows it is indefinite (\"a\" worshipper, not \"the\").…",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, devote oneself"
+      ],
+      [
+       "مَّا",
+       "mā",
+       "what / that which (here: the act of)",
+       "Indeclinable particle, so it has no case ending of its own. Two readings: (1) the dominant one for this verse, mā masdariyyah (infinitival) — it turns the following verb into a verbal noun, \"your worshipping / your mode of worship,\" yielding \"I will never adopt the way you worship\";…"
+      ],
+      [
+       "عَبَدْتُّمْ",
+       "ʿabad--tum",
+       "worship(ed) you (plural)",
+       "A perfect-tense verb with the attached subject ending -tum, \"you,\" masculine plural — \"you (all) worship / have worshipped.\" The doer is built into the suffix, so there is no separate prefix.…",
+       "ع-ب-د (ʿ-b-d) — to worship, serve, devote oneself"
+      ]
+     ]
+    },
+    {
+     "ref": "109:5",
+     "ar": "وَ لَاۤ اَنۡـتُمۡ عٰبِدـُوۡنَ مَاۤاَعۡبُدـُ",
+     "en": "Nor will you ever worship what I worship—until truth enters the heart, no argument can force genuine submission.",
+     "words": [
+      [
+       "وَ",
+       "wa",
+       "and",
+       "This is the prefix particle wa- (\"and\"), used to connect clauses. It carries no case ending of its own; it simply attaches to whatever follows and ties this line to the one before it. In the running verse it pairs with the negative that follows to give \"and not / nor.\""
+      ],
+      [
+       "لَاۤ",
+       "lā",
+       "not",
+       "This is the negating particle lā. It is invariable — it never takes a case ending and never changes form. It works by denying the statement that follows; combined with the earlier wa- it yields \"and not / nor.\""
+      ],
+      [
+       "اَنۡـتُمۡ",
+       "antum",
+       "you (all)",
+       "This is a standalone subject pronoun, second person masculine plural. The piece ant- carries the \"you,\" and the ending -um marks \"plural / more than two males.\" Being an independent pronoun it has a fixed shape and takes no case vowel; placed first, it stresses the subject — \"as for you...\""
+      ],
+      [
+       "عٰبِدـُوۡنَ",
+       "ʿābid--ūna",
+       "worshipper / one who worships (masculine plural ending)",
+       "This is an active participle, masculine plural. The stem ʿābid means \"one who worships\"; the ending -ūna marks masculine plural in the subject (nominative) case —…",
+       "ع-ب-د (ʿ-b-d) — to worship, to serve, to devote oneself"
+      ],
+      [
+       "مَاۤاَعۡبُدـُ",
+       "mā-aʿbud--u",
+       "that which / (my) manner of I worship (indicative-mood ending)",
+       "\"Mā\" is an invariable particle with no case ending; here it is read either as a relative pronoun (\"that which\") or, in the interpretation the source prefers for this verse, as mā maṣdariyya (an infinitival particle that recasts the following verb as a verbal noun, \"my worship / way of worshipping\").…",
+       "ع-ب-د (ʿ-b-d) — to worship, to serve, to devote oneself"
+      ]
+     ]
+    },
+    {
+     "ref": "109:6",
+     "ar": "لَـكُمۡ دِيۡنُكُمۡ وَلِــيَ دِيۡنِ",
+     "en": "For you is your deen—the way of life you have chosen. And for me is mine—the path of tawhid I will not abandon.",
+     "words": [
+      [
+       "لَـكُمۡ",
+       "la---kum",
+       "for / belonging to you (plural, men addressed)",
+       "A preposition plus an attached pronoun. The preposition is li- (\"for/to\"), but when the pronoun -kum attaches, its vowel shifts from -i to -a, giving la-kum. The -kum ending means \"you all\" (masculine plural), addressing the disbelievers. As a prepositional phrase placed first, it carries the sense \"to you belongs...\".",
+       "— (preposition + pronoun, no triliteral root)"
+      ],
+      [
+       "دِيۡنُكُمۡ",
+       "dīn--u--kum",
+       "religion / way of life / requital (subject-marking ending) your (plural, men addressed)",
+       "A noun with a possessive ending. The -u vowel on dīn-u is the nominative case: it marks this word as the subject of the verbless sentence (\"your religion [is] for you\"). The attached -kum means \"your\" (masculine plural), so together: \"your religion.\"",
+       "د-ي-ن (d-y-n) — religion, way of life, judgement/requital"
+      ],
+      [
+       "وَلِــيَ",
+       "wa--li---ya",
+       "and for / belonging to me",
+       "Three pieces joined: the connector wa- (\"and\"), the preposition li- (\"for\"), and the pronoun for \"me.\" When the \"me\" pronoun attaches to li-, it surfaces with an -a vowel here (li-ya), giving wa-li-ya. The phrase means \"and to me belongs...\".",
+       "— (connector + preposition + pronoun, no triliteral root)"
+      ],
+      [
+       "دِيۡنِ",
+       "dīn--i",
+       "religion / way of life / requital (remnant of \"my\")",
+       "The same noun dīn, here ending in -i. In this Qur'anic reading the possessive \"my\" (the yāʾ) is dropped at the end of the verse, and the leftover kasra (-i) stands in its place —…",
+       "د-ي-ن (d-y-n) — religion, way of life, judgement/requital"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nasr",
+   "n": 110,
+   "name": "النَّصْر",
+   "nameEn": "An-Nasr — The Divine Support",
+   "why": "Three verses with إذا، جاء، رأيت، كان — four of the highest-frequency words in the Quran, in their natural habitat.",
+   "verses": [
+    {
+     "ref": "110:1",
+     "ar": "اِذَا جَآءَ نَصۡرُ اللّٰهِ وَالفَتۡحُ",
+     "en": "When Allah's decisive help arrives and victory becomes visible—not the small wins of ego, but the opening you could not manufacture yourself—",
+     "words": [
+      [
+       "اِذَا",
+       "idhā",
+       "when (at the time that)",
+       "An indeclinable particle, so it has no case ending that changes. It introduces a future event treated as certain to occur and signals that a 'main clause' (the response) is still coming later in the passage."
+      ],
+      [
+       "جَآءَ",
+       "jāa",
+       "came / arrived",
+       "A past-tense verb, third-person masculine singular ('he/it came'), matching its subject 'help' which follows. It carries no added person/gender suffix — the bare third-masculine-singular form; the fatḥa on the final letter (the hamza) is part of the verb's own shape, not a separate tense or person marker.…",
+       "ج-ي-ء (j-y-ʾ) — coming, arriving"
+      ],
+      [
+       "نَصۡرُ",
+       "naṣr--u",
+       "help / victorious aid (the) — subject marker",
+       "A masculine noun functioning as the subject of 'came'. The final -u ending (nominative) marks it as the doer of the verb — it is the help that 'comes'. It is also the first part of a possessive pair, joined to 'Allah' next ('the help OF Allah').",
+       "ن-ص-ر (n-ṣ-r) — help, support, victory"
+      ],
+      [
+       "اللّٰهِ",
+       "l-lā--hi",
+       "Allah (the divine name) of — possessive ending",
+       "The divine name in the genitive (possessive) case, shown by the final -i ending, which links it to the preceding word: 'the help OF Allah'. The name اللّٰه is treated by Arabic grammarians as a single, undivided proper noun;…"
+      ],
+      [
+       "وَالفَتۡحُ",
+       "wa--l--fatḥ--u",
+       "and the victory / opening, conquest (subject marker)",
+       "'wa-' is 'and'; 'al-' is 'the'. The noun is a second subject of 'came', sharing the verb with 'help'. Its final -u ending (nominative) marks it as part of what 'comes'. The leading 'al-' makes it definite — THE victory, the well-known promised one.",
+       "ف-ت-ح (f-t-ḥ) — opening, unlocking, conquest"
+      ]
+     ]
+    },
+    {
+     "ref": "110:2",
+     "ar": "وَرَاَيْتَ النَّاسَ يَدْخُلُونَ فِىْ دِيْنِ اللّٰهِ اَفْوَاجًا",
+     "en": "and you see people entering Allah's deen in waves, no longer mocking what they once dismissed,",
+     "words": [
+      [
+       "وَرَاَيْتَ",
+       "wa-ra-ay--ta",
+       "and saw / witnessed you (masculine singular)",
+       "A past-tense verb. The wa- at the front simply means \"and,\" joining this to the previous verse. The core verb ra'ā means \"to see.\" The final -ta is the subject ending that means \"you\" (one man) did the action — here, the Prophet himself. So the whole is \"and you saw / witnessed.\"",
+       "ر-أ-ي (r-ʾ-y) — to see, perceive, behold (the middle radical is the hamza, ء)"
+      ],
+      [
+       "النَّاسَ",
+       "al---nāsa",
+       "the people, mankind",
+       "A noun with \"the\" attached at the front (the l of al- assimilates into the n, so it sounds like an-nās). The final -a is the accusative ending: it marks this word as the direct object — the thing being seen. So it answers \"you saw whom? — the people.\"",
+       "أ-ن-س (ʾ-n-s) — humans, sociability; nās comes from unās, with the initial hamza dropped"
+      ],
+      [
+       "يَدْخُلُونَ",
+       "ya---dkhulu--ūna",
+       "they (he-type, marks present tense) enter, go in they (masculine plural)",
+       "A present/ongoing-tense verb. The ya- prefix signals the present tense and a third-person subject, and the -ūna ending makes it \"they\" (many men) and keeps the verb in its normal (indicative) state, i.e. simple ongoing action: \"they are entering.\" It describes the people of the previous word.",
+       "د-خ-ل (d-kh-l) — to enter, go inside"
+      ],
+      [
+       "فِىْ",
+       "fī",
+       "in, into",
+       "A preposition (a small linking word) meaning \"in\" or \"into.\" It has no endings that change; it governs the noun after it, putting that noun into the genitive case. Here it links \"entering\" to its destination, \"the religion of Allah.\"",
+       "— (a particle; it has no triliteral root)"
+      ],
+      [
+       "دِيْنِ",
+       "dīni",
+       "religion, way of life, obedience to Allah",
+       "A noun. The final -i ending is genitive for two reasons working together: it follows the preposition fī (\"in\"), and it links to the next word to mean \"the religion OF…\" So it reads \"into the religion of [Allah].\"",
+       "د-ي-ن (d-y-n) — religion, way, obedience, recompense"
+      ],
+      [
+       "اللّٰهِ",
+       "l-lahi",
+       "Allah",
+       "The proper name Allah. The final -i ending is genitive, showing possession after the preceding word: \"the religion OF Allah.\" It links the religion to its owner.",
+       "— (the proper name of Allah; not derived from a triliteral root in the ordinary way)"
+      ],
+      [
+       "اَفْوَاجًا",
+       "afwājan",
+       "in crowds, in throngs, in troops (groups of people)",
+       "A single plural noun in the accusative indefinite (its ending carries tanwīn al-fatḥ, the \"-an\" you hear). It is not the direct object here; it works as a ḥāl — a word describing the state or manner in which the people entered: \"crowd after crowd, in throngs.\" So: they were entering the religion of Allah in droves.",
+       "ف-و-ج (f-w-j) — a group, troop, or band of people"
+      ]
+     ]
+    },
+    {
+     "ref": "110:3",
+     "ar": "فَسَبِّحۡ بِحَمۡدِ رَبِّكَ وَاسۡتَغۡفِرۡهُ اِنَّهُ كَانَ تَوَّابًا",
+     "en": "then glorify your Lord with deep praise and seek His forgiveness—for even on the day of triumph, a servant remains in need of mercy, and He is ever the One who accepts tawbah.",
+     "words": [
+      [
+       "فَسَبِّحۡ",
+       "fa-sabbiḥ",
+       "so / then (in response to what came before) glorify! / declare (Him) free of all imperfection",
+       "\"fa-\" is a connecting prefix meaning \"so/then,\" linking this response to the conditions in verses 1-2. \"sabbiḥ\" is a form II (doubled-middle-letter) command verb, which makes the action intensive and deliberate: to actively and repeatedly declare Allah's perfection.…",
+       "س-ب-ح (s-b-ḥ) — to swim/glide away; hence to declare Allah utterly removed and free from all imperfection (glorification, tasbīḥ)"
+      ],
+      [
+       "بِحَمۡدِ",
+       "bi-ḥamdi",
+       "with / by means of the praise (of)",
+       "\"bi-\" is an attached preposition meaning \"with/by.\" Any noun after it must take the genitive case, which is why \"ḥamd\" appears with a final \"-i\" (ḥamdi). That same \"-i\" ending also chains it to the next word, giving \"praise OF (your Lord).\"",
+       "ح-م-د (ḥ-m-d) — praise; commending someone for their excellence and goodness"
+      ],
+      [
+       "رَبِّكَ",
+       "rabbi--ka",
+       "Lord / Master and Sustainer your (one male)",
+       "\"rabb\" is the first term of a possessive construct (\"the Lord OF you\" = \"your Lord\"), and it joins directly to the possessor \"-ka\" without any separate word for \"of.\" Its final \"-i\" (rabbi) is the genitive case carried over from the preposition \"bi-\" two words back, which governs this whole \"praise-of-your-Lord\" phrase…",
+       "ر-ب-ب (r-b-b) — to nurture, master, sustain; one who owns and brings up"
+      ],
+      [
+       "وَاسۡتَغۡفِرۡهُ",
+       "wa-is'taghfir--hu",
+       "and seek forgiveness! / ask for pardon Him",
+       "\"wa-\" means \"and.\" The verb is form X, marked by the \"ist-\" prefix, which carries the sense of \"to seek or ask for\" something — so from the root \"to forgive\" it becomes \"to seek forgiveness.\" It is a command to a single male (\"you\"), ending in the jussive (no final vowel).…",
+       "غ-ف-ر (gh-f-r) — to cover, conceal, pardon; hence forgiveness"
+      ],
+      [
+       "اِنَّهُ",
+       "inna--hu",
+       "indeed / truly (emphasizing certainty) He (Allah)",
+       "\"inna\" is a particle of emphasis and affirmation placed at the start of a statement to assert it firmly — best rendered \"indeed\" or \"truly.\" It grammatically takes a following noun/pronoun in the accusative; here that is the attached pronoun \"-hu\" (\"He\"), referring to Allah. Together: \"Indeed He...\""
+      ],
+      [
+       "كَانَ",
+       "kāna",
+       "has ever been / is constantly",
+       "\"kāna\" is the past-tense verb \"to be,\" third-person singular masculine (\"He was/has been\"). The final \"-a\" is its normal past-tense ending. Applied to Allah it expresses permanence — an unchanging attribute — so it is best read as \"He has ever been\" / \"He always is.\"",
+       "ك-و-ن (k-w-n) — to be, to exist, to come to be"
+      ],
+      [
+       "تَوَّابًا",
+       "tawwāb--an",
+       "ever-accepting of repentance / oft-relenting (accusative ending, completing \"He has ever been ___\")",
+       "This is an intensive noun-pattern (faʿʿāl), which signals something done abundantly and repeatedly — hence \"ever / oft\" accepting repentance, not merely \"accepting\" once. The final \"-an\" (tanwīn) is the accusative ending because it is the complement of \"kāna\" (\"He has ever BEEN ever-relenting\");…",
+       "ت-و-ب (t-w-b) — to turn back, return; repentance (from the servant) and acceptance of it / relenting (from Allah)"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "masad",
+   "n": 111,
+   "name": "المَسَد",
+   "nameEn": "Al-Masad — The Palm Fibre",
+   "why": "Short narrative verses with past-tense verbs (تبّ، أغنى، كسب) — a story you already know, told in five lines.",
+   "verses": [
+    {
+     "ref": "111:1",
+     "ar": "تَبَّـَتْ يَدَا أَبِي لَهَبـٍ وَتَبَّ",
+     "en": "Ruin seize the hands of Abu Lahab—and may he himself perish—he who mocked the Message publicly and thought his tribe could protect him from consequences.",
+     "words": [
+      [
+       "تَبَّـَتْ",
+       "tabba--at",
+       "to perish, be ruined, come to nothing feminine-singular subject ending (agreeing with 'hands')",
+       "A past-tense verb (form I) used as a curse/invocation: 'may it perish!' The ending -at (ـَتْ) marks the subject as third-person feminine singular. It is feminine singular — not plural — because the grammatical subject is yadā ('the two hands');…",
+       "ت-ب-ب (t-b-b) — to perish, be ruined, suffer loss"
+      ],
+      [
+       "يَدَا",
+       "yadā",
+       "two hands (the long -ā ending marks 'two')",
+       "This is the dual form of yad ('hand'), so it means exactly 'two hands,' not one or many. It is the subject of the verb 'perish.' The dual normally ends in -āni, but because it is joined ('in construct') to the next word 'Abu (Lahab)' — 'the two hands OF Abu Lahab' — the final -ni drops, leaving just yadā.",
+       "ي-د-ي (y-d-y) — hand"
+      ],
+      [
+       "أَبِي",
+       "abī",
+       "father of",
+       "This is one of a small set of 'five nouns' that show their case with a long vowel. Here the -ī ending is the genitive (possessive) form, signalling two links at once: 'the hands OF Abu…' (it is possessed by 'hands') and 'Abu OF Lahab' (it owns the next word). So abī = 'father of,' set up to attach to 'Lahab.'",
+       "أ-ب-و (ʾ-b-w) — father"
+      ],
+      [
+       "لَهَبـٍ",
+       "lahab--in",
+       "flame, blaze the '-in' ending: genitive + indefinite (no 'the')",
+       "The final -in (written with the double-vowel mark called tanwīn) does two things: the -i part is genitive because this word is possessed by 'Abu' ('father OF Lahab'), and the -n part marks it as indefinite (no 'the'). Together they give the reading 'Father of Flame.'",
+       "ل-ه-ب (l-h-b) — to blaze, flame, burn"
+      ],
+      [
+       "وَتَبَّ",
+       "wa-tabba",
+       "and he perished / was ruined",
+       "'wa' (وَ) means 'and.' 'tabba' is the same form I past-tense verb as in word 1, but here it is third-person masculine singular, so the subject is Abu Lahab himself rather than 'the hands.' Masculine singular is shown by the absence of any subject suffix —…",
+       "ت-ب-ب (t-b-b) — to perish, be ruined, suffer loss"
+      ]
+     ]
+    },
+    {
+     "ref": "111:2",
+     "ar": "مَا اَغۡنَٰى عَنۡهُ مَالُهُ وَمَا كَسَبَ",
+     "en": "His wealth and whatever he accumulated will not rescue him when the account is due—no inheritance, no status, no emergency fund can pay that debt.",
+     "words": [
+      [
+       "مَا",
+       "mā",
+       "not",
+       "A standalone negative particle, here negating the past-tense verb that follows. It has no case ending of its own; it simply turns 'availed' into 'did NOT avail.' The lengthening on the alif is a recitation feature, not a grammatical ending."
+      ],
+      [
+       "اَغۡنَٰى",
+       "aghna--ā",
+       "availed / warded off (Form IV) he/it (3rd-person masc. past ending)",
+       "A past-tense verb, 3rd-person masculine singular ('it availed'). It is Form IV (formed with a prefixed hamza, اَ-, on the root), which makes the verb causative/transitive: 'to make someone free of need,' i.e.…",
+       "غ-ن-ي (gh-n-y) — to be free of need, richness, sufficiency"
+      ],
+      [
+       "عَنۡهُ",
+       "ʿan--hu",
+       "from / on behalf of him (attached pronoun)",
+       "A preposition ('ʿan') with an attached pronoun ('-hu' = him). The pronoun is in the object form required after a preposition. Together they tell us the wealth did not avail 'for/from him' — pinning the benefit that never came to Abu Lahab specifically."
+      ],
+      [
+       "مَالُهُ",
+       "mālu--hu",
+       "wealth / property his (attached possessive pronoun)",
+       "A noun ('māl' = wealth) plus the attached possessive pronoun '-hu' (his). The -u ending on 'mālu' is the nominative case, marking this as the doer/subject of the verb 'availed' — it is 'his wealth' that did the (non-)availing.",
+       "م-و-ل (m-w-l) — wealth, property, possessions"
+      ],
+      [
+       "وَمَا",
+       "wa-mā",
+       "and what / that which",
+       "Two particles: 'wa' (and) joining this to 'his wealth,' and 'mā' here used not as a negative but as a relative pronoun meaning 'what / that which.' So the second subject of 'availed' is 'and that which he earned.' These particles take no case ending."
+      ],
+      [
+       "كَسَبَ",
+       "kasaba",
+       "he earned / acquired",
+       "A past-tense verb, 3rd-person masculine singular: 'he earned.' The final -a is the standard past-tense ending for 'he (did).' It sits inside the relative clause begun by 'mā,' giving 'that which he earned.' Together with 'his wealth,' it forms the compound subject of 'availed him nothing.'",
+       "ك-س-ب (k-s-b) — to earn, gain, acquire"
+      ]
+     ]
+    },
+    {
+     "ref": "111:3",
+     "ar": "سَيَـصۡلٰى نَارًـا ذَاتَ لَهَبٍٍ",
+     "en": "He will enter a Fire of blazing flame—",
+     "words": [
+      [
+       "سَيَـصۡلٰى",
+       "sa--ya--ṣlā",
+       "shall / will soon (future marker) he (3rd-person masculine prefix) roast / be burned by fire",
+       "A present/future verb made future by the prefix sa- ('will, shall soon'). The ya- prefix marks a single male subject: 'he'. The verb ends in a long -ā (written with alif maqṣūra) because its final root letter is weak; it carries the indicative meaning of a real, certain event. Sense: 'he will surely be burned/roasted.'",
+       "ص-ل-ي (ṣ-l-y) — to roast, burn, be scorched by fire"
+      ],
+      [
+       "نَارًـا",
+       "nār--an",
+       "fire a (indefinite object ending)",
+       "A noun in the accusative case, shown by the final -an (tanwīn fatḥa). The accusative marks it as the object/goal of the verb — what he will be burned in. The -an ending also signals that the noun is indefinite: 'a fire.'",
+       "ن-و-ر (n-w-r) — the sense of burning/blazing fire; the noun نَار ('fire') belongs to this root (distinct from نُور, 'light,' from the same root)"
+      ],
+      [
+       "ذَاتَ",
+       "dhāta",
+       "possessor of / having (feminine)",
+       "The feminine form of dhū ('possessor of'). It is in the accusative case, shown by the final -a, because it describes the accusative noun 'fire' (nār is feminine, so the feminine dhāt agrees with it). It is grammatically bound to the word after it, meaning 'having ___ / possessor of ___.'",
+       "— (a possessive word; no verbal triliteral root)"
+      ],
+      [
+       "لَهَبٍٍ",
+       "lahab--in",
+       "flame / blaze of (indefinite genitive ending)",
+       "A noun in the genitive case, shown by the final -in (tanwīn kasra). It is genitive because it follows dhāta ('possessor of'), forming a possessive link (iḍāfa): 'possessor OF flame' = 'full of flame.' The -in ending also marks it as indefinite.",
+       "ل-ه-ب (l-h-b) — to blaze, flame up; flame"
+      ]
+     ]
+    },
+    {
+     "ref": "111:4",
+     "ar": "وَامۡرَاَتُـهٗ حَمَّالَةَ الۡحَطَبِ",
+     "en": "and his wife too, the carrier of thorns—she who spread harm alongside him, fueling hostility against the truth.",
+     "words": [
+      [
+       "وَامۡرَاَتُـهٗ",
+       "wa-imraʾatu--hu",
+       "and wife (of) his",
+       "Starts with the connecting word \"and\" (wa-), joining this verse to what precedes.…",
+       "م-ر-ء (m-r-ʾ) — person / human being; feminine form: woman, wife"
+      ],
+      [
+       "حَمَّالَةَ",
+       "ḥammālata",
+       "constant/zealous carrier (feminine)",
+       "This is an intensive doer-form (the faʿʿaal pattern, with the middle letter doubled) made feminine by the ـة ending — \"one who carries a great deal.\" The doubling stresses repetition and intensity.…",
+       "ح-م-ل (ḥ-m-l) — to carry, bear, haul a load"
+      ],
+      [
+       "الۡحَطَبِ",
+       "al--ḥaṭabi",
+       "the firewood / kindling",
+       "Begins with the definite article al- (\"the\"). The stem \"ḥaṭab\" (firewood) carries the ending -i (genitive): the -i marks it as the thing possessed by \"carrier,\" giving the meaning \"carrier OF the firewood\" — the genitive link is exactly what English shows with \"of.\"",
+       "ح-ط-ب (ḥ-ṭ-b) — firewood, to gather wood for fuel"
+      ]
+     ]
+    },
+    {
+     "ref": "111:5",
+     "ar": "فِىۡ جِيۡدِهَا حَبۡلٌ مِّنۡ مَّسَدٍ",
+     "en": "Around her neck will be a rope of palm fibre—a symbol of the burden she chose and the humiliation that follows arrogance against Allah.",
+     "words": [
+      [
+       "فِىۡ",
+       "fī",
+       "in / upon",
+       "An indeclinable preposition (a fixed little word that never changes its form). Its job is to point to a location: \"in/on her neck.\" Whatever noun comes after it must take the genitive ending — which is exactly why the next word reads jīdi-hā (with an -i) rather than jīdu-hā."
+      ],
+      [
+       "جِيۡدِهَا",
+       "jīdi-hā",
+       "neck her",
+       "A noun followed by an attached possessive pronoun. The -i ending on jīdi is genitive, caused by the preposition fī before it (\"in her neck\"). The suffix -hā means \"her,\" referring to a single female; because this pronoun is possessing the noun, the two together form an \"of\" relationship — literally \"the neck of her.\"",
+       "ج-ي-د (j-y-d) — the neck / throat"
+      ],
+      [
+       "حَبۡلٌ",
+       "ḥabl--un",
+       "rope a (indefinite, nominative)",
+       "A singular noun carrying the ending -un, a form of tanwīn (nunation) written above the final letter as two small ḍamma strokes (tiny curly hooks), not as two dots. That doubled-vowel ending marks the word as indefinite —…",
+       "ح-ب-ل (ḥ-b-l) — rope / cord, binding"
+      ],
+      [
+       "مِّنۡ",
+       "min",
+       "of / from",
+       "An indeclinable preposition (a fixed word that does not change form). It governs the following noun and forces it into the genitive case — which is why the next word ends in -in. In this context it conveys \"made of / consisting of,\" describing the rope's material."
+      ],
+      [
+       "مَّسَدٍ",
+       "masad--in",
+       "palm-fibre / twisted rope (genitive, indefinite)",
+       "A singular noun with the ending -in, a form of tanwīn (nunation) written beneath the final letter as two small kasra strokes. The -i part is the genitive case, required because the preposition min comes before it (\"of palm-fibre\"). The tanwīn (the doubled vowel) marks it as indefinite —…",
+       "م-س-د (m-s-d) — to twist / tightly wind (a fibre rope)"
+      ]
+     ]
+    }
+   ]
   }
  ]
 }

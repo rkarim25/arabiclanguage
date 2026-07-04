@@ -16,6 +16,9 @@ const META = {
   103: { id: "asr",     name: "العَصْر", nameEn: "Al-Asr — Time", why: "Three verses containing the Quran's core message — and its highest-frequency structures: إنّ، الذين، آمنوا، عملوا، الحق." },
   108: { id: "kawthar", name: "الكَوْثَر", nameEn: "Al-Kawthar — Abundance", why: "The shortest surah — and you already know فَصَلِّ and لِرَبِّكَ from your word families." },
   112: { id: "ikhlas",  name: "الإِخْلَاص", nameEn: "Al-Ikhlas — Sincerity", why: "Equal to a third of the Quran in reward, and built entirely from top-frequency words: قل، هو، الله، لم، يكن، له." },
+  109: { id: "kafirun", name: "الكَافِرُون", nameEn: "Al-Kafirun — The Disbelievers", why: "Six verses built almost entirely from one root (ع-ب-د, worship) and the negations لا وما — pure high-frequency grammar practice." },
+  110: { id: "nasr",    name: "النَّصْر", nameEn: "An-Nasr — The Divine Support", why: "Three verses with إذا، جاء، رأيت، كان — four of the highest-frequency words in the Quran, in their natural habitat." },
+  111: { id: "masad",   name: "المَسَد", nameEn: "Al-Masad — The Palm Fibre", why: "Short narrative verses with past-tense verbs (تبّ، أغنى، كسب) — a story you already know, told in five lines." },
   113: { id: "falaq",   name: "الفَلَق", nameEn: "Al-Falaq — Daybreak", why: "One of the two protection surahs you recite morning and evening." },
   114: { id: "nas",     name: "النَّاس", nameEn: "An-Nas — Mankind", why: "The Quran's final surah, recited daily for protection — six short verses around one root: النَّاس." },
 };
