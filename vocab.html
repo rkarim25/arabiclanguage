@@ -91,7 +91,8 @@ function renderList() {
 
     <div class="card" id="browseCard">
       <h2>🗂 All your words, by bucket</h2>
-      <p class="sub" style="margin-bottom:10px">Pick a bucket to see those words — including <strong>unmarked</strong> (never studied) and <strong>don't repeat</strong> (change your mind any time). Practice exactly the bucket you choose.</p>
+      <p class="sub" style="margin-bottom:10px">Filter by category and bucket — including <strong>unmarked</strong> (never studied) and <strong>don't repeat</strong> (change your mind any time). Practice exactly what you select.</p>
+      <div class="chips" id="catChips"></div>
       <div class="chips" id="bucketChips"></div>
       <div class="ex-row" style="margin-bottom:10px">
         <button class="primary" id="practiceBucket">📝 Practice this bucket</button>
@@ -103,11 +104,11 @@ function renderList() {
     </div>
 
     <h2 style="margin-top:24px">📖 The Quran core — most frequent words first</h2>
-    <p class="sub">These ≈60 words are the highest-yield vocabulary for understanding recitation. They flow into Vocab Learn a few at a time.</p>
+    <p class="sub">These ≈60 words are the highest-yield vocabulary for understanding recitation. Study right here — 🔊 to hear, then mark each word: <strong>know</strong> means learnt. They also flow into Vocab Learn (choose "Quran only" there to focus).</p>
     <div class="card">
-      <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
+      <div class="vocab-table-wrap" style="max-height:480px;overflow-y:auto">
         <table class="vocab-table">
-          <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th></tr></thead>
+          <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th><th>learnt?</th></tr></thead>
           <tbody id="coreBody"></tbody>
         </table>
       </div>
@@ -127,17 +128,18 @@ function renderList() {
   const coreBody = document.getElementById("coreBody");
   CORE.forEach((w, i) => {
     const tr = document.createElement("tr");
-    const st = srs[`qc:${i}`];
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:12px">${i + 1}</td>
-      <td class="en-cell">${w.en}${st ? ` <span style="color:var(--accent);font-size:11px">✓ ${bucketOf(`qc:${i}`)}</span>` : ""}</td>
+      <td class="en-cell">${w.en}</td>
       <td class="ar-cell">${w.ar}</td>
       <td><span class="row-speak">🔊</span></td>
       <td class="tr-cell">${w.tr}</td>
       <td style="color:var(--muted);font-size:12px;white-space:nowrap">≈${w.n}×</td>
+      <td><div class="bucket-slot"></div></td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(w.ar, 0.8);
     coreBody.appendChild(tr);
+    mountBucketBar(tr.querySelector(".bucket-slot"), `qc:${i}`);
   });
 
   /* grids */
@@ -165,6 +167,7 @@ function groupCard(obj, prefix, arTitle, metaText) {
 
 /* ================= Vocab Learn: endless auto-picked batches ================= */
 let sheetMode = "understand"; // understand: Ar→En | produce: En→Ar
+let sheetSrc = store.get("ats-sheet-src", "mixed"); // mixed | quran | msa
 let sheetItems = null;   // current batch
 let pool = null;         // ordered queue
 let poolPos = 0;
@@ -173,10 +176,11 @@ let poolLabel = "auto";
 const BATCH = 10;
 
 async function buildPool() {
-  const due = dueCards();
+  const inSrc = key => sheetSrc === "mixed" || catsOf(key).includes(sheetSrc);
+  const due = dueCards().filter(inSrc);
   const items = (await resolveCards(due)).map(x => ({ ...x, isNew: false }));
   const srs = getSrs();
-  const newQc = [], newEv = [], newFam = [];
+  const newQc = [], newEv = [], newFam = [], newStory = [];
   CORE.forEach((w, i) => {
     const key = `qc:${i}`;
     if (!srs[key]) newQc.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` }, isNew: true });
@@ -189,12 +193,27 @@ async function buildPool() {
     const key = `fam-${f.id}:${i}`;
     if (!srs[key]) newFam.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: "root " + f.root }, isNew: true });
   }));
-  // interleave: 5 Quran-core + 5 everyday per batch of new words — both goals advance together
-  const mixed = [];
-  while (newQc.length || newEv.length) {
-    mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
+  for (const s of STORY_LIST.filter(s => !s.locked)) {
+    try {
+      const st = await loadStory(s.id);
+      st.vocab.forEach((w, i) => {
+        const key = `${s.id}:${i}`;
+        if (!srs[key]) newStory.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: s.titleEn }, isNew: true });
+      });
+    } catch (e) {}
   }
-  return [...items, ...mixed, ...newFam];
+  let fresh;
+  if (sheetSrc === "quran") fresh = [...newQc, ...newFam];
+  else if (sheetSrc === "msa") fresh = [...newEv, ...newStory, ...newFam];
+  else {
+    // interleave: 5 Quran-core + 5 everyday per batch of new words — both goals advance together
+    const mixed = [];
+    while (newQc.length || newEv.length) {
+      mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
+    }
+    fresh = [...mixed, ...newFam, ...newStory];
+  }
+  return [...items, ...fresh];
 }
 
 async function renderSheet() {
@@ -204,7 +223,12 @@ async function renderSheet() {
   if (!sheetItems) { sheetItems = pool.slice(poolPos, poolPos + BATCH); poolPos += sheetItems.length; }
   if (!sheetItems.length) { area.innerHTML = `<p>🎉 You've worked through everything in this queue — ${sessionDone} words this session.</p>`; return; }
   area.innerHTML = `
-    ${poolLabel !== "auto" ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing bucket: ${poolLabel} (${pool.length} words) — <a href="vocab.html?sheet=1" style="color:var(--accent)">back to auto</a></p>` : ""}
+    ${poolLabel !== "auto" ? `<p style="font-size:13px;color:var(--amber);font-weight:600;margin:0 0 8px">Practicing bucket: ${poolLabel} (${pool.length} words) — <a href="vocab.html?sheet=1" style="color:var(--accent)">back to auto</a></p>` : `
+    <div class="toggles" style="margin-bottom:6px">
+      <label><input type="radio" name="shSrc" value="mixed" ${sheetSrc === "mixed" ? "checked" : ""}> Mixed</label>
+      <label><input type="radio" name="shSrc" value="quran" ${sheetSrc === "quran" ? "checked" : ""}> 📖 Quran only</label>
+      <label><input type="radio" name="shSrc" value="msa" ${sheetSrc === "msa" ? "checked" : ""}> 🗣 Everyday MSA only</label>
+    </div>`}
     <div class="toggles" style="margin-bottom:10px">
       <label><input type="radio" name="shMode" value="understand" ${sheetMode === "understand" ? "checked" : ""}> Understand (عربي → English)</label>
       <label><input type="radio" name="shMode" value="produce" ${sheetMode === "produce" ? "checked" : ""}> Write (English → عربي)</label>
@@ -221,6 +245,12 @@ async function renderSheet() {
     <div class="quiz-score" id="shScore"></div>
   `;
   area.querySelectorAll("input[name=shMode]").forEach(r => r.onchange = () => { sheetMode = r.value; renderSheet(); });
+  area.querySelectorAll("input[name=shSrc]").forEach(r => r.onchange = () => {
+    sheetSrc = r.value;
+    store.set("ats-sheet-src", sheetSrc);
+    pool = null; sheetItems = null;
+    renderSheet();
+  });
   const tbody = document.getElementById("shBody");
   let lastFocused = null;
   tbody.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") lastFocused = e.target; });
@@ -356,6 +386,7 @@ function mountBucketBar(slot, key) {
 /* ================= browse by bucket ================= */
 let catalog = null;
 let browseFilter = "unmarked";
+let browseCat = "all"; // all | quran | msa
 
 async function buildCatalog() {
   const items = [];
@@ -384,10 +415,13 @@ const FILTERS = [
   ["never", "Don't repeat"],
 ];
 
+function catCatalog() {
+  return catalog.filter(({ key }) => browseCat === "all" || catsOf(key).includes(browseCat));
+}
 function filterCatalog() {
   const now = Date.now();
   const srs = getSrs();
-  return catalog.filter(({ key }) => {
+  return catCatalog().filter(({ key }) => {
     if (browseFilter === "due") { const e = srs[key]; return e && e.due <= now && bucketOf(key) !== "never"; }
     return bucketOf(key) === browseFilter;
   });
@@ -397,13 +431,24 @@ async function initBrowse() {
   if (!catalog) catalog = await buildCatalog();
   const chips = document.getElementById("bucketChips");
   if (!chips) return;
+  const catChips = document.getElementById("catChips");
 
   function refresh() {
+    catChips.innerHTML = "";
+    [["all", "All"], ["quran", "📖 Quran"], ["msa", "🗣 MSA"]].forEach(([id, label]) => {
+      const b = document.createElement("button");
+      const n = catalog.filter(({ key }) => id === "all" || catsOf(key).includes(id)).length;
+      b.textContent = `${label} (${n})`;
+      if (id === browseCat) b.classList.add("sel");
+      b.onclick = () => { browseCat = id; refresh(); };
+      catChips.appendChild(b);
+    });
     chips.innerHTML = "";
+    const base = catCatalog();
     FILTERS.forEach(([id, label]) => {
       const n = id === "due"
-        ? catalog.filter(({ key }) => { const e = getSrs()[key]; return e && e.due <= Date.now() && bucketOf(key) !== "never"; }).length
-        : catalog.filter(({ key }) => bucketOf(key) === id).length;
+        ? base.filter(({ key }) => { const e = getSrs()[key]; return e && e.due <= Date.now() && bucketOf(key) !== "never"; }).length
+        : base.filter(({ key }) => bucketOf(key) === id).length;
       const b = document.createElement("button");
       b.textContent = `${label} (${n})`;
       if (id === browseFilter) b.classList.add("sel");

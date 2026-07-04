@@ -106,6 +106,14 @@ function setBucket(key, b) {
   srs[key] = { box: def.box, due, b };
   store.set("ats-srs", srs);
 }
+/* categories (not mutually exclusive): every word is Quran and/or MSA */
+function catsOf(key) {
+  const sid = key.split(":")[0];
+  if (sid === "qc" || sid === "qw") return ["quran"];
+  if (sid.startsWith("fam-")) return ["quran", "msa"]; // Quranic roots used in MSA too
+  return ["msa"]; // everyday clusters and story vocabulary
+}
+
 function bucketOf(key) {
   const e = getSrs()[key];
   if (!e) return "unmarked";
