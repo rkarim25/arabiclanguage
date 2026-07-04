@@ -37,13 +37,14 @@ Shared code: `js/app.js` (manifests, SRS, TTS, phonetic input, `resolveCards`, `
 
 All localStorage, synced to the cloud (see Infrastructure):
 - `ats-progress` — `{ "<unitId>": { steps: { <step>: true } } }`. Unit ids: `story-NN`, `fam-<id>` (step `fill`), `q-<surahId>` (steps `study`/`test`), `gr-<patternId>` (step `test`).
-- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min.
+- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min. `b` is an explicit user bucket — `know` (30d) / `repeat` (10min) / `later` (7d) / `never` (due=year 2100, excluded from rotation); auto-grading deletes `b`. `bucketOf(key)` maps state→bucket; the Vocab Lab browse view filters by bucket (incl. Unmarked and Don't-repeat) and can feed any bucket into the practice sheet.
 - `ats-log` — append-only event log (schema in `ANALYSIS.md` in the `rkarim25/arabic-learning-data` repo).
 - `ats-session` / `ats-token` / `ats-gclient` — Google session, GitHub PAT fallback, pasted Google client ID.
 
 **SRS card keys** (resolved to content by `resolveCards()` in app.js):
 - `story-NN:<i>` → `data/story-NN.json` `.vocab[i]`
 - `fam-<id>:<i>` → `data/families.json` family member
+- `ev-<id>:<i>` → `data/everyday.json` everyday-cluster member
 - `qc:<i>` → `data/quran-core.json` `.words[i]` — **append-only: never reorder or delete entries**
 - `qw:<surahId>:<v>:<w>` → `data/verses.json` verse word
 
@@ -52,6 +53,7 @@ All localStorage, synced to the cloud (see Infrastructure):
 - **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, and add it to `QURAN_SURAHS` in `js/app.js`. Recommended next: 110, 111, 109, 106, 105; Ayat al-Kursi needs a verse-range feature.
 - **Quran core words**: append to `data/quran-core.json` toward the top ~300 lemmas, keeping frequency order among *new* entries (existing indices frozen).
 - **Root families**: add to `data/families.json` + `FAMILY_LIST` in `js/app.js`. Pick roots from Reza's weak words. Include 4-7 Quranic forms + 2 real verses each.
+- **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words.
 - **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js`. Curriculum plan: 5 levels × 8 stories (L1 present tense → L5 functional MSA/media); recycle weak vocab and Quranic structures.
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
 
