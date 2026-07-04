@@ -214,6 +214,17 @@ computeMilestones().then(ms => {
         Straight talk: word counts are the ETAs above; the top stages also need real listening and speaking hours — no shortcut exists, which is why the 🎧 and Speak suggestions matter (so far: ${ms.goalStages.spokenAttempts} spoken attempts, ${ms.goalStages.listenClicks} listening sessions logged).
         Recognition % is a leading indicator; the surah and milestone tests measure true understanding. More minutes per day shortens everything linearly. Content for the higher stages arrives automatically via coaching updates.
       </div>
+    </div>
+    <div style="border-top:1px dashed var(--border);padding-top:10px;margin-top:10px">
+      <div style="font-weight:700;font-size:14px">🏆 Achieved so far — verified by tests, not self-reported</div>
+      <div style="font-size:13px;margin-top:5px"><strong>${ms.totalLearnt} words learnt</strong> (📖 ${ms.learntSplit.quran} Quranic · 🗣 ${ms.learntSplit.msa} everyday — families count in both)</div>
+      <div style="font-size:13px;margin-top:3px"><strong>Sentences proven out loud:</strong> ${ms.provenPrompts.length} prompt${ms.provenPrompts.length === 1 ? "" : "s"}${ms.provenSpoken ? ` + ${ms.provenSpoken} shadowed sentence${ms.provenSpoken > 1 ? "s" : ""}` : ""}${ms.provenTrans ? ` · ${ms.provenTrans} written translation${ms.provenTrans > 1 ? "s" : ""}` : ""}${ms.provenDict ? ` · ${ms.provenDict} dictation${ms.provenDict > 1 ? "s" : ""} transcribed` : ""}</div>
+      ${ms.provenPrompts.length ? `<div style="font-size:12.5px;margin-top:4px">${ms.provenPrompts.slice(0, 5).map(p =>
+        `<div>✓ “${p.en}” <span class="arabic" style="font-size:16px" dir="rtl">${p.ar}</span></div>`).join("")}${ms.provenPrompts.length > 5 ? `<div style="color:var(--muted)">…and ${ms.provenPrompts.length - 5} more</div>` : ""}</div>` : ""}
+      ${ms.history.length
+        ? `<div style="font-size:12.5px;margin-top:8px">${ms.history.slice(0, 8).map(h =>
+            `<div>${h.label} <span style="color:var(--muted)">· ${new Date(h.t).toLocaleDateString()}</span></div>`).join("")}${ms.history.length > 8 ? `<div style="color:var(--muted)">…and ${ms.history.length - 8} earlier results</div>` : ""}</div>`
+        : `<div style="font-size:12.5px;color:var(--muted);margin-top:6px">No verified results yet — pass a surah test, a milestone test, or speak a prompt with the mic, and it lands here with the date and score.</div>`}
     </div>`;
   document.getElementById("msStats").textContent =
     `${ms.totalLearnt} words learnt · ${dueCards().length} due for review · ${activeMinutes()} active minutes (measured from your actual interactions — open tabs count nothing)`;

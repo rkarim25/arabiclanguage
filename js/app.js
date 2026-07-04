@@ -303,7 +303,49 @@ async function computeMilestones() {
     spokenAttempts, listenClicks,
   };
 
-  return { quran, msa, coverage, convPct, totalLearnt, goalStages };
+  /* ---- verified achievements: history of what the tests have PROVEN ---- */
+  const TEST_TITLES = {
+    top20: "Top 20 Quran words", top40: "Top 40 Quran words", core60: "Full Quran core (60)",
+    opener: "Conversation opener kit", umrah: "Umrah-ready kit", masjid: "Masjid ears", survival: "Survival vocabulary",
+  };
+  const groupName = id => {
+    const clean = (id || "").replace(/^(fam-|ev-)/, "");
+    return (FAMILY_LIST.find(f => f.id === clean) || EVERYDAY_LIST.find(g => g.id === clean) || { root: clean, title: clean }).root
+      || (EVERYDAY_LIST.find(g => g.id === clean) || {}).title || clean;
+  };
+  const surahName = id => (QURAN_SURAHS.find(s => s.id === id) || { name: id }).name;
+  const history = [];
+  log.forEach(x => {
+    if (x.e === "mstest" && x.pass) history.push({ t: x.t, label: `${x.mode === "official" ? "🏅 Certified" : "📝 Mock passed"}: ${TEST_TITLES[x.ms] || x.ms} — ${x.score}/${x.total}` });
+    if (x.e === "qtest-done") history.push({ t: x.t, label: `📖 Surah ${surahName(x.surah)} word-meanings test — ${x.score}/${x.total}` });
+    if (x.e === "drill-done") history.push({ t: x.t, label: `⚡ Drilled ${groupName(x.fam)} — ${x.score}/${x.total} in ${x.secs}s` });
+    if (x.e === "gtest-done" && x.score === x.total) history.push({ t: x.t, label: `🧩 Grammar pattern "${x.g}" — ${x.score}/${x.total}` });
+  });
+  history.sort((a, b) => b.t - a.t);
+
+  /* sentences PROVEN, not self-reported: mic scored it or a check marked it right */
+  const provenPromptEns = new Map();
+  log.forEach(x => {
+    if (x.e === "prompt" && x.score >= 0.5 && !provenPromptEns.has(x.en)) provenPromptEns.set(x.en, x.t);
+  });
+  const provenPrompts = [...provenPromptEns.entries()].map(([en, t]) => {
+    const p = prompts.find(p => p.en === en);
+    return { en, ar: p ? p.ar : "", t };
+  }).sort((a, b) => b.t - a.t);
+  const provenSpoken = new Set(log.filter(x => (x.e === "speak" || x.e === "qspeak") && x.score >= 0.6).map(x => (x.story || x.surah) + ":" + x.s)).size;
+  const provenTrans = new Set(log.filter(x => x.e === "trans" && x.ok).map(x => x.story + ":" + x.i)).size;
+  const provenDict = new Set(log.filter(x => x.e === "dict" && x.ok).map(x => x.story + ":" + x.i)).size;
+
+  const learntKeys = Object.keys(getSrs()).filter(isLearnt);
+  const learntSplit = {
+    quran: learntKeys.filter(k => catsOf(k).includes("quran")).length,
+    msa: learntKeys.filter(k => catsOf(k).includes("msa")).length,
+  };
+
+  return {
+    quran, msa, coverage, convPct, totalLearnt, goalStages,
+    history, provenPrompts, provenSpoken, provenTrans, provenDict, learntSplit,
+  };
 }
 
 /* study rhythm measured from the log: words/min and min/day */
