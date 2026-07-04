@@ -19,23 +19,30 @@ function logEvent(e) {
   store.set(LOG_KEY, log);
 }
 
-/* ---------- time-on-task ---------- */
-let _page = null, _pageStart = 0;
+/* ---------- time-on-task (active time only) ----------
+   A tab left open doesn't count as studying. Seconds accrue only while the
+   page is visible AND there was interaction in the last 60s (or audio is
+   playing). Ticks every 15s. */
+let _page = null, _activeSec = 0, _lastActivity = Date.now();
+["pointerdown", "keydown", "scroll", "touchstart", "input"].forEach(ev =>
+  window.addEventListener(ev, () => { _lastActivity = Date.now(); }, { passive: true })
+);
+setInterval(() => {
+  const listening = window.speechSynthesis && speechSynthesis.speaking;
+  if (!document.hidden && (listening || Date.now() - _lastActivity < 60 * 1000)) {
+    _activeSec += 15;
+  }
+}, 15 * 1000);
 function trackPage(name) {
   flushTime();
   _page = name;
-  _pageStart = Date.now();
 }
 function flushTime() {
-  if (_page && _pageStart) {
-    const sec = Math.round((Date.now() - _pageStart) / 1000);
-    if (sec >= 5) logEvent({ e: "time", page: _page, sec });
-  }
-  _pageStart = Date.now();
+  if (_page && _activeSec >= 5) logEvent({ e: "time", page: _page, sec: _activeSec });
+  _activeSec = 0;
 }
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) { flushTime(); autoSync(); }
-  else _pageStart = Date.now();
 });
 window.addEventListener("pagehide", flushTime);
 
@@ -185,6 +192,21 @@ async function getGoogleClientId() {
     if (c.clientId) return c.clientId;
   } catch (e) { /* offline */ }
   return store.get(GCLIENT_KEY, null);
+}
+
+async function codeLogin(email, password) {
+  const r = await fetch(WORKER_URL + "/login-pw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e.error || "login-failed");
+  }
+  const { session } = await r.json();
+  setSession(session);
+  return session;
 }
 
 async function googleLogin(credential) {

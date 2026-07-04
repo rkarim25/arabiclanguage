@@ -34,6 +34,12 @@
   </div>
 
   <div class="card">
+    <h2>💬 Say it in Arabic — prompts from words you know</h2>
+    <p class="sub" style="margin-bottom:10px">English prompts built from vocabulary you've already studied — the readiest ones first. Say your answer, then compare with the model (yours can differ and still be right).</p>
+    <div id="promptArea">Loading…</div>
+  </div>
+
+  <div class="card">
     <h2>🗣 Shadow sentences — listen, then say it back</h2>
     <p class="sub" style="margin-bottom:10px">Whole sentences build fluency: play ▸, repeat aloud with 🎤. Pick a story or surah.</p>
     <div class="chips" id="shadowChips"></div>
@@ -218,6 +224,72 @@ function mountBucketBar(slot, key) {
   slot.appendChild(bar);
 }
 
+/* ================= "say it in Arabic" prompts ================= */
+async function renderPrompts() {
+  const area = document.getElementById("promptArea");
+  const data = await (await fetch("data/prompts.json")).json();
+  const srs = getSrs();
+  const known = key => { const e = srs[key]; return !!e && e.box >= 1; };
+  // readiness: fraction of the prompt's vocabulary already in training
+  const scored = data.prompts.map(p => {
+    const k = p.keys.filter(known).length;
+    return { ...p, ready: k / p.keys.length };
+  }).sort((a, b) => b.ready - a.ready || a.keys.length - b.keys.length);
+  const anyKnown = scored.some(p => p.ready > 0);
+
+  area.innerHTML = anyKnown ? "" : `<p style="font-size:13.5px;color:var(--amber)">You haven't marked much vocabulary yet — do a round of <a href="vocab.html?sheet=1">Vocab Learn</a> and these prompts will rank themselves to what you know. Meanwhile, here are the simplest ones:</p>`;
+
+  scored.slice(0, 12).forEach(p => {
+    const row = document.createElement("div");
+    row.className = "shadow-row";
+    const newWords = p.keys.filter(k => !known(k));
+    row.innerHTML = `
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:15.5px;font-weight:600">“${p.en}”</div>
+        ${p.ready < 1 ? `<div style="font-size:12px;color:var(--amber)">has ${newWords.length} word${newWords.length > 1 ? "s" : ""} you haven't studied yet</div>` : `<div style="font-size:12px;color:var(--accent)">✓ all words known</div>`}
+      </div>
+      ${SR ? `<button class="small mic">🎤</button>` : ""}
+      <button class="small reveal">👁 model answer</button>
+      <div class="res"></div>
+    `;
+    const res = row.querySelector(".res");
+    row.querySelector(".reveal").onclick = () => {
+      res.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${p.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
+      res.querySelector(".row-speak").onclick = () => speak(p.ar, 0.8);
+      logEvent({ e: "prompt-reveal", en: p.en });
+    };
+    if (SR) {
+      const mic = row.querySelector(".mic");
+      mic.onclick = () => {
+        stopSpeak();
+        const rec = new SR();
+        rec.lang = "ar-SA";
+        rec.interimResults = false;
+        mic.textContent = "🔴";
+        rec.onresult = (ev) => {
+          const heard = ev.results[0][0].transcript;
+          const target = normalizeAr(p.ar).split(" ");
+          const heardW = new Set(normalizeAr(heard).split(" "));
+          const hit = target.filter(w => heardW.has(w)).length;
+          const score = hit / target.length;
+          logEvent({ e: "prompt", en: p.en, heard, score: Math.round(score * 100) / 100 });
+          res.innerHTML = `<span style="color:${score >= 0.5 ? "var(--accent)" : "var(--red)"}">heard: ${heard}</span>
+            <span class="arabic" style="font-size:20px;display:block" dir="rtl">model: ${p.ar} <span class="row-speak" style="cursor:pointer">🔊</span></span>
+            <span style="font-size:12px;color:var(--muted)">${score >= 0.8 ? "✓ matches the model" : score >= 0.5 ? "close — a different correct phrasing also counts" : "compare with the model and try again"}</span>`;
+          res.querySelector(".row-speak").onclick = () => speak(p.ar, 0.8);
+        };
+        rec.onerror = (ev) => {
+          mic.textContent = "🎤";
+          res.innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
+        };
+        rec.onend = () => { mic.textContent = "🎤"; };
+        rec.start();
+      };
+    }
+    area.appendChild(row);
+  });
+}
+
 /* ================= sentence shadowing ================= */
 let VERSES = null;
 let shadowSel = null;
@@ -307,6 +379,7 @@ Promise.all([
   catalog = await buildCatalog();
   renderDrillChips();
   renderDrill();
+  renderPrompts();
   renderShadowChips();
   renderShadow();
 });

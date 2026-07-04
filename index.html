@@ -19,7 +19,7 @@
     <div class="stat" style="border-color:var(--accent)"><div class="n" id="statCoverage">0%</div><div class="l">of common Quran usage in training</div></div>
     <div class="stat"><div class="n" id="statWords">0</div><div class="l">words in your deck</div></div>
     <div class="stat"><div class="n" id="statDue">0</div><div class="l">reviews due now</div></div>
-    <div class="stat"><div class="n" id="statTime">0</div><div class="l">minutes studied</div></div>
+    <div class="stat"><div class="n" id="statTime">0</div><div class="l">active minutes studied</div></div>
     <div class="stat"><div class="n" id="statStories">0</div><div class="l">stories completed</div></div>
   </div>
 
@@ -64,6 +64,12 @@
       Your coach analyzes it and posts notes back here.
     </p>
     <div id="syncSetup">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+        <input id="loginEmail" type="email" value="rkarim88@gmail.com" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <button class="primary" id="btnCodeLogin">Sign in</button>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Your email + your sync code (your coach gave it to you in chat — ask there any time to reset it). Sign in once per device and everything stays in sync.</p>
       <div id="gsiButton" style="margin-bottom:10px"></div>
       <div id="gsiPending" style="display:none;font-size:14px">
         <p style="margin-top:0"><strong>Google sign-in needs one first-time setup</strong> (Google requires it — ~3 minutes):</p>
@@ -154,7 +160,8 @@ const completed = STORY_LIST.filter(s => !s.locked && STEPS.every(st => stepsDon
 document.getElementById("statStories").textContent = completed;
 document.getElementById("statWords").textContent = totalCards();
 document.getElementById("statDue").textContent = dueCards().length;
-const totalSec = store.get(LOG_KEY, []).filter(x => x.e === "time").reduce((a, x) => a + x.sec, 0);
+// cap each time event at 20 min so old open-tab inflation doesn't count
+const totalSec = store.get(LOG_KEY, []).filter(x => x.e === "time").reduce((a, x) => a + Math.min(x.sec, 1200), 0);
 document.getElementById("statTime").textContent = Math.round(totalSec / 60);
 
 /* Quran coverage: share of common-word occurrences whose words are in training */
@@ -197,6 +204,26 @@ function refreshSyncUI() {
   document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
 }
 refreshSyncUI();
+
+/* email + sync code sign-in */
+document.getElementById("btnCodeLogin").onclick = async () => {
+  const email = document.getElementById("loginEmail").value.trim();
+  const code = document.getElementById("loginCode").value.trim();
+  if (!email || !code) return;
+  const btn = document.getElementById("btnCodeLogin");
+  btn.textContent = "Signing in…";
+  try {
+    await codeLogin(email, code);
+    await syncNow();
+    refreshSyncUI();
+    loadCoach();
+  } catch (e) {
+    alert(e.message === "bad-code" ? "That code isn't right — check it, or ask your coach in chat to reset it."
+      : e.message === "email-not-allowed" ? "Use rkarim88@gmail.com."
+      : "Sign-in failed: " + e.message);
+  }
+  btn.textContent = "Sign in";
+};
 
 /* Google sign-in */
 async function initGoogleSignin() {

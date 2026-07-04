@@ -26,6 +26,11 @@ async function requireSession(req, env) {
   return env.ARABIC_SYNC.get("session:" + token); // -> email or null
 }
 
+async function sha256Hex(s) {
+  const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -34,6 +39,23 @@ export default {
     if (url.pathname === "/config" && req.method === "GET") {
       const stored = await env.ARABIC_SYNC.get("config:clientId");
       return json(env, 200, { clientId: env.GOOGLE_CLIENT_ID || stored || null });
+    }
+
+    // Email + sync code login — works on any device, no Google setup needed
+    if (url.pathname === "/login-pw" && req.method === "POST") {
+      let body;
+      try { body = await req.json(); } catch { return json(env, 400, { error: "bad-json" }); }
+      if (!body.email || !body.password) return json(env, 400, { error: "bad-request" });
+      if (body.email.toLowerCase().trim() !== env.ALLOWED_EMAIL) return json(env, 403, { error: "email-not-allowed" });
+      const stored = await env.ARABIC_SYNC.get("auth:pwhash");
+      const hash = await sha256Hex("arabic-sync-v1" + body.password.trim());
+      if (!stored || hash !== stored) {
+        await new Promise(res => setTimeout(res, 800)); // slow brute force
+        return json(env, 401, { error: "bad-code" });
+      }
+      const session = crypto.randomUUID() + "-" + crypto.randomUUID();
+      await env.ARABIC_SYNC.put("session:" + session, env.ALLOWED_EMAIL, { expirationTtl: SESSION_TTL });
+      return json(env, 200, { session, email: env.ALLOWED_EMAIL });
     }
 
     if (url.pathname === "/login" && req.method === "POST") {
