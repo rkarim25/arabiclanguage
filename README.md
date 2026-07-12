@@ -72,6 +72,7 @@ All localStorage, synced to the cloud (see Infrastructure):
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
 - **Sentence Practice verbs**: append to `data/sentences.json` `verbs[]` (already frequency-ordered) — each needs `root`/`base`/`past`, an `obj{ar,en}`, and `forms` for ana/nahnu/hum × past/pres/fut. **Verify every conjugation** (reuse the hand-checked set in grammar.html's `VE_VERBS`).
 - **Conversation scenarios**: append to `data/conversations.json` `scenarios[]` — `{id, titleEn, titleAr, clusters[] (existing everyday ids), goal, opener, openerTr, success}`. The briefing pulls the clusters' words as target vocab.
+- **Mnemonics**: add to `data/mnemonics.json`, keyed by normalized/al-stripped Arabic (`mnemFor()` in vocab.html; a first-word fallback covers phrases). The vocab 💡 toggle reveals it. **HARD RULE: only add a mnemonic if it's RIDICULOUS but NOT tenuous** — a strong, obvious sound/meaning hook drawing on Reza's English AND Bengali (Bengali shares many Perso-Arabic loanwords: রসূল, কিতাব, নজর, আজান, রহিম…). **Most words should have NO mnemonic — never force a weak/tenuous one.** Grow the file as his vocabulary grows.
 
 Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
