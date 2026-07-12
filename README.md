@@ -39,7 +39,7 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 
 Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, `latinToArabic` + `mountTranslitDock`, `resolveCards`, `suggestNext`, `arMatch`/`fuzzyEn`/`editDist`, `renderNav`, SW registration), `js/tracker.js` (event log, active-time, cloud sync, `weakSpots`, `activeMinutes`).
 
-**Offline (PWA):** `sw.js` (network-first, cache fallback — can never serve stale code while online; works offline from the last good copy) + `manifest.webmanifest` + `icons/`. He can "Add to Home Screen" and study in the Haram with no signal. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire automatically.
+**Offline (PWA):** `sw.js` — network-first with cache fallback. **HTML navigations are fetched with `cache:"reload"` to bypass the browser's HTTP cache** (GitHub Pages sets a max-age on HTML; without this a deploy looked stale for a while and pulled stale `?v=` assets — the "I don't see my update" bug, fixed 2026-07-12). Versioned js/css/json cache normally; works offline from the last good copy. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire. **After a deploy, an already-open device self-heals within ~2 visits (new SW installs, then a reload gets fresh HTML); a hard refresh forces it immediately.** `manifest.webmanifest` + `icons/` enable "Add to Home Screen".
 
 ## Data model
 
