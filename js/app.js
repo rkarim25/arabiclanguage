@@ -650,6 +650,7 @@ function renderNav(active) {
     <span class="spacer"></span>
     <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Stories</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
+    <a class="link ${active === "lessons" ? "active" : ""}" href="vocab.html?view=lessons">Lessons</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">Sentences</a>
