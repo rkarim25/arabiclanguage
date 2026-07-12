@@ -30,6 +30,9 @@ const FAMILY_LIST = [
 
 /* Everyday-Arabic clusters (full data in data/everyday.json) */
 const EVERYDAY_LIST = [
+  { id: "family", title: "الأُسْرَة", hint: "family — from your teacher (Bayna Yadayk U1)" },
+  { id: "home", title: "البَيْت وَالأَشْياء", hint: "home & everyday objects (Bayna Yadayk U1)" },
+  { id: "worship", title: "العِبادَة اليَوْمِيَّة", hint: "daily worship words (Bayna Yadayk U1)" },
   { id: "greetings", title: "التَّحِيَّات", hint: "greetings & politeness" },
   { id: "questions", title: "أَدَوَات الاِسْتِفْهَام", hint: "question words" },
   { id: "numbers", title: "الأَرْقَام", hint: "numbers 1–10" },

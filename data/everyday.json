@@ -1,6 +1,61 @@
 {
   "groups": [
     {
+      "id": "family",
+      "title": "الأُسْرَة",
+      "theme": "Your family — the people you name first (Bayna Yadayk, Unit 1)",
+      "source": "teacher",
+      "book": "aby",
+      "unit": "aby1-u1",
+      "members": [
+        { "ar": "أُسْرَة", "tr": "usra", "en": "family" },
+        { "ar": "والِد", "tr": "wālid", "en": "father" },
+        { "ar": "والِدَة", "tr": "wālida", "en": "mother" },
+        { "ar": "اِبْن", "tr": "ibn", "en": "son" },
+        { "ar": "اِبْنَة", "tr": "ibna", "en": "daughter" },
+        { "ar": "أَوْلاد", "tr": "awlād", "en": "children; sons" },
+        { "ar": "جَدّ", "tr": "jadd", "en": "grandfather" },
+        { "ar": "جَدَّة", "tr": "jadda", "en": "grandmother" },
+        { "ar": "عَمّ", "tr": "ʿamm", "en": "uncle (father's brother)" },
+        { "ar": "عَمَّة", "tr": "ʿamma", "en": "aunt (father's sister)" }
+      ]
+    },
+    {
+      "id": "home",
+      "title": "البَيْت وَالأَشْياء",
+      "theme": "Around the house & things you carry (Bayna Yadayk, Unit 1)",
+      "source": "teacher",
+      "book": "aby",
+      "unit": "aby1-u1",
+      "members": [
+        { "ar": "حَمّام", "tr": "ḥammām", "en": "bathroom" },
+        { "ar": "غُرْفَة", "tr": "ghurfa", "en": "room" },
+        { "ar": "صُورَة", "tr": "ṣūra", "en": "picture" },
+        { "ar": "مِعْطَف", "tr": "miʿṭaf", "en": "coat" },
+        { "ar": "نَظَّارَة", "tr": "naẓẓāra", "en": "glasses (spectacles)" },
+        { "ar": "شَجَرَة", "tr": "shajara", "en": "tree" }
+      ]
+    },
+    {
+      "id": "worship",
+      "title": "العِبادَة اليَوْمِيَّة",
+      "theme": "Words from your day's worship (Bayna Yadayk, Unit 1)",
+      "source": "teacher",
+      "book": "aby",
+      "unit": "aby1-u1",
+      "members": [
+        { "ar": "أَذانُ الفَجْر", "tr": "adhān al-fajr", "en": "the dawn call to prayer" },
+        { "ar": "تَوَضَّأَ / يَتَوَضَّأُ", "tr": "tawaḍḍaʾa / yatawaḍḍaʾu", "en": "did / does wudu (ablution)" },
+        { "ar": "مَسْجِد", "tr": "masjid", "en": "mosque" },
+        { "ar": "مُصَلّى", "tr": "muṣallā", "en": "prayer area; musalla" },
+        { "ar": "رَسُول", "tr": "rasūl", "en": "messenger (the Prophet ﷺ)" },
+        { "ar": "هَيّا بِنا", "tr": "hayyā binā", "en": "let's go!" },
+        { "ar": "اللهُ أَكْبَر", "tr": "allāhu akbar", "en": "Allah is the greatest" },
+        { "ar": "ما شاءَ الله", "tr": "mā shāʾa llāh", "en": "mashaAllah (said in admiration)" },
+        { "ar": "صَلَّى اللهُ عَلَيْهِ وَسَلَّم", "tr": "ṣallā llāhu ʿalayhi wa-sallam", "en": "may Allah bless him & grant him peace" }
+      ]
+    },
+    {
       "id": "greetings",
       "title": "التَّحِيَّات",
       "theme": "Greetings & politeness — the first things out of your mouth",
