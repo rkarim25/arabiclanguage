@@ -3,7 +3,7 @@
    cache-busting discipline stays the source of truth), but keeps working
    offline (phone in the Haram, on a plane) from the last good copy.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mrib72fq";
+const CACHE = "ats-mribbylo";
 const CORE = [
   "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
   "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html",
@@ -29,8 +29,12 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return; // audio/fonts/API pass through
+  // HTML navigations are NOT ?v=-versioned, so the browser's own HTTP cache can serve a
+  // STALE page — which then loads stale ?v= assets. Force navigations fresh from the
+  // network (bypass HTTP cache); versioned js/css/json still cache normally.
+  const req = e.request.mode === "navigate" ? new Request(e.request.url, { cache: "reload" }) : e.request;
   e.respondWith(
-    fetch(e.request)
+    fetch(req)
       .then(res => {
         if (res.ok) {
           const copy = res.clone();
