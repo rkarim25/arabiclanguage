@@ -3,7 +3,7 @@
    cache-busting discipline stays the source of truth), but keeps working
    offline (phone in the Haram, on a plane) from the last good copy.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mri5ebn9";
+const CACHE = "ats-mri9f9zj";
 const CORE = [
   "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
   "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html",

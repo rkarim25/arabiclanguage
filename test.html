@@ -10,7 +10,7 @@
   <title>Milestone Test — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mri5ebn9">
+  <link rel="stylesheet" href="css/style.css?v=mri9f9zj">
   <style>
     .t-row td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
     .t-prompt-ar { font-family: var(--font-ar); font-size: 26px; direction: rtl; text-align: right; }
@@ -26,8 +26,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mri5ebn9"></script>
-<script src="js/tracker.js?v=mri5ebn9"></script>
+<script src="js/app.js?v=mri9f9zj"></script>
+<script src="js/tracker.js?v=mri9f9zj"></script>
 <script>
 renderNav("");
 trackPage("test");
@@ -103,7 +103,7 @@ function renderTest(items, mode) {
       </div>
       <div class="ex-row" style="margin-top:14px">
         <button class="primary" id="tCheck">✓ Submit</button>
-        <button class="small" id="tKb">⌨ Phonetic keyboard</button>
+        <button class="small" id="tKb">⌨ typing box</button>
       </div>
       <div id="tResult"></div>
     </div>
@@ -130,7 +130,10 @@ function renderTest(items, mode) {
     tbody.appendChild(tr);
   });
 
-  document.getElementById("tKb").onclick = () => mountKbDock(() => lastFocused);
+  lastFocused = lastFocused || tbody.querySelector(".fill-input");
+  const tTarget = () => lastFocused;
+  document.getElementById("tKb").onclick = () => mountTranslitDock(tTarget);
+  if (lastFocused) mountTranslitDock(tTarget, true);
 
   let submitted = false;
   document.getElementById("tCheck").onclick = () => {

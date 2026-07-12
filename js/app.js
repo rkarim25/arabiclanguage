@@ -644,12 +644,12 @@ function attachPhoneticInput(container, answerInput) {
   const wrap = document.createElement("div");
   wrap.className = "mini-kb";
   wrap.innerHTML = `
-    <div class="ex-row">
-      <button type="button" class="small kb-toggle">⌨ Phonetic keyboard</button>
-      <span style="font-size:12px;color:var(--muted)">type Latin below (H=ح kh=خ 3=ع S=ص T=ط) or tap letters</span>
+    <input class="phonetic-box" placeholder="type in English letters → عربي (e.g. Alsuwq qaryb)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="ex-row" style="margin-top:6px">
+      <button type="button" class="small kb-toggle">⌨ keys</button>
+      <span style="font-size:12px;color:var(--muted)">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · A=ا</span>
     </div>
-    <input class="phonetic-box" placeholder="Type phonetic Latin here, e.g. alsuwq qaryb → السوق قريب" style="display:none">
-    <div class="kb-rows"></div>
+    <div class="kb-rows" style="display:none"></div>
   `;
   container.appendChild(wrap);
   const toggle = wrap.querySelector(".kb-toggle");
@@ -683,13 +683,72 @@ function attachPhoneticInput(container, answerInput) {
   rows.appendChild(space);
 
   toggle.onclick = () => {
-    wrap.classList.toggle("open");
-    phon.style.display = wrap.classList.contains("open") ? "block" : "none";
+    rows.style.display = rows.style.display === "none" ? "block" : "none";
   };
   phon.addEventListener("input", () => {
     answerInput.value = latinToArabic(phon.value);
     answerInput.dispatchEvent(new Event("input"));
   });
+}
+
+/* ---------- shared transliteration dock ----------
+   A visible Latin box that live-converts (mobile-safe `input` event + the
+   digraph-aware latinToArabic) into the currently focused Arabic answer field.
+   Only fills Arabic fields (class fill-input or dir=rtl) so English-answer
+   fields are never overwritten. Used by every writing surface. */
+let _tlDock = null, _tlTarget = null;
+function mountTranslitDock(getTarget, forceOpen) {
+  const dock = document.getElementById("kbDock");
+  if (!dock) return;
+  _tlTarget = getTarget;
+  if (_tlDock) {
+    _tlDock.style.display = forceOpen ? "block" : (_tlDock.style.display === "none" ? "block" : "none");
+    if (_tlDock.style.display !== "none") _tlDock.querySelector(".tl-in").focus();
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.style.padding = "10px";
+  wrap.innerHTML = `
+    <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Type in <b>English letters</b> — the Arabic appears as you type. <span style="white-space:nowrap">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · A=ا · aa=آ</span></div>
+    <div class="ex-row">
+      <input class="tl-in" placeholder="e.g. Alsuwq qaryb → السوق قريب" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="flex:1;min-width:170px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:16px">
+      <button type="button" class="small tl-clear">clear</button>
+      <button type="button" class="small tl-keys">⌨ keys</button>
+    </div>
+    <div class="tl-preview" dir="rtl" style="font-family:var(--font-ar);font-size:22px;color:var(--accent);min-height:30px;margin-top:6px;text-align:right">…</div>
+    <div class="kb-rows tl-rows" style="display:none;margin-top:6px"></div>
+  `;
+  dock.appendChild(wrap);
+  _tlDock = wrap;
+  const box = wrap.querySelector(".tl-in");
+  const preview = wrap.querySelector(".tl-preview");
+  const rows = wrap.querySelector(".tl-rows");
+  const fill = () => {
+    const ar = latinToArabic(box.value);
+    preview.textContent = ar || "…";
+    const t = _tlTarget && _tlTarget();
+    if (t && (t.classList.contains("fill-input") || t.getAttribute("dir") === "rtl")) {
+      t.value = ar; t.dispatchEvent(new Event("input"));
+    }
+  };
+  box.addEventListener("input", fill);
+  wrap.querySelector(".tl-clear").onclick = () => { box.value = ""; fill(); box.focus(); };
+  wrap.querySelector(".tl-keys").onclick = () => { rows.style.display = rows.style.display === "none" ? "block" : "none"; };
+  KB_LAYOUT.forEach(r => {
+    const rd = document.createElement("div"); rd.className = "kb-row";
+    r.forEach(k => { const b = document.createElement("button"); b.type = "button"; b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`; b.onmousedown = e => e.preventDefault(); b.onclick = () => { box.value += k; fill(); box.focus(); }; rd.appendChild(b); });
+    rows.appendChild(rd);
+  });
+  const extra = document.createElement("div"); extra.className = "kb-row";
+  const sp = document.createElement("button"); sp.type = "button"; sp.style.minWidth = "140px"; sp.innerHTML = `<span class="k-lat">space</span>`; sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { box.value += " "; fill(); box.focus(); };
+  const del = document.createElement("button"); del.type = "button"; del.innerHTML = `<span class="k-lat">⌫</span>`; del.onmousedown = e => e.preventDefault(); del.onclick = () => { box.value = box.value.slice(0, -1); fill(); box.focus(); };
+  extra.appendChild(sp); extra.appendChild(del); rows.appendChild(extra);
+  // focusing a different answer field starts a fresh Latin buffer
+  document.addEventListener("focusin", e => {
+    if (_tlDock && e.target !== box && e.target.classList && (e.target.classList.contains("fill-input") || e.target.getAttribute("dir") === "rtl")) { box.value = ""; preview.textContent = "…"; }
+  });
+  box.focus();
 }
 
 async function loadStory(id) {

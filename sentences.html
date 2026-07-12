@@ -10,7 +10,7 @@
   <title>Sentence Practice — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mri5ebn9">
+  <link rel="stylesheet" href="css/style.css?v=mri9f9zj">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -38,8 +38,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mri5ebn9"></script>
-<script src="js/tracker.js?v=mri5ebn9"></script>
+<script src="js/app.js?v=mri9f9zj"></script>
+<script src="js/tracker.js?v=mri9f9zj"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -118,14 +118,16 @@ function ask() {
     <input class="fill-input" id="spIn" autocomplete="off" dir="rtl" placeholder="اكتب الجملة…" style="max-width:340px;font-size:20px">
     <div class="ex-row" style="margin-top:12px">
       <button class="primary" id="spShow">Show answer</button>
-      <button class="small" id="spKb">⌨ Phonetic keyboard</button>
+      <button class="small" id="spKb">⌨ typing box</button>
     </div>
     <div id="spReveal"></div>
   `;
   const input = document.getElementById("spIn");
   input.focus();
   input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reveal(); } });
-  document.getElementById("spKb").onclick = () => mountKbDock(() => input);
+  const spTarget = () => document.getElementById("spIn");
+  document.getElementById("spKb").onclick = () => mountTranslitDock(spTarget);
+  mountTranslitDock(spTarget, true);
   document.getElementById("spShow").onclick = reveal;
 
   function reveal() {

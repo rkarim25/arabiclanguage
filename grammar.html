@@ -10,7 +10,7 @@
   <title>Grammar — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mri5ebn9">
+  <link rel="stylesheet" href="css/style.css?v=mri9f9zj">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -35,8 +35,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mri5ebn9"></script>
-<script src="js/tracker.js?v=mri5ebn9"></script>
+<script src="js/app.js?v=mri9f9zj"></script>
+<script src="js/tracker.js?v=mri9f9zj"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -98,7 +98,7 @@ function renderPattern(p) {
       <div id="testArea"></div>
       <div class="ex-row" style="margin-top:12px">
         <button class="primary" id="gCheck">✓ Check</button>
-        <button class="small" id="gKb">⌨ Phonetic keyboard</button>
+        <button class="small" id="gKb">⌨ typing box</button>
       </div>
       <div class="quiz-score" id="gScore"></div>
     </div>
@@ -129,7 +129,10 @@ function renderPattern(p) {
     ta.appendChild(div);
   });
 
-  document.getElementById("gKb").onclick = () => mountKbDock(() => lastFocused);
+  lastFocused = lastFocused || ta.querySelector("input");
+  const gTarget = () => lastFocused;
+  document.getElementById("gKb").onclick = () => mountTranslitDock(gTarget);
+  mountTranslitDock(gTarget, true);
 
   document.getElementById("gCheck").onclick = () => {
     let right = 0;
