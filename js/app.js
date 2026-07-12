@@ -6,7 +6,7 @@ const STORY_LIST = [
   { id: "story-03", level: 1, n: 3, titleAr: "فِي السُّوقِ", titleEn: "At the Market", desc: "Saturday shopping with mother.", words: 39 },
   { id: "story-04", level: 1, n: 4, titleAr: "يَوْمُ الجُمُعَةِ", titleEn: "Friday", desc: "Ghusl, the walk to the masjid, the khutbah, the prayer.", words: 38 },
   { id: "story-05", level: 1, n: 5, titleAr: "فِي المَطْعَمِ", titleEn: "At the Restaurant", desc: "Your first full dialogue — ordering dinner, start to bill.", words: 32 },
-  { id: "story-06", level: 1, n: 6, titleAr: "قَرِيبًا", titleEn: "Coming soon", locked: true },
+  { id: "story-06", level: 1, n: 6, titleAr: "حِصَّةٌ مَعَ المُعَلِّمَةِ", titleEn: "The Teacher Session", desc: "A day built around your Arabic lesson — weaving in your Bayna Yadayk Unit 1 words.", words: 27 },
 ];
 
 /* Root-family manifest (full data in data/families.json) */
@@ -628,6 +628,7 @@ function renderNav(active) {
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
+    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">Sentences</a>
     <a class="link ${active === "speaking" ? "active" : ""}" href="speaking.html">Speak</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>

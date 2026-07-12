@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Sentence Practice — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=mri52fdd">
+  <style>
+    .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
+    .sp-chip {
+      border: 1px solid var(--border); background: var(--card); border-radius: 999px;
+      padding: 6px 14px; font-size: 13.5px; cursor: pointer; color: var(--muted);
+    }
+    .sp-chip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .sp-meta { font-size: 12.5px; color: var(--muted); }
+    .sp-en { font-size: 21px; font-weight: 600; margin: 10px 0 4px; line-height: 1.4; }
+    .sp-hints { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; }
+    .sp-hint { background: #f6f2ea; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; font-size: 14px; }
+    .sp-hint .ar { font-family: var(--font-ar); font-size: 19px; color: var(--accent); }
+    .sp-model { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 32px; line-height: 1.9; color: var(--accent); margin: 6px 0; }
+    .sp-model .verb { background: #fdf3d0; border-radius: 6px; padding: 0 4px; }
+    .sp-gloss { font-size: 13.5px; color: var(--muted); text-align: right; direction: rtl; }
+    @media (prefers-color-scheme: dark) {
+      .sp-hint, .gx { background: rgba(255,255,255,.05); }
+      .sp-model .verb { background: rgba(253,224,71,.18); }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <div id="content">Loading…</div>
+  <div id="kbDock"></div>
+</main>
+
+<script src="js/app.js?v=mri52fdd"></script>
+<script src="js/tracker.js?v=mri52fdd"></script>
+<script>
+renderNav("sentences");
+trackPage("sentences");
+
+const content = document.getElementById("content");
+const SESSION = 8;
+let DATA = null, TENSE_FILTER = "all";
+
+fetch("data/sentences.json").then(r => r.json()).then(d => { DATA = d; start(); });
+
+/* Build every verb × person × tense item, then take a frequency-weighted session.
+   Verbs are pre-ordered most-frequent first, so a light weighting toward the top
+   of the list keeps practice on the words Reza actually meets most. */
+function buildPool() {
+  const items = [];
+  DATA.verbs.forEach((v, vi) => {
+    DATA.persons.forEach(p => {
+      DATA.tenses.forEach(t => {
+        if (TENSE_FILTER !== "all" && t.key !== TENSE_FILTER) return;
+        const form = v.forms[p.key][t.key];
+        const enVerb = t.key === "past" ? v.past : v.base;
+        const en = t.key === "fut"
+          ? `${p.en} will ${v.base} ${v.obj.en}`
+          : `${p.en} ${enVerb} ${v.obj.en}`;
+        items.push({
+          en, form, ar: `${form} ${v.obj.ar}`,
+          objAr: v.obj.ar, root: v.root, weight: DATA.verbs.length - vi,
+          person: p, tense: t, verb: v.base,
+        });
+      });
+    });
+  });
+  return items;
+}
+function pickSession() {
+  const pool = buildPool();
+  // weighted shuffle: sort by weight*random so frequent verbs surface more, with variety
+  return pool.map(it => ({ it, k: Math.random() * it.weight }))
+             .sort((a, b) => b.k - a.k).slice(0, SESSION).map(x => x.it);
+}
+
+let queue = [], done = 0, got = 0;
+
+function start() {
+  queue = pickSession(); done = 0; got = 0;
+  content.innerHTML = `
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Sentence Practice</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">بِناءُ الجُمَل</span>
+    </h1>
+    <p class="sub">Build the whole sentence yourself from a verb you already know — the point is the <b>conjugation</b>: I / we / they across past, present and future. Write it, then reveal. High-frequency verbs only, a short set at a time — no endless drilling.</p>
+    <div class="sp-chips" id="spChips">
+      ${[["all","Mixed"],["past","Past"],["pres","Present"],["fut","Future"]]
+        .map(([k,l]) => `<span class="sp-chip ${TENSE_FILTER===k?"on":""}" data-k="${k}">${l}</span>`).join("")}
+    </div>
+    <div class="card"><div id="stage"></div></div>
+  `;
+  document.querySelectorAll("#spChips .sp-chip").forEach(c => c.onclick = () => {
+    TENSE_FILTER = c.dataset.k; start();
+  });
+  ask();
+}
+
+function ask() {
+  const stage = document.getElementById("stage");
+  if (done >= queue.length) return finish();
+  const it = queue[done];
+  stage.innerHTML = `
+    <div class="sp-meta">${done + 1} / ${queue.length}</div>
+    <div class="sp-en">${it.en}</div>
+    <div class="sp-hints">
+      <span class="sp-hint">who: <span class="ar" dir="rtl">${it.person.ar}</span> — ${it.person.en.toLowerCase()}</span>
+      <span class="sp-hint">${it.tense.en} · <span style="font-style:italic">${it.tense.hint}</span></span>
+      <span class="sp-hint">root: <span class="ar" dir="rtl">${it.root}</span></span>
+    </div>
+    <input class="fill-input" id="spIn" autocomplete="off" dir="rtl" placeholder="اكتب الجملة…" style="max-width:340px;font-size:20px">
+    <div class="ex-row" style="margin-top:12px">
+      <button class="primary" id="spShow">Show answer</button>
+      <button class="small" id="spKb">⌨ Phonetic keyboard</button>
+    </div>
+    <div id="spReveal"></div>
+  `;
+  const input = document.getElementById("spIn");
+  input.focus();
+  input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reveal(); } });
+  document.getElementById("spKb").onclick = () => mountKbDock(() => input);
+  document.getElementById("spShow").onclick = reveal;
+
+  function reveal() {
+    const typed = input.value.trim();
+    const exact = typed && normalizeAr(typed) === normalizeAr(it.ar);
+    const rev = document.getElementById("spReveal");
+    rev.innerHTML = `
+      <div class="gx" style="margin-top:14px">
+        <div class="sp-model"><span class="verb">${it.form}</span> ${it.objAr} <span class="sent-play" style="cursor:pointer">🔊</span></div>
+        <div class="sp-gloss">${it.en}</div>
+        ${exact ? `<div style="color:var(--accent);font-weight:600;font-size:13.5px;margin-top:6px">✓ exact match — ${typed ? "" : ""}spot on!</div>`
+                : typed ? `<div class="sp-meta" style="margin-top:6px">you wrote: <span class="arabic" dir="rtl">${typed}</span></div>` : ""}
+      </div>
+      <div class="ex-row" style="margin-top:12px">
+        <button class="primary" id="spGot">✓ Got it</button>
+        <button class="small" id="spAgain">↺ Practise again</button>
+      </div>
+    `;
+    rev.querySelector(".sent-play").onclick = () => speak(it.ar, 0.85);
+    speak(it.ar, 0.85);
+    document.getElementById("spShow").disabled = true;
+    input.disabled = true;
+    document.getElementById("spGot").onclick = () => mark(true, typed, exact);
+    document.getElementById("spAgain").onclick = () => mark(false, typed, exact);
+  }
+
+  function mark(ok, typed, exact) {
+    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok });
+    if (ok) got++;
+    else queue.push(it); // drill-the-misses: requeue at the end of the set
+    done++;
+    ask();
+  }
+}
+
+function finish() {
+  logEvent({ e: "spract-done", n: done, got, tense: TENSE_FILTER });
+  autoSync();
+  const stage = document.getElementById("stage");
+  stage.innerHTML = `
+    <div style="text-align:center;padding:16px 0">
+      <div style="font-size:22px;font-weight:700">${got} / ${done} built cleanly 🎉</div>
+      <p class="sub" style="margin-top:8px">Every "practise again" came back around until you had it. Come back after your next lesson and the newest verbs will be here.</p>
+      <div class="ex-row" style="justify-content:center;margin-top:10px">
+        <button class="primary" id="spNew">New set</button>
+        <a href="speaking.html" style="color:var(--accent);font-weight:600;text-decoration:none;align-self:center">Now say them out loud →</a>
+      </div>
+    </div>
+  `;
+  document.getElementById("spNew").onclick = start;
+}
+
+/* shared phonetic keyboard dock (same pattern as Vocab Lab / Grammar) */
+let _kbMounted = false;
+function mountKbDock(getTarget) {
+  const dock = document.getElementById("kbDock");
+  if (_kbMounted) { dock.firstChild.style.display = dock.firstChild.style.display === "none" ? "block" : "none"; return; }
+  _kbMounted = true;
+  const kbWrap = document.createElement("div");
+  kbWrap.className = "card";
+  kbWrap.style.padding = "10px";
+  KB_LAYOUT.forEach(r => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "kb-row";
+    r.forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
+      b.onmousedown = (e) => e.preventDefault();
+      b.onclick = () => { const t = getTarget(); if (t) { t.value += LATIN_TO_AR[k]; t.focus(); } };
+      rowDiv.appendChild(b);
+    });
+    kbWrap.appendChild(rowDiv);
+  });
+  const extra = document.createElement("div");
+  extra.className = "kb-row";
+  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
+  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { const t = getTarget(); if (t) { t.value += " "; t.focus(); } };
+  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
+  del.onmousedown = e => e.preventDefault(); del.onclick = () => { const t = getTarget(); if (t) { t.value = t.value.slice(0, -1); t.focus(); } };
+  extra.appendChild(sp); extra.appendChild(del);
+  kbWrap.appendChild(extra);
+  dock.appendChild(kbWrap);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{
+  "note": "Sentence Practice bank. Each verb × {I / we / they} × {past / present / future} composes one model sentence: form + object. Verbs are ordered most-frequent first. Add verbs whose root Reza already meets in families/stories.",
+  "persons": [
+    { "key": "ana", "en": "I", "ar": "أَنَا" },
+    { "key": "nahnu", "en": "We", "ar": "نَحْنُ" },
+    { "key": "hum", "en": "They", "ar": "هُمْ" }
+  ],
+  "tenses": [
+    { "key": "past", "en": "past", "hint": "did it (المَاضِي)" },
+    { "key": "pres", "en": "present", "hint": "does it now (المُضَارِع)" },
+    { "key": "fut", "en": "future", "hint": "سَـ + present — will do it" }
+  ],
+  "verbs": [
+    {
+      "root": "ق و ل", "base": "say", "past": "said",
+      "obj": { "ar": "الحَقَّ", "en": "the truth" },
+      "forms": {
+        "ana":   { "past": "قُلْتُ",  "pres": "أَقُولُ",     "fut": "سَأَقُولُ" },
+        "nahnu": { "past": "قُلْنَا", "pres": "نَقُولُ",     "fut": "سَنَقُولُ" },
+        "hum":   { "past": "قَالُوا", "pres": "يَقُولُونَ",  "fut": "سَيَقُولُونَ" }
+      }
+    },
+    {
+      "root": "ق ر أ", "base": "read", "past": "read",
+      "obj": { "ar": "القُرْآنَ", "en": "the Quran" },
+      "forms": {
+        "ana":   { "past": "قَرَأْتُ",  "pres": "أَقْرَأُ",     "fut": "سَأَقْرَأُ" },
+        "nahnu": { "past": "قَرَأْنَا", "pres": "نَقْرَأُ",     "fut": "سَنَقْرَأُ" },
+        "hum":   { "past": "قَرَؤُوا",  "pres": "يَقْرَؤُونَ",  "fut": "سَيَقْرَؤُونَ" }
+      }
+    },
+    {
+      "root": "ذ هـ ب", "base": "go", "past": "went",
+      "obj": { "ar": "إِلَى المَسْجِدِ", "en": "to the mosque" },
+      "forms": {
+        "ana":   { "past": "ذَهَبْتُ",  "pres": "أَذْهَبُ",     "fut": "سَأَذْهَبُ" },
+        "nahnu": { "past": "ذَهَبْنَا", "pres": "نَذْهَبُ",     "fut": "سَنَذْهَبُ" },
+        "hum":   { "past": "ذَهَبُوا",  "pres": "يَذْهَبُونَ",  "fut": "سَيَذْهَبُونَ" }
+      }
+    },
+    {
+      "root": "ك ت ب", "base": "write", "past": "wrote",
+      "obj": { "ar": "الدَّرْسَ", "en": "the lesson" },
+      "forms": {
+        "ana":   { "past": "كَتَبْتُ",  "pres": "أَكْتُبُ",     "fut": "سَأَكْتُبُ" },
+        "nahnu": { "past": "كَتَبْنَا", "pres": "نَكْتُبُ",     "fut": "سَنَكْتُبُ" },
+        "hum":   { "past": "كَتَبُوا",  "pres": "يَكْتُبُونَ",  "fut": "سَيَكْتُبُونَ" }
+      }
+    },
+    {
+      "root": "س م ع", "base": "hear", "past": "heard",
+      "obj": { "ar": "الأَذانَ", "en": "the adhan" },
+      "forms": {
+        "ana":   { "past": "سَمِعْتُ",  "pres": "أَسْمَعُ",     "fut": "سَأَسْمَعُ" },
+        "nahnu": { "past": "سَمِعْنَا", "pres": "نَسْمَعُ",     "fut": "سَنَسْمَعُ" },
+        "hum":   { "past": "سَمِعُوا",  "pres": "يَسْمَعُونَ",  "fut": "سَيَسْمَعُونَ" }
+      }
+    },
+    {
+      "root": "أ ك ل", "base": "eat", "past": "ate",
+      "obj": { "ar": "الطَّعامَ", "en": "the food" },
+      "forms": {
+        "ana":   { "past": "أَكَلْتُ",  "pres": "آكُلُ",       "fut": "سَآكُلُ" },
+        "nahnu": { "past": "أَكَلْنَا", "pres": "نَأْكُلُ",     "fut": "سَنَأْكُلُ" },
+        "hum":   { "past": "أَكَلُوا",  "pres": "يَأْكُلُونَ",  "fut": "سَيَأْكُلُونَ" }
+      }
+    },
+    {
+      "root": "ش ر ب", "base": "drink", "past": "drank",
+      "obj": { "ar": "الماءَ", "en": "water" },
+      "forms": {
+        "ana":   { "past": "شَرِبْتُ",  "pres": "أَشْرَبُ",     "fut": "سَأَشْرَبُ" },
+        "nahnu": { "past": "شَرِبْنَا", "pres": "نَشْرَبُ",     "fut": "سَنَشْرَبُ" },
+        "hum":   { "past": "شَرِبُوا",  "pres": "يَشْرَبُونَ",  "fut": "سَيَشْرَبُونَ" }
+      }
+    },
+    {
+      "root": "س أ ل", "base": "ask", "past": "asked",
+      "obj": { "ar": "المُعَلِّمَةَ", "en": "the teacher" },
+      "forms": {
+        "ana":   { "past": "سَأَلْتُ",  "pres": "أَسْأَلُ",     "fut": "سَأَسْأَلُ" },
+        "nahnu": { "past": "سَأَلْنَا", "pres": "نَسْأَلُ",     "fut": "سَنَسْأَلُ" },
+        "hum":   { "past": "سَأَلُوا",  "pres": "يَسْأَلُونَ",  "fut": "سَيَسْأَلُونَ" }
+      }
+    },
+    {
+      "root": "ص ل و", "base": "pray", "past": "prayed",
+      "obj": { "ar": "الفَجْرَ", "en": "the dawn prayer" },
+      "forms": {
+        "ana":   { "past": "صَلَّيْتُ",  "pres": "أُصَلِّي",     "fut": "سَأُصَلِّي" },
+        "nahnu": { "past": "صَلَّيْنَا", "pres": "نُصَلِّي",     "fut": "سَنُصَلِّي" },
+        "hum":   { "past": "صَلَّوْا",   "pres": "يُصَلُّونَ",   "fut": "سَيُصَلُّونَ" }
+      }
+    }
+  ]
+}

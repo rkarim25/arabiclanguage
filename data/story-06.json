@@ -1,0 +1,232 @@
+{
+  "id": "story-06",
+  "level": 1,
+  "titleAr": "حِصَّةٌ مَعَ المُعَلِّمَةِ",
+  "titleEn": "The Teacher Session",
+  "grammar": "Present-tense narration; recycles your Bayna Yadayk Unit 1 vocabulary (family, home, worship) in context",
+  "sentences": [
+    {
+      "ar": "أَسْمَعُ أَذانَ الفَجْرِ، فَأَقُومُ مِنَ النَّوْمِ.",
+      "en": "I hear the dawn call to prayer, so I get up from sleep.",
+      "words": [
+        ["أَسْمَعُ", "I hear"],
+        ["أَذانَ", "the call (adhan)"],
+        ["الفَجْرِ،", "of dawn"],
+        ["فَأَقُومُ", "so I get up"],
+        ["مِنَ", "from"],
+        ["النَّوْمِ.", "sleep"]
+      ]
+    },
+    {
+      "ar": "أَذْهَبُ إِلَى الحَمّامِ وَأَتَوَضَّأُ.",
+      "en": "I go to the bathroom and make wudu.",
+      "words": [
+        ["أَذْهَبُ", "I go"],
+        ["إِلَى", "to"],
+        ["الحَمّامِ", "the bathroom"],
+        ["وَأَتَوَضَّأُ.", "and I make wudu"]
+      ]
+    },
+    {
+      "ar": "أَلْبَسُ مِعْطَفِي، ثُمَّ أَذْهَبُ إِلَى المَسْجِدِ.",
+      "en": "I put on my coat, then I go to the mosque.",
+      "words": [
+        ["أَلْبَسُ", "I put on"],
+        ["مِعْطَفِي،", "my coat"],
+        ["ثُمَّ", "then"],
+        ["أَذْهَبُ", "I go"],
+        ["إِلَى", "to"],
+        ["المَسْجِدِ.", "the mosque"]
+      ]
+    },
+    {
+      "ar": "أُصَلِّي فِي المُصَلَّى وَأَقْرَأُ القُرْآنَ.",
+      "en": "I pray in the prayer hall and read the Quran.",
+      "words": [
+        ["أُصَلِّي", "I pray"],
+        ["فِي", "in"],
+        ["المُصَلَّى", "the prayer hall"],
+        ["وَأَقْرَأُ", "and I read"],
+        ["القُرْآنَ.", "the Quran"]
+      ]
+    },
+    {
+      "ar": "بَعْدَ الصَّلاةِ أَرْجِعُ إِلَى البَيْتِ.",
+      "en": "After the prayer I return home.",
+      "words": [
+        ["بَعْدَ", "after"],
+        ["الصَّلاةِ", "the prayer"],
+        ["أَرْجِعُ", "I return"],
+        ["إِلَى", "to"],
+        ["البَيْتِ.", "the house"]
+      ]
+    },
+    {
+      "ar": "فِي غُرْفَتِي صُورَةٌ جَميلَةٌ لِأُسْرَتِي.",
+      "en": "In my room is a beautiful picture of my family.",
+      "words": [
+        ["فِي", "in"],
+        ["غُرْفَتِي", "my room"],
+        ["صُورَةٌ", "a picture"],
+        ["جَميلَةٌ", "beautiful"],
+        ["لِأُسْرَتِي.", "of my family"]
+      ]
+    },
+    {
+      "ar": "هَذا والِدِي، وَهَذِهِ والِدَتِي، وَهَؤُلاءِ أَوْلادِي.",
+      "en": "This is my father, this is my mother, and these are my children.",
+      "words": [
+        ["هَذا", "this is"],
+        ["والِدِي،", "my father"],
+        ["وَهَذِهِ", "and this is"],
+        ["والِدَتِي،", "my mother"],
+        ["وَهَؤُلاءِ", "and these are"],
+        ["أَوْلادِي.", "my children"]
+      ]
+    },
+    {
+      "ar": "لِي ابْنٌ وَابْنَةٌ، وَجَدٌّ وَجَدَّةٌ، وَعَمٌّ وَعَمَّةٌ.",
+      "en": "I have a son and a daughter, a grandfather and a grandmother, an uncle and an aunt.",
+      "words": [
+        ["لِي", "I have"],
+        ["ابْنٌ", "a son"],
+        ["وَابْنَةٌ،", "and a daughter"],
+        ["وَجَدٌّ", "and a grandfather"],
+        ["وَجَدَّةٌ،", "and a grandmother"],
+        ["وَعَمٌّ", "and an uncle"],
+        ["وَعَمَّةٌ.", "and an aunt"]
+      ]
+    },
+    {
+      "ar": "تَحْتَ الشَّجَرَةِ يَلْعَبُ الأَوْلادُ.",
+      "en": "Under the tree the children play.",
+      "words": [
+        ["تَحْتَ", "under"],
+        ["الشَّجَرَةِ", "the tree"],
+        ["يَلْعَبُ", "play"],
+        ["الأَوْلادُ.", "the children"]
+      ]
+    },
+    {
+      "ar": "الآنَ تَبْدَأُ الحِصَّةُ مَعَ المُعَلِّمَةِ.",
+      "en": "Now the session with the teacher begins.",
+      "words": [
+        ["الآنَ", "now"],
+        ["تَبْدَأُ", "begins"],
+        ["الحِصَّةُ", "the session"],
+        ["مَعَ", "with"],
+        ["المُعَلِّمَةِ.", "the teacher"]
+      ]
+    },
+    {
+      "ar": "أَضَعُ نَظّارَتِي وَأَقْرَأُ الدَّرْسَ.",
+      "en": "I put on my glasses and read the lesson.",
+      "words": [
+        ["أَضَعُ", "I put on"],
+        ["نَظّارَتِي", "my glasses"],
+        ["وَأَقْرَأُ", "and I read"],
+        ["الدَّرْسَ.", "the lesson"]
+      ]
+    },
+    {
+      "ar": "نَقْرَأُ عَنِ الرَّسولِ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ.",
+      "en": "We read about the Messenger, may Allah bless him and grant him peace.",
+      "words": [
+        ["نَقْرَأُ", "we read"],
+        ["عَنِ", "about"],
+        ["الرَّسولِ", "the Messenger"],
+        ["صَلَّى", "may (Allah) bless"],
+        ["اللهُ", "Allah"],
+        ["عَلَيْهِ", "upon him"],
+        ["وَسَلَّمَ.", "and grant peace"]
+      ]
+    },
+    {
+      "ar": "تَقولُ المُعَلِّمَةُ: ما شاءَ اللهُ! هَيّا بِنا نُصَلِّي.",
+      "en": "The teacher says: mashaAllah! Let's go and pray.",
+      "words": [
+        ["تَقولُ", "says"],
+        ["المُعَلِّمَةُ:", "the teacher"],
+        ["ما", "what"],
+        ["شاءَ", "has willed"],
+        ["اللهُ!", "Allah"],
+        ["هَيّا", "come on"],
+        ["بِنا", "let's go"],
+        ["نُصَلِّي.", "we pray"]
+      ]
+    },
+    {
+      "ar": "أَنا سَعيدٌ بِدَرْسِي. اللهُ أَكْبَرُ!",
+      "en": "I am happy with my lesson. Allah is the greatest!",
+      "words": [
+        ["أَنا", "I am"],
+        ["سَعيدٌ", "happy"],
+        ["بِدَرْسِي.", "with my lesson"],
+        ["اللهُ", "Allah"],
+        ["أَكْبَرُ!", "is the greatest"]
+      ]
+    }
+  ],
+  "vocab": [
+    { "ar": "أَذانُ الفَجْرِ", "en": "the dawn call to prayer", "tr": "adhān al-fajr" },
+    { "ar": "الحَمّام", "en": "bathroom", "tr": "al-ḥammām" },
+    { "ar": "تَوَضَّأَ", "en": "to make wudu (ablution)", "tr": "tawaḍḍaʾa" },
+    { "ar": "المِعْطَف", "en": "coat", "tr": "al-miʿṭaf" },
+    { "ar": "المَسْجِد", "en": "mosque", "tr": "al-masjid" },
+    { "ar": "المُصَلَّى", "en": "prayer hall; musalla", "tr": "al-muṣallā" },
+    { "ar": "البَيْت", "en": "house, home", "tr": "al-bayt" },
+    { "ar": "الغُرْفَة", "en": "room", "tr": "al-ghurfa" },
+    { "ar": "صُورَة", "en": "picture", "tr": "ṣūra" },
+    { "ar": "أُسْرَة", "en": "family", "tr": "usra" },
+    { "ar": "والِد", "en": "father", "tr": "wālid" },
+    { "ar": "والِدَة", "en": "mother", "tr": "wālida" },
+    { "ar": "أَوْلاد", "en": "children", "tr": "awlād" },
+    { "ar": "ابْن", "en": "son", "tr": "ibn" },
+    { "ar": "ابْنَة", "en": "daughter", "tr": "ibna" },
+    { "ar": "جَدّ", "en": "grandfather", "tr": "jadd" },
+    { "ar": "جَدَّة", "en": "grandmother", "tr": "jadda" },
+    { "ar": "عَمّ", "en": "uncle (father's brother)", "tr": "ʿamm" },
+    { "ar": "عَمَّة", "en": "aunt (father's sister)", "tr": "ʿamma" },
+    { "ar": "الشَّجَرَة", "en": "tree", "tr": "ash-shajara" },
+    { "ar": "نَظّارَة", "en": "glasses (spectacles)", "tr": "naẓẓāra" },
+    { "ar": "الحِصَّة", "en": "the class period; session", "tr": "al-ḥiṣṣa" },
+    { "ar": "المُعَلِّمَة", "en": "teacher (female)", "tr": "al-muʿallima" },
+    { "ar": "الرَّسول", "en": "the Messenger ﷺ", "tr": "ar-rasūl" },
+    { "ar": "هَيّا بِنا", "en": "let's go!", "tr": "hayyā binā" },
+    { "ar": "ما شاءَ اللهُ", "en": "mashaAllah (said in admiration)", "tr": "mā shāʾa llāh" },
+    { "ar": "اللهُ أَكْبَر", "en": "Allah is the greatest", "tr": "allāhu akbar" }
+  ],
+  "questions": [
+    {
+      "q": "ماذا يَسْمَعُ فِي أَوَّلِ الصَّباحِ؟",
+      "options": ["أَذانَ الفَجْرِ", "المُعَلِّمَةَ", "صَوْتَ الشَّجَرَةِ", "الأَوْلادَ"],
+      "answer": 0
+    },
+    {
+      "q": "أَيْنَ يُصَلِّي وَيَقْرَأُ القُرْآنَ؟",
+      "options": ["فِي المُصَلَّى", "فِي الحَمّامِ", "فِي الغُرْفَةِ", "فِي السّوقِ"],
+      "answer": 0
+    },
+    {
+      "q": "مَنْ فِي الصُّورَةِ الجَميلَةِ؟",
+      "options": ["أُسْرَتُهُ", "المُعَلِّمَةُ", "الرَّسولُ", "الجيرانُ"],
+      "answer": 0
+    },
+    {
+      "q": "ماذا يَضَعُ لِكَيْ يَقْرَأَ الدَّرْسَ؟",
+      "options": ["نَظّارَتَهُ", "مِعْطَفَهُ", "صورَةً", "القُرْآنَ"],
+      "answer": 0
+    },
+    {
+      "q": "ماذا تَقولُ المُعَلِّمَةُ؟",
+      "options": ["ما شاءَ اللهُ", "مَعَ السَّلامَةِ", "إلى اللِّقاءِ", "لا أَعْرِفُ"],
+      "answer": 0
+    }
+  ],
+  "dictation": [1, 3, 9],
+  "translate": [
+    { "en": "I go to the mosque.", "ar": "أَذْهَبُ إِلَى المَسْجِدِ." },
+    { "en": "This is my father and this is my mother.", "ar": "هَذا والِدِي وَهَذِهِ والِدَتِي." },
+    { "en": "The teacher says: mashaAllah!", "ar": "تَقولُ المُعَلِّمَةُ: ما شاءَ اللهُ!" }
+  ]
+}
