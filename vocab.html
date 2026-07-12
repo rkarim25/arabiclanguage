@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mribhxsz">
+  <link rel="stylesheet" href="css/style.css?v=mricbq6c">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -44,6 +44,9 @@
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
     .chips button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
     .show-btn { color: var(--muted); }
+    .mnem-btn { cursor: pointer; user-select: none; }
+    .mnem-cell { background: var(--amber-soft, #fff8e1); border-radius: 8px; padding: 7px 11px; font-size: 13px; color: var(--ink); line-height: 1.55; margin-top: 5px; }
+    @media (prefers-color-scheme: dark) { .mnem-cell { background: rgba(253,224,71,.12); } }
     .drill-stage { text-align: center; padding: 20px 0; }
     .drill-stage .d-en { font-size: 22px; font-weight: 600; margin-bottom: 14px; }
     .drill-stage .d-note { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
@@ -57,14 +60,22 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mribhxsz"></script>
-<script src="js/tracker.js?v=mribhxsz"></script>
+<script src="js/app.js?v=mricbq6c"></script>
+<script src="js/tracker.js?v=mricbq6c"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
 const content = document.getElementById("content");
 let FAMS = null, CORE = null, EV = null, VERSES = null;
 let labView = "learn";
+
+/* Mnemonics (💡) — optional memory hooks, only the strong ones exist (many words
+   have none, by design). Keyed by normalized/al-stripped Arabic; falls back to the
+   first word so a phrase like "أَذانُ الفَجْر" still finds the أذان hook. */
+let MNEM = {};
+fetch("data/mnemonics.json").then(r => r.json()).then(d => { MNEM = d; }).catch(() => {});
+function mnemKey(ar) { return normalizeAr(ar || "").replace(/^ال/, ""); }
+function mnemFor(ar) { if (!ar) return null; return MNEM[mnemKey(ar)] || MNEM[mnemKey(ar.split(/\s+/)[0])] || null; }
 
 Promise.all([
   fetch("data/families.json").then(r => r.json()),
@@ -388,13 +399,20 @@ async function renderSheet() {
     const { key, v } = sheetItems[i];
     const row = tbody.children[i];
     const shown = row.querySelector(".shown-answer");
+    const mn = mnemFor(v.ar);
+    const mnBtn = mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : "";
     if (sheetMode === "understand") {
-      shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}`;
+      shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}${mnBtn}`;
     } else if (sheetMode === "ears") {
-      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span style="font-weight:600">${v.en}</span>${v.tr ? ` <span style="color:var(--muted);font-size:12px">${v.tr}</span>` : ""}`;
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span style="font-weight:600">${v.en}</span>${v.tr ? ` <span style="color:var(--muted);font-size:12px">${v.tr}</span>` : ""}${mnBtn}`;
     } else {
-      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>${mnBtn}`;
       shown.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
+    }
+    if (mn) {
+      const mc = document.createElement("div"); mc.className = "mnem-cell"; mc.style.display = "none"; mc.textContent = "💡 " + mn;
+      shown.appendChild(mc);
+      shown.querySelector(".mnem-btn").onclick = () => { mc.style.display = mc.style.display === "none" ? "block" : "none"; if (mc.style.display !== "none") logEvent({ e: "mnem", key }); };
     }
     shown.style.display = "block";
     const btn = row.querySelector(".show-btn");
@@ -726,14 +744,23 @@ function renderGroupStudy(obj, prefix) {
   let anyHear = false;
   obj.members.forEach(m => {
     const tr = document.createElement("tr");
+    const mn = mnemFor(m.ar);
     tr.innerHTML = `
       <td class="en-cell">${m.en}</td>
       <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13.5px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
-      <td><span class="row-speak" title="hear it">🔊</span></td>
+      <td><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
       <td class="tr-cell">${m.tr}</td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
     tbody.appendChild(tr);
+    if (mn) {
+      const mrow = document.createElement("tr");
+      mrow.style.display = "none";
+      const cell = document.createElement("td"); cell.colSpan = 4;
+      const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
+      cell.appendChild(box); mrow.appendChild(cell); tbody.appendChild(mrow);
+      tr.querySelector(".mnem-btn").onclick = () => { mrow.style.display = mrow.style.display === "none" ? "table-row" : "none"; if (mrow.style.display !== "none") logEvent({ e: "mnem", ar: stripTashkeel(m.ar) }); };
+    }
     if (m.hear) anyHear = true;
   });
   if (anyHear) {
