@@ -166,12 +166,33 @@ function bucketOf(key) {
   if (e.box >= 2) return "later";
   return "repeat";
 }
-/* Arabic answer match that also accepts either half of a "X / Y" pair */
+/* Levenshtein, capped: returns 2 as soon as we know the distance exceeds 1. */
+function editDist(a, b) {
+  const m = a.length, n = b.length;
+  if (Math.abs(m - n) > 1) return 2;
+  const dp = Array.from({ length: m + 1 }, (_, i) => i);
+  for (let j = 1; j <= n; j++) {
+    let prev = dp[0]; dp[0] = j;
+    for (let i = 1; i <= m; i++) { const tmp = dp[i]; dp[i] = Math.min(dp[i] + 1, dp[i - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = tmp; }
+  }
+  return dp[m];
+}
+/* Arabic answer match — forgiving. normalizeAr already folds tashkeel and the
+   أإآ/ى variants; here we also forgive the ة/ه and hamza-seat confusions that
+   learners make, and a single slip in longer words. Accepts either half of a
+   "X / Y" pair. */
 function arMatch(typed, target) {
   const t = normalizeAr(typed);
   if (!t) return false;
-  if (t === normalizeAr(target)) return true;
-  return target.split("/").some(p => normalizeAr(p) === t);
+  const cands = [target, ...target.split("/")].map(normalizeAr).filter(Boolean);
+  if (cands.includes(t)) return true;
+  const fold = s => s.replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const tf = fold(t), tfns = tf.replace(/ /g, "");
+  return cands.some(c => {
+    const cf = fold(c);
+    if (cf === tf || cf.replace(/ /g, "") === tfns) return true; // exact, or same but for spacing
+    return Math.max(cf.length, tf.length) >= 5 && editDist(cf, tf) <= 1; // one slip in a longer word
+  });
 }
 /* accept a spoken transcript if it contains the target (or either half of a pair) */
 function speakMatch(heard, target) {
@@ -586,17 +607,20 @@ function playRecitation(items, onEach, onDone) {
 
 /* ---------- Phonetic Latin -> Arabic (from the rkarim25 keyboard) ---------- */
 const LATIN_TO_AR = {
-  A: "ا", aa: "آ", b: "ب", t: "ت", T: "ط", th: "ث",
+  A: "ا", aa: "ا", b: "ب", t: "ت", T: "ط", th: "ث",
   j: "ج", H: "ح", h: "ه", kh: "خ", d: "د", D: "ض",
   dh: "ذ", r: "ر", z: "ز", Z: "ظ", s: "س", S: "ص",
   sh: "ش", gh: "غ", f: "ف", q: "ق", k: "ك", l: "ل",
   m: "م", n: "ن", w: "و", y: "ي", Y: "ى", "3": "ع",
   "'": "ء", "t:": "ة",
   "A'": "أ", "a'": "إ", "w'": "ؤ", "y'": "ئ",
-  "(la)": "لا", laa: "لآ", "la'": "لإ", "lA'": "لأ",
+  "(la)": "لا", laa: "لا", "la'": "لإ", "lA'": "لأ",
   a: "َ", i: "ِ", u: "ُ", "^": "ْ", "*": "ّ",
   "a~": "ً", "i~": "ٍ", "u~": "ٌ",
   ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ",
+  // forgiving extras: Arabizi chat numerals + intuitive long vowels
+  "2": "ء", "5": "خ", "6": "ط", "7": "ح", "9": "ق",
+  ee: "ي", ii: "ي", oo: "و", uu: "و", ou: "و",
 };
 function latinToArabic(text) {
   let out = "", i = 0;
@@ -780,7 +804,7 @@ const _SYN_GROUPS = [
   ["sky", "heaven", "heavens"],
   ["great", "tremendous", "mighty", "greatest", "big", "grand", "immense"],
   ["merciful", "mercy"],
-  ["forgiving", "forgiver", "forgiveness"],
+  ["forgiving", "forgiver", "forgiveness", "forgive", "forgives", "forgave", "pardon"],
   ["knowing", "knower", "knows", "knew", "knowledge", "aware"],
   ["wise", "wisdom"],
   ["created", "creates", "create", "creation", "creator", "made"],
@@ -829,7 +853,11 @@ function fuzzyEn(typed, gloss) {
     return r.length > 0 && gloss.toLowerCase().includes(r);
   }
   if (!g.length) return false; // handled by the exact-part check above
-  return t.some(w => g.includes(w));
+  if (t.some(w => g.includes(w))) return true; // shares a meaningful word (or synonym)
+  // near-miss on a content word: a one-letter typo, or a shared stem (prefix)
+  const words = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w));
+  const tw = words(typed), gw = words(gloss);
+  return tw.some(w => w.length >= 4 && gw.some(x => x.length >= 4 && (editDist(w, x) <= 1 || x.startsWith(w) || w.startsWith(x))));
 }
 
 /* ---------- universal SRS card content resolver ----------

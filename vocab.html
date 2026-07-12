@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mri9f9zj">
+  <link rel="stylesheet" href="css/style.css?v=mria1i4e">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +57,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mri9f9zj"></script>
-<script src="js/tracker.js?v=mri9f9zj"></script>
+<script src="js/app.js?v=mria1i4e"></script>
+<script src="js/tracker.js?v=mria1i4e"></script>
 <script>
 renderNav("vocab");
 
@@ -331,7 +331,7 @@ async function renderSheet() {
       <button class="primary" id="shCheck">✓ Check</button>
       <button id="shShowAll">👁 Show all</button>
       ${sheetMode === "produce" ? '<button class="small" id="shKb">⌨</button>' : ""}
-      <span style="font-size:12px;color:var(--muted);align-self:center">✓ know · ↻ repeat · ⏳ later · ✗ never</span>
+      <span style="font-size:12px;color:var(--muted);align-self:center">Checking auto-schedules each word — the ✓ know · ↻ soon · ⏳ later · ✗ never buttons are optional overrides.</span>
     </div>
     <div class="quiz-score" id="shScore"></div>
   `;
@@ -425,7 +425,9 @@ async function renderSheet() {
 
   if (sheetMode === "produce") {
     const kb = document.getElementById("shKb");
-    if (kb) kb.onclick = () => mountKbDock(() => lastFocused);
+    lastFocused = lastFocused || tbody.querySelector(".fill-input");
+    if (kb) kb.onclick = () => mountTranslitDock(() => lastFocused);
+    mountTranslitDock(() => lastFocused, true);
   }
 
   function showBatchScore(right, graded) {

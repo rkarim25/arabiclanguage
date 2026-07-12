@@ -10,7 +10,7 @@
   <title>Quran — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mri9f9zj">
+  <link rel="stylesheet" href="css/style.css?v=mria1i4e">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -38,8 +38,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mri9f9zj"></script>
-<script src="js/tracker.js?v=mri9f9zj"></script>
+<script src="js/app.js?v=mria1i4e"></script>
+<script src="js/tracker.js?v=mria1i4e"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -47,6 +47,8 @@ trackPage("quran");
 const content = document.getElementById("content");
 let DATA = null;
 
+let FAM_BY_ROOT = {};
+fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f => { FAM_BY_ROOT[f.root.replace(/\s+/g, "")] = f; }); }).catch(() => {});
 fetch("data/verses.json").then(r => r.json()).then(d => {
   DATA = d.surahs;
   const params = new URLSearchParams(location.search);
@@ -285,12 +287,22 @@ function renderSurah(s, mode) {
         const gRow = document.createElement("tr");
         gRow.className = "g-row";
         gRow.style.display = "none";
-        gRow.innerHTML = `<td colspan="3">${grammar}${root ? `<span class="g-root">root: ${root}</span>` : ""}</td>`;
+        gRow.innerHTML = `<td colspan="3">${grammar}${root ? `<span class="g-root">root: ${root}</span>` : ""}<span class="g-fam" style="display:block;margin-top:8px;font-size:13px"></span></td>`;
         tbody.appendChild(gRow);
         row.querySelector(".g-btn").onclick = (e) => {
           e.stopPropagation();
-          gRow.style.display = gRow.style.display === "none" ? "table-row" : "none";
-          logEvent({ e: "gview", surah: s.id, ref: v.ref, w: wi });
+          const opening = gRow.style.display === "none";
+          gRow.style.display = opening ? "table-row" : "none";
+          if (opening) {
+            const fam = root && FAM_BY_ROOT[root.replace(/\s+/g, "")];
+            const famEl = gRow.querySelector(".g-fam");
+            if (fam && famEl && !famEl.innerHTML) {
+              famEl.innerHTML = `<span style="color:var(--amber);font-weight:600">Same root (${fam.root}) — words you can build:</span> `
+                + fam.members.map(m => `<span style="white-space:nowrap"><span class="arabic" style="font-size:17px">${m.ar}</span> <span style="color:var(--muted);font-size:12px">${m.en}</span></span>`).join(" &nbsp;·&nbsp; ")
+                + ` &nbsp;<a href="vocab.html" style="color:var(--accent)">practise this family →</a>`;
+            }
+            logEvent({ e: "gview", surah: s.id, ref: v.ref, w: wi });
+          }
         };
       }
     });
