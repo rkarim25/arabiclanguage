@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mribbylo">
+  <link rel="stylesheet" href="css/style.css?v=mribhxsz">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +57,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mribbylo"></script>
-<script src="js/tracker.js?v=mribbylo"></script>
+<script src="js/app.js?v=mribhxsz"></script>
+<script src="js/tracker.js?v=mribhxsz"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -299,14 +299,17 @@ async function buildPool() {
     if (x.key.startsWith("qc:") && e && e.box >= 3) x.ctx = findVerseCtx(x.v.ar);
   });
   const srs = getSrs();
-  const newQc = [], newEv = [], newFam = [], newStory = [];
+  const newQc = [], newEv = [], newLesson = [], newFam = [], newStory = [];
   CORE.forEach((w, i) => {
     const key = `qc:${i}`;
     if (!srs[key]) newQc.push({ key, v: { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` }, isNew: true });
   });
+  // teacher/lesson clusters jump to the front of the new pool (current lesson first)
   EV.forEach(g => g.members.forEach((m, i) => {
     const key = `ev-${g.id}:${i}`;
-    if (!srs[key]) newEv.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: g.theme.split("—")[0].trim() }, isNew: true });
+    if (srs[key]) return;
+    const item = { key, v: { ar: m.ar, en: m.en, tr: m.tr, note: g.source === "teacher" ? "📘 " + (g.lesson || "your lesson") : g.theme.split("—")[0].trim() }, isNew: true };
+    (g.source === "teacher" ? newLesson : newEv).push(item);
   }));
   FAMS.forEach(f => f.members.forEach((m, i) => {
     const key = `fam-${f.id}:${i}`;
@@ -323,11 +326,11 @@ async function buildPool() {
   }
   let fresh;
   if (sheetSrc === "quran") fresh = [...newQc, ...newFam];
-  else if (sheetSrc === "msa") fresh = [...newEv, ...newStory, ...newFam];
+  else if (sheetSrc === "msa") fresh = [...newLesson, ...newEv, ...newStory, ...newFam];
   else {
     const mixed = [];
     while (newQc.length || newEv.length) mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
-    fresh = [...mixed, ...newFam, ...newStory];
+    fresh = [...newLesson, ...mixed, ...newFam, ...newStory]; // current lesson leads
   }
   return [...items, ...fresh];
 }
