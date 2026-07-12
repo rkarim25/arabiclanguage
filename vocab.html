@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mria5f1c">
+  <link rel="stylesheet" href="css/style.css?v=mriajvup">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +57,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mria5f1c"></script>
-<script src="js/tracker.js?v=mria5f1c"></script>
+<script src="js/app.js?v=mriajvup"></script>
+<script src="js/tracker.js?v=mriajvup"></script>
 <script>
 renderNav("vocab");
 
@@ -142,6 +142,7 @@ function groupDone(prefix, id) { return !!stepsDone(prefix + id).fill; }
 /* ================= tabbed Vocab Lab ================= */
 const LAB_TABS = [
   ["learn", "📝 Learn"],
+  ["lessons", "🎓 Lessons"],
   ["roots", "🌿 Roots"],
   ["everyday", "🗣 Everyday"],
   ["core", "📖 Core"],
@@ -162,7 +163,7 @@ function renderList(view) {
   content.querySelectorAll("#labTabs button").forEach(b =>
     b.onclick = () => { history.replaceState({}, "", "vocab.html?view=" + b.dataset.v); renderList(b.dataset.v); });
   const body = document.getElementById("labBody");
-  ({ learn: renderLearnView, roots: renderRootsView, everyday: renderEverydayView, core: renderCoreView, browse: renderBrowseView })[labView](body);
+  ({ learn: renderLearnView, lessons: renderLessonsView, roots: renderRootsView, everyday: renderEverydayView, core: renderCoreView, browse: renderBrowseView })[labView](body);
 }
 
 /* ---------- Learn view ---------- */
@@ -190,6 +191,32 @@ function renderEverydayView(body) {
     <div class="fam-grid" id="evGrid"></div>`;
   const grid = document.getElementById("evGrid");
   EV.forEach(g => grid.appendChild(groupCard(g, "ev-", g.title, `${g.members.length} words`)));
+}
+
+/* ---------- Lessons view: everything your teacher has covered ---------- */
+function renderLessonsView(body) {
+  const mine = EV.filter(g => g.source === "teacher");
+  if (!mine.length) {
+    body.innerHTML = `<p class="sub">No lesson words here yet. When you send a page from your teacher's book, the words land here as a set you can study — and after that they come back to you automatically in Review.</p>`;
+    return;
+  }
+  const bookName = b => b === "aby" ? "Al-ʿArabiyyah Bayna Yadayk" : b === "atq" ? "Arabic Through the Qur'an" : "Your teacher";
+  const unitName = u => (u || "").replace(/^aby(\d+)-u(\d+)$/, "Book $1, Unit $2") || u;
+  const groups = {};
+  mine.forEach(g => { const k = (g.book || "") + "|" + (g.unit || ""); (groups[k] = groups[k] || []).push(g); });
+  let html = `<p class="sub">Everything your teacher has taught you, ready to study. Tap a set to learn it. Once you've studied it, these words return automatically in <a href="review.html">Review</a> and in “Start my 5 minutes” — no need to mark anything. Your lesson is also a <a href="story.html?id=story-06">story</a>, and the verbs drill in <a href="sentences.html">Sentence Practice</a>.</p>`;
+  const keys = Object.keys(groups);
+  keys.forEach(k => {
+    const [book, unit] = k.split("|");
+    const total = groups[k].reduce((n, g) => n + g.members.length, 0);
+    const safe = k.replace(/[^a-z0-9]/gi, "");
+    html += `<h2 style="margin:16px 0 6px;font-size:16px">${bookName(book)}${unit ? " — " + unitName(unit) : ""} <span style="font-size:13px;color:var(--muted);font-weight:400">· ${total} words</span></h2><div class="fam-grid" id="less-${safe}"></div>`;
+  });
+  body.innerHTML = html;
+  keys.forEach(k => {
+    const grid = document.getElementById("less-" + k.replace(/[^a-z0-9]/gi, ""));
+    groups[k].forEach(g => grid.appendChild(groupCard(g, "ev-", g.title, `${g.members.length} words`)));
+  });
 }
 
 function groupCard(obj, prefix, arTitle, metaText) {

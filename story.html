@@ -10,7 +10,7 @@
   <title>Story — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mria5f1c">
+  <link rel="stylesheet" href="css/style.css?v=mriajvup">
 </head>
 <body>
 <main>
@@ -23,8 +23,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mria5f1c"></script>
-<script src="js/tracker.js?v=mria5f1c"></script>
+<script src="js/app.js?v=mriajvup"></script>
+<script src="js/tracker.js?v=mriajvup"></script>
 <script>
 renderNav("stories");
 
@@ -146,10 +146,17 @@ function renderListen() {
 }
 
 /* ============ READ ============ */
+/* same-root families, keyed by each member's normalized (al-stripped) form, so a
+   tapped story word that IS a family form links out to the whole family. */
+let FAM_MEMBERS = {};
+fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f => (f.members || []).forEach(m => { FAM_MEMBERS[normalizeAr(m.ar).replace(/^ال/, "")] = { id: f.id, root: f.root }; })); }).catch(() => {});
+
 function renderRead() {
+  const VOCAB_TR = {};
+  (story.vocab || []).forEach(v => { if (v.tr) VOCAB_TR[normalizeAr(v.ar).replace(/^ال/, "")] = v.tr; });
   body.innerHTML = `
     <div class="card">
-      <h2>Read — tap any word to hear it and see its meaning</h2>
+      <h2>Read — tap any word to hear it, see its meaning, and where it links</h2>
       <div class="toggles">
         <label><input type="checkbox" id="tgTashkeel" checked> Vowel marks (تشكيل)</label>
         <label><input type="checkbox" id="tgTrans"> English translation</label>
@@ -187,12 +194,15 @@ function renderRead() {
           hidePop();
           pop = document.createElement("div");
           pop.className = "gloss-pop";
-          pop.innerHTML = `<div class="g-ar">${w.replace(/[.،«»!؟]/g, "")}</div><div>${g}</div>`;
+          const clean = w.replace(/[.،«»!؟]/g, "");
+          const norm = normalizeAr(clean).replace(/^ال/, "");
+          const tr = VOCAB_TR[norm], fam = FAM_MEMBERS[norm];
+          pop.innerHTML = `<div class="g-ar">${clean}</div>${tr ? `<div style="font-style:italic;color:var(--muted);font-size:12.5px">${tr}</div>` : ""}<div>${g}</div>${fam ? `<div style="margin-top:5px;font-size:12px;color:var(--amber)">root ${fam.root} · <a href="vocab.html?fam=${fam.id}" style="color:var(--accent)">same-root family →</a></div>` : ""}`;
           document.body.appendChild(pop);
           const r = ws.getBoundingClientRect();
           pop.style.left = Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, r.left + r.width / 2 - pop.offsetWidth / 2)) + "px";
           pop.style.top = (r.top - pop.offsetHeight - 8) + "px";
-          setTimeout(hidePop, 2600);
+          setTimeout(hidePop, fam ? 6000 : 2600);
         };
         span.appendChild(ws);
         if (wi < s.words.length - 1) span.appendChild(document.createTextNode(" "));
