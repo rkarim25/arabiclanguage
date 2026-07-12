@@ -1,55 +1,55 @@
-# Teacher-Sync — turning Preply lessons into site drills
+# Lesson capture — turn any lesson into a study programme
 
-Reza has a live Arabic teacher (Preply) working through two books:
-- **Al-ʿArabiyyah Bayna Yadayk** (communicative MSA) → feeds the **conversation** goal.
-- **Arabic Through the Qurʾān** (grammar taught through verses) → feeds the **Quran** goal.
+Reza has a live Arabic teacher (Preply) plus other study material. The books he happens to use now are **Al-ʿArabiyyah Bayna Yadayk** (communicative MSA) and **Alan Jones' *Arabic Through the Qurʾān*** (grammar through verses) — but this pipeline is **not tied to those books**. It works for anything: a photo of a vocabulary list, a grammar page, a dialogue, handwritten notes, a worksheet, a screenshot.
 
-The two books map exactly onto the site's two tracks, so her syllabus needs **no new machinery** — it becomes graded content in the structures that already exist. This file is the durable pipeline: any chat session can run it. Model: **she drives the syllabus, the site consolidates it between lessons and reports where he's weak.**
+**The deal:** Reza dumps images of whatever his lesson covered. Claude reads them, turns them into graded practice on the site, tags them so they live under "his lessons", and they then drill themselves via spaced repetition. Reza just studies — he never files or organises anything.
 
 ## The one input from Reza
 
-After each lesson he sends **one** of: a photo of the vocab/dialogue/grammar page, or "Bayna Yadayk book N, unit M" / "Arabic Through the Qurʾān chapter K". That is the whole ask on his side — everything below is Claude's job.
+Photos (or a description) of the lesson. That's it. He does not tell Claude how to structure it — Claude decides from the content what type it is and routes it.
 
-## Mapping: book element → site content
+## Routing — content type → where it lives
 
-| From the lesson | Becomes | File | Manifest in `js/app.js` | SRS key | Category (`catsOf`) |
+| What the images show | Becomes | File | Manifest in `js/app.js` | SRS key | Surfaces in |
 |---|---|---|---|---|---|
-| Bayna Yadayk **vocabulary list** | an everyday cluster (linked by theme/root) | `data/everyday.json` group | `EVERYDAY_LIST` | `ev-<id>:<i>` | msa |
-| Bayna Yadayk **dialogue / حوار** | a dialogue story lesson | `data/story-NN.json` | `STORY_LIST` (+ add file to `CORE` in `sw.js`) | `story-NN:<i>` | msa |
-| Bayna Yadayk **structure / تركيب** | a grammar pattern taught through its own example | `data/grammar.json` | `GRAMMAR_LIST` (inside `suggestNext`) | `gt:<id>:<i>` | (whichever verse source) |
-| Arabic Through the Qurʾān **grammar point** | a grammar pattern taught through the **same verses the book uses** | `data/grammar.json` | `GRAMMAR_LIST` | `gt:<id>:<i>` | quran |
-| A high-frequency **Quranic word** she introduces | append to Quran core | `data/quran-core.json` | (none — indexed) | `qc:<i>` (**append-only**) | quran |
-| A **root** she highlights | a root family (4–7 forms + 2 verses) | `data/families.json` | `FAMILY_LIST` | `fam-<id>:<i>` | quran+msa |
+| a **vocabulary list** | an everyday cluster (linked by theme/root) | `data/everyday.json` group | `EVERYDAY_LIST` | `ev-<id>:<i>` | Vocab → **🎓 Lessons** tab, Vocab Learn, Review |
+| a **dialogue / conversation** | a dialogue story lesson | `data/story-NN.json` | `STORY_LIST` (+ file to `CORE` in `sw.js`) | `story-NN:<i>` | Stories, Review |
+| a **grammar point / rule** | a grammar pattern (taught through an example, 1-min test) | `data/grammar.json` | `GRAMMAR_LIST` in `suggestNext()` | `gt:<id>:<i>` | Grammar page, Review |
+| **verbs to conjugate** | entries in the Sentence Practice bank | `data/sentences.json` | (none) | (logs `spract`) | Sentence Practice |
+| a **conversation scenario** | a scenario in the Conversation Partner | `data/conversations.json` | (none) | (logs `convo`) | Converse |
+| a high-frequency **Quranic word / root** | Quran core or a root family | `data/quran-core.json` / `data/families.json` | (indexed) / `FAMILY_LIST` | `qc:<i>` / `fam-<id>:<i>` | Vocab Roots/Core |
 
-## Generation rules (do not violate — these are Reza's hard rules)
+Most lessons are vocab + a grammar point; split them and route each part.
 
-1. **Check against existing content first.** Before adding a word, grep `data/*.json` for it. If it's already on the site, do **not** duplicate — note it so it resurfaces in Review instead. This keeps the frequency budget clean.
-2. **Frequency-first still applies.** Both books are already high-frequency, so trust them — but skip genuinely rare items (proper nouns, one-off vocabulary) rather than teaching them.
-3. **Every vocab item needs `ar` + `en` + `tr`** (transliteration). Full tashkeel on all Arabic. Story sentences render from the `words` gloss arrays, not `ar`.
-4. **Link, don't isolate.** Group her vocab by theme or shared root into one cluster; teach a root's forms together in a family.
-5. **Grammar = 1-minute test, not a paradigm table.** Follow the `data/grammar.json` shape: `what` (plain-language rule), 3 `examples`, 3 `test` items. For the Quran book, use the verses the book itself cites so lesson and site reinforce.
-6. **Tag the source** (see below) so progress is traceable back to book+unit.
+## Metadata convention (so it groups under "his lessons")
 
-## Metadata convention (additive — current code ignores unknown fields)
+Stamp every lesson-sourced item so the **🎓 Lessons** tab and (future) per-lesson retention can find it:
+- **Required:** `"source": "teacher"`.
+- **Preferred label:** `"lesson": "<free text>"` — e.g. `"Bayna Yadayk — Book 1, Unit 1"`, `"Grammar: the iḍāfa (12 Jul)"`, `"Class notes — greetings"`. The Lessons tab groups by this heading verbatim.
+- **Legacy/optional:** `"book": "aby"|"atq"` + `"unit": "aby1-u1"` still compose a heading if `lesson` is absent (back-compat with the first ingest). New content should just use `lesson`.
 
-Stamp teacher-sourced content so the progress sheet can report per-unit:
-- everyday group / grammar pattern / story: add `"source": "teacher"`, `"book": "aby" | "atq"`, `"unit": "<book-ref>"` (e.g. `"aby1-u3"`).
-- Existing content is left untouched; only new teacher content carries these.
+Current code ignores unknown fields, so these are safe to add to everyday groups, grammar patterns, and stories.
 
-## Rhythm
+## Generation rules (Reza's hard rules — do not violate)
 
-- **Post-lesson (default):** generate the lesson's content the same day → it enters the "new words" pool in Vocab Learn and drills all week via SRS; dialogues get Ears mode.
-- **Pre-lesson (optional):** if he sends the *next* unit ahead, pre-load its vocab so he walks in warm and spends paid time speaking, not on first contact.
+1. **Check against existing content first.** grep `data/*.json` for a word before adding it; if it's already on the site (e.g. numbers, or a word in a root family), do NOT duplicate — it'll resurface in Review anyway.
+2. **Frequency-first.** Lesson material is usually already high-frequency; skip genuinely rare items (proper nouns, one-offs).
+3. **Every vocab item needs `ar` + `en` + `tr`** (transliteration). Full tashkeel. Story sentences render from the `words` gloss arrays, not `ar`.
+4. **Link, don't isolate.** Group vocab by theme/root; teach a root's forms together.
+5. **Grammar = one plain rule + 3 examples + a 3-item 1-minute test** (the `data/grammar.json` shape). Use the lesson's own example sentence.
+6. **Verify every Arabic form you author.** Conjugations especially (see the hand-checked set in `data/sentences.json` and grammar.html's `VE_VERBS`).
+
+## How Reza studies it afterward
+
+- **Vocab** → open **Vocab → 🎓 Lessons**; each set opens to study (Understand / Write / 🎧 Ears). After studying, words auto-return in **Review** and **"Start my 5 minutes"** — no marking.
+- **Grammar** → the **Grammar** page (the new pattern); passing its test seeds `gt:` review cards.
+- **Dialogues** → the new **story**.
+- **Verbs** → **Sentence Practice**; **scenarios** → **Converse**.
 
 ## Deploy
 
-Content-only changes to `data/*.json` + manifests + `sw.js`:
-1. `node scripts/bump-version.js` (stamps `?v=` on js/css and the `sw.js` cache name).
-2. Commit + push to `main`; Pages publishes in ~1 min.
-3. Verify: `curl -s -o /dev/null -w '%{http_code}' https://rkarim25.github.io/arabiclanguage/` → 200, and spot-check the new data-file URL.
+`node scripts/bump-version.js` → commit → push `main` (Pages ~1 min) → verify `curl -s -o /dev/null -w '%{http_code}' <url>` = 200 and spot-check the data file. (A markdown-only change needs no bump.)
 
-(Adding only this markdown file needs no bump — it doesn't touch the running app.)
+## Known gap → next build
 
-## Known gap → next enhancement
-
-New teacher vocab currently joins the general "new words" pool; it isn't *prioritised* over other new words, so this week's lesson may not surface first. Next build: a **"From your lessons"** dashboard section (or a `current`-unit priority flag) that pushes the most recent unit to the front of Vocab Learn and shows retention per unit — this is also the data source for the **teacher-facing progress sheet**.
+Lesson content isn't *prioritised* in the daily flow yet (vocab is only front-loaded in `EVERYDAY_LIST` + reachable via the Lessons tab). Planned: push the **most recent lesson first** in daily review, and a **per-lesson retention view** — which is also the data source for a **teacher-facing progress sheet** (an honest what's-retained-vs-stuck summary Reza can share with his teacher before lessons).

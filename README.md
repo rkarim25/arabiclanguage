@@ -3,7 +3,7 @@
 **Live site:** https://rkarim25.github.io/arabiclanguage/
 **Owner:** Reza (rkarim25 / rkarim88@gmail.com) · **Maintainer:** Claude (any chat session)
 
-This README is the canonical guide. A chat session should be able to operate the whole project from this file plus the `/arabic-coach` skill.
+This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, and `TEACHER-SYNC.md` (the lesson-capture loop).
 
 ## Mission & hard rules
 
@@ -23,17 +23,21 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 
 | Page | What it does |
 |---|---|
-| `index.html` | Dashboard: Quran-coverage stat, "What now?" suggestions (first item = **Start my 5 minutes**, the one-button day: due review -> new words -> ears round via `vocab.html?today=1`), coach's notes, weak spots, story grid, cloud-sync setup |
-| `vocab.html` | **Vocab Learn** (endless auto-picked fill-sheets: due → new frequency-core → family forms) with three modes — Understand (Arabic→meaning), Write (meaning→Arabic), **🎧 Ears (sound only → meaning; the Arabic appears after checking)** — plus verse-context rows (box-3+ `qc:` words re-tested highlighted inside a real ayah), the Quran core table, 15 root-family lessons; everyday study tables show 🗣 Hijazi street variants (`hear` field) on Umrah-critical phrases |
-| `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar notes + tafsir link) then fill-the-meanings test. **▶ Real recitation** streams Alafasy from everyayah.com verse by verse (highlight follows). `quran.html?listen=1` = **Listen queue**: recitation of all studied surahs back to back (logs `rlisten`). **Cold listen** (third step per surah): recitation only, no text, MCQ meaning per verse; 85% sets step `listen` on `q-<id>` (logs `qlisten-test`) — the milestone "3 surahs certified by ear" counts these |
-| `grammar.html` | 8 practical patterns taught through known verses, typed 1-minute tests. Passing (60%+) seeds the pattern's test items as `gt:<id>:<i>` SRS cards so grammar resurfaces in Review. **Who's acting?** (`?g=verbears`): audio verb-form drill — hear a conjugation, name the doer; 80% sets `gr-verbears` step `test` (logs `vdrill`) |
-| `speaking.html` | Speaking section: word drill by bucket/source chips (say the Arabic, mic-checked, bucket bars) + "say it in Arabic" prompts ranked by known vocab (`data/prompts.json`) + sentence shadowing across all stories and surahs |
-| `test.html?ms=<id>` | Milestone tests (mock + official, 85% pass certifies as `ms-<id>` step `passed`): top20/top40/core60 (Quran core ranges), opener/survival (everyday sets) |
-| `story.html?id=story-NN` | 6-step story lessons: Listen, Read (tap word = audio+gloss), Memorize (vocab table), Quiz, Speak (speech-recognition shadowing), Write (dictation + translation) |
-| `review.html` | Spaced-repetition queue, table mode (reveal + mark misses) with card mode opt-in |
-| `keyboard.html` | Reza's original phonetic Latin→Arabic keyboard tool (mapping also lives in `js/app.js`) |
+| `index.html` | Dashboard: Quran-coverage stat, "What now?" suggestions (first = **Start my 5 minutes** — the one-button day: due review → new words → ears round via `vocab.html?today=1`), coach's notes, weak spots, story grid, cloud-sync setup |
+| `vocab.html` | **Vocab Lab**, tabbed: **📝 Learn** (endless auto fill-sheets: due → new frequency-core → family forms; modes Understand Ar→meaning / Write meaning→Ar / **🎧 Ears** sound→meaning), **🎓 Lessons** (all lesson-sourced clusters `source:"teacher"`, grouped by lesson label — one place to study/review your teacher's words), **🌿 Roots** (15 families), **📖 Core** (Quran-core table), **🗂 Browse** (by bucket). **Every checked answer auto-schedules the word by SRS interval — the ✓↻⏳✗ buckets are OPTIONAL overrides, not required.** |
+| `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar note + **root-family link** + tafsir) then fill-the-meanings test. **▶ Real recitation** (Alafasy, everyayah.com) verse by verse; `?listen=1` = **Listen queue** (logs `rlisten`); **Cold listen** per surah (recitation-only MCQ; 85% → step `listen`, logs `qlisten-test`; milestone "3 surahs certified by ear") |
+| `grammar.html` | 8 practical patterns via known verses, typed 1-min tests; passing (60%+) seeds `gt:<id>:<i>` SRS cards. **Who's acting?** (`?g=verbears`): audio verb-form drill (logs `vdrill`) |
+| `sentences.html` | **Sentence Practice**: produce a full sentence from a known verb, cycling I/we/they × past/present/future over frequency-ranked verbs (`data/sentences.json`); recall-then-show, drill-the-misses, tense chips. Logs `spract`/`spract-done` (conjugation weaknesses) |
+| `speaking.html` | Speaking: word drill by bucket/source, "say it in Arabic" prompts (`data/prompts.json`), sentence shadowing across stories + surahs |
+| `converse.html` | **Conversation Partner**: generates a portable, model-agnostic briefing file (paste into Gemini/Claude/ChatGPT) from Reza's known vocab + a scenario (`data/conversations.json`) + last 3 saved reports. He pastes the AI's end report back → `convo` log event → folds into the next briefing |
+| `test.html?ms=<id>` | Milestone tests (mock + official, 85% certifies `ms-<id>` step `passed`): top20/top40/core60, opener/survival/umrah/masjid |
+| `story.html?id=story-NN` | 6-step story lessons: Listen, Read (tap word = audio + gloss + **transliteration + same-root family link**), Memorize (vocab table), Quiz, Speak (speech shadowing), Write (dictation + translation) |
+| `review.html` | Spaced-repetition queue, table mode (reveal + mark misses), card mode opt-in |
+| `keyboard.html` | Phonetic Latin→Arabic keyboard tool (mapping in `js/app.js`) |
 
-Shared code: `js/app.js` (manifests, SRS, TTS, recitation audio (`playRecitation`/`recitationUrl`, everyayah.com Alafasy), phonetic input, `resolveCards`, `suggestNext`, `fuzzyEn`, service-worker registration), `js/tracker.js` (event log, active-time tracking, cloud sync, login helpers, `weakSpots`, `activeMinutes`).
+**Typing (all writing surfaces):** `mountTranslitDock(getTarget)` in app.js gives every answer box a live Latin→Arabic typing box — type transliteration, Arabic appears in real time (mobile-safe `input` event + `latinToArabic`). Auto-opens on Sentences/Grammar/Milestone tests; Story Write & Vocab Produce use it too. `LATIN_TO_AR` is forgiving: `aa`=ا, Arabizi numerals (2/5/6/7/9), long vowels (ee/ii/oo/uu). **Answer matching is lenient:** `arMatch` forgives tashkeel, ة/ه & hamza-seat slips, spacing, and one typo in words ≥5 letters; `fuzzyEn` accepts English typos and stems. Only Arabic fields (`fill-input`/`dir=rtl`) transliterate — English-meaning fields are untouched.
+
+Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, `latinToArabic` + `mountTranslitDock`, `resolveCards`, `suggestNext`, `arMatch`/`fuzzyEn`/`editDist`, `renderNav`, SW registration), `js/tracker.js` (event log, active-time, cloud sync, `weakSpots`, `activeMinutes`).
 
 **Offline (PWA):** `sw.js` (network-first, cache fallback — can never serve stale code while online; works offline from the last good copy) + `manifest.webmanifest` + `icons/`. He can "Add to Home Screen" and study in the Haram with no signal. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire automatically.
 
@@ -41,7 +45,7 @@ Shared code: `js/app.js` (manifests, SRS, TTS, recitation audio (`playRecitation
 
 All localStorage, synced to the cloud (see Infrastructure):
 - `ats-progress` — `{ "<unitId>": { steps: { <step>: true } } }`. Unit ids: `story-NN`, `fam-<id>` (step `fill`), `q-<surahId>` (steps `study`/`test`), `gr-<patternId>` (step `test`).
-- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min. `b` is an explicit user bucket — `know` (30d) / `repeat` (10min) / `later` (7d) / `never` (due=year 2100, excluded from rotation); auto-grading deletes `b`. `bucketOf(key)` maps state→bucket; the Vocab Lab browse view filters by bucket (incl. Unmarked and Don't-repeat) and can feed any bucket into the practice sheet.
+- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min. `b` is an explicit user bucket — `know` (30d) / `repeat` (10min) / `later` (7d) / `never` (due=year 2100, excluded from rotation); auto-grading deletes `b`. `bucketOf(key)` maps state→bucket; the Vocab Lab browse view filters by bucket (incl. Unmarked and Don't-repeat) and can feed any bucket into the practice sheet. **A checked answer calls `gradeCard()`, so the box/interval advance automatically — buckets are optional manual overrides, never required.**
 - `ats-log` — append-only event log (schema in `ANALYSIS.md` in the `rkarim25/arabic-learning-data` repo).
 - `ats-session` / `ats-token` / `ats-gclient` — Google session, GitHub PAT fallback, pasted Google client ID.
 
@@ -53,16 +57,21 @@ All localStorage, synced to the cloud (see Infrastructure):
 - `qw:<surahId>:<v>:<w>` → `data/verses.json` verse word
 - `gt:<patternId>:<i>` → `data/grammar.json` pattern test item (grammar chunk recognition; seeded on a passed grammar test)
 
+**Non-SRS data:** `data/sentences.json` (Sentence Practice verb bank) and `data/conversations.json` (Converse scenarios) drive practice + logging, not SRS cards. **Lesson tags:** lesson-sourced content carries `source:"teacher"` + a free `lesson:"<label>"` (see `TEACHER-SYNC.md`); the 🎓 Lessons tab groups everyday clusters by that label.
+
 **Sync safety:** `_mergeRemoteState()` in tracker.js merges remote srs/progress into local BEFORE every push (higher box wins; an explicit local bucket mark is kept as latest intent; `never` always wins; progress steps union). This prevents a fresh device or an evicted localStorage from wiping the cloud copy. Never revert sync to last-writer-wins.
 
 ## Content pipelines (how Claude adds material)
 
+- **Lesson capture (the main loop):** Reza dumps images of *any* lesson — any book, notes, worksheet; vocab or grammar or dialogue. Claude reads them, routes each part to the right structure below, tags it `source:"teacher"` + `lesson:"<label>"`, deploys. Full spec: **`TEACHER-SYNC.md`**. This is not tied to any one book.
 - **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, **and add it to `QURAN_SURAHS` in `js/app.js` — this step was once forgotten (commit 3a5afe4 added 3 surahs to verses.json only), which silently hides them from What-now, milestones, and the listen queue. Treat gen-surah + QURAN_SURAHS as one atomic change.** Done: 1, 97, 103, 105, 106, 108-114 + Ayat al-Kursi (verse ranges like `2:255` work via RANGE_META — id `kursi`). Recommended next: 93, 94, 99-104 (rest of the common short surahs). Memorized-first: Reza knows Fatiha + a few short ones by heart, so surahs already in his memory are the highest-value lessons. The "salah fully understood" long-view bar is PINNED to `SALAH_SURAH_IDS` (7 surahs) — new lessons must never move that goalpost.
 - **Quran core words**: append to `data/quran-core.json` toward the top ~300 lemmas, keeping frequency order among *new* entries (existing indices frozen).
 - **Root families**: add to `data/families.json` + `FAMILY_LIST` in `js/app.js`. Pick roots from Reza's weak words. Include 4-7 Quranic forms + 2 real verses each.
 - **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words. Members may carry a `hear` field (`"وين؟ — wēn"`) = the Hijazi street form rendered as a 🗣 line in study tables — use sparingly, Umrah-critical phrases only.
-- **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js` + add the file to `CORE` in `sw.js`. Live: 5 L1 stories (01-03 narratives, 04 Friday/masjid, 05 restaurant DIALOGUE). Curriculum decision (2026-07-04): from Level 2 on, roughly half the slots are scenario DIALOGUES (bargaining, pharmacy, directions) and khutbah-style monologues rather than narratives — better match to the speaking goal; keep recycling weak vocab and Quranic structures.
+- **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js` + add the file to `CORE` in `sw.js`. Live: 6 L1 stories (01-03 narratives, 04 Friday/masjid, 05 restaurant DIALOGUE, 06 The Teacher Session — weaves lesson vocab). Curriculum decision (2026-07-04): from Level 2 on, roughly half the slots are scenario DIALOGUES (bargaining, pharmacy, directions) and khutbah-style monologues rather than narratives; keep recycling weak vocab and Quranic structures.
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
+- **Sentence Practice verbs**: append to `data/sentences.json` `verbs[]` (already frequency-ordered) — each needs `root`/`base`/`past`, an `obj{ar,en}`, and `forms` for ana/nahnu/hum × past/pres/fut. **Verify every conjugation** (reuse the hand-checked set in grammar.html's `VE_VERBS`).
+- **Conversation scenarios**: append to `data/conversations.json` `scenarios[]` — `{id, titleEn, titleAr, clusters[] (existing everyday ids), goal, opener, openerTr, success}`. The briefing pulls the clusters' words as target vocab.
 
 Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
@@ -82,7 +91,7 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 
 ## The coaching loop
 
-One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It reads data (KV first, GitHub fallback), analyzes (weak vocab → listening → speaking → grammar → pacing), writes coach notes back, adds targeted content via the pipelines above, pushes, and verifies.
+One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It reads data (KV first, GitHub fallback), analyzes (weak vocab → listening → speaking → **conjugation** (`spract`) → grammar → **conversation** (`convo`) → **consistency** (`today-done`) → pacing), writes coach notes back, adds targeted content via the pipelines above (including any new lesson material Reza dumped), pushes, and verifies.
 
 Manual equivalents:
 ```
