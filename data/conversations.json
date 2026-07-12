@@ -1,0 +1,85 @@
+{
+  "note": "Conversation scenarios. Each pulls target vocab from everyday.json clusters (by id). Add scenarios as Reza's units grow; cluster:null = free chat.",
+  "scenarios": [
+    {
+      "id": "greet-intro",
+      "titleEn": "Meet someone",
+      "titleAr": "التَّعارُف",
+      "clusters": ["greetings", "people", "family"],
+      "goal": "Greet each other, introduce yourself, and say a little about your family.",
+      "opener": "السَّلامُ عَلَيْكُمْ! ما اسْمُكَ؟",
+      "openerTr": "as-salāmu ʿalaykum! mā smuka?",
+      "success": "You have exchanged greetings and names and said one or two things about your family."
+    },
+    {
+      "id": "family",
+      "titleEn": "Talk about your family",
+      "titleAr": "الأُسْرَة",
+      "clusters": ["family"],
+      "goal": "Describe who is in your family — parents, children, grandparents, aunts and uncles.",
+      "opener": "أَخْبِرْني عَنْ أُسْرَتِكَ. مَنْ في بَيْتِكَ؟",
+      "openerTr": "akhbirnī ʿan usratika. man fī baytika?",
+      "success": "You have named several family members and said one thing about each."
+    },
+    {
+      "id": "shopping",
+      "titleEn": "Shopping & bargaining",
+      "titleAr": "التَّسَوُّق",
+      "clusters": ["shopping", "numbers"],
+      "goal": "Ask the price of something, bargain, and agree to buy it (or politely decline).",
+      "opener": "أَهْلاً! تَفَضَّلْ، ماذا تُريدُ أَنْ تَشْتَرِيَ؟",
+      "openerTr": "ahlan! tafaḍḍal, mādhā turīdu an tashtariya?",
+      "success": "You asked a price, negotiated, and reached a decision."
+    },
+    {
+      "id": "restaurant",
+      "titleEn": "At the restaurant",
+      "titleAr": "في المَطْعَم",
+      "clusters": ["food", "numbers"],
+      "goal": "Order food and drink, then ask for the bill.",
+      "opener": "أَهْلاً وَسَهْلاً! تَفَضَّلْ، ماذا تُحِبُّ أَنْ تَأْكُلَ؟",
+      "openerTr": "ahlan wa-sahlan! tafaḍḍal, mādhā tuḥibbu an taʾkula?",
+      "success": "You ordered at least one food and one drink and asked for the bill."
+    },
+    {
+      "id": "directions",
+      "titleEn": "Ask for directions",
+      "titleAr": "الاِتِّجاهات",
+      "clusters": ["directions"],
+      "goal": "Ask how to reach a place and understand the directions you are given.",
+      "opener": "نَعَمْ، كَيْفَ أُساعِدُكَ؟",
+      "openerTr": "naʿam, kayfa usāʿiduka?",
+      "success": "You asked the way to a place and repeated the directions back correctly."
+    },
+    {
+      "id": "mosque",
+      "titleEn": "At the mosque",
+      "titleAr": "في المَسْجِد",
+      "clusters": ["worship"],
+      "goal": "Talk about your prayer, wudu, and going to the mosque.",
+      "opener": "هَلْ صَلَّيْتَ الفَجْرَ في المَسْجِدِ اليَوْمَ؟",
+      "openerTr": "hal ṣallayta l-fajra fī l-masjidi l-yawma?",
+      "success": "You described your prayer routine using several worship words."
+    },
+    {
+      "id": "taxi-hotel",
+      "titleEn": "Taxi & hotel",
+      "titleAr": "التاكْسي وَالفُنْدُق",
+      "clusters": ["hotel-taxi", "directions"],
+      "goal": "Take a taxi to your hotel and check in.",
+      "opener": "إِلى أَيْنَ تُريدُ أَنْ تَذْهَبَ؟",
+      "openerTr": "ilā ayna turīdu an tadhhaba?",
+      "success": "You told a driver where to go and completed a short hotel check-in."
+    },
+    {
+      "id": "free",
+      "titleEn": "Free chat (my level)",
+      "titleAr": "حَديثٌ حُرّ",
+      "clusters": [],
+      "goal": "Just talk about anything, staying within my current vocabulary.",
+      "opener": "أَهْلاً! كَيْفَ حالُكَ اليَوْمَ؟",
+      "openerTr": "ahlan! kayfa ḥāluka l-yawma?",
+      "success": "You kept a friendly back-and-forth going for several turns."
+    }
+  ]
+}

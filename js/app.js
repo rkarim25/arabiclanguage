@@ -630,6 +630,7 @@ function renderNav(active) {
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">Sentences</a>
     <a class="link ${active === "speaking" ? "active" : ""}" href="speaking.html">Speak</a>
+    <a class="link ${active === "converse" ? "active" : ""}" href="converse.html">Converse</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;

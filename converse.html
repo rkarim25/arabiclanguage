@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Conversation Partner — Arabic Through Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=mri5ebn9">
+  <style>
+    .cv-steps { display: grid; gap: 10px; margin: 8px 0 2px; }
+    .cv-step { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
+    .cv-step .n { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+    .cv-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
+    .cv-chip { border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 8px 13px; cursor: pointer; font-size: 13.5px; }
+    .cv-chip .ar { font-family: var(--font-ar); color: var(--accent); font-size: 16px; margin-inline-start: 4px; }
+    .cv-chip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .cv-chip.on .ar { color: #fff; }
+    #cvOut { width: 100%; min-height: 260px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5; white-space: pre; overflow: auto; border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card); color: var(--ink); }
+    #cvPaste { width: 100%; min-height: 120px; font-size: 14px; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    .cv-goal { background: #f6f2ea; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 14px; margin: 8px 0; }
+    .cv-goal .ar { font-family: var(--font-ar); font-size: 20px; color: var(--accent); direction: rtl; }
+    .cv-hist { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 8px; font-size: 13.5px; }
+    .cv-hist details { margin: 6px 0; }
+    .cv-hist summary { cursor: pointer; }
+    .cv-hist pre { white-space: pre-wrap; font-size: 12px; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-top: 6px; }
+    @media (prefers-color-scheme: dark) { .cv-goal { background: rgba(255,255,255,.05); } }
+  </style>
+</head>
+<body>
+<main>
+  <div id="content">Loading…</div>
+</main>
+
+<script src="js/app.js?v=mri5ebn9"></script>
+<script src="js/tracker.js?v=mri5ebn9"></script>
+<script>
+renderNav("converse");
+trackPage("converse");
+
+const content = document.getElementById("content");
+let SCENARIOS = null, EVERYDAY = null, current = null;
+
+Promise.all([
+  fetch("data/conversations.json").then(r => r.json()).then(d => d.scenarios),
+  fetch("data/everyday.json").then(r => r.json()).then(d => d.groups),
+]).then(([sc, ev]) => { SCENARIOS = sc; EVERYDAY = ev; current = sc[0]; render(); });
+
+function render() {
+  content.innerHTML = `
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Conversation Partner</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">مُحادَثَة</span>
+    </h1>
+    <p class="sub">Practise real conversation with any AI — Gemini, Claude or ChatGPT — tuned to exactly the words you know. The file below teaches the AI your level, your goal, and how to keep you talking. Save the AI's report at the end and next time picks up where you left off.</p>
+
+    <div class="card">
+      <div class="cv-steps">
+        <div class="cv-step"><span class="n">1</span><span>Pick a scenario, then <b>Generate</b> and <b>Copy</b> (or download) the briefing file.</span></div>
+        <div class="cv-step"><span class="n">2</span><span>Open any AI, <b>paste the whole file</b>, then send your first message in Arabic (or English — it'll help you).</span></div>
+        <div class="cv-step"><span class="n">3</span><span>When you finish, type <b>END</b>. The AI gives a short report — <b>paste it back here</b> and Save.</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>1 · Choose a scenario</h2>
+      <div class="cv-chips" id="cvChips"></div>
+      <div class="cv-goal" id="cvGoal"></div>
+      <div class="ex-row">
+        <button class="primary" id="cvGen">⚙️ Generate my briefing</button>
+      </div>
+      <div id="cvGenWrap" style="display:none;margin-top:12px">
+        <div class="ex-row" style="margin-bottom:8px">
+          <button class="small" id="cvCopy">📋 Copy</button>
+          <button class="small" id="cvDl">⬇️ Download .md</button>
+          <span id="cvCopyMsg" style="color:var(--accent);font-size:13px;align-self:center"></span>
+        </div>
+        <textarea id="cvOut" readonly spellcheck="false"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2 · Save what happened</h2>
+      <p class="sub" style="margin-top:0">Paste the AI's <b>SESSION REPORT</b> here so your progress carries into the next chat.</p>
+      <textarea id="cvPaste" placeholder="=== SESSION REPORT ===&#10;Scenario: ...&#10;..."></textarea>
+      <div class="ex-row" style="margin-top:8px">
+        <button class="primary" id="cvSave">💾 Save session</button>
+        <span id="cvSaveMsg" style="color:var(--accent);font-size:13px;align-self:center"></span>
+      </div>
+      <div class="cv-hist" id="cvHist"></div>
+    </div>
+  `;
+
+  const chips = document.getElementById("cvChips");
+  SCENARIOS.forEach(s => {
+    const c = document.createElement("span");
+    c.className = "cv-chip" + (s.id === current.id ? " on" : "");
+    c.innerHTML = `${s.titleEn} <span class="ar" dir="rtl">${s.titleAr}</span>`;
+    c.onclick = () => { current = s; document.querySelectorAll(".cv-chip").forEach(x => x.classList.remove("on")); c.classList.add("on"); showGoal(); document.getElementById("cvGenWrap").style.display = "none"; };
+    chips.appendChild(c);
+  });
+  showGoal();
+
+  document.getElementById("cvGen").onclick = generate;
+  document.getElementById("cvCopy").onclick = copyOut;
+  document.getElementById("cvDl").onclick = downloadOut;
+  document.getElementById("cvSave").onclick = saveReport;
+  renderHistory();
+}
+
+function showGoal() {
+  document.getElementById("cvGoal").innerHTML =
+    `🎯 <b>Goal:</b> ${current.goal}<br><span style="color:var(--muted)">Opens with: </span><span class="ar">${current.opener}</span> <span style="color:var(--muted)">(${current.openerTr})</span>`;
+}
+
+function fmt(v) { return `- ${v.ar}  —  ${v.tr || "—"}  —  ${v.en}`; }
+function uniqByAr(list) { const seen = new Set(); return list.filter(v => { const k = stripTashkeel(v.ar); if (seen.has(k)) return false; seen.add(k); return true; }); }
+
+async function buildBriefing(s) {
+  const srs = getSrs();
+  const learntKeys = Object.keys(srs).filter(isLearnt);
+  const learningKeys = Object.keys(srs).filter(k => !isLearnt(k));
+  const [knownR, learnR] = await Promise.all([resolveCards(learntKeys), resolveCards(learningKeys)]);
+  const known = uniqByAr(knownR.map(x => x.v)).slice(0, 240);
+  const learning = uniqByAr(learnR.map(x => x.v)).slice(0, 140);
+
+  const target = uniqByAr((s.clusters || []).flatMap(cid => {
+    const g = EVERYDAY.find(x => x.id === cid);
+    return g ? g.members : [];
+  }));
+
+  const pastConvos = store.get("ats-log", []).filter(e => e.e === "convo").slice(-3);
+  const L = [];
+  L.push("# Arabic Conversation Partner — Briefing");
+  L.push(`_Generated by my Arabic learning site. Paste this ENTIRE message into any AI (Gemini, Claude, or ChatGPT), then send your first message to begin._`);
+  L.push("");
+  L.push("## Your role");
+  L.push("You are a warm, patient Arabic (Modern Standard Arabic) conversation partner and gentle tutor. Your job is to have a real, flowing conversation with me while keeping it inside the words I already know, and to make sure I never get stuck.");
+  L.push("");
+  L.push("## About me (the learner)");
+  L.push("- Level: upper-beginner. I can read the Arabic script but slowly. I am early in *Al-ʿArabiyyah Bayna Yadayk*, Book 1.");
+  L.push("- Native languages: English and Bengali — use either for hints, translations, or mnemonics.");
+  L.push("- Goals: (1) understand the Qur'an as it is recited, and (2) hold everyday spoken MSA conversations, including for Umrah.");
+  L.push("");
+  L.push(`## Today's scenario: ${s.titleEn} — ${s.titleAr}`);
+  L.push(`- **Goal:** ${s.goal}`);
+  L.push(`- **You open with:** ${s.opener}  (${s.openerTr})`);
+  L.push(`- **We're done when:** ${s.success}`);
+  L.push("");
+  L.push("## How to talk to me — IMPORTANT");
+  L.push("1. Use Modern Standard Arabic. Keep sentences short and simple.");
+  L.push("2. For EVERY Arabic line you write, give three things: (a) the Arabic with full tashkeel (harakat), (b) a transliteration line, (c) a short English gloss.");
+  L.push("3. Stay within \"My vocabulary\" below. Introduce at most ONE new word per turn; when you do, gloss it (Arabic — translit — English) and then reuse it so it sticks.");
+  L.push("4. After your line, suggest 1–2 things I could say next (with transliteration), so I'm never stuck for words.");
+  L.push("5. If I reply in English or in transliteration, accept it, show me how to say it in Arabic, and continue.");
+  L.push("6. Correct only my BIG mistakes, by gently restating the correct version — don't nitpick harakat.");
+  L.push("7. Keep steering us toward today's goal. Tell me clearly when I've reached it.");
+  L.push("8. When I type END (or we reach the goal), output a SESSION REPORT in the exact format at the bottom.");
+  L.push("");
+  L.push("## My vocabulary");
+  if (target.length) {
+    L.push("### Target words for this scenario (lean on these)");
+    target.forEach(v => L.push(fmt(v)));
+    L.push("");
+  }
+  L.push(`### Words I know (${known.length})`);
+  L.push(known.length ? known.map(fmt).join("\n") : "- (I'm just starting — build from the target words above and go slowly.)");
+  L.push("");
+  if (learning.length) {
+    L.push(`### Words I'm still learning — use sparingly and always gloss (${learning.length})`);
+    L.push(learning.map(fmt).join("\n"));
+    L.push("");
+  }
+  L.push("## Continuity — what happened last time");
+  if (pastConvos.length) {
+    pastConvos.forEach(e => { L.push(`- ${new Date(e.t).toISOString().slice(0, 10)} · ${e.scenario || "?"}:`); L.push(e.report.trim()); L.push(""); });
+  } else {
+    L.push("This is our first session — start easy and find my level.");
+  }
+  L.push("");
+  L.push("## SESSION REPORT — output this at the very end");
+  L.push("=== SESSION REPORT (paste this back into my site) ===");
+  L.push(`Scenario: ${s.id}`);
+  L.push("Goal met: yes / partly / no");
+  L.push("Used well: (Arabic words I used correctly)");
+  L.push("Struggled with: (words or structures I got wrong or avoided)");
+  L.push("New words introduced: (ar — tr — en; ...)");
+  L.push("Focus next time: (one short line)");
+  L.push("Level note: (one line — is my level rising, steady, or should we slow down?)");
+  L.push("=== END REPORT ===");
+  return L.join("\n");
+}
+
+async function generate() {
+  const btn = document.getElementById("cvGen");
+  btn.disabled = true; btn.textContent = "Building…";
+  try {
+    const text = await buildBriefing(current);
+    document.getElementById("cvOut").value = text;
+    document.getElementById("cvGenWrap").style.display = "block";
+    logEvent({ e: "convo-gen", scenario: current.id });
+  } finally {
+    btn.disabled = false; btn.textContent = "⚙️ Generate my briefing";
+  }
+}
+
+function copyOut() {
+  const text = document.getElementById("cvOut").value;
+  const done = () => { document.getElementById("cvCopyMsg").textContent = "✓ copied — now paste it into your AI"; };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, fallbackCopy);
+  else fallbackCopy();
+  function fallbackCopy() { const o = document.getElementById("cvOut"); o.focus(); o.select(); try { document.execCommand("copy"); done(); } catch (e) {} }
+}
+
+function downloadOut() {
+  const text = document.getElementById("cvOut").value;
+  const blob = new Blob([text], { type: "text/markdown" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `arabic-conversation-${current.id}.md`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function saveReport() {
+  const box = document.getElementById("cvPaste");
+  const text = box.value.trim();
+  const msg = document.getElementById("cvSaveMsg");
+  if (text.length < 15) { msg.style.color = "var(--red)"; msg.textContent = "Paste the AI's report first."; return; }
+  const m = text.match(/Scenario:\s*([a-z-]+)/i);
+  logEvent({ e: "convo", scenario: m ? m[1] : current.id, report: text });
+  autoSync();
+  box.value = "";
+  msg.style.color = "var(--accent)"; msg.textContent = "✓ saved — next briefing will remember this";
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById("cvHist");
+  const convos = store.get("ats-log", []).filter(e => e.e === "convo").slice().reverse();
+  if (!convos.length) { el.innerHTML = `<p class="sub" style="margin:6px 0 0">No saved sessions yet.</p>`; return; }
+  el.innerHTML = `<div style="font-weight:600;margin-bottom:4px">Your conversation history (${convos.length})</div>` +
+    convos.map(e => {
+      const focus = (e.report.match(/Focus next time:\s*(.+)/i) || [])[1] || "";
+      return `<details><summary>${new Date(e.t).toISOString().slice(0, 10)} · <b>${e.scenario || "?"}</b>${focus ? ` — next: ${focus.slice(0, 60)}` : ""}</summary><pre>${e.report.replace(/</g, "&lt;")}</pre></details>`;
+    }).join("");
+}
+</script>
+</body>
+</html>
