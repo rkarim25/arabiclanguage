@@ -10,7 +10,7 @@
   <title>Quran — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mria1i4e">
+  <link rel="stylesheet" href="css/style.css?v=mria5f1c">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -38,8 +38,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mria1i4e"></script>
-<script src="js/tracker.js?v=mria1i4e"></script>
+<script src="js/app.js?v=mria5f1c"></script>
+<script src="js/tracker.js?v=mria5f1c"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -48,7 +48,9 @@ const content = document.getElementById("content");
 let DATA = null;
 
 let FAM_BY_ROOT = {};
-fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f => { FAM_BY_ROOT[f.root.replace(/\s+/g, "")] = f; }); }).catch(() => {});
+// word roots arrive as rich strings ("ق-و-ل (q-w-l) — to say…"); reduce to the bare Arabic letters
+const rootKey = s => ((s || "").split("(")[0]).replace(/[^ء-ي]/g, "").replace(/ـ/g, "").replace(/[أإآٱ]/g, "ا");
+fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f => { FAM_BY_ROOT[rootKey(f.root)] = f; }); }).catch(() => {});
 fetch("data/verses.json").then(r => r.json()).then(d => {
   DATA = d.surahs;
   const params = new URLSearchParams(location.search);
@@ -294,7 +296,7 @@ function renderSurah(s, mode) {
           const opening = gRow.style.display === "none";
           gRow.style.display = opening ? "table-row" : "none";
           if (opening) {
-            const fam = root && FAM_BY_ROOT[root.replace(/\s+/g, "")];
+            const fam = root && FAM_BY_ROOT[rootKey(root)];
             const famEl = gRow.querySelector(".g-fam");
             if (fam && famEl && !famEl.innerHTML) {
               famEl.innerHTML = `<span style="color:var(--amber);font-weight:600">Same root (${fam.root}) — words you can build:</span> `
