@@ -10,7 +10,7 @@
   <title>Quran — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mricbq6c">
+  <link rel="stylesheet" href="css/style.css?v=mrissqnr">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -38,8 +38,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mricbq6c"></script>
-<script src="js/tracker.js?v=mricbq6c"></script>
+<script src="js/app.js?v=mrissqnr"></script>
+<script src="js/tracker.js?v=mrissqnr"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -98,12 +98,17 @@ function renderList() {
 function renderListenQueue() {
   trackPage("quran:listen-queue");
   const studied = DATA.filter(s => { const d = stepsDone("q-" + s.id); return d.study || d.test; });
-  const queue = studied.length ? studied : [];
+  // Beginner on-ramp: with zero surahs studied, seed the ones everyone knows by heart
+  // from salah. Real recitation of KNOWN text is the by-ear entry point — no prerequisites.
+  const STARTER_IDS = ["fatiha", "ikhlas"];
+  const isStarter = !studied.length;
+  const queue = studied.length ? studied : DATA.filter(s => STARTER_IDS.includes(s.id));
   content.innerHTML = `
     <p><a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a></p>
     <h1>Listen queue <span class="arabic" style="color:var(--accent)">اِسْتَمِعْ وَافْهَمْ</span></h1>
-    <p class="sub">Real recitation (Mishary Alafasy) of the surahs you've studied, back to back.
-    You already know these words — let your ears catch up with your eyes. Good while walking, commuting, or before sleep.</p>
+    <p class="sub">${isStarter
+      ? `Al-Fatiha and Al-Ikhlas — the surahs you already know by heart from salah. Just listen and let the meanings surface. No reading, no test.`
+      : `Real recitation (Mishary Alafasy) of the surahs you've studied, back to back. You already know these words — let your ears catch up with your eyes.`} Good while walking, commuting, or before sleep.</p>
     ${queue.length ? `
     <div class="card">
       <div class="listen-controls" style="margin-bottom:10px">

@@ -437,6 +437,16 @@ function suggestNext() {
     desc: "One tap: due reviews → a few new words → an ears round. It stops by itself.",
     href: "vocab.html?today=1",
   });
+  // 0b. By-ear on-ramp — his #1 goal is understanding the Qur'an AS RECITED, and by-ear
+  //     is the honest gap. Real recitation (not TTS) of Al-Fatiha — known by heart from
+  //     salah — needs no prerequisites and no reading. Shown until he's listened even once.
+  const earLog = store.get("ats-log", []);
+  const byEarDone = earLog.filter(x => x.e === "rlisten" || x.e === "qlisten" || x.e === "qlisten-test").length;
+  if (!byEarDone) out.push({
+    icon: "🎧", title: "Just listen — 60 seconds",
+    desc: "Al-Fatiha recited for real. You know it by heart — let the meanings you've learnt surface. No reading.",
+    href: "quran.html?listen=1",
+  });
   // 1. Vocab Learn — pick your own lane when you want more control
   out.push({
     icon: "📝", title: "Vocab Learn",
