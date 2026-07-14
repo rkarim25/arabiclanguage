@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrl3hxmi">
+  <link rel="stylesheet" href="css/style.css?v=mrl3r7nz">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -60,8 +60,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrl3hxmi"></script>
-<script src="js/tracker.js?v=mrl3hxmi"></script>
+<script src="js/app.js?v=mrl3r7nz"></script>
+<script src="js/tracker.js?v=mrl3r7nz"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -76,6 +76,25 @@ let MNEM = {};
 fetch("data/mnemonics.json").then(r => r.json()).then(d => { MNEM = d; }).catch(() => {});
 function mnemKey(ar) { return normalizeAr(ar || "").replace(/^ال/, ""); }
 function mnemFor(ar) { if (!ar) return null; return MNEM[mnemKey(ar)] || MNEM[mnemKey(ar.split(/\s+/)[0])] || null; }
+/* Put a 💡 in btnHost and a hidden full-width hook row right after tr.
+   Call AFTER tr is in the DOM. No-op for words without a hook. */
+function mountMnem(tr, btnHost, ar, key) {
+  const mn = mnemFor(ar);
+  if (!mn || !btnHost) return;
+  const b = document.createElement("span");
+  b.className = "mnem-btn"; b.title = "memory hook"; b.textContent = " 💡";
+  btnHost.appendChild(b);
+  const mrow = document.createElement("tr"); mrow.style.display = "none";
+  const cell = document.createElement("td"); cell.colSpan = tr.children.length;
+  const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
+  cell.appendChild(box); mrow.appendChild(cell);
+  tr.after(mrow);
+  b.onclick = e => {
+    e.stopPropagation();
+    mrow.style.display = mrow.style.display === "none" ? "table-row" : "none";
+    if (mrow.style.display !== "none") logEvent({ e: "mnem", key: key || stripTashkeel(ar) });
+  };
+}
 
 Promise.all([
   fetch("data/families.json").then(r => r.json()),
@@ -270,6 +289,7 @@ function renderCoreView(body) {
     tr.querySelector(".row-speak").onclick = () => speak(w.ar, 0.8);
     coreBody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), `qc:${i}`);
+    mountMnem(tr, tr.querySelector(".row-speak").parentElement, w.ar, `qc:${i}`);
   });
 }
 
@@ -397,22 +417,16 @@ async function renderSheet() {
     if (revealed.has(i)) return;
     revealed.add(i);
     const { key, v } = sheetItems[i];
-    const row = tbody.children[i];
+    // look up by data-row: 💡 hook rows are interleaved, so child index is unreliable
+    const row = tbody.querySelector(`tr[data-row="${i}"]`);
     const shown = row.querySelector(".shown-answer");
-    const mn = mnemFor(v.ar);
-    const mnBtn = mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : "";
     if (sheetMode === "understand") {
-      shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}${mnBtn}`;
+      shown.innerHTML = `<span style="font-weight:600">${v.en}</span>${v.note ? ` <span style="color:var(--muted);font-size:12px">${v.note}</span>` : ""}`;
     } else if (sheetMode === "ears") {
-      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span style="font-weight:600">${v.en}</span>${v.tr ? ` <span style="color:var(--muted);font-size:12px">${v.tr}</span>` : ""}${mnBtn}`;
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span style="font-weight:600">${v.en}</span>${v.tr ? ` <span style="color:var(--muted);font-size:12px">${v.tr}</span>` : ""}`;
     } else {
-      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>${mnBtn}`;
+      shown.innerHTML = `<span class="arabic" style="font-size:22px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>`;
       shown.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
-    }
-    if (mn) {
-      const mc = document.createElement("div"); mc.className = "mnem-cell"; mc.style.display = "none"; mc.textContent = "💡 " + mn;
-      shown.appendChild(mc);
-      shown.querySelector(".mnem-btn").onclick = () => { mc.style.display = mc.style.display === "none" ? "block" : "none"; if (mc.style.display !== "none") logEvent({ e: "mnem", key }); };
     }
     shown.style.display = "block";
     const btn = row.querySelector(".show-btn");
@@ -423,6 +437,7 @@ async function renderSheet() {
   sheetItems.forEach((item, i) => {
     const { key, v, isNew, ctx } = item;
     const tr = document.createElement("tr");
+    tr.dataset.row = i;
     if (sheetMode === "understand") {
       const arCell = ctx
         ? `<td class="ar-cell" style="font-size:21px;line-height:1.9">${ctx.words.map((w, wi) =>
@@ -463,6 +478,9 @@ async function renderSheet() {
     tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), key);
+    // 💡 visible from the start — an opt-in hint, not tied to reveal
+    const spkTd = tr.querySelector(".row-speak, .ears-play");
+    mountMnem(tr, spkTd ? spkTd.parentElement : tr.querySelector(".en-cell"), v.ar, key);
   });
 
   document.getElementById("shShowAll").onclick = () => {
@@ -670,6 +688,7 @@ async function renderBrowseView(body) {
       });
       slot.appendChild(bar);
       tbody.appendChild(tr);
+      mountMnem(tr, tr.querySelector(".row-speak").parentElement, v.ar, key);
     });
     if (rows.length > 200) {
       const tr = document.createElement("tr");
