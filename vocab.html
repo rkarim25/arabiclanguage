@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrl3r7nz">
+  <link rel="stylesheet" href="css/style.css?v=mrleaqn2">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -60,8 +60,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrl3r7nz"></script>
-<script src="js/tracker.js?v=mrl3r7nz"></script>
+<script src="js/app.js?v=mrleaqn2"></script>
+<script src="js/tracker.js?v=mrleaqn2"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -495,13 +495,15 @@ async function renderSheet() {
     mountTranslitDock(() => lastFocused, true);
   }
 
-  function showBatchScore(right, graded) {
+  function showBatchScore(right, graded, heard) {
     if (graded === undefined) graded = sheetItems.length;
     sessionDone += sheetItems.length;
     document.getElementById("shScore").innerHTML =
       (graded === 0
         ? "Self-studied — bucket each word above."
-        : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉" : " — the red ones come back automatically.")) +
+        : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉"
+            : heard ? ` — 🎧 and ${heard} more you named by sound alone. Your ear is working — the amber rows show what each one means.`
+            : " — the red ones come back automatically.")) +
       `<div class="ex-row" style="margin-top:10px">
         <button class="primary" id="shMore">＋ Keep going (next ${Math.min(BATCH, pool.length - poolPos)})</button>
         <span style="font-size:13px;color:var(--muted);align-self:center">${sessionDone} words this session</span>
@@ -522,28 +524,37 @@ async function renderSheet() {
   document.getElementById("shCheck").onclick = () => {
     if (batchChecked) return;
     batchChecked = true;
-    let right = 0, graded = 0;
+    let right = 0, graded = 0, heardCount = 0;
     sheetItems.forEach(({ key, v }, i) => {
       if (revealed.has(i)) return;
       graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const ans = tbody.querySelectorAll(".correct-answer")[i];
       const ok = sheetMode === "produce" ? arMatch(input.value, v.ar) : fuzzyEn(input.value, v.en);
-      input.classList.remove("ok", "no");
-      input.classList.add(ok ? "ok" : "no");
+      // ears: typing the SOUND ("min", "qal") proves he heard the word — credit the ear, then teach the meaning
+      const heard = sheetMode === "ears" && !ok && trMatch(input.value, v.tr, v.ar);
+      input.classList.remove("ok", "no", "heard");
+      input.classList.add(ok ? "ok" : heard ? "heard" : "no");
       if (ok && sheetMode !== "ears") { right++; ans.style.display = "none"; }
       else if (sheetMode === "ears") {
         // ears: always reveal the Arabic after the check — he heard it, now he sees it
-        if (ok) right++;
+        if (ok) right++; else if (heard) heardCount++;
         ans.style.display = "block";
-        ans.innerHTML = `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span>${ok ? "" : ` — ${v.en}`}`;
+        ans.classList.remove("yes-note", "heard-note");
+        if (ok) ans.classList.add("yes-note");
+        else if (heard) ans.classList.add("heard-note");
+        ans.innerHTML = heard
+          ? `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span> — your ear got it (<i>${v.tr}</i>). It means: <b>${v.en}</b>`
+          : `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span>${ok ? "" : ` — ${v.en}`}`;
       }
       else { ans.style.display = "block"; ans.textContent = sheetMode === "understand" ? v.en : v.ar; }
       gradeCard(key, ok ? "good" : "again");
-      logEvent({ e: "sheet", key, mode: sheetMode, typed: input.value, ok });
+      const evt = { e: "sheet", key, mode: sheetMode, typed: input.value, ok };
+      if (heard) evt.heard = true;
+      logEvent(evt);
       mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
     });
-    showBatchScore(right, graded);
+    showBatchScore(right, graded, heardCount);
   };
 }
 

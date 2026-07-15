@@ -194,6 +194,42 @@ function arMatch(typed, target) {
     return Math.max(cf.length, tf.length) >= 5 && editDist(cf, tf) <= 1; // one slip in a longer word
   });
 }
+/* ears mode: he typed the SOUND of the word (its transliteration) instead of its meaning.
+   Casual typing allowed: "qal" ~ qāla, "illa" ~ illā, "3ala" ~ ʿalā. */
+function trMatch(typed, tr, ar) {
+  if (!tr) return false;
+  const norm = s => String(s).toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[ʿʾ'’`\-]/g, "")
+    .replace(/7/g, "h").replace(/5/g, "kh").replace(/9/g, "q").replace(/6/g, "t").replace(/[23]/g, "")
+    .replace(/[^a-z]/g, "")
+    .replace(/(.)\1+/g, "$1");
+  const vowel = ch => /[aiueo]/.test(ch);
+  // the ONE differing char in an editDist<=1 pair must be a vowel (never mid-word: walid≠wahid; never trailing: rule below owns that)
+  const vowelSlip = (a, b) => {
+    if (a.length === b.length) {
+      const d = []; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) d.push(i);
+      return d.length === 1 && vowel(a[d[0]]) && vowel(b[d[0]]);
+    }
+    const [s, l] = a.length < b.length ? [a, b] : [b, a];
+    if (l.length - s.length !== 1) return false;
+    for (let i = 0; i < s.length; i++) if (s[i] !== l[i]) return s.slice(i) === l.slice(i + 1) && vowel(l[i]);
+    return false; // trailing-char case is handled (with the ة guard) below
+  };
+  const t = norm(typed);
+  if (t.length < 2) return false;
+  // ة is the feminine marker he must actually HEAR — walid≠walida, ibn≠ibna, jadd≠jadda
+  const taMarbuta = /ة\s*$/.test(String(ar || ""));
+  return String(tr).split("/").some(c => {
+    c = norm(c);
+    if (!c) return false;
+    if (c === t) return true;
+    // he may skip trailing short vowels ("qal" for qāla) — unless they ARE the word (ta marbuta)
+    if (!taMarbuta && c.length > t.length && c.startsWith(t) && /^[aiueo]+$/.test(c.slice(t.length))) return true;
+    // one vowel slip in longer words ("yaqol" ~ yaqūl)
+    return Math.max(c.length, t.length) >= 5 && vowelSlip(c, t);
+  });
+}
 /* accept a spoken transcript if it contains the target (or either half of a pair) */
 function speakMatch(heard, target) {
   const h = normalizeAr(heard);

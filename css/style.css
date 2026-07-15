@@ -283,11 +283,14 @@ button.primary:disabled:hover { background: var(--accent); }
 /* ---------- Answer checking (any input) ---------- */
 input.ok { border-color: var(--accent) !important; background: var(--accent-soft) !important; }
 input.no { border-color: var(--red) !important; background: var(--red-soft) !important; }
+input.heard { border-color: var(--amber) !important; background: var(--amber-soft) !important; }
 .correct-answer {
   display: block; margin-top: 4px; font-size: 14px;
   color: var(--ink); font-weight: 600;
 }
 .correct-answer::before { content: "✗ "; color: var(--red); font-weight: 700; }
+.correct-answer.yes-note::before { content: "✓ "; color: var(--accent); }
+.correct-answer.heard-note::before { content: "🎧 "; }
 
 /* ---------- Vocabulary table ---------- */
 .vocab-table-wrap { overflow-x: auto; }
