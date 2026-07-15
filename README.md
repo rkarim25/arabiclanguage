@@ -2,6 +2,7 @@
 
 **Live site:** https://rkarim25.github.io/arabiclanguage/
 **Owner:** Reza (rkarim25 / rkarim88@gmail.com) · **Maintainer:** Claude (any chat session)
+**Learners (2026-07-15):** **Reza Karim** (rkarim88@gmail.com, standard) and **Saba Khan** (sabatarif.15@gmail.com, beginner) — separate cloud data, SRS, and personal coach notes; shared site content. `PROFILES` in `js/app.js` maps email → name/level. **Conflict rule:** one user's request must never degrade the other's experience — beginner material for Saba is ADDED (new clusters/levels), never swapped in over existing content.
 
 This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, and `TEACHER-SYNC.md` (the lesson-capture loop).
 
@@ -31,20 +32,25 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 | `speaking.html` | Speaking: word drill by bucket/source, "say it in Arabic" prompts (`data/prompts.json`), sentence shadowing across stories + surahs |
 | `converse.html` | **Conversation Partner**: generates a portable, model-agnostic briefing file (paste into Gemini/Claude/ChatGPT) from Reza's known vocab + a scenario (`data/conversations.json`) + last 3 saved reports. He pastes the AI's end report back → `convo` log event → folds into the next briefing |
 | `test.html?ms=<id>` | Milestone tests (mock + official, 85% certifies `ms-<id>` step `passed`): top20/top40/core60, opener/survival/umrah/masjid |
-| `story.html?id=story-NN` | 6-step story lessons: Listen, Read (tap word = audio + gloss + **transliteration + same-root family link**), Memorize (vocab table), Quiz, Speak (speech shadowing), Write (dictation + translation) |
-| `review.html` | Spaced-repetition queue, table mode (reveal + mark misses), card mode opt-in |
+| `story.html?id=story-NN` | 6-step story lessons: Listen, Read (tap word = audio + gloss + **transliteration + same-root family link**), Memorize (vocab table), Quiz (**Comprehension — question words are tap-for-gloss too**), Speak (speech shadowing), Write (dictation + translation) |
+| `review.html` | Spaced-repetition queue, table mode (reveal + "✗ missed") with a **full-width mobile-safe control row per word: standard bucket bar (✓↻⏳✗) + 💡 hooks**; an explicit bucket set during review is final (Finish skips regrading it); card mode opt-in shows 💡 on the back |
 | `keyboard.html` | Phonetic Latin→Arabic keyboard tool (mapping in `js/app.js`) |
 
 **Typing (all writing surfaces):** `mountTranslitDock(getTarget)` in app.js gives every answer box a live Latin→Arabic typing box — type transliteration, Arabic appears in real time (mobile-safe `input` event + `latinToArabic`). Auto-opens on Sentences/Grammar/Milestone tests; Story Write & Vocab Produce use it too. `LATIN_TO_AR` is forgiving: `aa`=ا, Arabizi numerals (2/5/6/7/9), long vowels (ee/ii/oo/uu). **Answer matching is lenient:** `arMatch` forgives tashkeel, ة/ه & hamza-seat slips, spacing, and one typo in words ≥5 letters; `fuzzyEn` accepts English typos and stems. Only Arabic fields (`fill-input`/`dir=rtl`) transliterate — English-meaning fields are untouched.
 
-Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, `latinToArabic` + `mountTranslitDock`, `resolveCards`, `suggestNext`, `arMatch`/`fuzzyEn`/`editDist`, `renderNav`, SW registration), `js/tracker.js` (event log, active-time, cloud sync, `weakSpots`, `activeMinutes`).
+Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, `latinToArabic` + `mountTranslitDock`, `resolveCards`, `suggestNext`, `arMatch`/`fuzzyEn`/`editDist`, `renderNav`, `PROFILES`/`whoami`, mnemonics `mnemFor`/`mountMnem`, `mountBucketBar`, `noteWordTap` tap-to-review, `mountNotePen`, SW registration), `js/tracker.js` (event log, active-time, cloud sync, `weakSpots`, `activeMinutes`).
+
+**Tap-to-review (`noteWordTap`)**: any word tapped for help ≥3 times quietly joins the Review deck — story Read + Quiz taps become `tw:<norm>` cards (content in `ats-tapwords`, synced in the payload), Quran word taps seed the exact `qw:` card. Logs `tapseed`.
+
+**✏️ Note to coach (`mountNotePen`)**: a floating pen on every page opens an open-format note box. Saved as a `note` log event `{text, ctx:{url,title,view,sel}, user}` — ctx captures what the learner was looking at (page, headings, selected text). Synced with everything else; the nightly coach reads every new note, acts on it, and acknowledges it in that user's dashboard coach note. This is the learners' direct channel to the AI.
 
 **Offline (PWA):** `sw.js` — network-first with cache fallback. **HTML navigations are fetched with `cache:"reload"` to bypass the browser's HTTP cache** (GitHub Pages sets a max-age on HTML; without this a deploy looked stale for a while and pulled stale `?v=` assets — the "I don't see my update" bug, fixed 2026-07-12). Versioned js/css/json cache normally; works offline from the last good copy. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire. **After a deploy, an already-open device self-heals within ~2 visits (new SW installs, then a reload gets fresh HTML); a hard refresh forces it immediately.** `manifest.webmanifest` + `icons/` enable "Add to Home Screen".
 
 ## Data model
 
-All localStorage, synced to the cloud (see Infrastructure):
+All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress, srs, tapwords, log, savedAt}`:
 - `ats-progress` — `{ "<unitId>": { steps: { <step>: true } } }`. Unit ids: `story-NN`, `fam-<id>` (step `fill`), `q-<surahId>` (steps `study`/`test`), `gr-<patternId>` (step `test`).
+- `ats-tapwords` / `ats-tapcounts` — tap-to-review: content for `tw:` cards (synced) and local tap counters. `ats-email` — who is signed in (drives `whoami()` personalization).
 - `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min. `b` is an explicit user bucket — `know` (30d) / `repeat` (10min) / `later` (7d) / `never` (due=year 2100, excluded from rotation); auto-grading deletes `b`. `bucketOf(key)` maps state→bucket; the Vocab Lab browse view filters by bucket (incl. Unmarked and Don't-repeat) and can feed any bucket into the practice sheet. **A checked answer calls `gradeCard()`, so the box/interval advance automatically — buckets are optional manual overrides, never required.**
 - `ats-log` — append-only event log (schema in `ANALYSIS.md` in the `rkarim25/arabic-learning-data` repo).
 - `ats-session` / `ats-token` / `ats-gclient` — Google session, GitHub PAT fallback, pasted Google client ID.
@@ -56,6 +62,7 @@ All localStorage, synced to the cloud (see Infrastructure):
 - `qc:<i>` → `data/quran-core.json` `.words[i]` — **append-only: never reorder or delete entries**
 - `qw:<surahId>:<v>:<w>` → `data/verses.json` verse word
 - `gt:<patternId>:<i>` → `data/grammar.json` pattern test item (grammar chunk recognition; seeded on a passed grammar test)
+- `tw:<normalized-ar>` → `ats-tapwords` (local, synced via payload `tapwords`) — seeded by `noteWordTap` when a word is tapped ≥3×
 
 **Non-SRS data:** `data/sentences.json` (Sentence Practice verb bank) and `data/conversations.json` (Converse scenarios) drive practice + logging, not SRS cards. **Lesson tags:** lesson-sourced content carries `source:"teacher"` + a free `lesson:"<label>"` (see `TEACHER-SYNC.md`); the 🎓 Lessons tab groups everyday clusters by that label.
 
@@ -79,8 +86,8 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 ## Infrastructure
 
 - **Site repo**: `rkarim25/arabiclanguage` (this repo) → GitHub Pages from `main`.
-- **Sync Worker**: `arabic-sync` at https://arabic-sync.rkarim88.workers.dev (source: `worker/`; deploy: `cd worker && npx wrangler deploy`). Endpoints: `/config`, `/login` (Google ID token → 180-day session; only rkarim88@gmail.com), `/data`, `/sync`, `/coach`. CORS pinned to the Pages origin.
-- **Storage**: Cloudflare KV namespace `9532d5717021486a92f75efb6d7b8a94` (binding `ARABIC_SYNC`). Keys: `data:rkarim88@gmail.com` (the learning payload `{progress,srs,log,savedAt}`), `coach:rkarim88@gmail.com` (dashboard coach notes `{updated,note,focus[]}`), `coach-state:rkarim88@gmail.com` (email throttle `{lastEmail,pendingQuestion}`), `config:clientId`, `session:*`.
+- **Sync Worker**: `arabic-sync` at https://arabic-sync.rkarim88.workers.dev (source: `worker/`; deploy: `cd worker && npx wrangler deploy`). Endpoints: `/config`, `/login-pw` (email + per-user sync code), `/login` (Google ID token → 180-day session), `/data`, `/sync`, `/coach`. **Multi-user:** allowed emails in `worker/wrangler.toml` `ALLOWED_EMAILS` (currently Reza + Saba); each user's code hash at `auth:pwhash:<email>` = sha256("arabic-sync-v1" + code) (legacy `auth:pwhash` still honored for Reza). To add a user: extend ALLOWED_EMAILS + `PROFILES` in js/app.js, hash a code, PUT it, deploy worker. CORS pinned to the Pages origin.
+- **Storage**: Cloudflare KV namespace `9532d5717021486a92f75efb6d7b8a94` (binding `ARABIC_SYNC`). Per-user keys: `data:<email>` (the learning payload `{progress,srs,tapwords,log,savedAt}`), `coach:<email>` (dashboard coach notes `{updated,note,focus[]}` — personally addressed), `coach-state:<email>` (email throttle `{lastEmail,pendingQuestion}`), plus `auth:pwhash:<email>`, `config:clientId`, `session:*`.
 - **Fallback / private data store**: private repo `rkarim25/arabic-learning-data` — `learning-data.json` (GitHub-PAT sync fallback), `coach.json`, `ANALYSIS.md` (event schema + analysis guide), **`learner-profile.md`** (who Reza is as a learner — 37, limited time, tiredness barrier, etc.; the coach reads and evolves it), and `snapshots/`.
 - **Automated coaching + email**: a nightly scheduled task (`arabic-coach-nightly`, on his machine ~02:00) runs the coach loop unattended — reviews goals-vs-usage, optimises his time, refreshes the dashboard note, may add safe content, and **emails him at most weekly, only when it helps** (via Gmail; from/to rkarim88@gmail.com; subject "[Arabic Coach]"). Big/structural changes it proposes by email rather than deploying.
 - **Auth available to Claude sessions**: `gh` CLI (account rkarim25) and `wrangler` (OAuth, account 3554b8ca31b3e9df1709eca7448169aa) are both logged in on Reza's machine.
@@ -93,7 +100,7 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 
 ## The coaching loop
 
-One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It reads data (KV first, GitHub fallback), analyzes (weak vocab → listening → speaking → **conjugation** (`spract`) → grammar → **conversation** (`convo`) → **consistency** (`today-done`) → pacing), writes coach notes back, adds targeted content via the pipelines above (including any new lesson material Reza dumped), pushes, and verifies.
+One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It runs **per user** (Reza, then Saba): reads data (KV first, GitHub fallback), reads **✏️ pen `note` events first** (the learner's direct requests — act on every one, acknowledge in their coach note), analyzes (weak vocab → listening → speaking → **conjugation** (`spract`) → grammar → **conversation** (`convo`) → **consistency** (`today-done`) → pacing → `tapseed` words), writes a personally-addressed coach note back to `coach:<email>`, adds targeted content via the pipelines above (including any new lesson material Reza dumped), pushes, and verifies. **Never let one user's request degrade the other's experience — beginner content for Saba is additive.**
 
 Manual equivalents:
 ```

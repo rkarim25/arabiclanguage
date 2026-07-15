@@ -10,7 +10,7 @@
   <title>Story — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrleaqn2">
+  <link rel="stylesheet" href="css/style.css?v=mrlyd8nk">
 </head>
 <body>
 <main>
@@ -23,8 +23,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mrleaqn2"></script>
-<script src="js/tracker.js?v=mrleaqn2"></script>
+<script src="js/app.js?v=mrlyd8nk"></script>
+<script src="js/tracker.js?v=mrlyd8nk"></script>
 <script>
 renderNav("stories");
 
@@ -197,6 +197,7 @@ function renderRead() {
           const clean = w.replace(/[.،«»!؟]/g, "");
           const norm = normalizeAr(clean).replace(/^ال/, "");
           const tr = VOCAB_TR[norm], fam = FAM_MEMBERS[norm];
+          noteWordTap({ content: { ar: clean, en: g, tr: tr || "", note: `from ${story.titleEn} — you tap this a lot` } });
           pop.innerHTML = `<div class="g-ar">${clean}</div>${tr ? `<div style="font-style:italic;color:var(--muted);font-size:12.5px">${tr}</div>` : ""}<div>${g}</div>${fam ? `<div style="margin-top:5px;font-size:12px;color:var(--amber)">root ${fam.root} · <a href="vocab.html?fam=${fam.id}" style="color:var(--accent)">same-root family →</a></div>` : ""}`;
           document.body.appendChild(pop);
           const r = ws.getBoundingClientRect();
@@ -372,6 +373,7 @@ function renderQuiz() {
   body.innerHTML = `
     <div class="card">
       <h2>Comprehension — answer without looking back</h2>
+      <p class="sub" style="margin-top:-4px">Tap any word in a question to hear it and see what it means — tapping is free, and words you keep tapping join your Review deck automatically.</p>
       <div id="quizArea"></div>
       <div class="quiz-score" id="quizScore"></div>
       <div class="step-done-banner" id="doneBanner">✓ Quiz passed</div>
@@ -381,11 +383,58 @@ function renderQuiz() {
   const area = document.getElementById("quizArea");
   let answered = 0, correct = 0;
 
+  // word meanings for question taps: story vocab + per-word glosses from the sentences
+  const QGLOSS = {};
+  (story.sentences || []).forEach(s => (s.words || []).forEach(([w, g]) => {
+    const n = normalizeAr(w.replace(/[.،«»!؟]/g, "")).replace(/^ال/, "");
+    if (n && !QGLOSS[n]) QGLOSS[n] = { en: g, tr: "" };
+  }));
+  (story.vocab || []).forEach(v => {
+    const n = normalizeAr(v.ar).replace(/^ال/, "");
+    if (n) QGLOSS[n] = { en: v.en, tr: v.tr || "" };
+  });
+  let qpop = null;
+  const hideQpop = () => { if (qpop) { qpop.remove(); qpop = null; } };
+  document.addEventListener("click", hideQpop);
+  document.addEventListener("scroll", hideQpop);
+
   story.questions.forEach((q, qi) => {
     const div = document.createElement("div");
     div.className = "quiz-q";
-    div.innerHTML = `<div class="qt">${q.q} <span class="sent-play" style="font-size:15px">🔊</span></div><div class="quiz-opts"></div>`;
-    div.querySelector(".sent-play").onclick = () => speak(q.q, 0.85);
+    div.innerHTML = `<div class="qt"></div><div class="quiz-opts"></div>`;
+    const qt = div.querySelector(".qt");
+    q.q.split(/\s+/).forEach((w, wi, arr) => {
+      const ws = document.createElement("span");
+      ws.className = "w";
+      ws.textContent = w;
+      ws.onclick = (ev) => {
+        ev.stopPropagation();
+        const clean = w.replace(/[.،«»!؟]/g, "");
+        if (!clean) return;
+        logEvent({ e: "tap", story: storyId, w: stripTashkeel(clean), src: "quiz" });
+        speak(clean, 0.8);
+        hideQpop();
+        const norm = normalizeAr(clean).replace(/^ال/, "");
+        const gl = QGLOSS[norm], fam = FAM_MEMBERS[norm];
+        if (gl) noteWordTap({ content: { ar: clean, en: gl.en, tr: gl.tr, note: `from ${story.titleEn} — you tap this a lot` } });
+        qpop = document.createElement("div");
+        qpop.className = "gloss-pop";
+        qpop.innerHTML = `<div class="g-ar">${clean}</div>${gl && gl.tr ? `<div style="font-style:italic;color:var(--muted);font-size:12.5px">${gl.tr}</div>` : ""}<div>${gl ? gl.en : "🔊"}</div>${fam ? `<div style="margin-top:5px;font-size:12px;color:var(--amber)">root ${fam.root} · <a href="vocab.html?fam=${fam.id}" style="color:var(--accent)">same-root family →</a></div>` : ""}`;
+        document.body.appendChild(qpop);
+        const r = ws.getBoundingClientRect();
+        qpop.style.left = Math.max(8, Math.min(window.innerWidth - qpop.offsetWidth - 8, r.left + r.width / 2 - qpop.offsetWidth / 2)) + "px";
+        qpop.style.top = (r.top - qpop.offsetHeight - 8) + "px";
+        setTimeout(hideQpop, fam ? 6000 : 2600);
+      };
+      qt.appendChild(ws);
+      if (wi < arr.length - 1) qt.appendChild(document.createTextNode(" "));
+    });
+    const play = document.createElement("span");
+    play.className = "sent-play";
+    play.style.fontSize = "15px";
+    play.textContent = " 🔊";
+    play.onclick = (ev) => { ev.stopPropagation(); speak(q.q, 0.85); };
+    qt.appendChild(play);
     const opts = div.querySelector(".quiz-opts");
     q.options.forEach((o, oi) => {
       const b = document.createElement("button");

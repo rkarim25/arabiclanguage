@@ -91,10 +91,15 @@ function _mergeRemoteState(remote) {
     Object.keys((u && u.steps) || {}).forEach(s => { p[id].steps[s] = true; });
   });
   store.set("ats-progress", p);
+  // tapped-word card contents (tw: keys) — union, local wins
+  const tw = store.get("ats-tapwords", {});
+  let twChanged = false;
+  Object.entries(remote.tapwords || {}).forEach(([k, v]) => { if (!tw[k]) { tw[k] = v; twChanged = true; } });
+  if (twChanged) store.set("ats-tapwords", tw);
 }
 
 function _payload(log) {
-  return { progress: getProgress(), srs: getSrs(), log, savedAt: Date.now() };
+  return { progress: getProgress(), srs: getSrs(), tapwords: store.get("ats-tapwords", {}), log, savedAt: Date.now() };
 }
 
 /* ---------- Worker (Google) backend ---------- */
@@ -207,6 +212,7 @@ async function restoreFromCloud() {
   }
   if (remote.progress) store.set("ats-progress", remote.progress);
   if (remote.srs) store.set("ats-srs", remote.srs);
+  if (remote.tapwords) store.set("ats-tapwords", remote.tapwords);
   if (remote.log) store.set(LOG_KEY, remote.log);
 }
 
@@ -230,8 +236,9 @@ async function codeLogin(email, password) {
     const e = await r.json().catch(() => ({}));
     throw new Error(e.error || "login-failed");
   }
-  const { session } = await r.json();
+  const { session, email: em } = await r.json();
   setSession(session);
+  store.set("ats-email", (em || email).toLowerCase().trim());
   return session;
 }
 
@@ -245,8 +252,9 @@ async function googleLogin(credential) {
     const e = await r.json().catch(() => ({}));
     throw new Error(e.error || "login-failed");
   }
-  const { session } = await r.json();
+  const { session, email: em } = await r.json();
   setSession(session);
+  if (em) store.set("ats-email", em.toLowerCase().trim());
   return session;
 }
 

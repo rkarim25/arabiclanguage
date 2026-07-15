@@ -31,6 +31,14 @@ async function sha256Hex(s) {
   return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
+/* Multi-user: comma-separated ALLOWED_EMAILS (falls back to legacy ALLOWED_EMAIL).
+   Each user has their own sync code (auth:pwhash:<email>) and their own
+   data:/coach: keys — nothing is shared between learners. */
+function allowedEmails(env) {
+  return (env.ALLOWED_EMAILS || env.ALLOWED_EMAIL || "")
+    .toLowerCase().split(",").map(s => s.trim()).filter(Boolean);
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -46,16 +54,18 @@ export default {
       let body;
       try { body = await req.json(); } catch { return json(env, 400, { error: "bad-json" }); }
       if (!body.email || !body.password) return json(env, 400, { error: "bad-request" });
-      if (body.email.toLowerCase().trim() !== env.ALLOWED_EMAIL) return json(env, 403, { error: "email-not-allowed" });
-      const stored = await env.ARABIC_SYNC.get("auth:pwhash");
+      const email = body.email.toLowerCase().trim();
+      if (!allowedEmails(env).includes(email)) return json(env, 403, { error: "email-not-allowed" });
+      const stored = (await env.ARABIC_SYNC.get("auth:pwhash:" + email))
+        || (email === "rkarim88@gmail.com" ? await env.ARABIC_SYNC.get("auth:pwhash") : null); // legacy key
       const hash = await sha256Hex("arabic-sync-v1" + body.password.trim());
       if (!stored || hash !== stored) {
         await new Promise(res => setTimeout(res, 800)); // slow brute force
         return json(env, 401, { error: "bad-code" });
       }
       const session = crypto.randomUUID() + "-" + crypto.randomUUID();
-      await env.ARABIC_SYNC.put("session:" + session, env.ALLOWED_EMAIL, { expirationTtl: SESSION_TTL });
-      return json(env, 200, { session, email: env.ALLOWED_EMAIL });
+      await env.ARABIC_SYNC.put("session:" + session, email, { expirationTtl: SESSION_TTL });
+      return json(env, 200, { session, email });
     }
 
     if (url.pathname === "/login" && req.method === "POST") {
@@ -68,7 +78,7 @@ export default {
       if (!r.ok) return json(env, 401, { error: "invalid-token" });
       const info = await r.json();
 
-      if (info.email !== env.ALLOWED_EMAIL || info.email_verified !== "true") {
+      if (!allowedEmails(env).includes((info.email || "").toLowerCase()) || info.email_verified !== "true") {
         return json(env, 403, { error: "email-not-allowed" });
       }
       // If a client ID is pinned (env or stored), enforce audience match

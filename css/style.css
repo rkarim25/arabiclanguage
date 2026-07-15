@@ -162,8 +162,8 @@ button.primary:disabled:hover { background: var(--accent); }
   font-family: var(--font-ar);
   font-size: 30px; line-height: 2.3;
 }
-.story-text .w { cursor: pointer; border-radius: 6px; padding: 0 2px; transition: background .12s; }
-.story-text .w:hover { background: var(--amber-soft); }
+.story-text .w, .quiz-q .qt .w { cursor: pointer; border-radius: 6px; padding: 0 2px; transition: background .12s; }
+.story-text .w:hover, .quiz-q .qt .w:hover { background: var(--amber-soft); }
 .story-text .w.hl { background: #fde68a; }
 .sent { display: block; margin-bottom: 6px; }
 .sent .en-line {
@@ -379,3 +379,28 @@ footer a { color: var(--accent); }
   button, .row-speak, .sent-play, .w { min-height: 34px; }
   .vocab-table .row-speak { font-size: 19px; padding: 4px; }
 }
+
+/* ---------- mnemonics (💡 memory hooks) — shared across pages ---------- */
+.mnem-btn { cursor: pointer; user-select: none; }
+.mnem-cell { background: var(--amber-soft, #fff8e1); border-radius: 8px; padding: 7px 11px; font-size: 13px; color: var(--ink); line-height: 1.55; margin-top: 5px; }
+@media (prefers-color-scheme: dark) { .mnem-cell { background: rgba(253, 224, 71, .12); } }
+
+/* ---------- ✏️ note-to-coach pen ---------- */
+#notePen {
+  position: fixed; right: 14px; bottom: 16px; z-index: 90;
+  width: 52px; height: 52px; border-radius: 50%; font-size: 22px; line-height: 1;
+  background: var(--card); border: 1.5px solid var(--accent); box-shadow: var(--shadow); cursor: pointer;
+}
+#notePen:hover { transform: scale(1.06); }
+#noteOverlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, .38); z-index: 100;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+#noteOverlay .note-box { background: var(--card); border-radius: var(--radius); padding: 18px; max-width: 480px; width: 100%; box-shadow: var(--shadow); }
+#noteOverlay textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 15px; font-family: var(--font-ui); }
+
+/* ---------- review control strip (mobile-safe: its own full-width row) ---------- */
+.vocab-table td.rv-ctrl { padding-top: 2px; padding-bottom: 10px; }
+.rv-ctrl .miss { border-color: var(--red); color: var(--red); margin-right: 10px; }
+.rv-ctrl .miss.on { background: var(--red-soft); }
+.rv-ctrl .bucket-slot { display: inline-block; vertical-align: middle; }

@@ -10,7 +10,7 @@
   <title>Arabic Through Stories — العربية بالقصص</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrleaqn2">
+  <link rel="stylesheet" href="css/style.css?v=mrlyd8nk">
 </head>
 <body>
 <main>
@@ -70,7 +70,7 @@
     </p>
     <div id="syncSetup">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-        <input id="loginEmail" type="email" value="rkarim88@gmail.com" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <input id="loginEmail" type="email" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
         <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
         <button class="primary" id="btnCodeLogin">Sign in</button>
       </div>
@@ -111,8 +111,8 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=mrleaqn2"></script>
-<script src="js/tracker.js?v=mrleaqn2"></script>
+<script src="js/app.js?v=mrlyd8nk"></script>
+<script src="js/tracker.js?v=mrlyd8nk"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -268,7 +268,11 @@ function refreshSyncUI() {
   const m = syncMethod();
   setup.style.display = m ? "none" : "block";
   connected.style.display = m ? "block" : "none";
-  if (m) document.getElementById("syncMethodLabel").textContent = m === "google" ? "Google" : "GitHub token";
+  if (m) {
+    const who = whoami();
+    document.getElementById("syncMethodLabel").textContent =
+      (who ? who.full + " · " : "") + (m === "google" ? "sync code / Google" : "GitHub token");
+  }
   const last = store.get(SYNC_KEY, 0);
   document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
 }
@@ -288,7 +292,7 @@ document.getElementById("btnCodeLogin").onclick = async () => {
     loadCoach();
   } catch (e) {
     alert(e.message === "bad-code" ? "That code isn't right — check it, or ask your coach in chat to reset it."
-      : e.message === "email-not-allowed" ? "Use rkarim88@gmail.com."
+      : e.message === "email-not-allowed" ? "That email isn't enabled on this site — ask your coach in chat to add it."
       : "Sign-in failed: " + e.message);
   }
   btn.textContent = "Sign in";
@@ -319,7 +323,7 @@ document.getElementById("btnRestore").onclick = async () => {
   try { await restoreFromCloud(); location.reload(); }
   catch (e) { alert("No cloud data found yet."); }
 };
-document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); refreshSyncUI(); };
+document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); store.set("ats-email", null); refreshSyncUI(); };
 
 /* coach notes */
 async function loadCoach() {
@@ -327,6 +331,8 @@ async function loadCoach() {
   try {
     const c = await fetchCoach();
     if (!c || !c.note) return;
+    const who = whoami();
+    if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
     document.getElementById("coachCard").style.display = "block";
     document.getElementById("coachDate").textContent = c.updated ? "· " + c.updated : "";
     document.getElementById("coachNote").textContent = c.note;

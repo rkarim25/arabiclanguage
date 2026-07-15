@@ -8,4 +8,5 @@ kv_namespaces = [
 
 [vars]
 ALLOWED_EMAIL = "rkarim88@gmail.com"
+ALLOWED_EMAILS = "rkarim88@gmail.com,sabatarif.15@gmail.com"
 ALLOWED_ORIGIN = "https://rkarim25.github.io"

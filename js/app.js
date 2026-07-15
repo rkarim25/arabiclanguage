@@ -706,6 +706,7 @@ function renderNav(active) {
     <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
   `;
   document.body.prepend(el);
+  mountNotePen();
 }
 
 /* ---------- mini phonetic keyboard component ----------
@@ -917,6 +918,7 @@ async function resolveCards(keys) {
     if (sid === "qc") needCore = true;
     else if (sid === "qw") needVerses = true;
     else if (sid === "gt") needGrammar = true;
+    else if (sid === "tw") { /* tapped-word cards resolve from local store */ }
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;
     else needStories.add(sid);
@@ -940,6 +942,9 @@ async function resolveCards(keys) {
       const pat = grammar && grammar.find(x => x.id === p[1]);
       const t = pat && pat.test[parseInt(p[2])];
       if (t) v = { ar: t.ar, en: `${t.prompt}${t.hint ? ` (${t.hint})` : ""}`, tr: "", note: "grammar — " + pat.name };
+    } else if (p[0] === "tw") {
+      const w = store.get("ats-tapwords", {})[p.slice(1).join(":")];
+      if (w) v = { ar: w.ar, en: w.en, tr: w.tr, note: w.note || "you tap this one a lot" };
     } else if (p[0] === "qc") {
       const w = core && core[parseInt(p[1])];
       if (w) v = { ar: w.ar, en: w.en, tr: w.tr, note: `≈${w.n}× in the Quran` };
@@ -962,6 +967,147 @@ async function resolveCards(keys) {
     }
     return v ? { key: k, v } : null;
   }).filter(Boolean);
+}
+
+/* ---------- users ----------
+   One site, two learners. The sync worker keeps each email's data, coach
+   notes, and sessions fully separate; this map only personalizes the UI. */
+const PROFILES = {
+  "rkarim88@gmail.com": { name: "Reza", full: "Reza Karim", level: "standard" },
+  "sabatarif.15@gmail.com": { name: "Saba", full: "Saba Khan", level: "beginner" },
+};
+function whoami() {
+  const em = store.get("ats-email", null);
+  return em && PROFILES[em] ? { email: em, ...PROFILES[em] } : null;
+}
+
+/* ---------- mnemonics (💡 memory hooks) ----------
+   Optional hooks in data/mnemonics.json — only strong ones exist; most words
+   have none by design. Keyed by normalized/al-stripped Arabic; first-word
+   fallback covers phrases. */
+let MNEM = {};
+fetch("data/mnemonics.json").then(r => r.json()).then(d => { MNEM = d; }).catch(() => {});
+function mnemKey(ar) { return normalizeAr(ar || "").replace(/^ال/, ""); }
+function mnemFor(ar) { if (!ar) return null; return MNEM[mnemKey(ar)] || MNEM[mnemKey(ar.split(/\s+/)[0])] || null; }
+/* Put a 💡 in btnHost and a hidden full-width hook row right after tr.
+   Call AFTER tr is in the DOM. No-op for words without a hook. */
+function mountMnem(tr, btnHost, ar, key) {
+  const mn = mnemFor(ar);
+  if (!mn || !btnHost) return;
+  const b = document.createElement("span");
+  b.className = "mnem-btn"; b.title = "memory hook"; b.textContent = " 💡";
+  btnHost.appendChild(b);
+  const mrow = document.createElement("tr"); mrow.style.display = "none";
+  const cell = document.createElement("td"); cell.colSpan = tr.children.length;
+  const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
+  cell.appendChild(box); mrow.appendChild(cell);
+  tr.after(mrow);
+  b.onclick = e => {
+    e.stopPropagation();
+    mrow.style.display = mrow.style.display === "none" ? "table-row" : "none";
+    if (mrow.style.display !== "none") logEvent({ e: "mnem", key: key || stripTashkeel(ar) });
+  };
+}
+
+/* ---------- shared bucket bar (✓ know · ↻ soon · ⏳ later · ✗ never) ---------- */
+function mountBucketBar(slot, key, onSet) {
+  if (!slot) return;
+  const bar = document.createElement("div");
+  bar.className = "bucket-bar";
+  const current = bucketOf(key);
+  BUCKETS.forEach(b => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = b.label;
+    btn.title = b.name;
+    if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    btn.onclick = () => {
+      setBucket(key, b.id);
+      logEvent({ e: "bucket", key, b: b.id });
+      [...bar.children].forEach(c => c.classList.remove("sel", "never"));
+      btn.classList.add("sel");
+      if (b.id === "never") btn.classList.add("never");
+      if (onSet) onSet(b.id);
+    };
+    bar.appendChild(btn);
+  });
+  slot.innerHTML = "";
+  slot.appendChild(bar);
+}
+
+/* ---------- tap-to-review ----------
+   A word you keep tapping for help is a word you don't know. On the 3rd tap
+   it quietly joins the review deck: qw/story keys resolve normally; free
+   words get a tw:<norm> card whose content lives in ats-tapwords (synced). */
+function noteWordTap(opts) {
+  const norm = opts.norm || (opts.content && opts.content.ar ? normalizeAr(opts.content.ar).replace(/^ال/, "") : null);
+  const id = opts.key || (norm ? "tw:" + norm : null);
+  if (!id) return;
+  const counts = store.get("ats-tapcounts", {});
+  counts[id] = (counts[id] || 0) + 1;
+  store.set("ats-tapcounts", counts);
+  if (counts[id] < 3) return;
+  const srs = getSrs();
+  if (srs[id]) return; // already in the deck
+  if (id.startsWith("tw:")) {
+    if (!opts.content || !opts.content.en) return; // no known meaning — no useful card
+    const words = store.get("ats-tapwords", {});
+    words[norm] = { ar: opts.content.ar, en: opts.content.en, tr: opts.content.tr || "", note: opts.content.note || "you tap this one a lot" };
+    store.set("ats-tapwords", words);
+  }
+  srs[id] = { box: 0, due: Date.now() }; // due now → appears in the next Review
+  store.set("ats-srs", srs);
+  logEvent({ e: "tapseed", key: id });
+}
+
+/* ---------- ✏️ note to coach: floating pen on every page ----------
+   Open format — the learner writes anything; the note carries where they
+   were (page, headings, any selected text). Saved as a `note` log event,
+   synced with everything else; the nightly coach reads and answers via the
+   dashboard notes. */
+function mountNotePen() {
+  if (document.getElementById("notePen")) return;
+  const btn = document.createElement("button");
+  btn.id = "notePen"; btn.type = "button"; btn.title = "Write a note to your coach"; btn.textContent = "✏️";
+  document.body.appendChild(btn);
+  btn.onclick = () => {
+    if (document.getElementById("noteOverlay")) return;
+    const who = whoami();
+    // capture context BEFORE the overlay steals focus/selection
+    const h = document.querySelector("main h1, main h2");
+    const ctx = {
+      url: location.pathname.split("/").pop() + location.search,
+      title: h ? h.textContent.trim().slice(0, 80) : document.title.slice(0, 80),
+      view: [...document.querySelectorAll("main h2")].slice(0, 3).map(x => x.textContent.trim().slice(0, 60)),
+      sel: (window.getSelection() + "").trim().slice(0, 160) || undefined,
+    };
+    const recent = store.get("ats-log", []).filter(x => x.e === "note").slice(-2);
+    const ov = document.createElement("div");
+    ov.id = "noteOverlay";
+    ov.innerHTML = `
+      <div class="note-box">
+        <h3 style="margin:0 0 4px">✏️ Note to your coach</h3>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Anything at all — “this confused me”, “too hard”, “more like this”. Your coach reads these nightly, sees exactly what you were looking at, and replies in the dashboard notes.</p>
+        <textarea id="noteText" rows="4" placeholder="${who ? `What's on your mind, ${who.name}?` : "What's on your mind?"}"></textarea>
+        <div class="ex-row" style="margin-top:8px">
+          <button class="primary" id="noteSave" type="button">Send to coach</button>
+          <button class="small" id="noteCancel" type="button">Cancel</button>
+        </div>
+        ${recent.length ? `<div style="margin-top:10px;font-size:12px;color:var(--muted)">Recent: ${recent.map(n => `“${(n.text || "").slice(0, 48)}” ✓`).join(" · ")}</div>` : ""}
+      </div>`;
+    document.body.appendChild(ov);
+    ov.onclick = e => { if (e.target === ov) ov.remove(); };
+    document.getElementById("noteCancel").onclick = () => ov.remove();
+    document.getElementById("noteText").focus();
+    document.getElementById("noteSave").onclick = () => {
+      const text = document.getElementById("noteText").value.trim();
+      if (!text) return;
+      logEvent({ e: "note", text: text.slice(0, 2000), ctx, user: who ? who.name : undefined });
+      ov.querySelector(".note-box").innerHTML = `<p style="font-size:15px;margin:0">✓ Saved${who ? ", " + who.name : ""} — your coach will read it tonight and reply in your dashboard notes.</p>`;
+      setTimeout(() => ov.remove(), 2000);
+      if (typeof autoSync === "function") setTimeout(autoSync, 50);
+    };
+  };
 }
 
 /* ---------- offline (PWA) ---------- */
