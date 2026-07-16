@@ -10,7 +10,7 @@
   <title>Sentence Practice — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrnxxt2l">
+  <link rel="stylesheet" href="css/style.css?v=mrnya5uo">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -38,8 +38,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrnxxt2l"></script>
-<script src="js/tracker.js?v=mrnxxt2l"></script>
+<script src="js/app.js?v=mrnya5uo"></script>
+<script src="js/tracker.js?v=mrnya5uo"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -130,7 +130,9 @@ function ask() {
     <div id="spReveal"></div>
   `;
   const input = document.getElementById("spIn");
-  attachInlineTranslit(input);
+  // autocorrect chips for the object words only — never the verb (that's the test)
+  const lexicon = DATA.verbs.flatMap(v => v.obj.ar.split(" ")).filter(w => normalizeAr(w) !== normalizeAr(it.form));
+  attachInlineTranslit(input, { lexicon });
   input.focus();
   input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reveal(); } });
   const spTarget = () => document.getElementById("spIn");
@@ -141,16 +143,15 @@ function ask() {
 
   function reveal() {
     const typed = input.value.trim();
-    const strict = typed && normalizeAr(typed) === normalizeAr(it.ar);
-    const m = strict ? { ok: true, rom: false } : answerMatchAr(typed, it.ar);
+    const m = sentenceMatchAr(typed, it.ar, it.form);
     const exact = m.ok;
     const rev = document.getElementById("spReveal");
     rev.innerHTML = `
       <div class="gx" style="margin-top:14px">
         <div class="sp-model"><span class="verb">${it.form}</span> ${it.objAr} <span class="sent-play" style="cursor:pointer">🔊</span></div>
         <div class="sp-gloss">${it.en}</div>
-        ${exact ? `<div style="color:var(--accent);font-weight:600;font-size:13.5px;margin-top:6px">✓ ${m.rom ? "got it — that's" : "exact match —"} <span class="arabic" dir="rtl">${it.form} ${it.objAr}</span>. Spot on!</div>`
-                : typed ? `<div class="sp-meta" style="margin-top:6px">you wrote: <span class="arabic" dir="rtl">${typed}</span></div>` : ""}
+        ${exact ? `<div style="color:var(--accent);font-weight:600;font-size:13.5px;margin-top:6px">✓ ${m.fuzzy ? "close enough — the model is" : m.rom ? "got it — that's" : "exact match —"} <span class="arabic" dir="rtl">${it.form} ${it.objAr}</span>. ${m.fuzzy ? "The conjugation was right, and that's the point." : "Spot on!"}</div>` : ""}
+        ${typed && (!exact || m.fuzzy) ? `<div class="sp-meta" style="margin-top:6px">you wrote: <span class="arabic" dir="rtl">${typed}</span></div>` : ""}
       </div>
       <div class="ex-row" style="margin-top:12px">
         <button class="primary" id="spGot">✓ Got it</button>
@@ -161,12 +162,12 @@ function ask() {
     speak(it.ar, 0.85);
     document.getElementById("spShow").disabled = true;
     input.disabled = true;
-    document.getElementById("spGot").onclick = () => mark(true, typed, exact, m.rom);
-    document.getElementById("spAgain").onclick = () => mark(false, typed, exact, m.rom);
+    document.getElementById("spGot").onclick = () => mark(true, typed, exact, m);
+    document.getElementById("spAgain").onclick = () => mark(false, typed, exact, m);
   }
 
-  function mark(ok, typed, exact, rom) {
-    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok, ...(rom ? { rom: true } : {}) });
+  function mark(ok, typed, exact, m) {
+    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok, ...(m.rom ? { rom: true } : {}), ...(m.fuzzy ? { fuzzy: true } : {}) });
     if (ok) got++;
     else queue.push(it); // drill-the-misses: requeue at the end of the set
     done++;

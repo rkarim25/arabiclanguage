@@ -166,16 +166,17 @@ function bucketOf(key) {
   if (e.box >= 2) return "later";
   return "repeat";
 }
-/* Levenshtein, capped: returns 2 as soon as we know the distance exceeds 1. */
-function editDist(a, b) {
+/* Levenshtein, capped: returns cap+1 (default cap 1) once the distance exceeds cap. */
+function editDist(a, b, cap) {
+  cap = cap || 1;
   const m = a.length, n = b.length;
-  if (Math.abs(m - n) > 1) return 2;
+  if (Math.abs(m - n) > cap) return cap + 1;
   const dp = Array.from({ length: m + 1 }, (_, i) => i);
   for (let j = 1; j <= n; j++) {
     let prev = dp[0]; dp[0] = j;
     for (let i = 1; i <= m; i++) { const tmp = dp[i]; dp[i] = Math.min(dp[i] + 1, dp[i - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = tmp; }
   }
-  return dp[m];
+  return Math.min(dp[m], cap + 1);
 }
 /* Arabic answer match — forgiving. normalizeAr already folds tashkeel and the
    أإآ/ى variants; here we also forgive the ة/ه and hamza-seat confusions that
@@ -207,6 +208,51 @@ function answerMatchAr(typed, targetAr) {
     if (conv && conv !== typed && arMatch(conv, targetAr)) return { ok: true, rom: true };
   }
   return { ok: false, rom: false };
+}
+
+/* Sentence-level fuzzy match (Sentence Practice). The conjugated verb is the thing
+   being tested, and its person/tense lives in the first and last couple of letters
+   (أكتب/نكتب, كتبت/كتبنا) — so the verb allows a slip only buried mid-word, never
+   at the edges. The rest of the sentence is graded loosely: a spelling slip per
+   word, a dropped/added ال, or joined/split words don't fail the sentence.
+   Returns { ok, rom, fuzzy } — fuzzy means accepted but not letter-perfect. */
+function sentenceMatchAr(typed, targetAr, verbForm) {
+  if (!typed || !typed.trim()) return { ok: false, rom: false };
+  const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
+  const rom = conv !== typed;
+  const fold = s => normalizeAr(String(s)).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const t = fold(conv), c = fold(targetAr);
+  if (!t || !c) return { ok: false, rom };
+  if (t === c) return { ok: true, rom };
+  if (t.replace(/ /g, "") === c.replace(/ /g, "")) return { ok: true, rom, fuzzy: true };
+  // the verb: exact, or one slip strictly inside (first/last 2 letters must stand)
+  const innerSlip = (a, b) => {
+    if (a === b) return true;
+    if (Math.max(a.length, b.length) < 5 || editDist(a, b) !== 1) return false;
+    const k = Math.min(a.length, b.length);
+    let head = 0; while (head < k && a[head] === b[head]) head++;
+    let tail = 0; while (tail < k && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++;
+    return head >= 2 && tail >= 2;
+  };
+  const tWords = t.split(" "), cWords = c.split(" ");
+  if (!innerSlip(tWords[0], fold(verbForm || cWords[0]))) return { ok: false, rom };
+  // the rest: loose per-word; if word counts differ, compare joined with scaled slack
+  const stripAl = w => w.replace(/^ال/, "");
+  const wordOk = (a, b) => {
+    if (a === b || stripAl(a) === stripAl(b)) return true;
+    const as = stripAl(a), bs = stripAl(b), len = Math.max(as.length, bs.length);
+    return len >= 4 && editDist(as, bs, 2) <= (len >= 7 ? 2 : 1);
+  };
+  const restT = tWords.slice(1), restC = cWords.slice(1);
+  let ok;
+  if (!restC.length) ok = !restT.length;
+  else if (restT.length === restC.length) ok = restC.every((w, i) => wordOk(restT[i], w));
+  else {
+    const a = stripAl(restT.join("")), b = stripAl(restC.join(""));
+    const slack = Math.max(1, Math.floor(b.length / 5));
+    ok = restT.length > 0 && editDist(a, b, slack) <= slack;
+  }
+  return ok ? { ok: true, rom, fuzzy: true } : { ok: false, rom };
 }
 
 /* ears mode: he typed the SOUND of the word (its transliteration) instead of its meaning.
@@ -875,8 +921,12 @@ function mountTranslitDock(getTarget, forceOpen) {
    itself — no separate box. A raw-Latin buffer on the element lets digraphs work
    ("k"+"h" → خ) and backspace peel one Latin char at a time. If the browser lacks
    beforeinput the field just stays plain text and the romanized-tolerant grader
-   still accepts it, so nothing breaks. Idempotent per element. */
-function attachInlineTranslit(el) {
+   still accepts it, so nothing breaks. Idempotent per element.
+   opts.lexicon (Arabic words): light autocorrect — while he types, close or
+   completable lexicon words appear as tap-to-fix chips under the field. Never
+   auto-replaces, and callers keep answer words (the verb) OUT of the lexicon
+   so suggestions can't hand over the graded part. */
+function attachInlineTranslit(el, opts) {
   if (!el || el.dataset.tlInline) return;
   el.dataset.tlInline = "1";
   el.setAttribute("dir", "rtl");
@@ -884,20 +934,61 @@ function attachInlineTranslit(el) {
   el.setAttribute("autocorrect", "off");
   el.setAttribute("autocapitalize", "off");
   el.setAttribute("spellcheck", "false");
-  let raw = "";
-  const render = () => { el.value = latinToArabic(raw); };
+  // committed = Arabic accepted from a suggestion; raw = Latin still being typed
+  let raw = "", committed = "";
+  const lex = [...new Set(((opts && opts.lexicon) || []).filter(Boolean))];
+  let bar = null;
+  const foldW = w => normalizeAr(String(w)).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const suggest = () => {
+    if (!lex.length) return;
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.style.cssText = "display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;direction:rtl;min-height:0";
+      el.insertAdjacentElement("afterend", bar);
+    }
+    const parts = el.value.split(" ");
+    const last = foldW(parts[parts.length - 1]);
+    let cands = [];
+    if (last.length >= 2) {
+      cands = lex.filter(w => {
+        const wn = foldW(w);
+        if (!wn || wn === last) return false;
+        return wn.startsWith(last) || (last.length >= 3 && editDist(wn, last, 2) <= (wn.length >= 6 ? 2 : 1));
+      }).slice(0, 3);
+    }
+    bar.innerHTML = "";
+    cands.forEach(w => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = w;
+      b.style.cssText = "font-family:var(--font-ar);font-size:19px;border:1px solid var(--border);background:var(--card);color:var(--accent);border-radius:999px;padding:2px 14px;cursor:pointer";
+      b.onmousedown = e => e.preventDefault();
+      b.onclick = () => {
+        parts[parts.length - 1] = w;
+        committed = parts.join(" ");
+        raw = "";
+        el.value = committed;
+        bar.innerHTML = "";
+        el.focus();
+      };
+      bar.appendChild(b);
+    });
+  };
+  const render = () => { el.value = committed + latinToArabic(raw); suggest(); };
   el.addEventListener("beforeinput", e => {
     if (e.inputType === "insertText" && e.data != null) {
       e.preventDefault(); raw += e.data; render();
     } else if (e.inputType === "deleteContentBackward") {
-      e.preventDefault(); raw = raw.slice(0, -1); render();
+      e.preventDefault();
+      if (raw) raw = raw.slice(0, -1); else committed = committed.slice(0, -1);
+      render();
     } else if (e.inputType === "insertFromPaste" && e.data != null) {
       e.preventDefault(); raw += e.data; render();
     }
     // other input types (line breaks, composition) fall through untouched
   });
   // keep the buffer in sync if code clears the field (e.g. on a new question)
-  el.addEventListener("tl-reset", () => { raw = ""; });
+  el.addEventListener("tl-reset", () => { raw = ""; committed = ""; if (bar) bar.innerHTML = ""; });
 }
 
 async function loadStory(id) {
