@@ -664,11 +664,13 @@ function suggestNext() {
 
 /* ---------- Arabic text utils ---------- */
 function stripTashkeel(s) {
-  return s.replace(/[ً-ٰٟـ]/g, "");
+  // includes the Quranic annotation range (U+06D6-U+06ED: waqf signs, small
+  // sukun, small madda...) so Uthmani mushaf text normalizes like plain text
+  return s.replace(/[ً-ٰـۖ-ۭ]/g, "");
 }
 function normalizeAr(s) {
   return stripTashkeel(s)
-    .replace(/[أإآ]/g, "ا")
+    .replace(/[أإآٱ]/g, "ا")
     .replace(/ى/g, "ي")
     .replace(/[^؀-ۿ\s]/g, "")
     .replace(/\s+/g, " ")
@@ -850,6 +852,7 @@ function renderNav(active) {
   `;
   document.body.prepend(el);
   mountNotePen();
+  initWordTap();
 }
 
 /* ---------- mini phonetic keyboard component ----------
@@ -1276,6 +1279,110 @@ function noteWordTap(opts) {
   srs[id] = { box: 0, due: Date.now() }; // due now → appears in the next Review
   store.set("ats-srs", srs);
   logEvent({ e: "tapseed", key: id });
+}
+
+/* ---------- tap any word → meaning + Learn ----------
+   One global handler for the whole site: tap/click any Arabic word and a small
+   popover shows its meaning (from data/lexicon.json — every gloss the site
+   teaches), a 🔊, and "＋ Learn" which puts it straight into the Review deck.
+   Inside an active test (an enabled answer box in the same row, or an area
+   marked data-nopeek) the meaning stays hidden — no free answers.
+   Elements can carry data-qkey="qw:…" so Learn seeds their proper SRS card
+   instead of a generic tapped-word card. */
+let _lex = null, _lexLoading = null;
+function loadLexicon() {
+  if (_lex) return Promise.resolve(_lex);
+  _lexLoading = _lexLoading || fetch("data/lexicon.json").then(r => r.json()).then(d => (_lex = d)).catch(() => (_lex = {}));
+  return _lexLoading;
+}
+function lexLookup(word) {
+  if (!_lex) return null;
+  const n = normalizeAr(word);
+  return _lex[n] || _lex[n.replace(/^ال/, "")] || null;
+}
+const _AR_CH = /[؀-ۿ]/;
+function wordAtPoint(x, y) {
+  let node = null, off = 0;
+  if (document.caretRangeFromPoint) {
+    const r = document.caretRangeFromPoint(x, y);
+    if (r) { node = r.startContainer; off = r.startOffset; }
+  } else if (document.caretPositionFromPoint) {
+    const p = document.caretPositionFromPoint(x, y);
+    if (p) { node = p.offsetNode; off = p.offset; }
+  }
+  if (!node || node.nodeType !== 3) return null;
+  const text = node.textContent;
+  let a = off, b = off;
+  while (a > 0 && _AR_CH.test(text[a - 1])) a--;
+  while (b < text.length && _AR_CH.test(text[b])) b++;
+  const w = text.slice(a, b).trim();
+  return _AR_CH.test(w) ? w : null;
+}
+let _wordPop = null;
+function closeWordPop() { if (_wordPop) { _wordPop.remove(); _wordPop = null; } }
+function showWordPop(word, x, y, o) {
+  closeWordPop();
+  const hit = o.hit;
+  const disp = hit ? hit[0] : word;
+  const already = !!getSrs()[o.qkey || ("tw:" + normalizeAr(disp).replace(/^ال/, ""))];
+  const canLearn = o.qkey || hit;
+  const pop = document.createElement("div");
+  pop.id = "wordPop";
+  pop.style.cssText = "position:fixed;z-index:95;background:var(--card,#fff);color:var(--ink,#222);border:1px solid var(--border,#ddd);border-radius:14px;padding:12px 16px;box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:250px;font-family:var(--font-ui,sans-serif);font-size:14px;text-align:center";
+  pop.innerHTML = `
+    <div class="arabic" dir="rtl" style="font-size:26px;line-height:1.6">${disp}</div>
+    ${hit && hit[1] ? `<div style="color:var(--muted,#888);font-style:italic;font-size:12.5px">${hit[1]}</div>` : ""}
+    ${o.hideMeaning
+      ? `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">meaning hidden — you're mid-test 🤫</div>`
+      : hit ? `<div style="font-weight:600;margin-top:4px">${hit[2]}</div>`
+            : `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">not in the site's word lists yet</div>`}
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+      <button type="button" class="wp-say" style="border:1px solid var(--border,#ddd);background:transparent;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:15px">🔊</button>
+      ${canLearn ? `<button type="button" class="wp-learn" ${already ? "disabled" : ""} style="border:none;background:var(--accent,#0d7a5f);color:#fff;border-radius:10px;padding:6px 14px;cursor:pointer;font-weight:600">${already ? "✓ in your deck" : "＋ Learn"}</button>` : ""}
+    </div>`;
+  document.body.appendChild(pop);
+  const r = pop.getBoundingClientRect();
+  pop.style.left = Math.max(8, Math.min(x - r.width / 2, innerWidth - r.width - 8)) + "px";
+  pop.style.top = (y + 16 + r.height > innerHeight ? y - r.height - 12 : y + 16) + "px";
+  pop.querySelector(".wp-say").onclick = () => speak(disp, 0.75);
+  const lb = pop.querySelector(".wp-learn");
+  if (lb && !already) lb.onclick = () => {
+    const srs = getSrs();
+    let id = o.qkey;
+    if (!id) {
+      const norm = normalizeAr(disp).replace(/^ال/, "");
+      id = "tw:" + norm;
+      const words = store.get("ats-tapwords", {});
+      if (!words[norm]) {
+        words[norm] = { ar: disp, en: hit[2], tr: hit[1] || "", note: "you chose to learn this" };
+        store.set("ats-tapwords", words);
+      }
+    }
+    if (!srs[id]) { srs[id] = { box: 0, due: Date.now() }; store.set("ats-srs", srs); }
+    logEvent({ e: "tap-learn", key: id });
+    lb.textContent = "✓ in your Review deck";
+    lb.disabled = true;
+  };
+  _wordPop = pop;
+}
+function initWordTap() {
+  if (document.body.dataset.wordtap) return;
+  document.body.dataset.wordtap = "1";
+  document.addEventListener("click", async e => {
+    if (e.target.closest("#wordPop")) return;
+    if (e.target.closest("input,textarea,select,button,a,label,[contenteditable],nav,#notePen,#noteOverlay")) { closeWordPop(); return; }
+    const word = wordAtPoint(e.clientX, e.clientY);
+    if (!word) { closeWordPop(); return; }
+    await loadLexicon();
+    const hit = lexLookup(word);
+    const row = e.target.closest("tr");
+    const tested = e.target.closest("[data-nopeek]") || (row && row.querySelector("input:not([disabled])"));
+    const qEl = e.target.closest("[data-qkey]");
+    showWordPop(word, e.clientX, e.clientY, { hit, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
+    logEvent({ e: "wtap", ar: normalizeAr(word), hit: !!hit, ...(tested ? { hidden: true } : {}) });
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeWordPop(); });
+  window.addEventListener("scroll", closeWordPop, { passive: true });
 }
 
 /* ---------- ✏️ note to coach: floating pen on every page ----------

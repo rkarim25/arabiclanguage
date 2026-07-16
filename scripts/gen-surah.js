@@ -43,15 +43,21 @@ function genSurah(n, range) {
   const meta = range ? RANGE_META[range.key] : META[n];
   if (!meta) throw new Error(`No META for ${range ? range.key : "surah " + n} — add name/nameEn/why to the ${range ? "RANGE_META" : "META"} map first.`);
   const wbw = JSON.parse(fs.readFileSync(`${QP}/ai_wbw/surah_${n}.json`, "utf8"));
+  // real Uthmani mushaf text + per-word tokens — the DISPLAY form. The ai_wbw
+  // parts are teaching decompositions (الْـ + إِلٰه), never what the eye should read.
+  const mushaf = {};
+  JSON.parse(fs.readFileSync(`${QP}/surah_${n}.json`, "utf8")).ayahs.forEach(a => { mushaf[a.ayah] = a; });
   let trans = {};
   try { trans = JSON.parse(fs.readFileSync(`${QP}/ai_translations/surah_${n}.json`, "utf8")).ayahs || {}; } catch (e) {}
 
   const ayahs = Object.keys(wbw).sort((a, b) => +a - +b)
     .filter(a => !range || (+a >= range.from && +a <= range.to));
   const verses = ayahs.map(ayah => {
+    const mu = mushaf[ayah] || {};
     const words = Object.keys(wbw[ayah]).sort((a, b) => +a - +b).map(w => {
       const it = wbw[ayah][w];
-      const ar = it.parts.map(p => p.ar).join("");
+      const mw = (mu.word_by_word || {})[w] || {};
+      const ar = mw.arabic || it.parts.map(p => p.ar).join("");
       const tr = it.parts.map(p => p.tr).join("-");
       const en = it.parts.map(p => p.en).join(" ").replace(/\s+/g, " ").trim();
       const entry = [ar, tr, en];
@@ -63,8 +69,9 @@ function genSurah(n, range) {
     });
     return {
       ref: `${n}:${ayah}`,
-      ar: words.map(w => w[0]).join(" "),
-      en: clampSentence(trans[ayah] || ""),
+      ar: mu.arabic || words.map(w => w[0]).join(" "),
+      // his own AI translation, in full — he wrote these to teach, never truncate them
+      en: (trans[ayah] || mu.translation || "").trim(),
       words,
     };
   });
@@ -86,10 +93,13 @@ targets.forEach(t => {
   if (!n) { console.error(`skipping unparseable target: ${t}`); return; }
   const s = genSurah(n, range);
   const i = data.surahs.findIndex(x => x.id === s.id);
-  if (i >= 0) data.surahs[i] = { ...data.surahs[i], n: s.n, verses: data.surahs[i].verses };
+  // always regenerate from the Quran-Project data — his ai_wbw + ai_translations
+  // are the canonical source (older hand-authored verses lacked his translations)
+  if (i >= 0) data.surahs[i] = s;
   else data.surahs.push(s);
-  console.log(`${range ? range.key : "surah " + n} (${s.id}): ${s.verses.length} verses, ${s.verses.reduce((a, v) => a + v.words.length, 0)} words ${i >= 0 ? "(kept hand-authored verses, added n)" : "(generated)"}`);
+  console.log(`${range ? range.key : "surah " + n} (${s.id}): ${s.verses.length} verses, ${s.verses.reduce((a, v) => a + v.words.length, 0)} words ${i >= 0 ? "(regenerated)" : "(generated)"}`);
 });
 
 fs.writeFileSync(OUT, JSON.stringify(data, null, 1) + "\n", "utf8");
 console.log("written", OUT);
+console.log("now run: node scripts/gen-lexicon.js (verse glosses feed the tap-any-word lexicon)");

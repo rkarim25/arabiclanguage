@@ -3,7 +3,7 @@
    cache-busting discipline stays the source of truth), but keeps working
    offline (phone in the Haram, on a plane) from the last good copy.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mro03rph";
+const CACHE = "ats-mro0nows";
 const CORE = [
   "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
   "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html", "audio.html",
@@ -13,6 +13,7 @@ const CORE = [
   "data/story-01.json", "data/story-02.json", "data/story-03.json",
   "data/story-04.json", "data/story-05.json", "data/story-06.json",
   "data/sentences.json", "data/conversations.json", "data/mnemonics.json",
+  "data/lexicon.json",
 ];
 
 self.addEventListener("install", e => {

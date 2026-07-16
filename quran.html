@@ -10,11 +10,19 @@
   <title>Quran — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mro03rph">
+  <link rel="stylesheet" href="css/style.css?v=mro0nows">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
     .verse-ar { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 32px; line-height: 2.1; }
+    .vw { cursor: pointer; position: relative; border-radius: 6px; padding: 0 2px; }
+    .vw:hover { background: var(--accent-soft); }
+    .vw[data-tip]:hover::after {
+      content: attr(data-tip); position: absolute; bottom: calc(100% + 4px); right: 50%; transform: translateX(50%);
+      background: var(--ink); color: var(--bg, #fdfaf4); font-family: var(--font-ui); font-size: 13px; font-weight: 500;
+      padding: 6px 11px; border-radius: 9px; width: max-content; max-width: 230px; white-space: normal;
+      text-align: center; line-height: 1.45; direction: ltr; z-index: 60; pointer-events: none;
+    }
     .verse-ref { color: var(--amber); font-weight: 600; font-size: 12px; }
     .verse-en { color: var(--muted); font-size: 14px; margin: 6px 0 10px; }
     .wbw { width: 100%; border-collapse: collapse; font-size: 14px; direction: rtl; }
@@ -38,8 +46,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mro03rph"></script>
-<script src="js/tracker.js?v=mro03rph"></script>
+<script src="js/app.js?v=mro0nows"></script>
+<script src="js/tracker.js?v=mro0nows"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -268,25 +276,35 @@ function renderSurah(s, mode) {
   const rate = () => parseFloat(document.getElementById("rate").value);
 
   const versesEl = document.getElementById("verses");
+  const esc = t => String(t).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   s.verses.forEach((v, vi) => {
     const block = document.createElement("div");
     block.className = "verse-block";
+    // each verse word is hoverable (meaning tooltip, study mode) and tappable
+    // (speak + the universal meaning/Learn popover; data-qkey → proper SRS card)
+    const arHtml = v.words.map((w, wi) =>
+      `<span class="vw" data-qkey="qw:${s.id}:${vi}:${wi}"${mode === "study" ? ` data-tip="${esc(w[2])}"` : ""}>${w[0]}</span>`).join(" ");
     block.innerHTML = `
       <div class="verse-ref">${v.ref}</div>
-      <div class="verse-ar">${v.ar} <span class="sent-play">🔊</span></div>
+      <div class="verse-ar"${mode === "test" ? " data-nopeek" : ""}>${arHtml} <span class="sent-play">🔊</span></div>
       <div class="verse-en" style="display:${mode === "study" ? "block" : "none"}">${v.en}</div>
       <table class="wbw"><tbody></tbody></table>
     `;
     block.querySelector(".sent-play").onclick = () => speak(v.ar, rate());
+    block.querySelectorAll(".vw").forEach((el, wi) => el.onclick = () => {
+      speak(v.words[wi][0], 0.75);
+      logEvent({ e: "qtap", surah: s.id, ref: v.ref, w: wi, src: "verse" });
+      noteWordTap({ key: `qw:${s.id}:${vi}:${wi}` }); // 3 taps → joins the Review deck
+    });
     const tbody = block.querySelector("tbody");
     v.words.forEach((word, wi) => {
       const [ar, tr, en, grammar, root] = word;
       const row = document.createElement("tr");
       const gBtn = grammar ? `<span class="g-btn" title="grammar note">ⓘ نحو</span>` : "";
       if (mode === "study") {
-        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}</td>`;
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}</td>`;
       } else {
-        row.innerHTML = `<td class="w-ar">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
       }
       row.querySelector(".w-ar").onclick = () => {
         speak(ar, 0.75);
