@@ -188,7 +188,19 @@
       }
     }
 
+    // definite article, however romanized (al- as- bial- bis- wal-…): rewrite to a
+    // canonical "Al" so ال is always written, and treat hyphens as silent joiners
+    const _SUN = "sh|th|dh|[tdrzsSDTZnl]", _PRE = "bi|li|ka|wa|fa|la|ta|sa";
+    function expandArticles(raw) {
+      return raw
+        .replace(new RegExp(`(^|\\s|${_PRE})a?(?:${_SUN})-`, "g"), "$1Al")
+        .replace(new RegExp(`(${_PRE})al`, "g"), "$1Al")
+        .replace(new RegExp(`(${_PRE})a(${_SUN})\\2`, "g"), "$1Al$2")
+        .replace(new RegExp(`(^|\\s)a(${_SUN})\\2`, "g"), "$1Al$2")
+        .replace(/-/g, "");
+    }
     function convertArabic(text) {
+      text = expandArticles(text);
       // same rules as the study pages: doubled consonant = shadda ("sayyara" → سيّارة),
       // and a word-initial a/i/u/e/o becomes ا (so "al..." gives the article ال)
       const consonant = ch => ch.length === 1 && /[ء-ي]/.test(ch) && ch !== "ا";

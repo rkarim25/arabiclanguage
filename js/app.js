@@ -237,11 +237,19 @@ function sentenceMatchAr(typed, targetAr, verbForm) {
   const tWords = t.split(" "), cWords = c.split(" ");
   if (!innerSlip(tWords[0], fold(verbForm || cWords[0]))) return { ok: false, rom };
   // the rest: loose per-word; if word counts differ, compare joined with scaled slack
-  const stripAl = w => w.replace(/^ال/, "");
+  // strip a leading ال to forgive a missing/extra article — but never down to a
+  // stub, so function words that just start ا-ل (إلى → الي) keep their body
+  const stripAl = w => { const s = w.replace(/^ال/, ""); return s.length >= 2 ? s : w; };
+  const LONGV = /[اويى]$/;
   const wordOk = (a, b) => {
-    if (a === b || stripAl(a) === stripAl(b)) return true;
-    const as = stripAl(a), bs = stripAl(b), len = Math.max(as.length, bs.length);
+    if (a === b) return true;
+    const as = stripAl(a), bs = stripAl(b);
+    if (as === bs) return true;
+    // a single dropped/added trailing long vowel — case ending or إلى-vs-الي, not a different word
+    const [sh, lo] = a.length < b.length ? [a, b] : [b, a];
+    if (lo.length - sh.length === 1 && lo.startsWith(sh) && LONGV.test(lo)) return true;
     // two slips at 5+ letters: an untyped long vowel plus a ة is normal romanization, not ignorance
+    const len = Math.max(as.length, bs.length);
     return len >= 4 && editDist(as, bs, 2) <= (len >= 5 ? 2 : 1);
   };
   const restT = tWords.slice(1), restC = cWords.slice(1);
@@ -762,6 +770,31 @@ const LATIN_TO_AR = {
   ee: "ي", ii: "ي", oo: "و", uu: "و", ou: "و",
   e: "ِ", o: "ُ",
 };
+/* The definite article ال, however he romanizes it. In Arabic ال is ALWAYS
+   written (alif+lam), even when the lam assimilates in speech to a following
+   "sun letter" (as-sayyāra, ash-shams) and even when it fuses onto a preposition
+   (bi-, wa-, li-…) where the alif elides in speech. Learners type all of these:
+   al-, as-, bi al-, bial-, bis-, bissayyara, wal-…  This pre-pass rewrites every
+   such form to a canonical "Al" (explicit alif+lam) so the converter always
+   produces the written ال. Hyphens are treated as silent article joiners, never
+   as a tatweel. */
+const _SUN = "sh|th|dh|[tdrzsSDTZnl]";          // sun-letter romanizations (l included → covers plain al-)
+const _PRE = "bi|li|ka|wa|fa|la|ta|sa";         // prepositions the article fuses onto
+function expandArticles(raw) {
+  return raw
+    // hyphen form (optional preposition/space, optional elided 'a'): al- as- bial- bis- wal- "bi as-"
+    .replace(new RegExp(`(^|\\s|${_PRE})a?(?:${_SUN})-`, "g"), "$1Al")
+    // fused, no hyphen, plain article after a preposition: bialkitab walkitab
+    .replace(new RegExp(`(${_PRE})al`, "g"), "$1Al")
+    // fused, no hyphen, assimilated sun article after a preposition — the article's
+    // 'a' MUST be written (biassayyara), else "sallama"/"kallama" (Form II verbs,
+    // same preposition+doubled-sun shape) would be mis-read as articles
+    .replace(new RegExp(`(${_PRE})a(${_SUN})\\2`, "g"), "$1Al$2")
+    // standalone assimilated sun article: assayyara ashshams annas
+    .replace(new RegExp(`(^|\\s)a(${_SUN})\\2`, "g"), "$1Al$2")
+    // any leftover hyphen is a silent joiner in romanized Arabic, not a kashida
+    .replace(/-/g, "");
+}
 /* Doubled consonant = shadda: "sayyara" → سيّارة, "rabb" → ربّ — the way he'd
    naturally romanize it. Only a token whose output is one Arabic consonant
    triggers it; long-vowel digraphs (aa/ee/oo…) match as their own tokens first
@@ -769,6 +802,7 @@ const LATIN_TO_AR = {
    A word-initial a/i/u/e/o becomes ا — no Arabic word starts with a bare vowel
    mark, and it makes "al..." produce the definite article ال as he'd expect. */
 function latinToArabic(text) {
+  text = expandArticles(text);
   const consonant = ch => ch.length === 1 && /[ء-ي]/.test(ch) && ch !== "ا";
   let out = "", i = 0, atStart = true;
   while (i < text.length) {
