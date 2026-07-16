@@ -241,7 +241,8 @@ function sentenceMatchAr(typed, targetAr, verbForm) {
   const wordOk = (a, b) => {
     if (a === b || stripAl(a) === stripAl(b)) return true;
     const as = stripAl(a), bs = stripAl(b), len = Math.max(as.length, bs.length);
-    return len >= 4 && editDist(as, bs, 2) <= (len >= 7 ? 2 : 1);
+    // two slips at 5+ letters: an untyped long vowel plus a ة is normal romanization, not ignorance
+    return len >= 4 && editDist(as, bs, 2) <= (len >= 5 ? 2 : 1);
   };
   const restT = tWords.slice(1), restC = cWords.slice(1);
   let ok;
@@ -756,19 +757,34 @@ const LATIN_TO_AR = {
   a: "َ", i: "ِ", u: "ُ", "^": "ْ", "*": "ّ",
   "a~": "ً", "i~": "ٍ", "u~": "ٌ",
   ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ",
-  // forgiving extras: Arabizi chat numerals + intuitive long vowels
+  // forgiving extras: Arabizi chat numerals + intuitive long vowels + e/o vowels
   "2": "ء", "5": "خ", "6": "ط", "7": "ح", "9": "ق",
   ee: "ي", ii: "ي", oo: "و", uu: "و", ou: "و",
+  e: "ِ", o: "ُ",
 };
+/* Doubled consonant = shadda: "sayyara" → سيّارة, "rabb" → ربّ — the way he'd
+   naturally romanize it. Only a token whose output is one Arabic consonant
+   triggers it; long-vowel digraphs (aa/ee/oo…) match as their own tokens first
+   and ا is excluded, so vowels never double. '*' still works as explicit shadda.
+   A word-initial a/i/u/e/o becomes ا — no Arabic word starts with a bare vowel
+   mark, and it makes "al..." produce the definite article ال as he'd expect. */
 function latinToArabic(text) {
-  let out = "", i = 0;
+  const consonant = ch => ch.length === 1 && /[ء-ي]/.test(ch) && ch !== "ا";
+  let out = "", i = 0, atStart = true;
   while (i < text.length) {
     let matched = false;
     for (let len = 4; len > 0; len--) {
       const part = text.slice(i, i + len);
-      if (LATIN_TO_AR[part]) { out += LATIN_TO_AR[part]; i += len; matched = true; break; }
+      if (LATIN_TO_AR[part]) {
+        const ch = LATIN_TO_AR[part];
+        i += len;
+        if (atStart && /^[aiueo]$/.test(part)) out += "ا";
+        else if (consonant(ch) && text.slice(i, i + len) === part) { out += ch + "ّ"; i += len; }
+        else out += ch;
+        matched = true; atStart = false; break;
+      }
     }
-    if (!matched) { out += text[i]; i++; }
+    if (!matched) { atStart = /\s/.test(text[i]); out += text[i]; i++; }
   }
   return out;
 }

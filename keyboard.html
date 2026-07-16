@@ -111,7 +111,8 @@
       a: "َ", i: "ِ", u: "ُ", "^": "ْ", "*": "ّ",
       "a~": "ً", "i~": "ٍ", "u~": "ٌ",
       "#3": "٣",
-      ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ"
+      ".": ".", ",": "،", ";": "؛", "?": "؟", "-": "ـ",
+      e: "ِ", o: "ُ"
     };
 
     const visualMap = {
@@ -188,20 +189,28 @@
     }
 
     function convertArabic(text) {
+      // same rules as the study pages: doubled consonant = shadda ("sayyara" → سيّارة),
+      // and a word-initial a/i/u/e/o becomes ا (so "al..." gives the article ال)
+      const consonant = ch => ch.length === 1 && /[ء-ي]/.test(ch) && ch !== "ا";
       let out = "";
-      let i = 0;
+      let i = 0, atStart = true;
       while (i < text.length) {
         let matched = false;
         for (let len = 4; len > 0; len--) {
           const part = text.slice(i, i + len);
           if (latinToArabic[part]) {
-            out += latinToArabic[part];
+            const ch = latinToArabic[part];
             i += len;
+            if (atStart && /^[aiueo]$/.test(part)) out += "ا";
+            else if (consonant(ch) && text.slice(i, i + len) === part) { out += ch + "ّ"; i += len; }
+            else out += ch;
             matched = true;
+            atStart = false;
             break;
           }
         }
         if (!matched) {
+          atStart = /\s/.test(text[i]);
           out += text[i];
           i++;
         }
