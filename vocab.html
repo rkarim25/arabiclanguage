@@ -10,7 +10,7 @@
   <title>Vocab Lab — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrmtict1">
+  <link rel="stylesheet" href="css/style.css?v=mrnunmtn">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +57,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrmtict1"></script>
-<script src="js/tracker.js?v=mrmtict1"></script>
+<script src="js/app.js?v=mrnunmtn"></script>
+<script src="js/tracker.js?v=mrnunmtn"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -462,9 +462,10 @@ async function renderSheet() {
 
   if (sheetMode === "produce") {
     const kb = document.getElementById("shKb");
+    // seamless: each answer box converts English letters to Arabic as he types — no separate box
+    tbody.querySelectorAll(".fill-input").forEach(attachInlineTranslit);
     lastFocused = lastFocused || tbody.querySelector(".fill-input");
     if (kb) kb.onclick = () => mountTranslitDock(() => lastFocused);
-    mountTranslitDock(() => lastFocused, true);
   }
 
   function showBatchScore(right, graded, heard) {
@@ -499,10 +500,15 @@ async function renderSheet() {
     let right = 0, graded = 0, heardCount = 0;
     sheetItems.forEach(({ key, v }, i) => {
       if (revealed.has(i)) return;
-      graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
+      // A blank box means "not attempted" — never score it as a miss or demote the
+      // card. And an explicit bucket mark (✓ know / ↻ / ⏳ / ✗) is his own claim: the
+      // Check must respect it, not overwrite it. Either way, skip the row untouched.
+      const srsMark = getSrs()[key];
+      if (!input.value.trim() || (srsMark && srsMark.b)) return;
+      graded++;
       const ans = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = sheetMode === "produce" ? arMatch(input.value, v.ar) : fuzzyEn(input.value, v.en);
+      const ok = sheetMode === "produce" ? answerMatchAr(input.value, v.ar).ok : fuzzyEn(input.value, v.en);
       // ears: typing the SOUND ("min", "qal") proves he heard the word — credit the ear, then teach the meaning
       const heard = sheetMode === "ears" && !ok && trMatch(input.value, v.tr, v.ar);
       input.classList.remove("ok", "no", "heard");

@@ -194,6 +194,21 @@ function arMatch(typed, target) {
     return Math.max(cf.length, tf.length) >= 5 && editDist(cf, tf) <= 1; // one slip in a longer word
   });
 }
+/* Accept an Arabic answer that may have been typed in English letters. He often
+   types romanized ("atakallam alhaqq") straight into the box; convert it and let
+   the forgiving arMatch decide. Short vowels/shadda become tashkeel that normalizeAr
+   strips anyway, so a doubled consonant (his shadda) collapses to one edit — inside
+   arMatch's single-slip tolerance. Returns { ok, rom } so callers can flag rom-typed. */
+function answerMatchAr(typed, targetAr) {
+  if (!typed || !typed.trim()) return { ok: false, rom: false };
+  if (arMatch(typed, targetAr)) return { ok: true, rom: false };
+  if (/[A-Za-z]/.test(typed)) {
+    const conv = latinToArabic(typed);
+    if (conv && conv !== typed && arMatch(conv, targetAr)) return { ok: true, rom: true };
+  }
+  return { ok: false, rom: false };
+}
+
 /* ears mode: he typed the SOUND of the word (its transliteration) instead of its meaning.
    Casual typing allowed: "qal" ~ qāla, "illa" ~ illā, "3ala" ~ ʿalā. */
 function trMatch(typed, tr, ar) {
@@ -483,6 +498,13 @@ function suggestNext() {
     desc: "Al-Fatiha recited for real. You know it by heart — let the meanings you've learnt surface. No reading.",
     href: "quran.html?listen=1",
   });
+  // 0c. Hands-free Audio Coach — active recall by ear for tired evenings and the commute,
+  //     no typing/tapping. Straight at his #1 goal (understand as recited) with the lowest friction.
+  out.push({
+    icon: "🎧", title: "Audio Coach — hands-free",
+    desc: "Listen, recall the meaning in the gap, hear the answer. Your weak words + Qur'an rests. Perfect on the move.",
+    href: "audio.html",
+  });
   // 1. Vocab Learn — pick your own lane when you want more control
   out.push({
     icon: "📝", title: "Vocab Learn",
@@ -700,6 +722,7 @@ function renderNav(active) {
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">Sentences</a>
+    <a class="link ${active === "audio" ? "active" : ""}" href="audio.html">🎧 Audio</a>
     <a class="link ${active === "speaking" ? "active" : ""}" href="speaking.html">Speak</a>
     <a class="link ${active === "converse" ? "active" : ""}" href="converse.html">Converse</a>
     <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
@@ -821,6 +844,36 @@ function mountTranslitDock(getTarget, forceOpen) {
     if (_tlDock && e.target !== box && e.target.classList && (e.target.classList.contains("fill-input") || e.target.getAttribute("dir") === "rtl")) { box.value = ""; preview.textContent = "…"; }
   });
   box.focus();
+}
+
+/* ---------- inline live transliteration ----------
+   Makes an answer field convert English letters to Arabic AS he types, in the field
+   itself — no separate box. A raw-Latin buffer on the element lets digraphs work
+   ("k"+"h" → خ) and backspace peel one Latin char at a time. If the browser lacks
+   beforeinput the field just stays plain text and the romanized-tolerant grader
+   still accepts it, so nothing breaks. Idempotent per element. */
+function attachInlineTranslit(el) {
+  if (!el || el.dataset.tlInline) return;
+  el.dataset.tlInline = "1";
+  el.setAttribute("dir", "rtl");
+  el.setAttribute("autocomplete", "off");
+  el.setAttribute("autocorrect", "off");
+  el.setAttribute("autocapitalize", "off");
+  el.setAttribute("spellcheck", "false");
+  let raw = "";
+  const render = () => { el.value = latinToArabic(raw); };
+  el.addEventListener("beforeinput", e => {
+    if (e.inputType === "insertText" && e.data != null) {
+      e.preventDefault(); raw += e.data; render();
+    } else if (e.inputType === "deleteContentBackward") {
+      e.preventDefault(); raw = raw.slice(0, -1); render();
+    } else if (e.inputType === "insertFromPaste" && e.data != null) {
+      e.preventDefault(); raw += e.data; render();
+    }
+    // other input types (line breaks, composition) fall through untouched
+  });
+  // keep the buffer in sync if code clears the field (e.g. on a new question)
+  el.addEventListener("tl-reset", () => { raw = ""; });
 }
 
 async function loadStory(id) {
