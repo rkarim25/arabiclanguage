@@ -10,7 +10,7 @@
   <title>Grammar — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrlyd8nk">
+  <link rel="stylesheet" href="css/style.css?v=mrmtict1">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -35,8 +35,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrlyd8nk"></script>
-<script src="js/tracker.js?v=mrlyd8nk"></script>
+<script src="js/app.js?v=mrmtict1"></script>
+<script src="js/tracker.js?v=mrmtict1"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -134,17 +134,32 @@ function renderPattern(p) {
   document.getElementById("gKb").onclick = () => mountTranslitDock(gTarget);
   mountTranslitDock(gTarget, true);
 
+  // he may answer in romanization (the hint itself is shown that way). Long vowels
+  // written as doubles (innā = innaa) stay significant, so إِنَّ vs إِنَّا remains honest;
+  // the lax (length-forgiving) match only applies when no sibling item collides with it.
+  const rom = s => String(s).toLowerCase()
+    .replace(/ā/g, "aa").replace(/ī/g, "ii").replace(/ū/g, "uu")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/g, "");
+  const lax = s => rom(s).replace(/(.)\1+/g, "$1");
   document.getElementById("gCheck").onclick = () => {
     let right = 0;
     p.test.forEach((t, i) => {
       const input = ta.querySelector(`input[data-i="${i}"]`);
       const ans = ta.querySelectorAll(".correct-answer")[i];
-      const ok = normalizeAr(input.value) === normalizeAr(t.ar);
+      let ok = normalizeAr(input.value) === normalizeAr(t.ar);
+      let romOk = false;
+      if (!ok && rom(input.value).length > 1) {
+        romOk = rom(input.value) === rom(t.hint) ||
+          (lax(input.value) === lax(t.hint) && !p.test.some((o, j) => j !== i && lax(o.hint) === lax(input.value)));
+        ok = romOk;
+      }
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
-      if (ok) { right++; ans.style.display = "none"; }
+      ans.classList.toggle("yes-note", romOk);
+      if (romOk) { right++; ans.style.display = "block"; ans.textContent = t.ar; }
+      else if (ok) { right++; ans.style.display = "none"; }
       else { ans.style.display = "block"; ans.textContent = t.ar; }
-      logEvent({ e: "gfill", g: p.id, i, typed: input.value, ok });
+      logEvent({ e: "gfill", g: p.id, i, typed: input.value, ok, ...(romOk ? { rom: true } : {}) });
     });
     let scoreMsg = `Score: ${right} / ${p.test.length}` + (right === p.test.length ? " — ممتاز! 🎉" : " — re-read the pattern and try again any time.");
     if (right >= Math.ceil(p.test.length * 0.6)) {
