@@ -620,17 +620,41 @@ function normalizeAr(s) {
     .trim();
 }
 
-/* ---------- TTS ---------- */
-let _arVoice = null;
+/* ---------- TTS ----------
+   Voice quality varies wildly by platform. Rank what's installed and take the
+   best, instead of the browser default (on Windows that default is the old
+   robotic SAPI voice): Edge/iOS neural voices > Google's hosted voices > rest. */
+let _arVoice = null, _enVoice = null;
+function _voiceScore(v) {
+  const n = (v.name || "").toLowerCase();
+  let s = 0;
+  if (n.includes("natural") || n.includes("neural")) s += 8;
+  if (n.includes("premium") || n.includes("enhanced")) s += 6;
+  if (n.includes("google")) s += 5;
+  if (n.includes("online")) s += 2;
+  if (v.localService === false) s += 1;
+  return s;
+}
+function _bestVoice(vs, langPrefix) {
+  let best = null, bestScore = -1;
+  vs.forEach(v => {
+    if (!v.lang || !v.lang.toLowerCase().startsWith(langPrefix)) return;
+    const s = _voiceScore(v);
+    if (s > bestScore) { best = v; bestScore = s; }
+  });
+  return best;
+}
 function _loadVoices() {
   const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-  _arVoice = vs.find(v => v.lang && v.lang.toLowerCase().startsWith("ar")) || null;
+  _arVoice = _bestVoice(vs, "ar");
+  _enVoice = _bestVoice(vs, "en");
 }
 if (window.speechSynthesis) {
   speechSynthesis.onvoiceschanged = _loadVoices;
   _loadVoices();
 }
 function hasArabicVoice() { _loadVoices(); return !!_arVoice; }
+function bestEnglishVoice() { _loadVoices(); return _enVoice; }
 function speak(text, rate, onend) {
   if (!window.speechSynthesis) { if (onend) onend(); return; }
   speechSynthesis.cancel();
