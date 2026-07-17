@@ -45,13 +45,32 @@ def add(lang, text):
     text = str(text or "").strip()
     if not text: return
     n = norm_ar(text) if lang == "ar" else norm_en(text)
-    if not n or len(n) < 2 or (lang, n) in jobs: return
+    if not n or (lang == "ar" and len(n) < 2) or (lang, n) in jobs: return  # en allows "I"
     jobs[(lang, n)] = text
 
 lex = json.load(open(os.path.join(DATA, "lexicon.json"), encoding="utf-8"))
 for entry in lex.values():
     add("ar", entry[0])
     add("en", entry[2])
+
+# English glosses from EVERY source directly — the lexicon dedupes by Arabic
+# key, but cards serve their own source's gloss, so a lexicon-only sweep left
+# 17% of spoken English with no clip (the robot voice Reza flagged twice).
+def loadd(f): return json.load(open(os.path.join(DATA, f), encoding="utf-8"))
+for g in loadd("everyday.json")["groups"]:
+    for m in g["members"]: add("en", m.get("en"))
+for f in loadd("families.json")["families"]:
+    for m in f["members"]: add("en", m.get("en"))
+for w in loadd("quran-core.json")["words"]: add("en", w.get("en"))
+for f in sorted(os.listdir(DATA)):
+    if re.match(r"^story-\d+\.json$", f):
+        for w in loadd(f).get("vocab", []): add("en", w.get("en"))
+for s in loadd("verses.json")["surahs"]:
+    for v in s["verses"]:
+        for w in v["words"]: add("en", w[2])
+
+# fixed spoken UI lines (audio.html)
+add("en", "Audio coach. Listen, and recall the meaning before I say it.")
 
 sen = json.load(open(os.path.join(DATA, "sentences.json"), encoding="utf-8"))
 PERSON_EN = {"ana": "I", "nahnu": "we", "hum": "they"}
@@ -84,7 +103,8 @@ async def gen(sem, lang, text, path, stats):
         for attempt in range(3):
             try:
                 voice = AR_VOICE if lang == "ar" else EN_VOICE
-                await edge_tts.Communicate(text, voice, rate="-10%").save(path)
+                spoken = text if lang == "ar" else text.replace("ﷺ", "").strip() or text
+                await edge_tts.Communicate(spoken, voice, rate="-10%").save(path)
                 if os.path.getsize(path) > 500:
                     stats["ok"] += 1
                     if stats["ok"] % 50 == 0: print(f'{stats["ok"]}/{len(todo)} done')
