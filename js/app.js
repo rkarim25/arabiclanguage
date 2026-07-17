@@ -796,20 +796,41 @@ function _audioFileFor(text) {
   const name = (_audioMan[isAr ? "ar" : "en"] || {})[key];
   return name ? `audio/${isAr ? "ar" : "en"}/${name}.mp3` : null;
 }
-let _speakAudio = null;
+/* ONE shared element, reused for every clip. Mobile autoplay policy blesses a
+   media element the user has started once — a fresh `new Audio()` per clip is
+   blocked as soon as the call chain isn't a tap (exactly the Audio Coach loop).
+   primeSpeak() must be called synchronously inside a click handler (Start,
+   Resume); direct 🔊 taps are their own gesture and need nothing. */
+let _speakEl = null, _speakPrimed = false;
+function _getSpeakEl() { if (!_speakEl) _speakEl = new Audio(); return _speakEl; }
+function primeSpeak() {
+  if (_speakPrimed || typeof Audio === "undefined") return;
+  const a = _getSpeakEl();
+  try {
+    a.muted = true;
+    // a beat of silence: the gesture-initiated play() is what unlocks the element
+    a.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+    const p = a.play();
+    if (p && p.then) p.then(() => { a.pause(); a.muted = false; }).catch(() => { a.muted = false; });
+    else a.muted = false;
+    _speakPrimed = true;
+  } catch (e) { a.muted = false; }
+}
 function speak(text, rate, onend) {
   stopSpeak();
   const file = _audioFileFor(text);
   if (file) {
-    const a = new Audio(file);
-    _speakAudio = a;
+    const a = _getSpeakEl();
     // clips are generated slightly slow already; don't slow them twice
-    a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+    const pr = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
     let done = false;
-    const fin = ok => { if (done) return; done = true; _speakAudio = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
+    const fin = ok => { if (done) return; done = true; a.onended = null; a.onerror = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
     a.onended = () => fin(true);
     a.onerror = () => fin(false);
-    a.play().then(() => { if (onend) setTimeout(() => fin(true), 15000); }).catch(() => fin(false));
+    a.src = file;
+    a.playbackRate = pr;
+    const p = a.play();
+    if (p && p.then) p.then(() => { a.playbackRate = pr; if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
     return;
   }
   _speakTts(text, rate, onend);
@@ -829,7 +850,7 @@ function _speakTts(text, rate, onend) {
 }
 function stopSpeak() {
   if (window.speechSynthesis) speechSynthesis.cancel();
-  if (_speakAudio) { try { _speakAudio.onended = null; _speakAudio.onerror = null; _speakAudio.pause(); } catch (e) {} _speakAudio = null; }
+  if (_speakEl) { try { _speakEl.onended = null; _speakEl.onerror = null; _speakEl.pause(); } catch (e) {} }
 }
 
 /* ---------- real recitation audio (everyayah.com, Alafasy) ----------

@@ -10,7 +10,7 @@
   <title>Audio Coach — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mros787r">
+  <link rel="stylesheet" href="css/style.css?v=mrosy79e">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -39,8 +39,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mros787r"></script>
-<script src="js/tracker.js?v=mros787r"></script>
+<script src="js/app.js?v=mrosy79e"></script>
+<script src="js/tracker.js?v=mrosy79e"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -53,6 +53,7 @@ const SENT_RECALL_MS = 5000;       // sentences get more time — he asked for i
 let words = [];        // [{key, v:{ar,en,tr}}]
 let sents = [];        // conjugated sentences from Sentence Practice
 let S = null;          // running session state
+let heardLog = [];     // this session's words, unique by key — the pause/stop recap
 
 /* ---- build a playlist customised to him: weakest & due first, but DIFFERENT
    every play. The old strict weakest-first sort replayed the identical list
@@ -162,6 +163,8 @@ function gradeWord(ok) {
   S.graded = true;
   gradeCard(S.current.key, ok ? "good" : "again");
   logEvent({ e: "alisten-grade", key: S.current.key, ok });
+  const h = heardLog.find(x => x.key === S.current.key);
+  if (h) h.g = ok ? "good" : "again";
   if (ok) {
     S.known++;
     setStatus("✓ marked known — moving on");
@@ -172,6 +175,46 @@ function gradeWord(ok) {
     if (n) n.textContent = "no problem — it'll come back around";
   }
   showGrade(false);
+}
+
+/* ---- pause/stop recap: mark what you had, live ----
+   Grades hit the same SRS immediately. ✓ also pulls the word out of THIS
+   session's remaining queue, so Resume genuinely moves on; a fresh Start
+   rebuilds the playlist from the updated boxes anyway. */
+function renderRecap() {
+  const el = document.getElementById("acRecap");
+  if (!el) return;
+  if (!heardLog.length) { el.innerHTML = ""; return; }
+  const rows = heardLog.slice().reverse().map(h => {
+    const i = heardLog.indexOf(h);
+    const b = (g, label, on, color) =>
+      `<button type="button" data-i="${i}" data-g="${g}" style="border:1px solid ${on ? color : "var(--border)"};background:${on ? color : "transparent"};color:${on ? "#fff" : "var(--muted)"};border-radius:10px;padding:6px 14px;cursor:pointer;font-weight:700">${label}</button>`;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px dashed var(--border)">
+      <span class="arabic" dir="rtl" style="font-size:22px;min-width:88px;text-align:right">${h.v.ar}</span>
+      <span style="flex:1;font-size:13.5px;color:var(--muted)">${h.v.en}</span>
+      ${b("good", "✓", h.g === "good", "var(--accent)")}
+      ${b("again", "✗", h.g === "again", "#b3402e")}
+    </div>`;
+  }).join("");
+  el.innerHTML = `<div class="card" style="margin-top:16px;text-align:left">
+    <h3 style="margin:0 0 4px;font-size:15px">This session — mark what you had</h3>
+    <p style="margin:0 0 6px;font-size:12.5px;color:var(--muted)">Counts immediately, like a Review. ✓ words leave the queue; ✗ words come back sooner.</p>
+    ${rows}</div>`;
+  el.querySelectorAll("button").forEach(btn => btn.onclick = () => {
+    const h = heardLog[+btn.dataset.i], g = btn.dataset.g;
+    if (!h || h.g === g) return;
+    h.g = g;
+    gradeCard(h.key, g);
+    logEvent({ e: "alisten-grade", key: h.key, ok: g === "good", src: "recap" });
+    autoSync();
+    if (g === "good" && S && words.length > 1) {
+      // live: pull it from the rest of this session's queue
+      words = words.filter(c => c.key !== h.key);
+      S.wIdx = words.length ? S.wIdx % words.length : 0;
+      if (S.known !== undefined) S.known++;
+    }
+    renderRecap();
+  });
 }
 
 function render(state) {
@@ -196,6 +239,7 @@ function render(state) {
     <div class="ac-meta"><span id="acCount"></span></div>
     <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
     Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.</p>
+    <div id="acRecap"></div>
   `;
   const yes = document.getElementById("acYes"), no = document.getElementById("acNo");
   if (yes) yes.onclick = () => gradeWord(true);
@@ -229,6 +273,8 @@ function renderControls(state) {
 
 /* ---------- the sequencer ---------- */
 async function start() {
+  primeSpeak();          // synchronously, inside the tap: unlocks mobile audio for the whole loop
+  heardLog = [];
   setStatus("Loading your words…");
   [words, sents] = await Promise.all([buildWords(), buildSentences()]);
   if (!words.length) { setStatus("No words yet — study a little first, then come back."); return; }
@@ -254,6 +300,10 @@ async function runLoop() {
     // bypasses the bottom reset and would silently truncate every later word
     S.skip = false;
     S.current = card; S.graded = false; showGrade(true);
+    // recap entry (unique per word; a returning word keeps its last verdict)
+    const prev = heardLog.find(h => h.key === card.key);
+    if (prev) { heardLog.splice(heardLog.indexOf(prev), 1); heardLog.push(prev); }
+    else heardLog.push({ key: card.key, v: card.v, g: null });
     setWord(card.v, false);
     setStatus("Listen…"); document.getElementById("acNote").textContent = "";
     await beat(() => speakP(card.v.ar, 0.7));
@@ -312,10 +362,12 @@ function pause() {
   if (!S) return;
   S.paused = true; if (S.cancel) S.cancel();
   stopAllAudio(); releaseWake();
-  render("paused"); setStatus("Paused — resume when you're ready"); setCounter();
+  render("paused"); setStatus("Paused — mark the words below, or just resume"); setCounter();
+  renderRecap();
 }
 function resume() {
   if (!S) return;
+  primeSpeak();   // make sure the shared audio element is unlocked (no-op once primed)
   S.paused = false; acquireWake();
   render("playing"); setCounter();
   if (S.onResume) { const r = S.onResume; S.onResume = null; r(); }
@@ -330,6 +382,7 @@ function stop() {
   render("ready");
   setStatus(t || k ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${k ? `, ${k} marked known` : ""}${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped.");
   S = null;
+  renderRecap();
 }
 window.addEventListener("pagehide", () => { if (S) { S.stop = true; stopAllAudio(); releaseWake(); } });
 
