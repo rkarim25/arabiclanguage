@@ -10,7 +10,7 @@
   <title>Audio Coach — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mroqxbjg">
+  <link rel="stylesheet" href="css/style.css?v=mror0ism">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -39,8 +39,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mroqxbjg"></script>
-<script src="js/tracker.js?v=mroqxbjg"></script>
+<script src="js/app.js?v=mror0ism"></script>
+<script src="js/tracker.js?v=mror0ism"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -54,14 +54,15 @@ let words = [];        // [{key, v:{ar,en,tr}}]
 let sents = [];        // conjugated sentences from Sentence Practice
 let S = null;          // running session state
 
-/* ---- build a playlist customised to him: weakest & due cards first ---- */
+/* ---- build a playlist customised to him: weakest & due first, but DIFFERENT
+   every play. The old strict weakest-first sort replayed the identical list
+   each session (listening doesn't regrade cards, so the "weakest" never
+   changed). Now: weighted shuffle by weakness/dueness + randomness, and words
+   already heard in the last 2 days sink to the back so replays move on. ---- */
 async function buildWords() {
   const srs = getSrs();
   const now = Date.now();
-  const keys = Object.keys(srs).sort((a, b) =>
-    (srs[a].box - srs[b].box) ||
-    ((srs[a].due <= now ? 0 : 1) - (srs[b].due <= now ? 0 : 1)));
-  let cards = await resolveCards(keys);
+  let cards = await resolveCards(Object.keys(srs));
   if (cards.length < 6) {
     // new user / empty deck: seed from everyday basics so there's always a lesson
     try {
@@ -71,7 +72,22 @@ async function buildWords() {
       cards = cards.concat(extra);
     } catch (e) { /* offline — go with what we have */ }
   }
-  return cards.filter(c => c.v && c.v.ar && c.v.en).slice(0, 40);
+  const heard = {};
+  (store.get("ats-log", []) || []).forEach(e => {
+    if (e.e === "alisten" && e.key && now - e.t < 2 * 864e5) heard[e.key] = (heard[e.key] || 0) + 1;
+  });
+  const score = c => {
+    const e = srs[c.key] || { box: 1, due: now };
+    return (5 - Math.min(e.box || 0, 5))            // weaker → higher
+      + (e.due <= now ? 2 : 0)                      // due → higher
+      + Math.random() * 4                           // variety every play
+      - Math.min(heard[c.key] || 0, 3) * 2.5;       // heard recently → move on
+  };
+  return cards.filter(c => c.v && c.v.ar && c.v.en)
+    .map(c => ({ c, s: score(c) }))
+    .sort((a, b) => b.s - a.s)
+    .map(x => x.c)
+    .slice(0, 40);
 }
 
 /* whole sentences from Sentence Practice — real conjugations he's drilling */
