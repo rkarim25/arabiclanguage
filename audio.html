@@ -10,7 +10,7 @@
   <title>Audio Coach — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mro96hl3">
+  <link rel="stylesheet" href="css/style.css?v=mroqkoeo">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -39,18 +39,19 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mro96hl3"></script>
-<script src="js/tracker.js?v=mro96hl3"></script>
+<script src="js/app.js?v=mroqkoeo"></script>
+<script src="js/tracker.js?v=mroqkoeo"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
 
 const content = document.getElementById("content");
-const WORDS_PER_REST = 6;          // a Qur'an listening rest every ~6 words
-const RECALL_MS = 2800;            // silence to recall the meaning by ear
-const FATIHA_AYAT = [1, 2, 3, 4, 5, 6, 7];
+const WORDS_PER_SENT = 6;          // a whole-sentence round every ~6 words
+const RECALL_MS = 2800;            // silence to recall a word's meaning by ear
+const SENT_RECALL_MS = 5000;       // sentences get more time — he asked for it
 
 let words = [];        // [{key, v:{ar,en,tr}}]
+let sents = [];        // conjugated sentences from Sentence Practice
 let S = null;          // running session state
 
 /* ---- build a playlist customised to him: weakest & due cards first ---- */
@@ -73,24 +74,35 @@ async function buildWords() {
   return cards.filter(c => c.v && c.v.ar && c.v.en).slice(0, 40);
 }
 
-/* ---------- cancelable audio primitives ---------- */
+/* whole sentences from Sentence Practice — real conjugations he's drilling */
+async function buildSentences() {
+  try {
+    const d = await fetch("data/sentences.json").then(r => r.json());
+    const out = [];
+    d.verbs.forEach(v => d.persons.forEach(p => d.tenses.forEach(t => {
+      const form = v.forms[p.key][t.key];
+      const enVerb = t.key === "past" ? v.past : v.base;
+      out.push({
+        ar: `${form} ${v.obj.ar}`,
+        en: t.key === "fut" ? `${p.en} will ${v.base} ${v.obj.en}` : `${p.en} ${enVerb} ${v.obj.en}`,
+        verb: v.base, person: p.key, tense: t.key,
+      });
+    })));
+    return out.sort(() => 0.5 - Math.random());
+  } catch (e) { return []; }
+}
+
+/* ---------- cancelable audio primitives ----------
+   speak() (app.js) plays the pre-generated NEURAL audio when a clip exists —
+   that's the fix for the mechanical voice — and falls back to the browser. */
 function speakP(text, rate) {
   return new Promise(resolve => {
     let done = false;
     const fin = () => { if (!done) { done = true; resolve(); } };
-    if (!window.speechSynthesis) { S.cancel = fin; return setTimeout(fin, 500); }
-    const isAr = /[؀-ۿ]/.test(text);
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = isAr ? "ar-SA" : "en-US";
-    if (isAr) { if (hasArabicVoice()) u.voice = _arVoice; }
-    else { const ev = bestEnglishVoice(); if (ev) { u.voice = ev; u.lang = ev.lang; } }
-    u.rate = rate || (isAr ? 0.72 : 1);
-    u.onend = fin; u.onerror = fin;
-    S.cancel = () => { try { speechSynthesis.cancel(); } catch (e) {} fin(); };
-    speechSynthesis.speak(u);
-    // mobile speechSynthesis sometimes never fires onend — bound the wait
-    setTimeout(fin, Math.max(1600, text.length * 155));
+    S.cancel = () => { stopSpeak(); fin(); };
+    speak(text, rate, fin);
+    // mobile audio/TTS sometimes never fires onend — bound the wait
+    setTimeout(fin, Math.max(3000, text.length * 200));
   });
 }
 function sleepP(ms) {
@@ -99,18 +111,7 @@ function sleepP(ms) {
     S.cancel = () => { clearTimeout(t); resolve(); };
   });
 }
-function reciteP(n, ayah) {
-  return new Promise(resolve => {
-    let done = false; const fin = () => { if (!done) { done = true; resolve(); } };
-    const a = new Audio(recitationUrl(n, ayah));
-    S.audio = a;
-    a.onended = fin; a.onerror = fin;
-    S.cancel = () => { try { a.pause(); } catch (e) {} fin(); };
-    a.play().catch(fin);
-    setTimeout(fin, 20000); // never let a stalled network load hang the loop
-  });
-}
-function stopAllAudio() { try { speechSynthesis.cancel(); } catch (e) {} if (S && S.audio) { try { S.audio.pause(); } catch (e) {} S.audio = null; } }
+function stopAllAudio() { stopSpeak(); if (S && S.audio) { try { S.audio.pause(); } catch (e) {} S.audio = null; } }
 
 /* ---------- wake lock: keep the screen awake on the move ---------- */
 let wakeLock = null;
@@ -128,7 +129,7 @@ function setWord(v, showEn) {
 }
 function setCounter() {
   const c = document.getElementById("acCount");
-  if (c) c.textContent = `${S.taught} word${S.taught === 1 ? "" : "s"} heard${S.rests ? ` · ${S.rests} Qur'an rest${S.rests === 1 ? "" : "s"}` : ""}`;
+  if (c) c.textContent = `${S.taught} word${S.taught === 1 ? "" : "s"} heard${S.sents ? ` · ${S.sents} sentence${S.sents === 1 ? "" : "s"} rebuilt` : ""}`;
 }
 
 function render(state) {
@@ -137,7 +138,7 @@ function render(state) {
       <span>🎧 Audio Coach</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">المُدَرِّبُ الصَّوتِيّ</span>
     </h1>
-    <p class="sub">Hands-free practice for the move. Listen to a word, <b>recall its meaning in the gap</b>, then hear the answer — real active recall, no typing, no tapping. A short Qur'an recitation every few words. It keeps going until you stop.</p>
+    <p class="sub">Hands-free practice for the move. Listen to a word, <b>recall its meaning in the gap</b>, then hear the answer — real active recall, no typing, no tapping. Every few words: a whole <b>sentence</b> to understand, with extra thinking time. It keeps going until you stop.</p>
     <div class="ac-stage">
       <div class="ac-status" id="acStatus">${state === "ready" ? "Ready when you are" : ""}</div>
       <div class="ac-ar" id="acAr"></div>
@@ -147,7 +148,7 @@ function render(state) {
     </div>
     <div class="ac-controls" id="acControls"></div>
     <div class="ac-meta"><span id="acCount"></span></div>
-    <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first. Best with earphones. ${window.speechSynthesis ? "" : "<br><span style='color:var(--amber)'>Your browser has no speech voice — the Qur'an rests will still play.</span>"}</p>
+    <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.</p>
   `;
   renderControls(state);
 }
@@ -179,9 +180,9 @@ function renderControls(state) {
 /* ---------- the sequencer ---------- */
 async function start() {
   setStatus("Loading your words…");
-  words = await buildWords();
+  [words, sents] = await Promise.all([buildWords(), buildSentences()]);
   if (!words.length) { setStatus("No words yet — study a little first, then come back."); return; }
-  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, taught: 0, rests: 0, ayahPos: 0, cancel: null, audio: null, onResume: null };
+  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, cancel: null, audio: null, onResume: null };
   logEvent({ e: "alisten-start", pool: words.length });
   acquireWake();
   render("playing");
@@ -189,6 +190,7 @@ async function start() {
 }
 
 function nextWord() { const w = words[S.wIdx % words.length]; S.wIdx++; return w; }
+function nextSent() { const x = sents[S.sIdx % sents.length]; S.sIdx++; return x; }
 
 async function runLoop() {
   // opening line, once
@@ -213,17 +215,27 @@ async function runLoop() {
     if (guard()) continue;
     await beat(() => sleepP(500));
 
-    // a Qur'an recitation rest every few words
-    if (S.taught && S.taught % WORDS_PER_REST === 0 && !S.skip) {
+    // a whole-sentence round every few words — real conjugations, extra time
+    if (S.taught && S.taught % WORDS_PER_SENT === 0 && !S.skip && sents.length) {
       if (S.stop) break;
-      setWord(null, false);
-      setStatus("A moment with the Qur'an — just listen");
-      document.getElementById("acAr").textContent = "﴾ الفاتحة ﴿";
-      await beat(() => speakP("Rest. Listen to the Qur'an.", 1));
+      const sent = nextSent();
+      setWord({ ar: sent.ar, en: sent.en, tr: "" }, false);
+      setStatus("Now a whole sentence — listen");
+      await beat(() => speakP(sent.ar, 0.7));
       if (!guard()) {
-        const ayah = FATIHA_AYAT[S.ayahPos % FATIHA_AYAT.length]; S.ayahPos++;
-        await beat(() => reciteP(1, ayah));
-        if (!S.paused && !S.skip) { S.rests++; setCounter(); logEvent({ e: "rlisten", s: "fatiha", ayah, src: "audio" }); }
+        setStatus("…take your time. Who is doing it, and when?");
+        document.getElementById("acNote").textContent = "whole meaning — person and tense too";
+        await beat(() => sleepP(SENT_RECALL_MS));
+        if (!guard()) {
+          setStatus("It means:"); setWord({ ar: sent.ar, en: sent.en, tr: "" }, true);
+          document.getElementById("acNote").textContent = "";
+          await beat(() => speakP(sent.en, 1));
+          if (!guard()) await beat(() => speakP(sent.ar, 0.7));
+          if (!S.paused && !S.skip) {
+            S.sents++; setCounter();
+            logEvent({ e: "alisten-sent", verb: sent.verb, person: sent.person, tense: sent.tense });
+          }
+        }
       }
       await beat(() => sleepP(400));
     }
@@ -258,10 +270,10 @@ function stop() {
   if (!S) return;
   S.stop = true; S.playing = false; if (S.cancel) S.cancel();
   stopAllAudio(); releaseWake();
-  logEvent({ e: "alisten-done", taught: S.taught, rests: S.rests }); autoSync();
-  const t = S.taught, r = S.rests;
+  logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents }); autoSync();
+  const t = S.taught, r = S.sents;
   render("ready");
-  setStatus(t ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} Qur'an rest${r === 1 ? "" : "s"}` : ""}. Well done. 🎧` : "Stopped.");
+  setStatus(t ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped.");
   S = null;
 }
 window.addEventListener("pagehide", () => { if (S) { S.stop = true; stopAllAudio(); releaseWake(); } });

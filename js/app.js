@@ -778,18 +778,59 @@ if (window.speechSynthesis) {
 }
 function hasArabicVoice() { _loadVoices(); return !!_arVoice; }
 function bestEnglishVoice() { _loadVoices(); return _enVoice; }
+
+/* Pre-generated neural audio (audio/ar|en/<hash>.mp3, built by scripts/gen-audio.py)
+   beats any browser voice. speak() plays the recording when one exists for the
+   text and quietly falls back to speechSynthesis when not (or offline+uncached). */
+let _audioMan = null, _audioManLoading = null;
+function loadAudioManifest() {
+  if (_audioMan || _audioManLoading) return;
+  _audioManLoading = fetch("data/audio-manifest.json").then(r => r.json())
+    .then(d => (_audioMan = d)).catch(() => (_audioMan = { ar: {}, en: {} }));
+}
+loadAudioManifest();
+function _audioFileFor(text) {
+  if (!_audioMan) return null;
+  const isAr = /[؀-ۿ]/.test(text);
+  const key = isAr ? normalizeAr(text) : String(text).trim().toLowerCase().replace(/\s+/g, " ");
+  const name = (_audioMan[isAr ? "ar" : "en"] || {})[key];
+  return name ? `audio/${isAr ? "ar" : "en"}/${name}.mp3` : null;
+}
+let _speakAudio = null;
 function speak(text, rate, onend) {
+  stopSpeak();
+  const file = _audioFileFor(text);
+  if (file) {
+    const a = new Audio(file);
+    _speakAudio = a;
+    // clips are generated slightly slow already; don't slow them twice
+    a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+    let done = false;
+    const fin = ok => { if (done) return; done = true; _speakAudio = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
+    a.onended = () => fin(true);
+    a.onerror = () => fin(false);
+    a.play().then(() => { if (onend) setTimeout(() => fin(true), 15000); }).catch(() => fin(false));
+    return;
+  }
+  _speakTts(text, rate, onend);
+}
+function _speakTts(text, rate, onend) {
   if (!window.speechSynthesis) { if (onend) onend(); return; }
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = "ar-SA";
   _loadVoices();
-  if (_arVoice) u.voice = _arVoice;
+  const isAr = /[؀-ۿ]/.test(text);
+  u.lang = isAr ? "ar-SA" : "en-US";
+  const v = isAr ? _arVoice : _enVoice;
+  if (v) { u.voice = v; if (!isAr) u.lang = v.lang; }
   u.rate = rate || 0.85;
   if (onend) u.onend = onend;
   speechSynthesis.speak(u);
 }
-function stopSpeak() { if (window.speechSynthesis) speechSynthesis.cancel(); }
+function stopSpeak() {
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  if (_speakAudio) { try { _speakAudio.onended = null; _speakAudio.onerror = null; _speakAudio.pause(); } catch (e) {} _speakAudio = null; }
+}
 
 /* ---------- real recitation audio (everyayah.com, Alafasy) ----------
    TTS is for study words; recitation is the real thing — the goal is to
