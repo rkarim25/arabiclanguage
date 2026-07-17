@@ -10,7 +10,7 @@
   <title>Story — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mro0nows">
+  <link rel="stylesheet" href="css/style.css?v=mro96hl3">
 </head>
 <body>
 <main>
@@ -23,8 +23,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mro0nows"></script>
-<script src="js/tracker.js?v=mro0nows"></script>
+<script src="js/app.js?v=mro96hl3"></script>
+<script src="js/tracker.js?v=mro96hl3"></script>
 <script>
 renderNav("stories");
 
@@ -553,7 +553,7 @@ function renderWrite() {
   body.innerHTML = `
     <div class="card">
       <h2>Write — dictation & translation</h2>
-      <p class="sub">Vowel marks are optional in your answers — spelling is what's checked. Use the phonetic keyboard if you can't type Arabic.</p>
+      <p class="sub">Type in English letters — they turn into Arabic as you type (tap a suggestion to fix a word). Vowel marks are optional, and an answer that's right by sound counts.</p>
       <div id="writeArea"></div>
       <div class="step-done-banner" id="doneBanner">✓ Writing step complete — story finished! 🎉</div>
     </div>
@@ -562,8 +562,19 @@ function renderWrite() {
   const area = document.getElementById("writeArea");
   const total = story.dictation.length + story.translate.length;
   const attempted = new Set();
+  const lexicon = story.sentences.flatMap(s => s.ar.split(/\s+/)).filter(Boolean);
 
   function checkAllDone() { if (attempted.size >= total) markDone("write"); }
+
+  // per-word feedback: green = letter-perfect, amber = right by sound,
+  // masked = not caught (mask keeps the dictation answer unspoiled)
+  function wordsHtml(m, maskMisses) {
+    return m.words.map((w, i) =>
+      m.hits[i] === "miss"
+        ? (maskMisses ? '<span style="opacity:.45">···</span>' : `<span style="opacity:.55">${w}</span>`)
+        : `<span style="color:${m.hits[i] === "hit" ? "var(--good,#16a34a)" : "var(--warn,#d97706)"}">${w}</span>`
+    ).join(" ");
+  }
 
   story.dictation.forEach((si, di) => {
     const sent = story.sentences[si];
@@ -589,10 +600,13 @@ function renderWrite() {
     const result = ex.querySelector(".check-result");
     ex.querySelector(".check").onclick = () => {
       attempted.add("d" + di);
-      const ok = normalizeAr(input.value) === normalizeAr(sent.ar);
-      logEvent({ e: "dict", story: storyId, i: si, typed: input.value, ok });
-      result.className = "check-result " + (ok ? "ok" : "no");
-      result.innerHTML = ok ? "✓ Correct! أحسنت" : `✗ Not quite — listen again, or reveal the answer.`;
+      const m = writeMatchAr(input.value, sent.ar);
+      logEvent({ e: "dict", story: storyId, i: si, typed: input.value, ok: m.ok, phon: m.phon || undefined, words: m.right + "/" + m.total });
+      result.className = "check-result " + (m.ok ? "ok" : "no");
+      if (m.ok && !m.phon) result.innerHTML = "✓ Correct! أحسنت";
+      else if (m.ok) result.innerHTML = `✓ Right by ear! Exact spelling (amber = letters that sound alike):<span class="model">${wordsHtml(m, false)}</span>`;
+      else if (m.right) result.innerHTML = `${m.right} of ${m.total} words right — listen again for the missing ones.<span class="model">${wordsHtml(m, true)}</span>`;
+      else result.innerHTML = `✗ Not quite — listen again, or reveal the answer.`;
       checkAllDone();
     };
     ex.querySelector(".reveal").onclick = () => {
@@ -602,7 +616,7 @@ function renderWrite() {
       result.innerHTML = `<span class="model">${sent.ar}</span>${sent.en}`;
       checkAllDone();
     };
-    attachPhoneticInput(ex, input);
+    attachInlineTranslit(input, { lexicon });
     area.appendChild(ex);
   });
 
@@ -623,12 +637,12 @@ function renderWrite() {
     const result = ex.querySelector(".check-result");
     ex.querySelector(".check").onclick = () => {
       attempted.add("t" + ti);
-      const ok = normalizeAr(input.value) === normalizeAr(t.ar);
-      logEvent({ e: "trans", story: storyId, i: ti, typed: input.value, ok });
-      result.className = "check-result " + (ok ? "ok" : "no");
-      result.innerHTML = ok
-        ? "✓ Matches the model answer! أحسنت"
-        : `Different from the model — that can still be fine in Arabic. Compare:<span class="model">${t.ar}</span>`;
+      const m = writeMatchAr(input.value, t.ar);
+      logEvent({ e: "trans", story: storyId, i: ti, typed: input.value, ok: m.ok, phon: m.phon || undefined, words: m.right + "/" + m.total });
+      result.className = "check-result " + (m.ok ? "ok" : "no");
+      if (m.ok && !m.phon) result.innerHTML = "✓ Matches the model answer! أحسنت";
+      else if (m.ok) result.innerHTML = `✓ Right by sound! Exact spelling (amber = letters that sound alike):<span class="model">${wordsHtml(m, false)}</span>`;
+      else result.innerHTML = `${m.right ? m.right + " of " + m.total + " words match. " : ""}Different from the model — that can still be fine in Arabic. Compare:<span class="model">${wordsHtml(m, false)}</span>`;
       checkAllDone();
     };
     ex.querySelector(".reveal").onclick = () => {
@@ -638,7 +652,7 @@ function renderWrite() {
       result.innerHTML = `<span class="model">${t.ar}</span>`;
       checkAllDone();
     };
-    attachPhoneticInput(ex, input);
+    attachInlineTranslit(input, { lexicon });
     area.appendChild(ex);
   });
 }

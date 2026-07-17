@@ -264,6 +264,72 @@ function sentenceMatchAr(typed, targetAr, verbForm) {
   return ok ? { ok: true, rom, fuzzy: true } : { ok: false, rom };
 }
 
+/* Story Write (dictation & translation): whole-sentence check with per-word
+   feedback. Romanized typing can't distinguish the emphatic letters, so pairs
+   that share one casual Latin letter are folded for grading (ص/س, ط/ت, ظ/ذ/ز,
+   ض/د, ح/ه, ع/ا) — but a fold-only match is reported as "phon", not perfect,
+   so the exact spelling can be shown and stays honest. Returns
+   { ok, phon, hits, words, right, total }: hits[i] ∈ 'hit'|'phon'|'miss' per
+   TARGET word (words[i]), ok = every word placed and none extra. */
+function writeMatchAr(typed, targetAr) {
+  const words = String(targetAr).split(/\s+/).filter(w => normalizeAr(w));
+  const empty = { ok: false, phon: false, hits: words.map(() => "miss"), words, right: 0, total: words.length };
+  if (!typed || !typed.trim()) return empty;
+  const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
+  const strict = s => normalizeAr(String(s));
+  const fold = s => strict(s)
+    .replace(/[ءؤئ]/g, "")
+    .replace(/ة/g, "ه").replace(/ح/g, "ه")
+    .replace(/ص/g, "س").replace(/ط/g, "ت")
+    .replace(/[ظذ]/g, "ز").replace(/ض/g, "د")
+    .replace(/ع/g, "ا");
+  const stripAl = w => { const s = w.replace(/^ال/, ""); return s.length >= 2 ? s : w; };
+  // 2 = letter-perfect, 1 = right by sound (fold / dropped long vowel), 0 = miss
+  const tier = (typedW, targetW) => {
+    const st = strict(typedW), sc = strict(targetW);
+    if (st === sc) return 2;
+    // ة is the feminine marker he must actually produce — والد≠والدة, ابن≠ابنة.
+    // Checked on the raw typed word: romanized "-a" arrives as a trailing fatha,
+    // which counts (he said the a) and is graded as the ة it spells; a bare
+    // consonant ending does not count.
+    if (/ة$/.test(sc)) {
+      if (!/[ةهَاۃ]$/.test(String(typedW))) return 0;
+      if (!/[ةه]$/.test(st)) typedW = String(typedW) + "ة";
+    }
+    const a = fold(typedW), b = fold(targetW);
+    if (!a || !b) return 0;
+    const as = stripAl(a), bs = stripAl(b);
+    for (const [x, y] of [[a, b], [as, bs], [a, bs], [as, b]]) {
+      if (x === y) return 1;
+      // an untyped trailing long vowel ("fi" → ف vs في) is romanization, not a different word
+      const [sh, lo] = x.length < y.length ? [x, y] : [y, x];
+      if (lo.length - sh.length === 1 && lo.startsWith(sh) && /[اويى]$/.test(lo)) return 1;
+      const len = Math.max(x.length, y.length);
+      if (len >= 4 && editDist(x, y, 2) <= (len >= 6 ? 2 : 1)) return 1;
+    }
+    return 0;
+  };
+  const T = conv.split(/\s+/).filter(w => strict(w));
+  const n = T.length, m = words.length;
+  // order-preserving alignment maximizing match quality (sentences are short)
+  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) {
+    const tr = tier(T[i], words[j]);
+    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1], tr ? tr + dp[i + 1][j + 1] : 0);
+  }
+  const hits = new Array(m).fill("miss");
+  let i = 0, j = 0;
+  while (i < n && j < m) {
+    const tr = tier(T[i], words[j]);
+    if (tr && dp[i][j] === tr + dp[i + 1][j + 1]) { hits[j] = tr === 2 ? "hit" : "phon"; i++; j++; }
+    else if (dp[i][j] === dp[i + 1][j]) i++;
+    else j++;
+  }
+  const right = hits.filter(h => h !== "miss").length;
+  const phon = hits.some(h => h === "phon");
+  return { ok: right === m && n === m, phon, hits, words, right, total: m };
+}
+
 /* ears mode: he typed the SOUND of the word (its transliteration) instead of its meaning.
    Casual typing allowed: "qal" ~ qāla, "illa" ~ illā, "3ala" ~ ʿalā. */
 function trMatch(typed, tr, ar) {
