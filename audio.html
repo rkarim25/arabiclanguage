@@ -10,7 +10,7 @@
   <title>Audio Coach — Arabic Through Stories</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mror0ism">
+  <link rel="stylesheet" href="css/style.css?v=mros787r">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -39,8 +39,8 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mror0ism"></script>
-<script src="js/tracker.js?v=mror0ism"></script>
+<script src="js/app.js?v=mros787r"></script>
+<script src="js/tracker.js?v=mros787r"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -148,6 +148,32 @@ function setCounter() {
   if (c) c.textContent = `${S.taught} word${S.taught === 1 ? "" : "s"} heard${S.sents ? ` · ${S.sents} sentence${S.sents === 1 ? "" : "s"} rebuilt` : ""}`;
 }
 
+/* ---- self-grading: his word, his call — feeds the same SRS as Review ----
+   ✓ = gradeCard "good": the box rises, the due date moves out, and the
+   playlist's weakness score drops — the word stops coming back until due.
+   ✗ = gradeCard "again" AND the word returns a couple of beats later in
+   this same session. No tap = pure listening, ungraded (unchanged). */
+function showGrade(on) {
+  const g = document.getElementById("acGrade");
+  if (g) g.style.display = on ? "flex" : "none";
+}
+function gradeWord(ok) {
+  if (!S || !S.current || S.graded) return;
+  S.graded = true;
+  gradeCard(S.current.key, ok ? "good" : "again");
+  logEvent({ e: "alisten-grade", key: S.current.key, ok });
+  if (ok) {
+    S.known++;
+    setStatus("✓ marked known — moving on");
+    S.skip = true; if (S.cancel) S.cancel(); stopAllAudio();
+  } else {
+    words.splice(Math.min(S.wIdx + 2, words.length), 0, S.current);
+    const n = document.getElementById("acNote");
+    if (n) n.textContent = "no problem — it'll come back around";
+  }
+  showGrade(false);
+}
+
 function render(state) {
   content.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -162,10 +188,18 @@ function render(state) {
       <div class="ac-en hidden" id="acEn"></div>
       <div class="ac-note" id="acNote"></div>
     </div>
+    <div class="ac-controls" id="acGrade" style="display:none">
+      <button class="ac-btn ghost" id="acNo" style="flex:1;max-width:220px">✗ didn't have it</button>
+      <button class="ac-btn primary" id="acYes" style="flex:1;max-width:220px">✓ I had it</button>
+    </div>
     <div class="ac-controls" id="acControls"></div>
     <div class="ac-meta"><span id="acCount"></span></div>
-    <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.</p>
+    <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
+    Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.</p>
   `;
+  const yes = document.getElementById("acYes"), no = document.getElementById("acNo");
+  if (yes) yes.onclick = () => gradeWord(true);
+  if (no) no.onclick = () => gradeWord(false);
   renderControls(state);
 }
 
@@ -198,7 +232,7 @@ async function start() {
   setStatus("Loading your words…");
   [words, sents] = await Promise.all([buildWords(), buildSentences()]);
   if (!words.length) { setStatus("No words yet — study a little first, then come back."); return; }
-  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, cancel: null, audio: null, onResume: null };
+  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, known: 0, current: null, graded: true, cancel: null, audio: null, onResume: null };
   logEvent({ e: "alisten-start", pool: words.length });
   acquireWake();
   render("playing");
@@ -216,6 +250,10 @@ async function runLoop() {
     // a word beat
     const card = nextWord();
     if (S.stop) break;
+    // reset here, not only at loop bottom: a skip/✓ lands via `continue`, which
+    // bypasses the bottom reset and would silently truncate every later word
+    S.skip = false;
+    S.current = card; S.graded = false; showGrade(true);
     setWord(card.v, false);
     setStatus("Listen…"); document.getElementById("acNote").textContent = "";
     await beat(() => speakP(card.v.ar, 0.7));
@@ -234,6 +272,7 @@ async function runLoop() {
     // a whole-sentence round every few words — real conjugations, extra time
     if (S.taught && S.taught % WORDS_PER_SENT === 0 && !S.skip && sents.length) {
       if (S.stop) break;
+      S.current = null; showGrade(false);   // sentences aren't SRS cards — no grading
       const sent = nextSent();
       setWord({ ar: sent.ar, en: sent.en, tr: "" }, false);
       setStatus("Now a whole sentence — listen");
@@ -286,10 +325,10 @@ function stop() {
   if (!S) return;
   S.stop = true; S.playing = false; if (S.cancel) S.cancel();
   stopAllAudio(); releaseWake();
-  logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents }); autoSync();
-  const t = S.taught, r = S.sents;
+  logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known }); autoSync();
+  const t = S.taught, r = S.sents, k = S.known;
   render("ready");
-  setStatus(t ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped.");
+  setStatus(t || k ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${k ? `, ${k} marked known` : ""}${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped.");
   S = null;
 }
 window.addEventListener("pagehide", () => { if (S) { S.stop = true; stopAllAudio(); releaseWake(); } });
