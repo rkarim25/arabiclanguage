@@ -140,7 +140,7 @@ const BUCKETS = [
   { id: "know", label: "✓", name: "know — learnt (30d check)", days: 30, box: 5 },
   { id: "repeat", label: "↻", name: "repeat — see it again soon", days: 0, box: 0 },
   { id: "later", label: "⏳", name: "repeat much later (7d)", days: 7, box: 3 },
-  { id: "never", label: "✗", name: "don't repeat", days: null, box: 5 },
+  { id: "never", label: "🚫", name: "retire — never show this word again", days: null, box: 5 },
 ];
 function setBucket(key, b) {
   const srs = getSrs();
@@ -1238,6 +1238,10 @@ function _canon(w) { return _SYN[w] !== undefined ? "~" + _SYN[w] : w; }
 
 function fuzzyEn(typed, gloss) {
   if (!typed.trim()) return false;
+  // he may offer alternatives himself ("It was/ he was" for كان): every part
+  // he offers must be right — a wrong hedge ("day/people") still fails
+  const alts = typed.split(/[;,\/]|\bor\b/).map(s => s.trim()).filter(Boolean);
+  if (alts.length > 1) return alts.every(a => fuzzyEn(a, gloss));
   const raw = s => s.toLowerCase().replace(/[!.?'’]/g, "").trim();
   const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w)).map(_canon);
   const t = norm(typed), g = norm(gloss);
@@ -1358,7 +1362,9 @@ function mountMnem(tr, btnHost, ar, key) {
   };
 }
 
-/* ---------- shared bucket bar (✓ know · ↻ soon · ⏳ later · ✗ never) ---------- */
+/* ---------- shared bucket bar (✓ know · ↻ soon · ⏳ later · 🚫 retire) ----------
+   🚫 must never look like the ✗ used for "got it wrong" on grading surfaces —
+   a wrong-answer ✗ tap here would silently retire the word forever. */
 function mountBucketBar(slot, key, onSet) {
   if (!slot) return;
   const bar = document.createElement("div");
