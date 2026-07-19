@@ -8,9 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=mrr3vg64">
+  <link rel="stylesheet" href="css/fonts.css?v=mrrej3nh">
+  <link rel="stylesheet" href="css/style.css?v=mrrej3nh">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -57,8 +56,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrr3vg64"></script>
-<script src="js/tracker.js?v=mrr3vg64"></script>
+<script src="js/app.js?v=mrrej3nh"></script>
+<script src="js/tracker.js?v=mrrej3nh"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -711,10 +710,11 @@ function renderGroupStudy(obj, prefix) {
       <h2>${prefix === "fam-" ? "The family" : "The cluster"} — say each one aloud</h2>
       <div class="vocab-table-wrap">
         <table class="vocab-table">
-          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>know?</th></tr></thead>
           <tbody id="vtBody"></tbody>
         </table>
       </div>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ know — drops out of Learn (30d check) · ↻ repeat soon · ⏳ much later · ✗ don't repeat</p>
     </div>
     ${obj.quran ? `
     <div class="card">
@@ -728,7 +728,7 @@ function renderGroupStudy(obj, prefix) {
   `;
   const tbody = document.getElementById("vtBody");
   let anyHear = false;
-  obj.members.forEach(m => {
+  obj.members.forEach((m, mi) => {
     const tr = document.createElement("tr");
     const mn = mnemFor(m.ar);
     tr.innerHTML = `
@@ -736,13 +736,16 @@ function renderGroupStudy(obj, prefix) {
       <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13.5px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
       <td><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
       <td class="tr-cell">${m.tr}</td>
+      <td><div class="bucket-slot"></div></td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
+    // his verdict feeds the same SRS as Learn/Review: ✓ = out of the new pool
+    mountBucketBar(tr.querySelector(".bucket-slot"), `${prefix}${obj.id}:${mi}`);
     tbody.appendChild(tr);
     if (mn) {
       const mrow = document.createElement("tr");
       mrow.style.display = "none";
-      const cell = document.createElement("td"); cell.colSpan = 4;
+      const cell = document.createElement("td"); cell.colSpan = 5;
       const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
       cell.appendChild(box); mrow.appendChild(cell); tbody.appendChild(mrow);
       tr.querySelector(".mnem-btn").onclick = () => { mrow.style.display = mrow.style.display === "none" ? "table-row" : "none"; if (mrow.style.display !== "none") logEvent({ e: "mnem", ar: stripTashkeel(m.ar) }); };

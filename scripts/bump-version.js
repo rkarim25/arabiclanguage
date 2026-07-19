@@ -7,7 +7,7 @@ const path = require("path");
 
 const v = Date.now().toString(36);
 const root = path.join(__dirname, "..");
-const assets = ["js/app.js", "js/tracker.js", "css/style.css"];
+const assets = ["js/app.js", "js/tracker.js", "css/style.css", "css/fonts.css"];
 
 let changed = 0;
 fs.readdirSync(root).filter(f => f.endsWith(".html")).forEach(f => {
