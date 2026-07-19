@@ -629,7 +629,7 @@ function suggestNext() {
   //     no typing/tapping. Straight at his #1 goal (understand as recited) with the lowest friction.
   out.push({
     icon: "🎧", title: "Audio Coach — hands-free",
-    desc: "Listen, recall the meaning in the gap, hear the answer. Your weak words + Qur'an rests. Perfect on the move.",
+    desc: "Listen, recall the meaning in the gap, hear the answer. Your weak words + whole sentences. Perfect on the move.",
     href: "audio.html",
   });
   // 1. Vocab Learn — pick your own lane when you want more control
@@ -648,13 +648,6 @@ function suggestNext() {
   // 3. Contextual listening — only when your learning has unlocked something worth hearing
   const lp = listenSuggestion();
   if (lp) out.push({ icon: "🎧", title: lp.title, desc: lp.desc, href: lp.url });
-  // 3b. Listen queue — real recitation of studied surahs; costs zero study minutes
-  const studiedSurahs = QURAN_SURAHS.filter(s => { const d = stepsDone("q-" + s.id); return d.study || d.test; });
-  if (studiedSurahs.length) out.push({
-    icon: "🔁", title: `Listen queue — ${studiedSurahs.length} surah${studiedSurahs.length > 1 ? "s" : ""} you've studied`,
-    desc: "Real recitation of text you already understand — perfect while walking or commuting",
-    href: "quran.html?listen=1",
-  });
   // next incomplete story/step
   for (const s of STORY_LIST) {
     if (s.locked) continue;
@@ -731,6 +724,15 @@ function suggestNext() {
       href: `story.html?id=${s.id}&step=read`,
     });
   }
+  // Listen queue LAST (2026-07-19, his call): he recites the short surahs daily
+  // in salah, so replaying them is low-value — study minutes go to words,
+  // sentences and new material first. Only surfaces when little else remains.
+  const studiedSurahs = QURAN_SURAHS.filter(s => { const d = stepsDone("q-" + s.id); return d.study || d.test; });
+  if (studiedSurahs.length) out.push({
+    icon: "🔁", title: `Listen queue — ${studiedSurahs.length} surah${studiedSurahs.length > 1 ? "s" : ""} you've studied`,
+    desc: "Real recitation of text you already understand — background listening, zero study minutes",
+    href: "quran.html?listen=1",
+  });
   return out.slice(0, 5);
 }
 
