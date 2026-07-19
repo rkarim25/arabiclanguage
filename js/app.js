@@ -119,11 +119,17 @@ function getSrs() { return store.get("ats-srs", {}); }
 function gradeCard(key, grade) {
   const srs = getSrs();
   const c = srs[key] || { box: 0, due: 0 };
-  if (c.b === "never") return; // "don't repeat" is explicit — a batch check must not resurrect the card
+  // Retired ("never") cards: a correct answer leaves them retired — that's the
+  // point of retiring. But an actual MISS he answered and got wrong is proof the
+  // burial was a mistake (✗ once meant retire on the bucket bar), so it un-retires
+  // the card. Every grade call here is a real user answer; batch checks skip
+  // bucketed rows before reaching this function.
+  if (c.b === "never" && grade !== "again") return;
   delete c.b; // an actual test result replaces any explicit bucket mark
   if (grade === "again") { c.box = 0; c.due = Date.now() + 10 * 60 * 1000; }
   else if (grade === "good") { c.box = Math.min(c.box + 1, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
   else { c.box = Math.min(c.box + 2, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
+  c.u = Date.now(); // write time — sync merge resolves retire/un-retire by latest intent
   srs[key] = c;
   store.set("ats-srs", srs);
 }
@@ -147,7 +153,7 @@ function setBucket(key, b) {
   const def = BUCKETS.find(x => x.id === b);
   if (!def) return;
   const due = b === "never" ? NEVER_DUE : (b === "repeat" ? Date.now() + 10 * 60 * 1000 : Date.now() + def.days * DAY);
-  srs[key] = { box: def.box, due, b };
+  srs[key] = { box: def.box, due, b, u: Date.now() };
   store.set("ats-srs", srs);
 }
 /* categories (not mutually exclusive): every word is Quran and/or MSA */

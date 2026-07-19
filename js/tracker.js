@@ -80,8 +80,18 @@ function _mergeRemoteState(remote) {
   Object.entries(remote.srs || {}).forEach(([k, r]) => {
     const l = srs[k];
     if (!l) { srs[k] = r; return; }
-    if (r.b === "never" && l.b !== "never") { srs[k] = r; return; }
-    if (l.b) return; // explicit local mark (know/repeat/later/never) = latest intent on this device
+    // Retire ("never") on either side resolves by LATEST intent, not "never always
+    // wins" — the old rule made un-retiring impossible on a synced device: the ↻
+    // un-retire was overwritten by the cloud's stale "never" on the very next merge,
+    // then pushed back up. Every srs write now stamps u (write time); entries from
+    // before the stamp count as oldest, so between two unstamped sides the old
+    // never-wins rule still applies.
+    if (r.b === "never" || l.b === "never") {
+      if ((r.u || 0) > (l.u || 0)) srs[k] = r;
+      else if (!(r.u || l.u) && r.b === "never" && l.b !== "never") srs[k] = r;
+      return;
+    }
+    if (l.b) return; // explicit local mark (know/repeat/later) = latest intent on this device
     if (r.box > l.box || (r.box === l.box && r.due > l.due)) srs[k] = r;
   });
   store.set("ats-srs", srs);
