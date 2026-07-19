@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mrrema6k">
-  <link rel="stylesheet" href="css/style.css?v=mrrema6k">
+  <link rel="stylesheet" href="css/fonts.css?v=mrrf4gi4">
+  <link rel="stylesheet" href="css/style.css?v=mrrf4gi4">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -56,13 +56,13 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mrrema6k"></script>
-<script src="js/tracker.js?v=mrrema6k"></script>
+<script src="js/app.js?v=mrrf4gi4"></script>
+<script src="js/tracker.js?v=mrrf4gi4"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
 const content = document.getElementById("content");
-let FAMS = null, CORE = null, EV = null, VERSES = null;
+let FAMS = null, CORE = null, EV = null, VERSES = null, PH = null;
 let labView = "learn";
 
 /* Mnemonics (💡) + mountMnem/mountBucketBar are shared — see js/app.js. */
@@ -72,16 +72,20 @@ Promise.all([
   fetch("data/quran-core.json").then(r => r.json()),
   fetch("data/everyday.json").then(r => r.json()),
   fetch("data/verses.json").then(r => r.json()),
-]).then(([f, c, e, v]) => {
+  fetch("data/phrases.json").then(r => r.json()).catch(() => ({ groups: [] })),
+]).then(([f, c, e, v, p]) => {
   FAMS = f.families;
   CORE = c.words;
   EV = e.groups;
   VERSES = v.surahs;
+  PH = p.groups;
   const params = new URLSearchParams(location.search);
   const fam = FAMS.find(x => x.id === params.get("fam"));
   const ev = EV.find(x => x.id === params.get("ev"));
+  const ph = PH.find(x => x.id === params.get("ph"));
   if (fam) renderGroup(fam, params.get("mode") || "study", "fam-");
   else if (ev) renderGroup(ev, params.get("mode") || "study", "ev-");
+  else if (ph) renderGroup(ph, params.get("mode") || "study", "ph-");
   else if (params.get("today")) startToday(0);
   else renderList(params.get("view") || "learn");
 });
@@ -141,10 +145,13 @@ function finishToday() {
 function groupDone(prefix, id) { return !!stepsDone(prefix + id).fill; }
 
 /* ================= tabbed Vocab Lab ================= */
+/* Roots lost its tab (2026-07-19, his call — too many sections): families now
+   travel WITH words via the tap popover; vocab.html?view=roots still renders
+   for old links. Phrases took the slot: the minimum conversational deck. */
 const LAB_TABS = [
   ["learn", "📝 Learn"],
   ["lessons", "🎓 Lessons"],
-  ["roots", "🌿 Roots"],
+  ["phrases", "💬 Phrases"],
   ["everyday", "🗣 Everyday"],
   ["core", "📖 Core"],
   ["browse", "🗂 Browse"],
@@ -164,7 +171,7 @@ function renderList(view) {
   content.querySelectorAll("#labTabs button").forEach(b =>
     b.onclick = () => { history.replaceState({}, "", "vocab.html?view=" + b.dataset.v); renderList(b.dataset.v); });
   const body = document.getElementById("labBody");
-  ({ learn: renderLearnView, lessons: renderLessonsView, roots: renderRootsView, everyday: renderEverydayView, core: renderCoreView, browse: renderBrowseView })[labView](body);
+  ({ learn: renderLearnView, lessons: renderLessonsView, phrases: renderPhrasesView, roots: renderRootsView, everyday: renderEverydayView, core: renderCoreView, browse: renderBrowseView })[labView](body);
 }
 
 /* ---------- Learn view ---------- */
@@ -227,9 +234,24 @@ function groupCard(obj, prefix, arTitle, metaText) {
     <div class="theme">${obj.theme}</div>
     <div class="meta">${metaText} ${groupDone(prefix, obj.id) ? "· ✓" : ""}</div>
   `;
-  const q = prefix === "fam-" ? "fam" : "ev";
+  const q = prefix === "fam-" ? "fam" : prefix === "ph-" ? "ph" : "ev";
   div.onclick = () => { history.pushState({}, "", `vocab.html?${q}=${obj.id}`); renderGroup(obj, "study", prefix); };
   return div;
+}
+
+/* ---------- Phrases view: the minimum conversational deck ---------- */
+function renderPhrasesView(body) {
+  const total = PH.reduce((n, g) => n + g.members.length, 0);
+  const learnt = PH.reduce((n, g) => n + g.members.filter((m, i) => isLearnt(`ph-${g.id}:${i}`)).length, 0);
+  body.innerHTML = `
+    <p class="sub">Whole sentences, chosen so the <b>minimum</b> memorised carries a basic conversation: every question with its
+    answer pattern, frames where you swap one word, and the repair phrases that keep you IN the exchange when you're stuck.
+    Study a set, fill the sheet, and each phrase comes back in <a href="review.html">Review</a> and the 🎧 Audio Coach like any word.
+    <b>${learnt} / ${total}</b> in your pocket so far.</p>
+    <div class="fam-grid" id="phGrid"></div>
+  `;
+  const grid = document.getElementById("phGrid");
+  PH.forEach(g => grid.appendChild(groupCard(g, "ph-", g.title, `${g.members.length} phrases`)));
 }
 
 /* ---------- Core view ---------- */
@@ -326,12 +348,18 @@ async function buildPool() {
       });
     } catch (e) {}
   }
+  // conversation phrases join the new pool like any word (his 2026-07-19 ask)
+  const newPh = [];
+  PH.forEach(g => g.members.forEach((m, i) => {
+    const key = `ph-${g.id}:${i}`;
+    if (!srs[key]) newPh.push({ key, v: { ar: m.ar, en: m.en, tr: m.tr, note: "💬 " + g.theme.split("—")[0].trim() }, isNew: true });
+  }));
   let fresh;
   if (sheetSrc === "quran") fresh = [...newQc, ...newFam];
-  else if (sheetSrc === "msa") fresh = [...newLesson, ...newEv, ...newStory, ...newFam];
+  else if (sheetSrc === "msa") fresh = [...newLesson, ...newPh, ...newEv, ...newStory, ...newFam];
   else {
     const mixed = [];
-    while (newQc.length || newEv.length) mixed.push(...newQc.splice(0, 5), ...newEv.splice(0, 5));
+    while (newQc.length || newPh.length || newEv.length) mixed.push(...newQc.splice(0, 5), ...newPh.splice(0, 3), ...newEv.splice(0, 5));
     fresh = [...newLesson, ...mixed, ...newFam, ...newStory]; // current lesson leads
   }
   return [...items, ...fresh];
@@ -681,8 +709,8 @@ function renderGroup(obj, mode, prefix) {
   trackPage(`vocab:${prefix}${obj.id}:${mode}`);
   window.scrollTo({ top: 0 });
   const arTitle = obj.root || obj.title;
-  const label = prefix === "fam-" ? "Root family" : "Everyday cluster";
-  const backView = prefix === "fam-" ? "roots" : "everyday";
+  const label = prefix === "fam-" ? "Root family" : prefix === "ph-" ? "Phrase set" : "Everyday cluster";
+  const backView = prefix === "fam-" ? "roots" : prefix === "ph-" ? "phrases" : "everyday";
   content.innerHTML = `
     <p><a href="vocab.html?view=${backView}" style="color:var(--accent);text-decoration:none">← Vocab Lab</a></p>
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">

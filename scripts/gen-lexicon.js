@@ -58,6 +58,9 @@ fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
 }
 // 6. Quran verse words (contextual — lowest priority)
 read("verses.json").surahs.forEach(s => s.verses.forEach(v => v.words.forEach(w => put(w[0], w[1], w[2], s.id))));
+// 7. conversational phrases — single-word entries land as tappable words;
+//    multi-word keys are harmless (taps only ever look up one word)
+read("phrases.json").groups.forEach(g => g.members.forEach(m => put(m.ar, m.tr, m.en, "phrase")));
 
 aliases.forEach(([bare, entry]) => { if (!lex[bare]) lex[bare] = entry; });
 

@@ -29,6 +29,23 @@ const FAMILY_LIST = [
 ];
 
 /* Everyday-Arabic clusters (full data in data/everyday.json) */
+/* The minimum conversational phrase deck (data/phrases.json) — memorise these
+   and a basic exchange holds together. Manifest only; content in the JSON. */
+const PHRASE_LIST = [
+  { id: "greet", title: "التَّحِيَّات", hint: "greetings & courtesy — how every exchange opens" },
+  { id: "intro", title: "مَنْ أَنا", hint: "who I am — the first two minutes with anyone" },
+  { id: "ask", title: "أَدَواتُ السُّؤال", hint: "question frames — swap one word, ask anything" },
+  { id: "need", title: "أُرِيد وَأَحْتاج", hint: "wants, needs and polite requests" },
+  { id: "dir", title: "أَيْنَ؟", hint: "places & directions" },
+  { id: "shop", title: "فِي السُّوق", hint: "the market exchange, start to finish" },
+  { id: "food", title: "الأَكْل وَالشُّرْب", hint: "ordering and enjoying food" },
+  { id: "time", title: "الوَقْت", hint: "time & plans" },
+  { id: "talk", title: "كَلِماتُ الرَّدّ", hint: "the glue between sentences" },
+  { id: "help", title: "عِنْدَما لا أَفْهَم", hint: "the repair kit — stay IN the conversation" },
+  { id: "state", title: "كَيْفَ أَنا", hint: "states & feelings people ask about" },
+  { id: "deen", title: "فِي المَسْجِد", hint: "mosque & worship contexts" },
+];
+
 const EVERYDAY_LIST = [
   { id: "family", title: "الأُسْرَة", hint: "family — from your teacher (Bayna Yadayk U1)" },
   { id: "home", title: "البَيْت وَالأَشْياء", hint: "home & everyday objects (Bayna Yadayk U1)" },
@@ -406,10 +423,11 @@ function isLearnt(key) {
 const QURAN_TOKENS = 77430; // total words in the Quran
 
 async function computeMilestones() {
-  const [core, everyday, prompts] = await Promise.all([
+  const [core, everyday, prompts, phraseGroups] = await Promise.all([
     fetch("data/quran-core.json").then(r => r.json()).then(d => d.words),
     fetch("data/everyday.json").then(r => r.json()).then(d => d.groups),
     fetch("data/prompts.json").then(r => r.json()).then(d => d.prompts),
+    fetch("data/phrases.json").then(r => r.json()).then(d => d.groups).catch(() => []),
   ]);
 
   const coreLearnt = core.map((w, i) => isLearnt(`qc:${i}`));
@@ -456,7 +474,11 @@ async function computeMilestones() {
   const convPct = Math.round(msaLearnt / (evTotal + storyTotal) * 100);
   const promptsReady = prompts.filter(p => p.keys.every(k => isLearnt(k))).length;
 
+  const phTotal = phraseGroups.reduce((a, g) => a + g.members.length, 0);
+  const phLearnt = phraseGroups.reduce((a, g) => a + g.members.filter((m, i) => isLearnt(`ph-${g.id}:${i}`)).length, 0);
   const msa = [
+    { title: `The conversation deck — ${phTotal} phrases`, why: "The minimum set of whole sentences that, memorised, carries a basic conversation: every question with its answer pattern, plus the repair phrases that keep you IN the exchange.",
+      have: phLearnt, need: phTotal, unit: "phrases", link: "vocab.html?view=phrases", test: "phrases" },
     { title: "Conversation opener kit", why: "Greetings, question words and glue words — you can start, ask, and connect.",
       have: openerHave, need: 27, unit: "words", link: "vocab.html?ev=greetings", test: "opener" },
     { title: "Umrah-ready kit", why: `Directions, the Haram, shopping, medical, taxi, asking for help — ${umrahTotal} words to live your whole trip in Arabic.`,
@@ -644,6 +666,14 @@ function suggestNext() {
     icon: "📖", title: `Surah ${nextSurah.name}`,
     desc: "Word-by-word — understand it as it's recited",
     href: `quran.html?s=${nextSurah.id}`,
+  });
+  // 2b. Next phrase set — the direct route to the "converse in Arabic" goal:
+  //     whole sentences, memorised, that carry a basic exchange
+  const nextPh = PHRASE_LIST.find(g => !stepsDone("ph-" + g.id).fill);
+  if (nextPh) out.push({
+    icon: "💬", title: `Phrases: ${nextPh.title}`,
+    desc: `${nextPh.hint} — whole sentences you'll actually say`,
+    href: `vocab.html?ph=${nextPh.id}`,
   });
   // 3. Contextual listening — only when your learning has unlocked something worth hearing
   const lp = listenSuggestion();
@@ -1273,7 +1303,7 @@ function fuzzyEn(typed, gloss) {
    Keys: "story-01:5", "fam-qwl:3", "qc:12", "qw:fatiha:2:1" */
 async function resolveCards(keys) {
   const needStories = new Set();
-  let needFams = false, needCore = false, needVerses = false, needEv = false, needGrammar = false;
+  let needFams = false, needCore = false, needVerses = false, needEv = false, needGrammar = false, needPhrases = false;
   keys.forEach(k => {
     const sid = k.split(":")[0];
     if (sid === "qc") needCore = true;
@@ -1282,15 +1312,17 @@ async function resolveCards(keys) {
     else if (sid === "tw") { /* tapped-word cards resolve from local store */ }
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;
+    else if (sid.startsWith("ph-")) needPhrases = true;
     else needStories.add(sid);
   });
   const stories = {};
-  const [fams, core, verses, everyday, grammar] = await Promise.all([
+  const [fams, core, verses, everyday, grammar, phrases] = await Promise.all([
     needFams ? fetch("data/families.json").then(r => r.json()).then(d => d.families) : null,
     needCore ? fetch("data/quran-core.json").then(r => r.json()).then(d => d.words) : null,
     needVerses ? fetch("data/verses.json").then(r => r.json()).then(d => d.surahs) : null,
     needEv ? fetch("data/everyday.json").then(r => r.json()).then(d => d.groups) : null,
     needGrammar ? fetch("data/grammar.json").then(r => r.json()).then(d => d.patterns) : null,
+    needPhrases ? fetch("data/phrases.json").then(r => r.json()).then(d => d.groups) : null,
     Promise.all([...needStories].map(async id => {
       try { stories[id] = await loadStory(id); } catch (e) { /* removed story */ }
     })),
@@ -1321,6 +1353,10 @@ async function resolveCards(keys) {
       const g = everyday && everyday.find(x => "ev-" + x.id === p[0]);
       const m = g && g.members[parseInt(p[1])];
       if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "everyday: " + g.theme.split("—")[0].trim() };
+    } else if (p[0].startsWith("ph-")) {
+      const g = phrases && phrases.find(x => "ph-" + x.id === p[0]);
+      const m = g && g.members[parseInt(p[1])];
+      if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "phrase: " + g.theme.split("—")[0].trim() };
     } else {
       const st = stories[p[0]];
       const w = st && st.vocab[parseInt(p[1])];
@@ -1442,6 +1478,26 @@ function lexLookup(word) {
   const n = normalizeAr(word);
   return _lex[n] || _lex[n.replace(/^ال/, "")] || null;
 }
+/* Root families travel WITH words (his call, 2026-07-19 — no separate Roots
+   destination): every family member is indexed by its normalized form, and
+   the tap popover shows the whole family under any of its words. */
+let _famIdx = null, _famIdxLoading = null;
+function loadFamIdx() {
+  if (_famIdx || _famIdxLoading) return _famIdxLoading || Promise.resolve();
+  _famIdxLoading = fetch("data/families.json").then(r => r.json()).then(d => {
+    _famIdx = {};
+    d.families.forEach(f => f.members.forEach(m => {
+      const n = normalizeAr(m.ar).replace(/^ال/, "");
+      if (n && !_famIdx[n]) _famIdx[n] = f;
+    }));
+  }).catch(() => (_famIdx = {}));
+  return _famIdxLoading;
+}
+function famLookup(word) {
+  if (!_famIdx) return null;
+  const n = normalizeAr(word);
+  return _famIdx[n] || _famIdx[n.replace(/^ال/, "")] || null;
+}
 const _AR_CH = /[؀-ۿ]/;
 function wordAtPoint(x, y) {
   let node = null, off = 0;
@@ -1478,6 +1534,10 @@ function showWordPop(word, x, y, o) {
       ? `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">meaning hidden — you're mid-test 🤫</div>`
       : hit ? `<div style="font-weight:600;margin-top:4px">${hit[2]}</div>`
             : `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">not in the site's word lists yet</div>`}
+    ${!o.hideMeaning && o.fam ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888)">
+      🌿 root <b dir="rtl" class="arabic" style="font-size:14px">${o.fam.root.split("(")[0].trim()}</b> —
+      ${o.fam.members.slice(0, 5).map(m => `<span style="white-space:nowrap"><span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink,#222)">${m.ar}</span> <span style="font-size:11.5px">${m.en}</span></span>`).join(" · ")}
+      <a href="vocab.html?fam=${o.fam.id}" style="color:var(--accent,#0d7a5f);display:inline-block">study the family →</a></div>` : ""}
     <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
       <button type="button" class="wp-say" style="border:1px solid var(--border,#ddd);background:transparent;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:15px">🔊</button>
       ${canLearn ? `<button type="button" class="wp-learn" ${already ? "disabled" : ""} style="border:none;background:var(--accent,#0d7a5f);color:#fff;border-radius:10px;padding:6px 14px;cursor:pointer;font-weight:600">${already ? "✓ in your deck" : "＋ Learn"}</button>` : ""}
@@ -1515,12 +1575,13 @@ function initWordTap() {
     if (e.target.closest("input,textarea,select,button,a,label,[contenteditable],nav,#notePen,#noteOverlay")) { closeWordPop(); return; }
     const word = wordAtPoint(e.clientX, e.clientY);
     if (!word) { closeWordPop(); return; }
-    await loadLexicon();
+    await Promise.all([loadLexicon(), loadFamIdx()]);
     const hit = lexLookup(word);
+    const fam = famLookup(word);
     const row = e.target.closest("tr");
     const tested = e.target.closest("[data-nopeek]") || (row && row.querySelector("input:not([disabled])"));
     const qEl = e.target.closest("[data-qkey]");
-    showWordPop(word, e.clientX, e.clientY, { hit, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
+    showWordPop(word, e.clientX, e.clientY, { hit, fam, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
     logEvent({ e: "wtap", ar: normalizeAr(word), hit: !!hit, ...(tested ? { hidden: true } : {}) });
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeWordPop(); });

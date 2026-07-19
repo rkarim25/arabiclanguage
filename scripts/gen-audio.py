@@ -69,6 +69,12 @@ for s in loadd("verses.json")["surahs"]:
     for v in s["verses"]:
         for w in v["words"]: add("en", w[2])
 
+# the conversational phrase deck — full sentences, both languages
+for g in loadd("phrases.json")["groups"]:
+    for m in g["members"]:
+        add("ar", m.get("ar"))
+        add("en", m.get("en"))
+
 # fixed spoken UI lines (audio.html)
 add("en", "Audio coach. Listen, and recall the meaning before I say it.")
 

@@ -1,0 +1,207 @@
+{
+  "about": "The minimum conversational phrase deck: short MSA sentences that, memorised, carry a basic conversation. Chosen so every question has its answer pattern, plus the repair phrases that keep a learner IN a conversation. Keys ph-<group>:<i> are append-only — never reorder or delete members, SRS points at indices.",
+  "groups": [
+    {
+      "id": "greet",
+      "title": "التَّحِيَّات",
+      "theme": "Greetings & courtesy — how every exchange opens and closes",
+      "members": [
+        { "ar": "السَّلامُ عَلَيْكُم", "tr": "as-salāmu ʿalaykum", "en": "peace be upon you (hello)" },
+        { "ar": "وَعَلَيْكُمُ السَّلام", "tr": "wa-ʿalaykumu s-salām", "en": "and upon you peace (reply)" },
+        { "ar": "أَهْلًا وَسَهْلًا", "tr": "ahlan wa-sahlan", "en": "welcome!" },
+        { "ar": "صَباحُ الخَيْر", "tr": "ṣabāḥu l-khayr", "en": "good morning" },
+        { "ar": "مَساءُ الخَيْر", "tr": "masāʾu l-khayr", "en": "good evening" },
+        { "ar": "كَيْفَ حالُك؟", "tr": "kayfa ḥāluk?", "en": "how are you?" },
+        { "ar": "أَنا بِخَيْر، الحَمْدُ لِلّٰه", "tr": "anā bi-khayr, al-ḥamdu lillāh", "en": "I'm well, praise be to Allah" },
+        { "ar": "شُكْرًا جَزِيلًا", "tr": "shukran jazīlan", "en": "thank you very much" },
+        { "ar": "عَفْوًا", "tr": "ʿafwan", "en": "you're welcome / excuse me" },
+        { "ar": "مِنْ فَضْلِك", "tr": "min faḍlik", "en": "please" },
+        { "ar": "آسِف", "tr": "āsif", "en": "sorry" },
+        { "ar": "مَعَ السَّلامَة", "tr": "maʿa s-salāma", "en": "goodbye" }
+      ]
+    },
+    {
+      "id": "intro",
+      "title": "مَنْ أَنا",
+      "theme": "Who I am — the first two minutes with anyone new",
+      "members": [
+        { "ar": "اِسْمِي رِضا", "tr": "ismī Riḍā", "en": "my name is Reza" },
+        { "ar": "مَا اسْمُك؟", "tr": "ma smuk?", "en": "what is your name?" },
+        { "ar": "تَشَرَّفْنا", "tr": "tasharrafnā", "en": "pleased to meet you" },
+        { "ar": "أَنا مِنْ بَرِيطانْيا", "tr": "anā min brīṭānyā", "en": "I am from Britain" },
+        { "ar": "مِنْ أَيْنَ أَنْت؟", "tr": "min ayna ant?", "en": "where are you from?" },
+        { "ar": "أَنا مُسْلِم", "tr": "anā muslim", "en": "I am a Muslim" },
+        { "ar": "هٰذِهِ زَوْجَتِي", "tr": "hādhihi zawjatī", "en": "this is my wife" },
+        { "ar": "هٰؤُلاءِ أَوْلادِي", "tr": "hāʾulāʾi awlādī", "en": "these are my children" },
+        { "ar": "أَتَعَلَّمُ العَرَبِيَّة", "tr": "ataʿallamu l-ʿarabiyya", "en": "I am learning Arabic" },
+        { "ar": "أَسْكُنُ فِي لَنْدَن", "tr": "askunu fī landan", "en": "I live in London" }
+      ]
+    },
+    {
+      "id": "ask",
+      "title": "أَدَواتُ السُّؤال",
+      "theme": "Question frames — swap one word and you can ask anything",
+      "members": [
+        { "ar": "ما هٰذا؟", "tr": "mā hādhā?", "en": "what is this?" },
+        { "ar": "مَنْ هٰذا؟", "tr": "man hādhā?", "en": "who is this?" },
+        { "ar": "أَيْنَ المَسْجِد؟", "tr": "ayna l-masjid?", "en": "where is the mosque?" },
+        { "ar": "مَتَى نَذْهَب؟", "tr": "matā nadhhab?", "en": "when do we go?" },
+        { "ar": "لِماذا؟", "tr": "li-mādhā?", "en": "why?" },
+        { "ar": "كَيْفَ أَذْهَبُ إِلَى هُناك؟", "tr": "kayfa adhhabu ilā hunāk?", "en": "how do I get there?" },
+        { "ar": "كَمِ السّاعَة؟", "tr": "kami s-sāʿa?", "en": "what time is it?" },
+        { "ar": "بِكَمْ هٰذا؟", "tr": "bikam hādhā?", "en": "how much is this?" },
+        { "ar": "هَلْ تَتَكَلَّمُ الإِنْجِلِيزِيَّة؟", "tr": "hal tatakallamu l-inglīziyya?", "en": "do you speak English?" },
+        { "ar": "ماذا تُرِيد؟", "tr": "mādhā turīd?", "en": "what do you want?" },
+        { "ar": "أَيُّ واحِد؟", "tr": "ayyu wāḥid?", "en": "which one?" },
+        { "ar": "هَلْ يُوجَد ماء؟", "tr": "hal yūjad māʾ?", "en": "is there water?" }
+      ]
+    },
+    {
+      "id": "need",
+      "title": "أُرِيد وَأَحْتاج",
+      "theme": "Wants, needs and requests — getting things done politely",
+      "members": [
+        { "ar": "أُرِيدُ ماءً", "tr": "urīdu māʾan", "en": "I want water" },
+        { "ar": "لا أُرِيد، شُكْرًا", "tr": "lā urīd, shukran", "en": "I don't want (any), thanks" },
+        { "ar": "أَحْتاجُ مُساعَدَة", "tr": "aḥtāju musāʿada", "en": "I need help" },
+        { "ar": "أُرِيدُ أَنْ أَذْهَب", "tr": "urīdu an adhhab", "en": "I want to go" },
+        { "ar": "أَعْطِنِي هٰذا مِنْ فَضْلِك", "tr": "aʿṭinī hādhā min faḍlik", "en": "give me this, please" },
+        { "ar": "هَلْ يُمْكِنُنِي الجُلُوسُ هُنا؟", "tr": "hal yumkinuni l-julūsu hunā?", "en": "may I sit here?" },
+        { "ar": "أَبْحَثُ عَنِ الفُنْدُق", "tr": "abḥathu ʿani l-funduq", "en": "I am looking for the hotel" },
+        { "ar": "لَحْظَة مِنْ فَضْلِك", "tr": "laḥẓa min faḍlik", "en": "one moment, please" },
+        { "ar": "لا مُشْكِلَة", "tr": "lā mushkila", "en": "no problem" },
+        { "ar": "خُذْ هٰذا", "tr": "khudh hādhā", "en": "take this" }
+      ]
+    },
+    {
+      "id": "dir",
+      "title": "أَيْنَ؟",
+      "theme": "Places & directions — never lost for long",
+      "members": [
+        { "ar": "أَيْنَ الحَمّام؟", "tr": "ayna l-ḥammām?", "en": "where is the bathroom?" },
+        { "ar": "هَلْ هُوَ قَرِيب؟", "tr": "hal huwa qarīb?", "en": "is it near?" },
+        { "ar": "هَلْ هُوَ بَعِيد؟", "tr": "hal huwa baʿīd?", "en": "is it far?" },
+        { "ar": "عَلَى اليَمِين", "tr": "ʿalā l-yamīn", "en": "on the right" },
+        { "ar": "عَلَى اليَسار", "tr": "ʿalā l-yasār", "en": "on the left" },
+        { "ar": "إِلَى الأَمامِ مُباشَرَة", "tr": "ilā l-amāmi mubāshara", "en": "straight ahead" },
+        { "ar": "أَنا تائِه", "tr": "anā tāʾih", "en": "I am lost" },
+        { "ar": "اِنْتَظِرْنِي هُنا", "tr": "intaẓirnī hunā", "en": "wait for me here" },
+        { "ar": "تَعالَ مَعِي", "tr": "taʿāla maʿī", "en": "come with me" },
+        { "ar": "أَيْنَ بابُ الخُرُوج؟", "tr": "ayna bābu l-khurūj?", "en": "where is the exit?" }
+      ]
+    },
+    {
+      "id": "shop",
+      "title": "فِي السُّوق",
+      "theme": "Buying things — the market exchange from start to finish",
+      "members": [
+        { "ar": "غالٍ جِدًّا", "tr": "ghālin jiddan", "en": "very expensive" },
+        { "ar": "هَلْ عِنْدَكَ أَرْخَص؟", "tr": "hal ʿindaka arkhaṣ?", "en": "do you have (something) cheaper?" },
+        { "ar": "سَآخُذُ هٰذا", "tr": "sa-ākhudhu hādhā", "en": "I'll take this" },
+        { "ar": "هَلْ تَقْبَلُ البِطاقَة؟", "tr": "hal taqbalu l-biṭāqa?", "en": "do you accept card?" },
+        { "ar": "الحِساب مِنْ فَضْلِك", "tr": "al-ḥisāb min faḍlik", "en": "the bill, please" },
+        { "ar": "فَقَط أَنْظُر، شُكْرًا", "tr": "faqaṭ anẓur, shukran", "en": "just looking, thanks" },
+        { "ar": "أُرِيدُ اثْنَيْنِ مِنْ هٰذا", "tr": "urīdu thnayni min hādhā", "en": "I want two of these" },
+        { "ar": "هَلْ عِنْدَكَ مَقاسٌ أَكْبَر؟", "tr": "hal ʿindaka maqāsun akbar?", "en": "do you have a bigger size?" }
+      ]
+    },
+    {
+      "id": "food",
+      "title": "الأَكْل وَالشُّرْب",
+      "theme": "Eating & drinking — ordering and enjoying",
+      "members": [
+        { "ar": "أَنا جَوْعان", "tr": "anā jawʿān", "en": "I am hungry" },
+        { "ar": "أَنا عَطْشان", "tr": "anā ʿaṭshān", "en": "I am thirsty" },
+        { "ar": "شاي بِدُونِ سُكَّر", "tr": "shāy bidūni sukkar", "en": "tea without sugar" },
+        { "ar": "قَهْوَة مِنْ فَضْلِك", "tr": "qahwa min faḍlik", "en": "coffee, please" },
+        { "ar": "لَذِيذ جِدًّا", "tr": "ladhīdh jiddan", "en": "very delicious" },
+        { "ar": "ماذا تَنْصَحُنِي؟", "tr": "mādhā tanṣaḥunī?", "en": "what do you recommend?" },
+        { "ar": "بِالهَناءِ وَالشِّفاء", "tr": "bil-hanāʾi wash-shifāʾ", "en": "bon appétit (enjoy!)" },
+        { "ar": "شَبِعْتُ، الحَمْدُ لِلّٰه", "tr": "shabiʿtu, al-ḥamdu lillāh", "en": "I'm full, praise be to Allah" }
+      ]
+    },
+    {
+      "id": "time",
+      "title": "الوَقْت",
+      "theme": "Time & plans — when things happen",
+      "members": [
+        { "ar": "اليَوْم", "tr": "al-yawm", "en": "today" },
+        { "ar": "غَدًا إِنْ شاءَ الله", "tr": "ghadan in shāʾa llāh", "en": "tomorrow, God willing" },
+        { "ar": "أَمْسِ", "tr": "amsi", "en": "yesterday" },
+        { "ar": "الآن", "tr": "al-ān", "en": "now" },
+        { "ar": "بَعْدَ صَلاةِ العِشاء", "tr": "baʿda ṣalāti l-ʿishāʾ", "en": "after the Isha prayer" },
+        { "ar": "أَنا مَشْغُولُ الآن", "tr": "anā mashghūlu l-ān", "en": "I am busy now" },
+        { "ar": "عِنْدِي وَقْت غَدًا", "tr": "ʿindī waqt ghadan", "en": "I have time tomorrow" },
+        { "ar": "مَتَى يَفْتَحُ المَحَلّ؟", "tr": "matā yaftaḥu l-maḥall?", "en": "when does the shop open?" },
+        { "ar": "قَرِيبًا", "tr": "qarīban", "en": "soon" }
+      ]
+    },
+    {
+      "id": "talk",
+      "title": "كَلِماتُ الرَّدّ",
+      "theme": "Keeping the conversation going — the glue between sentences",
+      "members": [
+        { "ar": "نَعَم", "tr": "naʿam", "en": "yes" },
+        { "ar": "لا", "tr": "lā", "en": "no" },
+        { "ar": "رُبَّما", "tr": "rubbamā", "en": "maybe" },
+        { "ar": "طَبْعًا", "tr": "ṭabʿan", "en": "of course" },
+        { "ar": "صَحِيح؟", "tr": "ṣaḥīḥ?", "en": "really? / right?" },
+        { "ar": "أَظُنُّ ذٰلِك", "tr": "aẓunnu dhālik", "en": "I think so" },
+        { "ar": "ما رَأْيُك؟", "tr": "mā raʾyuk?", "en": "what do you think?" },
+        { "ar": "وَأَنْت؟", "tr": "wa-ant?", "en": "and you?" },
+        { "ar": "إِنْ شاءَ الله", "tr": "in shāʾa llāh", "en": "God willing" },
+        { "ar": "ما شاءَ الله", "tr": "mā shāʾa llāh", "en": "what Allah willed (how wonderful!)" },
+        { "ar": "جَيِّد جِدًّا", "tr": "jayyid jiddan", "en": "very good" },
+        { "ar": "هٰذا صَحِيح", "tr": "hādhā ṣaḥīḥ", "en": "that's right" }
+      ]
+    },
+    {
+      "id": "help",
+      "title": "عِنْدَما لا أَفْهَم",
+      "theme": "The repair kit — these phrases keep you IN the conversation when you're stuck",
+      "members": [
+        { "ar": "لا أَفْهَم", "tr": "lā afham", "en": "I don't understand" },
+        { "ar": "أَفْهَمُ قَلِيلًا", "tr": "afhamu qalīlan", "en": "I understand a little" },
+        { "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك", "tr": "takallam bi-buṭʾin min faḍlik", "en": "speak slowly, please" },
+        { "ar": "أَعِدْ مِنْ فَضْلِك", "tr": "aʿid min faḍlik", "en": "repeat, please" },
+        { "ar": "ماذا يَعْنِي هٰذا؟", "tr": "mādhā yaʿnī hādhā?", "en": "what does this mean?" },
+        { "ar": "كَيْفَ أَقُولُ هٰذا بِالعَرَبِيَّة؟", "tr": "kayfa aqūlu hādhā bil-ʿarabiyya?", "en": "how do I say this in Arabic?" },
+        { "ar": "اُكْتُبْها مِنْ فَضْلِك", "tr": "uktubhā min faḍlik", "en": "write it down, please" },
+        { "ar": "عَرَبِيَّتِي بَسِيطَة", "tr": "ʿarabiyyatī basīṭa", "en": "my Arabic is basic" },
+        { "ar": "فَهِمْت", "tr": "fahimt", "en": "I understood / got it" },
+        { "ar": "لا أَعْرِف", "tr": "lā aʿrif", "en": "I don't know" }
+      ]
+    },
+    {
+      "id": "state",
+      "title": "كَيْفَ أَنا",
+      "theme": "How I am — states and feelings people ask about",
+      "members": [
+        { "ar": "أَنا تَعْبان", "tr": "anā taʿbān", "en": "I am tired" },
+        { "ar": "أَنا سَعِيد", "tr": "anā saʿīd", "en": "I am happy" },
+        { "ar": "أَنا مَرِيض", "tr": "anā marīḍ", "en": "I am sick" },
+        { "ar": "الجَوُّ حارّ", "tr": "al-jawwu ḥārr", "en": "the weather is hot" },
+        { "ar": "أُحِبُّ هٰذا", "tr": "uḥibbu hādhā", "en": "I like this" },
+        { "ar": "لا أُحِبُّ هٰذا", "tr": "lā uḥibbu hādhā", "en": "I don't like this" },
+        { "ar": "لا بَأْس", "tr": "lā baʾs", "en": "it's okay / no harm" },
+        { "ar": "كُلُّ شَيْءٍ بِخَيْر", "tr": "kullu shayʾin bi-khayr", "en": "everything is fine" }
+      ]
+    },
+    {
+      "id": "deen",
+      "title": "فِي المَسْجِد",
+      "theme": "Mosque & worship — the contexts you live in daily",
+      "members": [
+        { "ar": "مَتَى الأَذان؟", "tr": "matā l-adhān?", "en": "when is the adhan?" },
+        { "ar": "مَتَى صَلاةُ الفَجْر؟", "tr": "matā ṣalātu l-fajr?", "en": "when is the Fajr prayer?" },
+        { "ar": "أَيْنَ مَكانُ الوُضُوء؟", "tr": "ayna makānu l-wuḍūʾ?", "en": "where is the wudu area?" },
+        { "ar": "هَلْ صَلَّيْت؟", "tr": "hal ṣallayt?", "en": "have you prayed?" },
+        { "ar": "أُصَلِّي أَوَّلًا", "tr": "uṣallī awwalan", "en": "I will pray first" },
+        { "ar": "جَزاكَ اللهُ خَيْرًا", "tr": "jazāka llāhu khayran", "en": "may Allah reward you" },
+        { "ar": "بارَكَ اللهُ فِيك", "tr": "bāraka llāhu fīk", "en": "may Allah bless you" },
+        { "ar": "تَقَبَّلَ الله", "tr": "taqabbala llāh", "en": "may Allah accept (it)" },
+        { "ar": "أَيْنَ المُصَلَّى؟", "tr": "ayna l-muṣallā?", "en": "where is the prayer area?" }
+      ]
+    }
+  ]
+}
