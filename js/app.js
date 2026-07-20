@@ -628,9 +628,35 @@ const QURAN_SURAHS = [
 /* The salah bar is FIXED — adding new lessons must never move this goalpost. */
 const SALAH_SURAH_IDS = ["fatiha", "ikhlas", "falaq", "nas", "kawthar", "asr", "qadr"];
 
+/* Miss-buried rescue. A word he ANSWERED and got wrong, then retired within
+   minutes, was almost certainly a victim of the old bucket-bar ✗ (it read as
+   "got it wrong" but meant "never show again"). Deliberate retires — browse
+   taps with no miss just before — are respected and never flagged. The LAST
+   never-event per key decides, so re-retiring a rescued word sticks. */
+function missBuriedKeys() {
+  const srs = getSrs();
+  const lastMiss = {}, buriedByMiss = {};
+  store.get("ats-log", []).forEach(x => {
+    if (!x.key) return;
+    if (x.ok === false || x.g === "again") lastMiss[x.key] = x.t;
+    if (x.e === "bucket" && x.b === "never")
+      buriedByMiss[x.key] = !!(lastMiss[x.key] && x.t - lastMiss[x.key] < 10 * 60 * 1000);
+  });
+  return Object.keys(buriedByMiss).filter(k =>
+    buriedByMiss[k] && srs[k] && srs[k].b === "never");
+}
+
 function suggestNext() {
   const out = [];
   const due = dueCards().length;
+  // 0a-pre. Rescue accidentally buried words — a 10-second repair, so it goes first
+  //         and disappears the moment it's done.
+  const buried = missBuriedKeys();
+  if (buried.length) out.push({
+    icon: "🩹", title: `Rescue ${buried.length} buried word${buried.length > 1 ? "s" : ""}`,
+    desc: "You missed these, and the old ✗ button retired them by mistake. One tap brings them back into your reviews.",
+    href: "#", rescue: buried,
+  });
   // 0. The one-button day: zero decisions, just start
   out.push({
     icon: "▶", title: "Start my 5 minutes" + (due ? ` (${due} due)` : ""),
