@@ -62,7 +62,25 @@ read("verses.json").surahs.forEach(s => s.verses.forEach(v => v.words.forEach(w 
 //    multi-word keys are harmless (taps only ever look up one word)
 read("phrases.json").groups.forEach(g => g.members.forEach(m => put(m.ar, m.tr, m.en, "phrase")));
 
+// 8. the site's own UI Arabic — page titles etc. are tappable too, so the
+//    dictionary must answer for them (wtap hit:false on المدرب, 2026-07-18).
+//    Last so a curated gloss always wins if one ever appears upstream.
+[
+  ["مُدَرِّب", "mudarrib", "coach; trainer"],
+  ["صَوْتِيّ", "ṣawtī", "audio; sound- (from صَوْت voice)"],
+  ["بِنَاء", "bināʾ", "building; construction"],
+  ["جُمْلَة", "jumla", "sentence"],
+  ["جُمَل", "jumal", "sentences (plural of جُمْلَة)"],
+  ["فَاعِل", "fāʿil", "doer; subject (the one doing the verb)"],
+  ["مُحَادَثَة", "muḥādatha", "conversation"],
+  ["سُورَة", "sūra", "sura — a chapter of the Qurʾan"],
+].forEach(([ar, tr, en]) => put(ar, tr, en, "site"));
+
 aliases.forEach(([bare, entry]) => { if (!lex[bare]) lex[bare] = entry; });
+
+// Homographs that tashkeel-stripping collapses into one key: first-writer-wins
+// left مَنْ (who) showing "from; of". Show both readings honestly.
+lex["من"] = ["مِنْ / مَنْ", "min / man", "min: from · man: who?", "homograph"];
 
 fs.writeFileSync(path.join(DATA, "lexicon.json"), JSON.stringify(lex), "utf8");
 console.log("lexicon.json:", added, "entries,", Object.keys(lex).length, "keys with aliases");
