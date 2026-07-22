@@ -1560,6 +1560,7 @@ function showWordPop(word, x, y, o) {
       ? `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">meaning hidden — you're mid-test 🤫</div>`
       : hit ? `<div style="font-weight:600;margin-top:4px">${hit[2]}</div>`
             : `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">not in the site's word lists yet</div>`}
+    ${!o.hideMeaning && o.mnem ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888);text-align:left">💡 ${o.mnem}</div>` : ""}
     ${!o.hideMeaning && o.fam ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888)">
       🌿 root <b dir="rtl" class="arabic" style="font-size:14px">${o.fam.root.split("(")[0].trim()}</b> —
       ${o.fam.members.slice(0, 5).map(m => `<span style="white-space:nowrap"><span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink,#222)">${m.ar}</span> <span style="font-size:11.5px">${m.en}</span></span>`).join(" · ")}
@@ -1604,10 +1605,11 @@ function initWordTap() {
     await Promise.all([loadLexicon(), loadFamIdx()]);
     const hit = lexLookup(word);
     const fam = famLookup(word);
+    const mnem = mnemFor(word);
     const row = e.target.closest("tr");
     const tested = e.target.closest("[data-nopeek]") || (row && row.querySelector("input:not([disabled])"));
     const qEl = e.target.closest("[data-qkey]");
-    showWordPop(word, e.clientX, e.clientY, { hit, fam, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
+    showWordPop(word, e.clientX, e.clientY, { hit, fam, mnem, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
     logEvent({ e: "wtap", ar: normalizeAr(word), hit: !!hit, ...(tested ? { hidden: true } : {}) });
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeWordPop(); });

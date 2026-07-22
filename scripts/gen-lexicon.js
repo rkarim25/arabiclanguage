@@ -56,6 +56,13 @@ fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
       put(form, "", `${({ana:"I",nahnu:"we",hum:"they"})[person] || person} ${tense === "past" ? v.past : tense === "fut" ? "will " + v.base : v.base}`, "verb " + v.base)));
   });
 }
+// 5b. story sentence words — every inflected form in the running text, glossed
+//     in context (يَزُورَانِنَا "they (two) visit us"). Tap-any-word must answer
+//     for the text itself, not just the vocab list (his note, 2026-07-21).
+fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
+  const s = read(f);
+  (s.sentences || []).forEach(sen => (sen.words || []).forEach(w => put(w[0], "", w[1], s.id + " text")));
+});
 // 6. Quran verse words (contextual — lowest priority)
 read("verses.json").surahs.forEach(s => s.verses.forEach(v => v.words.forEach(w => put(w[0], w[1], w[2], s.id))));
 // 7. conversational phrases — single-word entries land as tappable words;
