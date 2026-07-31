@@ -56,6 +56,25 @@ fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
       put(form, "", `${({ana:"I",nahnu:"we",hum:"they"})[person] || person} ${tense === "past" ? v.past : tense === "fut" ? "will " + v.base : v.base}`, "verb " + v.base)));
   });
 }
+// 5c. conjugation library — every past/present form of every verb, glossed by
+//     person ("we said", "they say"). After the drill verbs so those keep
+//     their gloss; before story text so a curated form beats a contextual one.
+{
+  const d = read("conjugations.json");
+  const s3 = b => b === "be" ? "is" : String(b).replace(/^(\S+)/, w => /(o|ch|sh|ss|x|z)$/.test(w) ? w + "es" : w + "s");
+  const bePast = k => (k === "ana" || k === "huwa" || k === "hiya") ? "was" : "were";
+  const bePres = k => k === "ana" ? "am" : (k === "huwa" || k === "hiya") ? "is" : "are";
+  d.verbs.forEach(v => {
+    d.persons.forEach(p => {
+      const who = p.en;
+      const pastEn = v.base === "be" ? `${who} ${bePast(p.key)}` : `${who} ${v.pastEn}`;
+      const presEn = v.base === "be" ? `${who} ${bePres(p.key)}`
+        : (p.key === "huwa" || p.key === "hiya") ? `${who} ${s3(v.base)}` : `${who} ${v.base}`;
+      put(v.past[p.key], "", `${pastEn} (${v.en})`, "conj " + v.id);
+      put(v.pres[p.key], "", `${presEn} (${v.en})`, "conj " + v.id);
+    });
+  });
+}
 // 5b. story sentence words — every inflected form in the running text, glossed
 //     in context (يَزُورَانِنَا "they (two) visit us"). Tap-any-word must answer
 //     for the text itself, not just the vocab list (his note, 2026-07-21).

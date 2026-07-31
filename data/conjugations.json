@@ -1,0 +1,147 @@
+{
+  "note": "Conjugation library behind the tap-any-word popover (his 2026-07-21 pen note: every word should show 'conjugation and present and past form'). Every form is indexed at load, so tapping ANY conjugated form anywhere on the site finds its verb and shows the full table. Future = سَـ + present, taught as a rule (one row in the table footer), not stored. Persons kept to the practical 8 — dual and feminine plurals wait until the basics are automatic. Keep every form verified; this is a reference surface, errors here teach errors.",
+  "persons": [
+    { "key": "ana",   "ar": "أَنَا",    "en": "I" },
+    { "key": "anta",  "ar": "أَنْتَ",   "en": "you (m)" },
+    { "key": "anti",  "ar": "أَنْتِ",   "en": "you (f)" },
+    { "key": "huwa",  "ar": "هُوَ",     "en": "he" },
+    { "key": "hiya",  "ar": "هِيَ",     "en": "she" },
+    { "key": "nahnu", "ar": "نَحْنُ",   "en": "we" },
+    { "key": "antum", "ar": "أَنْتُمْ", "en": "you (pl)" },
+    { "key": "hum",   "ar": "هُمْ",     "en": "they" }
+  ],
+  "verbs": [
+    {
+      "id": "qala", "root": "ق و ل", "en": "to say", "base": "say", "pastEn": "said",
+      "past3": "قَالَ", "pres3": "يَقُولُ",
+      "past": { "ana": "قُلْتُ", "anta": "قُلْتَ", "anti": "قُلْتِ", "huwa": "قَالَ", "hiya": "قَالَتْ", "nahnu": "قُلْنَا", "antum": "قُلْتُمْ", "hum": "قَالُوا" },
+      "pres": { "ana": "أَقُولُ", "anta": "تَقُولُ", "anti": "تَقُولِينَ", "huwa": "يَقُولُ", "hiya": "تَقُولُ", "nahnu": "نَقُولُ", "antum": "تَقُولُونَ", "hum": "يَقُولُونَ" }
+    },
+    {
+      "id": "qaraa", "root": "ق ر أ", "en": "to read", "base": "read", "pastEn": "read",
+      "past3": "قَرَأَ", "pres3": "يَقْرَأُ",
+      "past": { "ana": "قَرَأْتُ", "anta": "قَرَأْتَ", "anti": "قَرَأْتِ", "huwa": "قَرَأَ", "hiya": "قَرَأَتْ", "nahnu": "قَرَأْنَا", "antum": "قَرَأْتُمْ", "hum": "قَرَؤُوا" },
+      "pres": { "ana": "أَقْرَأُ", "anta": "تَقْرَأُ", "anti": "تَقْرَئِينَ", "huwa": "يَقْرَأُ", "hiya": "تَقْرَأُ", "nahnu": "نَقْرَأُ", "antum": "تَقْرَؤُونَ", "hum": "يَقْرَؤُونَ" }
+    },
+    {
+      "id": "dhahaba", "root": "ذ هـ ب", "en": "to go", "base": "go", "pastEn": "went",
+      "past3": "ذَهَبَ", "pres3": "يَذْهَبُ",
+      "past": { "ana": "ذَهَبْتُ", "anta": "ذَهَبْتَ", "anti": "ذَهَبْتِ", "huwa": "ذَهَبَ", "hiya": "ذَهَبَتْ", "nahnu": "ذَهَبْنَا", "antum": "ذَهَبْتُمْ", "hum": "ذَهَبُوا" },
+      "pres": { "ana": "أَذْهَبُ", "anta": "تَذْهَبُ", "anti": "تَذْهَبِينَ", "huwa": "يَذْهَبُ", "hiya": "تَذْهَبُ", "nahnu": "نَذْهَبُ", "antum": "تَذْهَبُونَ", "hum": "يَذْهَبُونَ" }
+    },
+    {
+      "id": "kataba", "root": "ك ت ب", "en": "to write", "base": "write", "pastEn": "wrote",
+      "past3": "كَتَبَ", "pres3": "يَكْتُبُ",
+      "past": { "ana": "كَتَبْتُ", "anta": "كَتَبْتَ", "anti": "كَتَبْتِ", "huwa": "كَتَبَ", "hiya": "كَتَبَتْ", "nahnu": "كَتَبْنَا", "antum": "كَتَبْتُمْ", "hum": "كَتَبُوا" },
+      "pres": { "ana": "أَكْتُبُ", "anta": "تَكْتُبُ", "anti": "تَكْتُبِينَ", "huwa": "يَكْتُبُ", "hiya": "تَكْتُبُ", "nahnu": "نَكْتُبُ", "antum": "تَكْتُبُونَ", "hum": "يَكْتُبُونَ" }
+    },
+    {
+      "id": "samia", "root": "س م ع", "en": "to hear", "base": "hear", "pastEn": "heard",
+      "past3": "سَمِعَ", "pres3": "يَسْمَعُ",
+      "past": { "ana": "سَمِعْتُ", "anta": "سَمِعْتَ", "anti": "سَمِعْتِ", "huwa": "سَمِعَ", "hiya": "سَمِعَتْ", "nahnu": "سَمِعْنَا", "antum": "سَمِعْتُمْ", "hum": "سَمِعُوا" },
+      "pres": { "ana": "أَسْمَعُ", "anta": "تَسْمَعُ", "anti": "تَسْمَعِينَ", "huwa": "يَسْمَعُ", "hiya": "تَسْمَعُ", "nahnu": "نَسْمَعُ", "antum": "تَسْمَعُونَ", "hum": "يَسْمَعُونَ" }
+    },
+    {
+      "id": "akala", "root": "أ ك ل", "en": "to eat", "base": "eat", "pastEn": "ate",
+      "past3": "أَكَلَ", "pres3": "يَأْكُلُ",
+      "past": { "ana": "أَكَلْتُ", "anta": "أَكَلْتَ", "anti": "أَكَلْتِ", "huwa": "أَكَلَ", "hiya": "أَكَلَتْ", "nahnu": "أَكَلْنَا", "antum": "أَكَلْتُمْ", "hum": "أَكَلُوا" },
+      "pres": { "ana": "آكُلُ", "anta": "تَأْكُلُ", "anti": "تَأْكُلِينَ", "huwa": "يَأْكُلُ", "hiya": "تَأْكُلُ", "nahnu": "نَأْكُلُ", "antum": "تَأْكُلُونَ", "hum": "يَأْكُلُونَ" }
+    },
+    {
+      "id": "shariba", "root": "ش ر ب", "en": "to drink", "base": "drink", "pastEn": "drank",
+      "past3": "شَرِبَ", "pres3": "يَشْرَبُ",
+      "past": { "ana": "شَرِبْتُ", "anta": "شَرِبْتَ", "anti": "شَرِبْتِ", "huwa": "شَرِبَ", "hiya": "شَرِبَتْ", "nahnu": "شَرِبْنَا", "antum": "شَرِبْتُمْ", "hum": "شَرِبُوا" },
+      "pres": { "ana": "أَشْرَبُ", "anta": "تَشْرَبُ", "anti": "تَشْرَبِينَ", "huwa": "يَشْرَبُ", "hiya": "تَشْرَبُ", "nahnu": "نَشْرَبُ", "antum": "تَشْرَبُونَ", "hum": "يَشْرَبُونَ" }
+    },
+    {
+      "id": "saala", "root": "س أ ل", "en": "to ask", "base": "ask", "pastEn": "asked",
+      "past3": "سَأَلَ", "pres3": "يَسْأَلُ",
+      "past": { "ana": "سَأَلْتُ", "anta": "سَأَلْتَ", "anti": "سَأَلْتِ", "huwa": "سَأَلَ", "hiya": "سَأَلَتْ", "nahnu": "سَأَلْنَا", "antum": "سَأَلْتُمْ", "hum": "سَأَلُوا" },
+      "pres": { "ana": "أَسْأَلُ", "anta": "تَسْأَلُ", "anti": "تَسْأَلِينَ", "huwa": "يَسْأَلُ", "hiya": "تَسْأَلُ", "nahnu": "نَسْأَلُ", "antum": "تَسْأَلُونَ", "hum": "يَسْأَلُونَ" }
+    },
+    {
+      "id": "salla", "root": "ص ل و", "en": "to pray", "base": "pray", "pastEn": "prayed",
+      "past3": "صَلَّى", "pres3": "يُصَلِّي",
+      "past": { "ana": "صَلَّيْتُ", "anta": "صَلَّيْتَ", "anti": "صَلَّيْتِ", "huwa": "صَلَّى", "hiya": "صَلَّتْ", "nahnu": "صَلَّيْنَا", "antum": "صَلَّيْتُمْ", "hum": "صَلَّوْا" },
+      "pres": { "ana": "أُصَلِّي", "anta": "تُصَلِّي", "anti": "تُصَلِّينَ", "huwa": "يُصَلِّي", "hiya": "تُصَلِّي", "nahnu": "نُصَلِّي", "antum": "تُصَلُّونَ", "hum": "يُصَلُّونَ" }
+    },
+    {
+      "id": "amila", "root": "ع م ل", "en": "to do; to work", "base": "do", "pastEn": "did",
+      "past3": "عَمِلَ", "pres3": "يَعْمَلُ",
+      "past": { "ana": "عَمِلْتُ", "anta": "عَمِلْتَ", "anti": "عَمِلْتِ", "huwa": "عَمِلَ", "hiya": "عَمِلَتْ", "nahnu": "عَمِلْنَا", "antum": "عَمِلْتُمْ", "hum": "عَمِلُوا" },
+      "pres": { "ana": "أَعْمَلُ", "anta": "تَعْمَلُ", "anti": "تَعْمَلِينَ", "huwa": "يَعْمَلُ", "hiya": "تَعْمَلُ", "nahnu": "نَعْمَلُ", "antum": "تَعْمَلُونَ", "hum": "يَعْمَلُونَ" }
+    },
+    {
+      "id": "arafa", "root": "ع ر ف", "en": "to know", "base": "know", "pastEn": "knew",
+      "past3": "عَرَفَ", "pres3": "يَعْرِفُ",
+      "past": { "ana": "عَرَفْتُ", "anta": "عَرَفْتَ", "anti": "عَرَفْتِ", "huwa": "عَرَفَ", "hiya": "عَرَفَتْ", "nahnu": "عَرَفْنَا", "antum": "عَرَفْتُمْ", "hum": "عَرَفُوا" },
+      "pres": { "ana": "أَعْرِفُ", "anta": "تَعْرِفُ", "anti": "تَعْرِفِينَ", "huwa": "يَعْرِفُ", "hiya": "تَعْرِفُ", "nahnu": "نَعْرِفُ", "antum": "تَعْرِفُونَ", "hum": "يَعْرِفُونَ" }
+    },
+    {
+      "id": "fahima", "root": "ف هـ م", "en": "to understand", "base": "understand", "pastEn": "understood",
+      "past3": "فَهِمَ", "pres3": "يَفْهَمُ",
+      "past": { "ana": "فَهِمْتُ", "anta": "فَهِمْتَ", "anti": "فَهِمْتِ", "huwa": "فَهِمَ", "hiya": "فَهِمَتْ", "nahnu": "فَهِمْنَا", "antum": "فَهِمْتُمْ", "hum": "فَهِمُوا" },
+      "pres": { "ana": "أَفْهَمُ", "anta": "تَفْهَمُ", "anti": "تَفْهَمِينَ", "huwa": "يَفْهَمُ", "hiya": "تَفْهَمُ", "nahnu": "نَفْهَمُ", "antum": "تَفْهَمُونَ", "hum": "يَفْهَمُونَ" }
+    },
+    {
+      "id": "ahabba", "root": "ح ب ب", "en": "to love; to like", "base": "love", "pastEn": "loved",
+      "past3": "أَحَبَّ", "pres3": "يُحِبُّ",
+      "past": { "ana": "أَحْبَبْتُ", "anta": "أَحْبَبْتَ", "anti": "أَحْبَبْتِ", "huwa": "أَحَبَّ", "hiya": "أَحَبَّتْ", "nahnu": "أَحْبَبْنَا", "antum": "أَحْبَبْتُمْ", "hum": "أَحَبُّوا" },
+      "pres": { "ana": "أُحِبُّ", "anta": "تُحِبُّ", "anti": "تُحِبِّينَ", "huwa": "يُحِبُّ", "hiya": "تُحِبُّ", "nahnu": "نُحِبُّ", "antum": "تُحِبُّونَ", "hum": "يُحِبُّونَ" }
+    },
+    {
+      "id": "raa", "root": "ر أ ي", "en": "to see", "base": "see", "pastEn": "saw",
+      "past3": "رَأَى", "pres3": "يَرَى",
+      "past": { "ana": "رَأَيْتُ", "anta": "رَأَيْتَ", "anti": "رَأَيْتِ", "huwa": "رَأَى", "hiya": "رَأَتْ", "nahnu": "رَأَيْنَا", "antum": "رَأَيْتُمْ", "hum": "رَأَوْا" },
+      "pres": { "ana": "أَرَى", "anta": "تَرَى", "anti": "تَرَيْنَ", "huwa": "يَرَى", "hiya": "تَرَى", "nahnu": "نَرَى", "antum": "تَرَوْنَ", "hum": "يَرَوْنَ" }
+    },
+    {
+      "id": "zara", "root": "ز و ر", "en": "to visit", "base": "visit", "pastEn": "visited",
+      "past3": "زَارَ", "pres3": "يَزُورُ",
+      "past": { "ana": "زُرْتُ", "anta": "زُرْتَ", "anti": "زُرْتِ", "huwa": "زَارَ", "hiya": "زَارَتْ", "nahnu": "زُرْنَا", "antum": "زُرْتُمْ", "hum": "زَارُوا" },
+      "pres": { "ana": "أَزُورُ", "anta": "تَزُورُ", "anti": "تَزُورِينَ", "huwa": "يَزُورُ", "hiya": "تَزُورُ", "nahnu": "نَزُورُ", "antum": "تَزُورُونَ", "hum": "يَزُورُونَ" }
+    },
+    {
+      "id": "taallama", "root": "ع ل م", "en": "to learn", "base": "learn", "pastEn": "learned",
+      "past3": "تَعَلَّمَ", "pres3": "يَتَعَلَّمُ",
+      "past": { "ana": "تَعَلَّمْتُ", "anta": "تَعَلَّمْتَ", "anti": "تَعَلَّمْتِ", "huwa": "تَعَلَّمَ", "hiya": "تَعَلَّمَتْ", "nahnu": "تَعَلَّمْنَا", "antum": "تَعَلَّمْتُمْ", "hum": "تَعَلَّمُوا" },
+      "pres": { "ana": "أَتَعَلَّمُ", "anta": "تَتَعَلَّمُ", "anti": "تَتَعَلَّمِينَ", "huwa": "يَتَعَلَّمُ", "hiya": "تَتَعَلَّمُ", "nahnu": "نَتَعَلَّمُ", "antum": "تَتَعَلَّمُونَ", "hum": "يَتَعَلَّمُونَ" }
+    },
+    {
+      "id": "dakhala", "root": "د خ ل", "en": "to enter", "base": "enter", "pastEn": "entered",
+      "past3": "دَخَلَ", "pres3": "يَدْخُلُ",
+      "past": { "ana": "دَخَلْتُ", "anta": "دَخَلْتَ", "anti": "دَخَلْتِ", "huwa": "دَخَلَ", "hiya": "دَخَلَتْ", "nahnu": "دَخَلْنَا", "antum": "دَخَلْتُمْ", "hum": "دَخَلُوا" },
+      "pres": { "ana": "أَدْخُلُ", "anta": "تَدْخُلُ", "anti": "تَدْخُلِينَ", "huwa": "يَدْخُلُ", "hiya": "تَدْخُلُ", "nahnu": "نَدْخُلُ", "antum": "تَدْخُلُونَ", "hum": "يَدْخُلُونَ" }
+    },
+    {
+      "id": "takallama", "root": "ك ل م", "en": "to speak", "base": "speak", "pastEn": "spoke",
+      "past3": "تَكَلَّمَ", "pres3": "يَتَكَلَّمُ",
+      "past": { "ana": "تَكَلَّمْتُ", "anta": "تَكَلَّمْتَ", "anti": "تَكَلَّمْتِ", "huwa": "تَكَلَّمَ", "hiya": "تَكَلَّمَتْ", "nahnu": "تَكَلَّمْنَا", "antum": "تَكَلَّمْتُمْ", "hum": "تَكَلَّمُوا" },
+      "pres": { "ana": "أَتَكَلَّمُ", "anta": "تَتَكَلَّمُ", "anti": "تَتَكَلَّمِينَ", "huwa": "يَتَكَلَّمُ", "hiya": "تَتَكَلَّمُ", "nahnu": "نَتَكَلَّمُ", "antum": "تَتَكَلَّمُونَ", "hum": "يَتَكَلَّمُونَ" }
+    },
+    {
+      "id": "kana", "root": "ك و ن", "en": "to be (was / is)", "base": "be", "pastEn": "was",
+      "past3": "كَانَ", "pres3": "يَكُونُ",
+      "past": { "ana": "كُنْتُ", "anta": "كُنْتَ", "anti": "كُنْتِ", "huwa": "كَانَ", "hiya": "كَانَتْ", "nahnu": "كُنَّا", "antum": "كُنْتُمْ", "hum": "كَانُوا" },
+      "pres": { "ana": "أَكُونُ", "anta": "تَكُونُ", "anti": "تَكُونِينَ", "huwa": "يَكُونُ", "hiya": "تَكُونُ", "nahnu": "نَكُونُ", "antum": "تَكُونُونَ", "hum": "يَكُونُونَ" }
+    },
+    {
+      "id": "abada", "root": "ع ب د", "en": "to worship", "base": "worship", "pastEn": "worshipped",
+      "past3": "عَبَدَ", "pres3": "يَعْبُدُ",
+      "past": { "ana": "عَبَدْتُ", "anta": "عَبَدْتَ", "anti": "عَبَدْتِ", "huwa": "عَبَدَ", "hiya": "عَبَدَتْ", "nahnu": "عَبَدْنَا", "antum": "عَبَدْتُمْ", "hum": "عَبَدُوا" },
+      "pres": { "ana": "أَعْبُدُ", "anta": "تَعْبُدُ", "anti": "تَعْبُدِينَ", "huwa": "يَعْبُدُ", "hiya": "تَعْبُدُ", "nahnu": "نَعْبُدُ", "antum": "تَعْبُدُونَ", "hum": "يَعْبُدُونَ" }
+    },
+    {
+      "id": "istaana", "root": "ع و ن", "en": "to seek help", "base": "seek help", "pastEn": "sought help",
+      "past3": "اسْتَعَانَ", "pres3": "يَسْتَعِينُ",
+      "past": { "ana": "اسْتَعَنْتُ", "anta": "اسْتَعَنْتَ", "anti": "اسْتَعَنْتِ", "huwa": "اسْتَعَانَ", "hiya": "اسْتَعَانَتْ", "nahnu": "اسْتَعَنَّا", "antum": "اسْتَعَنْتُمْ", "hum": "اسْتَعَانُوا" },
+      "pres": { "ana": "أَسْتَعِينُ", "anta": "تَسْتَعِينُ", "anti": "تَسْتَعِينِينَ", "huwa": "يَسْتَعِينُ", "hiya": "تَسْتَعِينُ", "nahnu": "نَسْتَعِينُ", "antum": "تَسْتَعِينُونَ", "hum": "يَسْتَعِينُونَ" }
+    },
+    {
+      "id": "hada", "root": "هـ د ي", "en": "to guide", "base": "guide", "pastEn": "guided",
+      "past3": "هَدَى", "pres3": "يَهْدِي",
+      "past": { "ana": "هَدَيْتُ", "anta": "هَدَيْتَ", "anti": "هَدَيْتِ", "huwa": "هَدَى", "hiya": "هَدَتْ", "nahnu": "هَدَيْنَا", "antum": "هَدَيْتُمْ", "hum": "هَدَوْا" },
+      "pres": { "ana": "أَهْدِي", "anta": "تَهْدِي", "anti": "تَهْدِينَ", "huwa": "يَهْدِي", "hiya": "تَهْدِي", "nahnu": "نَهْدِي", "antum": "تَهْدُونَ", "hum": "يَهْدُونَ" }
+    }
+  ]
+}

@@ -1524,6 +1524,32 @@ function famLookup(word) {
   const n = normalizeAr(word);
   return _famIdx[n] || _famIdx[n.replace(/^ال/, "")] || null;
 }
+/* Conjugation tables travel with words too (his 2026-07-21 note: every word
+   should show "conjugation and present and past form"): conjugations.json
+   indexes EVERY past/present form — plus the سـ future and و/ف-prefixed
+   Quranic forms (وَقَالُوا، فَقَالَ) — so tapping any of them anywhere on the
+   site finds the verb and the popover offers the full table. */
+let _conj = null, _conjIdx = null, _conjLoading = null;
+function loadConj() {
+  if (_conjIdx || _conjLoading) return _conjLoading || Promise.resolve();
+  _conjLoading = fetch("data/conjugations.json").then(r => r.json()).then(d => {
+    _conj = d;
+    _conjIdx = {};
+    const putc = (n, hit) => { if (n && !_conjIdx[n]) _conjIdx[n] = hit; };
+    d.verbs.forEach(v => d.persons.forEach(p => {
+      putc(normalizeAr(v.past[p.key]), { v, person: p, tense: "past" });
+      const pn = normalizeAr(v.pres[p.key]);
+      putc(pn, { v, person: p, tense: "pres" });
+      putc("س" + pn, { v, person: p, tense: "fut" });
+    }));
+  }).catch(() => (_conjIdx = {}));
+  return _conjLoading;
+}
+function conjLookup(word) {
+  if (!_conjIdx) return null;
+  const n = normalizeAr(word);
+  return _conjIdx[n] || _conjIdx[n.replace(/^[وف]/, "")] || null;
+}
 const _AR_CH = /[؀-ۿ]/;
 function wordAtPoint(x, y) {
   let node = null, off = 0;
@@ -1544,6 +1570,11 @@ function wordAtPoint(x, y) {
 }
 let _wordPop = null;
 function closeWordPop() { if (_wordPop) { _wordPop.remove(); _wordPop = null; } }
+/* "he ___s" label for a verb base: go→goes, be→is, seek help→seeks help */
+function en3sg(base) {
+  if (base === "be") return "is";
+  return String(base).replace(/^(\S+)/, w => /(o|ch|sh|ss|x|z)$/.test(w) ? w + "es" : w + "s");
+}
 function showWordPop(word, x, y, o) {
   closeWordPop();
   const hit = o.hit;
@@ -1565,15 +1596,44 @@ function showWordPop(word, x, y, o) {
       🌿 root <b dir="rtl" class="arabic" style="font-size:14px">${o.fam.root.split("(")[0].trim()}</b> —
       ${o.fam.members.slice(0, 5).map(m => `<span style="white-space:nowrap"><span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink,#222)">${m.ar}</span> <span style="font-size:11.5px">${m.en}</span></span>`).join(" · ")}
       <a href="vocab.html?fam=${o.fam.id}" style="color:var(--accent,#0d7a5f);display:inline-block">study the family →</a></div>` : ""}
+    ${!o.hideMeaning && o.conj ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888)">
+      🔁 <span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink,#222)">${o.conj.v.past3}</span> ${o.conj.v.pastEn} ·
+      <span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink,#222)">${o.conj.v.pres3}</span> ${en3sg(o.conj.v.base)} —
+      this form: <b>${o.conj.person.en} + ${({ past: "past", pres: "present", fut: "future" })[o.conj.tense]}</b>
+      <a href="#" class="wp-conj" style="color:var(--accent,#0d7a5f);display:inline-block">full table ▾</a>
+      <div class="wp-conjtable" style="display:none;max-height:38vh;overflow-y:auto;margin-top:6px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <tr style="color:var(--muted,#888)"><td style="padding:2px 4px"></td><td style="padding:2px 4px;text-align:center">past</td><td style="padding:2px 4px;text-align:center">present</td></tr>
+          ${(_conj ? _conj.persons : []).map(p => `<tr style="border-top:1px solid var(--border,#eee)${p.key === o.conj.person.key ? ";background:rgba(13,122,95,.08)" : ""}">
+            <td style="padding:3px 4px;white-space:nowrap"><span class="arabic" dir="rtl" style="font-size:14px;color:var(--ink,#222)">${p.ar}</span> <span style="font-size:10.5px">${p.en}</span></td>
+            <td class="arabic" dir="rtl" style="padding:3px 4px;font-size:16px;color:var(--ink,#222);text-align:center">${o.conj.v.past[p.key]}</td>
+            <td class="arabic" dir="rtl" style="padding:3px 4px;font-size:16px;color:var(--ink,#222);text-align:center">${o.conj.v.pres[p.key]}</td>
+          </tr>`).join("")}
+        </table>
+        <div style="margin-top:4px;font-size:11.5px">future = <span class="arabic" dir="rtl" style="font-size:14px;color:var(--ink,#222)">سَـ</span> + present — <span class="arabic" dir="rtl" style="font-size:14px;color:var(--ink,#222)">سَ${o.conj.v.pres.ana}</span> I will ${o.conj.v.base}</div>
+      </div></div>` : ""}
     <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
       <button type="button" class="wp-say" style="border:1px solid var(--border,#ddd);background:transparent;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:15px">🔊</button>
       ${canLearn ? `<button type="button" class="wp-learn" ${already ? "disabled" : ""} style="border:none;background:var(--accent,#0d7a5f);color:#fff;border-radius:10px;padding:6px 14px;cursor:pointer;font-weight:600">${already ? "✓ in your deck" : "＋ Learn"}</button>` : ""}
     </div>`;
   document.body.appendChild(pop);
-  const r = pop.getBoundingClientRect();
-  pop.style.left = Math.max(8, Math.min(x - r.width / 2, innerWidth - r.width - 8)) + "px";
-  pop.style.top = (y + 16 + r.height > innerHeight ? y - r.height - 12 : y + 16) + "px";
+  const place = () => {
+    const r = pop.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(x - r.width / 2, innerWidth - r.width - 8)) + "px";
+    pop.style.top = Math.max(8, y + 16 + r.height > innerHeight ? y - r.height - 12 : y + 16) + "px";
+  };
+  place();
   pop.querySelector(".wp-say").onclick = () => speak(disp, 0.75);
+  const cj = pop.querySelector(".wp-conj");
+  if (cj) cj.onclick = e => {
+    e.preventDefault();
+    const t = pop.querySelector(".wp-conjtable");
+    const open = t.style.display !== "none";
+    t.style.display = open ? "none" : "block";
+    cj.textContent = open ? "full table ▾" : "hide table ▴";
+    place();
+    if (!open) logEvent({ e: "conj-open", verb: o.conj.v.id, form: normalizeAr(disp) });
+  };
   const lb = pop.querySelector(".wp-learn");
   if (lb && !already) lb.onclick = () => {
     const srs = getSrs();
@@ -1602,15 +1662,16 @@ function initWordTap() {
     if (e.target.closest("input,textarea,select,button,a,label,[contenteditable],nav,#notePen,#noteOverlay")) { closeWordPop(); return; }
     const word = wordAtPoint(e.clientX, e.clientY);
     if (!word) { closeWordPop(); return; }
-    await Promise.all([loadLexicon(), loadFamIdx()]);
+    await Promise.all([loadLexicon(), loadFamIdx(), loadConj()]);
     const hit = lexLookup(word);
     const fam = famLookup(word);
+    const conj = conjLookup(word);
     const mnem = mnemFor(word);
     const row = e.target.closest("tr");
     const tested = e.target.closest("[data-nopeek]") || (row && row.querySelector("input:not([disabled])"));
     const qEl = e.target.closest("[data-qkey]");
-    showWordPop(word, e.clientX, e.clientY, { hit, fam, mnem, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
-    logEvent({ e: "wtap", ar: normalizeAr(word), hit: !!hit, ...(tested ? { hidden: true } : {}) });
+    showWordPop(word, e.clientX, e.clientY, { hit, fam, conj, mnem, hideMeaning: !!tested, qkey: qEl && qEl.dataset.qkey });
+    logEvent({ e: "wtap", ar: normalizeAr(word), hit: !!hit, ...(conj ? { conj: conj.v.id } : {}), ...(tested ? { hidden: true } : {}) });
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeWordPop(); });
   window.addEventListener("scroll", closeWordPop, { passive: true });
