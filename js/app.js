@@ -26,6 +26,7 @@ const FAMILY_LIST = [
   { id: "hyy", root: "ح ي ي", hint: "life — الحيّ" },
   { id: "klm", root: "ك ل م", hint: "to speak — كلمة" },
   { id: "byt", root: "ب ي ت", hint: "house — البيت" },
+  { id: "rhm", root: "ر ح م", hint: "mercy — الرحمن والرحيم come from رَحِم, the womb" },
 ];
 
 /* Everyday-Arabic clusters (full data in data/everyday.json) */

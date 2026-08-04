@@ -277,6 +277,27 @@
         { "ref": "2:125", "ar": "وَإِذْ جَعَلْنَا الْبَيْتَ مَثَابَةً لِّلنَّاسِ وَأَمْنًا", "en": "And when We made the House a place of return for the people and a sanctuary." },
         { "ref": "3:96", "ar": "إِنَّ أَوَّلَ بَيْتٍ وُضِعَ لِلنَّاسِ لَلَّذِي بِبَكَّةَ مُبَارَكًا", "en": "Indeed, the first House established for mankind was that at Bakkah — blessed." }
       ]
+    },
+    {
+      "id": "rhm",
+      "root": "ر ح م",
+      "rootTr": "r-ḥ-m",
+      "theme": "mercy — from رَحِم, the womb (about 340 occurrences): the Quran's word for mercy is womb-tenderness, carrying and nourishing before ever being asked",
+      "met": "الرَّحْمَٰنِ الرَّحِيمِ",
+      "members": [
+        { "ar": "رَحْمَة", "tr": "raḥma", "en": "mercy" },
+        { "ar": "رَحِم", "tr": "raḥim", "en": "womb" },
+        { "ar": "الرَّحْمَٰن", "tr": "ar-raḥmān", "en": "the Most Compassionate" },
+        { "ar": "الرَّحِيم", "tr": "ar-raḥīm", "en": "the Most Merciful" },
+        { "ar": "رَحِمَ", "tr": "raḥima", "en": "he had mercy" },
+        { "ar": "يَرْحَمُ", "tr": "yarḥamu", "en": "he has mercy" },
+        { "ar": "ارْحَمْ", "tr": "irḥam", "en": "have mercy! (the dua word)" },
+        { "ar": "الرَّاحِمِينَ", "tr": "ar-rāḥimīn", "en": "the merciful ones" }
+      ],
+      "quran": [
+        { "ref": "1:3", "ar": "الرَّحْمَٰنِ الرَّحِيمِ", "en": "The Most Compassionate, the Most Merciful." },
+        { "ref": "17:24", "ar": "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", "en": "My Lord, have mercy on them both, as they raised me when I was small." }
+      ]
     }
   ]
 }
