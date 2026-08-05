@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msgjfjep">
-  <link rel="stylesheet" href="css/style.css?v=msgjfjep">
+  <link rel="stylesheet" href="css/fonts.css?v=msgk311r">
+  <link rel="stylesheet" href="css/style.css?v=msgk311r">
 </head>
 <body>
 <main>
@@ -22,8 +22,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msgjfjep"></script>
-<script src="js/tracker.js?v=msgjfjep"></script>
+<script src="js/app.js?v=msgk311r"></script>
+<script src="js/tracker.js?v=msgk311r"></script>
 <script>
 renderNav("stories");
 
@@ -280,6 +280,12 @@ function renderMemorize() {
 
   function applyToggles() {
     [...tbody.children].forEach((tr) => {
+      // the conjugation strips carry English ("I will live"), so they hide while
+      // you're testing yourself — and they have none of the cells below
+      if (tr.classList.contains("conj-row")) {
+        tr.style.display = tgTest.checked ? "none" : "";
+        return;
+      }
       const enCell = tr.querySelector(".en-cell");
       if (tgTest.checked) enCell.classList.add("veiled");
       else enCell.classList.remove("veiled");
@@ -289,6 +295,7 @@ function renderMemorize() {
   tgTest.onchange = applyToggles;
   tgTr.onchange = applyToggles;
   applyToggles();
+  mountConjRows(tbody, 4).then(applyToggles);
 
   document.getElementById("vtDone").onclick = () => {
     const keys = story.vocab.map((v, i) => `${storyId}:${i}`);

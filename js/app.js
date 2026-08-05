@@ -1555,6 +1555,71 @@ function conjLookup(word) {
   const n = normalizeAr(word);
   return _conjIdx[n] || _conjIdx[n.replace(/^[وف]/, "")] || null;
 }
+/* The un-vowelled skeleton is ambiguous: كتب is both كَتَبَ "he wrote" and كُتُب
+   "books". That is fine for a tap (you tapped that exact word), but NOT for
+   labelling a whole row as a verb — so the vocab strips demand the vowels match. */
+function conjLookupStrict(word) {
+  const hit = conjLookup(word);
+  if (!hit) return null;
+  const bare = s => String(s).replace(/[ـ\s]/g, "");
+  const w = bare(word);
+  const forms = [];
+  for (const p of (_conj ? _conj.persons : [])) { forms.push(hit.v.past[p.key], hit.v.pres[p.key]); }
+  return forms.some(f => bare(f) === w) ? hit : null;
+}
+/* Verbs earn a visible line in the vocab tables, not just a popover you have to
+   know to tap (his 2026-08-05 note: "i still dont see words with conjugations
+   and present past future ... should be encouraged"). Past · present · future
+   sit in the open; the eight persons are one tap away. */
+function conjStripHTML(hit) {
+  const v = hit.v;
+  const ar = s => `<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${s}</span>`;
+  return `<div class="conj-strip">
+    <span class="conj-line">🔁 <b>past</b> ${ar(v.past3)} · <b>present</b> ${ar(v.pres3)} · <b>future</b> ${ar("سَ" + v.pres3)}</span>
+    <a href="#" class="conj-more">all 8 persons ▾</a>
+    <div class="conj-table" style="display:none">
+      <table>
+        <thead><tr><th></th><th>past</th><th>present</th></tr></thead>
+        <tbody>${(_conj ? _conj.persons : []).map(p => `<tr${p.key === (hit.person && hit.person.key) ? ' class="me"' : ""}>
+          <td>${p.en}</td>
+          <td>${ar(v.past[p.key])}</td>
+          <td>${ar(v.pres[p.key])}</td></tr>`).join("")}</tbody>
+      </table>
+      <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)} “I will ${v.base}”</div>
+    </div>
+  </div>`;
+}
+/* Attach the strip to every row of a vocab table whose Arabic is a known verb.
+   Called after the table is built; loads the conjugation index on demand. */
+function mountConjRows(tbody, colSpan) {
+  if (!tbody) return Promise.resolve();
+  return loadConj().then(() => {
+    [...tbody.querySelectorAll("tr")].forEach(tr => {
+      if (tr.dataset.conjDone) return;
+      const arCell = tr.querySelector(".ar-cell");
+      if (!arCell) return;
+      const word = (arCell.textContent || "").trim().split(/\s+/)[0];
+      const hit = word && conjLookupStrict(word);
+      if (!hit) return;
+      tr.dataset.conjDone = "1";
+      const row = document.createElement("tr");
+      row.className = "conj-row";
+      const td = document.createElement("td");
+      td.colSpan = colSpan || 5;
+      td.innerHTML = conjStripHTML(hit);
+      row.appendChild(td);
+      tr.after(row);
+      const more = td.querySelector(".conj-more"), tbl = td.querySelector(".conj-table");
+      more.onclick = e => {
+        e.preventDefault();
+        const open = tbl.style.display !== "none";
+        tbl.style.display = open ? "none" : "block";
+        more.textContent = open ? "all 8 persons ▾" : "hide ▴";
+        if (!open) logEvent({ e: "conj-open", verb: hit.v.id, from: "table" });
+      };
+    });
+  });
+}
 const _AR_CH = /[؀-ۿ]/;
 function wordAtPoint(x, y) {
   let node = null, off = 0;
