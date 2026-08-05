@@ -4,6 +4,8 @@
    Claude reads/writes the KV from chat sessions via wrangler. */
 
 const SESSION_TTL = 180 * 24 * 60 * 60; // 180 days, seconds
+const IMG_TTL = 180 * 24 * 60 * 60;     // photos on ✏️ notes; the nightly run archives keepers
+const IMG_MAX = 2 * 1024 * 1024;        // backstop — the client downscales to ~200KB first
 
 function cors(env, extra = {}) {
   return {
@@ -116,6 +118,40 @@ export default {
       return coach
         ? new Response(coach, { status: 200, headers: cors(env) })
         : json(env, 200, { note: null });
+    }
+
+    /* Photo attached to a ✏️ note. Stored under its own key, NOT inside the
+       learning log: that blob is rewritten on every sync, so an image in it
+       would make every future sync tens of times heavier. The note event
+       carries only the id. Keys are namespaced by the session's email, so a
+       user can only ever read back their own. */
+    if (url.pathname === "/image" && req.method === "POST") {
+      const type = (req.headers.get("Content-Type") || "").split(";")[0].trim();
+      if (!/^image\/(jpeg|png|webp)$/.test(type)) return json(env, 415, { error: "bad-type" });
+      const buf = await req.arrayBuffer();
+      if (!buf.byteLength) return json(env, 400, { error: "empty" });
+      if (buf.byteLength > IMG_MAX) return json(env, 413, { error: "too-large" });
+      const id = Date.now() + "-" + crypto.randomUUID().slice(0, 8);
+      await env.ARABIC_SYNC.put("img:" + email + ":" + id, buf, {
+        expirationTtl: IMG_TTL,
+        metadata: { type, bytes: buf.byteLength, at: Date.now() },
+      });
+      return json(env, 200, { id, bytes: buf.byteLength });
+    }
+
+    if (url.pathname === "/image" && req.method === "GET") {
+      const id = url.searchParams.get("id") || "";
+      if (!/^[0-9a-fA-F-]{1,64}$/.test(id)) return json(env, 400, { error: "bad-id" });
+      const got = await env.ARABIC_SYNC.getWithMetadata("img:" + email + ":" + id, { type: "arrayBuffer" });
+      if (!got || !got.value) return json(env, 404, { error: "not-found" });
+      return new Response(got.value, {
+        status: 200,
+        headers: {
+          ...cors(env),
+          "Content-Type": (got.metadata && got.metadata.type) || "image/jpeg",
+          "Cache-Control": "private, max-age=86400",
+        },
+      });
     }
 
     return json(env, 404, { error: "not-found" });

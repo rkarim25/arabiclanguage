@@ -1687,6 +1687,35 @@ function initWordTap() {
    were (page, headings, any selected text). Saved as a `note` log event,
    synced with everything else; the nightly coach reads and answers via the
    dashboard notes. */
+/* A phone photo is 1-3MB — far too big to ride inside the log blob, which is
+   rewritten on every sync. Shrink to something readable-but-small first, then
+   the upload stores it under its own key and the note keeps just the id. */
+function shrinkImage(file, maxPx = 1400, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => b ? resolve(b) : reject(new Error("encode-failed")), "image/jpeg", quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode-failed")); };
+    img.src = url;
+  });
+}
+
+async function uploadNoteImage(blob) {
+  const r = await wReq("/image", { method: "POST", body: blob, headers: { "Content-Type": "image/jpeg" } });
+  if (!r.ok) throw new Error("upload-" + r.status);
+  const j = await r.json();
+  if (!j.id) throw new Error("no-id");
+  return j.id;
+}
+
 function mountNotePen() {
   if (document.getElementById("notePen")) return;
   const btn = document.createElement("button");
@@ -1704,6 +1733,9 @@ function mountNotePen() {
       sel: (window.getSelection() + "").trim().slice(0, 160) || undefined,
     };
     const recent = store.get("ats-log", []).filter(x => x.e === "note").slice(-2);
+    // photos travel through the sync Worker, so they need a Worker session
+    const canPhoto = typeof syncMethod === "function" && syncMethod() === "google";
+    const MAX_SHOTS = 6;
     const ov = document.createElement("div");
     ov.id = "noteOverlay";
     ov.innerHTML = `
@@ -1711,22 +1743,102 @@ function mountNotePen() {
         <h3 style="margin:0 0 4px">✏️ Note to your coach</h3>
         <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Anything at all — “this confused me”, “too hard”, “more like this”. Your coach reads these nightly, sees exactly what you were looking at, and replies in the dashboard notes.</p>
         <textarea id="noteText" rows="4" placeholder="${who ? `What's on your mind, ${who.name}?` : "What's on your mind?"}"></textarea>
+        ${canPhoto ? `
+        <div id="noteShots" class="note-shots"></div>
+        <div class="ex-row" style="margin-top:8px;align-items:center">
+          <button class="small" id="notePhoto" type="button">📷 Add a photo</button>
+          <span style="font-size:12px;color:var(--muted)">or paste / drag one in — a lesson page, a worksheet, anything</span>
+        </div>
+        <input type="file" id="noteFile" accept="image/*" multiple style="display:none">` : ""}
         <div class="ex-row" style="margin-top:8px">
           <button class="primary" id="noteSave" type="button">Send to coach</button>
           <button class="small" id="noteCancel" type="button">Cancel</button>
         </div>
-        ${recent.length ? `<div style="margin-top:10px;font-size:12px;color:var(--muted)">Recent: ${recent.map(n => `“${(n.text || "").slice(0, 48)}” ✓`).join(" · ")}</div>` : ""}
+        <div id="noteErr" style="margin-top:8px;font-size:12.5px;color:var(--red)"></div>
+        ${recent.length ? `<div style="margin-top:10px;font-size:12px;color:var(--muted)">Recent: ${recent.map(n => `“${(n.text || "").slice(0, 48)}”${n.imgs ? " 📷" : ""} ✓`).join(" · ")}</div>` : ""}
       </div>`;
     document.body.appendChild(ov);
-    ov.onclick = e => { if (e.target === ov) ov.remove(); };
-    document.getElementById("noteCancel").onclick = () => ov.remove();
+    const box = ov.querySelector(".note-box");
+    const errEl = document.getElementById("noteErr");
+    const shots = [];
+    const closeOv = () => { shots.forEach(s => URL.revokeObjectURL(s.url)); ov.remove(); };
+
+    const renderShots = () => {
+      const el = document.getElementById("noteShots");
+      if (!el) return;
+      el.innerHTML = shots.map((s, i) =>
+        `<span class="note-shot"><img src="${s.url}" alt="attached photo ${i + 1}"><button type="button" class="shot-x" data-i="${i}" title="Remove">×</button></span>`).join("");
+      el.querySelectorAll(".shot-x").forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; URL.revokeObjectURL(shots[i].url); shots.splice(i, 1); renderShots(); };
+      });
+    };
+    /* Shrinking a phone photo takes a moment. Send must WAIT for it, or a note
+       sent quickly after dropping would silently arrive without the picture. */
+    let queued = 0, shotQueue = Promise.resolve();
+    const setBusy = on => {
+      const b = document.getElementById("noteSave");
+      if (!b) return;
+      b.disabled = on;
+      b.textContent = on ? "Preparing photo…" : "Send to coach";
+    };
+    const addFiles = files => {
+      const pics = [...files].filter(f => f && /^image\//.test(f.type))
+        .slice(0, Math.max(0, MAX_SHOTS - shots.length - queued));
+      if (!pics.length) return;
+      errEl.textContent = "";
+      queued += pics.length;
+      setBusy(true);
+      shotQueue = shotQueue.then(async () => {
+        for (const f of pics) {
+          try { const blob = await shrinkImage(f); shots.push({ blob, url: URL.createObjectURL(blob) }); }
+          catch (e) { errEl.textContent = "One of those images couldn't be read — try another."; }
+          queued--;
+        }
+        renderShots();
+        if (queued === 0) setBusy(false);
+      });
+    };
+
+    if (canPhoto) {
+      const fileInput = document.getElementById("noteFile");
+      document.getElementById("notePhoto").onclick = () => fileInput.click();
+      fileInput.onchange = () => { addFiles(fileInput.files); fileInput.value = ""; };
+      document.getElementById("noteText").addEventListener("paste", e => {
+        const pics = [...((e.clipboardData && e.clipboardData.items) || [])]
+          .filter(i => i.type && i.type.startsWith("image/")).map(i => i.getAsFile()).filter(Boolean);
+        if (!pics.length) return;
+        e.preventDefault();
+        addFiles(pics);
+      });
+      box.addEventListener("dragover", e => { e.preventDefault(); box.classList.add("drag"); });
+      box.addEventListener("dragleave", e => { if (e.target === box) box.classList.remove("drag"); });
+      box.addEventListener("drop", e => { e.preventDefault(); box.classList.remove("drag"); addFiles(e.dataTransfer.files); });
+    }
+
+    ov.onclick = e => { if (e.target === ov) closeOv(); };
+    document.getElementById("noteCancel").onclick = closeOv;
     document.getElementById("noteText").focus();
-    document.getElementById("noteSave").onclick = () => {
+    document.getElementById("noteSave").onclick = async () => {
+      await shotQueue; // a photo still being prepared must never be left behind
       const text = document.getElementById("noteText").value.trim();
-      if (!text) return;
-      logEvent({ e: "note", text: text.slice(0, 2000), ctx, user: who ? who.name : undefined });
-      ov.querySelector(".note-box").innerHTML = `<p style="font-size:15px;margin:0">✓ Saved${who ? ", " + who.name : ""} — your coach will read it tonight and reply in your dashboard notes.</p>`;
-      setTimeout(() => ov.remove(), 2000);
+      if (!text && !shots.length) return;
+      const saveBtn = document.getElementById("noteSave");
+      const imgs = [];
+      if (shots.length) {
+        // upload BEFORE logging, so a failure can never leave a note pointing at nothing
+        saveBtn.disabled = true;
+        saveBtn.textContent = shots.length > 1 ? `Sending ${shots.length} photos…` : "Sending photo…";
+        errEl.textContent = "";
+        try { for (const s of shots) imgs.push(await uploadNoteImage(s.blob)); }
+        catch (err) {
+          saveBtn.disabled = false; saveBtn.textContent = "Send to coach";
+          errEl.textContent = "The photo didn't upload — check your connection and press send again. Nothing you typed is lost.";
+          return;
+        }
+      }
+      logEvent({ e: "note", text: text.slice(0, 2000), ctx, user: who ? who.name : undefined, ...(imgs.length ? { imgs } : {}) });
+      box.innerHTML = `<p style="font-size:15px;margin:0">✓ Saved${who ? ", " + who.name : ""}${imgs.length ? ` — photo${imgs.length > 1 ? "s" : ""} sent too` : ""}. Your coach will read it tonight and reply in your dashboard notes.</p>`;
+      setTimeout(closeOv, 2000);
       if (typeof autoSync === "function") setTimeout(autoSync, 50);
     };
   };

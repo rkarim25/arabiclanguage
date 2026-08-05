@@ -398,6 +398,15 @@ footer a { color: var(--accent); }
 }
 #noteOverlay .note-box { background: var(--card); border-radius: var(--radius); padding: 18px; max-width: 480px; width: 100%; box-shadow: var(--shadow); }
 #noteOverlay textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 15px; font-family: var(--font-ui); }
+#noteOverlay .note-box.drag { outline: 2px dashed var(--accent); outline-offset: 4px; }
+.note-shots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.note-shot { position: relative; display: inline-block; }
+.note-shot img { width: 74px; height: 74px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: block; }
+.note-shot .shot-x {
+  position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  font-size: 15px; line-height: 1; padding: 0; cursor: pointer;
+}
 
 /* ---------- review control strip (mobile-safe: its own full-width row) ---------- */
 .vocab-table td.rv-ctrl { padding-top: 2px; padding-bottom: 10px; }
