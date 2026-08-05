@@ -1254,7 +1254,8 @@ const _SYN_GROUPS = [
   ["no", "not", "none", "never", "dont", "doesnt", "didnt", "isnt"],
   ["what", "which"],
   ["every", "all", "each"],
-  ["lord", "master"],
+  ["lord", "master", "sustainer", "carer", "cherisher", "nurturer", "caretaker"],
+  ["allah", "god"],
   ["people", "mankind", "humanity", "humankind", "nation", "folk", "men"],
   ["book", "scripture"],
   ["path", "way", "road"],
@@ -1265,7 +1266,7 @@ const _SYN_GROUPS = [
   ["earth", "land", "ground"],
   ["sky", "heaven", "heavens"],
   ["great", "tremendous", "mighty", "greatest", "big", "grand", "immense"],
-  ["merciful", "mercy"],
+  ["merciful", "mercy", "compassionate", "gracious", "kind"],
   ["forgiving", "forgiver", "forgiveness", "forgive", "forgives", "forgave", "pardon"],
   ["knowing", "knower", "knows", "knew", "knowledge", "aware"],
   ["wise", "wisdom"],
@@ -1303,6 +1304,9 @@ function _canon(w) { return _SYN[w] !== undefined ? "~" + _SYN[w] : w; }
 
 function fuzzyEn(typed, gloss) {
   if (!typed.trim()) return false;
+  // parentheticals in a gloss are explainer notes ("(carries the object) You",
+  // "we worship (present tense)"), never the meaning itself — don't match against them
+  gloss = String(gloss || "").replace(/\([^)]*\)/g, " ");
   // he may offer alternatives himself ("It was/ he was" for كان): every part
   // he offers must be right — a wrong hedge ("day/people") still fails
   const alts = typed.split(/[;,\/]|\bor\b/).map(s => s.trim()).filter(Boolean);
