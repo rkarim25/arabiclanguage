@@ -425,6 +425,19 @@ footer a { color: var(--accent); }
 .conj-table tbody tr.me { background: var(--accent-soft); }
 .conj-fut { margin-top: 4px; font-size: 11.5px; }
 
+/* ---------- bucket bar — SHARED (2026-08-06) ----------
+   These rules used to live only inside vocab.html and speaking.html, so on the
+   Review page tapping ✓ saved the word but the button never changed: "i am
+   clicking the tick but dont think it is taking it". Shared here so every page
+   that mounts a bucket bar shows the selected state. */
+.bucket-bar { display: inline-flex; gap: 3px; margin-top: 4px; direction: ltr; flex-wrap: wrap; vertical-align: middle; }
+.bucket-bar button { font-size: 12px; padding: 1px 8px; border-radius: 999px; color: var(--muted); }
+.bucket-bar button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+.bucket-bar button.sel.never { background: var(--red); border-color: var(--red); }
+/* …and say out loud what the tap did, so it never has to be guessed at */
+.bucket-said { font-size: 11.5px; color: var(--accent); margin-left: 7px; white-space: nowrap; }
+.bucket-said.never { color: var(--red); }
+
 /* ---------- review control strip (mobile-safe: its own full-width row) ---------- */
 .vocab-table td.rv-ctrl { padding-top: 2px; padding-bottom: 10px; }
 .rv-ctrl .miss { border-color: var(--red); color: var(--red); margin-right: 10px; }

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msgtopxt">
-  <link rel="stylesheet" href="css/style.css?v=msgtopxt">
+  <link rel="stylesheet" href="css/fonts.css?v=mshzs40w">
+  <link rel="stylesheet" href="css/style.css?v=mshzs40w">
 </head>
 <body>
 <main>
@@ -20,8 +20,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msgtopxt"></script>
-<script src="js/tracker.js?v=msgtopxt"></script>
+<script src="js/app.js?v=mshzs40w"></script>
+<script src="js/tracker.js?v=mshzs40w"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -61,13 +61,25 @@ function renderTable(queue) {
       </table>
     </div>
     <div class="ex-row" style="margin-top:16px">
-      <button class="primary" id="finish">✓ Finish — I knew everything except the marked ones</button>
+      <button class="primary" id="finish">✓ Finish</button>
     </div>
-    <p style="font-size:13px;color:var(--muted)">Tap a row to reveal its English. <strong style="color:var(--red)">✗ missed</strong> = got it wrong this time (it comes back within minutes). Or set a bucket directly: ✓ know · ↻ repeat soon · ⏳ much later · 🚫 retire (never show it again). 💡 = memory hook.</p>
+    <p style="font-size:13px;color:var(--muted)" id="finishHint">Stop whenever you like — <strong>Finish</strong> saves the words you actually went through and leaves the rest due for next time. Tap a row to reveal its English. <strong style="color:var(--red)">✗ missed</strong> = got it wrong this time (it comes back within minutes). Or set a bucket directly: ✓ know · ↻ repeat soon · ⏳ much later · 🚫 retire (never show it again). 💡 = memory hook.</p>
   `;
   const tbody = document.getElementById("rvBody");
   const missed = new Set();
   const bucketed = new Set(); // an explicit bucket is the user's final say — Finish must not regrade it
+  /* Finish used to grade EVERY card in the queue, scoring untouched words as
+     "knew it" — so stopping a third of the way through silently promoted 30 words
+     he never looked at. His 2026-08-06 ask: "even if i dont finish the entire
+     thing it registers the ones i have marked". `touched` is the honest set:
+     revealed, missed, or bucketed. Everything else stays due, unchanged. */
+  const touched = new Set();
+  const finishBtn = () => document.getElementById("finish");
+  function noteTouch(key) {
+    touched.add(key);
+    const b = finishBtn();
+    if (b) b.textContent = `✓ Finish — save the ${touched.size} I've done`;
+  }
 
   queue.forEach(({ key, v }) => {
     const tr = document.createElement("tr");
@@ -79,7 +91,7 @@ function renderTable(queue) {
     `;
     tr.querySelector(".row-speak").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
     const enCell = tr.querySelector(".en-cell");
-    tr.onclick = () => enCell.classList.remove("veiled");
+    tr.onclick = () => { enCell.classList.remove("veiled"); noteTouch(key); };
     tbody.appendChild(tr);
     mountMnem(tr, tr.querySelector(".row-speak").parentElement, v.ar, key);
 
@@ -94,6 +106,7 @@ function renderTable(queue) {
       enCell.classList.remove("veiled");
       if (missed.has(key)) { missed.delete(key); missBtn.classList.remove("on"); }
       else { missed.add(key); missBtn.classList.add("on"); }
+      noteTouch(key);
     };
     td.appendChild(missBtn);
     const slot = document.createElement("div");
@@ -101,25 +114,39 @@ function renderTable(queue) {
     td.appendChild(slot);
     ctr.appendChild(td);
     tbody.appendChild(ctr);
-    mountBucketBar(slot, key, () => { bucketed.add(key); missed.delete(key); missBtn.classList.remove("on"); });
+    mountBucketBar(slot, key, () => { bucketed.add(key); missed.delete(key); missBtn.classList.remove("on"); noteTouch(key); });
   });
+  // 🔁 verbs show past/present/future here too — the English is still veiled, so
+  // the strip runs with its gloss suppressed (noEn) and doesn't give the answer away.
+  mountConjRows(tbody, 4, { noEn: true, from: "review" });
 
   document.getElementById("tgTr").onchange = (e) => {
     [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
   };
   document.getElementById("revealAll").onclick = () => {
+    // an explicit "I've been through the lot" — every word counts as reviewed
     [...tbody.querySelectorAll(".en-cell")].forEach(c => c.classList.remove("veiled"));
+    queue.forEach(({ key }) => noteTouch(key));
   };
   document.getElementById("cardMode").onclick = () => renderCards(queue);
   document.getElementById("finish").onclick = () => {
+    let saved = 0;
     queue.forEach(({ key }) => {
-      if (bucketed.has(key)) return; // the bucket already scheduled it
+      if (bucketed.has(key)) { saved++; return; } // the bucket already scheduled it
+      if (!touched.has(key)) return;             // never looked at → leave it due
       const g = missed.has(key) ? "again" : "good";
       gradeCard(key, g);
       logEvent({ e: "review", card: key, g, src: "table" });
+      saved++;
     });
-    area.innerHTML = `<p style="font-size:18px">🎉 Review complete — ${queue.length} words done, ${missed.size} to revisit. <span class="arabic">أَحْسَنْت!</span></p>
-      <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`;
+    const left = queue.length - saved;
+    logEvent({ e: "review-done", saved, left, missed: missed.size, src: "table" });
+    area.innerHTML = saved === 0
+      ? `<p style="font-size:18px">No words marked — nothing changed, all ${queue.length} are still waiting for you.</p>
+         <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`
+      : `<p style="font-size:18px">🎉 ${saved} word${saved > 1 ? "s" : ""} saved${missed.size ? `, ${missed.size} to revisit` : ""}. <span class="arabic">أَحْسَنْت!</span></p>
+         ${left ? `<p style="color:var(--muted);font-size:14px">${left} still due — they'll be here whenever you have another minute.</p>` : ""}
+         <a href="index.html"><button class="primary" style="margin-top:8px">Back to stories</button></a>`;
     autoSync();
   };
 }

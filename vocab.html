@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msgtopxt">
-  <link rel="stylesheet" href="css/style.css?v=msgtopxt">
+  <link rel="stylesheet" href="css/fonts.css?v=mshzs40w">
+  <link rel="stylesheet" href="css/style.css?v=mshzs40w">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -56,8 +56,8 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=msgtopxt"></script>
-<script src="js/tracker.js?v=msgtopxt"></script>
+<script src="js/app.js?v=mshzs40w"></script>
+<script src="js/tracker.js?v=mshzs40w"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -431,6 +431,8 @@ async function renderSheet() {
     shown.style.display = "block";
     const btn = row.querySelector(".show-btn");
     if (btn) btn.style.display = "none";
+    // the Arabic is out now — if it's a verb, show what it does across tenses
+    if (sheetMode !== "understand") mountConjFor(row, v.ar, sheetMode === "ears" ? 2 : 3, { from: "sheet-" + sheetMode });
     if (!quiet) logEvent({ e: "reveal", key, mode: sheetMode });
   }
 
@@ -481,6 +483,11 @@ async function renderSheet() {
     // 💡 visible from the start — an opt-in hint, not tied to reveal
     const spkTd = tr.querySelector(".row-speak, .ears-play");
     mountMnem(tr, spkTd ? spkTd.parentElement : tr.querySelector(".en-cell"), v.ar, key);
+    // 🔁 conjugations, right here in Learn — this is where he actually studies.
+    // Understand mode shows the Arabic already, so the strip goes up front (with
+    // the English gloss suppressed: the meaning is still the question). Ears and
+    // Write hide the Arabic on purpose — their strips wait for the reveal/check.
+    if (sheetMode === "understand") mountConjFor(tr, v.ar, 4, { noEn: true, from: "sheet" });
   });
 
   document.getElementById("shShowAll").onclick = () => {
@@ -559,6 +566,10 @@ async function renderSheet() {
       if (heard) evt.heard = true;
       logEvent(evt);
       mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
+      // graded — the word is no longer a secret, so verbs can show their tenses
+      if (sheetMode !== "understand") {
+        mountConjFor(tbody.querySelector(`tr[data-row="${i}"]`), v.ar, sheetMode === "ears" ? 2 : 3, { from: "sheet-check" });
+      }
     });
     showBatchScore(right, graded, heardCount);
   };
@@ -685,6 +696,7 @@ async function renderBrowseView(body) {
       tbody.appendChild(tr);
       mountMnem(tr, tr.querySelector(".row-speak").parentElement, v.ar, key);
     });
+    mountConjRows(tbody, 5, { from: "browse" }); // meanings are visible here — full strip
     if (rows.length > 200) {
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="5" style="color:var(--muted);font-size:13px">…and ${rows.length - 200} more — practice the selection to work through them.</td>`;

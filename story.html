@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msgtopxt">
-  <link rel="stylesheet" href="css/style.css?v=msgtopxt">
+  <link rel="stylesheet" href="css/fonts.css?v=mshzs40w">
+  <link rel="stylesheet" href="css/style.css?v=mshzs40w">
 </head>
 <body>
 <main>
@@ -22,8 +22,8 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msgtopxt"></script>
-<script src="js/tracker.js?v=msgtopxt"></script>
+<script src="js/app.js?v=mshzs40w"></script>
+<script src="js/tracker.js?v=mshzs40w"></script>
 <script>
 renderNav("stories");
 
@@ -277,6 +277,8 @@ function renderMemorize() {
     };
     tbody.appendChild(tr);
   });
+  // 🔁 story verbs carry their tenses too (English can be veiled here → noEn)
+  mountConjRows(tbody, 4, { noEn: true, from: "story" });
 
   function applyToggles() {
     [...tbody.children].forEach((tr) => {

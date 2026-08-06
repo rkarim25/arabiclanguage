@@ -1440,29 +1440,44 @@ function mountMnem(tr, btnHost, ar, key) {
 /* ---------- shared bucket bar (✓ know · ↻ soon · ⏳ later · 🚫 retire) ----------
    🚫 must never look like the ✗ used for "got it wrong" on grading surfaces —
    a wrong-answer ✗ tap here would silently retire the word forever. */
+function bucketSaidText(id) {
+  return ({
+    know: "saved — back in 30 days",
+    repeat: "saved — back in ~10 min",
+    later: "saved — back in 7 days",
+    never: "retired — won't show again",
+  })[id] || "saved";
+}
 function mountBucketBar(slot, key, onSet) {
   if (!slot) return;
   const bar = document.createElement("div");
   bar.className = "bucket-bar";
+  const said = document.createElement("span");
+  said.className = "bucket-said";
   const current = bucketOf(key);
+  const marked = getSrs()[key] && getSrs()[key].b;
   BUCKETS.forEach(b => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = b.label;
     btn.title = b.name;
-    if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    if (b.id === current && marked) btn.classList.add("sel", b.id === "never" ? "never" : "x");
     btn.onclick = () => {
       setBucket(key, b.id);
       logEvent({ e: "bucket", key, b: b.id });
       [...bar.children].forEach(c => c.classList.remove("sel", "never"));
       btn.classList.add("sel");
       if (b.id === "never") btn.classList.add("never");
+      // say what just happened — a silent save reads as a broken button
+      said.textContent = bucketSaidText(b.id);
+      said.classList.toggle("never", b.id === "never");
       if (onSet) onSet(b.id);
     };
     bar.appendChild(btn);
   });
   slot.innerHTML = "";
   slot.appendChild(bar);
+  slot.appendChild(said);
 }
 
 /* ---------- tap-to-review ----------
@@ -1561,6 +1576,10 @@ function conjLookup(word) {
 function conjLookupStrict(word) {
   const hit = conjLookup(word);
   if (!hit) return null;
+  // Vowels must match EXACTLY, final one included. Tempting as it is to forgive a
+  // missing final harakah (فَهِمْت for فَهِمْتُ), it can't be done safely: ذَهَب
+  // "gold" is then indistinguishable from ذَهَبَ "he went", and labelling a noun
+  // as a verb is worse than missing a strip. Tapping the word still finds it.
   const bare = s => String(s).replace(/[ـ\s]/g, "");
   const w = bare(word);
   const forms = [];
@@ -1571,8 +1590,8 @@ function conjLookupStrict(word) {
    know to tap (his 2026-08-05 note: "i still dont see words with conjugations
    and present past future ... should be encouraged"). Past · present · future
    sit in the open; the eight persons are one tap away. */
-function conjStripHTML(hit) {
-  const v = hit.v;
+function conjStripHTML(hit, opts) {
+  const v = hit.v, noEn = !!(opts && opts.noEn); // noEn: the row is a test — don't leak the meaning
   const ar = s => `<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${s}</span>`;
   return `<div class="conj-strip">
     <span class="conj-line">🔁 <b>past</b> ${ar(v.past3)} · <b>present</b> ${ar(v.pres3)} · <b>future</b> ${ar("سَ" + v.pres3)}</span>
@@ -1585,13 +1604,44 @@ function conjStripHTML(hit) {
           <td>${ar(v.past[p.key])}</td>
           <td>${ar(v.pres[p.key])}</td></tr>`).join("")}</tbody>
       </table>
-      <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)} “I will ${v.base}”</div>
+      <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)}${noEn ? "" : ` “I will ${v.base}”`}</div>
     </div>
   </div>`;
 }
+/* Build the strip row under one table row. Shared by both mounts below. */
+function attachConjRow(tr, hit, colSpan, opts) {
+  if (!tr || tr.dataset.conjDone) return null;
+  tr.dataset.conjDone = "1";
+  const row = document.createElement("tr");
+  row.className = "conj-row";
+  const td = document.createElement("td");
+  td.colSpan = colSpan || 5;
+  td.innerHTML = conjStripHTML(hit, opts);
+  row.appendChild(td);
+  tr.after(row);
+  const more = td.querySelector(".conj-more"), tbl = td.querySelector(".conj-table");
+  more.onclick = e => {
+    e.preventDefault();
+    e.stopPropagation(); // review rows reveal their English on row-click — don't trigger that
+    const open = tbl.style.display !== "none";
+    tbl.style.display = open ? "none" : "block";
+    more.textContent = open ? "all 8 persons ▾" : "hide ▴";
+    if (!open) logEvent({ e: "conj-open", verb: hit.v.id, from: (opts && opts.from) || "table" });
+  };
+  return row;
+}
+/* Attach the strip to one row whose Arabic isn't in the DOM (Ears/Write rows hide
+   it — it's the answer) or is a phrase rather than the target word. */
+function mountConjFor(tr, word, colSpan, opts) {
+  if (!tr || !word) return Promise.resolve();
+  return loadConj().then(() => {
+    const hit = conjLookupStrict(word);
+    if (hit) attachConjRow(tr, hit, colSpan, opts);
+  });
+}
 /* Attach the strip to every row of a vocab table whose Arabic is a known verb.
    Called after the table is built; loads the conjugation index on demand. */
-function mountConjRows(tbody, colSpan) {
+function mountConjRows(tbody, colSpan, opts) {
   if (!tbody) return Promise.resolve();
   return loadConj().then(() => {
     [...tbody.querySelectorAll("tr")].forEach(tr => {
@@ -1600,23 +1650,7 @@ function mountConjRows(tbody, colSpan) {
       if (!arCell) return;
       const word = (arCell.textContent || "").trim().split(/\s+/)[0];
       const hit = word && conjLookupStrict(word);
-      if (!hit) return;
-      tr.dataset.conjDone = "1";
-      const row = document.createElement("tr");
-      row.className = "conj-row";
-      const td = document.createElement("td");
-      td.colSpan = colSpan || 5;
-      td.innerHTML = conjStripHTML(hit);
-      row.appendChild(td);
-      tr.after(row);
-      const more = td.querySelector(".conj-more"), tbl = td.querySelector(".conj-table");
-      more.onclick = e => {
-        e.preventDefault();
-        const open = tbl.style.display !== "none";
-        tbl.style.display = open ? "none" : "block";
-        more.textContent = open ? "all 8 persons ▾" : "hide ▴";
-        if (!open) logEvent({ e: "conj-open", verb: hit.v.id, from: "table" });
-      };
+      if (hit) attachConjRow(tr, hit, colSpan, opts);
     });
   });
 }
