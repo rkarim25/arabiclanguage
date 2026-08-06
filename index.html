@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mshzs40w">
-  <link rel="stylesheet" href="css/style.css?v=mshzs40w">
+  <link rel="stylesheet" href="css/fonts.css?v=msi1b18p">
+  <link rel="stylesheet" href="css/style.css?v=msi1b18p">
 </head>
 <body>
 <main>
@@ -21,6 +21,16 @@
     <h2>▶ What now? Pick any — they all move you forward</h2>
     <div class="whatnow" id="whatNow"></div>
     <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">🕌 The easiest rhythm: one item after each salah — five prayers a day are five built-in five-minute sessions, no willpower needed.</p>
+  </div>
+
+  <div class="card" id="progressCard">
+    <h2 style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
+      <span>📈 Reality &amp; forecast</span>
+      <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span>
+    </h2>
+    <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is what you could actually recall each day — it rises when you study and sags as memory fades (that's normal, not failure). Every <strong style="color:var(--amber)">dotted line</strong> is a forecast: what happens at different rhythms, with the date each one reaches the goal. Goal = holding <strong>90%</strong> in memory on any given day.</p>
+    <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
+    <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers (every check, review and self-grade since 4 Jul). Dotted = the site's own scheduler simulated forward at your measured accuracy — each panel assumes those minutes go to <em>that</em> goal, so splitting your time lands between the lines. Maths: one shared model, calibrated from your own answers, revalidated before every deploy.</p>
   </div>
 
   <details class="card">
@@ -110,8 +120,9 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=mshzs40w"></script>
-<script src="js/tracker.js?v=mshzs40w"></script>
+<script src="js/app.js?v=msi1b18p"></script>
+<script src="js/tracker.js?v=msi1b18p"></script>
+<script src="js/progress-model.js?v=msi1b18p"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -388,6 +399,119 @@ document.getElementById("importFile").onchange = (e) => {
   };
   r.readAsText(f);
 };
+
+/* ============ 📈 Reality & forecast — the progress chart ============
+   Data: data/progress-series.json (nightly, scripts/gen-progress.js) — replayed
+   reality + simulated scenarios per goal. All maths in js/progress-model.js.
+   This code only DRAWS, plus one live touch: today's point is recomputed from
+   this device's SRS (the nightly JSON can be up to a day behind). */
+(function () {
+  const panels = document.getElementById("pgPanels");
+  if (!panels) return;
+  const fmtD = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" });
+  const fmtDY = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "2-digit" });
+
+  // scenario styling: greens = doing more, ambers→red = missing days
+  const SCEN_STYLE = {
+    current: { c: "#8a8578", w: 1.2, dash: "5 4" },
+    plus5:   { c: "#3d9b76", w: 1.2, dash: "2 3" },
+    plus10:  { c: "#0d7a5f", w: 1.6, dash: "2 3" },
+    ten7:    { c: "#3572b0", w: 1.2, dash: "2 3" },
+    miss1:   { c: "#c99a2e", w: 1,   dash: "1.5 3.5" },
+    miss2:   { c: "#c97e2e", w: 1,   dash: "1.5 3.5" },
+    miss3:   { c: "#c25c33", w: 1,   dash: "1.5 3.5" },
+    miss4:   { c: "#b03535", w: 1,   dash: "1.5 3.5" },
+  };
+
+  function drawPanel(tr, icon, title) {
+    const W = 560, H = 260, L = 40, R = 14, T = 16, B = 30; // plot box
+    const pw = W - L - R, ph = H - T - B;
+    const total = tr.basketSize, target = tr.target * total;
+
+    // live touch: recompute today's mass from THIS device's SRS
+    const live = ProgressModel.massFromSrs(getSrs(), tr.basket, Date.now());
+    const reality = tr.reality.slice();
+    const todayISO = new Date().toISOString().slice(0, 10);
+    if (reality.length && reality[reality.length - 1].d === todayISO) reality[reality.length - 1] = { d: todayISO, mass: live };
+    else reality.push({ d: todayISO, mass: live });
+
+    const t0 = new Date(reality[0].d).getTime();
+    // x-domain: reality span + forecast horizon (cap at latest completion + 60d, else 9 months out)
+    const comps = tr.scenarios.map(s => s.completion).filter(Boolean).map(d => new Date(d).getTime());
+    const tEnd = Math.min(
+      Math.max(Date.now() + 270 * 86400000, ...(comps.length ? [Math.max(...comps) + 60 * 86400000] : [])),
+      Date.now() + 550 * 86400000);
+    const x = iso => L + ((new Date(iso).getTime() - t0) / (tEnd - t0)) * pw;
+    const y = m => T + (1 - m / total) * ph;
+    const path = (pts, get) => pts.map((p, i) => (i ? "L" : "M") + x(p.d).toFixed(1) + " " + y(get(p)).toFixed(1)).join(" ");
+
+    // month ticks
+    let ticks = "";
+    const tick = new Date(t0); tick.setDate(1); tick.setMonth(tick.getMonth() + 1);
+    for (let m = new Date(tick); m.getTime() < tEnd; m.setMonth(m.getMonth() + 1)) {
+      const xx = x(m.toISOString().slice(0, 10));
+      ticks += `<line x1="${xx.toFixed(1)}" y1="${T}" x2="${xx.toFixed(1)}" y2="${H - B}" stroke="var(--border)" stroke-width="0.5"></line>
+        <text x="${xx.toFixed(1)}" y="${H - B + 14}" font-size="8.5" text-anchor="middle" fill="var(--muted)" font-family="var(--font-ui)">${m.toLocaleDateString(undefined, { month: "short" })}${m.getMonth() === 0 ? " " + String(m.getFullYear()).slice(2) : ""}</text>`;
+    }
+    // y grid: 25/50/75/goal
+    let grid = "";
+    [0.25, 0.5, 0.75].forEach(f => {
+      grid += `<line x1="${L}" y1="${y(f * total).toFixed(1)}" x2="${W - R}" y2="${y(f * total).toFixed(1)}" stroke="var(--border)" stroke-width="0.5"></line>
+        <text x="${L - 4}" y="${(y(f * total) + 3).toFixed(1)}" font-size="8.5" text-anchor="end" fill="var(--muted)" font-family="var(--font-ui)">${f * 100}%</text>`;
+    });
+
+    // scenarios: dotted from today; completion markers on the goal line
+    let scen = "", markers = "";
+    for (const s of tr.scenarios) {
+      const st = SCEN_STYLE[s.id]; if (!st) continue;
+      scen += `<path d="${path(s.series, p => Math.min(p.mass, total))}" fill="none" stroke="${st.c}" stroke-width="${st.w}" stroke-dasharray="${st.dash}" stroke-linejoin="round" opacity="0.95"></path>`;
+      if (s.completion && new Date(s.completion).getTime() < tEnd) {
+        markers += `<circle cx="${x(s.completion).toFixed(1)}" cy="${y(target).toFixed(1)}" r="2.4" fill="${st.c}"></circle>`;
+      }
+    }
+    const lastR = reality[reality.length - 1];
+
+    const legend = tr.scenarios.map(s => {
+      const st = SCEN_STYLE[s.id]; if (!st) return "";
+      return `<span style="white-space:nowrap"><span style="display:inline-block;width:16px;border-top:2px dashed ${st.c};vertical-align:middle;margin-right:4px"></span>${s.label} → <strong style="color:${st.c}">${s.completion ? fmtDY(s.completion) : "18mo+"}</strong></span>`;
+    }).join(" · ");
+
+    const pct = Math.round((live / total) * 1000) / 10;
+    const el = document.createElement("div");
+    el.style.cssText = "flex:1 1 420px;min-width:0";
+    el.innerHTML = `
+      <div style="font-weight:700;font-size:14px">${icon} ${title} <span style="color:var(--muted);font-weight:400">— ${tr.label}</span></div>
+      <div style="font-size:12.5px;color:var(--accent);font-weight:600;margin:2px 0 4px">holding ${live.toFixed(0)} of ${total} in memory right now (${pct}%)</div>
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
+        ${ticks}${grid}
+        <line x1="${L}" y1="${y(target).toFixed(1)}" x2="${W - R}" y2="${y(target).toFixed(1)}" stroke="var(--accent)" stroke-width="0.8" stroke-dasharray="6 3" opacity="0.65"></line>
+        <text x="${W - R}" y="${(y(target) - 4).toFixed(1)}" font-size="9" text-anchor="end" fill="var(--accent)" font-family="var(--font-ui)">goal: hold 90%</text>
+        <path d="${path(reality, p => p.mass)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>
+        ${scen}${markers}
+        <circle cx="${x(lastR.d).toFixed(1)}" cy="${y(lastR.mass).toFixed(1)}" r="3" fill="var(--accent)"></circle>
+        <text x="${x(lastR.d).toFixed(1)}" y="${(y(lastR.mass) - 7).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--accent)" font-weight="bold" font-family="var(--font-ui)">today</text>
+        <line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
+        <line x1="${L}" y1="${H - B}" x2="${W - R}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
+      </svg>
+      <div style="font-size:10.5px;color:var(--muted);line-height:1.9;margin-top:2px">${legend}</div>`;
+    return el;
+  }
+
+  fetch("data/progress-series.json").then(r => r.json()).then(pg => {
+    panels.innerHTML = "";
+    panels.appendChild(drawPanel(pg.tracks.quran, "📖", "Quran"));
+    panels.appendChild(drawPanel(pg.tracks.conv, "🗣", "Conversation"));
+    // headline: the week's movement, honestly (may be negative)
+    const tr = pg.tracks.quran;
+    const week = tr.reality.filter(p => new Date(p.d).getTime() >= Date.now() - 8 * 86400000);
+    if (week.length >= 2) {
+      const d = ProgressModel.massFromSrs(getSrs(), tr.basket, Date.now()) - week[0].mass;
+      document.getElementById("pgToday").textContent =
+        d >= 0.5 ? `this week: +${d.toFixed(1)} words held in memory` :
+        d <= -0.5 ? `this week: ${d.toFixed(1)} — fading without review; a 5-min round recovers fastest` : "";
+    }
+  }).catch(() => { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The chart data hasn't been generated yet — it appears after the next coaching run.</p>`; });
+})();
 </script>
 </body>
 </html>

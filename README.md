@@ -103,6 +103,33 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 - **Minutes**: use interaction-timestamp chaining (what `activeMinutes()` does — gaps ≤3 min chain, isolated events ≈30 s), NOT sums of `time` events. `time` events logged before 2026-07-04 predate idle detection and are inflated (a left-open tab once logged 10+ hours on vocab:list).
 - **Listening**: `rlisten` (a surah fully played in real recitation) and `listen-click` events are the listening record; `sheet` events with `mode:"ears"` are audio-recognition tests — track their accuracy separately from text modes, the gap between text% and ears% is the real "understand as recited" measure.
 
+## The progress model — the bedrock (2026-08-06)
+
+Reza's own framing, which the site now measures directly: a goal is a basket of
+items whose memory **decays between reviews** — so honest progress is *"% of the
+goal I could recall right now"*, a line that rises when he studies and sags when
+he doesn't. "Done" = **holding ≥90% recallable on any given day** (100%-forever
+isn't a real state of human memory).
+
+- **`js/progress-model.js`** — the ONE copy of the maths. Per-card recall
+  `p = 2^(−elapsed/halflife(box))`, half-lives anchored to the Leitner schedule
+  and **calibrated from his own answers** (constants + fit provenance in the file
+  header). Replays the event log through the site's real SRS rules to rebuild the
+  full reality curve since 2026-07-04, and runs expected-value forward simulations
+  of the site's own scheduler for the fan forecasts (+5/+10 min/day, 10-min with
+  1–4 missed days/week), each with its completion date.
+- **`scripts/gen-progress.js <kv-payload.json>`** → `data/progress-series.json`
+  (the dashboard chart's data; nightly). **`scripts/gen-progress-chart.py`** →
+  `progress.png` (embedded in the weekly email via its Pages URL).
+- **`scripts/test-progress-model.js <payload.json>`** — synthetic known-answer
+  cases, replay-vs-actual-KV validation, fan monotonicity. **Must pass before any
+  deploy that touches the model.** Refit the calibration quarterly as his
+  re-encounter gaps grow.
+- Dashboard: the "📈 Reality & forecast" card (index.html) draws both goals —
+  solid = replayed reality (+ a live point from this device's SRS), dotted =
+  forecasts. Chart honesty rules: reality is never smoothed, sags are shown, and
+  each panel states that its minutes assume focus on that goal.
+
 ## The coaching loop
 
 One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It runs **per user** (Reza, then Saba): reads data (KV first, GitHub fallback), reads **✏️ pen `note` events first** (the learner's direct requests — act on every one, acknowledge in their coach note), analyzes (weak vocab → listening → speaking → **conjugation** (`spract`) → grammar → **conversation** (`convo`) → **consistency** (`today-done`) → pacing → `tapseed` words), writes a personally-addressed coach note back to `coach:<email>`, adds targeted content via the pipelines above (including any new lesson material Reza dumped), pushes, and verifies. **Never let one user's request degrade the other's experience — beginner content for Saba is additive.**

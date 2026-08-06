@@ -8,7 +8,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mshzs40w";
+const CACHE = "ats-msi1b18p";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -22,6 +22,7 @@ const CORE = [
   "data/story-04.json", "data/story-05.json", "data/story-06.json",
   "data/sentences.json", "data/conversations.json", "data/mnemonics.json", "data/conjugations.json",
   "data/lexicon.json", "data/audio-manifest.json", "data/phrases.json",
+  "js/progress-model.js", "data/progress-series.json",
 ];
 
 self.addEventListener("install", e => {
