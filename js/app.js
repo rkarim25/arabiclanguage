@@ -1031,7 +1031,7 @@ function renderNav(active) {
   el.innerHTML = `
     <a class="brand" href="index.html"><span class="ar">العربية بالقصص</span><span>Arabic Through Stories</span></a>
     <span class="spacer"></span>
-    <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Stories</a>
+    <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Home</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "lessons" ? "active" : ""}" href="vocab.html?view=lessons">Lessons</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
