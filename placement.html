@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Listening Placement — Arabic Through Stories</title>
+  <link rel="stylesheet" href="css/fonts.css?v=msipqi3k">
+  <link rel="stylesheet" href="css/style.css?v=msipqi3k">
+  <style>
+    .pl-opt { display:block; width:100%; text-align:left; margin-top:8px; padding:10px 14px; border-radius:12px; font-size:14.5px; line-height:1.5; }
+    .pl-opt.ok { background: var(--accent-soft); border-color: var(--accent); }
+    .pl-opt.no { background: var(--red-soft); border-color: var(--red); }
+    .pl-play { font-size: 26px; padding: 14px 26px; border-radius: 999px; }
+    .pl-count { font-size: 12.5px; color: var(--muted); margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🎧 Listening placement <span class="arabic" style="color:var(--accent)">اِخْتِبَار الاِسْتِمَاع</span></h1>
+  <div class="card" id="plCard">
+    <div id="plArea">
+      <h2>Five minutes, ears only</h2>
+      <p style="font-size:14.5px">12 questions, all audio — <strong>no reading</strong>. Six recited passages from your salah surahs, then six single words. Pick the meaning you heard. Replay as often as you like (replays are counted honestly).</p>
+      <p style="font-size:13px;color:var(--muted)">This is a measurement, not a drill: the result anchors your skill chart (the ◆ marks) and recalibrates the forecast. A low score is USEFUL — it makes the chart true. Take one every week or two.</p>
+      <button class="primary" id="plStart" style="font-size:16px">▶ Start the test</button>
+    </div>
+  </div>
+</main>
+
+<script src="js/app.js?v=msipqi3k"></script>
+<script src="js/tracker.js?v=msipqi3k"></script>
+<script src="js/progress-model.js?v=msipqi3k"></script>
+<script>
+renderNav("placement");
+trackPage("placement");
+
+const area = document.getElementById("plArea");
+const shuffled = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
+const trim = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, s.lastIndexOf(" ", n)) + "…" : s; };
+
+let VERSES = null;
+fetch("data/verses.json").then(r => r.json()).then(v => { VERSES = v.surahs; });
+
+function buildQuestions() {
+  const salah = VERSES.filter(s => SALAH_SURAH_IDS.includes(s.id));
+  // Part A — six verses across different surahs, recited audio, meaning MCQ
+  const pool = shuffled(salah.flatMap(s => s.verses.map((v, vi) => ({ s, v, vi }))));
+  const seen = new Set();
+  const verseQs = [];
+  for (const q of pool) {
+    if (verseQs.length >= 6) break;
+    if (seen.has(q.s.id) && verseQs.length < 4) continue; // spread over surahs first
+    if (!q.v.en) continue;
+    seen.add(q.s.id);
+    verseQs.push(q);
+  }
+  const verseOpts = q => {
+    const wrong = shuffled(pool.filter(p => p.v !== q.v && p.v.en && trim(p.v.en, 60) !== trim(q.v.en, 60))).slice(0, 3);
+    return shuffled([{ t: trim(q.v.en, 110), ok: true }].concat(wrong.map(p => ({ t: trim(p.v.en, 110), ok: false }))));
+  };
+  // Part B — six single words from the same token basket (audio alone, gloss MCQ);
+  // prefer words he has studied on screen: those pairs calibrate the ear factor
+  const srs = getSrs();
+  const words = salah.flatMap(s => s.verses.flatMap((v, vi) => v.words.map((w, wi) => ({
+    key: `qw:${s.id}:${vi}:${wi}`, ar: w[0], gloss: w[5] ? trim(w[5], 70) : trim(w[2], 70),
+  })))).filter(w => w.gloss);
+  const uniq = []; const g = new Set();
+  for (const w of shuffled(words)) { const k = w.gloss.toLowerCase(); if (g.has(k)) continue; g.add(k); uniq.push(w); }
+  const studied = uniq.filter(w => srs[w.key]);
+  const fresh = uniq.filter(w => !srs[w.key]);
+  const wordQs = studied.slice(0, 4).concat(fresh.slice(0, 6)).slice(0, 6);
+  const wordOpts = q => shuffled([{ t: q.gloss, ok: true }].concat(
+    shuffled(uniq.filter(w => w.gloss !== q.gloss)).slice(0, 3).map(w => ({ t: w.gloss, ok: false }))));
+  return { verseQs, verseOpts, wordQs, wordOpts };
+}
+
+function runTest() {
+  const { verseQs, verseOpts, wordQs, wordOpts } = buildQuestions();
+  const results = { verse: [], word: [], replays: 0 };
+  let idx = 0;
+  const steps = verseQs.map(q => ({ kind: "verse", q })).concat(wordQs.map(q => ({ kind: "word", q })));
+
+  function ask() {
+    stopRecitation(); stopSpeak();
+    if (idx >= steps.length) return finish();
+    const st = steps[idx];
+    const opts = st.kind === "verse" ? verseOpts(st.q) : wordOpts(st.q);
+    area.innerHTML = `
+      <div class="pl-count">${st.kind === "verse" ? "Recited passage" : "Single word"} — question ${idx + 1} of ${steps.length}</div>
+      <div style="text-align:center;margin:14px 0">
+        <button class="pl-play primary" id="plPlay">🔊</button>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">tap to replay</div>
+      </div>
+      <p style="font-size:14px;font-weight:600;margin:10px 0 2px">What did it mean?</p>
+      <div id="plOpts"></div>`;
+    const play = () => {
+      if (st.kind === "verse") playRecitation([{ n: st.q.s.n, ayah: parseInt(st.q.v.ref.split(":")[1], 10) }]);
+      else speak(st.q.ar, 0.8);
+    };
+    let played = false;
+    document.getElementById("plPlay").onclick = () => { if (played) results.replays++; played = true; play(); };
+    const box = document.getElementById("plOpts");
+    let answered = false;
+    opts.forEach(o => {
+      const b = document.createElement("button");
+      b.className = "pl-opt"; b.textContent = o.t;
+      b.onclick = () => {
+        if (answered) return; answered = true;
+        b.classList.add(o.ok ? "ok" : "no");
+        if (!o.ok) [...box.children].find(c => c.dataset.ok === "1").classList.add("ok");
+        results[st.kind].push(!!o.ok);
+        setTimeout(() => { idx++; ask(); }, o.ok ? 550 : 1400);
+      };
+      b.dataset.ok = o.ok ? "1" : "0";
+      box.appendChild(b);
+    });
+    // auto-play once (we're inside a user gesture chain from Start)
+    played = true; play();
+  }
+
+  function finish() {
+    stopRecitation(); stopSpeak();
+    const frac = a => a.length ? a.filter(Boolean).length / a.length : 0;
+    const catchScore = frac(results.verse), isoScore = frac(results.word);
+    // model's belief at test time, for calibration (the nightly reads these fields)
+    fetch("data/progress-series.json").then(r => r.json()).catch(() => null).then(pg => {
+      const isolatedCov = pg && pg.skills && pg.skills.listening ? pg.skills.listening.isolatedCov : undefined;
+      const before = ProgressModel.connectedFactorCalibrated(store.get("ats-log", []));
+      logEvent({ e: "ptest-listen", score: catchScore, catch: catchScore, iso: isoScore, isolatedCov, n: results.verse.length + results.word.length, replays: results.replays });
+      const after = ProgressModel.connectedFactorCalibrated(store.get("ats-log", []));
+      autoSync();
+      const pc = v => (100 * v).toFixed(0) + "%";
+      area.innerHTML = `
+        <h2>Measured. ${catchScore >= 0.8 ? "Strong ears. 🎉" : catchScore >= 0.5 ? "Solid — and now the chart knows it." : "Honest baseline set — every test from here shows the climb."}</h2>
+        <div style="font-size:15px;line-height:2">
+          Recited passages understood: <strong>${results.verse.filter(Boolean).length} of ${results.verse.length}</strong> (${pc(catchScore)})<br>
+          Single words recognized by ear: <strong>${results.word.filter(Boolean).length} of ${results.word.length}</strong> (${pc(isoScore)})<br>
+          ${results.replays ? `<span style="color:var(--muted);font-size:13px">${results.replays} replays used — fine, and recorded.</span>` : ""}
+        </div>
+        <p style="font-size:13.5px;margin-top:10px">This result is now a <strong style="color:#7b5ea8">◆</strong> on your skill chart, and the model's stream-listening factor moved <strong>${before.p.toFixed(2)} → ${after.p.toFixed(2)}</strong>. Tonight's coaching run rebuilds the forecast from it${catchScore > 0 ? " — expect the dates to move toward reality" : ""}.</p>
+        <div class="ex-row" style="margin-top:14px">
+          <a href="index.html"><button class="primary">See the chart</button></a>
+          <a href="audio.html"><button>🎧 Train the ear now</button></a>
+        </div>`;
+    });
+  }
+
+  ask();
+}
+
+document.getElementById("plStart").onclick = () => {
+  if (!VERSES) { setTimeout(() => document.getElementById("plStart").onclick(), 300); return; }
+  logEvent({ e: "ptest-start", kind: "listen" });
+  runTest();
+};
+</script>
+</body>
+</html>

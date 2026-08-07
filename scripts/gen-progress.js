@@ -32,15 +32,17 @@ const qwKeys = ids => verses.surahs
   .filter(s => !ids || ids.includes(s.id))
   .flatMap(s => s.verses.flatMap((v, vi) => v.words.map((w, wi) => `qw:${s.id}:${vi}:${wi}`)));
 const QURAN_STAGES = [
-  { id: "salah", label: "Your salah, fully understood",
-    basket: qcore.words.slice(0, 60).map((w, i) => "qc:" + i).concat(qwKeys(SALAH_SURAH_IDS)) },
-  { id: "familiar", label: "Follow familiar passages",
-    basket: qcore.words.map((w, i) => "qc:" + i).concat(qwKeys(null)) },
+  // mode "catch": memorized text — skill = words caught by ear in the stream (target 90%)
+  // mode "comprehend": novel passages — coverage→comprehension curve (target 70%)
+  { id: "salah", label: "Understand your salah as recited", mode: "catch",
+    basket: qwKeys(SALAH_SURAH_IDS) },
+  { id: "familiar", label: "Follow familiar passages", mode: "comprehend",
+    basket: qwKeys(null) },
 ];
+const EV_WORDS = everyday.groups.flatMap(g => (g.members || []).map((m, i) => `ev-${g.id}:${i}`));
+const PH_KEYS = phrases.groups.flatMap(g => (g.members || []).map((m, i) => `ph-${g.id}:${i}`));
 const CONV_STAGES = [
-  { id: "umrah", label: "Umrah-transactional Arabic",
-    basket: everyday.groups.flatMap(g => (g.members || []).map((m, i) => `ev-${g.id}:${i}`))
-      .concat(phrases.groups.flatMap(g => (g.members || []).map((m, i) => `ph-${g.id}:${i}`))) },
+  { id: "umrah", label: "Speak for Umrah", words: EV_WORDS, phrases: PH_KEYS },
 ];
 
 /* ---- measured rhythm (for the "current pace" scenario) ---- */
@@ -68,41 +70,79 @@ const addDaily = (w, extra) => w.map(x => x + extra);
 /* downsample a daily series for the JSON: weekly points + the last point */
 const thin = series => series.filter((p, i) => i % 7 === 0 || i === series.length - 1);
 
-function buildTrack(stages, log, srs, now) {
-  // active stage = first whose basket isn't held at target yet
+/* ---- SKILL-AXIS tracks (2026-08-07 redesign): the chart plots the skill —
+   listening comprehension (Quran) / speaking deployability (conversation) —
+   with exactly THREE forecasts: current pace, one higher, one lower. ---- */
+function buildSkillTrack(kind, stages, log, srs, now) {
   const cards = PM.replay(log, now, qref);
+  const mix = PM.practiceMix(log);
+  const evAll = PM.earEvidence(log);
+  const efNow = PM.earFactor(log, cards, now);
+  const cfNow = PM.connectedFactorCalibrated(log, now);
+  const floorNow = PM.productiveFloorCalibrated(log, now);
+  // active stage = first whose SKILL isn't at ITS target yet (skill-axis, not retention)
+  const targetOf = st => kind === "listen" ? PM.listenTargetOf(st.mode) : PM.SKILL_CAL.SPEAK_TARGET;
+  const skillNow = st => {
+    if (kind === "listen") {
+      let iso = 0;
+      for (const k of st.basket) iso += PM.earRecallP(k, cards, evAll, efNow.p, now);
+      const asym = st.mode === "catch" ? PM.SKILL_CAL.CONN_ASYM_FAMILIAR : PM.SKILL_CAL.CONN_CAP;
+      return PM.listenSkillOf((iso / st.basket.length) * Math.min(asym, cfNow.p), st.mode);
+    }
+    const sp = PM.speakingEstimate(log, cards, st.words, st.phrases, now);
+    return sp.deployable / sp.basketSize;
+  };
   let stage = stages[stages.length - 1];
-  for (const st of stages) {
-    if (PM.recallMass(cards, st.basket, now) < PM.CAL.RECALL_TARGET * st.basket.length) { stage = st; break; }
-  }
-  const basket = stage.basket;
+  for (const st of stages) { if (skillNow(st) < targetOf(st)) { stage = st; break; } }
+  const target = targetOf(stage);
+
   const stream = PM.gradedStream(log, qref);
   const fromT = stream.length ? stream[0].t : now - 30 * DAY;
-  const reality = PM.realitySeries(log, basket, fromT, now, qref);
+  const reality = kind === "listen"
+    ? PM.listeningSkillSeries(log, stage.basket, fromT, now, qref, stage.mode)
+    : PM.speakingSkillSeries(log, stage.words, stage.phrases, fromT, now, qref);
   const r = measuredRhythm(log);
   const current = weeklyPattern(r.minPerStudyDay, r.daysPerWeek);
   const HORIZON = 550;
-  const scen = (id, label, weekly) => {
-    const s = PM.simulate(cards, basket, weekly, HORIZON, now);
-    return { id, label, weekly, completion: s.completion, series: thin(s.series) };
+  const basket = kind === "listen" ? stage.basket : stage.words.concat(stage.phrases);
+  const provenSet = new Set();
+  for (const e of log || []) {
+    if (!e || !e.t || e.t < 16e11) continue;
+    if (e.e === "speak" && (e.score !== undefined ? e.score : e.sim || 0) >= PM.SKILL_CAL.SPEAK_OK && e.key) provenSet.add(e.key);
+    else if (e.e === "sheet" && e.mode === "produce" && e.ok && e.key) provenSet.add(e.key);
+  }
+  const scen = (id, label, weekly, mixOverride) => {
+    const s = PM.simulateSkill(kind, cards, basket, {
+      weeklyMinutes: weekly, horizonDays: HORIZON, startT: now,
+      mix: mixOverride || mix, conn0: cfNow.p, mode: stage.mode,
+      earF: efNow.p, outMin0: PM.outputMinutes(log), floor: floorNow,
+      provenSet, phraseSet: new Set(stage.phrases || []),
+    });
+    return { id, label, completion: s.completion, series: thin(s.series) };
   };
+  // three lines only (his ask): current · one higher · one lower. The higher
+  // lever is the one that moves THIS skill (by-ear share for the ear, out-loud
+  // share for the mouth) at 15 min/day — the measured capacity cliff: 10 min/day
+  // can only maintain ~⅓ of the Umrah basket, 15 holds all of it.
+  const scenarios = kind === "listen" ? [
+    scen("current", `your current rhythm (~${r.minPerStudyDay} min, ${r.daysPerWeek} d/wk)`, current),
+    scen("higher", "15 min every day, half of it by ear", weeklyPattern(15, 7), { earShare: 0.5, outShare: mix.outShare }),
+    scen("lower", "slipping to 2 days/wk", weeklyPattern(r.minPerStudyDay, 2)),
+  ] : [
+    scen("current", `your current rhythm (~${r.minPerStudyDay} min, ${r.daysPerWeek} d/wk)`, current),
+    scen("higher", "15 min every day, half out loud", weeklyPattern(15, 7), { earShare: mix.earShare, outShare: 0.5 }),
+    scen("lower", "slipping to 2 days/wk", weeklyPattern(r.minPerStudyDay, 2)),
+  ];
+  // placement-test anchors for the chart
+  const pt = PM.ptestEvidence(log)[kind === "listen" ? "listen" : "speak"]
+    .map(e => ({ d: new Date(e.t).toISOString().slice(0, 10), skill: Math.round(e.score * 1000) / 1000 }));
   return {
-    stage: stage.id, label: stage.label, basketSize: basket.length,
-    target: PM.CAL.RECALL_TARGET,
-    rhythm: r,
-    reality,
-    todayMass: reality.length ? reality[reality.length - 1].mass : 0,
-    basket, // shipped so the site can compute a LIVE point from local SRS
-    scenarios: [
-      scen("current", `your current rhythm (~${r.minPerStudyDay} min, ${r.daysPerWeek} d/wk)`, current),
-      scen("plus5", "+5 min every day", addDaily(current, 5)),
-      scen("plus10", "+10 min every day", addDaily(current, 10)),
-      scen("ten7", "10 min, every day", weeklyPattern(10, 7)),
-      scen("miss1", "10 min, missing 1 day/wk", weeklyPattern(10, 6)),
-      scen("miss2", "10 min, missing 2 days/wk", weeklyPattern(10, 5)),
-      scen("miss3", "10 min, missing 3 days/wk", weeklyPattern(10, 4)),
-      scen("miss4", "10 min, missing 4 days/wk", weeklyPattern(10, 3)),
-    ],
+    kind, stage: stage.id, label: stage.label, basketSize: basket.length,
+    target, rhythm: r, mix: { earShare: Math.round(mix.earShare * 100) / 100, outShare: Math.round(mix.outShare * 100) / 100 },
+    factors: { ear: Math.round(efNow.p * 100) / 100, conn: Math.round(cfNow.p * 100) / 100, floor: Math.round(floorNow * 100) / 100, tests: pt.length },
+    reality, tests: pt,
+    todaySkill: reality.length ? reality[reality.length - 1].skill : 0,
+    scenarios,
   };
 }
 
@@ -129,8 +169,8 @@ const out = {
   cal: PM.CAL,
   note: "All maths in js/progress-model.js (calibrated from the learner's own answers). Solid = replayed reality; dotted = expected-value simulation of the site's own scheduler. 'Done' = holding ≥90% of the basket recallable on any given day.",
   tracks: {
-    quran: buildTrack(QURAN_STAGES, payload.log, payload.srs, now),
-    conv: buildTrack(CONV_STAGES, payload.log, payload.srs, now),
+    quran: buildSkillTrack("listen", QURAN_STAGES, payload.log, payload.srs, now),
+    conv: buildSkillTrack("speak", CONV_STAGES, payload.log, payload.srs, now),
   },
   skills: buildSkills(payload.log, now),
 };
@@ -139,7 +179,7 @@ fs.writeFileSync(outPath, JSON.stringify(out));
 const t = out.tracks;
 console.log(`progress-series.json written (${Math.round(fs.statSync(outPath).size / 1024)} KB)`);
 for (const [k, tr] of Object.entries(t)) {
-  console.log(`  ${k}: stage "${tr.label}" — today ${tr.todayMass}/${tr.basketSize} recallable (${(100 * tr.todayMass / tr.basketSize).toFixed(1)}%)`);
+  console.log(`  ${k}: stage "${tr.label}" — today ${(100 * tr.todaySkill).toFixed(1)}% (target ${100 * tr.target}%; factors ${JSON.stringify(tr.factors)})`);
   tr.scenarios.forEach(s => console.log(`    ${s.id.padEnd(8)} → ${s.completion || "not within 18 months"}`));
 }
 const sk = out.skills;

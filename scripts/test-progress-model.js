@@ -163,5 +163,42 @@ console.log("3. Fan monotonicity (the fan must never lie about direction)");
   ok("speaking rises with proven output but stays ≤ screen mass", sp1.deployable > sp0.deployable && sp1.deployable <= PM.recallMass(cards1, basket, tEval), `${sp0.deployable} → ${sp1.deployable}`);
 }
 
+/* ---- 5. Skill-axis forecasts + placement-test calibration ---- */
+{
+  console.log("5. Skill forecasts (direction) & placement calibration (tests must dominate)");
+  const t0 = Date.UTC(2026, 7, 1);
+  const basket = Array.from({ length: 40 }, (_, i) => "s:" + i);
+  const flat = m => [m, m, m, m, m, m, m];
+  const base = { horizonDays: 550, startT: t0, mix: { earShare: 0.3, outShare: 0.3 }, conn0: 0.3,
+    earF: 0.6, outMin0: 0, floor: 0.35, provenSet: new Set(), phraseSet: new Set() };
+  const dayOf = c => (c ? Math.round((new Date(c).getTime() - t0) / 86400000) : Infinity);
+
+  const lis10 = PM.simulateSkill("listen", {}, basket, { ...base, mode: "catch", weeklyMinutes: flat(10) });
+  const lis15 = PM.simulateSkill("listen", {}, basket, { ...base, mode: "catch", weeklyMinutes: flat(15) });
+  ok("listening: more minutes → earlier (or equal) completion", dayOf(lis15.completion) <= dayOf(lis10.completion),
+    `${lis15.completion} ≤ ${lis10.completion}`);
+  const lisEar = PM.simulateSkill("listen", {}, basket, { ...base, mode: "catch", weeklyMinutes: flat(10), mix: { earShare: 0.6, outShare: 0.3 } });
+  ok("listening: more by-ear share → earlier (or equal)", dayOf(lisEar.completion) <= dayOf(lis10.completion),
+    `${lisEar.completion} ≤ ${lis10.completion}`);
+  const spk = PM.simulateSkill("speak", {}, basket, { ...base, weeklyMinutes: flat(15) });
+  const spkOut = PM.simulateSkill("speak", {}, basket, { ...base, weeklyMinutes: flat(15), mix: { earShare: 0.3, outShare: 0.6 } });
+  ok("speaking: more out-loud share → earlier (or equal)", dayOf(spkOut.completion) <= dayOf(spk.completion),
+    `${spkOut.completion} ≤ ${spk.completion}`);
+  ok("skill series stays in [0,1]", lis15.series.concat(spk.series).every(p => p.skill >= 0 && p.skill <= 1), "");
+
+  // placement calibration: a strong test result must RAISE the conn factor, a weak one LOWER it
+  const mk = score => [{ e: "ptest-listen", score, catch: score, isolatedCov: 0.6, t: t0 + 1000 }];
+  const cNone = PM.connectedFactorCalibrated([]).p;
+  const cGood = PM.connectedFactorCalibrated(mk(0.55)).p;   // implied conn ≈ 0.92
+  const cBad = PM.connectedFactorCalibrated(mk(0.05)).p;    // implied conn ≈ 0.08
+  ok("good test raises conn factor", cGood > cNone, `${cNone.toFixed(2)} → ${cGood.toFixed(2)}`);
+  ok("bad test lowers conn factor", cBad < cNone, `${cNone.toFixed(2)} → ${cBad.toFixed(2)}`);
+  ok("one test moves the factor by a lot (tests dominate priors)", Math.abs(cGood - cNone) > 0.15, (cGood - cNone).toFixed(2));
+  const fGood = PM.productiveFloorCalibrated([{ e: "ptest-speak", score: 0.8, t: t0 }]);
+  const fBad = PM.productiveFloorCalibrated([{ e: "ptest-speak", score: 0.1, t: t0 }]);
+  ok("oral exam pulls productive floor toward the measured score, capped by it",
+    fGood > PM.SKILL_CAL.PRODUCTIVE_WORD && fGood <= 0.8 && fBad <= 0.35, `good→${fGood.toFixed(2)} bad→${fBad.toFixed(2)}`);
+}
+
 console.log(fails ? `\nFAILED: ${fails}` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

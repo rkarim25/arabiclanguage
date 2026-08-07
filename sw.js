@@ -8,11 +8,11 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-msiorr8l";
+const CACHE = "ats-msipqi3k";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
-  "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html", "audio.html",
+  "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html", "audio.html", "placement.html",
   "css/style.css", "css/fonts.css", "js/app.js", "js/tracker.js", "manifest.webmanifest",
   "fonts/font-1.woff2", "fonts/font-2.woff2", "fonts/font-3.woff2", "fonts/font-4.woff2", "fonts/font-5.woff2",
   "fonts/font-6.woff2", "fonts/font-7.woff2", "fonts/font-8.woff2", "fonts/font-9.woff2",

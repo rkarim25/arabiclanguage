@@ -400,6 +400,300 @@
     };
   }
 
+  /* ============================================================
+     SKILL-AXIS TRACKS (redesign 2026-08-07, his ask): the charts now
+     plot the SKILL — listening comprehension for Quran, speaking
+     deployability for conversation — not word retention. Retention
+     stays the engine underneath; these functions map it through the
+     conservative skill chain, forward and backward in time.
+
+     Placement tests are the feedback loop: `ptest-listen` and
+     `ptest-speak` log events are GOLD-STANDARD evidence. They enter
+     the factor posteriors at PTEST_W× weight, so a few real tests
+     dominate the priors — if reality is off the forecast, the factors
+     shift and the next forecast regenerates from the corrected values.
+     ============================================================ */
+  SKILL_CAL.PTEST_W = 8;              // one placement test outweighs ~8 practice observations
+  /* Two listening metrics, per stage:
+     - "catch" (memorized text, e.g. salah): he recites it daily, so meaning maps
+       word-by-word — the skill IS catching the words by ear in the stream.
+       Target: 90% of tokens. The comprehension curve does NOT apply (it models
+       novel-speech comprehension; applying it to text he knows by heart would
+       make the goal unreachable by construction, which is a modelling lie in
+       the opposite direction).
+     - "comprehend" (novel/familiar passages): coverage→comprehension curve
+       applies in full. Target: 70% = "adequate" (van Zeeland & Schmitt). */
+  SKILL_CAL.CATCH_TARGET = 0.9;
+  SKILL_CAL.COMPREHENSION_TARGET = 0.7;
+  SKILL_CAL.SPEAK_TARGET = 0.7;          // deployable fraction of the basket = Umrah-ready line
+  SKILL_CAL.CONN_ASYM_FAMILIAR = 0.97;   // ceiling for text he recites daily (salah)
+  SKILL_CAL.CONN_HALF_MIN = 300;         // ~5h of by-ear practice halves the gap to the ceiling
+  SKILL_CAL.EAR_SHARE_FLOOR = 0.1;       // at least this share of reviews assumed by-ear (site pushes it)
+  SKILL_CAL.OUT_SHARE_FLOOR = 0.05;
+  const listenSkillOf = (cov, mode) => (mode === "catch" ? cov : comprehensionAt(cov));
+  const listenTargetOf = mode => (mode === "catch" ? SKILL_CAL.CATCH_TARGET : SKILL_CAL.COMPREHENSION_TARGET);
+
+  /* Invert the comprehension curve: comprehension target → required coverage. */
+  function coverageFor(comp) {
+    const C = SKILL_CAL.COMPREHENSION_CURVE;
+    for (let i = 1; i < C.length; i++) {
+      if (comp <= C[i][1]) {
+        const [x0, y0] = C[i - 1], [x1, y1] = C[i];
+        return y1 === y0 ? x1 : x0 + (comp - y0) / (y1 - y0) * (x1 - x0);
+      }
+    }
+    return 1;
+  }
+
+  /* Placement-test evidence. ptest-listen: {score:0-1, isolatedCov} — implies a
+     connected factor; enters the conn Beta at PTEST_W weight. ptest-speak:
+     {score:0-1} — blends the productive floor upward (never above measured). */
+  function ptestEvidence(log, uptoT) {
+    const listen = [], speak = [];
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11 || (uptoT && e.t > uptoT)) continue;
+      if (e.e === "ptest-listen" && e.score !== undefined) listen.push(e);
+      else if (e.e === "ptest-speak" && e.score !== undefined) speak.push(e);
+    }
+    return { listen, speak };
+  }
+  function connectedFactorCalibrated(log, uptoT) {
+    const base = connectedFactor((log || []).filter(e => !uptoT || e.t <= uptoT));
+    let a = 0, b = 0;
+    for (const e of ptestEvidence(log, uptoT).listen) {
+      const iso = Math.max(0.05, e.isolatedCov || 0.5);
+      // a test that measured word-CATCH implies conn directly (catch = iso×conn);
+      // a comprehension score implies it through the inverted curve
+      const measured = e.catch !== undefined ? e.catch : coverageFor(e.score);
+      const implied = Math.max(0.05, Math.min(0.97, measured / iso));
+      a += SKILL_CAL.PTEST_W * implied; b += SKILL_CAL.PTEST_W * (1 - implied);
+    }
+    if (!a && !b) return base;
+    // tests dominate: blend base posterior with test-implied at test weight
+    const p = (base.p * 5 + a) / (5 + a + b);
+    return { p: Math.max(0.05, Math.min(0.97, p)), n: base.n + a + b };
+  }
+  function productiveFloorCalibrated(log, uptoT) {
+    const tests = ptestEvidence(log, uptoT).speak;
+    if (!tests.length) return SKILL_CAL.PRODUCTIVE_WORD;
+    const recent = tests[tests.length - 1].score;
+    // measured oral ability pulls the floor toward it, never above the test
+    return Math.max(0.1, Math.min(recent, (SKILL_CAL.PRODUCTIVE_WORD + recent) / 2));
+  }
+
+  /* Behaviour mix measured from the log: what share of his practice is by-ear,
+     what share is out-loud/production. Floors keep forecasts from zeroing. */
+  function practiceMix(log) {
+    let graded = 0, ear = 0, out = 0;
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11) continue;
+      if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
+      else if (e.e === "review" || e.e === "qfill") graded++;
+      else if (e.e === "alisten-grade") { graded++; ear++; }
+      else if (e.e === "speak" || e.e === "spract" || e.e === "trans") { graded++; out++; }
+    }
+    return {
+      earShare: Math.max(SKILL_CAL.EAR_SHARE_FLOOR, graded ? ear / graded : 0),
+      outShare: Math.max(SKILL_CAL.OUT_SHARE_FLOOR, graded ? out / graded : 0),
+    };
+  }
+  function outputMinutes(log, uptoT) {
+    let m = 0;
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11 || (uptoT && e.t > uptoT)) continue;
+      if (e.e === "speak") m += 0.5;
+      else if (e.e === "spract") m += 0.4;
+      else if (e.e === "alisten-sent") m += 0.3;
+      else if (e.e === "trans") m += 0.5;
+      else if (e.e === "convo") m += 10;
+      else if (e.e === "ptest-speak") m += 10;
+    }
+    return m;
+  }
+  function earMinutes(log, uptoT) {
+    let m = 0;
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11 || (uptoT && e.t > uptoT)) continue;
+      if (e.e === "sheet" && e.mode === "ears") m += 0.4;
+      else if (e.e === "alisten" || e.e === "alisten-grade") m += 0.3;
+      else if (e.e === "alisten-sent") m += 0.5;
+      else if (e.e === "rlisten" || e.e === "listen-click") m += 1.5;
+      else if (e.e === "dict") m += 1;
+      else if (e.e === "ptest-listen") m += 8;
+    }
+    return m;
+  }
+  /* Connected-speech skill grows toward its ceiling with by-ear minutes —
+     THE stated forecast assumption (placement tests confirm or correct it). */
+  function connAt(conn0, asym, extraEarMin) {
+    const a = Math.max(conn0, Math.min(asym, conn0 + (asym - conn0) * (1 - Math.pow(2, -extraEarMin / SKILL_CAL.CONN_HALF_MIN))));
+    return a;
+  }
+
+  /* LISTENING reality series: one point per day, factors evolving with the
+     evidence that existed THAT day. Placement tests appear as anchors. */
+  function listeningSkillSeries(log, tokenBasket, fromT, toT, qrefIndex, mode) {
+    const stream = gradedStream(log, qrefIndex);
+    const out = [];
+    const dayEnd = t => { const d = new Date(t); d.setHours(23, 59, 59, 999); return d.getTime(); };
+    const cards = {};
+    let i = 0;
+    const asym = mode === "catch" ? SKILL_CAL.CONN_ASYM_FAMILIAR : SKILL_CAL.CONN_CAP;
+    for (let t = dayEnd(fromT); t <= dayEnd(toT); t += DAY) {
+      while (i < stream.length && stream[i].t <= t) applyEvent(cards, stream[i++]);
+      const upto = (log || []).filter(e => e && e.t && e.t <= t);
+      const ev = earEvidence(upto);
+      const ef = earFactor(upto, cards, t);
+      const cf = connectedFactorCalibrated(log, t);
+      let iso = 0;
+      for (const k of tokenBasket) iso += earRecallP(k, cards, ev, ef.p, t);
+      const cov = (iso / (tokenBasket.length || 1)) * Math.min(asym, cf.p);
+      out.push({ d: new Date(t).toISOString().slice(0, 10), skill: Math.round(listenSkillOf(cov, mode) * 1000) / 1000 });
+    }
+    return out;
+  }
+
+  /* SPEAKING reality series: proven-production set + hours gate through time. */
+  function speakingSkillSeries(log, wordBasket, phraseBasket, fromT, toT, qrefIndex) {
+    const stream = gradedStream(log, qrefIndex);
+    const evts = (log || []).filter(e => e && e.t && e.t >= 16e11).sort((a, b) => a.t - b.t);
+    const out = [];
+    const dayEnd = t => { const d = new Date(t); d.setHours(23, 59, 59, 999); return d.getTime(); };
+    const cards = {};
+    const proven = new Set();
+    let i = 0, j = 0, outMin = 0;
+    const N = wordBasket.length + (phraseBasket || []).length || 1;
+    const all = wordBasket.concat(phraseBasket || []);
+    const isPhrase = new Set(phraseBasket || []);
+    for (let t = dayEnd(fromT); t <= dayEnd(toT); t += DAY) {
+      while (i < stream.length && stream[i].t <= t) applyEvent(cards, stream[i++]);
+      while (j < evts.length && evts[j].t <= t) {
+        const e = evts[j++];
+        if (e.e === "speak") { outMin += 0.5; if ((e.score !== undefined ? e.score : e.sim || 0) >= SKILL_CAL.SPEAK_OK && e.key) proven.add(e.key); }
+        else if (e.e === "sheet" && e.mode === "produce" && e.ok && e.key) proven.add(e.key);
+        else if (e.e === "spract") outMin += 0.4;
+        else if (e.e === "alisten-sent") outMin += 0.3;
+        else if (e.e === "trans") outMin += 0.5;
+        else if (e.e === "convo") outMin += 10;
+        else if (e.e === "ptest-speak") outMin += 10;
+      }
+      const gate = Math.min(1, outMin / SKILL_CAL.OUTPUT_TARGET_MIN);
+      const floor = productiveFloorCalibrated(log, t);
+      let mass = 0;
+      for (const k of all) {
+        const p = recallP(cards[k], t);
+        if (p <= 0.01) continue;
+        if (proven.has(k)) mass += p;
+        else mass += p * (isPhrase.has(k) ? Math.min(floor, SKILL_CAL.PRODUCTIVE_PHRASE) : floor) * gate;
+      }
+      out.push({ d: new Date(t).toISOString().slice(0, 10), skill: Math.round((mass / N) * 1000) / 1000 });
+    }
+    return out;
+  }
+
+  /* SKILL FORECAST — wraps the retention simulation, tracking per-card
+     ear-certified weight (a review certifies with prob = ear-share) or
+     production-proven weight (prob = out-share), plus the growth of the
+     connected-speech skill / hours gate with practice volume. */
+  function simulateSkill(kind, cardsToday, basket, opts) {
+    const { weeklyMinutes, horizonDays, startT, mix, conn0, mode, outMin0, provenSet, phraseSet, floor } = opts;
+    const share = kind === "listen" ? mix.earShare : mix.outShare;
+    const comps = {};
+    const inPhrase = phraseSet || new Set();
+    let retired = 0;
+    for (const k of basket) {
+      const c = cardsToday[k];
+      if (!c) continue;
+      if (c.retired) { retired += 1; continue; }
+      const certified = kind === "listen" ? 0 : (provenSet && provenSet.has(k) ? 1 : 0);
+      comps[k] = [{ box: c.box, last: c.last, w: 1, wc: certified }];
+    }
+    const unseen = basket.filter(k => !cardsToday[k]);
+    let unseenIdx = 0;
+    const series = [];
+    let completion = null;
+    let practMin = 0;
+    const asym = mode === "catch" ? SKILL_CAL.CONN_ASYM_FAMILIAR : SKILL_CAL.CONN_CAP;
+    const N = basket.length || 1;
+    for (let day = 1; day <= horizonDays; day++) {
+      const t = startT + day * DAY;
+      const minutes = weeklyMinutes[new Date(t).getDay()] || 0;
+      practMin += minutes * share;
+      let budget = CAL.ANSWERS_PER_MIN * minutes;
+      if (budget > 0) {
+        const due = [];
+        for (const k in comps) for (const c of comps[k]) {
+          const dueT = c.last + (BOX_DAYS[c.box] || 0) * DAY;
+          if (dueT <= t && c.w > 1e-4) due.push({ k, c, over: t - dueT });
+        }
+        due.sort((a, b) => b.over - a.over);
+        for (const { k, c } of due) {
+          if (budget <= 0) break;
+          const spend = Math.min(c.w, budget);
+          budget -= spend;
+          const p = recallP({ box: c.box, last: c.last }, t);
+          const certFrac = c.w > 0 ? c.wc / c.w : 0;
+          const sw = spend * p;
+          // success keeps its certified share and certifies a further `share` of the rest
+          const newCert = sw * (certFrac + (1 - certFrac) * share);
+          c.w -= spend; c.wc = Math.max(0, c.wc - spend * certFrac);
+          comps[k].push({ box: Math.min(c.box + 1, 5), last: t, w: sw, wc: Math.min(sw, newCert) });
+          comps[k].push({ box: 0, last: t, w: spend * (1 - p), wc: 0 });
+        }
+        while (budget >= 1 && unseenIdx < unseen.length) {
+          budget -= 1;
+          const k = unseen[unseenIdx++];
+          // first encounters never certify a skill — only later successful
+          // reviews do (share per success). Meeting a word once proves nothing
+          // about producing it in speech or catching it in a stream.
+          comps[k] = [
+            { box: 1, last: t, w: CAL.P_NEW, wc: 0 },
+            { box: 0, last: t, w: 1 - CAL.P_NEW, wc: 0 },
+          ];
+        }
+        for (const k in comps) {
+          const byBox = {};
+          for (const c of comps[k]) {
+            if (c.w < 1e-6) continue;
+            const b = byBox[c.box];
+            if (b) { b.last = (b.last * b.w + c.last * c.w) / (b.w + c.w); b.w += c.w; b.wc += c.wc; }
+            else byBox[c.box] = { box: c.box, last: c.last, w: c.w, wc: c.wc };
+          }
+          comps[k] = Object.values(byBox);
+        }
+      }
+      let skill;
+      if (kind === "listen") {
+        let iso = retired;
+        const conn = connAt(conn0, asym, practMin);
+        for (const k in comps) for (const c of comps[k]) {
+          const p = recallP({ box: c.box, last: c.last }, t);
+          iso += c.wc * p + (c.w - c.wc) * p * opts.earF;
+        }
+        skill = listenSkillOf((iso / N) * conn, mode);
+      } else {
+        const gate = Math.min(1, (outMin0 + practMin) / SKILL_CAL.OUTPUT_TARGET_MIN);
+        let mass = retired;
+        for (const k in comps) for (const c of comps[k]) {
+          const p = recallP({ box: c.box, last: c.last }, t);
+          const f = inPhrase.has(k) ? Math.min(floor, SKILL_CAL.PRODUCTIVE_PHRASE) : floor;
+          // the hours gate binds EVERYTHING in the forecast (DeKeyser: fluency
+          // is a whole-skill function of output hours — simulated drill success
+          // can't buy speech faster than simulated speaking time accumulates)
+          mass += (c.wc * p + (c.w - c.wc) * p * f) * gate;
+        }
+        skill = mass / N;
+      }
+      const dISO = new Date(t).toISOString().slice(0, 10);
+      series.push({ d: dISO, skill: Math.round(skill * 1000) / 1000 });
+      const target = kind === "listen" ? listenTargetOf(mode) : SKILL_CAL.SPEAK_TARGET;
+      if (!completion && skill >= target) completion = dISO;
+    }
+    return { series, completion };
+  }
+
   return { DAY, BOX_DAYS, CAL, SKILL_CAL, halflife, recallP, buildQrefIndex, gradedStream, applyEvent, replay, recallMass, realitySeries, simulate, massFromSrs,
-    earEvidence, earFactor, connectedFactor, comprehensionAt, earRecallP, listeningEstimate, speakingEstimate };
+    earEvidence, earFactor, connectedFactor, comprehensionAt, earRecallP, listeningEstimate, speakingEstimate,
+    coverageFor, ptestEvidence, connectedFactorCalibrated, productiveFloorCalibrated, practiceMix, outputMinutes, earMinutes, connAt,
+    listenSkillOf, listenTargetOf, listeningSkillSeries, speakingSkillSeries, simulateSkill };
 });

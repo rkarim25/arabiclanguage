@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msiorr8l">
-  <link rel="stylesheet" href="css/style.css?v=msiorr8l">
+  <link rel="stylesheet" href="css/fonts.css?v=msipqi3k">
+  <link rel="stylesheet" href="css/style.css?v=msipqi3k">
 </head>
 <body>
 <main>
@@ -25,33 +25,35 @@
 
   <div class="card" id="progressCard">
     <h2 style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
-      <span>📈 Reality &amp; forecast</span>
+      <span>🎧🗣 Your two skills — reality &amp; forecast</span>
       <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span>
     </h2>
-    <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is what you could actually recall each day — it rises when you study and sags as memory fades (that's normal, not failure). Every <strong style="color:var(--amber)">dotted line</strong> is a forecast: what happens at different rhythms, with the date each one reaches the goal. Goal = holding <strong>90%</strong> in memory on any given day.</p>
+    <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is the skill itself — how much recitation your <em>ear</em> catches, how much Arabic your <em>mouth</em> can deploy — estimated conservatively from every answer you've given. It rises when you practise and sags as memory fades (normal, not failure). The three <strong style="color:var(--amber)">dotted lines</strong> are futures: your current pace, one better, one worse. <strong style="color:#7b5ea8">◆ Placement tests</strong> anchor the line to measured reality — when a test disagrees with the model, the model recalibrates and the forecast moves.</p>
     <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
+      <a href="placement.html"><button class="primary">🎧 5-minute listening test</button></a>
+      <a href="converse.html?exam=1"><button>🎤 Oral exam (via any AI chat)</button></a>
+      <span style="font-size:12px;color:var(--muted)">Every test sharpens the chart — take one every week or two.</span>
+    </div>
     <div id="pgSkills" style="display:none;border-top:1px dashed var(--border);margin-top:12px;padding-top:10px">
-      <div style="font-weight:700;font-size:14px">🎧🗣 What this buys in the real world — conservative, tests-first</div>
-      <p class="sub" style="font-size:12.5px;margin:2px 0 8px">Held-in-memory (above) is a <em>screen</em> number. Your ear and mouth are separate skills, so these estimates deliberately understate: a word is only fully credited in a skill once a test proved it there.</p>
       <div id="pgSkillRows" style="font-size:13px;line-height:1.65"></div>
       <details style="font-size:11.5px;color:var(--muted);margin-top:6px">
-        <summary style="cursor:pointer">How these are computed (and why they look low)</summary>
+        <summary style="cursor:pointer">The science (and why the numbers start low)</summary>
         <div style="margin-top:4px;line-height:1.6">
-          Screen-known words are discounted for the ear (L2 listeners routinely miss words they "know" — Goh 2000; Field 2008), again for connected speech (finding word boundaries in a stream is its own skill), and word-catch converts to comprehension non-linearly (van Zeeland &amp; Schmitt 2013; Nation 2006: below ~90% coverage, understanding collapses — so 50% of words ≠ 50% of meaning). Speaking counts only what you've produced (typed in Arabic, spoken past the mic, drilled in Sentences) at full value; the rest is floored at the bottom of the receptive→productive range (Laufer 1998; Webb 2008) and capped by your logged speaking minutes — fluency needs output hours and no vocabulary count can substitute (DeKeyser). Every discount starts pessimistic and only rises as YOUR test results accumulate: 🎧 Ears rounds, cold-listen tests, Speak and Sentences move these numbers; nothing else does.
+          Screen-known words are discounted for the ear (L2 listeners routinely miss words they "know" — Goh 2000; Field 2008), again for connected speech (finding word boundaries in a stream is its own skill), and — for passages you don't recite from memory — word-catch converts to comprehension non-linearly (van Zeeland &amp; Schmitt 2013; Nation 2006: below ~90% coverage, understanding collapses). For your salah surahs, which you recite daily, catching the words by ear ≈ understanding them, so that panel tracks word-catch directly. Speaking counts only what you've produced (typed in Arabic, spoken past the mic, drilled in Sentences) at full value; the rest is floored at the bottom of the receptive→productive range (Laufer 1998; Webb 2008) and capped by your logged speaking minutes (DeKeyser: fluency needs output hours). Every discount starts pessimistic and rises only as YOUR results accumulate — and placement tests outweigh everything else, so a few honest tests quickly correct any pessimism. One measured fact worth knowing: at 10 focused min/day the model says you can hold about a third of the Umrah set in speech-ready memory; at 15 you hold all of it — the capacity cliff is real.
         </div>
       </details>
     </div>
-    <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers (every check, review and self-grade since 4 Jul). Dotted = the site's own scheduler simulated forward at your measured accuracy — each panel assumes those minutes go to <em>that</em> goal, so splitting your time lands between the lines. Maths: one shared model, calibrated from your own answers, revalidated before every deploy.</p>
+    <details style="margin-top:12px;border-top:1px dashed var(--border);padding-top:10px">
+      <summary style="cursor:pointer;list-style-position:outside">
+        <span style="font-weight:700;font-size:14px">🎯 All milestones &amp; verified achievements</span>
+        <span id="msSummary" style="font-size:12.5px;color:var(--accent);font-weight:600;margin-left:6px">…</span>
+      </summary>
+      <div id="msTracks" style="margin-top:12px">Working out your position…</div>
+      <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
+    </details>
+    <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers since 4 Jul. Dotted = the site's own scheduler simulated forward at your measured accuracy and practice mix. One shared model (js/progress-model.js), calibrated from your answers, revalidated before every deploy.</p>
   </div>
-
-  <details class="card">
-    <summary style="cursor:pointer;list-style-position:outside">
-      <span style="font-weight:700;font-size:17px">🎯 Milestones &amp; the long view</span>
-      <span id="msSummary" style="font-size:13px;color:var(--accent);font-weight:600;margin-left:6px">…</span>
-    </summary>
-    <div id="msTracks" style="margin-top:12px">Working out your position…</div>
-    <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
-  </details>
 
   <div class="card" id="coachCard" style="display:none;border-color:var(--accent)">
     <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
@@ -131,9 +133,9 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msiorr8l"></script>
-<script src="js/tracker.js?v=msiorr8l"></script>
-<script src="js/progress-model.js?v=msiorr8l"></script>
+<script src="js/app.js?v=msipqi3k"></script>
+<script src="js/tracker.js?v=msipqi3k"></script>
+<script src="js/progress-model.js?v=msipqi3k"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -411,40 +413,33 @@ document.getElementById("importFile").onchange = (e) => {
   r.readAsText(f);
 };
 
-/* ============ 📈 Reality & forecast — the progress chart ============
-   Data: data/progress-series.json (nightly, scripts/gen-progress.js) — replayed
-   reality + simulated scenarios per goal. All maths in js/progress-model.js.
-   This code only DRAWS, plus one live touch: today's point is recomputed from
-   this device's SRS (the nightly JSON can be up to a day behind). */
+/* ============ 🎧🗣 The two skills — reality & forecast ============
+   SKILL AXIS (redesign 2026-08-07, his ask): the Quran panel plots listening —
+   how much of the recitation he'd actually catch/follow by ear — and the
+   conversation panel plots speaking deployability. Word retention is the engine
+   underneath (js/progress-model.js) but is no longer the thing drawn.
+   Data: data/progress-series.json (nightly, scripts/gen-progress.js).
+   Placement tests (placement.html, Converse oral exam) appear as ◆ anchors and
+   recalibrate the model's factors — if reality is off the forecast, the next
+   nightly regeneration adjusts the forecast. */
 (function () {
   const panels = document.getElementById("pgPanels");
   if (!panels) return;
   const fmtD = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" });
   const fmtDY = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "2-digit" });
 
-  // scenario styling: greens = doing more, ambers→red = missing days
+  // three lines only (his ask): current pace · one higher · one lower
   const SCEN_STYLE = {
-    current: { c: "#8a8578", w: 1.2, dash: "5 4" },
-    plus5:   { c: "#3d9b76", w: 1.2, dash: "2 3" },
-    plus10:  { c: "#0d7a5f", w: 1.6, dash: "2 3" },
-    ten7:    { c: "#3572b0", w: 1.2, dash: "2 3" },
-    miss1:   { c: "#c99a2e", w: 1,   dash: "1.5 3.5" },
-    miss2:   { c: "#c97e2e", w: 1,   dash: "1.5 3.5" },
-    miss3:   { c: "#c25c33", w: 1,   dash: "1.5 3.5" },
-    miss4:   { c: "#b03535", w: 1,   dash: "1.5 3.5" },
+    current: { c: "#8a8578", w: 1.3, dash: "5 4" },
+    higher:  { c: "#0d7a5f", w: 1.6, dash: "2 3" },
+    lower:   { c: "#b03535", w: 1,   dash: "1.5 3.5" },
   };
 
-  function drawPanel(tr, icon, title) {
+  function drawPanel(tr, icon) {
     const W = 560, H = 260, L = 40, R = 14, T = 16, B = 30; // plot box
     const pw = W - L - R, ph = H - T - B;
-    const total = tr.basketSize, target = tr.target * total;
-
-    // live touch: recompute today's mass from THIS device's SRS
-    const live = ProgressModel.massFromSrs(getSrs(), tr.basket, Date.now());
-    const reality = tr.reality.slice();
-    const todayISO = new Date().toISOString().slice(0, 10);
-    if (reality.length && reality[reality.length - 1].d === todayISO) reality[reality.length - 1] = { d: todayISO, mass: live };
-    else reality.push({ d: todayISO, mass: live });
+    const total = 1, target = tr.target; // skill axis: 0..1, goal line at the stage target
+    const reality = tr.reality.slice();  // nightly skill series (already ends today)
 
     const t0 = new Date(reality[0].d).getTime();
     // x-domain: reality span + forecast horizon (cap at latest completion + 60d, else 9 months out)
@@ -475,10 +470,15 @@ document.getElementById("importFile").onchange = (e) => {
     let scen = "", markers = "";
     for (const s of tr.scenarios) {
       const st = SCEN_STYLE[s.id]; if (!st) continue;
-      scen += `<path d="${path(s.series, p => Math.min(p.mass, total))}" fill="none" stroke="${st.c}" stroke-width="${st.w}" stroke-dasharray="${st.dash}" stroke-linejoin="round" opacity="0.95"></path>`;
+      scen += `<path d="${path(s.series, p => Math.min(p.skill, total))}" fill="none" stroke="${st.c}" stroke-width="${st.w}" stroke-dasharray="${st.dash}" stroke-linejoin="round" opacity="0.95"></path>`;
       if (s.completion && new Date(s.completion).getTime() < tEnd) {
         markers += `<circle cx="${x(s.completion).toFixed(1)}" cy="${y(target).toFixed(1)}" r="2.4" fill="${st.c}"></circle>`;
       }
+    }
+    // placement-test anchors: ◆ where a real test measured the skill
+    for (const p of tr.tests || []) {
+      markers += `<rect x="${(x(p.d) - 2.6).toFixed(1)}" y="${(y(p.skill) - 2.6).toFixed(1)}" width="5.2" height="5.2"
+        transform="rotate(45 ${x(p.d).toFixed(1)} ${y(p.skill).toFixed(1)})" fill="#7b5ea8" stroke="#fff" stroke-width="0.7"></rect>`;
     }
     const lastR = reality[reality.length - 1];
 
@@ -487,21 +487,24 @@ document.getElementById("importFile").onchange = (e) => {
       return `<span style="white-space:nowrap"><span style="display:inline-block;width:16px;border-top:2px dashed ${st.c};vertical-align:middle;margin-right:4px"></span>${s.label} → <strong style="color:${st.c}">${s.completion ? fmtDY(s.completion) : "18mo+"}</strong></span>`;
     }).join(" · ");
 
-    const pct = Math.round((live / total) * 1000) / 10;
+    const todaySkill = reality.length ? reality[reality.length - 1].skill : 0;
+    const goalText = tr.kind === "listen"
+      ? (tr.stage === "salah" ? `goal: catch ${Math.round(target * 100)}% of the words by ear` : `goal: follow ${Math.round(target * 100)}% of the meaning`)
+      : `goal: deploy ${Math.round(target * 100)}% in speech`;
     const el = document.createElement("div");
     el.style.cssText = "flex:1 1 420px;min-width:0";
     el.innerHTML = `
-      <div style="font-weight:700;font-size:14px">${icon} ${title} <span style="color:var(--muted);font-weight:400">— ${tr.label}</span></div>
-      <div style="font-size:12.5px;color:var(--accent);font-weight:600;margin:2px 0 4px">holding ${live.toFixed(0)} of ${total} in memory right now (${pct}%)</div>
+      <div style="font-weight:700;font-size:14px">${icon} ${tr.label}</div>
+      <div style="font-size:12.5px;color:var(--accent);font-weight:600;margin:2px 0 4px">today: ~${(100 * todaySkill).toFixed(0)}% · ${goalText}</div>
       <div style="position:relative">
       <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;touch-action:pan-y">
         ${ticks}${grid}
         <line x1="${L}" y1="${y(target).toFixed(1)}" x2="${W - R}" y2="${y(target).toFixed(1)}" stroke="var(--accent)" stroke-width="0.8" stroke-dasharray="6 3" opacity="0.65"></line>
-        <text x="${W - R}" y="${(y(target) - 4).toFixed(1)}" font-size="9" text-anchor="end" fill="var(--accent)" font-family="var(--font-ui)">goal: hold 90%</text>
-        <path d="${path(reality, p => p.mass)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>
+        <text x="${W - R}" y="${(y(target) - 4).toFixed(1)}" font-size="9" text-anchor="end" fill="var(--accent)" font-family="var(--font-ui)">${goalText}</text>
+        <path d="${path(reality, p => p.skill)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>
         ${scen}${markers}
-        <circle cx="${x(lastR.d).toFixed(1)}" cy="${y(lastR.mass).toFixed(1)}" r="3" fill="var(--accent)"></circle>
-        <text x="${x(lastR.d).toFixed(1)}" y="${(y(lastR.mass) - 7).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--accent)" font-weight="bold" font-family="var(--font-ui)">today</text>
+        <circle cx="${x(lastR.d).toFixed(1)}" cy="${y(lastR.skill).toFixed(1)}" r="3" fill="var(--accent)"></circle>
+        <text x="${x(lastR.d).toFixed(1)}" y="${(y(lastR.skill) - 7).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--accent)" font-weight="bold" font-family="var(--font-ui)">today</text>
         <line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
         <line x1="${L}" y1="${H - B}" x2="${W - R}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
         <g class="pg-cross" style="display:none">
@@ -530,10 +533,10 @@ document.getElementById("importFile").onchange = (e) => {
         if (t <= tsOf(series[i])) {
           const a = series[i - 1], b = series[i];
           const f = (t - tsOf(a)) / Math.max(1, tsOf(b) - tsOf(a));
-          return a.mass + f * (b.mass - a.mass);
+          return a.skill + f * (b.skill - a.skill);
         }
       }
-      return series[series.length - 1].mass;
+      return series[series.length - 1].skill;
     };
     let tracked = false;
     function trackAt(clientX) {
@@ -545,11 +548,12 @@ document.getElementById("importFile").onchange = (e) => {
       cross.style.display = "";
       cLine.setAttribute("x1", xr.toFixed(1)); cLine.setAttribute("x2", xr.toFixed(1));
       const rows = [];
+      const skillWord = tr.kind === "listen" ? (tr.stage === "salah" ? "words caught by ear" : "meaning followed") : "deployable in speech";
       const rv = t <= lastRT ? lerp(reality, t) : null;
       if (rv !== null) {
         cDot.style.display = "";
         cDot.setAttribute("cx", xr.toFixed(1)); cDot.setAttribute("cy", y(rv).toFixed(1));
-        rows.push(`<div>held in memory: <strong>${rv.toFixed(0)}</strong> of ${total} (${(100 * rv / total).toFixed(0)}%)</div>`);
+        rows.push(`<div>${skillWord}: <strong>${(100 * rv).toFixed(0)}%</strong></div>`);
       } else {
         cDot.style.display = "none";
         for (const s of tr.scenarios) {
@@ -559,7 +563,7 @@ document.getElementById("importFile").onchange = (e) => {
             rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">✓ goal ${fmtD(s.completion)}</strong></div>`);
           } else {
             const v = lerp(s.series, t);
-            if (v !== null) rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">${(100 * Math.min(v, total) / total).toFixed(0)}%</strong></div>`);
+            if (v !== null) rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">${(100 * Math.min(v, total)).toFixed(0)}%</strong></div>`);
           }
         }
       }
@@ -568,7 +572,7 @@ document.getElementById("importFile").onchange = (e) => {
       const px = (xr / W) * rect.width;
       if (px > rect.width / 2) { tip.style.left = "auto"; tip.style.right = (rect.width - px + 10) + "px"; }
       else { tip.style.right = "auto"; tip.style.left = (px + 10) + "px"; }
-      if (!tracked) { tracked = true; logEvent({ e: "pg-track", panel: title }); }
+      if (!tracked) { tracked = true; logEvent({ e: "pg-track", panel: tr.kind }); }
     }
     svg.addEventListener("pointermove", e => trackAt(e.clientX));
     svg.addEventListener("pointerdown", e => { e.preventDefault(); trackAt(e.clientX); });
@@ -594,18 +598,20 @@ document.getElementById("importFile").onchange = (e) => {
   }
 
   fetch("data/progress-series.json").then(r => r.json()).then(pg => {
+    // fall back gracefully if the nightly hasn't regenerated to the skill format yet
+    if (!pg.tracks.quran.kind) { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The skill chart appears after the next coaching run refreshes the data.</p>`; return; }
     panels.innerHTML = "";
-    panels.appendChild(drawPanel(pg.tracks.quran, "📖", "Quran"));
-    panels.appendChild(drawPanel(pg.tracks.conv, "🗣", "Conversation"));
+    panels.appendChild(drawPanel(pg.tracks.quran, "🎧"));
+    panels.appendChild(drawPanel(pg.tracks.conv, "🗣"));
     renderSkills(pg.skills);
-    // headline: the week's movement, honestly (may be negative)
-    const tr = pg.tracks.quran;
-    const week = tr.reality.filter(p => new Date(p.d).getTime() >= Date.now() - 8 * 86400000);
+    // headline: the week's movement in the SKILL, honestly (may be negative)
+    const rq = pg.tracks.quran.reality;
+    const week = rq.filter(p => new Date(p.d).getTime() >= Date.now() - 8 * 86400000);
     if (week.length >= 2) {
-      const d = ProgressModel.massFromSrs(getSrs(), tr.basket, Date.now()) - week[0].mass;
+      const d = 100 * (week[week.length - 1].skill - week[0].skill);
       document.getElementById("pgToday").textContent =
-        d >= 0.5 ? `this week: +${d.toFixed(1)} words held in memory` :
-        d <= -0.5 ? `this week: ${d.toFixed(1)} — fading without review; a 5-min round recovers fastest` : "";
+        d >= 0.5 ? `this week: +${d.toFixed(1)} points of listening` :
+        d <= -0.5 ? `this week: ${d.toFixed(1)} points — the ear fades without listening practice; one Audio round recovers fastest` : "";
     }
   }).catch(() => { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The chart data hasn't been generated yet — it appears after the next coaching run.</p>`; });
 })();
