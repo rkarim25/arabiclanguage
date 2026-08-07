@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msi95wuk">
-  <link rel="stylesheet" href="css/style.css?v=msi95wuk">
+  <link rel="stylesheet" href="css/fonts.css?v=msio29oy">
+  <link rel="stylesheet" href="css/style.css?v=msio29oy">
 </head>
 <body>
 <main>
@@ -120,9 +120,9 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msi95wuk"></script>
-<script src="js/tracker.js?v=msi95wuk"></script>
-<script src="js/progress-model.js?v=msi95wuk"></script>
+<script src="js/app.js?v=msio29oy"></script>
+<script src="js/tracker.js?v=msio29oy"></script>
+<script src="js/progress-model.js?v=msio29oy"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -482,7 +482,8 @@ document.getElementById("importFile").onchange = (e) => {
     el.innerHTML = `
       <div style="font-weight:700;font-size:14px">${icon} ${title} <span style="color:var(--muted);font-weight:400">— ${tr.label}</span></div>
       <div style="font-size:12.5px;color:var(--accent);font-weight:600;margin:2px 0 4px">holding ${live.toFixed(0)} of ${total} in memory right now (${pct}%)</div>
-      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
+      <div style="position:relative">
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;touch-action:pan-y">
         ${ticks}${grid}
         <line x1="${L}" y1="${y(target).toFixed(1)}" x2="${W - R}" y2="${y(target).toFixed(1)}" stroke="var(--accent)" stroke-width="0.8" stroke-dasharray="6 3" opacity="0.65"></line>
         <text x="${W - R}" y="${(y(target) - 4).toFixed(1)}" font-size="9" text-anchor="end" fill="var(--accent)" font-family="var(--font-ui)">goal: hold 90%</text>
@@ -492,8 +493,75 @@ document.getElementById("importFile").onchange = (e) => {
         <text x="${x(lastR.d).toFixed(1)}" y="${(y(lastR.mass) - 7).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--accent)" font-weight="bold" font-family="var(--font-ui)">today</text>
         <line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
         <line x1="${L}" y1="${H - B}" x2="${W - R}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
+        <g class="pg-cross" style="display:none">
+          <line y1="${T}" y2="${H - B}" stroke="var(--ink)" stroke-width="0.6" opacity="0.45" stroke-dasharray="2 2"></line>
+          <circle r="2.6" fill="var(--accent)" stroke="#fff" stroke-width="0.8"></circle>
+        </g>
       </svg>
+      <div class="pg-tip" style="display:none;position:absolute;top:6px;z-index:5;pointer-events:none;background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:6px 9px;font-size:11.5px;line-height:1.55;max-width:230px"></div>
+      </div>
       <div style="font-size:10.5px;color:var(--muted);line-height:1.9;margin-top:2px">${legend}</div>`;
+
+    /* ---- track-the-line: crosshair + readout (his 2026-08-07 ask) ----
+       Follows mouse or finger (pointer events; touch-action:pan-y keeps the
+       page scrollable). Snaps to the day, interpolates every visible line:
+       past → what he actually held; future → what each scenario projects. */
+    const svg = el.querySelector("svg");
+    const tip = el.querySelector(".pg-tip");
+    const cross = el.querySelector(".pg-cross");
+    const cLine = cross.querySelector("line");
+    const cDot = cross.querySelector("circle");
+    const tsOf = p => new Date(p.d).getTime();
+    const lastRT = tsOf(lastR);
+    const lerp = (series, t) => {
+      if (!series.length || t < tsOf(series[0]) || t > tsOf(series[series.length - 1])) return null;
+      for (let i = 1; i < series.length; i++) {
+        if (t <= tsOf(series[i])) {
+          const a = series[i - 1], b = series[i];
+          const f = (t - tsOf(a)) / Math.max(1, tsOf(b) - tsOf(a));
+          return a.mass + f * (b.mass - a.mass);
+        }
+      }
+      return series[series.length - 1].mass;
+    };
+    let tracked = false;
+    function trackAt(clientX) {
+      const rect = svg.getBoundingClientRect();
+      const vx = Math.max(L, Math.min(W - R, (clientX - rect.left) / rect.width * W));
+      const t = Math.round((t0 + ((vx - L) / pw) * (tEnd - t0)) / 86400000) * 86400000;
+      const iso = new Date(t).toISOString().slice(0, 10);
+      const xr = L + ((t - t0) / (tEnd - t0)) * pw;
+      cross.style.display = "";
+      cLine.setAttribute("x1", xr.toFixed(1)); cLine.setAttribute("x2", xr.toFixed(1));
+      const rows = [];
+      const rv = t <= lastRT ? lerp(reality, t) : null;
+      if (rv !== null) {
+        cDot.style.display = "";
+        cDot.setAttribute("cx", xr.toFixed(1)); cDot.setAttribute("cy", y(rv).toFixed(1));
+        rows.push(`<div>held in memory: <strong>${rv.toFixed(0)}</strong> of ${total} (${(100 * rv / total).toFixed(0)}%)</div>`);
+      } else {
+        cDot.style.display = "none";
+        for (const s of tr.scenarios) {
+          const st = SCEN_STYLE[s.id]; if (!st) continue;
+          const sw = `<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${st.c};margin-right:5px;vertical-align:-1px"></span>`;
+          if (s.completion && t >= new Date(s.completion).getTime()) {
+            rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">✓ goal ${fmtD(s.completion)}</strong></div>`);
+          } else {
+            const v = lerp(s.series, t);
+            if (v !== null) rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">${(100 * Math.min(v, total) / total).toFixed(0)}%</strong></div>`);
+          }
+        }
+      }
+      tip.innerHTML = `<div style="font-weight:700;margin-bottom:1px">${fmtDY(iso)}${rv === null ? ' <span style="color:var(--muted);font-weight:400">forecast</span>' : ""}</div>` + rows.join("");
+      tip.style.display = "block";
+      const px = (xr / W) * rect.width;
+      if (px > rect.width / 2) { tip.style.left = "auto"; tip.style.right = (rect.width - px + 10) + "px"; }
+      else { tip.style.right = "auto"; tip.style.left = (px + 10) + "px"; }
+      if (!tracked) { tracked = true; logEvent({ e: "pg-track", panel: title }); }
+    }
+    svg.addEventListener("pointermove", e => trackAt(e.clientX));
+    svg.addEventListener("pointerdown", e => { e.preventDefault(); trackAt(e.clientX); });
+    svg.addEventListener("pointerleave", () => { cross.style.display = "none"; tip.style.display = "none"; });
     return el;
   }
 
