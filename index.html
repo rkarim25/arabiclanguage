@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msirx4z2">
-  <link rel="stylesheet" href="css/style.css?v=msirx4z2">
+  <link rel="stylesheet" href="css/fonts.css?v=msj4d2m1">
+  <link rel="stylesheet" href="css/style.css?v=msj4d2m1">
 </head>
 <body>
 <main>
@@ -138,10 +138,10 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msirx4z2"></script>
-<script src="js/tracker.js?v=msirx4z2"></script>
+<script src="js/app.js?v=msj4d2m1"></script>
+<script src="js/tracker.js?v=msj4d2m1"></script>
 <script src="js/plan.js?v=msirdlxo"></script>
-<script src="js/progress-model.js?v=msirx4z2"></script>
+<script src="js/progress-model.js?v=msj4d2m1"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -320,6 +320,13 @@ async function loadCoach() {
   try {
     const c = await fetchCoach();
     if (!c || !c.note) return;
+    // the teacher-lesson HOMEWORK CONTRACT rides in the coach payload — store it
+    // locally so the day-plan can schedule backwards from the lesson deadline
+    if (c.homework && c.homework.lessonAt) {
+      store.set("ats-homework", c.homework);
+      const pc = document.getElementById("planCard");
+      if (pc && typeof planRenderCard === "function") planRenderCard(pc);
+    } else if (!c.homework) store.set("ats-homework", null);
     const who = whoami();
     if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
     document.getElementById("coachCard").style.display = "block";

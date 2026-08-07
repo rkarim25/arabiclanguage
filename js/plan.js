@@ -59,11 +59,46 @@ const PLAN_BLOCKS = {
   sentences: { icon: "✍️", title: () => "Build 5 sentences", sub: "Conjugate and produce — I/we/they across the tenses.", url: "sentences.html", page: "sentences", done: ["spract-done"] },
   phrases:   { icon: "💬", title: c => "Phrases out loud — " + c, sub: "Whole sentences you'll actually say. Read each ALOUD before revealing.", url: c => `vocab.html?ph=${c}&mode=drill`, page: "vocab", done: [] },
   ptest:     { icon: "🎯", title: () => "5-minute listening test", sub: "A measurement, not a drill — it anchors your chart and corrects the forecast.", url: "placement.html", page: "placement", done: ["ptest-listen"] },
+  homework:  { icon: "📚", title: () => "Teacher homework", sub: "", url: "vocab.html?view=lessons", page: "vocab", done: ["fill-done", "drill-done", "sheet-done"] }, // display fields overridden in planMakeBlock
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
 };
 
 const PHRASE_GIDS = ["greet", "intro", "ask", "need", "dir", "shop", "food", "time", "talk", "help", "state", "deen"];
 const PLAN_SURAHS = ["fatiha", "ikhlas", "falaq", "nas", "kawthar", "asr", "qadr"];
+
+/* ---- teacher-lesson homework contract (2026-08-07) ----
+   Written into coach:<email> by the coach when Reza dumps a lesson:
+   { label, lessonAt: ISO datetime, group: "ev-<gid>", keys: ["ev-x:0", ...],
+     tasks: [{id, label}] }. The plan schedules BACKWARDS from lessonAt: a word
+   is "solid" once it survives a spaced gap (box ≥ 2, or an explicit know
+   bucket), so cramming the night before cannot fake readiness — the plan
+   surfaces homework early precisely so the spacing fits before the lesson. */
+function planHomework() {
+  const hw = store.get("ats-homework", null);
+  if (!hw || !hw.lessonAt) return null;
+  const lessonT = new Date(hw.lessonAt).getTime();
+  if (isNaN(lessonT)) return null;
+  const daysLeft = (lessonT - Date.now()) / 86400000;
+  if (daysLeft < -0.5) return { ...hw, past: true, daysLeft };
+  const srs = getSrs();
+  const keys = hw.keys || [];
+  const solid = keys.filter(k => { const e = srs[k]; return e && (e.box >= 2 || e.b === "know"); });
+  const started = keys.filter(k => srs[k]);
+  const done = store.get("ats-hw-done", {});
+  const tasks = (hw.tasks || []).map(t => ({ ...t, done: !!done[t.id] }));
+  const tasksLeft = tasks.filter(t => !t.done).length;
+  const wordReadiness = keys.length ? solid.length / keys.length : 1;
+  const taskReadiness = tasks.length ? (tasks.length - tasksLeft) / tasks.length : 1;
+  const readiness = Math.round(100 * (keys.length || tasks.length ? (wordReadiness * (keys.length ? 0.7 : 0) + taskReadiness * (tasks.length ? 0.3 : 0)) / ((keys.length ? 0.7 : 0) + (tasks.length ? 0.3 : 0)) : 1));
+  return { ...hw, past: false, daysLeft, lessonT, keys, tasks, tasksLeft, readiness,
+    solidN: solid.length, startedN: started.length, shakyN: keys.length - solid.length };
+}
+function planHwTaskDone(id) {
+  const done = store.get("ats-hw-done", {});
+  done[id] = true;
+  store.set("ats-hw-done", done);
+  logEvent({ e: "hw-task", id });
+}
 
 function planHist() { return store.get(PLAN_HIST_KEY, []); }
 function planRecentTypes() { return planHist().slice(-2).flatMap(h => h.types || []); }
@@ -78,6 +113,20 @@ function planPickContent(options, date) {
 }
 
 function planMakeBlock(type, date, dueN) {
+  if (type === "homework") {
+    const hw = planHomework();
+    const preCheck = hw.daysLeft <= 1.5;
+    return {
+      type, content: hw.group || null,
+      icon: "📚",
+      title: preCheck ? "Pre-lesson check — prove the homework" : `Teacher homework — ${hw.label || "this week's lesson"}`,
+      sub: preCheck
+        ? `Test yourself on the lesson words before ${hw.teacher || "your teacher"} does — pass it and you walk in ready.`
+        : `${hw.shakyN} word${hw.shakyN === 1 ? "" : "s"} not yet solid${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""} — lesson ${hw.daysLeft < 1 ? "TOMORROW" : "in " + Math.ceil(hw.daysLeft) + " days"}.`,
+      url: hw.group ? `vocab.html?ev=${hw.group.replace(/^ev-/, "")}&mode=${preCheck ? "fill" : "study"}` : "vocab.html?view=lessons",
+      page: "vocab", mins: PLAN_BLOCK_MIN, done: false, sec: 0,
+    };
+  }
   const def = PLAN_BLOCKS[type];
   let content = null;
   if (type === "phrases") content = planPickContent(PHRASE_GIDS, date);
@@ -104,6 +153,15 @@ function planBuild(date) {
   // block 1: protect the base
   blocks.push(planMakeBlock(dueN >= 4 ? "review" : "newwords", date, dueN));
 
+  // teacher homework: scheduled BACKWARDS from the lesson. Urgency grows as
+  // work-remaining meets days-remaining; near the deadline it owns a slot
+  // outright (and the pre-lesson check takes over inside planMakeBlock).
+  const hw = planHomework();
+  if (hw && !hw.past && hw.readiness < 100) {
+    const urgency = (hw.shakyN + hw.tasksLeft * 3) / Math.max(0.5, hw.daysLeft);
+    if (hw.daysLeft <= 1.5 || urgency >= 2) blocks.push(planMakeBlock("homework", date, dueN));
+  }
+
   // blocks 2+3: marginal value with mix-gap weighting + rotation + test cadence
   const listenGap = Math.max(0.12, PLAN_TARGET_SHARE - mix.earShare);
   const speakGap = Math.max(0.12, PLAN_TARGET_SHARE - mix.outShare);
@@ -115,6 +173,10 @@ function planBuild(date) {
     { type: "sentences", w: speakGap * 0.8 },
     { type: "newwords", w: dueN >= 4 ? 0.15 : 0 },  // only worth a slot when reviews didn't take block 1
   ];
+  // moderate-urgency homework competes on weight (steady progress beats a scramble)
+  if (hw && !hw.past && hw.readiness < 100 && !blocks.some(b => b.type === "homework")) {
+    cand.push({ type: "homework", w: 0.3 + 0.15 * ((hw.shakyN + hw.tasksLeft * 3) / Math.max(1, hw.daysLeft)) });
+  }
   // placement cadence: listening test ~every 8 days; oral exam ~every 14 (it's longer — weekend-ish slot)
   if (planDaysSince("ptest-listen") >= 8) cand.push({ type: "ptest", w: 9 });
   else if (planDaysSince("ptest-speak") >= 14 && [0, 5, 6].includes(new Date(date + "T12:00:00").getDay())) cand.push({ type: "exam", w: 8 });
@@ -236,6 +298,33 @@ function planMountBar() {
 }
 
 /* the dashboard card: today's blocks, completion state, banking */
+/* the 📚 lesson strip: countdown + readiness + tasks + the ready verdict */
+function planLessonStripHTML() {
+  const hw = planHomework();
+  if (!hw) return "";
+  if (hw.past) {
+    return `<div class="plan-lesson"><strong>📚 Lesson done?</strong> <span style="color:var(--muted)">Send the new pages + homework (✏️📷 pen note or chat) and say when the next lesson is — the plan takes it from there.</span></div>`;
+  }
+  const when = new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" }) +
+    (hw.lessonAt.includes("T") ? " " + new Date(hw.lessonT).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "");
+  const tasksHtml = hw.tasks.map(t =>
+    `<label style="display:block;font-size:12.5px;margin-top:2px;cursor:pointer"><input type="checkbox" data-hw-task="${t.id}" ${t.done ? "checked disabled" : ""}> ${t.label}</label>`).join("");
+  const ready = hw.readiness >= 100;
+  return `<div class="plan-lesson">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px">
+      <strong>📚 ${hw.label || "Teacher lesson"}</strong>
+      <span style="color:${hw.daysLeft < 1.5 && !ready ? "var(--red)" : "var(--muted)"};font-size:12.5px">lesson ${when}</span>
+    </div>
+    <div class="progress-bar" style="margin:6px 0 3px"><div style="width:${hw.readiness}%"></div></div>
+    <div style="font-size:12.5px;${ready ? "color:var(--accent);font-weight:600" : "color:var(--muted)"}">
+      ${ready
+        ? `✅ Fully ready — every word holds on a spaced schedule and the tasks are done. Walk in and tell her so.`
+        : `${hw.readiness}% ready — ${hw.solidN}/${hw.keys.length} words solid (solid = survived a spaced gap, not crammed)${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""}`}
+    </div>
+    ${tasksHtml}
+  </div>`;
+}
+
 function planRenderCard(el) {
   const p = planGet();
   const cur = planCurrent(p);
@@ -251,6 +340,7 @@ function planRenderCard(el) {
       : `<a class="plan-row ${state}" href="${b.url}">${inner}</a>`;
   }).join("");
   el.innerHTML = `
+    ${planLessonStripHTML()}
     <div class="plan-head">
       <span>${p.completedAt ? "✅ Today is complete" : `Today — ${p.blocks.length} blocks · ~${p.blocks.length * PLAN_BLOCK_MIN} min`}</span>
       <span class="plan-count">${doneN}/${p.blocks.length}</span>
@@ -267,6 +357,11 @@ function planRenderCard(el) {
     <div style="font-size:12px;color:var(--muted);margin-top:10px">Picked for maximum movement on your two skill lines (speaking and by-ear practice surface until their share of your week reaches half). <a href="vocab.html" style="color:var(--accent)">Or browse everything →</a></div>`;
   const bank = document.getElementById("planBankBtn");
   if (bank) bank.onclick = () => { planBank(); planRenderCard(el); };
+  el.querySelectorAll("[data-hw-task]").forEach(cb => cb.onchange = () => {
+    planHwTaskDone(cb.dataset.hwTask);
+    autoSync();
+    planRenderCard(el);
+  });
 }
 
 /* wire in: observe every logged event; tick the clock */

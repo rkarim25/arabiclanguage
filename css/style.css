@@ -450,6 +450,7 @@ footer a { color: var(--accent); }
 .plan-row .pl-t { font-weight: 700; font-size: 14.5px; }
 .plan-row .pl-s { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
 .plan-row .pl-go { margin-left: auto; flex: none; color: var(--accent); font-weight: 700; font-size: 13.5px; white-space: nowrap; }
+.plan-lesson { border: 1px dashed var(--amber); border-radius: 12px; padding: 9px 12px; margin-bottom: 10px; font-size: 13.5px; background: var(--amber-soft, rgba(201,154,46,.08)); }
 .plan-head { display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; font-size: 14px; }
 .plan-head .plan-count { color: var(--accent); font-size: 13px; }
 .plan-fin { border-top: 1px dashed var(--border); margin-top: 10px; padding-top: 10px; }

@@ -46,10 +46,48 @@ Current code ignores unknown fields, so these are safe to add to everyday groups
 - **Dialogues** → the new **story**.
 - **Verbs** → **Sentence Practice**; **scenarios** → **Converse**.
 
+## The HOMEWORK CONTRACT — lesson-ready by design (2026-08-07)
+
+Every lesson dump ALSO produces a **homework contract**, written into the
+learner's `coach:<email>` KV payload (the site copies it to `ats-homework`
+locally; `js/plan.js` schedules backwards from it). Format:
+
+```json
+"homework": {
+  "label": "ABY Book 1, Unit 2 — العائلة",
+  "lessonAt": "2026-08-12T19:00",
+  "group": "ev-family2",
+  "keys": ["ev-family2:0", "ev-family2:1", "..."],
+  "tasks": [
+    {"id": "write5", "label": "Write 5 sentences with the new words"},
+    {"id": "dlg", "label": "Read the Unit 2 dialogue aloud twice"}
+  ]
+}
+```
+
+Rules for the coach writing it:
+- `lessonAt` comes from Reza's message ("next lesson Tuesday 7pm") — **if he
+  didn't say when, ASK in the coach note / reply** (the contract is worthless
+  without the deadline). Convert relative dates carefully; his TZ is UK.
+- `keys` = the SRS keys of the content just created from the dump (the cluster
+  members, grammar `gt:` cards, story vocab — whatever the lesson made).
+- `tasks` = the non-word homework the teacher assigned, as short checkable
+  lines. Manual ✓ on the dashboard (`hw-task` events).
+- **What the plan does with it**: readiness = words at box ≥ 2 ("solid" =
+  survived a spaced gap — cramming can't fake it) + tasks ticked. Homework
+  blocks enter Today's plan with urgency (work-left ÷ days-left); the day
+  before the lesson the block becomes a **pre-lesson check** (fill-test on the
+  lesson group); at 100% the dashboard says **"Fully ready — walk in and tell
+  her so."** After `lessonAt` passes, the strip asks for the next dump.
+- **Nightly coach**: monitor readiness each run. Lesson < 36 h away and
+  readiness < 80% → make homework the plan's top block and say so in the coach
+  note. After each lesson passes with no new dump in 3+ days, one gentle
+  coach-note nudge (never email for this alone).
+
 ## Deploy
 
 `node scripts/bump-version.js` → commit → push `main` (Pages ~1 min) → verify `curl -s -o /dev/null -w '%{http_code}' <url>` = 200 and spot-check the data file. (A markdown-only change needs no bump.)
 
-## Known gap → next build
+## Next build
 
-Lesson content isn't *prioritised* in the daily flow yet (vocab is only front-loaded in `EVERYDAY_LIST` + reachable via the Lessons tab). Planned: push the **most recent lesson first** in daily review, and a **per-lesson retention view** — which is also the data source for a **teacher-facing progress sheet** (an honest what's-retained-vs-stuck summary Reza can share with his teacher before lessons).
+A **per-lesson retention view** feeding a **teacher-facing progress sheet** (an honest what's-retained-vs-stuck summary Reza can paste to his teacher before lessons — the readiness strip is the seed of it).
