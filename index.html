@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msipqi3k">
-  <link rel="stylesheet" href="css/style.css?v=msipqi3k">
+  <link rel="stylesheet" href="css/fonts.css?v=msirdlxo">
+  <link rel="stylesheet" href="css/style.css?v=msirdlxo">
 </head>
 <body>
 <main>
@@ -30,6 +30,7 @@
     </h2>
     <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is the skill itself — how much recitation your <em>ear</em> catches, how much Arabic your <em>mouth</em> can deploy — estimated conservatively from every answer you've given. It rises when you practise and sags as memory fades (normal, not failure). The three <strong style="color:var(--amber)">dotted lines</strong> are futures: your current pace, one better, one worse. <strong style="color:#7b5ea8">◆ Placement tests</strong> anchor the line to measured reality — when a test disagrees with the model, the model recalibrates and the forecast moves.</p>
     <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
+    <div id="pgNarrative" style="display:none;background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.65"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
       <a href="placement.html"><button class="primary">🎧 5-minute listening test</button></a>
       <a href="converse.html?exam=1"><button>🎤 Oral exam (via any AI chat)</button></a>
@@ -133,9 +134,9 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msipqi3k"></script>
-<script src="js/tracker.js?v=msipqi3k"></script>
-<script src="js/progress-model.js?v=msipqi3k"></script>
+<script src="js/app.js?v=msirdlxo"></script>
+<script src="js/tracker.js?v=msirdlxo"></script>
+<script src="js/progress-model.js?v=msirdlxo"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -187,97 +188,38 @@ suggestNext().forEach(s => {
 });
 
 /* milestones */
-function msTrackHtml(icon, name, ladder, pctLine) {
-  const doneList = ladder.filter(m => m.have >= m.need);
-  const next = ladder.find(m => m.have < m.need);
-  let html = `<div style="margin-bottom:16px">
-    <div style="font-weight:700;font-size:15px">${icon} ${name} — milestone ${doneList.length + (next ? 1 : 0)} of ${ladder.length}
-      <span style="font-weight:600;color:var(--accent);font-size:13px;margin-left:6px">${pctLine}</span></div>`;
-  if (doneList.length) {
-    html += `<div style="font-size:12.5px;color:var(--accent);margin:2px 0">${doneList.map(m =>
-      "✓ " + m.title + (m.test ? (stepsDone("ms-" + m.test).passed ? " 🏅" : ` <a href="test.html?ms=${m.test}" style="color:var(--amber)">take the official test</a>`) : "")
-    ).join(" · ")}</div>`;
-  }
-  if (next) {
-    const remaining = next.need - next.have;
-    const eta = paceEta(remaining, next.unit);
-    const pct = Math.round(next.have / next.need * 100);
-    html += `
-      <div style="margin-top:6px">Next: <a href="${next.link}" style="color:var(--accent);font-weight:600">${next.title}</a>
-        ${next.test ? ` · <a href="test.html?ms=${next.test}" style="font-size:12.5px;color:var(--amber)">mock test →</a>` : ""}</div>
-      <div style="font-size:13px;color:var(--muted)">${next.why}</div>
-      <div class="progress-bar" style="margin:6px 0 3px"><div style="width:${pct}%"></div></div>
-      <div style="font-size:12.5px;color:var(--muted)">${next.have} of ${next.need} — ≈${eta.min} focused minute${eta.min > 1 ? "s" : ""} to go at your ${eta.early ? "starting pace (personalizes as you study)" : "measured pace"}</div>`;
-  } else {
-    html += `<div style="color:var(--accent);font-weight:600;margin-top:4px">🎉 Track complete — new milestones arrive with your next coaching update.</div>`;
-  }
-  return html + "</div>";
-}
-
-function fmtSpan(weeks) {
-  if (weeks <= 8) return `≈${weeks} week${weeks > 1 ? "s" : ""}`;
-  const months = Math.round(weeks / 4.345);
-  return `≈${months} month${months > 1 ? "s" : ""}`;
-}
-function stageLines(stages) {
-  let cum = 0, isCurrent = true;
-  return stages.map(st => {
-    const done = st.have >= st.need;
-    let status;
-    if (done) status = `<span style="color:var(--accent);font-weight:600">✓ reached</span>`;
-    else {
-      cum += st.need - st.have; // stages are sequential: dates stack
-      const e = weeksTo(cum);
-      const date = new Date(Date.now() + e.weeks * 7 * 86400000).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-      status = isCurrent
-        ? `<strong style="color:var(--accent)">${fmtSpan(e.weeks)} away — around ${date}</strong> <span style="color:var(--muted)">(${st.have}/${st.need})</span>`
-        : `<span style="color:var(--muted)">${fmtSpan(e.weeks)} from now — around ${date}</span>`;
-      isCurrent = false;
-    }
-    return `<div style="font-size:13px;margin-top:5px">${done ? "✓" : "•"} <strong>${st.title}</strong> — ${status}
-      <div style="font-size:12px;color:var(--muted)">${st.detail}</div></div>`;
-  }).join("");
-}
-
+/* Milestones, consolidated (2026-08-07, his ask): the charts + weekly narrative
+   carry the story now. This is just the compact content ladder — one line per
+   milestone, current one linked — plus a one-line verified record. The old
+   "honest long view" prose is gone: the chart IS the long view. */
 computeMilestones().then(ms => {
-  // defensive defaults: a cached older app.js can't blank the whole panel
-  const gs = ms.goalStages || { quran: [], conv: [], spokenAttempts: 0, listenClicks: 0 };
   const hist = ms.history || [];
-  const pp = ms.provenPrompts || [];
   const ls = ms.learntSplit || { quran: 0, msa: 0 };
-  const r = studyRhythm();
-  const nextQ = ms.quran.find(m => m.have < m.need);
-  const nextM = ms.msa.find(m => m.have < m.need);
+  const ladder = list => {
+    const next = list.find(m => m.have < m.need);
+    return list.map(m => {
+      const done = m.have >= m.need;
+      if (m === next) {
+        const medal = m.test ? ` · <a href="test.html?ms=${m.test}" style="color:var(--amber)">test →</a>` : "";
+        return `<div style="margin-top:3px">► <a href="${m.link}" style="color:var(--accent);font-weight:600">${m.title}</a> <span style="color:var(--muted)">${m.have}/${m.need}</span>${medal}</div>`;
+      }
+      const badge = done && m.test && stepsDone("ms-" + m.test).passed ? " 🏅" : "";
+      return `<div style="margin-top:3px;color:${done ? "var(--accent)" : "var(--muted)"}">${done ? "✓" : "○"} ${m.title}${badge}</div>`;
+    }).join("");
+  };
+  const nextAny = ms.quran.find(m => m.have < m.need) || ms.msa.find(m => m.have < m.need);
   document.getElementById("msSummary").textContent =
-    `📖 ${ms.coverage}% recognized · 🗣 ${ms.convPct}% of the core · next: ${(nextQ || nextM || { title: "all done!" }).title}`;
-  document.getElementById("msTracks").innerHTML =
-    msTrackHtml("📖", "Quran", ms.quran, `you recognize ≈${ms.coverage}% of all Quranic words`) +
-    msTrackHtml("🗣", "Everyday MSA", ms.msa, `≈${ms.convPct}% of the conversation core`) +
-    `<div style="border-top:1px dashed var(--border);padding-top:10px;margin-top:4px">
-      <div style="font-weight:700;font-size:14px">🔭 The honest long view</div>
-      <div style="font-size:12.5px;color:var(--muted);margin-top:2px">Your measured pace: ≈${r.wordsPerMin.toFixed(1)} words per focused minute · ~${r.minPerDay} min/day${r.early ? " — early estimate, firms up as you study" : ""}. Dates below assume this rhythm continues.</div>
-      <div style="font-weight:600;font-size:13px;margin-top:8px">📖 Understanding the Quran as recited</div>
-      ${stageLines(gs.quran)}
-      <div style="font-weight:600;font-size:13px;margin-top:10px">🗣 Speaking & understanding conversation</div>
-      ${stageLines(gs.conv)}
-      <div style="font-size:12px;color:var(--muted);margin-top:8px">
-        Straight talk: word counts are the ETAs above; the top stages also need real listening and speaking hours — no shortcut exists, which is why the 🎧 and Speak suggestions matter (so far: ${gs.spokenAttempts} spoken attempts, ${gs.listenClicks} listening sessions logged).
-        Recognition % is a leading indicator; the surah and milestone tests measure true understanding. More minutes per day pulls every date closer. Content for the higher stages arrives automatically via coaching updates.
-      </div>
+    `📖 ${ms.coverage}% recognized · 🗣 ${ms.convPct}% core · next: ${(nextAny || { title: "all done!" }).title}`;
+  document.getElementById("msTracks").innerHTML = `
+    <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:13px">
+      <div style="flex:1 1 240px"><div style="font-weight:700">📖 Quran <span style="font-weight:600;color:var(--accent);font-size:12px">${ms.coverage}% of all Quranic words recognized</span></div>${ladder(ms.quran)}</div>
+      <div style="flex:1 1 240px"><div style="font-weight:700">🗣 Everyday MSA <span style="font-weight:600;color:var(--accent);font-size:12px">${ms.convPct}% of the conversation core</span></div>${ladder(ms.msa)}</div>
     </div>
-    <div style="border-top:1px dashed var(--border);padding-top:10px;margin-top:10px">
-      <div style="font-weight:700;font-size:14px">🏆 Achieved so far — verified by tests, not self-reported</div>
-      <div style="font-size:13px;margin-top:5px"><strong>${ms.totalLearnt} words learnt</strong> (📖 ${ls.quran} Quranic · 🗣 ${ls.msa} everyday — families count in both)</div>
-      <div style="font-size:13px;margin-top:3px"><strong>Sentences proven out loud:</strong> ${pp.length} prompt${pp.length === 1 ? "" : "s"}${ms.provenSpoken ? ` + ${ms.provenSpoken} shadowed sentence${ms.provenSpoken > 1 ? "s" : ""}` : ""}${ms.provenTrans ? ` · ${ms.provenTrans} written translation${ms.provenTrans > 1 ? "s" : ""}` : ""}${ms.provenDict ? ` · ${ms.provenDict} dictation${ms.provenDict > 1 ? "s" : ""} transcribed` : ""}</div>
-      ${pp.length ? `<div style="font-size:12.5px;margin-top:4px">${pp.slice(0, 5).map(p =>
-        `<div>✓ “${p.en}” <span class="arabic" style="font-size:16px" dir="rtl">${p.ar}</span></div>`).join("")}${pp.length > 5 ? `<div style="color:var(--muted)">…and ${pp.length - 5} more</div>` : ""}</div>` : ""}
-      ${hist.length
-        ? `<div style="font-size:12.5px;margin-top:8px">${hist.slice(0, 8).map(h =>
-            `<div>${h.label} <span style="color:var(--muted)">· ${new Date(h.t).toLocaleDateString()}</span></div>`).join("")}${hist.length > 8 ? `<div style="color:var(--muted)">…and ${hist.length - 8} earlier results</div>` : ""}</div>`
-        : `<div style="font-size:12.5px;color:var(--muted);margin-top:6px">No verified results yet — pass a surah test, a milestone test, or speak a prompt with the mic, and it lands here with the date and score.</div>`}
+    <div style="border-top:1px dashed var(--border);margin-top:10px;padding-top:8px;font-size:12.5px">
+      🏆 <strong>Verified:</strong> ${ms.totalLearnt} words (📖 ${ls.quran} · 🗣 ${ls.msa})${ms.provenSpoken ? ` · ${ms.provenSpoken} sentences spoken` : ""}${ms.provenTrans ? ` · ${ms.provenTrans} translations` : ""}${hist.length ? " · " + hist.slice(0, 3).map(h => h.label).join(" · ") + (hist.length > 3 ? ` · +${hist.length - 3} more` : "") : " · no test results yet — every pass lands here with its date"}
     </div>`;
   document.getElementById("msStats").textContent =
-    `${ms.totalLearnt} words learnt · ${dueCards().length} due for review · ${activeMinutes()} active minutes (measured from your actual interactions — open tabs count nothing)`;
+    `${dueCards().length} due for review · ${activeMinutes()} active minutes measured from real interactions`;
 }).catch(e => {
   document.getElementById("msTracks").innerHTML =
     `Couldn't load milestone data (${e && e.message ? e.message : "error"}) — usually a stale cached script. <strong>Hard-refresh</strong> (Ctrl+F5, or pull down to refresh on mobile) and it will load.`;
@@ -603,6 +545,11 @@ document.getElementById("importFile").onchange = (e) => {
     panels.innerHTML = "";
     panels.appendChild(drawPanel(pg.tracks.quran, "🎧"));
     panels.appendChild(drawPanel(pg.tracks.conv, "🗣"));
+    if (pg.narrative) {
+      const nEl = document.getElementById("pgNarrative");
+      nEl.innerHTML = `<strong>📝 This week</strong> <span style="color:var(--muted);font-size:11.5px">(rewritten nightly from your data)</span><br>${pg.narrative}`;
+      nEl.style.display = "";
+    }
     renderSkills(pg.skills);
     // headline: the week's movement in the SKILL, honestly (may be negative)
     const rq = pg.tracks.quran.reality;

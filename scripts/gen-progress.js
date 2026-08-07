@@ -164,6 +164,38 @@ function buildSkills(log, now) {
   };
 }
 
+/* ---- the weekly narrative: 4 sentences, regenerated every nightly run, shown
+   under the charts and quoted in the weekly email. Data-written, so it changes
+   exactly as fast as his reality does. ---- */
+function weekDelta(reality) {
+  if (reality.length < 2) return 0;
+  const last = reality[reality.length - 1];
+  const cutoff = new Date(last.d).getTime() - 7 * DAY;
+  const older = reality.filter(p => new Date(p.d).getTime() <= cutoff);
+  const then = older.length ? older[older.length - 1] : reality[0];
+  return 100 * (last.skill - then.skill);
+}
+const fmtDate = iso => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+function narrative(q, c) {
+  const dq = weekDelta(q.reality), dc = weekDelta(c.reality);
+  const move = (d, name) =>
+    d >= 0.5 ? `your ${name} rose ${d.toFixed(1)} points` :
+    d <= -0.5 ? `your ${name} slipped ${Math.abs(d).toFixed(1)} points (fading, not failing — it comes back faster than it left)` :
+    `your ${name} held steady`;
+  const qh = q.scenarios.find(s => s.id === "higher"), qc = q.scenarios.find(s => s.id === "current");
+  const ch = c.scenarios.find(s => s.id === "higher"), cc = c.scenarios.find(s => s.id === "current");
+  const eta = s => s && s.completion ? `around ${fmtDate(s.completion)}` : "beyond 18 months";
+  const s = [];
+  s.push(`This week: ${move(dq, "listening")}; ${move(dc, "speaking")}.`);
+  s.push(`🎧 You'd catch ~${(100 * q.todaySkill).toFixed(0)}% of your salah by ear today. At your current rhythm the ${Math.round(100 * q.target)}% goal is ${eta(qc)}; on the higher path (${qh.label}) it's ${eta(qh)}.`);
+  s.push(`🗣 ~${(100 * c.todaySkill).toFixed(0)}% of the Umrah set is speech-ready. ${ch.label} reaches the goal ${eta(ch)}${cc.completion ? `; your current rhythm ${eta(cc)}` : "; your current rhythm doesn't reach it within 18 months"}.`);
+  const tests = (q.factors.tests || 0) + (c.factors.tests || 0);
+  s.push(tests === 0
+    ? "No placement test yet, so these forecasts run on deliberately cautious assumptions — one 5-minute listening test would sharpen every line."
+    : `${tests} placement test${tests > 1 ? "s" : ""} anchoring the model — keep one coming every week or two.`);
+  return s.join(" ");
+}
+
 const out = {
   generated: new Date(now).toISOString(),
   cal: PM.CAL,
@@ -174,6 +206,7 @@ const out = {
   },
   skills: buildSkills(payload.log, now),
 };
+out.narrative = narrative(out.tracks.quran, out.tracks.conv);
 const outPath = path.join(ROOT, "data", "progress-series.json");
 fs.writeFileSync(outPath, JSON.stringify(out));
 const t = out.tracks;
