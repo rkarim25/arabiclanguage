@@ -300,7 +300,9 @@
     let a = SKILL_CAL.CONN_PRIOR_A, b = SKILL_CAL.CONN_PRIOR_B;
     for (const e of log || []) {
       if (!e || !e.t || e.t < 16e11) continue;
-      if (e.e === "dict") { if (e.ok) a += 1; else b += 1; }
+      // dictation FAILURES are spelling-confounded (hearing the word ≠ writing
+      // its hamza correctly) — half weight; successes are clean positive evidence
+      if (e.e === "dict") { if (e.ok) a += 1; else b += 0.5; }
       else if (e.e === "alisten-sent") { a += SKILL_CAL.SELF_GRADE_W * 0.5; } // completing a round is weak positive evidence
       else if (e.e === "qlisten-test" && e.score !== undefined) { a += e.score >= 0.85 ? 1.5 : 0; b += e.score < 0.85 ? 1 : 0; }
     }

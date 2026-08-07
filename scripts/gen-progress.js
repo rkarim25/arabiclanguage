@@ -98,9 +98,15 @@ function buildSkillTrack(kind, stages, log, srs, now) {
 
   const stream = PM.gradedStream(log, qref);
   const fromT = stream.length ? stream[0].t : now - 30 * DAY;
+  const fullBasket = kind === "listen" ? stage.basket : stage.words.concat(stage.phrases);
   const reality = kind === "listen"
     ? PM.listeningSkillSeries(log, stage.basket, fromT, now, qref, stage.mode)
     : PM.speakingSkillSeries(log, stage.words, stage.phrases, fromT, now, qref);
+  // the ENGINE, for context behind the skill line: fraction of the basket held
+  // in screen memory. His real work shows here even while the skill lags it
+  // ("why is it 0 — there was some progress": this line is that progress).
+  const held = PM.realitySeries(log, fullBasket, fromT, now, qref)
+    .map(p => ({ d: p.d, frac: Math.round((p.mass / fullBasket.length) * 1000) / 1000 }));
   const r = measuredRhythm(log);
   const current = weeklyPattern(r.minPerStudyDay, r.daysPerWeek);
   const HORIZON = 550;
@@ -124,14 +130,16 @@ function buildSkillTrack(kind, stages, log, srs, now) {
   // lever is the one that moves THIS skill (by-ear share for the ear, out-loud
   // share for the mouth) at 15 min/day — the measured capacity cliff: 10 min/day
   // can only maintain ~⅓ of the Umrah basket, 15 holds all of it.
+  // lower = STOPPING (pure decay, the line falls — his sketch's forgetting made
+  // visible); "slipping to 2 d/wk" was indistinguishable from his current pace.
   const scenarios = kind === "listen" ? [
     scen("current", `your current rhythm (~${r.minPerStudyDay} min, ${r.daysPerWeek} d/wk)`, current),
     scen("higher", "15 min every day, half of it by ear", weeklyPattern(15, 7), { earShare: 0.5, outShare: mix.outShare }),
-    scen("lower", "slipping to 2 days/wk", weeklyPattern(r.minPerStudyDay, 2)),
+    scen("lower", "if you stop — memory fade alone", weeklyPattern(0, 0)),
   ] : [
     scen("current", `your current rhythm (~${r.minPerStudyDay} min, ${r.daysPerWeek} d/wk)`, current),
     scen("higher", "15 min every day, half out loud", weeklyPattern(15, 7), { earShare: mix.earShare, outShare: 0.5 }),
-    scen("lower", "slipping to 2 days/wk", weeklyPattern(r.minPerStudyDay, 2)),
+    scen("lower", "if you stop — memory fade alone", weeklyPattern(0, 0)),
   ];
   // placement-test anchors for the chart
   const pt = PM.ptestEvidence(log)[kind === "listen" ? "listen" : "speak"]
@@ -140,8 +148,9 @@ function buildSkillTrack(kind, stages, log, srs, now) {
     kind, stage: stage.id, label: stage.label, basketSize: basket.length,
     target, rhythm: r, mix: { earShare: Math.round(mix.earShare * 100) / 100, outShare: Math.round(mix.outShare * 100) / 100 },
     factors: { ear: Math.round(efNow.p * 100) / 100, conn: Math.round(cfNow.p * 100) / 100, floor: Math.round(floorNow * 100) / 100, tests: pt.length },
-    reality, tests: pt,
+    reality, held, tests: pt,
     todaySkill: reality.length ? reality[reality.length - 1].skill : 0,
+    heldToday: held.length ? held[held.length - 1].frac : 0,
     scenarios,
   };
 }

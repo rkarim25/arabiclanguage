@@ -36,6 +36,10 @@ for ax, key in zip(axes, ["quran", "conv"]):
     ax.set_facecolor("#faf6ef")
     xs = [D(p["d"]) for p in tr["reality"]]
     ys = [100 * p["skill"] for p in tr["reality"]]
+    held = tr.get("held", [])
+    if len(held) > 1:
+        ax.plot([D(p["d"]) for p in held], [100 * p["frac"] for p in held],
+                color="#8a8578", lw=1, ls=(0, (1, 2)), alpha=0.6, zorder=4, label="words held (the engine)")
     ax.plot(xs, ys, color="#0d7a5f", lw=2.2, solid_capstyle="round", zorder=5, label="reality (the skill today)")
     ax.plot(xs[-1], ys[-1], "o", color="#0d7a5f", ms=6, zorder=6)
     horizon = None

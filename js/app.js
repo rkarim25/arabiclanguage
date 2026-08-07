@@ -1046,6 +1046,8 @@ function renderNav(active) {
   document.body.prepend(el);
   mountNotePen();
   initWordTap();
+  // the day-plan bar (js/plan.js) — walks him block to block without decisions
+  if (typeof planMountBar === "function") { try { planMountBar(); } catch (e) {} }
 }
 
 /* ---------- mini phonetic keyboard component ----------
