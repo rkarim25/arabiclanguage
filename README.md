@@ -103,32 +103,47 @@ Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css in
 - **Minutes**: use interaction-timestamp chaining (what `activeMinutes()` does — gaps ≤3 min chain, isolated events ≈30 s), NOT sums of `time` events. `time` events logged before 2026-07-04 predate idle detection and are inflated (a left-open tab once logged 10+ hours on vocab:list).
 - **Listening**: `rlisten` (a surah fully played in real recitation) and `listen-click` events are the listening record; `sheet` events with `mode:"ears"` are audio-recognition tests — track their accuracy separately from text modes, the gap between text% and ears% is the real "understand as recited" measure.
 
-## The progress model — the bedrock (2026-08-06)
+## The progress model — the bedrock (2026-08-06; SKILL AXIS 2026-08-07)
 
 Reza's own framing, which the site now measures directly: a goal is a basket of
-items whose memory **decays between reviews** — so honest progress is *"% of the
-goal I could recall right now"*, a line that rises when he studies and sags when
-he doesn't. "Done" = **holding ≥90% recallable on any given day** (100%-forever
-isn't a real state of human memory).
+items whose memory **decays between reviews** — a line that rises when he studies
+and sags when he doesn't. Since 2026-08-07 the charts plot **the skills, not word
+retention** (his ask): the Quran panel is **listening** — salah stage = % of
+recitation words caught by ear (target 90%; he recites the text daily, so
+catching the words ≈ understanding); later stages use the coverage→comprehension
+curve (van Zeeland & Schmitt; target 70%) — and the conversation panel is
+**speaking** — the share of the Umrah set deployable in speech (target 70%).
+Retention is still the engine underneath.
 
 - **`js/progress-model.js`** — the ONE copy of the maths. Per-card recall
-  `p = 2^(−elapsed/halflife(box))`, half-lives anchored to the Leitner schedule
-  and **calibrated from his own answers** (constants + fit provenance in the file
-  header). Replays the event log through the site's real SRS rules to rebuild the
-  full reality curve since 2026-07-04, and runs expected-value forward simulations
-  of the site's own scheduler for the fan forecasts (+5/+10 min/day, 10-min with
-  1–4 missed days/week), each with its completion date.
+  `p = 2^(−elapsed/halflife(box))`, calibrated from his own answers (constants +
+  fit provenance in the file header). Skill chain on top, every discount
+  conservative and evidence-driven: ear factor (Beta prior, capped), connected-
+  speech factor (grows with by-ear minutes toward a stated ceiling), comprehension
+  non-linearity, productive floor + output-hours gate (DeKeyser). Reality series
+  replay the log with factors-as-of-that-day; `simulateSkill()` runs the forecasts
+  (THREE only: current / one higher / one lower — the higher lever is 15 min/day
+  with half the practice in the skill's own modality; 10 min/day measurably cannot
+  hold the 311-item Umrah basket — the capacity cliff).
+- **Placement tests are the feedback loop** (8× the weight of practice evidence):
+  **`placement.html`** = 12 audio-only questions (6 recited passages, 6 words) →
+  `ptest-listen {score,catch,iso,isolatedCov}`; **Converse → 🎤 Oral exam** =
+  examiner briefing for any AI chat (8 tasks, strict 0–5 rubric, conservative-bias
+  instruction) whose pasted report logs `ptest-speak {score,mode}`. Tests appear
+  as ◆ on chart + email PNG, and `connectedFactorCalibrated()` /
+  `productiveFloorCalibrated()` fold them into the next nightly regeneration —
+  **if his tests diverge from the forecast, the forecast self-corrects.**
 - **`scripts/gen-progress.js <kv-payload.json>`** → `data/progress-series.json`
-  (the dashboard chart's data; nightly). **`scripts/gen-progress-chart.py`** →
-  `progress.png` (embedded in the weekly email via its Pages URL).
-- **`scripts/test-progress-model.js <payload.json>`** — synthetic known-answer
-  cases, replay-vs-actual-KV validation, fan monotonicity. **Must pass before any
-  deploy that touches the model.** Refit the calibration quarterly as his
-  re-encounter gaps grow.
-- Dashboard: the "📈 Reality & forecast" card (index.html) draws both goals —
-  solid = replayed reality (+ a live point from this device's SRS), dotted =
-  forecasts. Chart honesty rules: reality is never smoothed, sags are shown, and
-  each panel states that its minutes assume focus on that goal.
+  (nightly). **`scripts/gen-progress-chart.py`** → `progress.png` (weekly email).
+- **`scripts/test-progress-model.js <payload.json>`** — known-answer cases,
+  replay-vs-KV validation, fan monotonicity, **conservatism invariants (skills
+  must understate; overshooting is a test failure)**, placement-calibration
+  direction tests. **Must pass before any deploy that touches the model.**
+- Dashboard: the "🎧🗣 Your two skills" card (index.html) is the consolidated
+  home of progress: both skill panels with day-snapped crosshair, test CTAs, the
+  conservative estimates block, and the full milestones/achievements ladder as a
+  collapsed details section. Honesty rules: reality never smoothed, sags shown,
+  targets stated per stage, numbers floored not flattered.
 
 ## The coaching loop
 
