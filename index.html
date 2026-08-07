@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msio29oy">
-  <link rel="stylesheet" href="css/style.css?v=msio29oy">
+  <link rel="stylesheet" href="css/fonts.css?v=msiorr8l">
+  <link rel="stylesheet" href="css/style.css?v=msiorr8l">
 </head>
 <body>
 <main>
@@ -30,6 +30,17 @@
     </h2>
     <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is what you could actually recall each day — it rises when you study and sags as memory fades (that's normal, not failure). Every <strong style="color:var(--amber)">dotted line</strong> is a forecast: what happens at different rhythms, with the date each one reaches the goal. Goal = holding <strong>90%</strong> in memory on any given day.</p>
     <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
+    <div id="pgSkills" style="display:none;border-top:1px dashed var(--border);margin-top:12px;padding-top:10px">
+      <div style="font-weight:700;font-size:14px">🎧🗣 What this buys in the real world — conservative, tests-first</div>
+      <p class="sub" style="font-size:12.5px;margin:2px 0 8px">Held-in-memory (above) is a <em>screen</em> number. Your ear and mouth are separate skills, so these estimates deliberately understate: a word is only fully credited in a skill once a test proved it there.</p>
+      <div id="pgSkillRows" style="font-size:13px;line-height:1.65"></div>
+      <details style="font-size:11.5px;color:var(--muted);margin-top:6px">
+        <summary style="cursor:pointer">How these are computed (and why they look low)</summary>
+        <div style="margin-top:4px;line-height:1.6">
+          Screen-known words are discounted for the ear (L2 listeners routinely miss words they "know" — Goh 2000; Field 2008), again for connected speech (finding word boundaries in a stream is its own skill), and word-catch converts to comprehension non-linearly (van Zeeland &amp; Schmitt 2013; Nation 2006: below ~90% coverage, understanding collapses — so 50% of words ≠ 50% of meaning). Speaking counts only what you've produced (typed in Arabic, spoken past the mic, drilled in Sentences) at full value; the rest is floored at the bottom of the receptive→productive range (Laufer 1998; Webb 2008) and capped by your logged speaking minutes — fluency needs output hours and no vocabulary count can substitute (DeKeyser). Every discount starts pessimistic and only rises as YOUR test results accumulate: 🎧 Ears rounds, cold-listen tests, Speak and Sentences move these numbers; nothing else does.
+        </div>
+      </details>
+    </div>
     <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers (every check, review and self-grade since 4 Jul). Dotted = the site's own scheduler simulated forward at your measured accuracy — each panel assumes those minutes go to <em>that</em> goal, so splitting your time lands between the lines. Maths: one shared model, calibrated from your own answers, revalidated before every deploy.</p>
   </div>
 
@@ -120,9 +131,9 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msio29oy"></script>
-<script src="js/tracker.js?v=msio29oy"></script>
-<script src="js/progress-model.js?v=msio29oy"></script>
+<script src="js/app.js?v=msiorr8l"></script>
+<script src="js/tracker.js?v=msiorr8l"></script>
+<script src="js/progress-model.js?v=msiorr8l"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -565,10 +576,28 @@ document.getElementById("importFile").onchange = (e) => {
     return el;
   }
 
+  function renderSkills(sk) {
+    if (!sk || !sk.listening) return;
+    const li = sk.listening, sp = sk.speaking;
+    const pc = v => (100 * v).toFixed(0) + "%";
+    const rows = document.getElementById("pgSkillRows");
+    const liMove = li.certifiedWords === 0
+      ? `No words are certified by ear yet — a 🎧 Ears round or an Audio Coach session starts certifying, and each one lifts this honestly.`
+      : `${li.certifiedWords} word${li.certifiedWords > 1 ? "s" : ""} certified by ear so far — more ear-tests keep firming this up.`;
+    const spMove = sp.outputMinutes < 30
+      ? `Only ${sp.outputMinutes} speaking minutes logged — the estimate is capped by real output time (Speak, Sentences, Converse raise the ceiling; vocabulary alone can't).`
+      : `${sp.outputMinutes} speaking minutes logged.`;
+    rows.innerHTML = `
+      <div>🎧 <strong>Salah recitation, by ear:</strong> played a word alone you'd likely get ${pc(li.isolatedCov)} · inside the recitation stream ~${pc(li.connectedCov)} · following the <em>meaning</em> as it flows: ~${pc(li.comprehension)}. <span style="color:var(--muted)">${liMove}</span></div>
+      <div style="margin-top:4px">🗣 <strong>Speaking:</strong> ${sp.provenItems} item${sp.provenItems === 1 ? "" : "s"} proven out loud or in writing · conservatively deployable in a real exchange: ~${sp.deployable} of ${sp.basketSize}. <span style="color:var(--muted)">${spMove}</span></div>`;
+    document.getElementById("pgSkills").style.display = "";
+  }
+
   fetch("data/progress-series.json").then(r => r.json()).then(pg => {
     panels.innerHTML = "";
     panels.appendChild(drawPanel(pg.tracks.quran, "📖", "Quran"));
     panels.appendChild(drawPanel(pg.tracks.conv, "🗣", "Conversation"));
+    renderSkills(pg.skills);
     // headline: the week's movement, honestly (may be negative)
     const tr = pg.tracks.quran;
     const week = tr.reality.filter(p => new Date(p.d).getTime() >= Date.now() - 8 * 86400000);

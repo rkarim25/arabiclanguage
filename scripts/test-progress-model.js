@@ -110,5 +110,58 @@ console.log("3. Fan monotonicity (the fan must never lie about direction)");
   ok("each extra missed day pushes completion later (or equal)", monotone, detail.join(" "));
 }
 
+/* ---- 4. Skills extrapolation: the conservatism invariants ----
+   The whole point is "don't overshoot" — so overshooting is a test FAILURE. */
+{
+  console.log("4. Skills conservatism (listening/speaking must understate)");
+  const t0 = Date.UTC(2026, 7, 1);
+  const mkLog = (n, earOk) => {
+    // n screen-known words, half ear-tested with the given outcome
+    const log = [];
+    for (let i = 0; i < n; i++) {
+      log.push({ e: "sheet", key: "w:" + i, mode: "understand", ok: true, t: t0 + i * 1000 });
+      if (i < n / 2) log.push({ e: "sheet", key: "w:" + i, mode: "ears", ok: earOk, t: t0 + 86400000 + i * 1000 });
+    }
+    return log;
+  };
+  const basket = Array.from({ length: 20 }, (_, i) => "w:" + i);
+  const tEval = t0 + 2 * 86400000;
+
+  // (a) zero data → near-zero claims, no NaN
+  const empty = PM.listeningEstimate([], {}, basket, tEval);
+  ok("no data → comprehension ≈ 0 and finite", empty.comprehension === 0 && isFinite(empty.isolatedCov), JSON.stringify(empty));
+
+  // (b) listening chain only ever discounts: comprehension ≤ connected ≤ isolated ≤ screen
+  const log1 = mkLog(20, true);
+  const cards1 = PM.replay(log1, tEval);
+  const screenCov = PM.recallMass(cards1, basket, tEval) / basket.length;
+  const li = PM.listeningEstimate(log1, cards1, basket, tEval);
+  ok("isolated-ear ≤ screen coverage", li.isolatedCov <= screenCov + 1e-9, `${li.isolatedCov} ≤ ${screenCov.toFixed(3)}`);
+  ok("in-stream ≤ isolated", li.connectedCov <= li.isolatedCov + 1e-9, `${li.connectedCov} ≤ ${li.isolatedCov}`);
+  ok("comprehension ≤ in-stream coverage", li.comprehension <= li.connectedCov + 1e-9, `${li.comprehension} ≤ ${li.connectedCov}`);
+
+  // (c) failed ear tests DROP the estimate below the no-test extrapolation
+  const liBad = PM.listeningEstimate(mkLog(20, false), PM.replay(mkLog(20, false), tEval), basket, tEval);
+  ok("failed ear tests lower the estimate", liBad.isolatedCov < li.isolatedCov, `${liBad.isolatedCov} < ${li.isolatedCov}`);
+
+  // (d) the coverage→comprehension curve is brutal below 90% — the non-linearity is the guard
+  ok("60% coverage → ≤ 12% comprehension", PM.comprehensionAt(0.6) <= 0.12, PM.comprehensionAt(0.6).toFixed(3));
+  ok("95% coverage → ≤ 70% comprehension", PM.comprehensionAt(0.95) <= 0.7 + 1e-9, PM.comprehensionAt(0.95).toFixed(3));
+  ok("curve is monotonic", [0.1,0.3,0.5,0.7,0.8,0.9,0.95,1].every((c,i,a)=>!i||PM.comprehensionAt(c)>=PM.comprehensionAt(a[i-1])), "");
+
+  // (e) ear factor: capped, and self-grades weigh half
+  const ef = PM.earFactor(log1, cards1, tEval);
+  ok("ear factor never exceeds cap 0.80", ef.p <= PM.SKILL_CAL.EAR_CAP + 1e-9, String(ef.p));
+
+  // (f) speaking: no output logged → hours-gate ≈ 0 → deployable ≈ proven only
+  const sp0 = PM.speakingEstimate(log1, cards1, basket, [], tEval);
+  ok("no output minutes → extrapolated speaking ≈ 0", sp0.deployable <= sp0.provenItems + 0.5, JSON.stringify(sp0));
+  // (g) proven production counts; unproven never exceeds the floor × gate
+  const logSpeak = log1.concat(Array.from({ length: 30 }, (_, i) => ({ e: "convo", t: t0 + i * 60000 })),
+    [{ e: "speak", key: "w:0", score: 0.9, t: t0 + 1000 }]);
+  const sp1 = PM.speakingEstimate(logSpeak, cards1, basket, [], tEval);
+  ok("speaking rises with proven output but stays ≤ screen mass", sp1.deployable > sp0.deployable && sp1.deployable <= PM.recallMass(cards1, basket, tEval), `${sp0.deployable} → ${sp1.deployable}`);
+}
+
 console.log(fails ? `\nFAILED: ${fails}` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

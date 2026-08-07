@@ -218,5 +218,188 @@
     return Math.round(m * 100) / 100;
   }
 
-  return { DAY, BOX_DAYS, CAL, halflife, recallP, buildQrefIndex, gradedStream, applyEvent, replay, recallMass, realitySeries, simulate, massFromSrs };
+  /* ============================================================
+     SKILLS EXTRAPOLATION — listening & speaking, CONSERVATIVE
+     (his 2026-08-07 ask: "extrapolate real listening comprehension
+     and spoken ability … with a conservative bias, don't overshoot")
+
+     Principle: nothing is credited at full value unless a TEST proved
+     it in that modality. Everything else is discounted through Beta
+     posteriors that start pessimistic and only rise as evidence
+     accumulates. Anchors from the literature, applied as CEILINGS:
+
+     · Screen-knowledge ≠ ear-knowledge. A word he can read is only
+       partially recognizable in audio (L2 listeners routinely fail to
+       hear words they "know" — Goh 2000; Field 2008). Prior on
+       P(ear|screen): Beta(2,3), mean 0.40. His ear-test pairs update
+       it; self-graded Audio-Coach ✓s count at HALF weight (self-
+       grading flatters); the posterior is CAPPED at 0.80 — only
+       cold-listen style tests can take a word above that, and they do
+       it per-word, not through this factor.
+     · Isolated word ≠ connected speech. Segmentation losses in a
+       recitation/speech stream are severe. Prior on the connected
+       discount: Beta(2,3) (mean 0.40), updated by dictation and
+       sentence-level ear results, capped at 0.85.
+     · Word-catch ≠ comprehension. Lexical coverage maps to passage
+       comprehension NON-linearly (van Zeeland & Schmitt 2013;
+       Nation 2006): ≈95% coverage → adequate (~70%); 90% → ~50%;
+       80% → ~25%; below that it collapses. Piecewise-linear on those
+       anchor points, and we never report above the curve.
+     · Receptive ≠ productive. Producing a word is harder than
+       recognizing it (Laufer 1998; Webb 2008: productive ≈ 50–80% of
+       receptive — we take the BOTTOM). Unproven words enter speaking
+       at ≤0.35 of their recall mass; whole phrases at 0.3 (memorised
+       chunks deploy a little better than isolated words).
+     · Fluency needs output hours (DeKeyser's skill acquisition):
+       the speaking estimate is CAPPED by logged speaking time —
+       readiness can never exceed minutes/TARGET_MIN regardless of
+       vocabulary. No shortcut exists and the model says so.
+     ============================================================ */
+  const SKILL_CAL = {
+    EAR_PRIOR_A: 2, EAR_PRIOR_B: 3, EAR_CAP: 0.80, SELF_GRADE_W: 0.5,
+    CONN_PRIOR_A: 2, CONN_PRIOR_B: 3, CONN_CAP: 0.85,
+    // coverage→comprehension anchor points (x = token coverage, y = comprehension)
+    COMPREHENSION_CURVE: [[0, 0], [0.5, 0.05], [0.8, 0.25], [0.9, 0.5], [0.95, 0.7], [1, 0.85]],
+    PRODUCTIVE_WORD: 0.35, PRODUCTIVE_PHRASE: 0.3,
+    SPEAK_OK: 0.6,             // ASR shadow score that counts as "proven out loud"
+    OUTPUT_TARGET_MIN: 600,    // ~10h of real output before the hours-gate stops binding
+    EAR_STALE_D: 45,           // an ear result older than this decays like any memory
+  };
+  const betaMean = (a, b) => a / (a + b);
+
+  /* Every by-ear judgment in the log, per key: ears-mode sheet answers (typed,
+     objective) and Audio-Coach self-verdicts (down-weighted). */
+  function earEvidence(log) {
+    const byKey = {};
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11) continue;
+      let w = 0, ok = false, key = e.key;
+      if (e.e === "sheet" && e.mode === "ears" && key) { w = 1; ok = !!e.ok || !!e.heard; }
+      else if (e.e === "alisten-grade" && key) { w = SKILL_CAL.SELF_GRADE_W; ok = !!e.ok; }
+      else if (e.e === "qlisten-test" && key) { w = 1.2; ok = !!e.ok; } // a real cold test
+      else continue;
+      (byKey[key] = byKey[key] || []).push({ t: e.t, ok, w });
+    }
+    return byKey;
+  }
+
+  /* P(recognize by ear | knows on screen), from pairs where both exist. */
+  function earFactor(log, cards, t) {
+    let a = SKILL_CAL.EAR_PRIOR_A, b = SKILL_CAL.EAR_PRIOR_B;
+    const ev = earEvidence(log);
+    for (const k in ev) {
+      if (!cards[k]) continue;                    // ear-tested but never screen-known: not a pair
+      for (const o of ev[k]) { if (o.ok) a += o.w; else b += o.w; }
+    }
+    return { p: Math.min(SKILL_CAL.EAR_CAP, betaMean(a, b)), n: a + b - SKILL_CAL.EAR_PRIOR_A - SKILL_CAL.EAR_PRIOR_B };
+  }
+
+  /* Connected-speech discount from sentence-level evidence: dictation results
+     and sentence-round self-verdicts vs word-level ear success. */
+  function connectedFactor(log) {
+    let a = SKILL_CAL.CONN_PRIOR_A, b = SKILL_CAL.CONN_PRIOR_B;
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11) continue;
+      if (e.e === "dict") { if (e.ok) a += 1; else b += 1; }
+      else if (e.e === "alisten-sent") { a += SKILL_CAL.SELF_GRADE_W * 0.5; } // completing a round is weak positive evidence
+      else if (e.e === "qlisten-test" && e.score !== undefined) { a += e.score >= 0.85 ? 1.5 : 0; b += e.score < 0.85 ? 1 : 0; }
+    }
+    return { p: Math.min(SKILL_CAL.CONN_CAP, betaMean(a, b)), n: a + b - SKILL_CAL.CONN_PRIOR_A - SKILL_CAL.CONN_PRIOR_B };
+  }
+
+  function comprehensionAt(coverage) {
+    const C = SKILL_CAL.COMPREHENSION_CURVE;
+    for (let i = 1; i < C.length; i++) {
+      if (coverage <= C[i][0]) {
+        const [x0, y0] = C[i - 1], [x1, y1] = C[i];
+        return y0 + (coverage - x0) / (x1 - x0) * (y1 - y0);
+      }
+    }
+    return C[C.length - 1][1];
+  }
+
+  /* Per-word ear recall at t: certified words use their own ear history
+     (decayed like memory); the rest use screen recall × the global ear factor. */
+  function earRecallP(key, cards, ev, ef, t) {
+    const c = cards[key];
+    if (!c) return 0;
+    const screen = recallP(c, t);
+    const hist = ev[key];
+    if (hist && hist.length) {
+      const lastOk = [...hist].reverse().find(o => o.ok);
+      const lastAny = hist[hist.length - 1];
+      if (lastAny && !lastAny.ok) return Math.min(screen, 0.25); // last ear attempt FAILED — near floor
+      if (lastOk) {
+        // proven by ear: decays from 1 with the same forgetting curve, floored by the discounted path
+        const p = Math.pow(2, -Math.max(0, t - lastOk.t) / halflife(Math.max(c.box, 2)));
+        return Math.min(screen, Math.max(p, screen * ef));
+      }
+    }
+    return screen * ef; // never ear-tested: discounted
+  }
+
+  /* LISTENING for a token basket (e.g. the salah surahs word-by-word):
+     token coverage by ear → comprehension through the curve. */
+  function listeningEstimate(log, cards, tokenBasket, t) {
+    const ev = earEvidence(log);
+    const ef = earFactor(log, cards, t);
+    const cf = connectedFactor(log);
+    let isolated = 0;
+    let certified = 0;
+    for (const k of tokenBasket) {
+      const p = earRecallP(k, cards, ev, ef.p, t);
+      isolated += p;
+      if (ev[k] && ev[k].some(o => o.ok) && t - ev[k][ev[k].length - 1].t < SKILL_CAL.EAR_STALE_D * DAY) certified++;
+    }
+    const n = tokenBasket.length || 1;
+    const isolatedCov = isolated / n;
+    const connectedCov = isolatedCov * cf.p;
+    return {
+      earFactor: Math.round(ef.p * 100) / 100, earEvidenceN: Math.round(ef.n * 10) / 10,
+      connFactor: Math.round(cf.p * 100) / 100,
+      certifiedWords: certified, basketSize: n,
+      isolatedCov: Math.round(isolatedCov * 1000) / 1000,   // words you'd get played ALONE
+      connectedCov: Math.round(connectedCov * 1000) / 1000, // words you'd catch IN the stream
+      comprehension: Math.round(comprehensionAt(connectedCov) * 1000) / 1000,
+    };
+  }
+
+  /* SPEAKING: only production events prove it; unproven knowledge is floored. */
+  function speakingEstimate(log, cards, wordBasket, phraseBasket, t) {
+    const provenKeys = new Set();
+    let outputMin = 0;
+    for (const e of log || []) {
+      if (!e || !e.t || e.t < 16e11) continue;
+      if (e.e === "speak") { outputMin += 0.5; if ((e.score ?? e.sim ?? 0) >= SKILL_CAL.SPEAK_OK && e.key) provenKeys.add(e.key); }
+      else if (e.e === "sheet" && e.mode === "produce" && e.ok && e.key) provenKeys.add(e.key);
+      else if (e.e === "spract" && (e.exact || e.got)) { outputMin += 0.4; }
+      else if (e.e === "alisten-sent") outputMin += 0.3;
+      else if (e.e === "trans" && e.ok) outputMin += 0.5;
+      else if (e.e === "convo") outputMin += 10;
+    }
+    const hoursGate = Math.min(1, outputMin / SKILL_CAL.OUTPUT_TARGET_MIN);
+    const scoreSet = (basket, discount) => {
+      let proven = 0, extrapolated = 0;
+      for (const k of basket) {
+        const p = recallP(cards[k], t);
+        if (p <= 0.01) continue;
+        if (provenKeys.has(k)) proven += p;
+        else extrapolated += p * discount;
+      }
+      return { proven, extrapolated };
+    };
+    const w = scoreSet(wordBasket, SKILL_CAL.PRODUCTIVE_WORD);
+    const ph = scoreSet(phraseBasket || [], SKILL_CAL.PRODUCTIVE_PHRASE);
+    const deployableRaw = w.proven + ph.proven + (w.extrapolated + ph.extrapolated) * hoursGate;
+    return {
+      provenItems: Math.round((w.proven + ph.proven) * 10) / 10,
+      deployable: Math.round(deployableRaw * 10) / 10,
+      basketSize: wordBasket.length + (phraseBasket || []).length,
+      outputMinutes: Math.round(outputMin),
+      hoursGate: Math.round(hoursGate * 100) / 100,
+    };
+  }
+
+  return { DAY, BOX_DAYS, CAL, SKILL_CAL, halflife, recallP, buildQrefIndex, gradedStream, applyEvent, replay, recallMass, realitySeries, simulate, massFromSrs,
+    earEvidence, earFactor, connectedFactor, comprehensionAt, earRecallP, listeningEstimate, speakingEstimate };
 });

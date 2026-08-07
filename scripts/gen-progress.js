@@ -107,6 +107,23 @@ function buildTrack(stages, log, srs, now) {
 }
 
 const now = Date.now();
+
+/* ---- conservative skills extrapolation (listening & speaking) ----
+   Listening is evaluated on the salah surahs' TOKENS (each qw: key is one word
+   as it occurs in recitation — token coverage falls straight out). Speaking is
+   evaluated on the conversation basket, words vs phrases separated. */
+function buildSkills(log, now) {
+  const cards = PM.replay(log, now, qref);
+  const salahTokens = qwKeys(SALAH_SURAH_IDS);
+  const evWords = everyday.groups.flatMap(g => (g.members || []).map((m, i) => `ev-${g.id}:${i}`));
+  const phKeys = phrases.groups.flatMap(g => (g.members || []).map((m, i) => `ph-${g.id}:${i}`));
+  return {
+    note: "Conservative by design: screen-knowledge is discounted for the ear (Goh 2000; Field 2008), isolated-word recognition is discounted for connected speech, coverage→comprehension is non-linear (van Zeeland & Schmitt 2013; Nation 2006), production is floored at the bottom of the receptive→productive range (Laufer 1998; Webb 2008) and capped by logged output time (DeKeyser). These numbers should UNDERSTATE.",
+    listening: PM.listeningEstimate(log, cards, salahTokens, now),
+    speaking: PM.speakingEstimate(log, cards, evWords, phKeys, now),
+  };
+}
+
 const out = {
   generated: new Date(now).toISOString(),
   cal: PM.CAL,
@@ -115,6 +132,7 @@ const out = {
     quran: buildTrack(QURAN_STAGES, payload.log, payload.srs, now),
     conv: buildTrack(CONV_STAGES, payload.log, payload.srs, now),
   },
+  skills: buildSkills(payload.log, now),
 };
 const outPath = path.join(ROOT, "data", "progress-series.json");
 fs.writeFileSync(outPath, JSON.stringify(out));
@@ -124,3 +142,6 @@ for (const [k, tr] of Object.entries(t)) {
   console.log(`  ${k}: stage "${tr.label}" — today ${tr.todayMass}/${tr.basketSize} recallable (${(100 * tr.todayMass / tr.basketSize).toFixed(1)}%)`);
   tr.scenarios.forEach(s => console.log(`    ${s.id.padEnd(8)} → ${s.completion || "not within 18 months"}`));
 }
+const sk = out.skills;
+console.log(`  listening (salah tokens): isolated ${(100 * sk.listening.isolatedCov).toFixed(0)}% → in-stream ${(100 * sk.listening.connectedCov).toFixed(0)}% → comprehension ~${(100 * sk.listening.comprehension).toFixed(0)}% (ear factor ${sk.listening.earFactor}, evidence n=${sk.listening.earEvidenceN}; certified ${sk.listening.certifiedWords} words)`);
+console.log(`  speaking: proven ${sk.speaking.provenItems} · deployable ~${sk.speaking.deployable}/${sk.speaking.basketSize} (output ${sk.speaking.outputMinutes} min, hours-gate ${sk.speaking.hoursGate})`);
