@@ -66,9 +66,10 @@ locally; `js/plan.js` schedules backwards from it). Format:
 ```
 
 Rules for the coach writing it:
-- `lessonAt` comes from Reza's message ("next lesson Tuesday 7pm") — **if he
-  didn't say when, ASK in the coach note / reply** (the contract is worthless
-  without the deadline). Convert relative dates carefully; his TZ is UK.
+- **STANDING SCHEDULE (2026-08-07): Preply lessons are every SUNDAY 07:00 UK
+  time.** Default `lessonAt` = the next Sunday 07:00 Europe/London — no need to
+  ask unless he says the lesson moved or was skipped. If his message names a
+  different date, that wins for that one contract.
 - `keys` = the SRS keys of the content just created from the dump (the cluster
   members, grammar `gt:` cards, story vocab — whatever the lesson made).
 - `tasks` = the non-word homework the teacher assigned, as short checkable
