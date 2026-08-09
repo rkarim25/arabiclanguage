@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mslo10hv">
-  <link rel="stylesheet" href="css/style.css?v=mslo10hv">
+  <link rel="stylesheet" href="css/fonts.css?v=mslo4dz3">
+  <link rel="stylesheet" href="css/style.css?v=mslo4dz3">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mslo10hv"></script>
-<script src="js/tracker.js?v=mslo10hv"></script>
-<script src="js/plan.js?v=mslo10hv"></script>
+<script src="js/app.js?v=mslo4dz3"></script>
+<script src="js/tracker.js?v=mslo4dz3"></script>
+<script src="js/plan.js?v=mslo4dz3"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -289,10 +289,26 @@ function render(state) {
   renderControls(state);
 }
 
+/* a commute-only rhythm must still meet the test: if the 90-second check from
+   the last commute is waiting, say so HERE — before the next session starts */
+function checkDueLine() {
+  try {
+    const lg = store.get("ats-log", []);
+    const last = [...lg].reverse().find(e => e.e === "commute-done" && e.keys && e.keys.length >= 3);
+    if (!last) return "";
+    const since = Date.now() - last.t;
+    const done = lg.some(e => e.e === "commute-check-done" && e.forT === last.t);
+    if (!done && since >= 8 * 3600e3 && since <= 7 * 86400e3)
+      return `<a href="index.html" style="flex-basis:100%;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px dashed var(--accent);border-radius:12px;padding:10px 14px">🧪 First: your 90-second check from the last commute is waiting on the dashboard — that's the measurement →</a>`;
+  } catch (e) {}
+  return "";
+}
+
 function renderControls(state) {
   const c = document.getElementById("acControls");
   if (state === "ready") {
     c.innerHTML = `
+      ${checkDueLine()}
       <button class="ac-btn primary" id="acCommute" style="min-width:230px">🚗 Commute session — ${COMMUTE_MIN} min, hands-free</button>
       <button class="ac-btn ghost" id="acStart">▶ Open-ended</button>
       <div style="flex-basis:100%;text-align:center;font-size:12px;color:var(--muted)" id="acPrefetch"></div>`;
