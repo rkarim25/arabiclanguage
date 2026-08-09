@@ -419,11 +419,21 @@ footer a { color: var(--accent); }
 .conj-table { margin-top: 6px; overflow-x: auto; }
 .conj-table table { border-collapse: collapse; font-size: 12.5px; }
 .conj-table th, .conj-table td { padding: 3px 8px; text-align: center; }
-.conj-table th { color: var(--muted); font-weight: 600; }
+/* the strip nests inside a .vocab-table, whose th/zebra rules would otherwise
+   bleed in — his 2026-08-07 photo: "past/present" grey on dark green, unreadable */
+.vocab-table .conj-table th, .conj-table th { background: transparent; color: var(--muted); font-weight: 600; font-size: 12px; }
+.vocab-table .conj-table td, .vocab-table tr:nth-child(even) .conj-table td { background: transparent; }
 .conj-table td:first-child { text-align: left; color: var(--muted); white-space: nowrap; }
 .conj-table tbody tr { border-top: 1px solid var(--border); }
-.conj-table tbody tr.me { background: var(--accent-soft); }
+.vocab-table .conj-table tbody tr.me td, .conj-table tbody tr.me { background: var(--accent-soft); }
+.conj-table tbody tr.dim { opacity: .5; }
+.conj-table tbody tr.focus td { font-weight: 600; }
+.conj-table tbody tr.focus td:first-child { color: var(--ink); }
+.conj-tr { font-size: 10.5px; color: var(--muted); font-style: italic; line-height: 1.2; }
+.conj-tr-inline { font-size: 11px; color: var(--muted); }
 .conj-fut { margin-top: 4px; font-size: 11.5px; }
+.conj-pattern { margin-top: 6px; font-size: 11.5px; color: var(--muted); border-top: 1px dashed var(--border); padding-top: 5px; max-width: 480px; }
+.conj-pattern b { color: var(--ink); }
 
 /* ---------- bucket bar — SHARED (2026-08-06) ----------
    These rules used to live only inside vocab.html and speaking.html, so on the

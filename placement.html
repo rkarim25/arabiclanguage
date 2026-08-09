@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Listening Placement — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msj4fho8">
-  <link rel="stylesheet" href="css/style.css?v=msj4fho8">
+  <link rel="stylesheet" href="css/fonts.css?v=msl4gdlh">
+  <link rel="stylesheet" href="css/style.css?v=msl4gdlh">
   <style>
     .pl-opt { display:block; width:100%; text-align:left; margin-top:8px; padding:10px 14px; border-radius:12px; font-size:14.5px; line-height:1.5; }
     .pl-opt.ok { background: var(--accent-soft); border-color: var(--accent); }
@@ -24,17 +24,17 @@
   <div class="card" id="plCard">
     <div id="plArea">
       <h2>Five minutes, ears only</h2>
-      <p style="font-size:14.5px">12 questions, all audio — <strong>no reading</strong>. Six recited passages from your salah surahs, then six single words. Pick the meaning you heard. Replay as often as you like (replays are counted honestly).</p>
+      <p style="font-size:14.5px">12 questions, all audio — <strong>no reading</strong>. Six recited verses (one ayah each) from your salah surahs, then six single words. Pick the meaning you heard. Replay as often as you like (replays are counted honestly).</p>
       <p style="font-size:13px;color:var(--muted)">This is a measurement, not a drill: the result anchors your skill chart (the ◆ marks) and recalibrates the forecast. A low score is USEFUL — it makes the chart true. Take one every week or two.</p>
       <button class="primary" id="plStart" style="font-size:16px">▶ Start the test</button>
     </div>
   </div>
 </main>
 
-<script src="js/app.js?v=msj4fho8"></script>
-<script src="js/tracker.js?v=msj4fho8"></script>
-<script src="js/plan.js?v=msj4fho8"></script>
-<script src="js/progress-model.js?v=msj4fho8"></script>
+<script src="js/app.js?v=msl4gdlh"></script>
+<script src="js/tracker.js?v=msl4gdlh"></script>
+<script src="js/plan.js?v=msl4gdlh"></script>
+<script src="js/progress-model.js?v=msl4gdlh"></script>
 <script>
 renderNav("placement");
 trackPage("placement");
@@ -42,6 +42,14 @@ trackPage("placement");
 const area = document.getElementById("plArea");
 const shuffled = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
 const trim = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, s.lastIndexOf(" ", n)) + "…" : s; };
+/* The AI translations run "core meaning — expansive explanation…". Whole-passage
+   options were walls of text (his 2026-08-07 note: "they are all big") — keep the
+   core, drop the expansion, and the four options become scannable in seconds. */
+const core = s => {
+  s = String(s || "").replace(/\s+/g, " ").replace(/^[\s—–-]+/, "").trim();
+  const i = s.indexOf("—");
+  return i > 14 ? s.slice(0, i).replace(/[,;:\s]+$/, "").trim() : trim(s, 90);
+};
 
 let VERSES = null;
 fetch("data/verses.json").then(r => r.json()).then(v => { VERSES = v.surahs; });
@@ -60,8 +68,8 @@ function buildQuestions() {
     verseQs.push(q);
   }
   const verseOpts = q => {
-    const wrong = shuffled(pool.filter(p => p.v !== q.v && p.v.en && trim(p.v.en, 60) !== trim(q.v.en, 60))).slice(0, 3);
-    return shuffled([{ t: trim(q.v.en, 110), ok: true }].concat(wrong.map(p => ({ t: trim(p.v.en, 110), ok: false }))));
+    const wrong = shuffled(pool.filter(p => p.v !== q.v && p.v.en && core(p.v.en) !== core(q.v.en))).slice(0, 3);
+    return shuffled([{ t: core(q.v.en), ok: true }].concat(wrong.map(p => ({ t: core(p.v.en), ok: false }))));
   };
   // Part B — six single words from the same token basket (audio alone, gloss MCQ);
   // prefer words he has studied on screen: those pairs calibrate the ear factor
@@ -91,7 +99,7 @@ function runTest() {
     const st = steps[idx];
     const opts = st.kind === "verse" ? verseOpts(st.q) : wordOpts(st.q);
     area.innerHTML = `
-      <div class="pl-count">${st.kind === "verse" ? "Recited passage" : "Single word"} — question ${idx + 1} of ${steps.length}</div>
+      <div class="pl-count">${st.kind === "verse" ? "Recited verse — one ayah" : "Single word"} — question ${idx + 1} of ${steps.length}</div>
       <div style="text-align:center;margin:14px 0">
         <button class="pl-play primary" id="plPlay">🔊</button>
         <div style="font-size:12px;color:var(--muted);margin-top:6px">tap to replay</div>

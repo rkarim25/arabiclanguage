@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msj4fho8">
-  <link rel="stylesheet" href="css/style.css?v=msj4fho8">
+  <link rel="stylesheet" href="css/fonts.css?v=msl4gdlh">
+  <link rel="stylesheet" href="css/style.css?v=msl4gdlh">
 </head>
 <body>
 <main>
@@ -20,9 +20,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msj4fho8"></script>
-<script src="js/tracker.js?v=msj4fho8"></script>
-<script src="js/plan.js?v=msj4fho8"></script>
+<script src="js/app.js?v=msl4gdlh"></script>
+<script src="js/tracker.js?v=msl4gdlh"></script>
+<script src="js/plan.js?v=msl4gdlh"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -39,7 +39,17 @@ async function init() {
     return;
   }
 
-  const queue = (await resolveCards(due)).sort(() => 0.5 - Math.random());
+  /* The same word can live under several keys (عَلَيْهِم appears twice in Fatiha 1:7,
+     so two qw: cards) — his 2026-08-07 photo: "you see two alaihim? that shouldnt
+     happen". Show it ONCE; grading it grades every twin, so none stays stuck due. */
+  const byWord = new Map();
+  (await resolveCards(due)).forEach(({ key, v }) => {
+    const sig = normalizeAr(v.ar) + "|" + String(v.en || "").toLowerCase().trim();
+    const hit = byWord.get(sig);
+    if (hit) hit.keys.push(key);
+    else byWord.set(sig, { key, keys: [key], v });
+  });
+  const queue = [...byWord.values()].sort(() => 0.5 - Math.random());
 
   renderTable(queue);
 }
@@ -82,7 +92,7 @@ function renderTable(queue) {
     if (b) b.textContent = `✓ Finish — save the ${touched.size} I've done`;
   }
 
-  queue.forEach(({ key, v }) => {
+  queue.forEach(({ key, keys, v }) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="ar-cell">${v.ar}</td>
@@ -115,7 +125,11 @@ function renderTable(queue) {
     td.appendChild(slot);
     ctr.appendChild(td);
     tbody.appendChild(ctr);
-    mountBucketBar(slot, key, () => { bucketed.add(key); missed.delete(key); missBtn.classList.remove("on"); noteTouch(key); });
+    const twins = keys || [key];
+    mountBucketBar(slot, key, (bid) => {
+      twins.forEach(k => { if (k !== key) setBucket(k, bid); }); // a bucket is final for every twin too
+      bucketed.add(key); missed.delete(key); missBtn.classList.remove("on"); noteTouch(key);
+    });
   });
   // 🔁 verbs show past/present/future here too — the English is still veiled, so
   // the strip runs with its gloss suppressed (noEn) and doesn't give the answer away.
@@ -132,11 +146,11 @@ function renderTable(queue) {
   document.getElementById("cardMode").onclick = () => renderCards(queue);
   document.getElementById("finish").onclick = () => {
     let saved = 0;
-    queue.forEach(({ key }) => {
+    queue.forEach(({ key, keys }) => {
       if (bucketed.has(key)) { saved++; return; } // the bucket already scheduled it
       if (!touched.has(key)) return;             // never looked at → leave it due
       const g = missed.has(key) ? "again" : "good";
-      gradeCard(key, g);
+      (keys || [key]).forEach(k => gradeCard(k, g)); // twins ride along (same word, same verdict)
       logEvent({ e: "review", card: key, g, src: "table" });
       saved++;
     });
@@ -173,7 +187,7 @@ function renderCards(queue) {
       autoSync();
       return;
     }
-    const { key, v } = queue[pos];
+    const { key, keys, v } = queue[pos];
     count.textContent = `${pos + 1} / ${queue.length}` + (again.length ? ` (+${again.length} to retry)` : "");
     const mn = mnemFor(v.ar);
     flashArea.innerHTML = `
@@ -200,9 +214,9 @@ function renderCards(queue) {
     };
     document.getElementById("hear").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
     const grade = (g) => {
-      gradeCard(key, g);
+      (keys || [key]).forEach(k => gradeCard(k, g));
       logEvent({ e: "review", card: key, g, ms: revealedAt ? Date.now() - revealedAt : null, src: "review" });
-      if (g === "again") again.push({ key, v });
+      if (g === "again") again.push({ key, keys, v });
       pos++;
       show();
     };

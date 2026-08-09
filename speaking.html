@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msj4fho8">
-  <link rel="stylesheet" href="css/style.css?v=msj4fho8">
+  <link rel="stylesheet" href="css/fonts.css?v=msl4gdlh">
+  <link rel="stylesheet" href="css/style.css?v=msl4gdlh">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -26,7 +26,7 @@
 <body>
 <main>
   <h1>Speaking <span class="arabic" style="color:var(--accent)">تَكَلَّمْ</span></h1>
-  <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked.</p>
+  <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked. Tap 🎤 again any time to retry, and ▶ plays your own take back.</p>
 
   <div class="card" style="border-color:var(--accent)">
     <h2>🎤 Word drill — say the Arabic</h2>
@@ -49,15 +49,98 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msj4fho8"></script>
-<script src="js/tracker.js?v=msj4fho8"></script>
-<script src="js/plan.js?v=msj4fho8"></script>
+<script src="js/app.js?v=msl4gdlh"></script>
+<script src="js/tracker.js?v=msl4gdlh"></script>
+<script src="js/plan.js?v=msl4gdlh"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
 
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const BATCH = 10;
+
+/* ---------- one shared dictation pipeline ----------
+   His 2026-08-07 notes: rows stuck on "listening…", no retry, and "should i be
+   able to hear back what i said". Root cause: every 🎤 spun up its own
+   SpeechRecognition — the browser allows ONE, so competing rows hung forever.
+   Now: one live recognition (starting a new one resets the old row), a 9s
+   watchdog so nothing hangs, every 🎤 stays tappable for retries, and a
+   best-effort MediaRecorder captures the take for "▶ hear yourself" (dropped
+   automatically if this device's recognition can't share the mic). */
+let _live = null;      // { rec, mediaRec, stream, watchdog, reset }
+let _recOwnVoice = true; // flips off if recording breaks recognition on this device
+function stopDictation() {
+  const L = _live;
+  if (!L) return;
+  _live = null;
+  clearTimeout(L.watchdog);
+  try { L.rec.onresult = L.rec.onerror = L.rec.onend = null; L.rec.abort(); } catch (e) {}
+  try { if (L.mediaRec && L.mediaRec.state !== "inactive") { L.mediaRec.onstop = null; L.mediaRec.stop(); } } catch (e) {}
+  try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+  if (L.reset) L.reset();
+}
+function dictate(btn, idleLabel, cb) {
+  // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
+  stopDictation(); stopSpeak();
+  const rec = new SR();
+  rec.lang = "ar-SA"; rec.interimResults = false;
+  const L = { rec, reset: () => { btn.textContent = idleLabel; } };
+  _live = L;
+  btn.textContent = "🔴 listening…";
+  const chunks = [];
+  const finish = (heard, errMsg) => {
+    if (_live !== L) return;                 // superseded by a newer dictation
+    _live = null;
+    clearTimeout(L.watchdog);
+    L.reset();
+    try { rec.onend = null; rec.stop(); } catch (e) {}
+    const done = url => cb(heard, url, errMsg);
+    try {
+      if (L.mediaRec && L.mediaRec.state !== "inactive") {
+        L.mediaRec.onstop = () => {
+          let url = null;
+          try { if (heard && chunks.length) url = URL.createObjectURL(new Blob(chunks, { type: L.mediaRec.mimeType || "audio/webm" })); } catch (e) {}
+          try { L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+          done(url);
+        };
+        L.mediaRec.stop();
+        return;
+      }
+    } catch (e) {}
+    try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    done(null);
+  };
+  rec.onresult = ev => finish(ev.results[0][0].transcript, null);
+  rec.onerror = ev => {
+    if (ev.error === "aborted" && L.mediaRec) _recOwnVoice = false; // recording likely stole the mic here
+    finish(null, ev.error === "not-allowed" ? "mic blocked — allow it in the address bar"
+      : ev.error === "audio-capture" ? "no microphone found"
+      : "didn't catch that — tap 🎤 to try again");
+  };
+  rec.onend = () => finish(null, "didn't catch that — tap 🎤 to try again");
+  L.watchdog = setTimeout(() => { try { rec.stop(); } catch (e) {} }, 9000);
+  const start = () => { try { rec.start(); } catch (e) { finish(null, "mic is busy — tap 🎤 to try again"); } };
+  if (_recOwnVoice && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      if (_live !== L) { stream.getTracks().forEach(t => t.stop()); return; }
+      try {
+        L.stream = stream;
+        L.mediaRec = new MediaRecorder(stream);
+        L.mediaRec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+        L.mediaRec.start();
+      } catch (e) { L.mediaRec = null; }
+      start();
+    }).catch(() => { if (_live === L) start(); });
+  } else start();
+}
+/* ▶ hear yourself + keep the URL tidy: each row remembers its last take */
+function hearMeHtml(url) { return url ? ` <button class="small hearme" type="button">▶ hear yourself</button>` : ""; }
+function bindHearMe(container, url, prevUrlBox) {
+  if (prevUrlBox.url && prevUrlBox.url !== url) { try { URL.revokeObjectURL(prevUrlBox.url); } catch (e) {} }
+  prevUrlBox.url = url;
+  const b = container.querySelector(".hearme");
+  if (b && url) b.onclick = () => { stopSpeak(); new Audio(url).play(); };
+}
 
 /* ================= word drill ================= */
 let CORE = null, EV = null, FAMS = null, catalog = null;
@@ -170,27 +253,23 @@ function renderDrill() {
 
     if (SR) {
       const mic = tr.querySelector(".mic");
-      mic.onclick = () => {
-        stopSpeak();
-        const rec = new SR();
-        rec.lang = "ar-SA";
-        rec.interimResults = false;
-        mic.textContent = "🔴 listening…";
-        rec.onresult = (ev) => {
-          const heard = ev.results[0][0].transcript;
-          const ok = speakMatch(heard, v.ar);
-          logEvent({ e: "vspeak", key, heard, ok });
-          finishRow(i, key, ok, ok
-            ? `<span style="color:var(--accent);font-weight:600">✓ ${heard}</span>`
-            : `<span style="color:var(--red)">heard: ${heard}</span>`);
-        };
-        rec.onerror = (ev) => {
-          mic.textContent = "🎤 say it";
-          tr.querySelector(".res").innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
-        };
-        rec.onend = () => { if (!attempted.has(i)) mic.textContent = "🎤 say it"; else mic.disabled = true; };
-        rec.start();
-      };
+      const takeBox = {}; // last recorded take for this row
+      mic.onclick = () => dictate(mic, "🎤 say it", (heard, url, err) => {
+        const res = tr.querySelector(".res");
+        if (!heard) { if (err) res.innerHTML = `<span style="color:var(--muted)">${err}</span>`; return; }
+        const ok = speakMatch(heard, v.ar);
+        logEvent({ e: "vspeak", key, heard, ok });
+        const html = (ok
+          ? `<span style="color:var(--accent);font-weight:600">✓ ${heard}</span>`
+          : `<span style="color:var(--red)">heard: ${heard}</span>`) + hearMeHtml(url);
+        if (!attempted.has(i)) {
+          finishRow(i, key, ok, html);
+        } else {
+          // retries are free practice — the first take already graded the card
+          res.innerHTML = html + ` <span style="font-size:11.5px;color:var(--muted)">retry — first take counted</span>`;
+        }
+        bindHearMe(res, url, takeBox);
+      });
     } else {
       tr.querySelector(".reveal").onclick = () => {
         const res = tr.querySelector(".res");
@@ -264,31 +343,20 @@ async function renderPrompts() {
     };
     if (SR) {
       const mic = row.querySelector(".mic");
-      mic.onclick = () => {
-        stopSpeak();
-        const rec = new SR();
-        rec.lang = "ar-SA";
-        rec.interimResults = false;
-        mic.textContent = "🔴";
-        rec.onresult = (ev) => {
-          const heard = ev.results[0][0].transcript;
-          const target = normalizeAr(p.ar).split(" ");
-          const heardW = new Set(normalizeAr(heard).split(" "));
-          const hit = target.filter(w => heardW.has(w)).length;
-          const score = hit / target.length;
-          logEvent({ e: "prompt", en: p.en, heard, score: Math.round(score * 100) / 100 });
-          res.innerHTML = `<span style="color:${score >= 0.5 ? "var(--accent)" : "var(--red)"}">heard: ${heard}</span>
-            <span class="arabic" style="font-size:20px;display:block" dir="rtl">model: ${p.ar} <span class="row-speak" style="cursor:pointer">🔊</span></span>
-            <span style="font-size:12px;color:var(--muted)">${score >= 0.8 ? "✓ matches the model" : score >= 0.5 ? "close — a different correct phrasing also counts" : "compare with the model and try again"}</span>`;
-          res.querySelector(".row-speak").onclick = () => speak(p.ar, 0.8);
-        };
-        rec.onerror = (ev) => {
-          mic.textContent = "🎤";
-          res.innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
-        };
-        rec.onend = () => { mic.textContent = "🎤"; };
-        rec.start();
-      };
+      const takeBox = {};
+      mic.onclick = () => dictate(mic, "🎤", (heard, url, err) => {
+        if (!heard) { if (err) res.innerHTML = `<span style="color:var(--muted)">${err}</span>`; return; }
+        const target = normalizeAr(p.ar).split(" ");
+        const heardW = new Set(normalizeAr(heard).split(" "));
+        const hit = target.filter(w => heardW.has(w)).length;
+        const score = hit / target.length;
+        logEvent({ e: "prompt", en: p.en, heard, score: Math.round(score * 100) / 100 });
+        res.innerHTML = `<span style="color:${score >= 0.5 ? "var(--accent)" : "var(--red)"}">heard: ${heard}</span>${hearMeHtml(url)}
+          <span class="arabic" style="font-size:20px;display:block" dir="rtl">model: ${p.ar} <span class="row-speak" style="cursor:pointer">🔊</span></span>
+          <span style="font-size:12px;color:var(--muted)">${score >= 0.8 ? "✓ matches the model" : score >= 0.5 ? "close — a different correct phrasing also counts" : "compare with the model, then tap 🎤 to try again"}</span>`;
+        res.querySelector(".row-speak").onclick = () => speak(p.ar, 0.8);
+        bindHearMe(res, url, takeBox);
+      });
     }
     area.appendChild(row);
   });
@@ -342,30 +410,20 @@ async function renderShadow() {
     row.querySelector(".play").onclick = () => speak(ar, 0.8);
     if (SR) {
       const mic = row.querySelector(".mic");
-      mic.onclick = () => {
-        stopSpeak();
-        const rec = new SR();
-        rec.lang = "ar-SA";
-        rec.interimResults = false;
-        mic.textContent = "🔴";
-        rec.onresult = (ev) => {
-          const heard = ev.results[0][0].transcript;
-          const target = normalizeAr(ar).split(" ");
-          const heardW = new Set(normalizeAr(heard).split(" "));
-          const hit = target.filter(w => heardW.has(w)).length;
-          const score = Math.round(hit / target.length * 100) / 100;
-          logEvent(shadowSel.kind === "story"
-            ? { e: "speak", story: shadowSel.id, s: i, heard, score }
-            : { e: "qspeak", surah: shadowSel.id, s: i, heard, score });
-          row.querySelector(".res").innerHTML = `<span style="color:${score >= 0.6 ? "var(--accent)" : "var(--red)"}">${score >= 0.8 ? "✓ Excellent" : score >= 0.6 ? "✓ Good" : "Keep practicing"} — ${hit}/${target.length} words. Heard: ${heard}</span>`;
-        };
-        rec.onerror = (ev) => {
-          mic.textContent = "🎤";
-          row.querySelector(".res").innerHTML = `<span style="color:var(--muted)">${ev.error === "not-allowed" ? "mic blocked — allow it in the address bar" : "didn't catch that — try again"}</span>`;
-        };
-        rec.onend = () => { mic.textContent = "🎤"; };
-        rec.start();
-      };
+      const takeBox = {};
+      mic.onclick = () => dictate(mic, "🎤", (heard, url, err) => {
+        const res = row.querySelector(".res");
+        if (!heard) { if (err) res.innerHTML = `<span style="color:var(--muted)">${err}</span>`; return; }
+        const target = normalizeAr(ar).split(" ");
+        const heardW = new Set(normalizeAr(heard).split(" "));
+        const hit = target.filter(w => heardW.has(w)).length;
+        const score = Math.round(hit / target.length * 100) / 100;
+        logEvent(shadowSel.kind === "story"
+          ? { e: "speak", story: shadowSel.id, s: i, heard, score }
+          : { e: "qspeak", surah: shadowSel.id, s: i, heard, score });
+        res.innerHTML = `<span style="color:${score >= 0.6 ? "var(--accent)" : "var(--red)"}">${score >= 0.8 ? "✓ Excellent" : score >= 0.6 ? "✓ Good" : "Keep practicing"} — ${hit}/${target.length} words. Heard: ${heard}</span>${hearMeHtml(url)}`;
+        bindHearMe(res, url, takeBox);
+      });
     }
     area.appendChild(row);
   });

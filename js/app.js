@@ -808,6 +808,69 @@ function normalizeAr(s) {
     .trim();
 }
 
+/* ---------- transliteration for fully-vocalized text ----------
+   Rule-based, for machine-generated forms that carry ALL their harakat (the
+   conjugation tables). Matches the site's tr style: macrons, ʾ hamza, ʿ ayn.
+   The data writes consonant + haraka + shadda, so shadda doubles the last
+   consonant BEFORE any short vowel already emitted. Verified against 25
+   hand-checked conjugations + all 1312 forms in conjugations.json (2026-08-09).
+   Not for un-vowelled or ال-prefixed dictionary words — those need a human. */
+const _TL_CONS = {
+  'ب': 'b', 'ت': 't', 'ث': 'th', 'ج': 'j', 'ح': 'ḥ', 'خ': 'kh', 'د': 'd', 'ذ': 'dh',
+  'ر': 'r', 'ز': 'z', 'س': 's', 'ش': 'sh', 'ص': 'ṣ', 'ض': 'ḍ', 'ط': 'ṭ', 'ظ': 'ẓ',
+  'ع': 'ʿ', 'غ': 'gh', 'ف': 'f', 'ق': 'q', 'ك': 'k', 'ل': 'l', 'م': 'm', 'ن': 'n',
+  'ه': 'h', 'و': 'w', 'ي': 'y', 'ء': 'ʾ', 'ؤ': 'ʾ', 'ئ': 'ʾ', 'ٱ': '',
+};
+const _TL_HARAKA = { 'َ': 'a', 'ُ': 'u', 'ِ': 'i' };
+const _TL_TANWEEN = { 'ً': 'an', 'ٌ': 'un', 'ٍ': 'in' };
+function translitAr(word) {
+  const SUKUN = 'ْ', SHADDA = 'ّ';
+  const s = String(word || '').replace(/[ـ\s]+/g, '');
+  let out = '';
+  const isHaraka = c => _TL_HARAKA[c] || _TL_TANWEEN[c] || c === SUKUN || c === SHADDA;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i], first = out === '', next = s[i + 1];
+    if (c === 'آ') { out += first ? 'ā' : 'ʾā'; continue; }
+    if (c === 'ا') {
+      if (first) {
+        const h = _TL_HARAKA[next];
+        if (h) { out += h; i++; }
+        else out += ([s[i + 2], s[i + 3]].some(x => x === SUKUN || x === SHADDA) ? 'i' : 'a');
+        continue;
+      }
+      if (out.slice(-1) === 'a') out = out.slice(0, -1) + 'ā';   // long ā; else silent (كَتَبُوا)
+      continue;
+    }
+    if (c === 'ى') { out = (out.slice(-1) === 'a' ? out.slice(0, -1) : out) + 'ā'; continue; }
+    if (c === 'ٰ') { if (out.slice(-1) !== 'ā') out = (out.slice(-1) === 'a' ? out.slice(0, -1) : out) + 'ā'; continue; }
+    if (c === 'أ' || c === 'إ') {
+      const h = _TL_HARAKA[next] || (c === 'إ' ? 'i' : '');
+      if (first) { out += h || 'a'; if (_TL_HARAKA[next]) i++; continue; }
+      out += 'ʾ'; continue;
+    }
+    if (c === 'ة') { if (out.slice(-1) !== 'a') out += 'a'; continue; }
+    if (_TL_HARAKA[c]) { out += _TL_HARAKA[c]; continue; }
+    if (_TL_TANWEEN[c]) { out += _TL_TANWEEN[c]; continue; }
+    if (c === SUKUN) continue;
+    if (c === SHADDA) {
+      const m = out.match(/^([\s\S]*?)(sh|th|kh|dh|gh|ḥ|ṣ|ḍ|ṭ|ẓ|ʿ|ʾ|[bcdfghjklmnpqrstwyz])([aui]{0,2})$/);
+      if (m) out = m[1] + m[2] + m[2] + m[3];
+      continue;
+    }
+    if (c === 'و' || c === 'ي') {
+      const shortV = c === 'و' ? 'u' : 'i', long = c === 'و' ? 'ū' : 'ī';
+      if ((!isHaraka(next) || next === SUKUN) && out.slice(-1) === shortV) {
+        out = out.slice(0, -1) + long;
+        if (next === SUKUN) i++;
+        continue;
+      }
+      out += _TL_CONS[c]; continue;
+    }
+    if (_TL_CONS[c] !== undefined) out += _TL_CONS[c];
+  }
+  return out;
+}
+
 /* ---------- TTS ----------
    Voice quality varies wildly by platform. Rank what's installed and take the
    best, instead of the browser default (on Windows that default is the old
@@ -1592,21 +1655,30 @@ function conjLookupStrict(word) {
    know to tap (his 2026-08-05 note: "i still dont see words with conjugations
    and present past future ... should be encouraged"). Past · present · future
    sit in the open; the eight persons are one tap away. */
+/* His 2026-08-07 asks, all in one place: readable headings, transliteration on
+   every form ("this is something i struggle with"), and BOLD the persons worth
+   internalising first — the rest stay visible but dimmed. */
+const CONJ_FOCUS = ["ana", "anta", "huwa", "nahnu", "hum"];
 function conjStripHTML(hit, opts) {
   const v = hit.v, noEn = !!(opts && opts.noEn); // noEn: the row is a test — don't leak the meaning
   const ar = s => `<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${s}</span>`;
+  const cell = s => `${ar(s)}<div class="conj-tr">${translitAr(s)}</div>`;
   return `<div class="conj-strip">
-    <span class="conj-line">🔁 <b>past</b> ${ar(v.past3)} · <b>present</b> ${ar(v.pres3)} · <b>future</b> ${ar("سَ" + v.pres3)}</span>
+    <span class="conj-line">🔁 <b>past</b> ${ar(v.past3)} <i class="conj-tr-inline">${translitAr(v.past3)}</i> · <b>present</b> ${ar(v.pres3)} <i class="conj-tr-inline">${translitAr(v.pres3)}</i> · <b>future</b> ${ar("سَ" + v.pres3)} <i class="conj-tr-inline">sa-${translitAr(v.pres3)}</i></span>
     <a href="#" class="conj-more">all 8 persons ▾</a>
     <div class="conj-table" style="display:none">
       <table>
         <thead><tr><th></th><th>past</th><th>present</th></tr></thead>
-        <tbody>${(_conj ? _conj.persons : []).map(p => `<tr${p.key === (hit.person && hit.person.key) ? ' class="me"' : ""}>
+        <tbody>${(_conj ? _conj.persons : []).map(p => {
+          const cls = [p.key === (hit.person && hit.person.key) ? "me" : "", CONJ_FOCUS.includes(p.key) ? "focus" : "dim"].filter(Boolean).join(" ");
+          return `<tr${cls ? ` class="${cls}"` : ""}>
           <td>${p.en}</td>
-          <td>${ar(v.past[p.key])}</td>
-          <td>${ar(v.pres[p.key])}</td></tr>`).join("")}</tbody>
+          <td>${cell(v.past[p.key])}</td>
+          <td>${cell(v.pres[p.key])}</td></tr>`;
+        }).join("")}</tbody>
       </table>
-      <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)}${noEn ? "" : ` “I will ${v.base}”`}</div>
+      <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)} <i class="conj-tr-inline">sa-${translitAr(v.pres.ana)}</i>${noEn ? "" : ` “I will ${v.base}”`}</div>
+      <div class="conj-pattern">the pattern — <b>past</b> = verb + ending: ‑tu <i>I</i> · ‑ta <i>you</i> · ‑a <i>he</i> · ‑nā <i>we</i> · ‑ū <i>they</i> &nbsp; <b>present</b> = prefix + verb: a‑ <i>I</i> · ta‑ <i>you</i> · ya‑ <i>he</i> · na‑ <i>we</i> · ya‑…‑ūna <i>they</i>. Start with the <b>bold five</b>; the dimmed rows follow the same music.</div>
     </div>
   </div>`;
 }
