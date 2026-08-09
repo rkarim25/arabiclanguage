@@ -24,7 +24,8 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 
 | Page | What it does |
 |---|---|
-| `index.html` | Dashboard: Quran-coverage stat, "What now?" suggestions (first = **Start my 5 minutes** — the one-button day: due review → new words → ears round via `vocab.html?today=1`), coach's notes, weak spots, story grid, cloud-sync setup |
+| `index.html` | Dashboard, "just home" (his 2026-08-09 order): 🚗 commute check (test-first) → coach's notes → **Today's plan** (with ⚡ boost notices/sections and the 🚗 hands-free parallel row) → skill charts + milestones → sync. Weak-spots card removed (the data feeds the plan instead); story grid moved to `stories.html` |
+| `stories.html` | Story grid (Level 1) + how-to-use-each-story — moved off home 2026-08-09; nav tab **Stories** |
 | `vocab.html` | **Vocab Lab**, tabbed: **📝 Learn** (endless auto fill-sheets: due → new frequency-core → family forms; modes Understand Ar→meaning / Write meaning→Ar / **🎧 Ears** sound→meaning), **🎓 Lessons** (all lesson-sourced clusters `source:"teacher"`, grouped by lesson label — one place to study/review your teacher's words), **🌿 Roots** (15 families), **📖 Core** (Quran-core table), **🗂 Browse** (by bucket). **Every checked answer auto-schedules the word by SRS interval — the ✓↻⏳🚫 buckets are OPTIONAL overrides, not required.** |
 | `quran.html` | Word-by-word surah lessons: study (per-word audio + ⓘ grammar note + **root-family link** + tafsir) then fill-the-meanings test. **▶ Real recitation** (Alafasy, everyayah.com) verse by verse; `?listen=1` = **Listen queue** (logs `rlisten`); **Cold listen** per surah (recitation-only MCQ; 85% → step `listen`, logs `qlisten-test`; milestone "3 surahs certified by ear") |
 | `grammar.html` | 8 practical patterns via known verses, typed 1-min tests; passing (60%+) seeds `gt:<id>:<i>` SRS cards. **Who's acting?** (`?g=verbears`): audio verb-form drill (logs `vdrill`) |

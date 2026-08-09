@@ -100,6 +100,55 @@ function planHwTaskDone(id) {
   logEvent({ e: "hw-task", id });
 }
 
+/* ---- ⚡ boost days (2026-08-09, his ask): forward-looking extra-time asks ----
+   The SRS makes review load PREDICTABLE days ahead. When a wave of cards lands
+   on one day (or lesson-readiness slips with the lesson close), ONE extra
+   ~15-min session that day pays disproportionately — cards cleared the day
+   they land stay in high boxes; left to pile up they decay to box 0 and cost
+   double later. Rules: rare (≥4 days between asks), announced 1–3 days ahead
+   on the plan card, opt-in on the day — the base 3 blocks still complete the
+   day; boost blocks never gate plan-done. */
+const BOOST_HIST_KEY = "ats-boost-hist";   // ISO dates boosts were OFFERED
+const BOOST_WAVE_MIN = 12;                 // same-day due arrivals worth asking for
+const BOOST_GAP_D = 4;                     // min days between asks
+
+function planDueArrivals(dayOffset) {
+  const srs = getSrs();
+  const start = new Date(); start.setHours(0, 0, 0, 0);
+  const a = start.getTime() + dayOffset * 86400000, b = a + 86400000;
+  let n = 0;
+  for (const k in srs) {
+    const e = srs[k];
+    if (e && e.b !== "never" && e.due >= a && e.due < b) n++;
+  }
+  return n;
+}
+/* the ONE upcoming boost day (offset 0..6), or null. Recomputed live from the
+   same SRS every day, so the Saturday it announces stays Saturday when it comes. */
+function planBoostDay() {
+  const hist = store.get(BOOST_HIST_KEY, []);
+  if (hist.length) {
+    const last = new Date(hist[hist.length - 1] + "T12:00:00").getTime();
+    if (Date.now() - last < BOOST_GAP_D * 86400000) return null;
+  }
+  const hw = planHomework();
+  let best = null;
+  for (let d = 0; d <= 6; d++) {
+    let score = 0; const parts = [];
+    const wave = planDueArrivals(d);
+    if (wave >= BOOST_WAVE_MIN) { score += wave; parts.push(`${wave} reviews land together that day`); }
+    if (hw && !hw.past && hw.readiness < 80 && hw.daysLeft - d >= 0 && hw.daysLeft - d <= 1.5) {
+      score += 15; parts.push(`lesson prep at ${hw.readiness}% ready`);
+    }
+    if (score >= BOOST_WAVE_MIN && (!best || score > best.score)) {
+      const dt = new Date(Date.now() + d * 86400000);
+      best = { day: d, score, reason: parts.join(" + "),
+               label: d === 0 ? "today" : d === 1 ? "tomorrow" : dt.toLocaleDateString(undefined, { weekday: "long" }) };
+    }
+  }
+  return best;
+}
+
 function planHist() { return store.get(PLAN_HIST_KEY, []); }
 function planRecentTypes() { return planHist().slice(-2).flatMap(h => h.types || []); }
 function planRecentContent() { return planHist().slice(-3).flatMap(h => h.content || []); }
@@ -144,7 +193,7 @@ function planMakeBlock(type, date, dueN) {
 }
 
 /* ---- the planner: 3 blocks by marginal value, deterministic per day ---- */
-function planBuild(date) {
+function planBuild(date, noBoost) {
   const dueN = dueCards().length;
   const mix = planMix();
   const recent = planRecentTypes();
@@ -193,7 +242,25 @@ function planBuild(date) {
 
   // a banked block yesterday shrinks today (never below 2)
   if (store.get(PLAN_BANK_KEY, null) === date && blocks.length > 2) blocks.pop();
-  return { date, blocks, completedAt: null, banked: false };
+  const plan = { date, blocks, completedAt: null, banked: false };
+
+  // ⚡ boost day arrived (announced in the days before): attach the extra section
+  if (!noBoost) {
+    const bst = planBoostDay();
+    if (bst && bst.day === 0) {
+      const extra = [];
+      const rb = planMakeBlock("review", date, dueN + planDueArrivals(0));
+      rb.sub = "The wave you had notice about — cleared the day it lands, it stays learnt.";
+      extra.push(rb);
+      const second = cand.find(c => c.w > 0 && c.type !== "review" && !blocks.some(b => b.type === c.type));
+      if (second) extra.push(planMakeBlock(second.type, date, dueN));
+      plan.boost = extra;
+      const hist = store.get(BOOST_HIST_KEY, []);
+      hist.push(date); store.set(BOOST_HIST_KEY, hist.slice(-8));
+      logEvent({ e: "boost-day", reason: bst.reason });
+    }
+  }
+  return plan;
 }
 
 function planGet() {
@@ -218,19 +285,32 @@ function planCurrent(p) { return p.blocks.find(b => !b.done) || null; }
 /* ---- completion: observe events + accrue focused time on the block's page ---- */
 function planObserve(ev) {
   const p = store.get(PLAN_KEY, null);
-  if (!p || p.completedAt || p.date !== planToday()) return;
-  // 🚗 a FULL commute session (≥10 min hands-free) delivers the whole day —
-  // audio and screen are parallel delivery lines that meet at the test (his
-  // 2026-08-09 design). The plan measures time-in; the SRS and the checks,
-  // not block ticks, remain the measure of what was actually learnt.
-  if (ev.e === "commute-done" && (ev.min || 0) >= 10) {
-    p.blocks.filter(b => !b.done).forEach(b => planFinishBlock(p, b, "commute"));
+  if (!p || p.date !== planToday()) return;
+  if (!p.completedAt) {
+    // 🚗 a FULL commute session (≥10 min hands-free) delivers the whole day —
+    // audio and screen are parallel delivery lines that meet at the test (his
+    // 2026-08-09 design). The plan measures time-in; the SRS and the checks,
+    // not block ticks, remain the measure of what was actually learnt.
+    if (ev.e === "commute-done" && (ev.min || 0) >= 10) {
+      p.blocks.filter(b => !b.done).forEach(b => planFinishBlock(p, b, "commute"));
+      return;
+    }
+    const cur = planCurrent(p);
+    if (!cur) return;
+    const def = PLAN_BLOCKS[cur.type];
+    if (def.done.includes(ev.e)) planFinishBlock(p, cur, "event");
     return;
   }
-  const cur = planCurrent(p);
-  if (!cur) return;
-  const def = PLAN_BLOCKS[cur.type];
-  if (def.done.includes(ev.e)) planFinishBlock(p, cur, "event");
+  // day complete — ⚡ boost blocks (extra, opt-in) still listen for their events
+  if (p.boost && p.boost.some(b => !b.done)) {
+    const cur = p.boost.find(b => !b.done);
+    if (!PLAN_BLOCKS[cur.type].done.includes(ev.e)) return;
+    cur.done = true; cur.doneT = Date.now();
+    logEvent({ e: "plan-block-done", type: cur.type, how: "event", boost: true });
+    if (!p.boost.some(b => !b.done)) { logEvent({ e: "boost-done" }); autoSync(); }
+    planSave(p);
+    planPaintBar();
+  }
 }
 function planFinishBlock(p, block, how) {
   if (block.done) return;
@@ -261,7 +341,7 @@ function planBank() {
   if (!p.completedAt || p.banked) return;
   const tomorrow = new Date(Date.now() + 86400000);
   const tISO = tomorrow.getFullYear() + "-" + String(tomorrow.getMonth() + 1).padStart(2, "0") + "-" + String(tomorrow.getDate()).padStart(2, "0");
-  const tPlan = planBuild(tISO);
+  const tPlan = planBuild(tISO, true);
   const extra = tPlan.blocks.find(b => b.type !== "review" && !p.blocks.some(x => x.type === b.type)) || tPlan.blocks[1];
   extra.done = false; extra.sec = 0;
   p.blocks.push(extra);
@@ -355,13 +435,36 @@ function planRenderCard(el) {
       <div class="pl-s">On the move? One full commute session (~13 min, just listening) counts as the whole day — tomorrow's 90-second check verifies what stuck.</div></div>
       <div class="pl-go">Start →</div>
     </a>`;
+  // ⚡ boost: the advance notice (1-3 days out), and the extra section on the day
+  const bst = p.boost ? null : planBoostDay();
+  const noticeLine = (bst && bst.day >= 1 && bst.day <= 3)
+    ? `<div class="plan-lesson" style="border-left:3px solid #c98a2b">📅 <strong>Heads-up:</strong> ${bst.label} looks worth an extra ~15 minutes — ${bst.reason}. Nothing needed now; a ⚡ section will be waiting that day, and your normal 3 blocks still finish the day without it.</div>`
+    : "";
+  if (noticeLine && store.get("ats-boost-noticed", "") !== p.date) {
+    store.set("ats-boost-noticed", p.date);
+    logEvent({ e: "boost-notice", day: bst.day, reason: bst.reason });
+  }
+  const boostRows = (p.boost || []).map((b, i) => {
+    const inner = `
+      <div class="pl-num">${b.done ? "✓" : "⚡"}</div>
+      <div><div class="pl-t">${b.icon} ${b.title}</div><div class="pl-s">${b.sub}</div></div>
+      ${b.done ? "" : `<button class="small" data-boost-i="${i}" style="align-self:center">✓ done</button>`}`;
+    return b.done ? `<div class="plan-row done">${inner}</div>`
+                  : `<a class="plan-row" href="${b.url}" style="border-color:#c98a2b">${inner}</a>`;
+  }).join("");
+  const boostSection = p.boost ? `
+    <div style="margin-top:12px;font-size:13.5px;font-weight:700">⚡ Today's the extra ~15 you had notice about${p.boost.every(b => b.done) ? " — done. That's the wave broken." : ""}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Optional — today counts complete without it. But what's cleared today stays learnt instead of piling into next week.</div>
+    ${boostRows}` : "";
   el.innerHTML = `
     ${planLessonStripHTML()}
+    ${noticeLine}
     <div class="plan-head">
       <span>${p.completedAt ? "✅ Today is complete" : `Today — ${p.blocks.length} blocks · ~${p.blocks.length * PLAN_BLOCK_MIN} min`}</span>
       <span class="plan-count">${doneN}/${p.blocks.length}</span>
     </div>
     ${rows}
+    ${boostSection}
     ${commuteRow}
     ${p.completedAt ? `
       <div class="plan-fin">
@@ -374,6 +477,17 @@ function planRenderCard(el) {
     <div style="font-size:12px;color:var(--muted);margin-top:10px">Picked for maximum movement on your two skill lines (speaking and by-ear practice surface until their share of your week reaches half). <a href="vocab.html" style="color:var(--accent)">Or browse everything →</a></div>`;
   const bank = document.getElementById("planBankBtn");
   if (bank) bank.onclick = () => { planBank(); planRenderCard(el); };
+  el.querySelectorAll("[data-boost-i]").forEach(btn => btn.onclick = e => {
+    e.preventDefault(); e.stopPropagation();
+    const pp = planGet();
+    const b = pp.boost && pp.boost[+btn.dataset.boostI];
+    if (!b || b.done) return;
+    b.done = true; b.doneT = Date.now();
+    logEvent({ e: "plan-block-done", type: b.type, how: "manual", boost: true });
+    if (!pp.boost.some(x => !x.done)) { logEvent({ e: "boost-done" }); autoSync(); }
+    planSave(pp);
+    planRenderCard(el);
+  });
   el.querySelectorAll("[data-hw-task]").forEach(cb => cb.onchange = () => {
     planHwTaskDone(cb.dataset.hwTask);
     autoSync();

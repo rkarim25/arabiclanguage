@@ -494,7 +494,7 @@ async function computeMilestones() {
     { title: "Survival vocabulary complete", why: `All ${evTotal} everyday words across the ${everyday.length} clusters — shops, food, time, people, the whole journey.`,
       have: evTotalLearnt, need: evTotal, unit: "words", link: "vocab.html", test: "survival" },
     { title: `All ${STORY_LIST.filter(s => !s.locked).length} stories + 150 MSA words`, why: "Comfortable with connected everyday narrative and dialogue — ready for level 2.",
-      have: storiesComplete + Math.min(msaLearnt, 150), need: STORY_LIST.filter(s => !s.locked).length + 150, unit: "stories+words", link: "index.html" },
+      have: storiesComplete + Math.min(msaLearnt, 150), need: STORY_LIST.filter(s => !s.locked).length + 150, unit: "stories+words", link: "stories.html" },
   ];
 
   const totalLearnt = Object.keys(getSrs()).filter(isLearnt).length;
@@ -1094,7 +1094,8 @@ function renderNav(active) {
   el.innerHTML = `
     <a class="brand" href="index.html"><span class="ar">العربية بالقصص</span><span>Arabic Through Stories</span></a>
     <span class="spacer"></span>
-    <a class="link ${active === "stories" ? "active" : ""}" href="index.html">Home</a>
+    <a class="link ${active === "home" ? "active" : ""}" href="index.html">Home</a>
+    <a class="link ${active === "stories" ? "active" : ""}" href="stories.html">Stories</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
     <a class="link ${active === "lessons" ? "active" : ""}" href="vocab.html?view=lessons">Lessons</a>
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>

@@ -8,10 +8,10 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mslo4dz3";
+const CACHE = "ats-msloo8d6";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
-  "index.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
+  "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
   "review.html", "story.html", "test.html", "keyboard.html", "sentences.html", "converse.html", "audio.html", "placement.html",
   "css/style.css", "css/fonts.css", "js/app.js", "js/tracker.js", "manifest.webmanifest",
   "fonts/font-1.woff2", "fonts/font-2.woff2", "fonts/font-3.woff2", "fonts/font-4.woff2", "fonts/font-5.woff2",
@@ -60,26 +60,27 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // navigations must be fresh (a stale page would load stale ?v= assets);
-  // un-stamped data is network-first with a 3.5s budget before cache answers
+  // navigations + un-stamped data: STALE-WHILE-REVALIDATE (2026-08-09, "the
+  // website is slow to load"). The cached copy answers INSTANTLY and the
+  // network refresh lands in cache for the next visit — at most one visit
+  // stale. A one-visit-old page still works: its ?v= assets are served by the
+  // ignoreSearch fallback and GitHub keeps serving old files, and every deploy
+  // reinstalls fresh CORE pages anyway (new cache name → clean slate).
   const isNav = e.request.mode === "navigate";
-  const req = isNav ? new Request(e.request.url, { cache: "reload" }) : e.request;
+  const req = isNav ? new Request(e.request.url, { cache: "no-cache" }) : e.request;
   e.respondWith((async () => {
+    const cached = (await caches.match(e.request)) || (await caches.match(e.request, { ignoreSearch: true }));
     const net = fetch(req).then(res => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
       return res;
     }).catch(() => null);
-    const winner = isNav ? await net
-      : await Promise.race([net, new Promise(r => setTimeout(() => r(null), 3500))]);
-    if (winner) return winner;
-    const exact = await caches.match(e.request);
-    if (exact) return exact;
-    const loose = await caches.match(e.request, { ignoreSearch: true });
-    if (loose) return loose;
+    if (cached) { try { e.waitUntil(net); } catch (err) {} return cached; }
+    const fresh = await net;
+    if (fresh) return fresh;
     if (isNav) {
       const shell = await caches.match("index.html");
       if (shell) return shell;
     }
-    return (await net) || Response.error();
+    return Response.error();
   })());
 });

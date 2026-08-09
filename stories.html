@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Stories — Arabic Through Stories</title>
+  <link rel="stylesheet" href="css/fonts.css?v=msloo8d6">
+  <link rel="stylesheet" href="css/style.css?v=msloo8d6">
+</head>
+<body>
+<main>
+  <h1>Stories <span class="arabic" style="color:var(--accent)">القِصَص</span></h1>
+  <p class="sub">Level 1 — الأَسَاس (Foundation): present tense, daily life, family. Upper-beginner: assumes you can read the Arabic script.</p>
+  <div class="story-grid" id="storyGrid"></div>
+
+  <div class="card" style="margin-top:26px">
+    <h2>How to use each story</h2>
+    <ol style="margin:0; padding-left:20px; font-size:14.5px">
+      <li><strong>اِسْتَمِعْ Listen</strong> — play the story before reading. Listen twice; catch what you can.</li>
+      <li><strong>اِقْرَأْ Read</strong> — read with vowels on, tap any word you don't know. Then turn vowels off and read again.</li>
+      <li><strong>اِحْفَظْ Memorize</strong> — grade yourself on each flashcard honestly; missed words return sooner.</li>
+      <li><strong>أَجِبْ Quiz</strong> — answer the comprehension questions without looking back.</li>
+      <li><strong>تَكَلَّمْ Speak</strong> — say every sentence aloud; the microphone checks how close you were.</li>
+      <li><strong>اُكْتُبْ Write</strong> — dictation and translation. Writing is what locks vocabulary in.</li>
+    </ol>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:0">Come back daily and clear the <a href="review.html">Review</a> queue — that's where memorization actually happens.</p>
+  </div>
+</main>
+
+<script src="js/app.js?v=msloo8d6"></script>
+<script src="js/tracker.js?v=msloo8d6"></script>
+<script src="js/plan.js?v=msloo8d6"></script>
+<script>
+renderNav("stories");
+trackPage("stories");
+
+/* story grid (moved from the home page 2026-08-09 — home is just home now) */
+const grid = document.getElementById("storyGrid");
+STORY_LIST.forEach(s => {
+  const done = stepsDone(s.id);
+  const nDone = STEPS.filter(st => done[st.key]).length;
+  const pct = Math.round(nDone / STEPS.length * 100);
+  const a = document.createElement("a");
+  a.className = "story-card" + (s.locked ? " locked" : "");
+  a.href = s.locked ? "#" : `story.html?id=${s.id}`;
+  a.innerHTML = `
+    <div class="num">Story ${s.n}${s.locked ? " · locked" : ""}</div>
+    <div class="title-ar">${s.titleAr}</div>
+    <div class="title-en">${s.titleEn}</div>
+    <div class="progress-bar"><div style="width:${s.locked ? 0 : pct}%"></div></div>
+    <div class="meta">${s.locked ? "Added in the next batch" : (pct === 100 ? "✓ Completed" : pct > 0 ? pct + "% complete" : (s.desc || ""))}</div>
+  `;
+  grid.appendChild(a);
+});
+</script>
+</body>
+</html>
