@@ -37,7 +37,7 @@ function planMix() {
     if (!e || !e.t || e.t < cutoff) continue;
     if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
     else if (e.e === "review" || e.e === "qfill") graded++;
-    else if (e.e === "alisten-grade") { graded++; ear++; }
+    else if (e.e === "alisten-grade" || e.e === "commute-check") { graded++; ear++; }
     else if (e.e === "vspeak" || e.e === "vspeak-self" || e.e === "spract" || e.e === "trans" || e.e === "prompt") { graded++; out++; }
   }
   return { earShare: graded ? ear / graded : 0, outShare: graded ? out / graded : 0, graded };
@@ -53,7 +53,7 @@ function planDaysSince(evName) {
 const PLAN_BLOCKS = {
   review:    { icon: "🔁", title: n => `Clear your ${n} due words`, sub: "Reviews first — they protect everything the other blocks build.", url: "review.html", page: "review", done: ["review-done"] },
   newwords:  { icon: "📝", title: () => "A few new words", sub: "Frequency-first — fill the column, check, stop.", url: "vocab.html?sheet=1", page: "vocab", done: ["sheet-done"] },
-  audio:     { icon: "🎧", title: () => "Audio Coach round", sub: "Ears only — every word you name by sound is certified by ear and lifts the listening line.", url: "audio.html", page: "audio", done: ["alisten-done"] },
+  audio:     { icon: "🎧", title: () => "Audio Coach round", sub: "Ears only — every word you name by sound is certified by ear and lifts the listening line. On the move? The 🚗 commute session counts fully.", url: "audio.html", page: "audio", done: ["alisten-done", "commute-done"] },
   salah:     { icon: "📖", title: c => `Surah ${c} — word by word`, sub: "The salah basket: meaning mapped onto sound you already recite.", url: c => `quran.html?s=${c}`, page: "quran", done: ["qtest-part", "qtest-done", "qlisten-test"] },
   speakdrill:{ icon: "🎤", title: () => "Speak round — mic on", sub: "Say them out loud. Spoken practice is the only thing that moves the speaking line.", url: "speaking.html", page: "speaking", done: ["drill-done", "prompt"] },
   sentences: { icon: "✍️", title: () => "Build 5 sentences", sub: "Conjugate and produce — I/we/they across the tenses.", url: "sentences.html", page: "sentences", done: ["spract-done"] },

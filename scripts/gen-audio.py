@@ -77,6 +77,8 @@ for g in loadd("phrases.json")["groups"]:
 
 # fixed spoken UI lines (audio.html)
 add("en", "Audio coach. Listen, and recall the meaning before I say it.")
+add("en", "Commute session. Hands free. Recall each meaning in the gap, before I say it.")
+add("en", "That's your commute session done. Every word counted. Well done.")
 
 sen = json.load(open(os.path.join(DATA, "sentences.json"), encoding="utf-8"))
 PERSON_EN = {"ana": "I", "nahnu": "we", "hum": "they"}

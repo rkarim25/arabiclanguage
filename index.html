@@ -8,14 +8,18 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msl4gdlh">
-  <link rel="stylesheet" href="css/style.css?v=msl4gdlh">
+  <link rel="stylesheet" href="css/fonts.css?v=mslnj77v">
+  <link rel="stylesheet" href="css/style.css?v=mslnj77v">
 </head>
 <body>
 <main>
   <h1>Arabic Through Stories <span class="arabic" style="color:var(--accent)">العربية بالقصص</span></h1>
   <p class="sub">Two goals, one path: <strong>understand the Quran as it's recited</strong>, and <strong>speak Arabic</strong>.
   Everything is ordered by frequency — you only ever study the words that pay off most — and everything you do is tracked so your coach targets what you need.</p>
+
+  <!-- test-first (his 2026-08-09 drawing: audio and screen are two delivery lines
+       that MEET AT THE TEST) — the check opens the sitting, before the plan -->
+  <div class="card" id="commuteCard" style="display:none;border-color:var(--accent)"></div>
 
   <div class="card" style="border-color:var(--accent)">
     <h2>▶ Today's plan</h2>
@@ -138,10 +142,10 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=msl4gdlh"></script>
-<script src="js/tracker.js?v=msl4gdlh"></script>
-<script src="js/plan.js?v=msl4gdlh"></script>
-<script src="js/progress-model.js?v=msl4gdlh"></script>
+<script src="js/app.js?v=mslnj77v"></script>
+<script src="js/tracker.js?v=mslnj77v"></script>
+<script src="js/plan.js?v=mslnj77v"></script>
+<script src="js/progress-model.js?v=mslnj77v"></script>
 <script>
 renderNav("stories");
 trackPage("dashboard");
@@ -582,6 +586,131 @@ document.getElementById("importFile").onchange = (e) => {
         d <= -0.5 ? `this week: ${d.toFixed(1)} points — the ear fades without listening practice; one Audio round recovers fastest` : "";
     }
   }).catch(() => { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The chart data hasn't been generated yet — it appears after the next coaching run.</p>`; });
+})();
+
+/* ---- 🚗 commute check: does commute listening actually stick? (2026-08-09) ----
+   After each 🚗 commute session, the NEXT sitting (≥8h later, within 7 days)
+   offers a 6-word by-ear check: 3 words the commute trained + 3 controls
+   matched by review box that no recent commute touched — shuffled, unlabeled.
+   Every answer grades the real SRS (it is normal study, not extra); the
+   trained-vs-control gap, accumulated over ~2 weeks, is the honest verdict
+   on whether commute listening is worth his scarce time. */
+(async function () {
+  const card = document.getElementById("commuteCard");
+  if (!card) return;
+  const log = store.get("ats-log", []);
+  const checks = log.filter(e => e.e === "commute-check");
+  const verdictHTML = () => {
+    const t = checks.filter(c => c.trained), c0 = checks.filter(c => !c.trained);
+    const rate = a => a.length ? a.filter(x => x.ok).length / a.length : 0;
+    if (t.length < 10 || c0.length < 10)
+      return `<span style="color:var(--muted)">Measuring: ${t.length} trained + ${c0.length} control answers banked — the verdict lands at 10 of each (~2 weeks of commutes).</span>`;
+    const dt = Math.round(100 * (rate(t) - rate(c0)));
+    const line = `Commute-trained words: <strong>${Math.round(100 * rate(t))}%</strong> recalled by ear (n=${t.length}) vs <strong>${Math.round(100 * rate(c0))}%</strong> for matched words it never touched (n=${c0.length}).`;
+    if (dt >= 12) return `${line} <strong style="color:var(--accent)">+${dt} points — the commute is genuinely teaching you. Keep it.</strong>`;
+    if (t.length >= 20 && c0.length >= 20 && dt <= 2) return `${line} <strong style="color:#b03535">No real gap — honest verdict: the commute isn't beating normal study for you. Worth rethinking.</strong>`;
+    return `${line} <span style="color:var(--muted)">+${dt} points — promising, not yet proven; keep measuring.</span>`;
+  };
+
+  const lastCommute = [...log].reverse().find(e => e.e === "commute-done" && e.keys && e.keys.length >= 3);
+  if (!lastCommute && !checks.length) return;   // feature untouched — stay hidden
+
+  const since = lastCommute ? Date.now() - lastCommute.t : Infinity;
+  const already = lastCommute && log.some(e => e.e === "commute-check-done" && e.forT === lastCommute.t);
+  const due = lastCommute && !already && since >= 8 * 3600e3 && since <= 7 * 86400e3;
+
+  if (!due) {
+    if (checks.length) {
+      card.style.display = "";
+      card.innerHTML = `<h2>🚗 Commute effect</h2><p style="font-size:13.5px;margin:0">${verdictHTML()}</p>`;
+    }
+    return;
+  }
+
+  // build the probe: 3 trained + 3 box-matched controls no recent commute touched
+  const srs = getSrs();
+  const recentKeys = new Set();
+  log.forEach(e => { if (e.e === "commute-done" && e.keys && Date.now() - e.t < 7 * 86400e3) e.keys.forEach(k => recentKeys.add(k)); });
+  const shuffle = a => a.sort(() => 0.5 - Math.random());
+  const boxOf = k => (srs[k] && srs[k].box) || 0;
+  const trainedKeys = shuffle(lastCommute.keys.filter(k => srs[k] && srs[k].b !== "never")).slice(0, 3);
+  const controlPool = shuffle(Object.keys(srs).filter(k => !recentKeys.has(k) && srs[k].b !== "never"));
+  const controls = [];
+  for (const tk of trainedKeys) {
+    let best = null, bestD = 99;
+    for (const ck of controlPool) {
+      if (controls.includes(ck)) continue;
+      const d = Math.abs(boxOf(ck) - boxOf(tk));
+      if (d < bestD) { bestD = d; best = ck; if (!d) break; }
+    }
+    if (best) controls.push(best);
+  }
+  if (trainedKeys.length < 2 || controls.length < 2) return;
+  const probe = shuffle([
+    ...trainedKeys.map(k => ({ key: k, trained: true })),
+    ...controls.map(k => ({ key: k, trained: false })),
+  ]);
+  const resolved = await resolveCards(probe.map(p => p.key));
+  const byKey = {}; resolved.forEach(c => { byKey[c.key] = c.v; });
+  const items = probe.filter(p => byKey[p.key] && byKey[p.key].ar && byKey[p.key].en);
+  if (items.length < 4) return;
+
+  card.style.display = "";
+  let i = -1; const results = [];
+  const head = () => `<h2>🚗 Commute check <span style="font-weight:400;font-size:13px;color:var(--muted)">${i + 1}/${items.length}</span></h2>`;
+  const intro = () => {
+    card.innerHTML = `<h2>🚗 Commute check — 90 seconds, by ear</h2>
+      <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">${items.length} words: some from your last commute session, some it never touched — you won't know which. The gap between them is the proof that commute listening works <em>for you</em> (or doesn't). Every answer counts as a real review.</p>
+      <button class="primary" id="ccStart">▶ Start the check</button>
+      <p style="font-size:12.5px;margin:10px 0 0">${verdictHTML()}</p>`;
+    document.getElementById("ccStart").onclick = () => { primeSpeak(); next(); };
+  };
+  const next = () => {
+    i++;
+    if (i >= items.length) return finish();
+    const it = items[i];
+    card.innerHTML = `${head()}
+      <div style="text-align:center;padding:10px 0">
+        <button class="primary" id="ccPlay" style="font-size:17px">🔊 hear it again</button>
+        <p style="font-size:14px;color:var(--muted);margin:12px 0">…what does it mean?</p>
+        <button id="ccReveal" style="font-size:15px">show the answer</button>
+      </div>`;
+    const play = () => speak(byKey[it.key].ar, 0.7);
+    document.getElementById("ccPlay").onclick = play;
+    document.getElementById("ccReveal").onclick = () => reveal(it);
+    play();
+  };
+  const reveal = it => {
+    const v = byKey[it.key];
+    card.innerHTML = `${head()}
+      <div style="text-align:center;padding:6px 0">
+        <div class="arabic" dir="rtl" style="font-size:34px">${v.ar}</div>
+        ${v.tr ? `<div style="font-size:14px;color:var(--muted);font-style:italic">${v.tr}</div>` : ""}
+        <div style="font-size:19px;font-weight:700;margin:6px 0 14px">${v.en}</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button id="ccNo" style="min-width:130px">✗ didn't have it</button>
+          <button class="primary" id="ccYes" style="min-width:130px">✓ had it</button>
+        </div>
+      </div>`;
+    const grade = ok => {
+      const preBox = boxOf(it.key);          // record the box BEFORE the grade moves it
+      gradeCard(it.key, ok ? "good" : "again");
+      const ev = { e: "commute-check", key: it.key, trained: it.trained, ok, box: preBox };
+      logEvent(ev); checks.push(ev); results.push(ev);
+      next();
+    };
+    document.getElementById("ccYes").onclick = () => grade(true);
+    document.getElementById("ccNo").onclick = () => grade(false);
+  };
+  const finish = () => {
+    logEvent({ e: "commute-check-done", forT: lastCommute.t, n: results.length });
+    autoSync();
+    const got = results.filter(r => r.ok).length;
+    card.innerHTML = `<h2>🚗 Commute check — done</h2>
+      <p style="font-size:14px;margin:0 0 6px">${got}/${results.length} by ear — all ${results.length} graded into your review boxes, nothing wasted.</p>
+      <p style="font-size:13px;margin:0">${verdictHTML()}</p>`;
+  };
+  intro();
 })();
 </script>
 </body>

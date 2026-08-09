@@ -276,6 +276,7 @@
       let w = 0, ok = false, key = e.key;
       if (e.e === "sheet" && e.mode === "ears" && key) { w = 1; ok = !!e.ok || !!e.heard; }
       else if (e.e === "alisten-grade" && key) { w = SKILL_CAL.SELF_GRADE_W; ok = !!e.ok; }
+      else if (e.e === "commute-check" && key) { w = SKILL_CAL.SELF_GRADE_W; ok = !!e.ok; } // by-ear reveal, self-verdict
       else if (e.e === "qlisten-test" && key) { w = 1.2; ok = !!e.ok; } // a real cold test
       else continue;
       (byKey[key] = byKey[key] || []).push({ t: e.t, ok, w });
@@ -491,7 +492,7 @@
       if (!e || !e.t || e.t < 16e11) continue;
       if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
       else if (e.e === "review" || e.e === "qfill") graded++;
-      else if (e.e === "alisten-grade") { graded++; ear++; }
+      else if (e.e === "alisten-grade" || e.e === "commute-check") { graded++; ear++; }
       else if (e.e === "speak" || e.e === "spract" || e.e === "trans") { graded++; out++; }
     }
     return {
@@ -517,7 +518,7 @@
     for (const e of log || []) {
       if (!e || !e.t || e.t < 16e11 || (uptoT && e.t > uptoT)) continue;
       if (e.e === "sheet" && e.mode === "ears") m += 0.4;
-      else if (e.e === "alisten" || e.e === "alisten-grade") m += 0.3;
+      else if (e.e === "alisten" || e.e === "alisten-grade" || e.e === "commute-check") m += 0.3;
       else if (e.e === "alisten-sent") m += 0.5;
       else if (e.e === "rlisten" || e.e === "listen-click") m += 1.5;
       else if (e.e === "dict") m += 1;

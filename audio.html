@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msl4gdlh">
-  <link rel="stylesheet" href="css/style.css?v=msl4gdlh">
+  <link rel="stylesheet" href="css/fonts.css?v=mslnj77v">
+  <link rel="stylesheet" href="css/style.css?v=mslnj77v">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=msl4gdlh"></script>
-<script src="js/tracker.js?v=msl4gdlh"></script>
-<script src="js/plan.js?v=msl4gdlh"></script>
+<script src="js/app.js?v=mslnj77v"></script>
+<script src="js/tracker.js?v=mslnj77v"></script>
+<script src="js/plan.js?v=mslnj77v"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -49,6 +49,8 @@ const content = document.getElementById("content");
 const WORDS_PER_SENT = 6;          // a whole-sentence round every ~6 words
 const RECALL_MS = 2800;            // silence to recall a word's meaning by ear
 const SENT_RECALL_MS = 5000;       // sentences get more time — he asked for it
+const COMMUTE_MIN = 13;            // commute session content budget (~15 min door to door)
+const IS_COMMUTE_LINK = new URLSearchParams(location.search).has("commute");
 
 let words = [];        // [{key, v:{ar,en,tr}}]
 let sents = [];        // conjugated sentences from Sentence Practice
@@ -128,7 +130,44 @@ function sleepP(ms) {
     S.cancel = () => { clearTimeout(t); resolve(); };
   });
 }
+/* commute gaps are AUDIO (silent wav through the primed element), not timers —
+   with the phone locked in a pocket, background timers throttle but a page
+   that is continuously *playing* keeps its audio chain alive. */
+function gapP(sec) {
+  return new Promise(resolve => {
+    let done = false;
+    const fin = () => { if (!done) { done = true; resolve(); } };
+    S.cancel = () => { stopSpeak(); fin(); };
+    try {
+      stopSpeak();
+      const a = _getSpeakEl();
+      a.onended = () => { a.onended = null; a.onerror = null; fin(); };
+      a.onerror = () => { a.onended = null; a.onerror = null; setTimeout(fin, sec * 1000); };
+      a.src = `audio/ui/gap${sec}.wav`;
+      a.playbackRate = 1;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => setTimeout(fin, sec * 1000));
+      setTimeout(fin, sec * 1000 + 4000); // bound the wait whatever happens
+    } catch (e) { setTimeout(fin, sec * 1000); }
+  });
+}
 function stopAllAudio() { stopSpeak(); if (S && S.audio) { try { S.audio.pause(); } catch (e) {} S.audio = null; } }
+
+/* lock-screen / headphone / car controls */
+function setMediaSession() {
+  if (!("mediaSession" in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: S && S.commute ? "🚗 Arabic commute — recall in the gaps" : "🎧 Audio Coach",
+      artist: "Arabic Through Stories",
+    });
+    navigator.mediaSession.setActionHandler("pause", () => pause());
+    navigator.mediaSession.setActionHandler("play", () => resume());
+    navigator.mediaSession.setActionHandler("nexttrack", () => skip());
+    navigator.mediaSession.playbackState = "playing";
+  } catch (e) {}
+}
+function commuteElapsedMs() { return S ? Date.now() - S.t0 - (S.pausedMs || 0) : 0; }
 
 /* ---------- wake lock: keep the screen awake on the move ---------- */
 let wakeLock = null;
@@ -146,7 +185,9 @@ function setWord(v, showEn) {
 }
 function setCounter() {
   const c = document.getElementById("acCount");
-  if (c) c.textContent = `${S.taught} word${S.taught === 1 ? "" : "s"} heard${S.sents ? ` · ${S.sents} sentence${S.sents === 1 ? "" : "s"} rebuilt` : ""}`;
+  if (!c) return;
+  const left = S.commute ? Math.max(0, Math.ceil(COMMUTE_MIN - commuteElapsedMs() / 60000)) : 0;
+  c.textContent = `${S.taught} word${S.taught === 1 ? "" : "s"} heard${S.sents ? ` · ${S.sents} sentence${S.sents === 1 ? "" : "s"} rebuilt` : ""}${S.commute ? ` · ~${left} min left` : ""}`;
 }
 
 /* ---- self-grading: his word, his call — feeds the same SRS as Review ----
@@ -155,6 +196,7 @@ function setCounter() {
    ✗ = gradeCard "again" AND the word returns a couple of beats later in
    this same session. No tap = pure listening, ungraded (unchanged). */
 function showGrade(on) {
+  if (on && S && S.commute) return;   // commute is fully hands-free — no grade taps
   const g = document.getElementById("acGrade");
   if (g) g.style.display = on ? "flex" : "none";
 }
@@ -223,7 +265,7 @@ function render(state) {
       <span>🎧 Audio Coach</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">المُدَرِّبُ الصَّوتِيّ</span>
     </h1>
-    <p class="sub">Hands-free practice for the move. Listen to a word, <b>recall its meaning in the gap</b>, then hear the answer — real active recall, no typing, no tapping. Every few words: a whole <b>sentence</b> to understand, with extra thinking time. It keeps going until you stop.</p>
+    <p class="sub">Hands-free practice for the move. Listen to a word, <b>recall its meaning in the gap</b>, then hear the answer — real active recall, no typing, no tapping. Every few words: a whole <b>sentence</b> to understand, with extra thinking time. <b>🚗 Commute session</b> runs itself for ~${COMMUTE_MIN} minutes and stops — pocket the phone and just listen; the next morning your dashboard checks what stuck.</p>
     <div class="ac-stage">
       <div class="ac-status" id="acStatus">${state === "ready" ? "Ready when you are" : ""}</div>
       <div class="ac-ar" id="acAr"></div>
@@ -250,8 +292,13 @@ function render(state) {
 function renderControls(state) {
   const c = document.getElementById("acControls");
   if (state === "ready") {
-    c.innerHTML = `<button class="ac-btn primary" id="acStart">▶ Start listening</button>`;
-    document.getElementById("acStart").onclick = start;
+    c.innerHTML = `
+      <button class="ac-btn primary" id="acCommute" style="min-width:230px">🚗 Commute session — ${COMMUTE_MIN} min, hands-free</button>
+      <button class="ac-btn ghost" id="acStart">▶ Open-ended</button>
+      <div style="flex-basis:100%;text-align:center;font-size:12px;color:var(--muted)" id="acPrefetch"></div>`;
+    document.getElementById("acStart").onclick = () => start(false);
+    document.getElementById("acCommute").onclick = () => start(true);
+    prefetchClips();
   } else if (state === "playing") {
     c.innerHTML = `
       <button class="ac-btn ghost" id="acSkip">⏭ Skip</button>
@@ -272,15 +319,17 @@ function renderControls(state) {
 }
 
 /* ---------- the sequencer ---------- */
-async function start() {
+async function start(commute) {
   primeSpeak();          // synchronously, inside the tap: unlocks mobile audio for the whole loop
   heardLog = [];
   setStatus("Loading your words…");
   [words, sents] = await Promise.all([buildWords(), buildSentences()]);
   if (!words.length) { setStatus("No words yet — study a little first, then come back."); return; }
-  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, known: 0, current: null, graded: true, cancel: null, audio: null, onResume: null };
-  logEvent({ e: "alisten-start", pool: words.length });
+  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, known: 0, current: null, graded: true, cancel: null, audio: null, onResume: null,
+        commute: !!commute, t0: Date.now(), pausedMs: 0, pauseAt: 0 };
+  logEvent(commute ? { e: "commute-start", pool: words.length } : { e: "alisten-start", pool: words.length });
   acquireWake();
+  setMediaSession();
   render("playing");
   runLoop();
 }
@@ -290,12 +339,15 @@ function nextSent() { const x = sents[S.sIdx % sents.length]; S.sIdx++; return x
 
 async function runLoop() {
   // opening line, once
-  await speakP("Audio coach. Listen, and recall the meaning before I say it.", 1);
+  await speakP(S.commute
+    ? "Commute session. Hands free. Recall each meaning in the gap, before I say it."
+    : "Audio coach. Listen, and recall the meaning before I say it.", 1);
   while (S && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
+    if (S.commute && commuteElapsedMs() > COMMUTE_MIN * 60000) break;   // the 15-min promise
     // a word beat
     const card = nextWord();
-    if (S.stop) break;
+    if (!S || S.stop) break;   // stop() may have nulled S while the last await settled
     // reset here, not only at loop bottom: a skip/✓ lands via `continue`, which
     // bypasses the bottom reset and would silently truncate every later word
     S.skip = false;
@@ -309,16 +361,18 @@ async function runLoop() {
     await beat(() => speakP(card.v.ar, 0.7));
     if (guard()) continue;
     setStatus("…what does it mean?"); document.getElementById("acNote").textContent = "recall it now";
-    await beat(() => sleepP(RECALL_MS));
+    await beat(() => S.commute ? gapP(3) : sleepP(RECALL_MS));
     if (guard()) continue;
     setStatus("It means:"); setWord(card.v, true); document.getElementById("acNote").textContent = "";
     await beat(() => speakP(card.v.en, 1));
     if (guard()) continue;
     await beat(() => speakP(card.v.ar, 0.7));      // hear it once more, now that you know it
+    if (!S) break;
     if (!S.paused && !S.skip) { S.taught++; setCounter(); logEvent({ e: "alisten", key: card.key }); }
     if (guard()) continue;
-    await beat(() => sleepP(500));
+    if (!S.commute) await beat(() => sleepP(500));   // commute: no timers at all — the chain must stay audio
 
+    if (!S) break;
     // a whole-sentence round every few words — real conjugations, extra time
     if (S.taught && S.taught % WORDS_PER_SENT === 0 && !S.skip && sents.length) {
       if (S.stop) break;
@@ -330,7 +384,7 @@ async function runLoop() {
       if (!guard()) {
         setStatus("…take your time. Who is doing it, and when?");
         document.getElementById("acNote").textContent = "whole meaning — person and tense too";
-        await beat(() => sleepP(SENT_RECALL_MS));
+        await beat(() => S.commute ? gapP(5) : sleepP(SENT_RECALL_MS));
         if (!guard()) {
           setStatus("It means:"); setWord({ ar: sent.ar, en: sent.en, tr: "" }, true);
           document.getElementById("acNote").textContent = "";
@@ -342,9 +396,16 @@ async function runLoop() {
           }
         }
       }
-      await beat(() => sleepP(400));
+      if (S && !S.commute) await beat(() => sleepP(400));
     }
+    if (!S) break;
     S.skip = false;
+  }
+  // commute budget spent (not a manual stop): sign off properly, then finish
+  if (S && S.commute && !S.stop) {
+    setStatus("Session complete");
+    await speakP("That's your commute session done. Every word counted. Well done.", 1);
+    stop();
   }
 }
 
@@ -352,23 +413,27 @@ async function runLoop() {
 function beat(fn) { return fn(); }
 // after a step, decide whether to restart the current word (pause) — returns true if the loop should `continue`
 function guard() {
-  if (S.stop) return true;
+  if (!S || S.stop) return true;   // S is nulled by stop() — a settling await must not touch it
   if (S.paused) return true;   // loop will await resume, then fall through to next word
   if (S.skip) { stopAllAudio(); return true; }
   return false;
 }
 
 function pause() {
-  if (!S) return;
-  S.paused = true; if (S.cancel) S.cancel();
+  if (!S || S.paused) return;
+  S.paused = true; S.pauseAt = Date.now(); if (S.cancel) S.cancel();
   stopAllAudio(); releaseWake();
+  try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused"; } catch (e) {}
   render("paused"); setStatus("Paused — mark the words below, or just resume"); setCounter();
   renderRecap();
 }
 function resume() {
-  if (!S) return;
+  if (!S || !S.paused) return;
   primeSpeak();   // make sure the shared audio element is unlocked (no-op once primed)
-  S.paused = false; acquireWake();
+  S.paused = false;
+  if (S.pauseAt) { S.pausedMs += Date.now() - S.pauseAt; S.pauseAt = 0; }  // paused time doesn't eat the budget
+  acquireWake();
+  try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; } catch (e) {}
   render("playing"); setCounter();
   if (S.onResume) { const r = S.onResume; S.onResume = null; r(); }
 }
@@ -377,16 +442,52 @@ function stop() {
   if (!S) return;
   S.stop = true; S.playing = false; if (S.cancel) S.cancel();
   stopAllAudio(); releaseWake();
-  logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known }); autoSync();
+  try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "none"; } catch (e) {}
+  const wasCommute = S.commute;
+  if (wasCommute) {
+    // the trained set: what tomorrow's dashboard check measures against matched controls
+    logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
+               min: Math.round(commuteElapsedMs() / 60000) });
+  } else {
+    logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known });
+  }
+  autoSync();
   const t = S.taught, r = S.sents, k = S.known;
   render("ready");
-  setStatus(t || k ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${k ? `, ${k} marked known` : ""}${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped.");
+  setStatus(wasCommute
+    ? `🚗 Commute done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} sentence${r === 1 ? "" : "s"}` : ""}. Tomorrow the dashboard checks what stuck.`
+    : (t || k ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${k ? `, ${k} marked known` : ""}${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped."));
   S = null;
   renderRecap();
 }
 window.addEventListener("pagehide", () => { if (S) { S.stop = true; stopAllAudio(); releaseWake(); } });
 
+/* warm the audio cache while on Wi-Fi so a commute works with no signal —
+   the service worker keeps every /audio/ fetch in its persistent audio cache */
+let _prefetched = false;
+async function prefetchClips() {
+  const el = () => document.getElementById("acPrefetch");
+  if (_prefetched) { if (el()) el().textContent = "✓ clips cached — works offline"; return; }
+  if (!navigator.onLine) return;
+  _prefetched = true;
+  try {
+    if (typeof _audioManLoading !== "undefined" && _audioManLoading) await _audioManLoading;
+    const [w, s] = await Promise.all([buildWords(), buildSentences()]);
+    const urls = new Set(["audio/ui/gap3.wav", "audio/ui/gap5.wav"]);
+    const addT = t => { const f = typeof _audioFileFor === "function" ? _audioFileFor(t) : null; if (f) urls.add(f); };
+    addT("Commute session. Hands free. Recall each meaning in the gap, before I say it.");
+    addT("That's your commute session done. Every word counted. Well done.");
+    addT("Audio coach. Listen, and recall the meaning before I say it.");
+    w.forEach(c => { addT(c.v.ar); addT(c.v.en); });
+    s.slice(0, 12).forEach(x => { addT(x.ar); addT(x.en); });
+    let n = 0;
+    for (const u of urls) { try { const r = await fetch(u); if (r.ok) n++; } catch (e) {} }
+    if (el()) el().textContent = `✓ ${n} clips cached — commute works offline`;
+  } catch (e) { _prefetched = false; }
+}
+
 render("ready");
+if (IS_COMMUTE_LINK) setStatus("Ready for the drive — one tap 🚗, then pocket the phone");
 </script>
 </body>
 </html>
