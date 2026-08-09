@@ -219,6 +219,14 @@ function planCurrent(p) { return p.blocks.find(b => !b.done) || null; }
 function planObserve(ev) {
   const p = store.get(PLAN_KEY, null);
   if (!p || p.completedAt || p.date !== planToday()) return;
+  // 🚗 a FULL commute session (≥10 min hands-free) delivers the whole day —
+  // audio and screen are parallel delivery lines that meet at the test (his
+  // 2026-08-09 design). The plan measures time-in; the SRS and the checks,
+  // not block ticks, remain the measure of what was actually learnt.
+  if (ev.e === "commute-done" && (ev.min || 0) >= 10) {
+    p.blocks.filter(b => !b.done).forEach(b => planFinishBlock(p, b, "commute"));
+    return;
+  }
   const cur = planCurrent(p);
   if (!cur) return;
   const def = PLAN_BLOCKS[cur.type];
@@ -339,6 +347,14 @@ function planRenderCard(el) {
       ? `<div class="plan-row done">${inner}</div>`
       : `<a class="plan-row ${state}" href="${b.url}">${inner}</a>`;
   }).join("");
+  // the parallel delivery line (his drawing): same day, hands-free — always visible
+  const commuteRow = p.completedAt ? "" : `
+    <a class="plan-row" href="audio.html?commute=1" style="border:1px dashed var(--accent);background:transparent">
+      <div class="pl-num">🚗</div>
+      <div><div class="pl-t">…or do today hands-free</div>
+      <div class="pl-s">On the move? One full commute session (~13 min, just listening) counts as the whole day — tomorrow's 90-second check verifies what stuck.</div></div>
+      <div class="pl-go">Start →</div>
+    </a>`;
   el.innerHTML = `
     ${planLessonStripHTML()}
     <div class="plan-head">
@@ -346,6 +362,7 @@ function planRenderCard(el) {
       <span class="plan-count">${doneN}/${p.blocks.length}</span>
     </div>
     ${rows}
+    ${commuteRow}
     ${p.completedAt ? `
       <div class="plan-fin">
         <div style="font-size:16px;font-weight:700">أَحْسَنْت — nothing more is asked of you today.</div>
