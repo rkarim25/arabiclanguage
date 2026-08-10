@@ -359,7 +359,8 @@ function planBarHTML(p) {
   const here = (location.pathname.split("/").pop() || "index.html").startsWith(cur.page);
   return `${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
     ${here ? `<button class="pb-tick" title="mark this block done">✓ done</button>`
-           : `<a href="${cur.url}" class="pb-next">start →</a>`}`;
+           : `<a href="${cur.url}" class="pb-next">start →</a>`}
+    <a href="index.html" class="pb-plan" title="back to today's plan">📋 plan</a>`;
 }
 function planPaintBar() {
   const bar = document.getElementById("planBar");

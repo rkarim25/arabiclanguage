@@ -209,7 +209,14 @@ function editDist(a, b, cap) {
 function arMatch(typed, target) {
   const t = normalizeAr(typed);
   if (!t) return false;
-  const cands = [target, ...target.split("/")].map(normalizeAr).filter(Boolean);
+  const cands = [];
+  [target, ...target.split("/")].forEach(r => {
+    const n = normalizeAr(r);
+    if (!n || cands.includes(n)) return;
+    cands.push(n);
+    // tanwin target (شُكْرًا): typed "shukran" converts to شكرن — accept that too
+    if (/ً/.test(r) && n.endsWith("ا")) cands.push(n.slice(0, -1) + "ن");
+  });
   if (cands.includes(t)) return true;
   const fold = s => s.replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
   const tf = fold(t), tfns = tf.replace(/ /g, "");
@@ -803,6 +810,8 @@ function normalizeAr(s) {
   return stripTashkeel(s)
     .replace(/[أإآٱ]/g, "ا")
     .replace(/ى/g, "ي")
+    // punctuation is never part of an answer — a target "وَأَنْتَ؟" must accept "wa anta"
+    .replace(/[؟،؛]/g, "")
     .replace(/[^؀-ۿ\s]/g, "")
     .replace(/\s+/g, " ")
     .trim();

@@ -473,6 +473,7 @@ footer a { color: var(--accent); }
 #planBar .pb-next { color: var(--accent); font-weight: 700; white-space: nowrap; }
 #planBar .pb-tick { border-color: var(--accent); color: var(--accent); border-radius: 999px; font-size: 12.5px; padding: 3px 12px; }
 #planBar .pb-done { font-weight: 700; color: var(--accent); }
+#planBar .pb-plan { color: var(--muted); font-weight: 600; white-space: nowrap; }
 body:has(#planBar) main { padding-bottom: 56px; }
 
 /* ---------- review control strip (mobile-safe: its own full-width row) ---------- */

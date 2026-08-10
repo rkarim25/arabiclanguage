@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msloo8d6">
-  <link rel="stylesheet" href="css/style.css?v=msloo8d6">
+  <link rel="stylesheet" href="css/fonts.css?v=msmjphcd">
+  <link rel="stylesheet" href="css/style.css?v=msmjphcd">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -56,9 +56,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=msloo8d6"></script>
-<script src="js/tracker.js?v=msloo8d6"></script>
-<script src="js/plan.js?v=msloo8d6"></script>
+<script src="js/app.js?v=msmjphcd"></script>
+<script src="js/tracker.js?v=msmjphcd"></script>
+<script src="js/plan.js?v=msmjphcd"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -871,6 +871,8 @@ function renderGroupFill(obj, prefix) {
     tbody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), `${prefix}${obj.id}:${i}`);
   });
+  // seamless: English letters become Arabic in the box itself, same as the sheets
+  tbody.querySelectorAll(".fill-input").forEach(attachInlineTranslit);
 
   document.getElementById("fillShowAll").onclick = () => {
     obj.members.forEach((m, i) => showRow(i, true));
@@ -952,6 +954,8 @@ function renderGroupDrill(obj, prefix) {
     `;
     const input = document.getElementById("dIn");
     currentInput = input;
+    // seamless: English letters become Arabic in the box itself, same as the sheets
+    attachInlineTranslit(input);
     input.focus();
     const submit = () => {
       const key = `${prefix}${obj.id}:${i}`;
