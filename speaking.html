@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msp3qut7">
-  <link rel="stylesheet" href="css/style.css?v=msp3qut7">
+  <link rel="stylesheet" href="css/fonts.css?v=mspnxfey">
+  <link rel="stylesheet" href="css/style.css?v=mspnxfey">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -49,9 +49,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msp3qut7"></script>
-<script src="js/tracker.js?v=msp3qut7"></script>
-<script src="js/plan.js?v=msp3qut7"></script>
+<script src="js/app.js?v=mspnxfey"></script>
+<script src="js/tracker.js?v=mspnxfey"></script>
+<script src="js/plan.js?v=mspnxfey"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -69,6 +69,7 @@ const BATCH = 10;
    automatically if this device's recognition can't share the mic). */
 let _live = null;      // { rec, mediaRec, stream, watchdog, reset }
 let _recOwnVoice = true; // flips off if recording breaks recognition on this device
+let _recFails = 0;       // consecutive empty takes while also recording
 function stopDictation() {
   const L = _live;
   if (!L) return;
@@ -92,6 +93,14 @@ function dictate(btn, idleLabel, cb) {
     if (_live !== L) return;                 // superseded by a newer dictation
     _live = null;
     clearTimeout(L.watchdog);
+    // If recording rode along and the recognizer still heard nothing twice in a
+    // row, this device won't share the mic — drop self-recording so dictation
+    // gets it alone (his 08-11 note: "I press microphone but nothing records").
+    if (heard) _recFails = 0;
+    else if (L.mediaRec && ++_recFails >= 2 && _recOwnVoice) {
+      _recOwnVoice = false;
+      errMsg = "didn't catch that — tap 🎤 once more (▶ hear-yourself is now off so the mic can listen properly)";
+    }
     L.reset();
     try { rec.onend = null; rec.stop(); } catch (e) {}
     const done = url => cb(heard, url, errMsg);
@@ -118,7 +127,9 @@ function dictate(btn, idleLabel, cb) {
       : "didn't catch that — tap 🎤 to try again");
   };
   rec.onend = () => finish(null, "didn't catch that — tap 🎤 to try again");
-  L.watchdog = setTimeout(() => { try { rec.stop(); } catch (e) {} }, 9000);
+  // The watchdog must resolve the take itself: rec.stop() on a recognizer that
+  // never started throws (swallowed) and leaves the row on "listening…" forever.
+  L.watchdog = setTimeout(() => finish(null, "didn't catch that — tap 🎤 to try again"), 9000);
   const start = () => { try { rec.start(); } catch (e) { finish(null, "mic is busy — tap 🎤 to try again"); } };
   if (_recOwnVoice && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
