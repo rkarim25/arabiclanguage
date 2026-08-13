@@ -1269,23 +1269,46 @@ function attachInlineTranslit(el, opts) {
     }
     const parts = el.value.split(" ");
     const last = foldW(parts[parts.length - 1]);
+    const prev = parts.length >= 2 ? foldW(parts[parts.length - 2]) : "";
+    const joined = prev ? prev + last : "";   // "ال مشجد" typed with a space → المشجد
+    // lower score = closer match; null = no match
+    const scoreAgainst = (wn, probe) => {
+      if (!probe || probe.length < 2 || wn === probe) return null;
+      if (wn.startsWith(probe)) return (wn.length - probe.length) * 0.5;
+      if (probe.length >= 3) {
+        const d = editDist(wn, probe, 2);
+        if (d <= (wn.length >= 6 ? 2 : 1)) return d + 0.1;
+      }
+      return null;
+    };
     let cands = [];
-    if (last.length >= 2) {
-      cands = lex.filter(w => {
+    if (last.length >= 2 || joined.length >= 3) {
+      cands = lex.map(w => {
         const wn = foldW(w);
-        if (!wn || wn === last) return false;
-        return wn.startsWith(last) || (last.length >= 3 && editDist(wn, last, 2) <= (wn.length >= 6 ? 2 : 1));
-      }).slice(0, 3);
+        if (!wn) return null;
+        const bare = wn.replace(/^ال/, "");   // مشجد should still find المسجد
+        let best = null, span = 1;
+        // an exact two-token join ("ال"+"مشجد"→المشجد) is the best possible fix, cost 0
+        const sJoin = !joined ? null : (wn === joined ? 0 : scoreAgainst(wn, joined));
+        [[scoreAgainst(wn, last), 0, 1],
+         [bare !== wn ? scoreAgainst(bare, last) : null, 0.2, 1],
+         [sJoin, 0, 2]].forEach(([s, pen, sp]) => {
+          if (s !== null && (best === null || s + pen < best)) { best = s + pen; span = sp; }
+        });
+        return best === null ? null : { w, best, span };
+      }).filter(Boolean)
+        .sort((a, b) => a.best - b.best || a.w.length - b.w.length)
+        .slice(0, 3);
     }
     bar.innerHTML = "";
-    cands.forEach(w => {
+    cands.forEach(c => {
       const b = document.createElement("button");
       b.type = "button";
-      b.textContent = w;
+      b.textContent = c.w;
       b.style.cssText = "font-family:var(--font-ar);font-size:19px;border:1px solid var(--border);background:var(--card);color:var(--accent);border-radius:999px;padding:2px 14px;cursor:pointer";
       b.onmousedown = e => e.preventDefault();
       b.onclick = () => {
-        parts[parts.length - 1] = w;
+        parts.splice(parts.length - c.span, c.span, c.w);
         committed = parts.join(" ");
         raw = "";
         el.value = committed;

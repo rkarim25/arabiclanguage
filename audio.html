@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mspnxfey">
-  <link rel="stylesheet" href="css/style.css?v=mspnxfey">
+  <link rel="stylesheet" href="css/fonts.css?v=msqu060l">
+  <link rel="stylesheet" href="css/style.css?v=msqu060l">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mspnxfey"></script>
-<script src="js/tracker.js?v=mspnxfey"></script>
-<script src="js/plan.js?v=mspnxfey"></script>
+<script src="js/app.js?v=msqu060l"></script>
+<script src="js/tracker.js?v=msqu060l"></script>
+<script src="js/plan.js?v=msqu060l"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -159,11 +159,19 @@ function setMediaSession() {
   try {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: S && S.commute ? "🚗 Arabic commute — recall in the gaps" : "🎧 Audio Coach",
-      artist: "Arabic Through Stories",
+      artist: "⏭ = I had it · ⏮ = didn't, bring it back",
     });
     navigator.mediaSession.setActionHandler("pause", () => pause());
     navigator.mediaSession.setActionHandler("play", () => resume());
-    navigator.mediaSession.setActionHandler("nexttrack", () => skip());
+    // lock-screen grading (his ✏️ ask): ⏭ marks the current word known and moves on
+    // (falls back to a plain skip during sentences / after grading); ⏮ marks it
+    // missed so it comes back a couple of beats later. No tap = ungraded listening.
+    navigator.mediaSession.setActionHandler("nexttrack", () => {
+      if (S && S.current && !S.graded) gradeWord(true); else skip();
+    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => {
+      if (S && S.current && !S.graded) gradeWord(false);
+    });
     navigator.mediaSession.playbackState = "playing";
   } catch (e) {}
 }
@@ -196,7 +204,8 @@ function setCounter() {
    ✗ = gradeCard "again" AND the word returns a couple of beats later in
    this same session. No tap = pure listening, ungraded (unchanged). */
 function showGrade(on) {
-  if (on && S && S.commute) return;   // commute is fully hands-free — no grade taps
+  // commute stays hands-free (no tap needed), but the taps are OFFERED there too —
+  // his ✏️ ask: grade while listening, not only at the end recap
   const g = document.getElementById("acGrade");
   if (g) g.style.display = on ? "flex" : "none";
 }
@@ -280,7 +289,8 @@ function render(state) {
     <div class="ac-controls" id="acControls"></div>
     <div class="ac-meta"><span id="acCount"></span></div>
     <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
-    Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.</p>
+    Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.
+    Phone in your pocket? The <b>lock-screen buttons work too</b>: <b>⏭ = I had it</b>, <b>⏮ = didn't — bring it back</b>.</p>
     <div id="acRecap"></div>
   `;
   const yes = document.getElementById("acYes"), no = document.getElementById("acNo");
