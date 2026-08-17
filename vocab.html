@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msqu060l">
-  <link rel="stylesheet" href="css/style.css?v=msqu060l">
+  <link rel="stylesheet" href="css/fonts.css?v=msxpbw2n">
+  <link rel="stylesheet" href="css/style.css?v=msxpbw2n">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -56,9 +56,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=msqu060l"></script>
-<script src="js/tracker.js?v=msqu060l"></script>
-<script src="js/plan.js?v=msqu060l"></script>
+<script src="js/app.js?v=msxpbw2n"></script>
+<script src="js/tracker.js?v=msxpbw2n"></script>
+<script src="js/plan.js?v=msxpbw2n"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -919,10 +919,28 @@ function renderGroupFill(obj, prefix) {
   };
 }
 
-/* ---------- Drill: rapid-fire mastery of a family/cluster ---------- */
-function renderGroupDrill(obj, prefix) {
+/* ---------- Drill: LEARN first, then rapid-fire mastery ----------
+   His 2026-08-13 note (after scoring 0/8 on a set he had never been taught):
+   "i understand rapid fire. but it should be able to learn it and then do rapid
+   fire again. now it just shows the arabic writing after the drill and it is not
+   very clear either as english, transliteration is missing".
+   So: anything he hasn't met yet gets a 60-second learn pass first, and every
+   reveal — mid-drill and at the end — carries English + Arabic + transliteration. */
+function drillMet(key) {
+  const c = getSrs()[key];
+  return !!c && (((c.box || 0) >= 1) || (c.b && c.b !== "repeat"));
+}
+
+function renderGroupDrill(obj, prefix, opts) {
+  opts = opts || {};
   const body = document.getElementById("famBody");
-  const order = obj.members.map((m, i) => i).sort(() => 0.5 - Math.random());
+  const idxs = (opts.only && opts.only.length ? opts.only : obj.members.map((m, i) => i)).slice();
+  const unmet = idxs.filter(i => !drillMet(`${prefix}${obj.id}:${i}`));
+  // learn pass when most of this set is new to him (or he asked to relearn)
+  if (!opts.skipLearn && (opts.forceLearn || unmet.length >= Math.max(2, Math.ceil(idxs.length / 2)))) {
+    return renderDrillLearn(obj, prefix, idxs, opts);
+  }
+  const order = idxs.sort(() => 0.5 - Math.random());
   let pos = 0, right = 0;
   const misses = [];
   const t0 = Date.now();
@@ -934,9 +952,11 @@ function renderGroupDrill(obj, prefix) {
       <div class="drill-stage" id="stage"></div>
       <div class="ex-row" style="justify-content:center">
         <button class="small" id="kbToggle">⌨ keyboard</button>
+        <button class="small" id="dRelearn">📖 learn them first instead</button>
       </div>
     </div>
   `;
+  document.getElementById("dRelearn").onclick = () => renderDrillLearn(obj, prefix, idxs.slice(), opts);
   const stage = document.getElementById("stage");
   let currentInput = null;
   document.getElementById("kbToggle").onclick = () => mountKbDock(() => currentInput);
@@ -979,20 +999,28 @@ function renderGroupDrill(obj, prefix) {
 
   function finish() {
     const secs = Math.round((Date.now() - t0) / 1000);
+    const total = order.length;
     setStepDone(prefix + obj.id, "drill");
-    logEvent({ e: "drill-done", fam: prefix + obj.id, score: right, total: order.length, secs, misses: misses.length });
+    logEvent({ e: "drill-done", fam: prefix + obj.id, score: right, total, secs, misses: misses.length });
     autoSync();
+    const missIdx = misses.slice();
     stage.innerHTML = `
-      <div style="font-size:22px;font-weight:700">${right} / ${order.length} in ${secs}s ${right === order.length ? "— ممتاز! 🎉" : ""}</div>
-      ${misses.length ? `<p style="font-size:14px;color:var(--muted)">Missed: ${misses.map(i => `<span class="arabic" style="font-size:19px">${obj.members[i].ar}</span>`).join("، ")}</p>` : ""}
-      <div class="ex-row" style="justify-content:center;margin-top:10px">
-        ${misses.length ? `<button class="primary" id="dMisses">Drill the misses (${misses.length})</button>` : ""}
+      <div style="font-size:22px;font-weight:700">${right} / ${total} in ${secs}s ${right === total ? "— ممتاز! 🎉" : ""}</div>
+      ${missIdx.length ? `
+      <p style="font-size:13.5px;color:var(--muted);margin:10px 0 4px">The ones that didn't come out — read each row aloud:</p>
+      ${drillRowsHTML(obj, missIdx)}` : ""}
+      <div class="ex-row" style="justify-content:center;margin-top:12px;flex-wrap:wrap">
+        ${missIdx.length ? `<button class="primary" id="dRelearnMiss">📖 Learn these ${missIdx.length}, then drill again</button>
+        <button id="dMisses">Drill the misses straight away</button>` : ""}
         <button id="dAgain">Drill all again</button>
       </div>
     `;
+    bindDrillRows(stage, obj);
+    const dr = document.getElementById("dRelearnMiss");
+    if (dr) dr.onclick = () => renderDrillLearn(obj, prefix, missIdx.slice(), { only: missIdx.slice(), forceLearn: true });
     const dm = document.getElementById("dMisses");
     if (dm) dm.onclick = () => {
-      order.length = 0; order.push(...misses.sort(() => 0.5 - Math.random()));
+      order.length = 0; order.push(...missIdx.sort(() => 0.5 - Math.random()));
       misses.length = 0; pos = 0; right = 0;
       ask();
     };
@@ -1000,6 +1028,48 @@ function renderGroupDrill(obj, prefix) {
   }
 
   ask();
+}
+
+/* English | Arabic 🔊 | transliteration — the shape he asks for every time */
+function drillRowsHTML(obj, idxs) {
+  return `<div class="vocab-table-wrap"><table class="vocab-table">
+    <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+    <tbody>${idxs.map(i => {
+      const m = obj.members[i];
+      return `<tr><td class="en-cell">${m.en}</td><td class="ar-cell">${m.ar}</td>
+        <td><span class="row-speak" data-i="${i}" style="cursor:pointer">🔊</span></td>
+        <td class="tr-cell">${m.tr}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
+}
+function bindDrillRows(root, obj) {
+  root.querySelectorAll(".row-speak[data-i]").forEach(el => {
+    el.onclick = () => speak(obj.members[+el.dataset.i].ar, 0.8);
+  });
+}
+
+/* the learn pass: see them, hear them, say them — then rapid fire */
+function renderDrillLearn(obj, prefix, idxs, opts) {
+  const body = document.getElementById("famBody");
+  logEvent({ e: "drill-learn", fam: prefix + obj.id, n: idxs.length });
+  body.innerHTML = `
+    <div class="card">
+      <h2>Learn these ${idxs.length} first — about a minute</h2>
+      <p class="sub" style="margin-bottom:10px">Say each one out loud with the 🔊, cover the Arabic column, then go. Rapid fire only works on words you've already met — that's what was missing before.</p>
+      ${drillRowsHTML(obj, idxs)}
+      <div class="ex-row" style="justify-content:center;margin-top:14px">
+        <button class="primary" id="dStart">Now drill me →</button>
+        <button class="small" id="dPlayAll">🔊 play them all</button>
+      </div>
+    </div>
+  `;
+  bindDrillRows(body, obj);
+  document.getElementById("dPlayAll").onclick = () => {
+    let k = 0;
+    const next = () => { if (k >= idxs.length) return; speak(obj.members[idxs[k++]].ar, 0.75); setTimeout(next, 1600); };
+    next();
+  };
+  document.getElementById("dStart").onclick = () =>
+    renderGroupDrill(obj, prefix, { ...(opts || {}), only: idxs.slice(), skipLearn: true, forceLearn: false });
 }
 
 /* ================= shared phonetic keyboard dock ================= */

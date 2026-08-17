@@ -58,6 +58,7 @@ const PLAN_BLOCKS = {
   speakdrill:{ icon: "🎤", title: () => "Speak round — mic on", sub: "Say them out loud. Spoken practice is the only thing that moves the speaking line.", url: "speaking.html", page: "speaking", done: ["drill-done", "prompt"] },
   sentences: { icon: "✍️", title: () => "Build 5 sentences", sub: "Conjugate and produce — I/we/they across the tenses.", url: "sentences.html", page: "sentences", done: ["spract-done"] },
   phrases:   { icon: "💬", title: c => "Phrases out loud — " + c, sub: "Whole sentences you'll actually say. Read each ALOUD before revealing.", url: c => `vocab.html?ph=${c}&mode=drill`, page: "vocab", done: ["drill-done", "fill-done"] },
+  story:     { icon: "📖", title: c => `${c.title} — ${c.stepEn}`, sub: c => c.sub, url: c => `story.html?id=${c.id}&step=${c.step}`, page: "story", done: ["story-step"] },
   ptest:     { icon: "🎯", title: () => "5-minute listening test", sub: "A measurement, not a drill — it anchors your chart and corrects the forecast.", url: "placement.html", page: "placement", done: ["ptest-listen"] },
   homework:  { icon: "📚", title: () => "Teacher homework", sub: "", url: "vocab.html?view=lessons", page: "vocab", done: ["fill-done", "drill-done", "sheet-done"] }, // display fields overridden in planMakeBlock
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
@@ -161,6 +162,29 @@ function planPickContent(options, date) {
   return pool[Math.floor(planHash(date + pool.join()) * pool.length) % pool.length];
 }
 
+/* The next story step waiting for him. His 2026-08-13 note: "in the lessons you
+   are not directing me to do any of the stories, which was the foundation of the
+   site" — he was right, there was no story block at all. Stories go step by step,
+   so the plan points at the FIRST unfinished step of the earliest unfinished
+   story and deep-links straight into it. */
+const STORY_STEP_SUB = {
+  listen: "Ears first — play it through before you read a word of it.",
+  read: "Read it with the glosses; tap anything you don't know.",
+  memorize: "The story's vocabulary, in a table — mark what holds.",
+  quiz: "Five questions on meaning — proves the story actually landed.",
+  speak: "Say every sentence out loud after the model.",
+  write: "Produce it: dictation and translation, typed in Arabic.",
+};
+function planNextStory() {
+  if (typeof STORY_LIST === "undefined" || typeof STEPS === "undefined") return null;
+  for (const s of STORY_LIST.filter(s => !s.locked)) {
+    const done = stepsDone(s.id);
+    const step = STEPS.find(st => !done[st.key]);
+    if (step) return { id: s.id, title: `Story ${s.n} — ${s.titleEn}`, step: step.key, stepEn: step.en, sub: STORY_STEP_SUB[step.key] || "" };
+  }
+  return null;
+}
+
 function planMakeBlock(type, date, dueN) {
   if (type === "homework") {
     const hw = planHomework();
@@ -180,11 +204,12 @@ function planMakeBlock(type, date, dueN) {
   let content = null;
   if (type === "phrases") content = planPickContent(PHRASE_GIDS, date);
   if (type === "salah") content = planPickContent(PLAN_SURAHS, date);
+  if (type === "story") content = planNextStory();
   return {
     type, content,
     icon: def.icon,
     title: typeof def.title === "function" ? def.title(type === "review" ? dueN : content) : def.title,
-    sub: def.sub,
+    sub: typeof def.sub === "function" ? def.sub(content) : def.sub,
     url: typeof def.url === "function" ? def.url(content) : def.url,
     page: def.page,
     mins: PLAN_BLOCK_MIN,
@@ -222,6 +247,9 @@ function planBuild(date, noBoost) {
     { type: "sentences", w: speakGap * 0.8 },
     { type: "newwords", w: dueN >= 4 ? 0.15 : 0 },  // only worth a slot when reviews didn't take block 1
   ];
+  // stories: the site's spine — one step at a time, and the longer since the last
+  // step the louder it gets (capped so it never crowds out ear/mouth work)
+  if (planNextStory()) cand.push({ type: "story", w: 0.30 + Math.min(0.35, planDaysSince("story-step") / 25) });
   // moderate-urgency homework competes on weight (steady progress beats a scramble)
   if (hw && !hw.past && hw.readiness < 100 && !blocks.some(b => b.type === "homework")) {
     cand.push({ type: "homework", w: 0.3 + 0.15 * ((hw.shakyN + hw.tasksLeft * 3) / Math.max(1, hw.daysLeft)) });
@@ -357,9 +385,12 @@ function planBarHTML(p) {
   const boxes = p.blocks.map(b => `<span class="pb-box ${b.done ? "on" : ""}"></span>`).join("");
   if (!cur) return `<span class="pb-done">✅ Today complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">see the chart →</a>`;
   const here = (location.pathname.split("/").pop() || "index.html").startsWith(cur.page);
+  // "start" only when nothing is done yet — his 08-13 note: "shouldnt it say
+  // continue rather than start, i already started"
+  const go = p.blocks.some(b => b.done) ? "continue →" : "start →";
   return `${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
     ${here ? `<button class="pb-tick" title="mark this block done">✓ done</button>`
-           : `<a href="${cur.url}" class="pb-next">start →</a>`}
+           : `<a href="${cur.url}" class="pb-next">${go}</a>`}
     <a href="index.html" class="pb-plan" title="back to today's plan">📋 plan</a>`;
 }
 function planPaintBar() {
@@ -423,7 +454,7 @@ function planRenderCard(el) {
     const inner = `
       <div class="pl-num">${b.done ? "✓" : i + 1}</div>
       <div><div class="pl-t">${b.icon} ${b.title}</div><div class="pl-s">${b.sub}</div></div>
-      ${b === cur ? `<div class="pl-go">Start →</div>` : ""}`;
+      ${b === cur ? `<div class="pl-go">${doneN ? "Continue →" : "Start →"}</div>` : ""}`;
     return b.done
       ? `<div class="plan-row done">${inner}</div>`
       : `<a class="plan-row ${state}" href="${b.url}">${inner}</a>`;

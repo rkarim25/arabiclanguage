@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msqu060l">
-  <link rel="stylesheet" href="css/style.css?v=msqu060l">
+  <link rel="stylesheet" href="css/fonts.css?v=msxpbw2n">
+  <link rel="stylesheet" href="css/style.css?v=msxpbw2n">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -27,6 +27,23 @@
 <main>
   <h1>Speaking <span class="arabic" style="color:var(--accent)">تَكَلَّمْ</span></h1>
   <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked. Tap 🎤 again any time to retry, and ▶ plays your own take back.</p>
+
+  <div class="card" id="micCard">
+    <h2>🎤 Is the mic working?</h2>
+    <p class="sub" style="margin-bottom:10px">Five seconds. It shows you the sound level coming in and any words it recognises — so you can see what's working instead of guessing.</p>
+    <div class="ex-row" style="flex-wrap:wrap">
+      <button class="primary" id="micTest">🎤 Test my mic (5s)</button>
+      <button class="small" id="selfToggle"></button>
+      <a href="converse.html"><button class="small">🗣 practise with a live AI instead</button></a>
+    </div>
+    <div id="micLevelWrap" style="display:none;margin-top:12px">
+      <div style="height:12px;border-radius:999px;background:var(--border);overflow:hidden">
+        <div id="micLevel" style="height:100%;width:0;background:var(--accent);transition:width .08s"></div>
+      </div>
+      <div id="micHeard" class="arabic" dir="rtl" style="font-size:22px;min-height:30px;margin-top:8px"></div>
+    </div>
+    <div id="micVerdict" style="font-size:13.5px;margin-top:10px"></div>
+  </div>
 
   <div class="card" style="border-color:var(--accent)">
     <h2>🎤 Word drill — say the Arabic</h2>
@@ -49,9 +66,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=msqu060l"></script>
-<script src="js/tracker.js?v=msqu060l"></script>
-<script src="js/plan.js?v=msqu060l"></script>
+<script src="js/app.js?v=msxpbw2n"></script>
+<script src="js/tracker.js?v=msxpbw2n"></script>
+<script src="js/plan.js?v=msxpbw2n"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -84,22 +101,31 @@ function dictate(btn, idleLabel, cb) {
   // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
   stopDictation(); stopSpeak();
   const rec = new SR();
-  rec.lang = "ar-SA"; rec.interimResults = false;
-  const L = { rec, reset: () => { btn.textContent = idleLabel; } };
+  // interimResults ON (his 08-13 note: "i am saying it but doesnt get recorded
+  // and keeps saying didnt get it"). Two reasons: he SEES the words appear as he
+  // speaks, and — the actual bug — some engines emit interim text but never a
+  // final result for ar-SA, so the take used to be thrown away as silence. The
+  // last interim is now kept and used if no final arrives.
+  rec.lang = "ar-SA"; rec.interimResults = true;
+  const L = { rec, interim: "", reset: () => { btn.textContent = idleLabel; } };
   _live = L;
   btn.textContent = "🔴 listening…";
   const chunks = [];
   const finish = (heard, errMsg) => {
+    if (!heard && L.interim) { heard = L.interim; errMsg = null; }   // partial beats nothing
     if (_live !== L) return;                 // superseded by a newer dictation
     _live = null;
     clearTimeout(L.watchdog);
     // If recording rode along and the recognizer still heard nothing twice in a
     // row, this device won't share the mic — drop self-recording so dictation
     // gets it alone (his 08-11 note: "I press microphone but nothing records").
-    if (heard) _recFails = 0;
-    else if (L.mediaRec && ++_recFails >= 2 && _recOwnVoice) {
-      _recOwnVoice = false;
-      errMsg = "didn't catch that — tap 🎤 once more (▶ hear-yourself is now off so the mic can listen properly)";
+    if (heard) { _recFails = 0; _noHeard = 0; }
+    else {
+      _noHeard++; setTimeout(micTrouble, 0);
+      if (L.mediaRec && ++_recFails >= 2 && _recOwnVoice) {
+        _recOwnVoice = false;
+        errMsg = "didn't catch that — tap 🎤 once more (▶ hear-yourself is now off so the mic can listen properly)";
+      }
     }
     L.reset();
     try { rec.onend = null; rec.stop(); } catch (e) {}
@@ -119,11 +145,20 @@ function dictate(btn, idleLabel, cb) {
     try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
     done(null);
   };
-  rec.onresult = ev => finish(ev.results[0][0].transcript, null);
+  rec.onresult = ev => {
+    let final = "", interim = "";
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const r = ev.results[i];
+      if (r.isFinal) final += r[0].transcript; else interim += r[0].transcript;
+    }
+    if (interim.trim()) { L.interim = interim.trim(); btn.textContent = "🔴 " + L.interim.slice(-22); }
+    if (final.trim()) finish(final.trim(), null);
+  };
   rec.onerror = ev => {
     if (ev.error === "aborted" && L.mediaRec) _recOwnVoice = false; // recording likely stole the mic here
     finish(null, ev.error === "not-allowed" ? "mic blocked — allow it in the address bar"
       : ev.error === "audio-capture" ? "no microphone found"
+      : ev.error === "no-speech" ? "heard silence — is the right mic selected? try 🎤 Test my mic above"
       : "didn't catch that — tap 🎤 to try again");
   };
   rec.onend = () => finish(null, "didn't catch that — tap 🎤 to try again");
@@ -144,6 +179,111 @@ function dictate(btn, idleLabel, cb) {
     }).catch(() => { if (_live === L) start(); });
   } else start();
 }
+/* ---------- mic self-test + self-grading fallback ----------
+   His 08-13 notes: "this audio still doesnt seem to work… keeps saying didnt get
+   it" and "maybe somewhay to test if microphone is working… at least displaying
+   the text gives me an idea what is working". The test separates the two things
+   that can fail: the microphone (level meter, needs no recognition at all) and
+   the browser's Arabic recognition (live text). Whatever it finds, the page stays
+   usable — self-grading keeps the speaking work going. */
+const SELF_KEY = "ats-selfgrade";
+let MIC = !!SR && !store.get(SELF_KEY, false);
+let _noHeard = 0;
+
+function paintSelfToggle() {
+  const b = document.getElementById("selfToggle");
+  if (!b) return;
+  b.textContent = MIC ? "✋ mic not working? switch to self-grading" : "🎤 switch back to the mic";
+}
+function setSelfGrade(on) {
+  store.set(SELF_KEY, on);
+  MIC = !!SR && !on;
+  logEvent({ e: "mic-mode", self: on });
+  paintSelfToggle();
+  drillPool = null; renderDrill(); renderPrompts(); renderShadow();
+}
+function micTrouble() {
+  if (!MIC || _noHeard < 3) return;
+  const v = document.getElementById("micVerdict");
+  if (!v || v.dataset.trouble) return;
+  v.dataset.trouble = "1";
+  v.innerHTML = `<span style="color:var(--amber)">Three takes in a row with nothing heard. Run the 5-second test above — or just switch to self-grading and keep speaking; your ✓/✗ counts the same in your Review.</span>`;
+}
+
+async function runMicTest() {
+  const btn = document.getElementById("micTest");
+  const wrap = document.getElementById("micLevelWrap");
+  const bar = document.getElementById("micLevel");
+  const heardBox = document.getElementById("micHeard");
+  const verdict = document.getElementById("micVerdict");
+  btn.disabled = true; btn.textContent = "🔴 say something in Arabic…";
+  wrap.style.display = "block"; heardBox.textContent = ""; verdict.textContent = "";
+  const res = { sr: !!SR, secure: window.isSecureContext !== false, peak: 0, heard: "", err: "" };
+
+  let stream = null, ctx = null, raf = null;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaStreamSource(stream);
+    const an = ctx.createAnalyser(); an.fftSize = 512;
+    src.connect(an);
+    const buf = new Uint8Array(an.fftSize);
+    const tick = () => {
+      an.getByteTimeDomainData(buf);
+      let peak = 0;
+      for (let i = 0; i < buf.length; i++) peak = Math.max(peak, Math.abs(buf[i] - 128) / 128);
+      res.peak = Math.max(res.peak, peak);
+      bar.style.width = Math.min(100, Math.round(peak * 220)) + "%";
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+  } catch (e) {
+    res.err = (e && e.name) || "mic-denied";
+  }
+
+  // recognition runs alongside, purely to show him live text
+  let rec = null;
+  if (SR && !res.err) {
+    try {
+      rec = new SR();
+      rec.lang = "ar-SA"; rec.interimResults = true; rec.continuous = true;
+      rec.onresult = ev => {
+        let txt = "";
+        for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
+        res.heard = txt.trim();
+        heardBox.textContent = res.heard;
+      };
+      rec.onerror = ev => { if (!res.err) res.err = ev.error; };
+      rec.start();
+    } catch (e) { rec = null; }
+  }
+
+  await new Promise(r => setTimeout(r, 5000));
+  if (raf) cancelAnimationFrame(raf);
+  try { if (rec) { rec.onresult = rec.onerror = null; rec.abort(); } } catch (e) {}
+  try { if (stream) stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+  try { if (ctx) ctx.close(); } catch (e) {}
+  bar.style.width = "0";
+  btn.disabled = false; btn.textContent = "🎤 Test my mic (5s)";
+
+  const micOk = res.peak >= 0.05;
+  let msg;
+  if (res.err === "NotAllowedError" || res.err === "not-allowed" || res.err === "SecurityError") {
+    msg = `<span style="color:var(--red)">The browser is blocking the microphone.</span> Tap the 🔒/🎤 icon in the address bar → allow microphone, then test again. (On iPhone: Settings → Safari → Microphone.)`;
+  } else if (res.err === "NotFoundError" || res.err === "audio-capture") {
+    msg = `<span style="color:var(--red)">No microphone found on this device.</span> If you're on a laptop with a headset plugged in, check which input is selected.`;
+  } else if (!micOk) {
+    msg = `<span style="color:var(--red)">The mic is open but heard almost nothing (peak ${Math.round(res.peak * 100)}%).</span> Wrong input selected, muted headset, or something else is holding the mic. Fix that and the drills will work — meanwhile self-grading below keeps you moving.`;
+  } else if (res.heard) {
+    msg = `<span style="color:var(--accent);font-weight:600">✓ Both working.</span> Mic peaked at ${Math.round(res.peak * 100)}% and it heard: <span class="arabic" dir="rtl">${res.heard}</span>. If a drill still says "didn't catch that", speak a touch louder and closer — it needs a clear couple of seconds.`;
+  } else {
+    msg = `<span style="color:var(--amber)">Your mic works (peak ${Math.round(res.peak * 100)}%) — but this browser returned no Arabic text.</span> That's the browser's recognition, not you${SR ? "" : " (it has no speech recognition at all)"}. Best options: open the site in <strong>Chrome or Edge</strong>, or use self-grading (button above) and a <a href="converse.html">live AI partner</a> for real speaking practice.`;
+  }
+  verdict.innerHTML = msg;
+  logEvent({ e: "mictest", sr: res.sr, peak: Math.round(res.peak * 100) / 100, heard: res.heard ? 1 : 0, err: res.err || "", ua: navigator.userAgent.slice(0, 120) });
+  autoSync();
+}
+
 /* ▶ hear yourself + keep the URL tidy: each row remembers its last take */
 function hearMeHtml(url) { return url ? ` <button class="small hearme" type="button">▶ hear yourself</button>` : ""; }
 function bindHearMe(container, url, prevUrlBox) {
@@ -217,7 +357,7 @@ function renderDrill() {
   }
   drillPos += batch.length;
   area.innerHTML = `
-    ${!SR ? `<div class="tts-warn">⚠ No speech recognition in this browser — use Chrome or Edge for automatic checking. For now: reveal and rate yourself.</div>` : ""}
+    ${!MIC ? `<div class="tts-warn">${SR ? "✋ Self-grading mode — reveal, say it out loud, then rate yourself honestly. Your ✓/✗ feeds the same Review as the mic." : "⚠ No speech recognition in this browser — use Chrome or Edge for automatic checking. For now: reveal and rate yourself."}</div>` : ""}
     <div class="vocab-table-wrap"><table class="vocab-table"><tbody id="drillBody"></tbody></table></div>
     <div class="quiz-score" id="drillScore"></div>
   `;
@@ -255,14 +395,14 @@ function renderDrill() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="en-cell">${v.en}</td>
-      <td>${SR ? `<button class="small mic">🎤 say it</button>` : `<button class="small reveal">👁 reveal</button>`}</td>
+      <td>${MIC ? `<button class="small mic">🎤 say it</button>` : `<button class="small reveal">👁 reveal</button>`}</td>
       <td style="min-width:150px"><span class="res" style="font-size:13.5px"></span><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
       <td class="tr-cell">${v.tr || ""}</td>
     `;
     tbody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), key);
 
-    if (SR) {
+    if (MIC) {
       const mic = tr.querySelector(".mic");
       const takeBox = {}; // last recorded take for this row
       mic.onclick = () => dictate(mic, "🎤 say it", (heard, url, err) => {
@@ -342,7 +482,7 @@ async function renderPrompts() {
         <div style="font-size:15.5px;font-weight:600">“${p.en}”</div>
         ${p.ready < 1 ? `<div style="font-size:12px;color:var(--amber)">has ${newWords.length} word${newWords.length > 1 ? "s" : ""} you haven't studied yet</div>` : `<div style="font-size:12px;color:var(--accent)">✓ all words known</div>`}
       </div>
-      ${SR ? `<button class="small mic">🎤</button>` : ""}
+      ${MIC ? `<button class="small mic">🎤</button>` : ""}
       <button class="small reveal">👁 model answer</button>
       <div class="res"></div>
     `;
@@ -352,7 +492,7 @@ async function renderPrompts() {
       res.querySelector(".row-speak").onclick = () => speak(p.ar, 0.8);
       logEvent({ e: "prompt-reveal", en: p.en });
     };
-    if (SR) {
+    if (MIC) {
       const mic = row.querySelector(".mic");
       const takeBox = {};
       mic.onclick = () => dictate(mic, "🎤", (heard, url, err) => {
@@ -415,11 +555,11 @@ async function renderShadow() {
     row.innerHTML = `
       <button class="small play">▸</button>
       <span class="txt">${ar}</span>
-      ${SR ? `<button class="small mic">🎤</button>` : ""}
+      ${MIC ? `<button class="small mic">🎤</button>` : ""}
       <div class="res"></div>
     `;
     row.querySelector(".play").onclick = () => speak(ar, 0.8);
-    if (SR) {
+    if (MIC) {
       const mic = row.querySelector(".mic");
       const takeBox = {};
       mic.onclick = () => dictate(mic, "🎤", (heard, url, err) => {
@@ -441,6 +581,14 @@ async function renderShadow() {
 }
 
 /* ================= init ================= */
+paintSelfToggle();
+document.getElementById("selfToggle").onclick = () => setSelfGrade(MIC);
+document.getElementById("micTest").onclick = runMicTest;
+if (!SR) {
+  document.getElementById("micVerdict").innerHTML =
+    `<span style="color:var(--amber)">This browser has no speech recognition at all — everything below is in self-grading mode. Chrome or Edge give you the mic back; a <a href="converse.html">live AI partner</a> works anywhere.</span>`;
+}
+
 Promise.all([
   fetch("data/quran-core.json").then(r => r.json()),
   fetch("data/everyday.json").then(r => r.json()),
