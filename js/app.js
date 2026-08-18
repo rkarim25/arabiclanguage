@@ -1019,6 +1019,42 @@ function playRecitation(items, onEach, onDone) {
   next();
 }
 
+/* Real qari voice for single Quran words (his 2026-08-17 pen note). The clips
+   are quran.com's human word-by-word recordings; data/quran-word-audio.json
+   maps OUR word tokens to them (built by scripts/gen-quran-word-audio.js —
+   token boundaries differ from the canonical text, so the mapping is aligned
+   at build time, never guessed here). Merged tokens play their clips in
+   sequence; unmapped tokens and any load failure fall back to speak() (TTS). */
+let _qwbw = null, _qwbwLoading = null;
+function loadQuranWordAudio() {
+  if (_qwbw || _qwbwLoading) return;
+  _qwbwLoading = fetch("data/quran-word-audio.json").then(r => r.json())
+    .then(d => (_qwbw = d)).catch(() => (_qwbw = { base: "", map: {} }));
+}
+function speakQuranWord(surahId, vi, wi, text, rate) {
+  const urls = _qwbw && ((_qwbw.map[surahId] || [])[vi] || [])[wi];
+  if (!urls || !urls.length) { speak(text, rate); return; }
+  stopSpeak(); stopRecitation();
+  const a = _getSpeakEl();
+  let i = 0, done = false;
+  const fail = () => { if (done) return; done = true; a.onended = null; a.onerror = null; speak(text, rate); };
+  const next = () => {
+    if (done) return;
+    if (i >= urls.length) { done = true; a.onended = null; a.onerror = null; return; }
+    a.src = _qwbw.base + urls[i++];
+    a.playbackRate = 1;
+    const p = a.play();
+    if (p && p.catch) p.catch(fail);
+  };
+  a.onended = next;
+  a.onerror = fail;
+  next();
+}
+/* One ayah in the real qari's voice (verse 🔊 taps); TTS if the stream fails. */
+function reciteVerse(surahN, ayah, fallbackText, rate) {
+  playRecitation([{ n: surahN, ayah }], null, err => { if (err) speak(fallbackText, rate); });
+}
+
 /* ---------- Phonetic Latin -> Arabic (from the rkarim25 keyboard) ---------- */
 const LATIN_TO_AR = {
   A: "ا", aa: "ا", b: "ب", t: "ت", T: "ط", th: "ث",

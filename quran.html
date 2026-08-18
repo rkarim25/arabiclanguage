@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msxph701">
-  <link rel="stylesheet" href="css/style.css?v=msxph701">
+  <link rel="stylesheet" href="css/fonts.css?v=msxz3k07">
+  <link rel="stylesheet" href="css/style.css?v=msxz3k07">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,9 +46,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=msxph701"></script>
-<script src="js/tracker.js?v=msxph701"></script>
-<script src="js/plan.js?v=msxph701"></script>
+<script src="js/app.js?v=msxz3k07"></script>
+<script src="js/tracker.js?v=msxz3k07"></script>
+<script src="js/plan.js?v=msxz3k07"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -83,7 +83,7 @@ function renderList() {
     </div>
     <div class="story-grid" id="sGrid"></div>
     <div class="card" style="margin-top:20px">
-      <p style="margin:0;font-size:13.5px;color:var(--muted)">▶ Real recitation streams a real qari (Alafasy) verse by verse; 🔊 uses your browser's voice — an approximation for studying single words.</p>
+      <p style="margin:0;font-size:13.5px;color:var(--muted)">▶ Real recitation streams a real qari (Mishary Rashid Alafasy) verse by verse. A verse's 🔊 plays him too, and tapping any word now plays a real human voice for that word (browser voice only as offline fallback).</p>
     </div>
   `;
   const grid = document.getElementById("sGrid");
@@ -277,6 +277,7 @@ function renderSurah(s, mode) {
   const rate = () => parseFloat(document.getElementById("rate").value);
 
   const versesEl = document.getElementById("verses");
+  loadQuranWordAudio(); // real qari clips for word taps (idempotent)
   const esc = t => String(t).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   s.verses.forEach((v, vi) => {
     const block = document.createElement("div");
@@ -292,9 +293,9 @@ function renderSurah(s, mode) {
       <table class="wbw"><tbody></tbody></table>
       ${mode === "test" ? `<div class="ex-row" style="margin-top:6px"><button class="vcheck" data-vi="${vi}" style="font-size:13px;padding:6px 14px">✓ Check this verse</button><span class="vscore" style="font-weight:600"></span></div>` : ""}
     `;
-    block.querySelector(".sent-play").onclick = () => speak(v.ar, rate());
+    block.querySelector(".sent-play").onclick = () => reciteVerse(s.n, parseInt(v.ref.split(":")[1]), v.ar, rate());
     block.querySelectorAll(".vw").forEach((el, wi) => el.onclick = () => {
-      speak(v.words[wi][0], 0.75);
+      speakQuranWord(s.id, vi, wi, v.words[wi][0], 0.75);
       logEvent({ e: "qtap", surah: s.id, ref: v.ref, w: wi, src: "verse" });
       noteWordTap({ key: `qw:${s.id}:${vi}:${wi}` }); // 3 taps → joins the Review deck
     });
@@ -311,7 +312,7 @@ function renderSurah(s, mode) {
         row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
       }
       row.querySelector(".w-ar").onclick = () => {
-        speak(ar, 0.75);
+        speakQuranWord(s.id, vi, wi, ar, 0.75);
         logEvent({ e: "qtap", surah: s.id, ref: v.ref, w: wi });
         noteWordTap({ key: `qw:${s.id}:${vi}:${wi}` }); // 3 taps → joins the Review deck
       };
