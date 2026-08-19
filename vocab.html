@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mszeh909">
-  <link rel="stylesheet" href="css/style.css?v=mszeh909">
+  <link rel="stylesheet" href="css/fonts.css?v=mt0kclqf">
+  <link rel="stylesheet" href="css/style.css?v=mt0kclqf">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -56,9 +56,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mszeh909"></script>
-<script src="js/tracker.js?v=mszeh909"></script>
-<script src="js/plan.js?v=mszeh909"></script>
+<script src="js/app.js?v=mt0kclqf"></script>
+<script src="js/tracker.js?v=mt0kclqf"></script>
+<script src="js/plan.js?v=mt0kclqf"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -941,7 +941,7 @@ function renderGroupDrill(obj, prefix, opts) {
     return renderDrillLearn(obj, prefix, idxs, opts);
   }
   const order = idxs.sort(() => 0.5 - Math.random());
-  let pos = 0, right = 0;
+  let pos = 0, right = 0, phonCount = 0;
   const misses = [];
   const t0 = Date.now();
 
@@ -979,19 +979,32 @@ function renderGroupDrill(obj, prefix, opts) {
     input.focus();
     const submit = () => {
       const key = `${prefix}${obj.id}:${i}`;
-      const ok = arMatch(input.value, m.ar);
+      // Letter-perfect first (arMatch also handles slash-alternates and tanwin).
+      // Only if that fails do we grade word-by-word with sound-alike letters
+      // folded, so a 4-word phrase typed 3-right stops reading as a flat ✗.
+      const exact = arMatch(input.value, m.ar);
+      const g = exact ? null : writeMatchAr(input.value, String(m.ar).split("/")[0]);
+      const ok = exact || (g && g.ok);          // right by sound still counts
+      const part = !ok && g && g.right > 0;     // some words landed
       gradeCard(key, ok ? "good" : "again");
-      logEvent({ e: "drill", fam: prefix + obj.id, i, typed: input.value, ok });
-      if (ok) right++;
-      else misses.push(i);
-      document.getElementById("dFb").innerHTML = ok
-        ? `<span style="color:var(--accent);font-weight:700;font-size:18px">✓</span>`
-        : `<span class="arabic" style="font-size:26px" dir="rtl">${m.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span> <span style="color:var(--muted);font-size:13px">${m.tr}</span>`;
+      logEvent({
+        e: "drill", fam: prefix + obj.id, i, typed: input.value, ok,
+        phon: (!exact && ok) || undefined,
+        words: g ? g.right + "/" + g.total : undefined
+      });
+      if (ok) right++; else misses.push(i);
+      if (!exact && ok) phonCount++;
+      const spelling = `<span class="arabic" style="font-size:26px" dir="rtl">${m.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span> <span style="color:var(--muted);font-size:13px">${m.tr}</span>`;
+      document.getElementById("dFb").innerHTML =
+        exact ? `<span style="color:var(--accent);font-weight:700;font-size:18px">✓</span>`
+        : ok ? `<span style="color:var(--warn,#d97706);font-weight:700;font-size:18px">✓</span> <span style="font-size:13px;color:var(--muted)">right by sound — exact spelling:</span><br>${spelling}`
+        : part ? `<span style="font-size:14px">${g.right} of ${g.total} words — <span dir="rtl">${wordsHtml(g, false)}</span></span><br>${spelling}`
+        : spelling;
       const spk = document.getElementById("dFb").querySelector(".row-speak");
       if (spk) spk.onclick = () => speak(m.ar, 0.8);
       if (ok) speak(m.ar, 0.9);
       pos++;
-      setTimeout(ask, ok ? 700 : 2200);
+      setTimeout(ask, exact ? 700 : ok ? 2200 : 2600);
     };
     input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
     document.getElementById("dGo").onclick = submit;
@@ -1001,11 +1014,12 @@ function renderGroupDrill(obj, prefix, opts) {
     const secs = Math.round((Date.now() - t0) / 1000);
     const total = order.length;
     setStepDone(prefix + obj.id, "drill");
-    logEvent({ e: "drill-done", fam: prefix + obj.id, score: right, total, secs, misses: misses.length });
+    logEvent({ e: "drill-done", fam: prefix + obj.id, score: right, total, secs, misses: misses.length, phon: phonCount || undefined });
     autoSync();
     const missIdx = misses.slice();
     stage.innerHTML = `
       <div style="font-size:22px;font-weight:700">${right} / ${total} in ${secs}s ${right === total ? "— ممتاز! 🎉" : ""}</div>
+      ${phonCount ? `<p style="font-size:13px;color:var(--warn,#d97706);margin:4px 0 0">${phonCount} of those were right by sound — the spelling still needs a look.</p>` : ""}
       ${missIdx.length ? `
       <p style="font-size:13.5px;color:var(--muted);margin:10px 0 4px">The ones that didn't come out — read each row aloud:</p>
       ${drillRowsHTML(obj, missIdx)}` : ""}

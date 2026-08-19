@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mszeh909">
-  <link rel="stylesheet" href="css/style.css?v=mszeh909">
+  <link rel="stylesheet" href="css/fonts.css?v=mt0kclqf">
+  <link rel="stylesheet" href="css/style.css?v=mt0kclqf">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -28,6 +28,10 @@
     @media (prefers-color-scheme: dark) {
       .sp-hint, .gx { background: rgba(255,255,255,.05); }
       .sp-model .verb { background: rgba(253,224,71,.18); }
+    .sp-diag { margin-top: 8px; font-size: 13.5px; line-height: 1.65; color: var(--text);
+      background: rgba(217,119,6,.10); border-left: 3px solid var(--warn, #d97706);
+      border-radius: 0 8px 8px 0; padding: 8px 10px; }
+    .sp-diag .arabic { font-size: 17px; }
     }
   </style>
 </head>
@@ -37,9 +41,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mszeh909"></script>
-<script src="js/tracker.js?v=mszeh909"></script>
-<script src="js/plan.js?v=mszeh909"></script>
+<script src="js/app.js?v=mt0kclqf"></script>
+<script src="js/tracker.js?v=mt0kclqf"></script>
+<script src="js/plan.js?v=mt0kclqf"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -67,13 +71,37 @@ function buildPool() {
         items.push({
           en, form, ar: `${form} ${v.obj.ar}`,
           objAr: v.obj.ar, root: v.root, weight: DATA.verbs.length - vi,
-          person: p, tense: t, verb: v.base,
+          person: p, tense: t, verb: v.base, forms: v.forms,
         });
       });
     });
   });
   return items;
 }
+/* When the sentence is wrong it is almost always the VERB, and almost always
+   the right verb in the WRONG CELL — he writes يَقُولُونَ (they, present) for
+   "we said". The grid is only ana/nahnu/hum x past/pres/fut, so we can name the
+   cell he actually produced instead of silently showing the model answer.
+   Returns {person, tense} of the matched cell, or null if it is not a form of
+   this verb at all. */
+function diagnoseVerb(typed, it) {
+  if (!typed || !it.forms) return null;
+  const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
+  const bare = w => normalizeAr(String(w || "")).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const first = bare(conv.trim().split(/\s+/)[0]);
+  if (!first) return null;
+  if (first === bare(it.form)) return null; // verb was right; the object differed
+  for (const p of DATA.persons) {
+    const row = it.forms[p.key];
+    if (!row) continue;
+    for (const t of DATA.tenses) {
+      if (p.key === it.person.key && t.key === it.tense.key) continue;
+      if (row[t.key] && bare(row[t.key]) === first) return { person: p, tense: t, form: row[t.key] };
+    }
+  }
+  return null;
+}
+
 function pickSession() {
   const pool = buildPool();
   // weighted shuffle: sort by weight*random so frequent verbs surface more, with variety
@@ -81,10 +109,10 @@ function pickSession() {
              .sort((a, b) => b.k - a.k).slice(0, SESSION).map(x => x.it);
 }
 
-let queue = [], done = 0, got = 0;
+let queue = [], done = 0, got = 0, exactCount = 0;
 
 function start() {
-  queue = pickSession(); done = 0; got = 0;
+  queue = pickSession(); done = 0; got = 0; exactCount = 0;
   content.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>Sentence Practice</span>
@@ -146,6 +174,7 @@ function ask() {
     const typed = input.value.trim();
     const m = sentenceMatchAr(typed, it.ar, it.form);
     const exact = m.ok;
+    const diag = exact ? null : diagnoseVerb(typed, it);
     const rev = document.getElementById("spReveal");
     rev.innerHTML = `
       <div class="gx" style="margin-top:14px">
@@ -153,6 +182,8 @@ function ask() {
         <div class="sp-gloss">${it.en}</div>
         ${exact ? `<div style="color:var(--accent);font-weight:600;font-size:13.5px;margin-top:6px">✓ ${m.fuzzy ? "close enough — the model is" : m.rom ? "got it — that's" : "exact match —"} <span class="arabic" dir="rtl">${it.form} ${it.objAr}</span>. ${m.fuzzy ? "The conjugation was right, and that's the point." : "Spot on!"}</div>` : ""}
         ${typed && (!exact || m.fuzzy) ? `<div class="sp-meta" style="margin-top:6px">you wrote: <span class="arabic" dir="rtl">${typed}</span></div>` : ""}
+        ${diag ? `<div class="sp-diag">Right verb, wrong slot: <span class="arabic" dir="rtl">${diag.form}</span> is the <b>${diag.person.en} — ${diag.tense.en}</b> form. This one wants <b>${it.person.en} — ${it.tense.en}</b>: <span class="arabic" dir="rtl">${it.form}</span>.</div>`
+          : (!exact && typed) ? `<div class="sp-diag">The verb to build was <b>${it.person.en} — ${it.tense.en}</b>: <span class="arabic" dir="rtl">${it.form}</span>.</div>` : ""}
       </div>
       <div class="ex-row" style="margin-top:12px">
         <button class="primary" id="spGot">✓ Got it</button>
@@ -163,12 +194,15 @@ function ask() {
     speak(it.ar, 0.85);
     document.getElementById("spShow").disabled = true;
     input.disabled = true;
-    document.getElementById("spGot").onclick = () => mark(true, typed, exact, m);
-    document.getElementById("spAgain").onclick = () => mark(false, typed, exact, m);
+    document.getElementById("spGot").onclick = () => mark(true, typed, exact, m, diag);
+    document.getElementById("spAgain").onclick = () => mark(false, typed, exact, m, diag);
   }
 
-  function mark(ok, typed, exact, m) {
-    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok, ...(m.rom ? { rom: true } : {}), ...(m.fuzzy ? { fuzzy: true } : {}) });
+  function mark(ok, typed, exact, m, diag) {
+    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok,
+      ...(m.rom ? { rom: true } : {}), ...(m.fuzzy ? { fuzzy: true } : {}),
+      ...(diag ? { wrongCell: diag.person.key + ":" + diag.tense.key } : {}) });
+    if (exact) exactCount++;
     if (ok) got++;
     else queue.push(it); // drill-the-misses: requeue at the end of the set
     done++;
@@ -177,12 +211,16 @@ function ask() {
 }
 
 function finish() {
-  logEvent({ e: "spract-done", n: done, got, tense: TENSE_FILTER });
+  logEvent({ e: "spract-done", n: done, got, exact: exactCount, tense: TENSE_FILTER });
   autoSync();
   const stage = document.getElementById("stage");
+  // `got` is HIS self-mark; exactCount is what he actually wrote correctly. Showing
+  // only the self-mark read as a score and flattered him (8/8 while 3 were exact).
+  const shaky = done - exactCount;
   stage.innerHTML = `
     <div style="text-align:center;padding:16px 0">
-      <div style="font-size:22px;font-weight:700">${got} / ${done} built cleanly 🎉</div>
+      <div style="font-size:22px;font-weight:700">${exactCount} / ${done} written correctly ${exactCount === done ? "— ممتاز! 🎉" : ""}</div>
+      ${shaky ? `<p class="sub" style="margin-top:6px">${shaky === 1 ? "One conjugation" : shaky + " conjugations"} needed the answer — that is the useful half. ${got > exactCount ? `You marked ${got} as “got it”; the count above is what came out of your own head.` : ""}</p>` : ""}
       <p class="sub" style="margin-top:8px">Every "practise again" came back around until you had it. Come back after your next lesson and the newest verbs will be here.</p>
       <div class="ex-row" style="justify-content:center;margin-top:10px">
         <button class="primary" id="spNew">New set</button>

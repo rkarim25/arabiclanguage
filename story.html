@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mszeh909">
-  <link rel="stylesheet" href="css/style.css?v=mszeh909">
+  <link rel="stylesheet" href="css/fonts.css?v=mt0kclqf">
+  <link rel="stylesheet" href="css/style.css?v=mt0kclqf">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mszeh909"></script>
-<script src="js/tracker.js?v=mszeh909"></script>
-<script src="js/plan.js?v=mszeh909"></script>
+<script src="js/app.js?v=mt0kclqf"></script>
+<script src="js/tracker.js?v=mt0kclqf"></script>
+<script src="js/plan.js?v=mt0kclqf"></script>
 <script>
 renderNav("stories");
 
@@ -581,13 +581,7 @@ function renderWrite() {
 
   // per-word feedback: green = letter-perfect, amber = right by sound,
   // masked = not caught (mask keeps the dictation answer unspoiled)
-  function wordsHtml(m, maskMisses) {
-    return m.words.map((w, i) =>
-      m.hits[i] === "miss"
-        ? (maskMisses ? '<span style="opacity:.45">···</span>' : `<span style="opacity:.55">${w}</span>`)
-        : `<span style="color:${m.hits[i] === "hit" ? "var(--good,#16a34a)" : "var(--warn,#d97706)"}">${w}</span>`
-    ).join(" ");
-  }
+  // wordsHtml now lives in js/app.js (shared with the vocab drill)
 
   story.dictation.forEach((si, di) => {
     const sent = story.sentences[si];

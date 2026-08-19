@@ -361,6 +361,18 @@ function writeMatchAr(typed, targetAr) {
   return { ok: right === m && n === m, phon, hits, words, right, total: m };
 }
 
+/* Render a writeMatchAr result word-by-word: green = letter-perfect, amber =
+   right by sound (exact spelling shown so it stays honest), faded = missed.
+   maskMisses hides the words he still has to produce (dictation), otherwise
+   they are shown faded for comparison. Shared by story Write and the drill. */
+function wordsHtml(m, maskMisses) {
+  return m.words.map((w, i) =>
+    m.hits[i] === "miss"
+      ? (maskMisses ? '<span style="opacity:.45">···</span>' : `<span style="opacity:.55">${w}</span>`)
+      : `<span style="color:${m.hits[i] === "hit" ? "var(--good,#16a34a)" : "var(--warn,#d97706)"}">${w}</span>`
+  ).join(" ");
+}
+
 /* ears mode: he typed the SOUND of the word (its transliteration) instead of its meaning.
    Casual typing allowed: "qal" ~ qāla, "illa" ~ illā, "3ala" ~ ʿalā. */
 function trMatch(typed, tr, ar) {
