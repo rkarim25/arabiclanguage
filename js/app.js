@@ -989,6 +989,12 @@ function stopSpeak() {
   if (window.speechSynthesis) speechSynthesis.cancel();
   if (_speakEl) { try { _speakEl.onended = null; _speakEl.onerror = null; _speakEl.pause(); } catch (e) {} }
 }
+/* true while the shared clip element or TTS is still producing (or fetching)
+   sound — callers that bound their waits with a timer must not cut this off */
+function speakBusy() {
+  if (_speakEl && _speakEl.src && !_speakEl.paused && !_speakEl.ended) return true;
+  return !!(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending));
+}
 
 /* ---------- real recitation audio (everyayah.com, Alafasy) ----------
    TTS is for study words; recitation is the real thing — the goal is to

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=msxz3k07">
-  <link rel="stylesheet" href="css/style.css?v=msxz3k07">
+  <link rel="stylesheet" href="css/fonts.css?v=mszeh909">
+  <link rel="stylesheet" href="css/style.css?v=mszeh909">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=msxz3k07"></script>
-<script src="js/tracker.js?v=msxz3k07"></script>
-<script src="js/plan.js?v=msxz3k07"></script>
+<script src="js/app.js?v=mszeh909"></script>
+<script src="js/tracker.js?v=mszeh909"></script>
+<script src="js/plan.js?v=mszeh909"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -120,8 +120,20 @@ function speakP(text, rate) {
     const fin = () => { if (!done) { done = true; resolve(); } };
     S.cancel = () => { stopSpeak(); fin(); };
     speak(text, rate, fin);
-    // mobile audio/TTS sometimes never fires onend — bound the wait
-    setTimeout(fin, Math.max(3000, text.length * 200));
+    // mobile audio/TTS sometimes never fires onend — bound the wait. But the
+    // bound must never cut audio that is still audibly playing: clip fetch
+    // latency + slowed playback often pushed real words past a fixed timeout
+    // and the next step's stopSpeak() truncated them mid-word ("alhamdulil").
+    const soft = Math.max(3000, text.length * 200);
+    let waited = 0;
+    const step = () => {
+      if (done) return;
+      waited += 500;
+      if (waited >= 20000) { fin(); return; }              // stuck audio: give up
+      if (waited >= soft && !speakBusy()) { fin(); return; }
+      setTimeout(step, 500);
+    };
+    setTimeout(step, 500);
   });
 }
 function sleepP(ms) {
