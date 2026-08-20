@@ -743,6 +743,7 @@ function suggestNext() {
   // next grammar pattern not yet tested
   const GRAMMAR_LIST = [
     ["inna", "إِنَّ — the certainty opener"],
+    ["who-acts", "نَحْنُ vs هُمْ — who's doing it?"],
     ["alladhina", "الَّذِينَ — 'those who'"],
     ["idafa", "الإضافة — possession by pairing"],
     ["pronouns", "attached pronouns — my/your/his"],

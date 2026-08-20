@@ -81,6 +81,22 @@
       ]
     },
     {
+      "id": "who-acts",
+      "ar": "نَحْنُ / هُمْ",
+      "name": "who's doing it — we vs they",
+      "what": "The prefix says WHO, and the tail ـونَ says THEY. نَحْنُ (we): prefix نَـ — the same ن that starts نَحْنُ — and NO tail: نَقُولُ we say, سَنَقُولُ we will say. هُمْ (they): prefix يَـ PLUS the tail ـونَ: يَقُولُونَ they say, سَيَقُولُونَ they will say. In the past the job moves to the ending: we = ـنَا (قُلْنَا we said), they = ـُوا (قَالُوا they said). One rule saves you every time: the ـونَ tail belongs to the crowd — 'we' never wears it.",
+      "examples": [
+        { "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "en": "You alone WE worship, You alone WE ask for help (1:5) — نَـ with no tail" },
+        { "ar": "يَقُولُونَ بِأَفْوَاهِهِم", "en": "THEY say with their mouths (3:167) — يَـ … ـونَ" },
+        { "ar": "وَإِذْ قُلْنَا لِلْمَلَائِكَةِ", "en": "and when WE said to the angels (2:34) — past 'we' = ـنَا" }
+      ],
+      "test": [
+        { "prompt": "'we will say' (سَ + قال — remember: no tail!)", "ar": "سَنَقُولُ", "hint": "sanaqūlu" },
+        { "prompt": "'they say' (present of قَالَ)", "ar": "يَقُولُونَ", "hint": "yaqūlūna" },
+        { "prompt": "'we read' (past of قَرَأَ)", "ar": "قَرَأْنَا", "hint": "qaraʾnā" }
+      ]
+    },
+    {
       "id": "negation",
       "ar": "لَا / مَا / لَمْ / لَنْ",
       "name": "the four ways to say 'not'",
