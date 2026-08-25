@@ -314,6 +314,7 @@ input.heard { border-color: var(--amber) !important; background: var(--amber-sof
    table wider than the screen (2026-08-20 pen note: sideways scrolling). */
 @media (max-width: 600px) {
   .vocab-table td.ar-cell, .vocab-table td.tr-cell { white-space: normal; }
+  .vocab-table td.en-cell { min-width: 0; }
 }
 .vocab-table td.veiled { cursor: pointer; }
 .vocab-table td.veiled > * { visibility: hidden; }
