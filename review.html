@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mt0u145r">
-  <link rel="stylesheet" href="css/style.css?v=mt0u145r">
+  <link rel="stylesheet" href="css/fonts.css?v=mt7zaxod">
+  <link rel="stylesheet" href="css/style.css?v=mt7zaxod">
 </head>
 <body>
 <main>
@@ -20,9 +20,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mt0u145r"></script>
-<script src="js/tracker.js?v=mt0u145r"></script>
-<script src="js/plan.js?v=mt0u145r"></script>
+<script src="js/app.js?v=mt7zaxod"></script>
+<script src="js/tracker.js?v=mt7zaxod"></script>
+<script src="js/plan.js?v=mt7zaxod"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -67,7 +67,7 @@ function renderTable(queue) {
     <div class="toggles"><label><input type="checkbox" id="tgTr"> Transliteration</label></div>
     <div class="vocab-table-wrap">
       <table class="vocab-table">
-        <thead><tr><th class="ar-col" style="text-align:right">Arabic</th><th></th><th>Transliteration</th><th>English</th></tr></thead>
+        <thead><tr><th class="ar-col" style="text-align:right">Arabic</th><th></th><th class="tr-head" style="display:none">Transliteration</th><th>English</th></tr></thead>
         <tbody id="rvBody"></tbody>
       </table>
     </div>
@@ -97,7 +97,7 @@ function renderTable(queue) {
     tr.innerHTML = `
       <td class="ar-cell">${v.ar}</td>
       <td><span class="row-speak" title="hear it">🔊</span></td>
-      <td class="tr-cell" style="visibility:hidden">${v.tr || ""}</td>
+      <td class="tr-cell" style="display:none">${v.tr || ""}</td>
       <td class="en-cell veiled"><span>${v.en}${v.note ? `<span class="note-inline">${v.note}</span>` : ""}</span></td>
     `;
     tr.querySelector(".row-speak").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
@@ -136,7 +136,14 @@ function renderTable(queue) {
   mountConjRows(tbody, 4, { noEn: true, from: "review" });
 
   document.getElementById("tgTr").onchange = (e) => {
-    [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.visibility = e.target.checked ? "visible" : "hidden");
+    /* display, not visibility — a hidden column must not keep its width: on a
+       phone the invisible transliteration ate ~200px and forced sideways
+       scrolling (his 2026-08-20 pen note: "a lot of empty space … keep
+       scrolling sideways") */
+    const on = e.target.checked;
+    [...tbody.querySelectorAll(".tr-cell")].forEach(c => c.style.display = on ? "" : "none");
+    const th = document.querySelector(".vocab-table th.tr-head");
+    if (th) th.style.display = on ? "" : "none";
   };
   document.getElementById("revealAll").onclick = () => {
     // an explicit "I've been through the lot" — every word counts as reviewed

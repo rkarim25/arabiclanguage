@@ -310,6 +310,11 @@ input.heard { border-color: var(--amber) !important; background: var(--amber-sof
 .vocab-table td.en-cell { min-width: 140px; }
 .vocab-table .note-inline { display: block; font-size: 12px; color: var(--muted); font-style: normal; }
 .vocab-table .row-speak { cursor: pointer; user-select: none; font-size: 15px; }
+/* Phones: phrase and sentence cards must wrap — nowrap cells forced the whole
+   table wider than the screen (2026-08-20 pen note: sideways scrolling). */
+@media (max-width: 600px) {
+  .vocab-table td.ar-cell, .vocab-table td.tr-cell { white-space: normal; }
+}
 .vocab-table td.veiled { cursor: pointer; }
 .vocab-table td.veiled > * { visibility: hidden; }
 .vocab-table td.veiled { background: repeating-linear-gradient(45deg, #eee7db, #eee7db 6px, #f5f0e8 6px, #f5f0e8 12px) !important; border-radius: 4px; }
