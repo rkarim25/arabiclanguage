@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Milestone Test — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteweqg2">
-  <link rel="stylesheet" href="css/style.css?v=mteweqg2">
+  <link rel="stylesheet" href="css/fonts.css?v=mtexh6xq">
+  <link rel="stylesheet" href="css/style.css?v=mtexh6xq">
   <style>
     .t-row td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
     .t-prompt-ar { font-family: var(--font-ar); font-size: 26px; direction: rtl; text-align: right; }
@@ -25,9 +25,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mteweqg2"></script>
-<script src="js/tracker.js?v=mteweqg2"></script>
-<script src="js/plan.js?v=mteweqg2"></script>
+<script src="js/app.js?v=mtexh6xq"></script>
+<script src="js/tracker.js?v=mtexh6xq"></script>
+<script src="js/plan.js?v=mtexh6xq"></script>
 <script>
 renderNav("");
 trackPage("test");
@@ -130,6 +130,9 @@ function renderTest(items, mode) {
     tbody.appendChild(tr);
   });
 
+  // Live English→Arabic in every write box, same as everywhere else. This page
+  // had only the tap keyboard, so typing here produced Latin letters.
+  tbody.querySelectorAll(".fill-input").forEach(el => attachInlineTranslit(el));
   lastFocused = lastFocused || tbody.querySelector(".fill-input");
   const tTarget = () => lastFocused;
   document.getElementById("tKb").onclick = () => mountTranslitDock(tTarget);
@@ -143,7 +146,7 @@ function renderTest(items, mode) {
     qs.forEach((q, i) => {
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const ans = tbody.querySelectorAll(".correct-answer")[i];
-      const ok = q.dir === "understand" ? fuzzyEn(input.value, q.en) : arMatch(input.value, q.ar);
+      const ok = q.dir === "understand" ? fuzzyEn(input.value, q.en) : answerMatchAr(input.value, q.ar).ok;
       input.classList.add(ok ? "ok" : "no");
       if (!ok) { ans.style.display = "block"; ans.textContent = q.dir === "understand" ? q.en : q.ar; }
       if (ok) right++;

@@ -250,6 +250,16 @@ button.primary:disabled:hover { background: var(--accent); }
   background: #fffdf9;
 }
 .answer-ar:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+/* The narrow Arabic answer box (vocab tables, Sentence Practice, the test grid).
+   It lived only inside vocab.html's own <style>, so every other page that used
+   the class got a raw browser input — square, grey, tiny — which is what a
+   broken typing box looks like. Shared here so they all match. */
+.fill-input {
+  direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 22px;
+  border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; width: 180px;
+  background: #fffdf9;
+}
+.fill-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
 .phonetic-box {
   width: 100%; font-family: var(--font-ui); font-size: 15px;
   border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; margin-top: 6px;

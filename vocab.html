@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteweqg2">
-  <link rel="stylesheet" href="css/style.css?v=mteweqg2">
+  <link rel="stylesheet" href="css/fonts.css?v=mtexh6xq">
+  <link rel="stylesheet" href="css/style.css?v=mtexh6xq">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -27,12 +27,8 @@
     .verse-card .v-ar { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 26px; line-height: 2; }
     .verse-card .v-en { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
     .verse-card .v-ref { font-size: 12px; color: var(--amber); font-weight: 600; }
-    .fill-input {
-      direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 22px;
-      border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; width: 180px;
-      background: #fffdf9;
-    }
-    .fill-input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+    /* .fill-input itself now lives in css/style.css — every page that types
+       Arabic uses it, not just this one. */
     .correct-answer { font-family: var(--font-ar); font-size: 20px; color: var(--accent); direction: rtl; display: block; }
     #kbDock { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; }
     .bucket-bar { display: inline-flex; gap: 3px; margin-top: 4px; direction: ltr; }
@@ -56,9 +52,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mteweqg2"></script>
-<script src="js/tracker.js?v=mteweqg2"></script>
-<script src="js/plan.js?v=mteweqg2"></script>
+<script src="js/app.js?v=mtexh6xq"></script>
+<script src="js/tracker.js?v=mtexh6xq"></script>
+<script src="js/plan.js?v=mtexh6xq"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -900,7 +896,8 @@ function renderGroupFill(obj, prefix) {
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const answer = tbody.querySelectorAll(".correct-answer")[i];
       const key = `${prefix}${obj.id}:${i}`;
-      const ok = arMatch(input.value, m.ar);
+      // graded the same way as the drill: letter-perfect, or right by sound
+      const ok = answerMatchAr(input.value, m.ar).ok;
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
       if (ok) { right++; answer.style.display = "none"; }

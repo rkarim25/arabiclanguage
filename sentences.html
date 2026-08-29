@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteweqg2">
-  <link rel="stylesheet" href="css/style.css?v=mteweqg2">
+  <link rel="stylesheet" href="css/fonts.css?v=mtexh6xq">
+  <link rel="stylesheet" href="css/style.css?v=mtexh6xq">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -41,9 +41,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mteweqg2"></script>
-<script src="js/tracker.js?v=mteweqg2"></script>
-<script src="js/plan.js?v=mteweqg2"></script>
+<script src="js/app.js?v=mtexh6xq"></script>
+<script src="js/tracker.js?v=mtexh6xq"></script>
+<script src="js/plan.js?v=mtexh6xq"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -143,7 +143,7 @@ function ask() {
       <span class="sp-hint">${it.tense.en} · <span style="font-style:italic">${it.tense.hint}</span></span>
       <span class="sp-hint">root: <span class="ar" dir="rtl">${it.root}</span></span>
     </div>
-    <input class="fill-input" id="spIn" placeholder="just type in English letters…" style="max-width:340px;font-size:20px">
+    <input class="fill-input" id="spIn" placeholder="just type in English letters…" style="width:340px;max-width:100%;font-size:20px">
     <div class="sp-meta" style="margin-top:4px">Type in <b>English letters</b> — Arabic appears as you type. <a href="#" id="spHelpToggle" style="color:var(--accent)">how do I type it?</a></div>
     <div id="spHelp" style="display:none;font-size:13px;color:var(--muted);background:#f6f2ea;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:8px;line-height:1.7">
       <b>You can ignore the little vowel marks</b> — grading only checks the letters, so just type the consonants and long vowels.<br>
@@ -159,9 +159,12 @@ function ask() {
     <div id="spReveal"></div>
   `;
   const input = document.getElementById("spIn");
-  // autocorrect chips for the object words only — never the verb (that's the test)
+  // Autocorrect chips for the object words only — never the verb, because the
+  // verb IS the question. The sentence starts with the verb, so the whole first
+  // word gets no chips, which reads as broken (he reported exactly that on
+  // 2026-08-30). heldBackNote fills that space with the reason instead.
   const lexicon = DATA.verbs.flatMap(v => v.obj.ar.split(" ")).filter(w => normalizeAr(w) !== normalizeAr(it.form));
-  attachInlineTranslit(input, { lexicon });
+  attachInlineTranslit(input, { lexicon, heldBackNote: "no chips for the verb — that's the bit you're proving. ⌨ keys if you're stuck." });
   input.focus();
   input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reveal(); } });
   const spTarget = () => document.getElementById("spIn");

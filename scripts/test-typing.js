@@ -98,5 +98,101 @@ yes(writeMatchAr("كيف حالك", target).ok || arMatch("كيف حالك", tar
   yes(/attachInlineTranslit/.test(learn), "learn.html uses the shared live-transliteration helper, not its own");
 }
 
+/* ---------- the spellings romanization cannot reach ----------
+   Reported 2026-08-30. Typing these the obvious way used to produce visibly
+   wrong Arabic (عَلا for عَلَى, الا for إِلَى) and the grader then marked a correct
+   answer wrong. Each of these is a word he meets constantly. */
+for (const [typed, want] of [
+  ["ilaa", "إلى"], ["3alaa", "على"], ["Hattaa", "حتى"], ["mataa", "متى"],
+  ["haadhaa", "هذا"], ["dhaalika", "ذلك"], ["allaah", "الله"], ["laakin", "لكن"],
+]) {
+  yes(normalizeAr(latinToArabic(typed)) === normalizeAr(want), `"${typed}" → ${want}, not a phonetic guess`);
+}
+yes(normalizeAr(latinToArabic("al-ujra")).includes("اجر"), "ال before a vowel keeps that word's own alif (al-ujra → الأجرة)");
+
+/* ---------- the four things a typist cannot know ---------- */
+for (const [typed, target, why] of [
+  ["qaaluu", "قَالُوا", "the plural's silent alif (ـوا)"],
+  ["ghurfa", "غُرْفَة", "ة heard as a plain -a"],
+  ["shukran", "شُكْرًا", "a tanwin written out as n"],
+  ["hudan", "هُدًى", "a tanwin over an alif maqsura"],
+  ["3alaa", "عَلَى", "a final long ā written ى"],
+  ["li'anna", "لِأَنَّ", "a hamza whose seat he cannot guess"],
+]) {
+  yes(answerMatchAr(typed, target).ok, `${why}: "${typed}" is accepted for ${target}`);
+}
+
+/* ---------- the whole lexicon, typed as the site itself transliterates it ----------
+   The site SHOWS him a transliteration for every word. Typing that back must be
+   accepted, or the site is contradicting itself. Was 82% before this was fixed. */
+{
+  const L = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "lexicon.json"), "utf8"));
+  const ascii = s => String(s).normalize("NFC")
+    .replace(/ā/g, "aa").replace(/ū/g, "uu").replace(/ī/g, "ii")
+    .replace(/ḥ/g, "H").replace(/ṣ/g, "S").replace(/ḍ/g, "D").replace(/ṭ/g, "T").replace(/ẓ/g, "Z")
+    .replace(/ʿ/g, "3").replace(/[ʾʼ’]/g, "'");
+  let n = 0, ok_ = 0;
+  for (const v of Object.values(L)) {
+    const ar = (v[0] || "").split("/")[0].trim(), tr = ascii((v[1] || "").split("/")[0].trim());
+    if (!ar || !tr || /[^\x00-\x7F]/.test(tr) || tr.includes("--")) continue;   // skip morpheme-marked Quranic tr
+    n++;
+    if (answerMatchAr(tr, ar).ok) ok_++;
+  }
+  const pct = 100 * ok_ / n;
+  yes(n > 700, `${n} lexicon words carry a transliteration to type back`);
+  yes(pct >= 92, `typing the site's own transliteration is accepted ${pct.toFixed(1)}% of the time (floor 92%)`);
+  /* The other half of the bargain: forgiving cannot mean indiscriminate. A word
+     he did not write must not be accepted, or "proved" means nothing. */
+  for (const [typed, target] of [["3alayhi", "اللَّه"], ["ma3", "مَا"], ["qaala", "قَالُوا"], ["madrasa", "مَسْجِد"]]) {
+    yes(!answerMatchAr(typed, target).ok, `"${typed}" is still wrong for ${target}`);
+  }
+}
+
+/* ---------- Sentence Practice: every conjugation must be typeable ----------
+   The verb is the graded word and gets no suggestion chips, so if the converter
+   or the grader can't handle it he has no way through at all. */
+{
+  const D = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "sentences.json"), "utf8"));
+  const ascii = s => String(s).normalize("NFC")
+    .replace(/ā/g, "aa").replace(/ū/g, "uu").replace(/ī/g, "ii")
+    .replace(/ḥ/g, "H").replace(/ṣ/g, "S").replace(/ḍ/g, "D").replace(/ṭ/g, "T").replace(/ẓ/g, "Z")
+    .replace(/ʿ/g, "3").replace(/[ʾʼ’]/g, "'");
+  let n = 0, ok_ = 0;
+  for (const v of D.verbs) for (const p of ["ana", "nahnu", "hum"]) for (const t of ["past", "pres", "fut"]) {
+    const form = v.forms[p] && v.forms[p][t];
+    if (!form) continue;
+    const typed = [form, ...v.obj.ar.split(" ")].map(w => ascii(translitAr(w))).join(" ");
+    n++;
+    if (sentenceMatchAr(typed, form + " " + v.obj.ar, form).ok) ok_++;
+  }
+  yes(n >= 100, `${n} verb × person × tense sentences`);
+  yes(ok_ === n, `every one of them is accepted when typed as it sounds (${ok_}/${n})`);
+}
+/* …and a wrong conjugation must still fail, or the drill proves nothing. */
+yes(!sentenceMatchAr("qultu alHaqqa", "قَالُوا الحَقَّ", "قَالُوا").ok,
+  "the wrong person/tense is still wrong — the fold forgives spelling, not conjugation");
+
+/* ---------- a chip must offer the word he is halfway through ----------
+   Scoring a completion by half its remaining length buried the right long word
+   under an unrelated near-miss: typing الص offered إِلَى ahead of الصَّالِحَاتِ. */
+{
+  const src2 = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const m = /if \(wn\.startsWith\(probe\)\) return ([^;]+);/.exec(src2);
+  yes(!!m, "the completion score is still where the suggestion ranking can be checked");
+  const completionCost = m ? eval(m[1].replace(/wn\.length/g, "12").replace(/probe\.length/g, "3")) : 99;
+  yes(completionCost < 1.1, `a 9-letter-longer completion (cost ${completionCost}) still outranks any edit-distance fix (1.1+)`);
+}
+
+/* ---------- every page that types Arabic is wired and looks like the others ---------- */
+{
+  const css = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
+  yes(/^\.fill-input \{/m.test(css), ".fill-input is styled site-wide, not inside one page's <style>");
+  for (const page of ["sentences.html", "test.html", "vocab.html"]) {
+    const html = fs.readFileSync(path.join(ROOT, page), "utf8");
+    if (!/class="fill-input"/.test(html)) continue;
+    yes(/attachInlineTranslit/.test(html), `${page} converts English letters as he types`);
+  }
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

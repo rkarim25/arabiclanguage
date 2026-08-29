@@ -202,27 +202,46 @@ function editDist(a, b, cap) {
   }
   return Math.min(dp[m], cap + 1);
 }
-/* Arabic answer match — forgiving. normalizeAr already folds tashkeel and the
-   أإآ/ى variants; here we also forgive the ة/ه and hamza-seat confusions that
-   learners make, and a single slip in longer words. Accepts either half of a
-   "X / Y" pair. */
+/* ---------- the fold every typed answer is compared through ----------
+   Arabic writes things romanized typing simply cannot reach, and the site's own
+   transliteration doesn't distinguish them either:
+     · a final long ā may be written ى (عَلَى, حَتَّى, مُصَلَّى) where typing "aa" can only
+       ever produce ا;
+     · a hamza sits on a seat (ء ؤ ئ أ إ) the typist has no way to pick;
+     · ة sounds like a plain "-a" (غُرْفَة typed "ghurfa");
+     · the masculine plural carries a silent alif (قَالُوا typed "qaaluu").
+   Every one of those was being marked WRONG on correctly-typed answers — 18% of
+   the lexicon and 31% of Sentence Practice (measured 2026-08-30). So they are
+   folded away on BOTH sides before any comparison.
+
+   normalizeAr is deliberately left alone: it builds SRS card keys, and loosening
+   it would silently merge cards and orphan his review history. */
+function typedFold(s) {
+  return normalizeAr(String(s).replace(/ى/g, "ا"))   // final long ā: ى ≡ ا
+    .replace(/[ءؤئ]/g, "ا")                          // hamza seats (normalizeAr already did أإآ)
+    .replace(/ة/g, "ه")
+    .replace(/وا(?= |$)/g, "و");                     // the plural's silent alif
+}
+/* Arabic answer match — forgiving. typedFold has already taken care of the
+   spellings romanization can't reach; on top of that we forgive a written-out
+   tanwin, a ة heard as "-a", and a single slip in longer words. Accepts either
+   half of a "X / Y" pair. */
 function arMatch(typed, target) {
   const t = normalizeAr(typed);
   if (!t) return false;
-  const cands = [];
-  [target, ...target.split("/")].forEach(r => {
-    const n = normalizeAr(r);
-    if (!n || cands.includes(n)) return;
-    cands.push(n);
-    // tanwin target (شُكْرًا): typed "shukran" converts to شكرن — accept that too
-    if (/ً/.test(r) && n.endsWith("ا")) cands.push(n.slice(0, -1) + "ن");
-  });
-  if (cands.includes(t)) return true;
-  const fold = s => s.replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
-  const tf = fold(t), tfns = tf.replace(/ /g, "");
-  return cands.some(c => {
-    const cf = fold(c);
-    if (cf === tf || cf.replace(/ /g, "") === tfns) return true; // exact, or same but for spacing
+  const raws = [String(target), ...String(target).split("/")].map(r => r.trim()).filter(r => normalizeAr(r));
+  if (raws.some(r => normalizeAr(r) === t)) return true;
+  const tf0 = typedFold(typed), raw = String(typed).trim();
+  return raws.some(r => {
+    const cf = typedFold(r);
+    let tf = tf0;
+    // ة is the feminine marker he must produce, but romanized "-a" arrives as a
+    // trailing fatha — count that as the ة it spells (the fold made ة into ه)
+    if (/ة$/.test(r) && !/ه$/.test(tf) && /[َاةه]$/.test(raw)) tf += "ه";
+    if (cf === tf || cf.replace(/ /g, "") === tf.replace(/ /g, "")) return true; // exact, or same but for spacing
+    // tanwin target (شُكْرًا, هُدًى, غَالٍ جِدًّا): typed "shukran"/"jiddan" writes the n out
+    if (/[ًٌٍ]/.test(r) && r.split(/\s+/).map(w =>
+      /[ًٌٍ]/.test(w) ? typedFold(w).replace(/[اه]$/, "") + "ن" : typedFold(w)).join(" ") === tf) return true;
     return Math.max(cf.length, tf.length) >= 5 && editDist(cf, tf) <= 1; // one slip in a longer word
   });
 }
@@ -234,9 +253,25 @@ function arMatch(typed, target) {
 function answerMatchAr(typed, targetAr) {
   if (!typed || !typed.trim()) return { ok: false, rom: false };
   if (arMatch(typed, targetAr)) return { ok: true, rom: false };
+  let rom = false, conv = typed;
   if (/[A-Za-z]/.test(typed)) {
-    const conv = latinToArabic(typed);
-    if (conv && conv !== typed && arMatch(conv, targetAr)) return { ok: true, rom: true };
+    const c = latinToArabic(typed);
+    if (c && c !== typed) { conv = c; rom = true; if (arMatch(conv, targetAr)) return { ok: true, rom: true }; }
+  }
+  /* Everything here arrives through romanization — the answer boxes convert
+     English letters as he types — and casual Latin simply has no ص/س, ط/ت, ظ/ذ,
+     ح/ه or ع distinction. The site's own transliterations don't either ("khatib"
+     for خَطِيب, "nazif" for نَظِيف). So fall through to the same sound-alike tier the
+     drill and Story Write already grade on, flagged phon so callers can show the
+     exact spelling rather than pretend it was letter-perfect.
+     Only for a phrase or a word of 5+ letters, though: that fold is deliberately
+     blunt, and on short words it stops telling words apart (مَعَ would pass for
+     مَا, قَالُوا for قَالَ). Short words are graded strictly — they are also the ones
+     he can actually be expected to spell. */
+  const tgt = typedFold(targetAr);
+  if (tgt.includes(" ") || tgt.length >= 5) {
+    const w = writeMatchAr(conv, targetAr);
+    if (w.ok) return { ok: true, rom, phon: true };
   }
   return { ok: false, rom: false };
 }
@@ -251,7 +286,7 @@ function sentenceMatchAr(typed, targetAr, verbForm) {
   if (!typed || !typed.trim()) return { ok: false, rom: false };
   const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
   const rom = conv !== typed;
-  const fold = s => normalizeAr(String(s)).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const fold = typedFold;
   const t = fold(conv), c = fold(targetAr);
   if (!t || !c) return { ok: false, rom };
   if (t === c) return { ok: true, rom };
@@ -265,8 +300,19 @@ function sentenceMatchAr(typed, targetAr, verbForm) {
     let tail = 0; while (tail < k && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++;
     return head >= 2 && tail >= 2;
   };
+  // a long vowel he didn't type is romanization, not the wrong conjugation
+  // ("aqulu" for أَقُولُ). The edges still have to stand — person and tense live there.
+  const longVowelSlip = (a, b) => {
+    const [sh, lo] = a.length <= b.length ? [a, b] : [b, a];
+    if (lo.length - sh.length !== 1) return false;
+    for (let i = 1; i < lo.length - 1; i++) {
+      if (/[اوي]/.test(lo[i]) && lo.slice(0, i) + lo.slice(i + 1) === sh) return true;
+    }
+    return false;
+  };
   const tWords = t.split(" "), cWords = c.split(" ");
-  if (!innerSlip(tWords[0], fold(verbForm || cWords[0]))) return { ok: false, rom };
+  const cVerb = fold(verbForm || cWords[0]);
+  if (!innerSlip(tWords[0], cVerb) && !longVowelSlip(tWords[0], cVerb)) return { ok: false, rom };
   // the rest: loose per-word; if word counts differ, compare joined with scaled slack
   // strip a leading ال to forgive a missing/extra article — but never down to a
   // stub, so function words that just start ا-ل (إلى → الي) keep their body
@@ -308,9 +354,8 @@ function writeMatchAr(typed, targetAr) {
   if (!typed || !typed.trim()) return empty;
   const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
   const strict = s => normalizeAr(String(s));
-  const fold = s => strict(s)
-    .replace(/[ءؤئ]/g, "")
-    .replace(/ة/g, "ه").replace(/ح/g, "ه")
+  const fold = s => typedFold(s)
+    .replace(/ح/g, "ه")
     .replace(/ص/g, "س").replace(/ط/g, "ت")
     .replace(/[ظذ]/g, "ز").replace(/ض/g, "د")
     .replace(/ع/g, "ا");
@@ -329,6 +374,8 @@ function writeMatchAr(typed, targetAr) {
     }
     const a = fold(typedW), b = fold(targetW);
     if (!a || !b) return 0;
+    // a tanwin typed the way it sounds, with the n written out: "shukran" → شكرن
+    if (/[ًٌٍ]/.test(String(targetW)) && b.replace(/[اه]$/, "") + "ن" === a) return 1;
     const as = stripAl(a), bs = stripAl(b);
     for (const [x, y] of [[a, b], [as, bs], [a, bs], [as, b]]) {
       if (x === y) return 1;
@@ -336,7 +383,16 @@ function writeMatchAr(typed, targetAr) {
       const [sh, lo] = x.length < y.length ? [x, y] : [y, x];
       if (lo.length - sh.length === 1 && lo.startsWith(sh) && /[اويى]$/.test(lo)) return 1;
       const len = Math.max(x.length, y.length);
-      if (len >= 4 && editDist(x, y, 2) <= (len >= 6 ? 2 : 1)) return 1;
+      // a long vowel he didn't type ("halak" for حالك) is romanization, not a
+      // different word — allowed at any length, because it explains itself
+      if (Math.abs(x.length - y.length) === 1) {
+        const [sv, lv] = x.length < y.length ? [x, y] : [y, x];
+        for (let k = 0; k < lv.length; k++)
+          if (/[اوي]/.test(lv[k]) && lv.slice(0, k) + lv.slice(k + 1) === sv) return 1;
+      }
+      // a plain slip needs 5+, not 4+: at four letters one substitution on top of
+      // the sound-alike fold lands on a different word — عَلَيْهِ was grading as اللَّه.
+      if (len >= 5 && editDist(x, y, 2) <= (len >= 6 ? 2 : 1)) return 1;
     }
     return 0;
   };
@@ -1114,6 +1170,10 @@ function expandArticles(raw) {
     .replace(new RegExp(`(${_PRE})a(${_SUN})\\2`, "g"), "$1Al$2")
     // standalone assimilated sun article: assayyara ashshams annas
     .replace(new RegExp(`(^|\\s)a(${_SUN})\\2`, "g"), "$1Al$2")
+    // ال before a word that starts with a vowel: the alif of that word is still
+    // written (al-ujra → الأجرة, al-insan → الإنسان), but romanization only carries
+    // the vowel, so put the carrier back — otherwise the article eats it
+    .replace(/Al(?=[aiueo])/g, "AlA")
     // any leftover hyphen is a silent joiner in romanized Arabic, not a kashida
     .replace(/-/g, "");
 }
@@ -1123,7 +1183,40 @@ function expandArticles(raw) {
    and ا is excluded, so vowels never double. '*' still works as explicit shadda.
    A word-initial a/i/u/e/o becomes ا — no Arabic word starts with a bare vowel
    mark, and it makes "al..." produce the definite article ال as he'd expect. */
+/* ---------- words whose spelling no phonetic rule can reach ----------
+   A short list of very frequent words is written with an alif maqṣūra or a
+   dagger alif where the sound is a plain long ā (عَلَى, إِلَى, حَتَّى, هَٰذَا), or hides a
+   spelling nothing in the sound announces (الله). Typing them the obvious way
+   produced عَلا / الا / هاذا — visibly wrong Arabic in the box, however forgiving
+   the grader downstream was. إِلَى alone is the object of a third of Sentence
+   Practice. Substituted whole-word, before anything else runs. */
+const _ORTHO = {
+  allah: "الله", allaah: "الله", allahu: "اللهُ", allaahu: "اللهُ",
+  // the site's own transliteration elides the alif after a vowel: "rasūlu llāh"
+  llah: "الله", llaah: "الله", llahu: "اللهُ", llaahu: "اللهُ",
+  ana: "أنا", anaa: "أنا",
+  ila: "إلى", ilaa: "إلى", ilay: "إلى",
+  ala: "على", alaa: "على", "3ala": "على", "3alaa": "على",
+  hatta: "حتى", hattaa: "حتى", Hatta: "حتى", Hattaa: "حتى",
+  mata: "متى", mataa: "متى",
+  hadha: "هذا", hadhaa: "هذا", haadha: "هذا", haadhaa: "هذا",
+  hadhihi: "هذه", haadhihi: "هذه",
+  dhalika: "ذلك", dhaalika: "ذلك",
+  lakin: "لكن", laakin: "لكن", lakinna: "لكنّ", laakinna: "لكنّ",
+  "ulaika": "أولئك", "ulaaika": "أولئك", "ula'ika": "أولئك", "ulaa'ika": "أولئك",
+  "shay": "شيء", "shay'": "شيء", "shai": "شيء",
+};
+/* The article is written separately from the word it defines, so "al-hadha"
+   style forms still resolve. Anything not in the table falls through to the
+   ordinary letter-by-letter conversion. */
+function _orthoWord(w) {
+  if (!w) return null;
+  if (_ORTHO[w]) return _ORTHO[w];
+  const m = /^(?:al-|Al-|al|Al)(.+)$/.exec(w);
+  return m && _ORTHO[m[1]] ? "ال" + _ORTHO[m[1]] : null;
+}
 function latinToArabic(text) {
+  text = String(text).split(/(\s+)/).map(t => _orthoWord(t) || t).join("");
   text = expandArticles(text);
   const consonant = ch => ch.length === 1 && /[ء-ي]/.test(ch) && ch !== "ا";
   let out = "", i = 0, atStart = true;
@@ -1450,7 +1543,11 @@ function attachInlineTranslit(el, opts) {
     // lower score = closer match; null = no match
     const scoreAgainst = (wn, probe) => {
       if (!probe || probe.length < 2 || wn === probe) return null;
-      if (wn.startsWith(probe)) return (wn.length - probe.length) * 0.5;
+      // A completion is what he is actually doing — he stopped mid-word — so it
+      // outranks every edit-distance correction (those start at 1.1). Scoring it
+      // by half its remaining length used to bury the right long word: typing
+      // الص offered إِلَى before الصَّالِحَاتِ.
+      if (wn.startsWith(probe)) return 0.05 * (wn.length - probe.length);
       if (probe.length >= 3) {
         const d = editDist(wn, probe, 2);
         if (d <= (wn.length >= 6 ? 2 : 1)) return d + 0.1;
@@ -1477,6 +1574,16 @@ function attachInlineTranslit(el, opts) {
         .slice(0, 3);
     }
     bar.innerHTML = "";
+    // Some callers hold a word back on purpose (Sentence Practice keeps the verb
+    // out — it is the thing being proved). Silence there reads as "the
+    // suggestions are broken", which is exactly how he reported it, so say so.
+    if (!cands.length && opts && opts.heldBackNote && parts.length === 1 && last.length >= 2) {
+      const n = document.createElement("span");
+      n.style.cssText = "font-size:12.5px;color:var(--muted);direction:ltr";
+      n.textContent = opts.heldBackNote;
+      bar.appendChild(n);
+      return;
+    }
     cands.forEach(c => {
       const b = document.createElement("button");
       b.type = "button";
