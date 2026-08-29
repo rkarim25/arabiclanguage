@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevg6nj">
-  <link rel="stylesheet" href="css/style.css?v=mtevg6nj">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevhzl1">
+  <link rel="stylesheet" href="css/style.css?v=mtevhzl1">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -82,12 +82,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtevg6nj"></script>
-<script src="js/curriculum.js?v=mtevg6nj"></script>
-<script src="js/app.js?v=mtevg6nj"></script>
-<script src="js/tracker.js?v=mtevg6nj"></script>
-<script src="js/plan.js?v=mtevg6nj"></script>
-<script src="js/account.js?v=mtevg6nj"></script>
+<script src="js/progress-model.js?v=mtevhzl1"></script>
+<script src="js/curriculum.js?v=mtevhzl1"></script>
+<script src="js/app.js?v=mtevhzl1"></script>
+<script src="js/tracker.js?v=mtevhzl1"></script>
+<script src="js/plan.js?v=mtevhzl1"></script>
+<script src="js/account.js?v=mtevhzl1"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -139,7 +139,7 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
       <p style="font-size:15px;margin:0 0 4px">When this is done, you can <strong>${esc(ms.can)}</strong>.</p>
       <p style="font-size:13.5px;color:var(--muted);margin:0 0 8px">${esc(ms.why || "")}</p>
       <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
-        ${ms.lessonCount} lessons · ${ms.items} words · about ${ms.chunks} short sittings.
+        ${ms.lessonCount} lessons · ${ms.items} words · about ${ms.plannedMin} minutes in total.
         Take as long as you like — it's done when you've proved it, not when a week is up.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
         <a href="${href}" style="flex:1 1 220px;text-decoration:none"><button class="primary" style="width:100%;font-size:17px;padding:14px">${esc(label)}</button></a>
