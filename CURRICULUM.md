@@ -270,10 +270,16 @@ The week's `items` are the **target**, set on Sunday. He is free to carry on pas
 does, **the exam must cover what he actually learnt** — otherwise extra effort is invisible, which
 is the exact trap the old design fell into.
 
-So `examBuild()` is scoped by `weekLearned()`, **not** by `week.items`:
+So `examBuild()` is scoped by the **union** of the week's target and what he actually learnt —
+never one instead of the other:
 
-> *learnt this week* = on the week's list and now solid, **or** any other card brought to
-> box ≥ 3 between `week.from` and now (`srs.u` stamps the write time).
+> *scope* = every key in the week's objectives, **plus** any other card brought to box ≥ 3
+> between `week.from` and now (`srs.u` stamps the write time).
+
+Both halves matter. Scoping to the mastered part alone would score near 100% every time and hide
+the movement the retakes exist to show; scoping to the list alone would ignore work he chose to
+do. The union makes the score start low and climb as the week is mastered — which is what "how
+far along have I gone" means.
 
 Consequences, all deliberate:
 
@@ -281,7 +287,8 @@ Consequences, all deliberate:
 - Free-practice work (§1b) that reaches box ≥ 3 during the week **is** examined, even though it
   does not count toward the target. Learning counts wherever it happened.
 - Material that was already solid before the week started is *not* re-counted as this week's.
-- Before anything is solid yet, the exam falls back to the list — it is never empty.
+- Early in the week, before anything is solid, the exam still covers the whole target — that low
+  first score is the baseline the retakes are measured against.
 - `weekProgress()` reports `solid` against the target **and** `extra` beyond it. Progress is never
   capped at 100%: "15 of 15 — plus 6 more" is a better week than "15 of 15", and it should read
   that way.
