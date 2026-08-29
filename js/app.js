@@ -1203,8 +1203,15 @@ async function curLoadNames() {
       fetch("data/phrases.json").then(r => r.json()),
       fetch("data/everyday.json").then(r => r.json()),
     ]);
-    (ph.groups || []).forEach(g => { window._PH_NAMES[g.id] = g.en || g.title || g.id; });
-    (ev.groups || []).forEach(g => { window._EV_NAMES[g.id] = g.en || g.title || g.id; });
+    // `title` is the ARABIC heading; `theme` carries the English, often as
+    // "Greetings & courtesy — how every exchange opens and closes". An objective
+    // wants the short English name, so take the part before the dash.
+    const label = g => {
+      const th = String(g.theme || "").split(/\s+[—–-]\s+/)[0].replace(/\s*\([^)]*\)\s*$/, "").trim();
+      return th || g.title || g.id;
+    };
+    (ph.groups || []).forEach(g => { window._PH_NAMES[g.id] = label(g); });
+    (ev.groups || []).forEach(g => { window._EV_NAMES[g.id] = label(g); });
   } catch (e) { /* names are a nicety; the week still works without them */ }
 }
 
