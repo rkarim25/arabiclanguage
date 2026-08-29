@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevvqhd">
-  <link rel="stylesheet" href="css/style.css?v=mtevvqhd">
+  <link rel="stylesheet" href="css/fonts.css?v=mtew56mi">
+  <link rel="stylesheet" href="css/style.css?v=mtew56mi">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtevvqhd"></script>
-<script src="js/curriculum.js?v=mtevvqhd"></script>
-<script src="js/app.js?v=mtevvqhd"></script>
-<script src="js/tracker.js?v=mtevvqhd"></script>
-<script src="js/plan.js?v=mtevvqhd"></script>
+<script src="js/progress-model.js?v=mtew56mi"></script>
+<script src="js/curriculum.js?v=mtew56mi"></script>
+<script src="js/app.js?v=mtew56mi"></script>
+<script src="js/tracker.js?v=mtew56mi"></script>
+<script src="js/plan.js?v=mtew56mi"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -45,6 +45,53 @@ trackPage("learn");
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const app = document.getElementById("app");
 const P = new URLSearchParams(location.search);
+
+/* ---------- typing Arabic ----------
+   Typing Arabic script is not the skill being tested — knowing the word is. So
+   every answer box converts English letters to Arabic AS he types
+   (attachInlineTranslit in js/app.js) and offers tap-to-fix chips from the
+   site-wide lexicon when what he has typed is close to a real word.
+
+   The pool rule follows the rest of the codebase: in a LESSON the item's own
+   words are included (he is learning them, and picking the right spelling is
+   the point), but in a TEST they are excluded, so a chip can never hand him the
+   graded answer. A roughly-right spelling still passes either way — writeMatchAr
+   accepts sound-alike answers. */
+let LEXICON = null;
+async function typingPool(exclude) {
+  if (!LEXICON) {
+    try { LEXICON = Object.keys(await fetch("data/lexicon.json").then(r => r.json())); }
+    catch (e) { LEXICON = []; }
+  }
+  if (!exclude || !exclude.length) return LEXICON;
+  const out = new Set(exclude.flatMap(a => String(a).split(/\s+/)).map(w => normalizeAr(w)).filter(Boolean));
+  return LEXICON.filter(w => !out.has(normalizeAr(w)));
+}
+
+const TYPING_HELP = `
+  <details style="margin-top:8px">
+    <summary style="cursor:pointer;font-size:12.5px;color:var(--muted)">How to type Arabic here</summary>
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:6px">
+      Just type it the way it sounds — <code>kitab</code> → <span dir="rtl">كتاب</span>. It converts as you go.<br>
+      <b>Long vowels:</b> <code>aa</code>=ا · <code>ee</code>/<code>ii</code>=ي · <code>oo</code>/<code>uu</code>=و ·
+      <b>tricky letters:</b> <code>H</code>=ح · <code>kh</code>=خ · <code>th</code>=ث · <code>dh</code>=ذ ·
+      <code>sh</code>=ش · <code>gh</code>=غ · <code>3</code>=ع · <code>S</code>=ص · <code>T</code>=ط ·
+      <b>"the":</b> <code>al-kitab</code> → <span dir="rtl">الكتاب</span>.<br>
+      Close spellings are accepted, and the chips under the box fix a word with one tap.
+    </div>
+  </details>`;
+
+/* Wire a freshly-rendered answer box: live conversion, suggestion chips, a tap
+   keyboard, and Enter to submit. */
+async function wireAnswer(inputId, submitId, exclude) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  attachInlineTranslit(inp, { lexicon: await typingPool(exclude) });
+  inp.focus();
+  inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); const b = document.getElementById(submitId); if (b) b.click(); } };
+  const kb = document.getElementById(inputId + "Kb");
+  if (kb) kb.onclick = () => mountTranslitDock(() => document.getElementById(inputId));
+}
 
 (async () => {
   const ctx = await curCtx();
@@ -179,12 +226,14 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       } else {
         app.innerHTML = head() + `<div class="card">${n}
           <div class="q-en">${esc(it.v.en)}</div>
-          <p style="text-align:center;font-size:13.5px;color:var(--muted)">Write it in Arabic — English letters work too</p>
+          <p style="text-align:center;font-size:13.5px;color:var(--muted)">Type it the way it sounds — it turns into Arabic as you go</p>
           <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
-          <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button></div></div>`;
-        const inp = document.getElementById("ans"); inp.focus();
-        inp.onkeydown = e => { if (e.key === "Enter") document.getElementById("chk").click(); };
+          <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+          ${TYPING_HELP}</div>`;
+        // a LESSON may suggest the item itself — he is learning to spell it
+        wireAnswer("ans", "chk");
         document.getElementById("chk").onclick = () => {
+          const inp = document.getElementById("ans");
           const m = writeMatchAr(inp.value, it.v.ar);
           after(m.ok || arMatch(inp.value, it.v.ar));
         };
@@ -297,11 +346,14 @@ async function runTest(lessonIds, ctx, state, label) {
     } else {
       app.innerHTML = head + `<div class="card">${n}
         <div class="q-en">${esc(q.v.en)}</div>
+        <p style="text-align:center;font-size:13px;color:var(--muted)">Type it the way it sounds — it turns into Arabic as you go</p>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
-        <div class="row"><button class="primary" id="chk">Check</button><button id="skip">skip</button></div></div>`;
-      const inp = document.getElementById("ans"); inp.focus();
-      inp.onkeydown = e => { if (e.key === "Enter") document.getElementById("chk").click(); };
+        <div class="row"><button class="primary" id="chk">Check</button><button id="skip">skip</button><button class="small" id="ansKb">⌨ keys</button></div>
+        ${TYPING_HELP}</div>`;
+      // a TEST excludes the answer's own words, so a chip can never give it away
+      wireAnswer("ans", "chk", [q.v.ar]);
       document.getElementById("chk").onclick = () => {
+        const inp = document.getElementById("ans");
         const m = writeMatchAr(inp.value, q.v.ar);
         score(m.ok || arMatch(inp.value, q.v.ar), true);
       };
