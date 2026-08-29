@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtewaqzu">
-  <link rel="stylesheet" href="css/style.css?v=mtewaqzu">
+  <link rel="stylesheet" href="css/fonts.css?v=mtewc1wx">
+  <link rel="stylesheet" href="css/style.css?v=mtewc1wx">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -75,12 +75,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtewaqzu"></script>
-<script src="js/curriculum.js?v=mtewaqzu"></script>
-<script src="js/app.js?v=mtewaqzu"></script>
-<script src="js/tracker.js?v=mtewaqzu"></script>
-<script src="js/plan.js?v=mtewaqzu"></script>
-<script src="js/account.js?v=mtewaqzu"></script>
+<script src="js/progress-model.js?v=mtewc1wx"></script>
+<script src="js/curriculum.js?v=mtewc1wx"></script>
+<script src="js/app.js?v=mtewc1wx"></script>
+<script src="js/tracker.js?v=mtewc1wx"></script>
+<script src="js/plan.js?v=mtewc1wx"></script>
+<script src="js/account.js?v=mtewc1wx"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -130,26 +130,35 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
     const ms = state.current;
     const src = ctx.curriculum.milestones.find(m => m.id === ms.id);
     const next = Curriculum.nextChunk(ctx, state);
+    const nextTitle = next && next.lesson ? next.lesson.title : "";
     const label = next && next.testNext
-      ? (next.skipToTest ? "You already know these — prove it" : "Take the test")
-      : next ? `Continue — ${next.chunk.label.toLowerCase()}` : "Continue";
+      ? (next.skipToTest ? `Prove “${nextTitle}” — you already hold it` : `Test “${nextTitle}”`)
+      : next ? `Continue — ${nextTitle}` : "Continue";
     const href = next && next.testNext ? `learn.html?test=1&m=${encodeURIComponent(ms.id)}` : "learn.html";
 
+    /* The eyebrow reports where he actually IS, not a static "working on now" —
+       he proved five lessons and the card looked identical, which read as though
+       nothing had happened. */
+    const doneN = ms.lessonsDone, totalN = ms.lessonCount, leftN = totalN - doneN;
+    const stateLine = doneN === 0 ? "starting now"
+      : leftN === 1 ? "one lesson from done"
+      : `${doneN} of ${totalN} lessons proved`;
     nowEl.innerHTML = `
-      <div style="font-size:12.5px;color:var(--muted)">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Conversation"} · working on now</div>
+      <div style="font-size:12.5px;color:var(--muted)">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Conversation"} · ${esc(stateLine)}</div>
       <h2 style="margin:2px 0 4px">${esc(ms.name)}</h2>
       <p style="font-size:15px;margin:0 0 4px">When this is done, you can <strong>${esc(ms.can)}</strong>.</p>
       <p style="font-size:13.5px;color:var(--muted);margin:0 0 8px">${esc(ms.why || "")}</p>
+      <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:0 0 6px">
+        <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * doneN / (totalN || 1))}%"></i></div>
       <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
-        ${ms.lessonCount} lessons · ${ms.items} words · about ${ms.plannedMin} minutes in total.
-        Take as long as you like — it's done when you've proved it, not when a week is up.</p>
+        <strong style="color:var(--text)">${doneN} of ${totalN} proved</strong> · ${ms.items} words · about ${ms.plannedMin} minutes in total.
+        ${leftN ? "It's done when you've proved every lesson, not when a week is up." : ""}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
         <a href="${href}" style="flex:1 1 220px;text-decoration:none"><button class="primary" style="width:100%;font-size:17px;padding:14px">${esc(label)}</button></a>
         <a href="learn.html?mode=hands" style="flex:1 1 160px;text-decoration:none"><button style="width:100%;font-size:17px;padding:14px">🚗 Hands-free</button></a>
       </div>
       <p class="pace" style="margin:10px 0 0">
-        ${ms.lessonsDone} of ${ms.lessonCount} lessons proved ·
-        <a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}">take the test any time</a>
+        <a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}">Test everything still open in this milestone</a>
         ${pc.known && pc.state !== "on track" ? ` · ${Math.abs(pc.weeksAhead)} week${Math.abs(pc.weeksAhead) === 1 ? "" : "s"} ${pc.state}` : ""}
       </p>`;
   }
