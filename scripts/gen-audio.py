@@ -6,8 +6,9 @@
 #   pip install edge-tts
 #   python scripts/gen-audio.py          (incremental — skips files that exist)
 #
-# Sources: data/lexicon.json (every Arabic word + its English gloss) and
-# data/sentences.json (every conjugated sentence + its English line).
+# Sources: data/lexicon.json (every Arabic word + its English gloss),
+# data/sentences.json (every conjugated sentence + its English line), and
+# data/story-NN.json (every spoken story sentence, question and tappable word).
 # Output:  audio/ar/<hash>.mp3, audio/en/<hash>.mp3,
 #          data/audio-manifest.json  { "ar": {"<norm text>": "<hash>"}, "en": {...} }
 # Re-run after gen-lexicon.js / sentences.json changes.
@@ -32,6 +33,10 @@ def norm_ar(s):
     s = TASHKEEL.sub("", s)
     s = re.sub(r"[أإآٱ]", "ا", s)
     s = s.replace("ى", "ي")
+    # ؟ ، ؛ are INSIDE the Arabic block, so the filter below can't drop them;
+    # app.js normalizeAr strips them, so a key that keeps them is one the
+    # browser can never look up (100 clips were unreachable this way).
+    s = re.sub(r"[؟،؛]", "", s)
     s = re.sub(r"[^؀-ۿ\s]", "", s)
     return re.sub(r"\s+", " ", s).strip()
 def norm_en(s):
@@ -65,6 +70,26 @@ for w in loadd("quran-core.json")["words"]: add("en", w.get("en"))
 for f in sorted(os.listdir(DATA)):
     if re.match(r"^story-\d+\.json$", f):
         for w in loadd(f).get("vocab", []): add("en", w.get("en"))
+
+# Story Arabic: the lexicon only carries story VOCAB, but story.html speaks the
+# whole sentence (read-along, playthrough, speaking practice, dictation), each
+# comprehension question, and any word tapped inside a sentence or a quiz
+# option. Those were falling through to the browser voice — Reza flagged it on
+# the story-02 page ("again the audio doesn't work", 2026-08-13).
+STRIP_AR = str.maketrans("", "", ".،«»!؟")
+def add_ar_words(text):
+    for w in str(text or "").split():
+        add("ar", w.translate(STRIP_AR))
+for f in sorted(os.listdir(DATA)):
+    if not re.match(r"^story-\d+\.json$", f): continue
+    st = loadd(f)
+    for sent in st.get("sentences", []):
+        add("ar", sent.get("ar"))
+        for w in sent.get("words", []): add("ar", w[0].translate(STRIP_AR))
+    for q in st.get("questions", []):
+        add("ar", q.get("q"))
+        for o in q.get("options", []): add_ar_words(o)
+    for t in st.get("translate", []): add("ar", t.get("ar"))
 for s in loadd("verses.json")["surahs"]:
     for v in s["verses"]:
         for w in v["words"]: add("en", w[2])
