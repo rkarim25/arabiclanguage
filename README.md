@@ -4,7 +4,15 @@
 **Owner:** Reza (rkarim25 / rkarim88@gmail.com) · **Maintainer:** Claude (any chat session)
 **Learners (2026-07-15):** **Reza Karim** (rkarim88@gmail.com, standard) and **Saba Khan** (sabatarif.15@gmail.com, beginner) — separate cloud data, SRS, and personal coach notes; shared site content. `PROFILES` in `js/app.js` maps email → name/level. **Conflict rule:** one user's request must never degrade the other's experience — beginner material for Saba is ADDED (new clusters/levels), never swapped in over existing content.
 
-This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, and `TEACHER-SYNC.md` (the lesson-capture loop).
+This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, `TEACHER-SYNC.md` (the lesson-capture loop) and **`CURRICULUM.md`** (weeks, levels and exams).
+
+> **⚠️ Read `CURRICULUM.md` before changing the home page, the nav, or anything about weeks/levels/tests.**
+> Since **2026-08-29** the site is organised around a capability ladder, not a forecast: two tracks
+> (Qur'an by ear, Conversation) each carrying a CEFR level plus a can-do line; a weekly target expressed
+> as **objectives to master** (time is the variable, never a quota of minutes); and an always-open,
+> unlimited-retake test that both measures and teaches. The nav is deliberately **four links** and the
+> home page offers exactly **two ways in** — ▶ Lesson and 🚗 Commute — plus free vocab/sentence practice.
+> Adding a new top-level destination requires removing one.
 
 ## Mission & hard rules
 
