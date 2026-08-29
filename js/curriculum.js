@@ -345,12 +345,30 @@
     const size = weekSize(ctx);
     const b = weekBounds(now);
     const hist = weekHistory(ctx.log);
+
+    /* A week number is minted ONCE per calendar week. If this week has already
+       been started, rebuild the same week rather than inventing a new one —
+       otherwise every page load would mint another number and his history would
+       fill with phantom weeks. */
+    const already = hist.find(w => w.from === b.from && w.objectives && w.objectives.length);
+    if (already) {
+      return {
+        n: already.n, from: b.from, to: b.to, examOn: b.examOn,
+        title: already.title, why: already.why, track: already.track || "quran",
+        source: "coach", selfSeeded: true, sizedFor: already.sizedFor || size,
+        objectives: already.objectives, tasks: [],
+      };
+    }
     const n = (hist.length ? Math.max(...hist.map(w => w.n)) : 0) + 1;
 
     const srs = ctx.srs || {};
     const nameFor = ctx.nameFor || (g => g);
 
-    const scored = Object.keys(srs).map(k => {
+    /* Objectives are things still to MASTER. A card already at box >= SOLID_BOX
+       is mastered; it belongs in ordinary review, not in this week's target —
+       and putting it here would let a carried objective re-absorb the very words
+       he had just finished. */
+    const scored = Object.keys(srs).filter(k => ((srs[k] || {}).box || 0) < SOLID_BOX).map(k => {
       const c = srs[k];
       const due = (c.due || 0) <= now;
       // leaking-and-due first, then weakest box, then oldest due
@@ -361,13 +379,15 @@
        rather than being written off. Unfinished objectives lead the new week. */
     const prev = hist.length ? hist[hist.length - 1] : null;
     const objectives = [];
+    const byId = new Map();                      // one objective per group, ever
     const used = new Set();
-    if (prev && prev.objectives) {
+    const addObj = o => { objectives.push(o); byId.set(o.id, o); o.keys.forEach(k => used.add(k)); };
+
+    if (prev && prev.objectives && prev.n !== n) {
       for (const o of prev.objectives) {
         const unmastered = (o.keys || []).filter(k => ((srs[k] || {}).box || 0) < SOLID_BOX);
         if (!unmastered.length) continue;
-        objectives.push({ id: o.id, title: o.title, can: o.can, keys: unmastered, why: "carried over — not finished yet, and that's fine" });
-        unmastered.forEach(k => used.add(k));
+        addObj({ id: o.id, title: o.title, can: o.can, keys: unmastered, why: "carried over — not finished yet, and that's fine" });
       }
     }
 
@@ -385,8 +405,14 @@
     }
     for (const [g, keys] of byGroup) {
       if (objectives.reduce((a, o) => a + o.keys.length, 0) >= size.items) break;
+      const existing = byId.get(g);
+      if (existing) {                                // same group as a carried objective — MERGE
+        existing.keys = existing.keys.concat(keys);  // never show one thing twice under two headings
+        keys.forEach(k => used.add(k));
+        continue;
+      }
       if (keys.length < 2) continue;                 // a single stray card is not an objective
-      objectives.push({ id: g, title: nameFor(g), keys, why: "slipping — bring it back to solid" });
+      addObj({ id: g, title: nameFor(g), keys, why: "slipping — bring it back to solid" });
     }
     // last resort: never hand back an empty week
     if (!objectives.length && scored.length) {

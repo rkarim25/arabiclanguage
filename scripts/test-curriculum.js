@@ -156,6 +156,37 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
     "a mastered objective does not come back");
 }
 
+/* ---------- a week number is minted once, and a thing appears once ---------- */
+{
+  const srs = {};
+  for (let i = 0; i < 8; i++) srs["ph-food:" + i] = { box: 1, due: NOW - 86400000 };
+  for (let i = 0; i < 8; i++) srs["story-02:" + i] = { box: 1, due: NOW - 86400000 };
+
+  const b = C.weekBounds(NOW);
+  const first = C.weekSelfSeed(ctx({ srs }));
+  eq(first.n, 1, "the first self-seeded week is week 1");
+
+  // simulate the page having announced it, then loading again
+  const log = [{ e: "week-start", n: first.n, title: first.title, from: first.from, to: first.to,
+                 objectives: first.objectives, keys: C.weekKeys(first), t: NOW }];
+  const second = C.weekSelfSeed(ctx({ srs, log }));
+  eq(second.n, 1, "reloading the page does NOT mint a new week number");
+  eq(JSON.stringify(second.objectives), JSON.stringify(first.objectives), "…and the same week comes back unchanged");
+
+  // next calendar week: carried-over work must not appear twice
+  const lastWeek = [{ e: "week-start", n: 1, title: "Week 1", from: "2026-08-16", to: "2026-08-22",
+                      objectives: [{ id: "ph-food", title: "Eating & drinking", keys: ["ph-food:0", "ph-food:1"] }],
+                      keys: ["ph-food:0", "ph-food:1"], t: NOW - 9 * 86400000 }];
+  const nextWk = C.weekSelfSeed(ctx({ srs, log: lastWeek }));
+  eq(nextWk.n, 2, "a genuinely new calendar week gets the next number");
+  const ids = nextWk.objectives.map(o => o.id);
+  eq(ids.length, new Set(ids).size, "no group appears twice — a carried objective absorbs its new words");
+  const food = nextWk.objectives.filter(o => o.id === "ph-food");
+  eq(food.length, 1, "'Eating & drinking' appears exactly once, not once carried and once fresh");
+  yes(food[0].keys.length > 2, "…and it absorbed the newly-slipping words from the same group");
+  eq(new Set(C.weekKeys(nextWk)).size, C.weekKeys(nextWk).length, "no word is listed under two objectives");
+}
+
 /* ---------- exam construction ---------- */
 {
   const items = []; for (let i = 0; i < 30; i++) items.push({ key: "qw:fatiha:0:" + i });

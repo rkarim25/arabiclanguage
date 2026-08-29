@@ -1234,6 +1234,9 @@ async function weekGet() {
   const saved = store.get(WEEK_KEY, null);
   const usable = saved && Curriculum.weekKeys(saved).length && saved.to >= bounds.from;
   const week = usable ? saved : Curriculum.weekSelfSeed(ctx);
+  // PERSIST a self-seeded week: without this it is rebuilt on every page load,
+  // and each rebuild would mint the next week number
+  if (!usable) store.set(WEEK_KEY, week);
   weekAnnounce(week);
   return { week, ctx };
 }
