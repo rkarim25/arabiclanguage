@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtepdr8c">
-  <link rel="stylesheet" href="css/style.css?v=mtepdr8c">
+  <link rel="stylesheet" href="css/fonts.css?v=mteqx2jn">
+  <link rel="stylesheet" href="css/style.css?v=mteqx2jn">
 </head>
 <body>
 <main>
@@ -153,11 +153,11 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/progress-model.js?v=mtepdr8c"></script>
-<script src="js/curriculum.js?v=mtepdr8c"></script>
-<script src="js/app.js?v=mtepdr8c"></script>
-<script src="js/tracker.js?v=mtepdr8c"></script>
-<script src="js/plan.js?v=mtepdr8c"></script>
+<script src="js/progress-model.js?v=mteqx2jn"></script>
+<script src="js/curriculum.js?v=mteqx2jn"></script>
+<script src="js/app.js?v=mteqx2jn"></script>
+<script src="js/tracker.js?v=mteqx2jn"></script>
+<script src="js/plan.js?v=mteqx2jn"></script>
 <script>
 renderNav("home");
 trackPage("dashboard");
@@ -193,6 +193,7 @@ async function paintWeekHero() {
       <p style="margin:4px 0 0;font-size:14px">
         <strong>${p.mastered} of ${p.objectiveCount}</strong> mastered${p.extra ? ` · <span style="color:var(--accent)">+${p.extra} extra</span>` : ""}
         ${left !== null && left >= 0 ? ` · <span style="color:var(--muted)">${left === 0 ? "last day" : left + "d left"}</span>` : ""}
+        ${weekClassLine(week) ? ` · <span style="color:var(--accent);font-weight:600">🎓 ${esc(weekClassLine(week))}</span>` : ""}
         ${tr ? ` · <span style="color:var(--muted)">test: ${tr.scores.join(" → ")}</span>` : ""}</p>
       ${next ? `<p style="margin:8px 0 0;font-size:14px;color:var(--muted)">Up next: <strong style="color:var(--text)">${esc(next.title)}</strong> — ${next.solid} of ${next.total} solid</p>`
              : `<p style="margin:8px 0 0;font-size:14px;color:var(--accent);font-weight:600">Everything mastered. Test yourself, or carry on for bonus.</p>`}`;

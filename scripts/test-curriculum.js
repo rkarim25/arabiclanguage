@@ -106,6 +106,34 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   yes(/easing back in/.test(back.basis), "and it says why, so a light week doesn't read as a demotion");
 }
 
+/* ---------- the week runs MONDAY -> SUNDAY, bookended by his class ---------- */
+{
+  const at = (y, m, d) => new Date(y, m - 1, d, 12, 0, 0).getTime();
+  const b = t => C.weekBounds(t);
+
+  const mon = b(at(2026, 8, 31));
+  eq(mon.from, "2026-08-31", "a Monday starts its own week");
+  eq(mon.to, "2026-09-06", "…and the week runs to the following Sunday");
+  eq(mon.examOn, "2026-09-05", "the test opens on the Saturday");
+  eq(mon.classOn, "2026-09-06", "the Sunday class closes the week it was preparing for");
+
+  eq(b(at(2026, 9, 1)).from, "2026-08-31", "Tuesday is in the same week as its Monday");
+  eq(b(at(2026, 9, 5)).from, "2026-08-31", "Saturday is still that week");
+  eq(b(at(2026, 9, 6)).from, "2026-08-31", "Sunday — class day — is the LAST day of the week, not the first");
+  eq(b(at(2026, 9, 7)).from, "2026-09-07", "the next Monday opens the next week, on the material from Sunday's class");
+
+  // his ask: "start the week from Monday, so the first lesson starts after my class"
+  const sun = b(at(2026, 9, 6)), nextMon = b(at(2026, 9, 7));
+  yes(sun.from !== nextMon.from, "the class day and the day after it are in DIFFERENT weeks");
+  eq(nextMon.from, "2026-09-07", "so the new week's study opens the morning after the class");
+
+  // local dates, not UTC: under BST a Monday 00:30 is Sunday 23:30 UTC
+  eq(C.weekBounds(new Date(2026, 8, 7, 0, 30, 0).getTime()).from, "2026-09-07",
+    "just after midnight on a Monday is already the new week (local time, not UTC)");
+  eq(C.weekBounds(new Date(2026, 8, 6, 23, 30, 0).getTime()).from, "2026-08-31",
+    "…and late Sunday night is still the old week");
+}
+
 /* ---------- week progress + self-seed ---------- */
 {
   // legacy flat shape must still work — old coach payloads are in the wild

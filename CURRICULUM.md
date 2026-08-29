@@ -187,15 +187,26 @@ progress bars. Levels beyond the next are **not** shown — the whole point is a
 
 ### Rhythm
 
-His live Preply lesson is **Sunday 07:00 UK**, so the week is anchored to it:
+His live Preply lesson is **Sunday 07:00 UK**. His instruction (2026-08-29): *"start the week from
+Monday, so the first lesson starts after my class."* So the class **bookends** the week — the one
+that starts it supplies the material, the one that ends it is what the week was preparing for:
 
 ```
-Sunday 07:00  lesson  →  syllabus set from it  →  study Mon–Fri  →  Saturday: EXAM  →  next Sunday
+Sun 07:00  CLASS  →  he pastes/photos it same day
+Mon                 the week OPENS on that material          ← from
+Mon–Fri             study
+Sat                 the TEST opens (retakeable from here on) ← examOn
+Sun 07:00  NEXT CLASS — walked into prepared                  ← to / classOn
+Mon                 the next week opens on what she just taught
 ```
 
-- Week runs **Sunday → Saturday**.
-- The exam becomes available on the **Saturday** (`examOn`), and stays available until the week
-  is superseded — a missed Saturday is not a lost week.
+- Week runs **Monday → Sunday**, with `classOn` = the closing Sunday.
+- **Turnaround commitment:** material pasted on Sunday must be live as the week's objectives by
+  **Monday morning**. That is the whole point of the Monday start — see §7.
+- Dates are handled in **local time**, never UTC: under BST a Monday 00:30 is Sunday 23:30 UTC, and
+  a UTC boundary would put him in the previous week for an hour every morning.
+- The test becomes available on the **Saturday** (`examOn`) and never closes — unlimited retakes,
+  and a missed Saturday is not a lost week.
 - Weeks with no lesson (teacher away, he skipped) are set entirely by the coach from weak spots.
   **A week is never empty**; if no coach-set week exists, `weekSelfSeed()` builds one from due
   cards so he never opens the site to nothing.
@@ -415,6 +426,13 @@ letter with no meaning is the thing CEFR labels were chosen to avoid.
 This is the recurring job. It belongs to the nightly (`arabic-coach-nightly`) and to any
 interactive `run-arabic-coach` session that happens on or after a Sunday.
 
+0. **The Sunday→Monday turnaround is the commitment.** He asked directly: *"if i paste my class
+   lessons can it be incorporated to be ready before my next class?"* Yes — and the deadline is
+   **Monday morning**, not "soon". Whatever he pastes on Sunday (photos, typed notes, a screenshot,
+   a book page) becomes the week's objectives before he next opens the site. He has a full six days
+   on it and the test on Saturday, so he walks into the next Sunday class having already mastered
+   what the last one taught. If a paste arrives mid-week, add it to the CURRENT week as a new
+   objective rather than making him wait — the target grows, and the test grows with it (§5).
 1. **Capture the lesson** if one happened (per `TEACHER-SYNC.md`) — that material is the spine of
    the week. Without photos, the week is coach-set from weak spots instead; never stall waiting.
 2. **Score the week that just ended.** Read `exam-done` for week `n-1`. No exam sat? Treat as

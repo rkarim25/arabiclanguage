@@ -1257,9 +1257,25 @@ function weekAnnounce(week) {
 /* Days until the week closes. The TEST itself is always open (retakes are how
    he sees progress and, by retrieval practice, how he learns) — this is only
    about which attempt goes on the record. */
+function _dayStart(ymd) { const p = String(ymd).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]).getTime(); }
 function weekDaysLeft(week) {
   if (!week || !week.to) return null;
-  return Math.ceil((new Date(week.to + "T23:59:59Z").getTime() - Date.now()) / 86400000);
+  const n = new Date();
+  return Math.round((_dayStart(week.to) - new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime()) / 86400000);
+}
+/* Days until the Sunday 07:00 class that CLOSES this week — the thing the week
+   is preparing him for. Same day = 0. */
+function weekDaysToClass(week) {
+  const on = week && (week.classOn || week.to);
+  if (!on) return null;
+  const today = new Date();
+  const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  return Math.round((_dayStart(on) - t0) / 86400000);
+}
+function weekClassLine(week) {
+  const d = weekDaysToClass(week);
+  if (d === null || d < 0) return "";
+  return d === 0 ? "class today" : d === 1 ? "class tomorrow" : `class in ${d} days`;
 }
 function weekAttemptsSoFar(week) {
   return Curriculum.examAttempts(store.get("ats-log", []), week.n).length;

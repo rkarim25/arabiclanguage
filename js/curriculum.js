@@ -24,7 +24,15 @@
   const SOLID_BOX = 3;              // an item counts as "learnt this week" at box >= 3
   const EAR_STALE_D = 45;           // matches ProgressModel.SKILL_CAL.EAR_STALE_D
 
-  const iso = t => new Date(t).toISOString().slice(0, 10);
+  /* Dates are LOCAL, not UTC. Under BST a Monday 00:30 is Sunday 23:30 UTC, and
+     a UTC-based week boundary would put him in the wrong week for an hour every
+     morning. js/plan.js already formats local dates this way. */
+  const iso = t => {
+    const d = new Date(t);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  };
+  const startOfDay = ymd => { const p = String(ymd).split("-"); return new Date(+p[0], +p[1] - 1, +p[2], 0, 0, 0, 0).getTime(); };
+  const endOfDay = ymd => startOfDay(ymd) + DAY - 1;
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const pct = (a, b) => (b > 0 ? clamp(a / b, 0, 1) : 0);
 
@@ -268,8 +276,8 @@
      brought to box >= SOLID_BOX during the week (srs.u stamps the write time).
      Extra work therefore earns extra questions instead of going untested. */
   function weekLearned(week, srs, now) {
-    const from = week && week.from ? Date.parse(week.from + "T00:00:00Z") : 0;
-    const to = Math.min(now || Date.now(), week && week.to ? Date.parse(week.to + "T23:59:59Z") : Infinity);
+    const from = week && week.from ? startOfDay(week.from) : 0;
+    const to = Math.min(now || Date.now(), week && week.to ? endOfDay(week.to) : Infinity);
     const listed = new Set(weekKeys(week));
     const out = [];
     for (const k of Object.keys(srs || {})) {
@@ -330,11 +338,26 @@
 
   /* ---------- week boundaries ---------- */
   /* The week is anchored to his Sunday 07:00 lesson: Sunday -> Saturday. */
+  /* MONDAY -> SUNDAY, anchored to his Sunday 07:00 class (his 2026-08-29 ask:
+     "start the week from Monday, so the first lesson starts after my class").
+
+       Sun 07:00  class  ->  he pastes it  ->  Mon: the week opens ON that material
+       Mon..Fri   study
+       Sat        the test opens (retakeable all week after)
+       Sun 07:00  next class — the last day of the week, walked into prepared
+
+     The class therefore BOOKENDS the week: the one that starts it supplies the
+     material, and the one that ends it is what the week was preparing for. */
   function weekBounds(now) {
     const d = new Date(now);
-    const dow = d.getUTCDay();                     // 0 = Sunday
-    const from = new Date(now - dow * DAY);
-    return { from: iso(from.getTime()), to: iso(from.getTime() + 6 * DAY), examOn: iso(from.getTime() + 6 * DAY) };
+    const daysSinceMon = (d.getDay() + 6) % 7;     // getDay(): 0=Sun -> Mon=0 … Sun=6
+    const from = startOfDay(iso(now)) - daysSinceMon * DAY;
+    return {
+      from: iso(from),
+      to: iso(from + 6 * DAY),                     // Sunday — next class day
+      examOn: iso(from + 5 * DAY),                 // Saturday — the test opens
+      classOn: iso(from + 6 * DAY),
+    };
   }
 
   /* ---------- self-seeded week ---------- */
@@ -353,7 +376,7 @@
     const already = hist.find(w => w.from === b.from && w.objectives && w.objectives.length);
     if (already) {
       return {
-        n: already.n, from: b.from, to: b.to, examOn: b.examOn,
+        n: already.n, from: b.from, to: b.to, examOn: b.examOn, classOn: b.classOn,
         title: already.title, why: already.why, track: already.track || "quran",
         source: "coach", selfSeeded: true, sizedFor: already.sizedFor || size,
         objectives: already.objectives, tasks: [],
@@ -420,7 +443,7 @@
     }
 
     return {
-      n, from: b.from, to: b.to, examOn: b.examOn,
+      n, from: b.from, to: b.to, examOn: b.examOn, classOn: b.classOn,
       title: "Week " + n,
       why: "Set automatically from what's closest to being forgotten. Your coach replaces this each Sunday.",
       track: "quran", source: "coach", selfSeeded: true,

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>This week — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtepdr8c">
-  <link rel="stylesheet" href="css/style.css?v=mtepdr8c">
+  <link rel="stylesheet" href="css/fonts.css?v=mteqx2jn">
+  <link rel="stylesheet" href="css/style.css?v=mteqx2jn">
   <style>
     .lvl { display:flex; gap:12px; flex-wrap:wrap; }
     .lvl-chip { flex:1 1 260px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; }
@@ -46,11 +46,11 @@
   <div class="card" id="histCard" style="display:none"><h2>Every week so far</h2><div id="histBody"></div></div>
 </main>
 
-<script src="js/progress-model.js?v=mtepdr8c"></script>
-<script src="js/curriculum.js?v=mtepdr8c"></script>
-<script src="js/app.js?v=mtepdr8c"></script>
-<script src="js/tracker.js?v=mtepdr8c"></script>
-<script src="js/plan.js?v=mtepdr8c"></script>
+<script src="js/progress-model.js?v=mteqx2jn"></script>
+<script src="js/curriculum.js?v=mteqx2jn"></script>
+<script src="js/app.js?v=mteqx2jn"></script>
+<script src="js/tracker.js?v=mteqx2jn"></script>
+<script src="js/plan.js?v=mteqx2jn"></script>
 <script>
 renderNav("week");
 trackPage("week");
@@ -89,7 +89,8 @@ function paintWeek(week, ctx) {
     ${week.why ? `<p style="font-size:13.5px;color:var(--muted);margin-top:-6px">${esc(week.why)}</p>` : ""}
     <p style="font-size:14px">
       <strong>${p.mastered} of ${p.objectiveCount}</strong> mastered${p.extra ? ` · <span style="color:var(--accent)">+${p.extra} extra learnt beyond the target</span>` : ""}
-      ${left !== null && left >= 0 ? ` · <span style="color:var(--muted)">${left === 0 ? "last day of the week" : left + " day" + (left === 1 ? "" : "s") + " left in the week"}</span>` : ""}
+      ${left !== null && left >= 0 ? ` · <span style="color:var(--muted)">${left === 0 ? "last day of the week" : left + " day" + (left === 1 ? "" : "s") + " left"}</span>` : ""}
+      ${weekClassLine(week) ? ` · <span style="color:var(--accent);font-weight:600">🎓 ${esc(weekClassLine(week))}</span>` : ""}
     </p>
     ${p.objectives.map(o => `
       <div class="obj ${o.mastered ? "done" : ""}">
