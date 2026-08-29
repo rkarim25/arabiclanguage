@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>The long view — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mteu26rd">
+  <link rel="stylesheet" href="css/style.css?v=mteu26rd">
+  <style>
+    .lvlblock { border-left: 3px solid var(--border); padding-left: 14px; margin-bottom: 22px; }
+    .lvlblock.now { border-left-color: var(--accent); }
+    .lvlhead { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .lvlhead b { font-size: 20px; color: var(--accent); }
+    .msrow { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; font-size: 14.5px; }
+    .msrow .tick { width: 18px; flex: none; }
+    .msrow.done { color: var(--muted); }
+    .msrow.now { font-weight: 600; }
+    .crit { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 6px 0 0; padding: 0; list-style: none; }
+    .crit li.met { color: var(--text); }
+    .bar { height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 7px 0 0; }
+    .bar > i { display: block; height: 100%; background: var(--accent); }
+    .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>The long view</h1>
+  <p class="sub">Your two goals, the capabilities that get you there, and where you actually are.
+  There are no dates here — only what you can do and what comes next.</p>
+
+  <div class="card" id="paceCard"><div id="pace">…</div></div>
+  <div class="card"><h2>What you hold</h2><div class="inv" id="inv" style="display:flex;gap:22px;flex-wrap:wrap"></div>
+    <p style="font-size:13px;color:var(--muted);margin:10px 0 0" id="invBand"></p></div>
+
+  <div class="card"><h2>🎧 Understand the Qur'an as it is recited</h2><div id="track-quran">…</div></div>
+  <div class="card"><h2>🗣 Hold a conversation in Arabic</h2><div id="track-conv">…</div></div>
+
+  <div class="card" id="commuteCard" style="display:none;border-color:var(--accent)"></div>
+
+  <div class="card">
+    <details>
+      <summary style="cursor:pointer;font-weight:700;font-size:15px">The forecast model
+        <span style="font-weight:400;font-size:13px;color:var(--muted)">— the engine underneath, if you want the raw view</span>
+        <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span></summary>
+      <p style="font-size:13px;color:var(--muted);margin:8px 0 0">The milestones above are the real measure. This is the conservative model that sets the pacing —
+      it discounts screen knowledge for the ear, discounts again for connected speech, and floors speaking at your logged output time.</p>
+      <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">Loading…</div>
+      <div id="pgNarrative" style="display:none;background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.65"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
+        <a href="placement.html"><button class="primary">🎧 5-minute listening test</button></a>
+        <a href="converse.html?exam=1"><button>🎤 Oral exam (via any AI chat)</button></a>
+      </div>
+      <div id="pgSkills" style="display:none;border-top:1px dashed var(--border);margin-top:12px;padding-top:10px">
+        <div id="pgSkillRows" style="font-size:13px;line-height:1.65"></div>
+      </div>
+    </details>
+  </div>
+</main>
+
+<script src="js/progress-model.js?v=mteu26rd"></script>
+<script src="js/curriculum.js?v=mteu26rd"></script>
+<script src="js/app.js?v=mteu26rd"></script>
+<script src="js/tracker.js?v=mteu26rd"></script>
+<script src="js/plan.js?v=mteu26rd"></script>
+<script>
+renderNav("map");
+trackPage("map");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+(async () => {
+  const ctx = await curCtx();
+  if (!ctx) return;
+  const state = Curriculum.milestoneState(ctx);
+  const L = Curriculum.levels(ctx);
+  const inv = Curriculum.inventory(ctx);
+  const pc = Curriculum.pace(ctx, state);
+
+  document.getElementById("inv").innerHTML = `
+    <div><div class="n">${inv.words}</div><div style="font-size:13px;color:var(--muted)">words you hold${inv.wordsLong ? ` · ${inv.wordsLong} long-term` : ""}</div></div>
+    <div><div class="n">${inv.sentences}</div><div style="font-size:13px;color:var(--muted)">sentences you can use${inv.sentencesLong ? ` · ${inv.sentencesLong} long-term` : ""}</div></div>
+    <div><div class="n">${state.achieved.length}<span style="font-size:15px;color:var(--muted)">/${state.milestones.length}</span></div><div style="font-size:13px;color:var(--muted)">milestones achieved</div></div>`;
+  document.getElementById("invBand").textContent = inv.nextBand
+    ? `At about ${inv.nextBand.at} words, ${inv.nextBand.say}.`
+    : "You have the vocabulary for ordinary conversation — what's left is fluency, not words.";
+
+  /* pace: reported, but deliberately secondary to the capabilities */
+  document.getElementById("pace").innerHTML = state.current
+    ? `<p style="margin:0;font-size:15px">You're working on <strong>${esc(state.current.name)}</strong> — when it's done you can ${esc(state.current.can)}.</p>
+       ${pc.known ? `<p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Against the plan you're
+         <strong style="color:var(--text)">${pc.state === "on track" ? "on track" : Math.abs(pc.weeksAhead) + " week" + (Math.abs(pc.weeksAhead) === 1 ? "" : "s") + " " + pc.state}</strong>
+         — ${esc(pc.reason)}. Weeks are only how the plan was drawn; the milestones are the thing.</p>` : ""}`
+    : `<p style="margin:0">Every milestone achieved.</p>`;
+
+  /* each track: its levels, and the milestones that feed each level */
+  for (const t of Object.values(L)) {
+    const byLevel = {};
+    for (const m of state.milestones) (byLevel[m.level] = byLevel[m.level] || []).push(m);
+    const track = ctx.curriculum.tracks.find(x => x.id === t.id);
+    const html = track.levels.map(lv => {
+      const mine = (byLevel[lv.id] || []);
+      if (!mine.length) return "";
+      const earned = t.earned.some(e => e.id === lv.id);
+      const isNext = t.next && t.next.id === lv.id;
+      const lvState = earned ? t.earned.find(e => e.id === lv.id) : (isNext ? t.next : null);
+      return `
+        <div class="lvlblock ${isNext ? "now" : ""}">
+          <div class="lvlhead"><b>${esc(lv.label)}</b>
+            <span style="font-size:14.5px">${esc(lv.can)}</span>
+            ${earned ? `<span style="font-size:12px;color:var(--accent);font-weight:600">✓ earned</span>` : ""}</div>
+          ${isNext ? `<div class="bar"><i style="width:${Math.round(t.nextPct * 100)}%"></i></div>
+            <ul class="crit">${t.next.criteria.map(c => `<li class="${c.met ? "met" : ""}">${c.met ? "✓" : "·"} ${esc(c.label)} — ${esc(c.have)}/${esc(c.need)} ${esc(c.unit)}</li>`).join("")}</ul>` : ""}
+          <div style="margin-top:8px">
+            ${mine.map(m => `<div class="msrow ${m.achieved ? "done" : ""} ${state.current && state.current.id === m.id ? "now" : ""}">
+              <span class="tick">${m.achieved ? "✓" : "○"}</span>
+              <span>${esc(m.name)} — <span style="color:var(--muted)">you can ${esc(m.can)}</span>
+                ${m.achieved && m.score !== null ? ` <span style="color:var(--accent)">${m.score}</span>` : ""}
+                ${!m.achieved ? ` <span style="color:var(--muted);font-size:13px">(${m.lessonsDone}/${m.lessonCount} lessons)</span>` : ""}</span>
+            </div>`).join("")}
+          </div>
+        </div>`;
+    }).join("");
+    document.getElementById("track-" + t.id).innerHTML = html || "<p>No milestones defined for this track yet.</p>";
+  }
+})();
+</script>
+<script src="js/longview.js?v=mteu26rd"></script>
+</body>
+</html>

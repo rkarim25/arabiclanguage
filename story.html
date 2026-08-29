@@ -7,9 +7,9 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Story — Arabic Through Stories</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteqx2jn">
-  <link rel="stylesheet" href="css/style.css?v=mteqx2jn">
+  <title>Story — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mteu26rd">
+  <link rel="stylesheet" href="css/style.css?v=mteu26rd">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mteqx2jn"></script>
-<script src="js/tracker.js?v=mteqx2jn"></script>
-<script src="js/plan.js?v=mteqx2jn"></script>
+<script src="js/app.js?v=mteu26rd"></script>
+<script src="js/tracker.js?v=mteu26rd"></script>
+<script src="js/plan.js?v=mteu26rd"></script>
 <script>
 renderNav("stories");
 
@@ -40,7 +40,7 @@ const nextBtn = document.getElementById("nextStepBtn");
 
 loadStory(storyId).then(s => {
   story = s;
-  document.title = `${s.titleEn} — Arabic Through Stories`;
+  document.title = `${s.titleEn} — Arabic`;
   header.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>${s.titleEn}</span>

@@ -7,757 +7,167 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteqx2jn">
-  <link rel="stylesheet" href="css/style.css?v=mteqx2jn">
+  <title>Arabic — العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mteu26rd">
+  <link rel="stylesheet" href="css/style.css?v=mteu26rd">
+  <style>
+    .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .lvl { flex: 1 1 240px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
+    .lvl b { font-size: 19px; color: var(--accent); }
+    .inv { display: flex; gap: 22px; flex-wrap: wrap; align-items: baseline; }
+    .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .inv .l { font-size: 13px; color: var(--muted); }
+    .lesson { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .lesson:last-child { border-bottom: 0; }
+    .lesson .t { flex: 1; font-size: 15px; }
+    .lesson .m { font-size: 12.5px; color: var(--muted); }
+    .dots { letter-spacing: 2px; font-size: 13px; color: var(--muted); white-space: nowrap; }
+    .ms { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+    .ms.done { border-color: var(--accent); background: var(--accent-soft); }
+    .ms h3 { margin: 0 0 2px; font-size: 15.5px; }
+    .ms p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+    .pace { font-size: 13px; color: var(--muted); }
+  </style>
 </head>
 <body>
 <main>
-  <h1>Arabic Through Stories <span class="arabic" style="color:var(--accent)">العربية بالقصص</span></h1>
+  <h1>Arabic <span class="arabic" style="color:var(--accent)">العربية</span></h1>
 
-  <!-- Milestones are the spine (CURRICULUM.md §1b): where he stands, what this
-       week asks, and the only two ways in. Everything else is machinery. -->
-  <div id="levelStrip" style="display:none;margin:0 0 14px"></div>
+  <div class="lvls" id="lvls"></div>
 
-  <div class="card" id="weekHero" style="border-color:var(--accent)">
-    <h2 style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
-      <span>📅 This week</span>
-      <a href="week.html" style="font-size:13px;font-weight:400">the target &amp; the test →</a>
-    </h2>
-    <div id="weekHeroBody">Loading your week…</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
-      <button class="primary" id="btnLesson" style="flex:1 1 200px;font-size:17px;padding:14px">▶ Lesson</button>
-      <a href="audio.html?commute=1" style="flex:1 1 200px;text-decoration:none">
-        <button style="width:100%;font-size:17px;padding:14px">🚗 Commute</button></a>
-    </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0" id="lessonHint">A lesson is one small chunk, picked for you. The commute version is the same week, hands-free.</p>
+  <div class="card" id="nowCard" style="border-color:var(--accent)">
+    <div id="now">Loading…</div>
   </div>
 
   <div class="card">
-    <h2>Free practice</h2>
-    <p class="sub" style="margin-bottom:10px">Outside the week — for when you just want to turn the handle. It still counts in the test.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
-      <a href="vocab.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>📖 Vocab</b><br><span style="font-size:13px;color:var(--muted)">Learn new words</span></a>
-      <a href="review.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>🔁 Review</b><br><span style="font-size:13px;color:var(--muted)" id="dueHint">Everything due today</span></a>
-      <a href="sentences.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>✍️ Sentences</b><br><span style="font-size:13px;color:var(--muted)">Build &amp; review</span></a>
-      <a href="more.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>⋯ Everything else</b><br><span style="font-size:13px;color:var(--muted)">Stories, Qur'an, grammar…</span></a>
-    </div>
+    <h2>What you hold</h2>
+    <div class="inv" id="inv"></div>
+    <p style="font-size:13px;color:var(--muted);margin:10px 0 0" id="invBand"></p>
   </div>
 
-  <!-- test-first (his 2026-08-09 drawing: audio and screen are two delivery lines
-       that MEET AT THE TEST) — the check opens the sitting, before the plan -->
-  <div class="card" id="commuteCard" style="display:none;border-color:var(--accent)"></div>
-
-  <!-- his 2026-08-09 order: the coach frames the day, the plan acts on it,
-       charts & milestones sit below for when he wants the depth -->
-  <div class="card" id="coachCard" style="display:none;border-color:var(--accent)">
+  <div class="card" id="coachCard" style="display:none">
     <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
     <p id="coachNote" style="font-size:15px"></p>
     <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
   </div>
 
   <div class="card">
-    <details id="planDetails">
-      <summary style="cursor:pointer;font-weight:700;font-size:15px">Today's chunks — see all of them</summary>
-      <div id="planCard" style="margin-top:10px">Building today's plan…</div>
-      <details style="margin-top:10px">
-        <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Browse everything instead</summary>
-        <div class="whatnow" id="whatNow" style="margin-top:10px"></div>
-      </details>
-      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">🕌 One block after a salah — three prayers with a block each and the day is done, no willpower needed.</p>
-    </details>
+    <h2>What's coming</h2>
+    <div id="upcoming"></div>
+    <p style="margin:10px 0 0"><a href="map.html">The long view — where this is taking you →</a></p>
   </div>
 
-  <div class="card" id="progressCard">
-    <details>
-    <summary style="cursor:pointer;font-weight:700;font-size:15px;list-style-position:outside">
-      The long view <span style="font-weight:400;font-size:13px;color:var(--muted)">— the underlying model, if you want it</span>
-      <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span>
-    </summary>
-    <p style="font-size:13px;color:var(--muted);margin:8px 0 0">Your levels above are the real measure. This is the engine underneath them — kept honest, kept out of the way.</p>
-    <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is the skill itself — how much recitation your <em>ear</em> catches, how much Arabic your <em>mouth</em> can deploy — estimated conservatively from every answer you've given. It rises when you practise and sags as memory fades (normal, not failure). The three <strong style="color:var(--amber)">dotted lines</strong> are futures: your current pace, one better, one worse. <strong style="color:#7b5ea8">◆ Placement tests</strong> anchor the line to measured reality — when a test disagrees with the model, the model recalibrates and the forecast moves.</p>
-    <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
-    <div id="pgNarrative" style="display:none;background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.65"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
-      <a href="placement.html"><button class="primary">🎧 5-minute listening test</button></a>
-      <a href="converse.html?exam=1"><button>🎤 Oral exam (via any AI chat)</button></a>
-      <span style="font-size:12px;color:var(--muted)">Every test sharpens the chart — take one every week or two.</span>
-    </div>
-    <div id="pgSkills" style="display:none;border-top:1px dashed var(--border);margin-top:12px;padding-top:10px">
-      <div id="pgSkillRows" style="font-size:13px;line-height:1.65"></div>
-      <details style="font-size:11.5px;color:var(--muted);margin-top:6px">
-        <summary style="cursor:pointer">The science (and why the numbers start low)</summary>
-        <div style="margin-top:4px;line-height:1.6">
-          Screen-known words are discounted for the ear (L2 listeners routinely miss words they "know" — Goh 2000; Field 2008), again for connected speech (finding word boundaries in a stream is its own skill), and — for passages you don't recite from memory — word-catch converts to comprehension non-linearly (van Zeeland &amp; Schmitt 2013; Nation 2006: below ~90% coverage, understanding collapses). For your salah surahs, which you recite daily, catching the words by ear ≈ understanding them, so that panel tracks word-catch directly. Speaking counts only what you've produced (typed in Arabic, spoken past the mic, drilled in Sentences) at full value; the rest is floored at the bottom of the receptive→productive range (Laufer 1998; Webb 2008) and capped by your logged speaking minutes (DeKeyser: fluency needs output hours). Every discount starts pessimistic and rises only as YOUR results accumulate — and placement tests outweigh everything else, so a few honest tests quickly correct any pessimism. One measured fact worth knowing: at 10 focused min/day the model says you can hold about a third of the Umrah set in speech-ready memory; at 15 you hold all of it — the capacity cliff is real.
-        </div>
-      </details>
-    </div>
-    <details style="margin-top:12px;border-top:1px dashed var(--border);padding-top:10px">
-      <summary style="cursor:pointer;list-style-position:outside">
-        <span style="font-weight:700;font-size:14px">🎯 All milestones &amp; verified achievements</span>
-        <span id="msSummary" style="font-size:12.5px;color:var(--accent);font-weight:600;margin-left:6px">…</span>
-      </summary>
-      <div id="msTracks" style="margin-top:12px">Working out your position…</div>
-      <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
+  <div class="card" id="doneCard" style="display:none">
+    <details><summary style="cursor:pointer;font-weight:700;font-size:15px">Achieved <span id="doneN" style="color:var(--accent)"></span></summary>
+      <div id="doneList" style="margin-top:10px"></div>
     </details>
-    <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers since 4 Jul. Dotted = the site's own scheduler simulated forward at your measured accuracy and practice mix. One shared model (js/progress-model.js), calibrated from your answers, revalidated before every deploy.</p>
-    </details>
-  </div>
-
-  <div class="card" id="syncCard">
-    <h2>☁ Cloud sync & coaching</h2>
-    <p style="font-size:14px;color:var(--muted)" id="syncIntro">
-      Sign in once and the site backs up your learning data to the cloud automatically.
-      Your coach analyzes it and posts notes back here.
-    </p>
-    <div id="syncSetup">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-        <input id="loginEmail" type="email" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-        <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-        <button class="primary" id="btnCodeLogin">Sign in</button>
-      </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Everything is already set up — this box only appears on a device that hasn't signed in yet. Enter your email + sync code once and this becomes a status line. (Ask your coach in chat to reset the code any time.)</p>
-      <details style="font-size:13px;margin-top:12px">
-        <summary style="cursor:pointer;color:var(--muted)">Alternative: connect with a GitHub token instead</summary>
-        <ol style="padding-left:20px;margin:10px 0">
-          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a>.</li>
-          <li>Repository access → Only select repositories → <code>arabic-learning-data</code>; Permissions → Contents: Read and write.</li>
-          <li>Generate and paste the token below.</li>
-        </ol>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-          <button class="primary" id="btnConnect">Connect</button>
-        </div>
-      </details>
-    </div>
-    <div id="syncConnected" style="display:none">
-      <p style="font-size:14px">✅ Connected via <strong id="syncMethodLabel"></strong>. <span id="lastSync" style="color:var(--muted)"></span></p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="primary" id="btnSync">Sync now</button>
-        <button id="btnRestore">Restore from cloud</button>
-        <button id="btnDisconnect" class="small">Disconnect</button>
-      </div>
-      <p id="syncMsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
-    </div>
   </div>
 
   <div class="card">
-    <h2>Backup (manual)</h2>
-    <p style="font-size:14px;color:var(--muted)">Progress lives in this browser (and the cloud if connected). You can also export a file backup.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button id="btnExport">Export progress</button>
-      <button id="btnImport">Import progress</button>
-      <input type="file" id="importFile" accept=".json" style="display:none">
+    <h2>Free practice</h2>
+    <p class="sub" style="margin-bottom:10px">Outside the plan, whenever you feel like it. It still counts.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
+      <a href="vocab.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>📖 Vocabulary</b><br><span style="font-size:13px;color:var(--muted)">Learn &amp; review words</span></a>
+      <a href="sentences.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>✍️ Sentences</b><br><span style="font-size:13px;color:var(--muted)">Build &amp; review sentences</span></a>
+      <a href="more.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>⋯ Everything else</b><br><span style="font-size:13px;color:var(--muted)">Stories, Qur'an, grammar, settings</span></a>
     </div>
   </div>
 </main>
-<footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/progress-model.js?v=mteqx2jn"></script>
-<script src="js/curriculum.js?v=mteqx2jn"></script>
-<script src="js/app.js?v=mteqx2jn"></script>
-<script src="js/tracker.js?v=mteqx2jn"></script>
-<script src="js/plan.js?v=mteqx2jn"></script>
+<script src="js/progress-model.js?v=mteu26rd"></script>
+<script src="js/curriculum.js?v=mteu26rd"></script>
+<script src="js/app.js?v=mteu26rd"></script>
+<script src="js/tracker.js?v=mteu26rd"></script>
+<script src="js/plan.js?v=mteu26rd"></script>
+<script src="js/account.js?v=mteu26rd"></script>
 <script>
 renderNav("home");
-trackPage("dashboard");
+trackPage("home");
 
-/* ---------- the week hero (CURRICULUM.md §1b) ----------
-   Milestones are the spine: where he stands, what this week asks, and the two
-   ways in. The Lesson button is the ONE decision on this page. */
-async function paintWeekHero() {
-  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  {
-    const got = await weekGet();
-    if (!got) return;
-    const { week, ctx } = got;
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, total - done));
 
-    const L = Curriculum.levels(ctx);
-    const strip = document.getElementById("levelStrip");
-    strip.style.display = "flex";
-    strip.style.cssText += ";gap:10px;flex-wrap:wrap";
-    strip.innerHTML = Object.values(L).map(t => `
-      <a href="week.html" style="flex:1 1 240px;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 13px">
-        <div style="font-size:13px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
-        <div style="font-size:19px;font-weight:700;color:var(--accent)">${t.current ? esc(t.current.label) : "—"}
-          <span style="font-size:12.5px;font-weight:400;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) + " " + Math.round(t.nextPct * 100) + "%" : "complete"}</span></div>
-        <div style="font-size:13px;line-height:1.5;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
-      </a>`).join("");
+(async () => {
+  const ctx = await curCtx();
+  if (!ctx) { document.getElementById("now").textContent = "Couldn't load the curriculum."; return; }
+  const state = Curriculum.milestoneState(ctx);
+  const L = Curriculum.levels(ctx);
+  const inv = Curriculum.inventory(ctx);
+  const pc = Curriculum.pace(ctx, state);
 
-    const p = Curriculum.weekProgress(week, ctx.srs, Date.now());
-    const left = weekDaysLeft(week);
-    const tr = Curriculum.examTrajectory(ctx.log, week.n);
-    const next = p.objectives.find(o => !o.mastered);
-    document.getElementById("weekHeroBody").innerHTML = `
-      <p style="margin:0;font-size:15px"><strong>${esc(week.title)}</strong></p>
-      <p style="margin:4px 0 0;font-size:14px">
-        <strong>${p.mastered} of ${p.objectiveCount}</strong> mastered${p.extra ? ` · <span style="color:var(--accent)">+${p.extra} extra</span>` : ""}
-        ${left !== null && left >= 0 ? ` · <span style="color:var(--muted)">${left === 0 ? "last day" : left + "d left"}</span>` : ""}
-        ${weekClassLine(week) ? ` · <span style="color:var(--accent);font-weight:600">🎓 ${esc(weekClassLine(week))}</span>` : ""}
-        ${tr ? ` · <span style="color:var(--muted)">test: ${tr.scores.join(" → ")}</span>` : ""}</p>
-      ${next ? `<p style="margin:8px 0 0;font-size:14px;color:var(--muted)">Up next: <strong style="color:var(--text)">${esc(next.title)}</strong> — ${next.solid} of ${next.total} solid</p>`
-             : `<p style="margin:8px 0 0;font-size:14px;color:var(--accent);font-weight:600">Everything mastered. Test yourself, or carry on for bonus.</p>`}`;
+  /* the two levels */
+  document.getElementById("lvls").innerHTML = Object.values(L).map(t => `
+    <a class="lvl" href="map.html">
+      <div style="font-size:12.5px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
+      <div><b>${t.current ? esc(t.current.label) : "—"}</b>
+        <span style="font-size:12px;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) : "complete"}</span></div>
+      <div style="font-size:13px;line-height:1.45;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
+    </a>`).join("");
 
-    const due = dueCards().length;
-    if (due) document.getElementById("dueHint").textContent = due + " word" + (due === 1 ? "" : "s") + " due today";
+  /* words and sentences — the bedrock, stated plainly */
+  document.getElementById("inv").innerHTML = `
+    <div><div class="n">${inv.words}</div><div class="l">words you hold${inv.wordsLong ? ` · ${inv.wordsLong} long-term` : ""}</div></div>
+    <div><div class="n">${inv.sentences}</div><div class="l">sentences you can use${inv.sentencesLong ? ` · ${inv.sentencesLong} long-term` : ""}</div></div>`;
+  document.getElementById("invBand").textContent = inv.nextBand
+    ? `At about ${inv.nextBand.at} words, ${inv.nextBand.say}.`
+    : "You have the vocabulary for ordinary conversation — what's left is fluency, not words.";
 
-    // ▶ Lesson = the next unfinished block of today's plan; no menu, no choosing
-    document.getElementById("btnLesson").onclick = () => {
-      try {
-        const plan = planGet();
-        const cur = planCurrent(plan);
-        if (cur && cur.url) { location.href = cur.url; return; }
-      } catch (e) {}
-      location.href = "review.html";
-    };
-    try {
-      const cur = planCurrent(planGet());
-      if (cur) document.getElementById("lessonHint").textContent = `Next chunk: ${cur.icon} ${cur.title} · ~5 min. The commute version is the same week, hands-free.`;
-    } catch (e) {}
-  }
-}
-paintWeekHero().catch(() => { /* the rest of the dashboard still works */ });
+  /* the milestone you're on */
+  const nowEl = document.getElementById("now");
+  if (!state.current) {
+    nowEl.innerHTML = `<h2>Everything achieved</h2><p>Nothing left on the ladder — ask your coach for the next stretch.</p>`;
+  } else {
+    const ms = state.current;
+    const src = ctx.curriculum.milestones.find(m => m.id === ms.id);
+    const next = Curriculum.nextChunk(ctx, state);
+    const label = next && next.testNext
+      ? (next.skipToTest ? "You already know these — prove it" : "Take the test")
+      : next ? `Continue — ${next.chunk.label.toLowerCase()}` : "Continue";
+    const href = next && next.testNext ? `learn.html?test=1&m=${encodeURIComponent(ms.id)}` : "learn.html";
 
-/* today's plan — the front door (browse tiles live in the collapsed details) */
-planRenderCard(document.getElementById("planCard"));
-
-/* browse-everything tiles */
-const wn = document.getElementById("whatNow");
-suggestNext().forEach(s => {
-  const a = document.createElement("a");
-  a.href = s.href;
-  if (s.href.startsWith("http")) { a.target = "_blank"; a.rel = "noopener"; }
-  a.innerHTML = `<div class="wn-icon">${s.icon}</div><div class="wn-title">${s.title}</div><div class="wn-desc">${s.desc}</div>`;
-  if (s.href.startsWith("http")) a.addEventListener("click", () => logEvent({ e: "listen-click", title: s.title }));
-  if (s.rescue) {
-    // name the words up front so he knows exactly what one tap restores
-    resolveCards(s.rescue).then(cards => {
-      const names = cards.filter(c => c && c.v).map(c => `${c.v.ar} (${c.v.en})`).join(" · ");
-      if (names) a.querySelector(".wn-desc").textContent =
-        `${names} — you missed these and the old ✗ button retired them by mistake. Tap once to bring them back.`;
-    }).catch(() => {});
-    a.addEventListener("click", ev => {
-      ev.preventDefault();
-      s.rescue.forEach(k => { setBucket(k, "repeat"); logEvent({ e: "rescue", key: k }); });
-      a.querySelector(".wn-icon").textContent = "✓";
-      a.querySelector(".wn-title").textContent = "Restored";
-      a.querySelector(".wn-desc").textContent = "Back in rotation — they'll come up for review in about 10 minutes.";
-      a.style.pointerEvents = "none";
-    }, { once: true });
-  }
-  wn.appendChild(a);
-});
-
-/* milestones */
-/* Milestones, consolidated (2026-08-07, his ask): the charts + weekly narrative
-   carry the story now. This is just the compact content ladder — one line per
-   milestone, current one linked — plus a one-line verified record. The old
-   "honest long view" prose is gone: the chart IS the long view. */
-computeMilestones().then(ms => {
-  const hist = ms.history || [];
-  const ls = ms.learntSplit || { quran: 0, msa: 0 };
-  const ladder = list => {
-    const next = list.find(m => m.have < m.need);
-    return list.map(m => {
-      const done = m.have >= m.need;
-      if (m === next) {
-        const medal = m.test ? ` · <a href="test.html?ms=${m.test}" style="color:var(--amber)">test →</a>` : "";
-        return `<div style="margin-top:3px">► <a href="${m.link}" style="color:var(--accent);font-weight:600">${m.title}</a> <span style="color:var(--muted)">${m.have}/${m.need}</span>${medal}</div>`;
-      }
-      const badge = done && m.test && stepsDone("ms-" + m.test).passed ? " 🏅" : "";
-      return `<div style="margin-top:3px;color:${done ? "var(--accent)" : "var(--muted)"}">${done ? "✓" : "○"} ${m.title}${badge}</div>`;
-    }).join("");
-  };
-  const nextAny = ms.quran.find(m => m.have < m.need) || ms.msa.find(m => m.have < m.need);
-  document.getElementById("msSummary").textContent =
-    `📖 ${ms.coverage}% recognized · 🗣 ${ms.convPct}% core · next: ${(nextAny || { title: "all done!" }).title}`;
-  document.getElementById("msTracks").innerHTML = `
-    <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:13px">
-      <div style="flex:1 1 240px"><div style="font-weight:700">📖 Quran <span style="font-weight:600;color:var(--accent);font-size:12px">${ms.coverage}% of all Quranic words recognized</span></div>${ladder(ms.quran)}</div>
-      <div style="flex:1 1 240px"><div style="font-weight:700">🗣 Everyday MSA <span style="font-weight:600;color:var(--accent);font-size:12px">${ms.convPct}% of the conversation core</span></div>${ladder(ms.msa)}</div>
-    </div>
-    <div style="border-top:1px dashed var(--border);margin-top:10px;padding-top:8px;font-size:12.5px">
-      🏆 <strong>Verified:</strong> ${ms.totalLearnt} words (📖 ${ls.quran} · 🗣 ${ls.msa})${ms.provenSpoken ? ` · ${ms.provenSpoken} sentences spoken` : ""}${ms.provenTrans ? ` · ${ms.provenTrans} translations` : ""}${hist.length ? " · " + hist.slice(0, 3).map(h => h.label).join(" · ") + (hist.length > 3 ? ` · +${hist.length - 3} more` : "") : " · no test results yet — every pass lands here with its date"}
-    </div>`;
-  document.getElementById("msStats").textContent =
-    `${dueCards().length} due for review · ${activeMinutes()} active minutes measured from real interactions`;
-}).catch(e => {
-  document.getElementById("msTracks").innerHTML =
-    `Couldn't load milestone data (${e && e.message ? e.message : "error"}) — usually a stale cached script. <strong>Hard-refresh</strong> (Ctrl+F5, or pull down to refresh on mobile) and it will load.`;
-});
-
-/* weak spots: no card any more (his 2026-08-09 ask) — the data already feeds
-   the plan instead: the review block clears misses, Audio Coach playlists and
-   fill-sheets weight weak/due words first, drill-the-misses everywhere. */
-
-/* sync UI */
-const setup = document.getElementById("syncSetup");
-const connected = document.getElementById("syncConnected");
-const syncMsg = document.getElementById("syncMsg");
-function refreshSyncUI() {
-  const m = syncMethod();
-  setup.style.display = m ? "none" : "block";
-  connected.style.display = m ? "block" : "none";
-  if (m) {
-    const who = whoami();
-    document.getElementById("syncMethodLabel").textContent =
-      (who ? who.full + " · " : "") + (m === "google" ? "sync code / Google" : "GitHub token");
-  }
-  const last = store.get(SYNC_KEY, 0);
-  document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
-}
-refreshSyncUI();
-
-/* email + sync code sign-in */
-document.getElementById("btnCodeLogin").onclick = async () => {
-  const email = document.getElementById("loginEmail").value.trim();
-  const code = document.getElementById("loginCode").value.trim();
-  if (!email || !code) return;
-  const btn = document.getElementById("btnCodeLogin");
-  btn.textContent = "Signing in…";
-  try {
-    await codeLogin(email, code);
-    await syncNow();
-    refreshSyncUI();
-    loadCoach();
-  } catch (e) {
-    alert(e.message === "bad-code" ? "That code isn't right — check it, or ask your coach in chat to reset it."
-      : e.message === "email-not-allowed" ? "That email isn't enabled on this site — ask your coach in chat to add it."
-      : "Sign-in failed: " + e.message);
-  }
-  btn.textContent = "Sign in";
-};
-
-document.getElementById("btnConnect").onclick = async () => {
-  const t = document.getElementById("tokenInput").value.trim();
-  if (!t) return;
-  setToken(t);
-  try {
-    await syncNow();
-    refreshSyncUI();
-    loadCoach();
-    syncMsg.textContent = "";
-  } catch (e) {
-    setToken(null);
-    alert("Could not sync with that token. Check it has Contents read/write on arabic-learning-data.");
-  }
-  refreshSyncUI();
-};
-document.getElementById("btnSync").onclick = async () => {
-  syncMsg.textContent = "Syncing…";
-  try { const n = await syncNow(); syncMsg.textContent = `✓ Synced (${n} events).`; refreshSyncUI(); }
-  catch (e) { syncMsg.textContent = "✗ Sync failed — " + (e.message === "bad-token" ? "token invalid or expired." : "check your connection."); }
-};
-document.getElementById("btnRestore").onclick = async () => {
-  if (!confirm("Replace progress in THIS browser with the cloud copy?")) return;
-  try { await restoreFromCloud(); location.reload(); }
-  catch (e) { alert("No cloud data found yet."); }
-};
-document.getElementById("btnDisconnect").onclick = () => { setToken(null); setSession(null); store.set("ats-email", null); refreshSyncUI(); };
-
-/* coach notes */
-async function loadCoach() {
-  if (!syncMethod()) return; // works for BOTH sign-in methods (email+code session or GitHub token)
-  try {
-    const c = await fetchCoach();
-    if (!c || !c.note) return;
-    // the teacher-lesson HOMEWORK CONTRACT rides in the coach payload — store it
-    // locally so the day-plan can schedule backwards from the lesson deadline
-    if (c.homework && c.homework.lessonAt) {
-      store.set("ats-homework", c.homework);
-      const pc = document.getElementById("planCard");
-      if (pc && typeof planRenderCard === "function") planRenderCard(pc);
-    } else if (!c.homework) store.set("ats-homework", null);
-    // the WEEK rides in the same payload (CURRICULUM.md §6) — cache it so the
-    // week hero and week.html show the coach's target instead of a self-seed
-    if (c.week && c.week.n) {
-      // only repaint when the coach's week actually CHANGED — an unconditional
-      // reload here would re-fetch, re-store and reload again, forever
-      const prev = store.get(WEEK_KEY, null);
-      const isNew = !prev || prev.n !== c.week.n || JSON.stringify(prev) !== JSON.stringify(c.week);
-      store.set(WEEK_KEY, c.week);
-      if (isNew && typeof paintWeekHero === "function") { try { await paintWeekHero(); } catch (e) {} }
-    }
-    const who = whoami();
-    if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
-    document.getElementById("coachCard").style.display = "block";
-    document.getElementById("coachDate").textContent = c.updated ? "· " + c.updated : "";
-    document.getElementById("coachNote").textContent = c.note;
-    const ul = document.getElementById("coachFocus");
-    ul.innerHTML = "";
-    (c.focus || []).forEach(f => {
-      const li = document.createElement("li");
-      li.textContent = f;
-      ul.appendChild(li);
-    });
-  } catch (e) { /* offline or bad token — skip */ }
-}
-loadCoach();
-autoSync();
-
-/* manual backup */
-document.getElementById("btnExport").onclick = () => {
-  const data = { progress: getProgress(), srs: getSrs(), log: store.get(LOG_KEY, []), exported: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "arabic-stories-progress.json";
-  a.click();
-};
-document.getElementById("btnImport").onclick = () => document.getElementById("importFile").click();
-document.getElementById("importFile").onchange = (e) => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const r = new FileReader();
-  r.onload = () => {
-    try {
-      const d = JSON.parse(r.result);
-      if (d.progress) store.set("ats-progress", d.progress);
-      if (d.srs) store.set("ats-srs", d.srs);
-      if (d.log) store.set(LOG_KEY, d.log);
-      location.reload();
-    } catch (err) { alert("Could not read that file."); }
-  };
-  r.readAsText(f);
-};
-
-/* ============ 🎧🗣 The two skills — reality & forecast ============
-   SKILL AXIS (redesign 2026-08-07, his ask): the Quran panel plots listening —
-   how much of the recitation he'd actually catch/follow by ear — and the
-   conversation panel plots speaking deployability. Word retention is the engine
-   underneath (js/progress-model.js) but is no longer the thing drawn.
-   Data: data/progress-series.json (nightly, scripts/gen-progress.js).
-   Placement tests (placement.html, Converse oral exam) appear as ◆ anchors and
-   recalibrate the model's factors — if reality is off the forecast, the next
-   nightly regeneration adjusts the forecast. */
-(function () {
-  const panels = document.getElementById("pgPanels");
-  if (!panels) return;
-  const fmtD = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" });
-  const fmtDY = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "2-digit" });
-
-  // three lines only (his ask): current pace · one higher · one lower
-  const SCEN_STYLE = {
-    current: { c: "#8a8578", w: 1.3, dash: "5 4" },
-    higher:  { c: "#0d7a5f", w: 1.6, dash: "2 3" },
-    lower:   { c: "#b03535", w: 1,   dash: "1.5 3.5" },
-  };
-
-  function drawPanel(tr, icon) {
-    const W = 560, H = 260, L = 40, R = 14, T = 16, B = 30; // plot box
-    const pw = W - L - R, ph = H - T - B;
-    const total = 1, target = tr.target; // skill axis: 0..1, goal line at the stage target
-    const reality = tr.reality.slice();  // nightly skill series (already ends today)
-
-    const t0 = new Date(reality[0].d).getTime();
-    // x-domain: reality span + forecast horizon (cap at latest completion + 60d, else 9 months out)
-    const comps = tr.scenarios.map(s => s.completion).filter(Boolean).map(d => new Date(d).getTime());
-    const tEnd = Math.min(
-      Math.max(Date.now() + 270 * 86400000, ...(comps.length ? [Math.max(...comps) + 60 * 86400000] : [])),
-      Date.now() + 550 * 86400000);
-    const x = iso => L + ((new Date(iso).getTime() - t0) / (tEnd - t0)) * pw;
-    const y = m => T + (1 - m / total) * ph;
-    const path = (pts, get) => pts.map((p, i) => (i ? "L" : "M") + x(p.d).toFixed(1) + " " + y(get(p)).toFixed(1)).join(" ");
-
-    // month ticks
-    let ticks = "";
-    const tick = new Date(t0); tick.setDate(1); tick.setMonth(tick.getMonth() + 1);
-    for (let m = new Date(tick); m.getTime() < tEnd; m.setMonth(m.getMonth() + 1)) {
-      const xx = x(m.toISOString().slice(0, 10));
-      ticks += `<line x1="${xx.toFixed(1)}" y1="${T}" x2="${xx.toFixed(1)}" y2="${H - B}" stroke="var(--border)" stroke-width="0.5"></line>
-        <text x="${xx.toFixed(1)}" y="${H - B + 14}" font-size="8.5" text-anchor="middle" fill="var(--muted)" font-family="var(--font-ui)">${m.toLocaleDateString(undefined, { month: "short" })}${m.getMonth() === 0 ? " " + String(m.getFullYear()).slice(2) : ""}</text>`;
-    }
-    // y grid: 25/50/75/goal
-    let grid = "";
-    [0.25, 0.5, 0.75].forEach(f => {
-      grid += `<line x1="${L}" y1="${y(f * total).toFixed(1)}" x2="${W - R}" y2="${y(f * total).toFixed(1)}" stroke="var(--border)" stroke-width="0.5"></line>
-        <text x="${L - 4}" y="${(y(f * total) + 3).toFixed(1)}" font-size="8.5" text-anchor="end" fill="var(--muted)" font-family="var(--font-ui)">${f * 100}%</text>`;
-    });
-
-    // scenarios: dotted from today; completion markers on the goal line
-    let scen = "", markers = "";
-    for (const s of tr.scenarios) {
-      const st = SCEN_STYLE[s.id]; if (!st) continue;
-      scen += `<path d="${path(s.series, p => Math.min(p.skill, total))}" fill="none" stroke="${st.c}" stroke-width="${st.w}" stroke-dasharray="${st.dash}" stroke-linejoin="round" opacity="0.95"></path>`;
-      if (s.completion && new Date(s.completion).getTime() < tEnd) {
-        markers += `<circle cx="${x(s.completion).toFixed(1)}" cy="${y(target).toFixed(1)}" r="2.4" fill="${st.c}"></circle>`;
-      }
-    }
-    // placement-test anchors: ◆ where a real test measured the skill
-    for (const p of tr.tests || []) {
-      markers += `<rect x="${(x(p.d) - 2.6).toFixed(1)}" y="${(y(p.skill) - 2.6).toFixed(1)}" width="5.2" height="5.2"
-        transform="rotate(45 ${x(p.d).toFixed(1)} ${y(p.skill).toFixed(1)})" fill="#7b5ea8" stroke="#fff" stroke-width="0.7"></rect>`;
-    }
-    const lastR = reality[reality.length - 1];
-
-    const legend = tr.scenarios.map(s => {
-      const st = SCEN_STYLE[s.id]; if (!st) return "";
-      return `<span style="white-space:nowrap"><span style="display:inline-block;width:16px;border-top:2px dashed ${st.c};vertical-align:middle;margin-right:4px"></span>${s.label} → <strong style="color:${st.c}">${s.completion ? fmtDY(s.completion) : "18mo+"}</strong></span>`;
-    }).join(" · ");
-
-    const todaySkill = reality.length ? reality[reality.length - 1].skill : 0;
-    const held = tr.held || [];
-    const goalText = tr.kind === "listen"
-      ? (tr.stage === "salah" ? `goal: catch ${Math.round(target * 100)}% of the words by ear` : `goal: follow ${Math.round(target * 100)}% of the meaning`)
-      : `goal: deploy ${Math.round(target * 100)}% in speech`;
-    const lagNote = tr.kind === "listen" ? "the ear lags the eye until words are certified" : "the mouth lags the eye until words are spoken";
-    const el = document.createElement("div");
-    el.style.cssText = "flex:1 1 420px;min-width:0";
-    el.innerHTML = `
-      <div style="font-weight:700;font-size:14px">${icon} ${tr.label}</div>
-      <div style="font-size:12.5px;color:var(--accent);font-weight:600;margin:2px 0 4px">today: ~${(100 * todaySkill).toFixed(0)}%${tr.heldToday ? ` <span style="color:var(--muted);font-weight:400">· ${(100 * tr.heldToday).toFixed(0)}% held on screen — ${lagNote}</span>` : ""} · ${goalText}</div>
-      <div style="position:relative">
-      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;touch-action:pan-y">
-        ${ticks}${grid}
-        <line x1="${L}" y1="${y(target).toFixed(1)}" x2="${W - R}" y2="${y(target).toFixed(1)}" stroke="var(--accent)" stroke-width="0.8" stroke-dasharray="6 3" opacity="0.65"></line>
-        <text x="${W - R}" y="${(y(target) - 4).toFixed(1)}" font-size="9" text-anchor="end" fill="var(--accent)" font-family="var(--font-ui)">${goalText}</text>
-        ${held.length > 1 ? `<path d="${path(held, p => p.frac)}" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="1 2.5" opacity="0.55"></path>` : ""}
-        <path d="${path(reality, p => p.skill)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>
-        ${scen}${markers}
-        <circle cx="${x(lastR.d).toFixed(1)}" cy="${y(lastR.skill).toFixed(1)}" r="3" fill="var(--accent)"></circle>
-        <text x="${x(lastR.d).toFixed(1)}" y="${(y(lastR.skill) - 7).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--accent)" font-weight="bold" font-family="var(--font-ui)">today</text>
-        <line x1="${L}" y1="${T}" x2="${L}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
-        <line x1="${L}" y1="${H - B}" x2="${W - R}" y2="${H - B}" stroke="var(--muted)" stroke-width="0.7"></line>
-        <g class="pg-cross" style="display:none">
-          <line y1="${T}" y2="${H - B}" stroke="var(--ink)" stroke-width="0.6" opacity="0.45" stroke-dasharray="2 2"></line>
-          <circle r="2.6" fill="var(--accent)" stroke="#fff" stroke-width="0.8"></circle>
-        </g>
-      </svg>
-      <div class="pg-tip" style="display:none;position:absolute;top:6px;z-index:5;pointer-events:none;background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:6px 9px;font-size:11.5px;line-height:1.55;max-width:230px"></div>
+    nowEl.innerHTML = `
+      <div style="font-size:12.5px;color:var(--muted)">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Conversation"} · working on now</div>
+      <h2 style="margin:2px 0 4px">${esc(ms.name)}</h2>
+      <p style="font-size:15px;margin:0 0 4px">When this is done, you can <strong>${esc(ms.can)}</strong>.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">${esc(ms.why || "")}</p>
+      <div>${ms.lessons.map(l => {
+        const srcL = src.lessons.find(x => x.id === l.id);
+        const chunks = Curriculum.lessonChunks(srcL);
+        const done = chunks.filter(c => Curriculum.chunkDone(c.id, ctx.log)).length;
+        return `<div class="lesson">
+          <div class="t">${l.mastered ? "✓ " : ""}${esc(l.title)}
+            <div class="m">${l.mastered ? `mastered · scored ${l.score}`
+              : l.readyToProve ? "you already hold these — just prove it"
+              : `${l.solid} of ${l.total} words holding`}</div>
+          </div>
+          <div class="dots">${l.mastered ? "" : dots(done, chunks.length)}</div>
+        </div>`;
+      }).join("")}</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
+        <a href="${href}" style="flex:1 1 220px;text-decoration:none"><button class="primary" style="width:100%;font-size:17px;padding:14px">${esc(label)}</button></a>
+        <a href="audio.html?commute=1" style="flex:1 1 160px;text-decoration:none"><button style="width:100%;font-size:17px;padding:14px">🚗 Hands-free</button></a>
       </div>
-      <div style="font-size:10.5px;color:var(--muted);line-height:1.9;margin-top:2px">${legend}</div>`;
-
-    /* ---- track-the-line: crosshair + readout (his 2026-08-07 ask) ----
-       Follows mouse or finger (pointer events; touch-action:pan-y keeps the
-       page scrollable). Snaps to the day, interpolates every visible line:
-       past → what he actually held; future → what each scenario projects. */
-    const svg = el.querySelector("svg");
-    const tip = el.querySelector(".pg-tip");
-    const cross = el.querySelector(".pg-cross");
-    const cLine = cross.querySelector("line");
-    const cDot = cross.querySelector("circle");
-    const tsOf = p => new Date(p.d).getTime();
-    const lastRT = tsOf(lastR);
-    const lerp = (series, t, get) => {
-      get = get || (p => p.skill);
-      if (!series.length || t < tsOf(series[0]) || t > tsOf(series[series.length - 1])) return null;
-      for (let i = 1; i < series.length; i++) {
-        if (t <= tsOf(series[i])) {
-          const a = series[i - 1], b = series[i];
-          const f = (t - tsOf(a)) / Math.max(1, tsOf(b) - tsOf(a));
-          return get(a) + f * (get(b) - get(a));
-        }
-      }
-      return get(series[series.length - 1]);
-    };
-    let tracked = false;
-    function trackAt(clientX) {
-      const rect = svg.getBoundingClientRect();
-      const vx = Math.max(L, Math.min(W - R, (clientX - rect.left) / rect.width * W));
-      const t = Math.round((t0 + ((vx - L) / pw) * (tEnd - t0)) / 86400000) * 86400000;
-      const iso = new Date(t).toISOString().slice(0, 10);
-      const xr = L + ((t - t0) / (tEnd - t0)) * pw;
-      cross.style.display = "";
-      cLine.setAttribute("x1", xr.toFixed(1)); cLine.setAttribute("x2", xr.toFixed(1));
-      const rows = [];
-      const skillWord = tr.kind === "listen" ? (tr.stage === "salah" ? "words caught by ear" : "meaning followed") : "deployable in speech";
-      const rv = t <= lastRT ? lerp(reality, t) : null;
-      if (rv !== null) {
-        cDot.style.display = "";
-        cDot.setAttribute("cx", xr.toFixed(1)); cDot.setAttribute("cy", y(rv).toFixed(1));
-        rows.push(`<div>${skillWord}: <strong>${(100 * rv).toFixed(0)}%</strong></div>`);
-        const hv = lerp(held, t, p => p.frac);
-        if (hv !== null) rows.push(`<div style="color:var(--muted)">words held on screen: ${(100 * hv).toFixed(0)}%</div>`);
-      } else {
-        cDot.style.display = "none";
-        for (const s of tr.scenarios) {
-          const st = SCEN_STYLE[s.id]; if (!st) continue;
-          const sw = `<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${st.c};margin-right:5px;vertical-align:-1px"></span>`;
-          if (s.completion && t >= new Date(s.completion).getTime()) {
-            rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">✓ goal ${fmtD(s.completion)}</strong></div>`);
-          } else {
-            const v = lerp(s.series, t);
-            if (v !== null) rows.push(`<div>${sw}${s.label}: <strong style="color:${st.c}">${(100 * Math.min(v, total)).toFixed(0)}%</strong></div>`);
-          }
-        }
-      }
-      tip.innerHTML = `<div style="font-weight:700;margin-bottom:1px">${fmtDY(iso)}${rv === null ? ' <span style="color:var(--muted);font-weight:400">forecast</span>' : ""}</div>` + rows.join("");
-      tip.style.display = "block";
-      const px = (xr / W) * rect.width;
-      if (px > rect.width / 2) { tip.style.left = "auto"; tip.style.right = (rect.width - px + 10) + "px"; }
-      else { tip.style.right = "auto"; tip.style.left = (px + 10) + "px"; }
-      if (!tracked) { tracked = true; logEvent({ e: "pg-track", panel: tr.kind }); }
-    }
-    svg.addEventListener("pointermove", e => trackAt(e.clientX));
-    svg.addEventListener("pointerdown", e => { e.preventDefault(); trackAt(e.clientX); });
-    svg.addEventListener("pointerleave", () => { cross.style.display = "none"; tip.style.display = "none"; });
-    return el;
+      <p class="pace" style="margin:10px 0 0">
+        ${ms.lessonsDone} of ${ms.lessonCount} lessons proved ·
+        <a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}">take the test any time</a>
+        ${pc.known && pc.state !== "on track" ? ` · ${Math.abs(pc.weeksAhead)} week${Math.abs(pc.weeksAhead) === 1 ? "" : "s"} ${pc.state}` : ""}
+      </p>`;
   }
 
-  function renderSkills(sk) {
-    if (!sk || !sk.listening) return;
-    const li = sk.listening, sp = sk.speaking;
-    const pc = v => (100 * v).toFixed(0) + "%";
-    const rows = document.getElementById("pgSkillRows");
-    const liMove = li.certifiedWords === 0
-      ? `No words are certified by ear yet — a 🎧 Ears round or an Audio Coach session starts certifying, and each one lifts this honestly.`
-      : `${li.certifiedWords} word${li.certifiedWords > 1 ? "s" : ""} certified by ear so far — more ear-tests keep firming this up.`;
-    const spMove = sp.outputMinutes < 30
-      ? `Only ${sp.outputMinutes} speaking minutes logged — the estimate is capped by real output time (Speak, Sentences, Converse raise the ceiling; vocabulary alone can't).`
-      : `${sp.outputMinutes} speaking minutes logged.`;
-    rows.innerHTML = `
-      <div>🎧 <strong>Salah recitation, by ear:</strong> played a word alone you'd likely get ${pc(li.isolatedCov)} · inside the recitation stream ~${pc(li.connectedCov)} · following the <em>meaning</em> as it flows: ~${pc(li.comprehension)}. <span style="color:var(--muted)">${liMove}</span></div>
-      <div style="margin-top:4px">🗣 <strong>Speaking:</strong> ${sp.provenItems} item${sp.provenItems === 1 ? "" : "s"} proven out loud or in writing · conservatively deployable in a real exchange: ~${sp.deployable} of ${sp.basketSize}. <span style="color:var(--muted)">${spMove}</span></div>`;
-    document.getElementById("pgSkills").style.display = "";
+  /* what's coming — capability, never a date */
+  document.getElementById("upcoming").innerHTML = state.upcoming.slice(0, 4).map(m => `
+    <div class="ms">
+      <h3>${m.track === "quran" ? "🎧" : "🗣"} ${esc(m.name)}</h3>
+      <p>you can ${esc(m.can)} — ${m.lessonCount} lessons, ${m.items} items</p>
+    </div>`).join("") || `<p style="font-size:14px;color:var(--muted)">Nothing queued beyond this one.</p>`;
+
+  /* achieved */
+  if (state.achieved.length) {
+    document.getElementById("doneCard").style.display = "block";
+    document.getElementById("doneN").textContent = state.achieved.length;
+    document.getElementById("doneList").innerHTML = state.achieved.map(m => `
+      <div class="ms done"><h3>✓ ${esc(m.name)}</h3><p>you can ${esc(m.can)}${m.score !== null ? ` · scored ${m.score}` : ""}</p></div>`).join("");
   }
-
-  fetch("data/progress-series.json").then(r => r.json()).then(pg => {
-    // fall back gracefully if the nightly hasn't regenerated to the skill format yet
-    if (!pg.tracks.quran.kind) { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The skill chart appears after the next coaching run refreshes the data.</p>`; return; }
-    panels.innerHTML = "";
-    panels.appendChild(drawPanel(pg.tracks.quran, "🎧"));
-    panels.appendChild(drawPanel(pg.tracks.conv, "🗣"));
-    if (pg.narrative) {
-      const nEl = document.getElementById("pgNarrative");
-      nEl.innerHTML = `<strong>📝 This week</strong> <span style="color:var(--muted);font-size:11.5px">(rewritten nightly from your data)</span><br>${pg.narrative}`;
-      nEl.style.display = "";
-    }
-    renderSkills(pg.skills);
-    // headline: the week's movement in the SKILL, honestly (may be negative)
-    const rq = pg.tracks.quran.reality;
-    const week = rq.filter(p => new Date(p.d).getTime() >= Date.now() - 8 * 86400000);
-    if (week.length >= 2) {
-      const d = 100 * (week[week.length - 1].skill - week[0].skill);
-      document.getElementById("pgToday").textContent =
-        d >= 0.5 ? `this week: +${d.toFixed(1)} points of listening` :
-        d <= -0.5 ? `this week: ${d.toFixed(1)} points — the ear fades without listening practice; one Audio round recovers fastest` : "";
-    }
-  }).catch(() => { panels.innerHTML = `<p style="font-size:13px;color:var(--muted)">The chart data hasn't been generated yet — it appears after the next coaching run.</p>`; });
-})();
-
-/* ---- 🚗 commute check: does commute listening actually stick? (2026-08-09) ----
-   After each 🚗 commute session, the NEXT sitting (≥8h later, within 7 days)
-   offers a 6-word by-ear check: 3 words the commute trained + 3 controls
-   matched by review box that no recent commute touched — shuffled, unlabeled.
-   Every answer grades the real SRS (it is normal study, not extra); the
-   trained-vs-control gap, accumulated over ~2 weeks, is the honest verdict
-   on whether commute listening is worth his scarce time. */
-(async function () {
-  const card = document.getElementById("commuteCard");
-  if (!card) return;
-  const log = store.get("ats-log", []);
-  const checks = log.filter(e => e.e === "commute-check");
-  const verdictHTML = () => {
-    const t = checks.filter(c => c.trained), c0 = checks.filter(c => !c.trained);
-    const rate = a => a.length ? a.filter(x => x.ok).length / a.length : 0;
-    if (t.length < 10 || c0.length < 10)
-      return `<span style="color:var(--muted)">Measuring: ${t.length} trained + ${c0.length} control answers banked — the verdict lands at 10 of each (~2 weeks of commutes).</span>`;
-    const dt = Math.round(100 * (rate(t) - rate(c0)));
-    const line = `Commute-trained words: <strong>${Math.round(100 * rate(t))}%</strong> recalled by ear (n=${t.length}) vs <strong>${Math.round(100 * rate(c0))}%</strong> for matched words it never touched (n=${c0.length}).`;
-    if (dt >= 12) return `${line} <strong style="color:var(--accent)">+${dt} points — the commute is genuinely teaching you. Keep it.</strong>`;
-    if (t.length >= 20 && c0.length >= 20 && dt <= 2) return `${line} <strong style="color:#b03535">No real gap — honest verdict: the commute isn't beating normal study for you. Worth rethinking.</strong>`;
-    return `${line} <span style="color:var(--muted)">+${dt} points — promising, not yet proven; keep measuring.</span>`;
-  };
-
-  const lastCommute = [...log].reverse().find(e => e.e === "commute-done" && e.keys && e.keys.length >= 3);
-  if (!lastCommute && !checks.length) return;   // feature untouched — stay hidden
-
-  const since = lastCommute ? Date.now() - lastCommute.t : Infinity;
-  const already = lastCommute && log.some(e => e.e === "commute-check-done" && e.forT === lastCommute.t);
-  const due = lastCommute && !already && since >= 8 * 3600e3 && since <= 7 * 86400e3;
-
-  if (!due) {
-    if (checks.length) {
-      card.style.display = "";
-      card.innerHTML = `<h2>🚗 Commute effect</h2><p style="font-size:13.5px;margin:0">${verdictHTML()}</p>`;
-    }
-    return;
-  }
-
-  // build the probe: 3 trained + 3 box-matched controls no recent commute touched
-  const srs = getSrs();
-  const recentKeys = new Set();
-  log.forEach(e => { if (e.e === "commute-done" && e.keys && Date.now() - e.t < 7 * 86400e3) e.keys.forEach(k => recentKeys.add(k)); });
-  const shuffle = a => a.sort(() => 0.5 - Math.random());
-  const boxOf = k => (srs[k] && srs[k].box) || 0;
-  const trainedKeys = shuffle(lastCommute.keys.filter(k => srs[k] && srs[k].b !== "never")).slice(0, 3);
-  const controlPool = shuffle(Object.keys(srs).filter(k => !recentKeys.has(k) && srs[k].b !== "never"));
-  const controls = [];
-  for (const tk of trainedKeys) {
-    let best = null, bestD = 99;
-    for (const ck of controlPool) {
-      if (controls.includes(ck)) continue;
-      const d = Math.abs(boxOf(ck) - boxOf(tk));
-      if (d < bestD) { bestD = d; best = ck; if (!d) break; }
-    }
-    if (best) controls.push(best);
-  }
-  if (trainedKeys.length < 2 || controls.length < 2) return;
-  const probe = shuffle([
-    ...trainedKeys.map(k => ({ key: k, trained: true })),
-    ...controls.map(k => ({ key: k, trained: false })),
-  ]);
-  const resolved = await resolveCards(probe.map(p => p.key));
-  const byKey = {}; resolved.forEach(c => { byKey[c.key] = c.v; });
-  const items = probe.filter(p => byKey[p.key] && byKey[p.key].ar && byKey[p.key].en);
-  if (items.length < 4) return;
-
-  card.style.display = "";
-  let i = -1; const results = [];
-  const head = () => `<h2>🚗 Commute check <span style="font-weight:400;font-size:13px;color:var(--muted)">${i + 1}/${items.length}</span></h2>`;
-  const intro = () => {
-    card.innerHTML = `<h2>🚗 Commute check — 90 seconds, by ear</h2>
-      <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">${items.length} words: some from your last commute session, some it never touched — you won't know which. The gap between them is the proof that commute listening works <em>for you</em> (or doesn't). Every answer counts as a real review.</p>
-      <button class="primary" id="ccStart">▶ Start the check</button>
-      <p style="font-size:12.5px;margin:10px 0 0">${verdictHTML()}</p>`;
-    document.getElementById("ccStart").onclick = () => { primeSpeak(); next(); };
-  };
-  const next = () => {
-    i++;
-    if (i >= items.length) return finish();
-    const it = items[i];
-    card.innerHTML = `${head()}
-      <div style="text-align:center;padding:10px 0">
-        <button class="primary" id="ccPlay" style="font-size:17px">🔊 hear it again</button>
-        <p style="font-size:14px;color:var(--muted);margin:12px 0">…what does it mean?</p>
-        <button id="ccReveal" style="font-size:15px">show the answer</button>
-      </div>`;
-    const play = () => speak(byKey[it.key].ar, 0.7);
-    document.getElementById("ccPlay").onclick = play;
-    document.getElementById("ccReveal").onclick = () => reveal(it);
-    play();
-  };
-  const reveal = it => {
-    const v = byKey[it.key];
-    card.innerHTML = `${head()}
-      <div style="text-align:center;padding:6px 0">
-        <div class="arabic" dir="rtl" style="font-size:34px">${v.ar}</div>
-        ${v.tr ? `<div style="font-size:14px;color:var(--muted);font-style:italic">${v.tr}</div>` : ""}
-        <div style="font-size:19px;font-weight:700;margin:6px 0 14px">${v.en}</div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button id="ccNo" style="min-width:130px">✗ didn't have it</button>
-          <button class="primary" id="ccYes" style="min-width:130px">✓ had it</button>
-        </div>
-      </div>`;
-    const grade = ok => {
-      const preBox = boxOf(it.key);          // record the box BEFORE the grade moves it
-      gradeCard(it.key, ok ? "good" : "again");
-      const ev = { e: "commute-check", key: it.key, trained: it.trained, ok, box: preBox };
-      logEvent(ev); checks.push(ev); results.push(ev);
-      next();
-    };
-    document.getElementById("ccYes").onclick = () => grade(true);
-    document.getElementById("ccNo").onclick = () => grade(false);
-  };
-  const finish = () => {
-    logEvent({ e: "commute-check-done", forT: lastCommute.t, n: results.length });
-    autoSync();
-    const got = results.filter(r => r.ok).length;
-    card.innerHTML = `<h2>🚗 Commute check — done</h2>
-      <p style="font-size:14px;margin:0 0 6px">${got}/${results.length} by ear — all ${results.length} graded into your review boxes, nothing wasted.</p>
-      <p style="font-size:13px;margin:0">${verdictHTML()}</p>`;
-  };
-  intro();
 })();
 </script>
 </body>

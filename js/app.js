@@ -1285,13 +1285,12 @@ function renderNav(active) {
   const due = dueCards().length;
   const el = document.createElement("nav");
   el.innerHTML = `
-    <a class="brand" href="index.html"><span class="ar">العربية بالقصص</span><span>Arabic Through Stories</span></a>
+    <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
     <span class="spacer"></span>
-    <a class="link ${active === "home" ? "active" : ""}" href="index.html">Home</a>
-    <a class="link ${active === "week" ? "active" : ""}" href="week.html">📅 Week</a>
-    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">📖 Vocab${due ? `<span class="badge">${due}</span>` : ""}</a>
+    <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
+    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">📖 Vocabulary${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences</a>
-    <a class="link ${active === "more" ? "active" : ""}" href="more.html">⋯ More</a>
+    <a class="link ${active === "more" || active === "map" ? "active" : ""}" href="more.html">⋯ More</a>
   `;
   document.body.prepend(el);
   mountNotePen();

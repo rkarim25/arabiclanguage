@@ -617,9 +617,307 @@
     }));
   }
 
+
+  /* ==========================================================================
+     THE MILESTONE LADDER — the site's spine (CURRICULUM.md).
+
+     His instruction (2026-08-29): "in language learning itself [weeks] don't
+     have any intrinsic value but the milestones are everything. either i know a
+     list of words or not, whether it is 3 weeks before or after my plan is a bit
+     irrelevant. so downplay the timeline aspect of it and make the entire
+     website milestone based."
+
+       MILESTONE (a capability, written as a can-do sentence)
+         -> LESSONS (one thing to master, each with its own test section)
+           -> CHUNKS (~5 min, with due reviews folded in invisibly)
+
+     Weeks survive only as `plannedWeek`, a pacing annotation used to say how far
+     ahead or behind the plan he is. They are never the headline.
+     ========================================================================== */
+  const PASS = 80;                  // his choice: a lesson section at 80+ is mastered
+  const CHUNK_ITEMS = 8;            // items one ~5-minute pass can cover
+  const REVIEW_PER_CHUNK = 4;       // due cards folded into the front of each chunk
+
+  /* The most recent score for each lesson, from any milestone-test attempt. */
+  function lessonScores(log) {
+    const out = {};
+    const sorted = (log || []).filter(e => e && e.e === "exam-done" && e.lessons).sort((a, b) => a.t - b.t);
+    for (const e of sorted) {
+      for (const id in e.lessons) {
+        const sc = e.lessons[id];
+        const prev = out[id];
+        // passes counts CONSECUTIVE passes — a failed re-check resets it, so the
+        // re-verification interval starts short again rather than staying long
+        const passes = sc >= PASS ? ((prev && prev.score >= PASS ? prev.passes : 0) + 1) : 0;
+        out[id] = { score: sc, t: e.t, passes };
+      }
+    }
+    return out;
+  }
+
+  /* PROOF IS THE ONLY ROUTE (his rule, 2026-08-29): "everything needs to be
+     proved by test, unless i achieve a 80, i cannot claim i know words."
+
+     So solid SRS cards no longer auto-master a lesson. They do something else,
+     which matters just as much: a lesson whose words are already solid skips
+     straight to its test instead of making him walk chunks he does not need
+     (see nextChunk). Knowing it saves him the LEARNING, not the PROOF.
+
+     A pass is re-verified after a while. If the re-check fails, the lesson
+     reopens — he asked for exactly this standard. (Levels, by contrast, are
+     never revoked; a lesson reopening simply slows the next level down.) */
+  const REVERIFY_D = [45, 120, 300];        // days after each successive pass
+  function lessonState(lesson, srs, scores, now) {
+    const keys = lesson.keys || [];
+    const solid = keys.filter(k => ((srs[k] || {}).box || 0) >= SOLID_BOX).length;
+    const sc = scores[lesson.id];
+    const score = sc ? sc.score : null;
+    const passed = score !== null && score >= PASS;
+    const passes = sc ? sc.passes : 0;
+    const gap = REVERIFY_D[Math.min(passes - 1, REVERIFY_D.length - 1)] || REVERIFY_D[0];
+    const reverifyAt = passed ? sc.t + gap * DAY : null;
+    const reverifyDue = passed && (now || Date.now()) >= reverifyAt;
+    return {
+      id: lesson.id, title: lesson.title, keys,
+      solid, total: keys.length, pct: pct(solid, keys.length),
+      score, passes,
+      mastered: passed,
+      provedByTest: passed,
+      // already known but unproven — the test is all that is left to do
+      readyToProve: !passed && keys.length > 0 && solid / keys.length >= 0.8,
+      reverifyAt, reverifyDue,
+    };
+  }
+
+  function milestoneState(ctx) {
+    const srs = ctx.srs || {};
+    const scores = lessonScores(ctx.log);
+    const list = (ctx.curriculum.milestones || []).map(m => {
+      const lessons = (m.lessons || []).map(l => lessonState(l, srs, scores, ctx.now));
+      const done = lessons.filter(l => l.mastered).length;
+      const items = lessons.reduce((a, l) => a + l.total, 0);
+      const solid = lessons.reduce((a, l) => a + l.solid, 0);
+      const scored = lessons.filter(l => l.score !== null);
+      return Object.assign({}, m, {
+        lessons,
+        lessonsDone: done, lessonCount: lessons.length,
+        items, solid, pct: pct(solid, items),
+        achieved: lessons.length > 0 && done === lessons.length,
+        score: scored.length ? Math.round(scored.reduce((a, l) => a + l.score, 0) / scored.length) : null,
+      });
+    });
+    const currentIdx = list.findIndex(m => !m.achieved);
+    return {
+      milestones: list,
+      achieved: list.filter(m => m.achieved),
+      current: currentIdx === -1 ? null : list[currentIdx],
+      currentIdx,
+      upcoming: currentIdx === -1 ? [] : list.slice(currentIdx + 1),
+    };
+  }
+
+  /* ---------- chunks ----------
+     A lesson is walked in passes: meet the words, produce them, say them in a
+     whole sentence, prove them by ear. Each pass is one ~5-minute chunk. Due
+     reviews ride at the front of every chunk, so reviewing never becomes a
+     separate chore (his choice). */
+  const CHUNK_MODES = [
+    { mode: "meet",  label: "Meet the words", sub: "See them once. Recall before you reveal." },
+    { mode: "drill", label: "Write them",     sub: "Produce each one from the English." },
+    { mode: "say",   label: "Say them",       sub: "Whole sentences, out loud. This is the half that becomes speech." },
+    { mode: "ear",   label: "By ear",         sub: "Sound only — the half that counts for the Qur'an." },
+  ];
+
+  function lessonChunks(lesson) {
+    const keys = lesson.keys || [];
+    const out = [];
+    for (const m of CHUNK_MODES) {
+      for (let i = 0; i < keys.length; i += CHUNK_ITEMS) {
+        const slice = keys.slice(i, i + CHUNK_ITEMS);
+        const part = keys.length > CHUNK_ITEMS ? " (" + (Math.floor(i / CHUNK_ITEMS) + 1) + ")" : "";
+        out.push({
+          id: lesson.id + ":" + m.mode + ":" + i,
+          lessonId: lesson.id, mode: m.mode,
+          label: m.label + part, sub: m.sub, keys: slice,
+        });
+      }
+    }
+    return out;
+  }
+
+  const chunkDone = (chunkId, log) => (log || []).some(e => e && e.e === "chunk-done" && e.chunk === chunkId);
+
+  /* Continue = the next unfinished chunk of the current milestone's first
+     unmastered lesson. One button, no decision. */
+  function nextChunk(ctx, state) {
+    state = state || milestoneState(ctx);
+    const ms = state.current;
+    if (!ms) return null;
+    const src = (ctx.curriculum.milestones || []).find(m => m.id === ms.id) || ms;
+    for (const l of ms.lessons) {
+      if (l.mastered) continue;
+      // he already holds these words — do not make him walk chunks he does not
+      // need; the only thing outstanding is the proof
+      if (l.readyToProve) return { milestone: ms, lesson: l, chunk: null, testNext: true, skipToTest: true };
+      const source = (src.lessons || []).find(x => x.id === l.id) || l;
+      const chunks = lessonChunks(source);
+      const next = chunks.find(c => !chunkDone(c.id, ctx.log));
+      if (next) return { milestone: ms, lesson: l, chunk: next, chunks };
+    }
+    // every chunk walked but not yet proved — the test is what remains
+    return { milestone: ms, lesson: ms.lessons.find(l => !l.mastered) || null, chunk: null, testNext: true };
+  }
+
+  /* Due cards folded into the front of a chunk — never the chunk's own words
+     (those are the lesson), always something else that is slipping. */
+  function reviewsFor(chunk, ctx, n) {
+    const srs = ctx.srs || {}, now = ctx.now || Date.now();
+    const own = new Set(chunk.keys || []);
+    return Object.keys(srs)
+      .filter(k => !own.has(k) && (srs[k].due || 0) <= now)
+      .sort((a, b) => (srs[a].due || 0) - (srs[b].due || 0))
+      .slice(0, n === undefined ? REVIEW_PER_CHUNK : n);
+  }
+
+  /* ---------- what he actually holds ----------
+     His ask (2026-08-29): "if i do have a vocabulary of a certain number of
+     words and if i can also say a certain number of sentences or at least
+     understand it then things should start to make sense."
+
+     So the site states the two inventories plainly. WORDS are single-word cards;
+     SENTENCES are whole utterances (the phrase deck and story sentences) — those
+     are what turn vocabulary into speech. Both counted at box >= 3 (held), with
+     box >= 5 called out separately as long-term. */
+  const isSentenceKey = k => k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
+  function inventory(ctx) {
+    const srs = ctx.srs || {};
+    let words = 0, wordsLong = 0, sents = 0, sentsLong = 0;
+    for (const k in srs) {
+      const b = (srs[k] || {}).box || 0;
+      if (b < SOLID_BOX) continue;
+      if (isSentenceKey(k)) { sents++; if (b >= 5) sentsLong++; }
+      else { words++; if (b >= 5) wordsLong++; }
+    }
+    /* Comprehension thresholds are the standard vocabulary-coverage findings
+       (Nation 2006; van Zeeland & Schmitt 2013): understanding rises slowly and
+       then sharply once coverage passes ~95%. Stated as what he can DO, never as
+       a percentage of a goal he hasn't reached. */
+    const nextBand = words < 250 ? { at: 250, say: "everyday sentences start holding together" }
+      : words < 500 ? { at: 500, say: "you follow the gist of simple spoken Arabic" }
+      : words < 1000 ? { at: 1000, say: "most ordinary conversation becomes followable" }
+      : null;
+    return { words, wordsLong, sentences: sents, sentencesLong: sentsLong, nextBand };
+  }
+
+  /* ---------- pace ----------
+     Reported because he asked for it, but deliberately secondary: the milestone
+     is the achievement, the week is only how the plan was drawn. He also asked
+     to be told WHY, since the two causes deserve opposite responses. */
+  function pace(ctx, state) {
+    state = state || milestoneState(ctx);
+    const now = ctx.now || Date.now();
+    const cur = state.current;
+    const perWeek = (ctx.curriculum.planning && ctx.curriculum.planning.minPerWeek) || 50;
+
+    let firstEvent = 0;
+    for (const e of (ctx.log || [])) if (e && e.t > 16e11 && (!firstEvent || e.t < firstEvent)) firstEvent = e.t;
+    if (!firstEvent || !cur) return { known: false };
+
+    const elapsedWeeks = Math.max(1, (now - firstEvent) / (7 * DAY));
+    const weeksAhead = cur.plannedWeek - elapsedWeeks;
+
+    const mins = [];
+    for (let i = 1; i <= 3; i++) mins.push(activeMinutesBetween(ctx.log, now - i * 7 * DAY, now - (i - 1) * 7 * DAY));
+    const typical = mins.slice().sort((a, b) => a - b)[1];
+
+    let reason;
+    if (weeksAhead > 0.5) {
+      const knewIt = state.achieved.reduce((a, m) => a + m.lessons.filter(l => l.provedByTest && l.solid < l.total).length, 0);
+      reason = knewIt >= 2
+        ? "mostly because you already knew a lot of it — worth telling me, so I can start you higher"
+        : "you are getting through it faster than the plan assumed";
+    } else if (weeksAhead < -0.5) {
+      reason = typical < perWeek * 0.5
+        ? "and it is time, not difficulty — about " + Math.round(typical) + " min a week against the ~" + perWeek + " the plan assumes"
+        : "and it is not the time — you are putting the minutes in, so the material is the hard part and I should slow the steps down";
+    } else reason = "right on the plan";
+
+    return {
+      known: true,
+      weeksAhead: Math.round(weeksAhead * 10) / 10,
+      state: weeksAhead > 0.5 ? "ahead" : weeksAhead < -0.5 ? "behind" : "on track",
+      typicalMin: Math.round(typical), perWeek, reason,
+      achievedCount: state.achieved.length, total: state.milestones.length,
+    };
+  }
+
+  /* ---------- the milestone test ----------
+     Sectioned BY LESSON, so a section he aces marks that lesson mastered and it
+     drops out of the milestone. Always open, unlimited retakes, reshuffled per
+     attempt so he cannot memorise the paper. */
+  function milestoneExam(ms, ctx, opts) {
+    opts = opts || {};
+    const only = opts.lessonIds && opts.lessonIds.length ? new Set(opts.lessonIds) : null;
+    const src = (ctx.curriculum.milestones || []).find(m => m.id === ms.id) || ms;
+    const items = [];
+    let seed = (((ms.order || 1) * 2654435761) ^ ((opts.attempt || 0) * 40503)) % 2147483647;
+    if (seed <= 0) seed += 2147483646;
+    const rnd = () => (seed = (seed * 48271) % 2147483647) / 2147483647;
+    const isQuran = k => k.indexOf("qw:") === 0 || k.indexOf("qc:") === 0;
+
+    /* NOT REPETITIVE (his rule): a lesson already proved is not re-tested, EXCEPT
+       when its re-verification has come due — and then only a sample of it, so a
+       long-term check costs a few questions rather than a whole re-sit. Learning
+       mode may repeat freely; the TEST is where repetition is wasteful. */
+    const stateById = {};
+    for (const l of (ms.lessons || [])) stateById[l.id] = l;
+
+    for (const l of (src.lessons || [])) {
+      if (only && !only.has(l.id)) continue;
+      const st = stateById[l.id];
+      let keys = l.keys;
+      if (st && st.mastered && !only) {
+        if (!st.reverifyDue) continue;                       // proved and still fresh — skip entirely
+        keys = l.keys.slice(0, Math.max(2, Math.ceil(l.keys.length * 0.3)));   // a spot-check only
+      }
+      keys.forEach((k, i) => {
+        // at least half of Qur'an-track items by EAR — the honest gap
+        const form = isQuran(k) ? (i % 2 === 0 ? "ear" : "mean") : (i % 3 === 0 ? "ear" : i % 3 === 1 ? "mean" : "prod");
+        items.push({ key: k, lessonId: l.id, lessonTitle: l.title, section: l.id, form });
+      });
+    }
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      const t = items[i]; items[i] = items[j]; items[j] = t;
+    }
+    return { milestoneId: ms.id, total: items.length, items, passMark: PASS };
+  }
+
+  /* Overall score, plus one score PER LESSON (that is what clears a lesson), plus
+     the by-ear split stated separately. */
+  function milestoneScoreOf(answers) {
+    const by = {};
+    for (const a of answers) {
+      const b = by[a.lessonId] || (by[a.lessonId] = { ok: 0, n: 0, title: a.lessonTitle });
+      b.n++; if (a.ok) b.ok++;
+    }
+    const lessons = {}, titles = {};
+    for (const id in by) { lessons[id] = Math.round(100 * by[id].ok / by[id].n); titles[id] = by[id].title; }
+    const ear = answers.filter(a => a.form === "ear");
+    const correct = answers.filter(a => a.ok).length;
+    return {
+      score: Math.round(100 * correct / (answers.length || 1)), correct, total: answers.length,
+      lessons, lessonTitles: titles,
+      cleared: Object.keys(lessons).filter(id => lessons[id] >= PASS),
+      sections: { ear: ear.length ? Math.round(100 * ear.filter(a => a.ok).length / ear.length) : null },
+    };
+  }
+
   return {
     SOLID_BOX, expandBasket, evalCriterion, trackLevel, levels,
     examKind, examScope, examResults, examAttempts, examTrajectory, examBuild, examScoreOf, examBand, examVerdict, levelSummary, groupOf,
     weekHistory, weekSize, weekProgress, weekLearned, weekObjectives, weekKeys, weekBounds, weekSelfSeed, activeMinutesBetween,
+    PASS, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
+    nextChunk, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
   };
 });

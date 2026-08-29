@@ -360,6 +360,74 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   eq(h[1].score, undefined, "a week with no exam has no score — NOT a zero (a zero would lie about his knowledge)");
 }
 
+
+/* ---------- the milestone ladder: capability first, proof only ---------- */
+{
+  const cur = D("curriculum.json");
+  yes(cur.version >= 2 && (cur.milestones || []).length > 0, "the curriculum carries a milestone ladder");
+  yes(cur.milestones.every(m => m.can && m.name && m.lessons.length), "every milestone has a name, a can-do sentence and lessons");
+  yes(cur.milestones.every(m => m.lessons.every(l => l.keys.length)), "every lesson resolves to real keys");
+  yes(cur.milestones.every(m => ["quran", "conv"].includes(m.track)), "every milestone belongs to a track");
+
+  const mctx = o => Object.assign({ curriculum: cur, verses, log: [], srs: {}, progress: {}, now: NOW }, o);
+
+  // PROOF ONLY: solid words must not auto-master
+  const first = cur.milestones[0], l1 = first.lessons[0];
+  const allSolid = {}; l1.keys.forEach(k => (allSolid[k] = { box: 5 }));
+  let st = C.milestoneState(mctx({ srs: allSolid }));
+  const s1 = st.milestones[0].lessons[0];
+  yes(!s1.mastered, "words already solid do NOT master a lesson — only a test can");
+  yes(s1.readyToProve, "…but the lesson is flagged as ready to prove, so he isn't made to relearn it");
+  const nx = C.nextChunk(mctx({ srs: allSolid }), st);
+  yes(nx.skipToTest, "Continue sends him straight to the test when he already holds the words");
+
+  // a pass masters it
+  const pass = [{ e: "exam-done", t: NOW - 1000, milestone: first.id, score: 90, lessons: { [l1.id]: 90 } }];
+  st = C.milestoneState(mctx({ srs: allSolid, log: pass }));
+  yes(st.milestones[0].lessons[0].mastered, "a test section at 80+ masters the lesson");
+  yes(!st.milestones[0].achieved, "…but the milestone needs ALL its lessons proved");
+
+  // a fail does not
+  const fail = [{ e: "exam-done", t: NOW - 1000, milestone: first.id, score: 70, lessons: { [l1.id]: 70 } }];
+  yes(!C.milestoneState(mctx({ srs: allSolid, log: fail })).milestones[0].lessons[0].mastered,
+    "below 80 is not mastery, however solid the cards are");
+
+  // NOT REPETITIVE: a proved, still-fresh lesson is skipped by the next test
+  const st2 = C.milestoneState(mctx({ srs: allSolid, log: pass }));
+  const ex = C.milestoneExam(st2.milestones[0], mctx({ srs: allSolid, log: pass }), { attempt: 2 });
+  yes(!ex.items.some(i => i.lessonId === l1.id), "a lesson already proved is not re-tested while it is still fresh");
+  yes(ex.items.length > 0, "…while the unproved lessons still are");
+
+  // …but it comes back for a spot-check once re-verification is due
+  const stale = [{ e: "exam-done", t: NOW - 60 * 86400000, milestone: first.id, score: 90, lessons: { [l1.id]: 90 } }];
+  const st3 = C.milestoneState(mctx({ srs: allSolid, log: stale }));
+  yes(st3.milestones[0].lessons[0].reverifyDue, "a pass goes stale and comes due for re-verification");
+  const ex3 = C.milestoneExam(st3.milestones[0], mctx({ srs: allSolid, log: stale }), { attempt: 3 });
+  const n1 = ex3.items.filter(i => i.lessonId === l1.id).length;
+  yes(n1 > 0 && n1 < l1.keys.length, "re-verification is a SPOT CHECK, not a full re-sit");
+
+  // chunks
+  const ch = C.lessonChunks(l1);
+  yes(ch.length >= 4, "a lesson is walked in several ~5-minute chunks");
+  yes(ch.some(c => c.mode === "say") && ch.some(c => c.mode === "ear"),
+    "chunks include saying it out loud and hearing it — words AND sentences, his bedrock");
+  yes(ch.every(c => c.keys.length <= 8), "no chunk is longer than one sitting");
+
+  // reviews are folded in, and never duplicate the chunk's own words
+  const due = {}; for (let i = 0; i < 20; i++) due["qc:" + (100 + i)] = { box: 1, due: NOW - 86400000 };
+  const rv = C.reviewsFor(ch[0], mctx({ srs: Object.assign({}, allSolid, due) }));
+  yes(rv.length > 0, "due cards are folded into the front of a chunk");
+  yes(!rv.some(k => ch[0].keys.includes(k)), "…and never repeat the chunk's own words");
+
+  // inventory: words vs sentences
+  const invSrs = { "qc:1": { box: 5 }, "qc:2": { box: 3 }, "qc:3": { box: 1 }, "ph-greet:0": { box: 5 }, "story-02:1": { box: 4 } };
+  const inv = C.inventory(mctx({ srs: invSrs }));
+  eq(inv.words, 2, "words held counts single-word cards at box >= 3");
+  eq(inv.sentences, 2, "sentences held counts phrases and story sentences separately");
+  eq(inv.wordsLong, 1, "long-term words are counted apart");
+  yes(inv.nextBand && inv.nextBand.at > 0, "there is a next band, described as what it lets him do");
+}
+
 /* ---------- calibration against real data, if given ---------- */
 const payloadPath = process.argv[2];
 if (payloadPath && fs.existsSync(payloadPath)) {
