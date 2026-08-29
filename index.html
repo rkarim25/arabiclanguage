@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteu9wlm">
-  <link rel="stylesheet" href="css/style.css?v=mteu9wlm">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevg6nj">
+  <link rel="stylesheet" href="css/style.css?v=mtevg6nj">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -37,6 +37,14 @@
 
   <div class="card" id="nowCard" style="border-color:var(--accent)">
     <div id="now">Loading…</div>
+  </div>
+
+  <div class="card">
+    <h2>Your lessons</h2>
+    <p class="sub" style="margin-bottom:12px">Seven lessons a week, about seven minutes each, always a mix of
+    Qur'an and everyday Arabic. Do them in any order — on screen or 🚗 hands-free. Each has its own 3-minute test,
+    and you can test a whole week in one go.</p>
+    <div id="weeks">…</div>
   </div>
 
   <div class="card">
@@ -74,12 +82,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mteu9wlm"></script>
-<script src="js/curriculum.js?v=mteu9wlm"></script>
-<script src="js/app.js?v=mteu9wlm"></script>
-<script src="js/tracker.js?v=mteu9wlm"></script>
-<script src="js/plan.js?v=mteu9wlm"></script>
-<script src="js/account.js?v=mteu9wlm"></script>
+<script src="js/progress-model.js?v=mtevg6nj"></script>
+<script src="js/curriculum.js?v=mtevg6nj"></script>
+<script src="js/app.js?v=mtevg6nj"></script>
+<script src="js/tracker.js?v=mtevg6nj"></script>
+<script src="js/plan.js?v=mtevg6nj"></script>
+<script src="js/account.js?v=mtevg6nj"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -129,23 +137,13 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
       <div style="font-size:12.5px;color:var(--muted)">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Conversation"} · working on now</div>
       <h2 style="margin:2px 0 4px">${esc(ms.name)}</h2>
       <p style="font-size:15px;margin:0 0 4px">When this is done, you can <strong>${esc(ms.can)}</strong>.</p>
-      <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">${esc(ms.why || "")}</p>
-      <div>${ms.lessons.map(l => {
-        const srcL = src.lessons.find(x => x.id === l.id);
-        const chunks = Curriculum.lessonChunks(srcL);
-        const done = chunks.filter(c => Curriculum.chunkDone(c.id, ctx.log)).length;
-        return `<div class="lesson">
-          <div class="t">${l.mastered ? "✓ " : ""}${esc(l.title)}
-            <div class="m">${l.mastered ? `mastered · scored ${l.score}`
-              : l.readyToProve ? "you already hold these — just prove it"
-              : `${l.solid} of ${l.total} words holding`}</div>
-          </div>
-          <div class="dots">${l.mastered ? "" : dots(done, chunks.length)}</div>
-        </div>`;
-      }).join("")}</div>
+      <p style="font-size:13.5px;color:var(--muted);margin:0 0 8px">${esc(ms.why || "")}</p>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
+        ${ms.lessonCount} lessons · ${ms.items} words · about ${ms.chunks} short sittings.
+        Take as long as you like — it's done when you've proved it, not when a week is up.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
         <a href="${href}" style="flex:1 1 220px;text-decoration:none"><button class="primary" style="width:100%;font-size:17px;padding:14px">${esc(label)}</button></a>
-        <a href="audio.html?commute=1" style="flex:1 1 160px;text-decoration:none"><button style="width:100%;font-size:17px;padding:14px">🚗 Hands-free</button></a>
+        <a href="learn.html?mode=hands" style="flex:1 1 160px;text-decoration:none"><button style="width:100%;font-size:17px;padding:14px">🚗 Hands-free</button></a>
       </div>
       <p class="pace" style="margin:10px 0 0">
         ${ms.lessonsDone} of ${ms.lessonCount} lessons proved ·
@@ -153,6 +151,41 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
         ${pc.known && pc.state !== "on track" ? ` · ${Math.abs(pc.weeksAhead)} week${Math.abs(pc.weeksAhead) === 1 ? "" : "s"} ${pc.state}` : ""}
       </p>`;
   }
+
+  /* THE SHELF: four weeks of seven 7-minute lessons. Every week mixes Qur'an and
+     everyday language; every lesson can be done on screen or hands-free, has its
+     own 3-minute test, and a week can be tested in one 7-minute go. */
+  const weeks = Curriculum.weekPlan(ctx, state);
+  const cw = Curriculum.currentWeek(weeks);
+  const show = weeks.slice(cw - 1, cw + 3);
+  document.getElementById("weeks").innerHTML = show.map(w => {
+    const openIds = w.lessons.filter(x => !x.lesson.mastered).map(x => x.lesson.id);
+    return `
+    <div style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+        <strong style="font-size:15px">Week ${w.week}${w.week === cw ? ` <span style="font-weight:400;color:var(--accent);font-size:13px">· you're here</span>` : ""}</strong>
+        <span style="font-size:12.5px;color:var(--muted)">${w.provedCount} of ${w.lessons.length} proved · 🎧 ${w.quran} · 🗣 ${w.conv} · ~${w.mins} min</span>
+      </div>
+      ${w.lessons.map(x => {
+        const l = x.lesson, done = Curriculum.chunkDone(l.id + ":lesson", ctx.log);
+        return `<div class="lesson">
+          <div class="t">${l.mastered ? "✓ " : ""}${esc(l.title)}
+            <div class="m">${x.milestone.track === "quran" ? "🎧" : "🗣"} ${esc(x.milestone.name)} ·
+              ${l.mastered ? `proved — scored ${l.score}`
+                : l.readyToProve ? "you already hold these — just prove it"
+                : `${l.total} words${done ? " · learnt, not yet proved" : ""}`}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;white-space:nowrap">
+            ${l.mastered ? "" : `
+              <a href="learn.html?lesson=${encodeURIComponent(l.id)}" style="font-size:13px">${done ? "again" : "learn"}</a>
+              <a href="learn.html?lesson=${encodeURIComponent(l.id)}&mode=hands" title="hands-free" style="font-size:14px">🚗</a>`}
+            <a href="learn.html?test=1&lesson=${encodeURIComponent(l.id)}" style="font-size:13px">test</a>
+          </div>
+        </div>`;
+      }).join("")}
+      ${openIds.length > 1 ? `<p style="margin:8px 0 0"><a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="font-size:13.5px">Test the whole of week ${w.week} · ~7 min →</a></p>` : ""}
+    </div>`;
+  }).join("");
 
   /* what's coming — capability, never a date */
   document.getElementById("upcoming").innerHTML = state.upcoming.slice(0, 4).map(m => `

@@ -406,12 +406,15 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   const n1 = ex3.items.filter(i => i.lessonId === l1.id).length;
   yes(n1 > 0 && n1 < l1.keys.length, "re-verification is a SPOT CHECK, not a full re-sit");
 
-  // chunks
+  // a lesson is ONE ~7-minute sitting (his sizing rule)
+  const pl = cur.planning;
+  eq(pl.minPerLesson, 7, "a lesson is planned at seven minutes");
+  eq(pl.lessonsPerWeek, 7, "a week is seven lessons");
+  yes(cur.milestones.every(m => m.lessons.every(l => l.keys.length <= pl.lessonItems)),
+    "no lesson is bigger than one sitting — longer sources are split automatically");
   const ch = C.lessonChunks(l1);
-  yes(ch.length >= 4, "a lesson is walked in several ~5-minute chunks");
-  yes(ch.some(c => c.mode === "say") && ch.some(c => c.mode === "ear"),
-    "chunks include saying it out loud and hearing it — words AND sentences, his bedrock");
-  yes(ch.every(c => c.keys.length <= 8), "no chunk is longer than one sitting");
+  eq(ch.length, 1, "the lesson IS the sitting — it is not split into sub-chunks any more");
+  eq(ch[0].keys.length, l1.keys.length, "…and that one sitting covers the whole lesson");
 
   // reviews are folded in, and never duplicate the chunk's own words
   const due = {}; for (let i = 0; i < 20; i++) due["qc:" + (100 + i)] = { box: 1, due: NOW - 86400000 };
@@ -426,6 +429,53 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   eq(inv.sentences, 2, "sentences held counts phrases and story sentences separately");
   eq(inv.wordsLong, 1, "long-term words are counted apart");
   yes(inv.nextBand && inv.nextBand.at > 0, "there is a next band, described as what it lets him do");
+}
+
+
+/* ---------- seven 7-minute lessons a week, both tracks in every week ---------- */
+{
+  const cur = D("curriculum.json");
+  const mctx = o => Object.assign({ curriculum: cur, verses, log: [], srs: {}, progress: {}, now: NOW }, o);
+  const ctx2 = mctx({});
+  const st = C.milestoneState(ctx2);
+  const weeks = C.weekPlan(ctx2, st);
+
+  yes(weeks.length > 4, "the ladder packs into many weeks");
+  yes(weeks.slice(0, -1).every(w => w.lessons.length === 7), "every full week holds seven lessons");
+  yes(weeks.slice(0, -1).every(w => w.mins === 49), "…which is about fifty minutes, his yardstick");
+
+  // his rule: "the week needs to be split between quranic and everyday language"
+  const early = weeks.slice(0, 6);
+  yes(early.every(w => w.quran > 0 && w.conv > 0),
+    "EVERY week mixes Qur'an and everyday Arabic — never a whole week of one track");
+  yes(early.every(w => w.quran >= 3 && w.quran <= 5),
+    "…weighted toward Qur'an, his ranked-first goal, without crowding the other out");
+
+  // class material is baked in at the front of the next week
+  const withClass = JSON.parse(JSON.stringify(cur));
+  withClass.milestones.unshift({
+    id: "ms-class", order: 0, track: "conv", source: "teacher", level: "conv-a1",
+    name: "Sunday's class", can: "use what your teacher taught this week", why: "",
+    lessons: [{ id: "ms-class-l1", title: "From class", keys: ["ph-greet:0", "ph-greet:1"] }],
+  });
+  const cctx = Object.assign({}, mctx({}), { curriculum: withClass });
+  const cw = C.weekPlan(cctx, C.milestoneState(cctx));
+  eq(cw[0].lessons[0].lesson.id, "ms-class-l1", "what his teacher just taught leads the very next week");
+
+  // no test may run long
+  const wk1 = weeks[0].lessons.map(x => x.lesson.id);
+  const weekly = C.examForLessons(wk1, ctx2, { attempt: 1, state: st, seed: 1 });
+  yes(weekly.minutes <= 7, "a whole-week test stays inside seven minutes");
+  yes(weekly.total <= cur.planning.maxTestItems, "…by sampling rather than asking everything");
+  eq(new Set(weekly.items.map(i => i.lessonId)).size, 7, "…and every one of the seven lessons is still represented");
+
+  const one = C.examForLessons([wk1[0]], ctx2, { attempt: 1, state: st, seed: 1 });
+  yes(one.minutes <= 3, "a single lesson's test is about three minutes");
+  yes(one.total >= 6, "…and long enough to be a real test, asking small lessons in a second form");
+  yes(new Set(one.items.map(i => i.form)).size > 1, "…across more than one form, so it proves recall AND production");
+
+  // a score from too few questions must not silently clear a lesson
+  yes(typeof weekly.clearable === "boolean", "a test says whether it is dense enough to clear lessons");
 }
 
 /* ---------- calibration against real data, if given ---------- */

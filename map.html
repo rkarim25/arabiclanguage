@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>The long view — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteu9wlm">
-  <link rel="stylesheet" href="css/style.css?v=mteu9wlm">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevg6nj">
+  <link rel="stylesheet" href="css/style.css?v=mtevg6nj">
   <style>
     .lvlblock { border-left: 3px solid var(--border); padding-left: 14px; margin-bottom: 22px; }
     .lvlblock.now { border-left-color: var(--accent); }
@@ -61,11 +61,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mteu9wlm"></script>
-<script src="js/curriculum.js?v=mteu9wlm"></script>
-<script src="js/app.js?v=mteu9wlm"></script>
-<script src="js/tracker.js?v=mteu9wlm"></script>
-<script src="js/plan.js?v=mteu9wlm"></script>
+<script src="js/progress-model.js?v=mtevg6nj"></script>
+<script src="js/curriculum.js?v=mtevg6nj"></script>
+<script src="js/app.js?v=mtevg6nj"></script>
+<script src="js/tracker.js?v=mtevg6nj"></script>
+<script src="js/plan.js?v=mtevg6nj"></script>
 <script>
 renderNav("map");
 trackPage("map");
@@ -90,9 +90,14 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&am
   /* pace: reported, but deliberately secondary to the capabilities */
   document.getElementById("pace").innerHTML = state.current
     ? `<p style="margin:0;font-size:15px">You're working on <strong>${esc(state.current.name)}</strong> — when it's done you can ${esc(state.current.can)}.</p>
-       ${pc.known ? `<p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Against the plan you're
+       <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">${esc(state.current.why || "")}</p>
+       <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">
+         ${state.current.lessonCount} lessons · ${state.current.items} words · about ${state.current.chunks} short sittings.</p>
+       ${pc.known ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">Against the plan you're
          <strong style="color:var(--text)">${pc.state === "on track" ? "on track" : Math.abs(pc.weeksAhead) + " week" + (Math.abs(pc.weeksAhead) === 1 ? "" : "s") + " " + pc.state}</strong>
-         — ${esc(pc.reason)}. Weeks are only how the plan was drawn; the milestones are the thing.</p>` : ""}`
+         — ${esc(pc.reason)}. Weeks are only how the plan was drawn; the milestones are the thing.</p>`
+       : pc.notStarted ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">No pace yet — the clock starts when you do, not before.</p>`
+       : pc.tooEarly ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">Just started — I'll tell you how you're pacing once there's a week of it to measure.</p>` : ""}`
     : `<p style="margin:0">Every milestone achieved.</p>`;
 
   /* each track: its levels, and the milestones that feed each level */
@@ -127,6 +132,6 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&am
   }
 })();
 </script>
-<script src="js/longview.js?v=mteu9wlm"></script>
+<script src="js/longview.js?v=mtevg6nj"></script>
 </body>
 </html>

@@ -634,7 +634,9 @@
      Weeks survive only as `plannedWeek`, a pacing annotation used to say how far
      ahead or behind the plan he is. They are never the headline.
      ========================================================================== */
-  const PASS = 80;                  // his choice: a lesson section at 80+ is mastered
+  const PASS = 80;
+  const CLEAR_MIN = 3;              // questions a lesson needs before a score may clear it
+                                    // (3 of 3 = 100 clears; 2 of 3 = 67 does not)                  // his choice: a lesson section at 80+ is mastered
   const CHUNK_ITEMS = 8;            // items one ~5-minute pass can cover
   const REVIEW_PER_CHUNK = 4;       // due cards folded into the front of each chunk
 
@@ -698,9 +700,11 @@
       const items = lessons.reduce((a, l) => a + l.total, 0);
       const solid = lessons.reduce((a, l) => a + l.solid, 0);
       const scored = lessons.filter(l => l.score !== null);
+      const chunks = (m.lessons || []).reduce((a, l) => a + lessonChunks(l).length, 0);
       return Object.assign({}, m, {
         lessons,
         lessonsDone: done, lessonCount: lessons.length,
+        chunks,
         items, solid, pct: pct(solid, items),
         achieved: lessons.length > 0 && done === lessons.length,
         score: scored.length ? Math.round(scored.reduce((a, l) => a + l.score, 0) / scored.length) : null,
@@ -721,28 +725,25 @@
      whole sentence, prove them by ear. Each pass is one ~5-minute chunk. Due
      reviews ride at the front of every chunk, so reviewing never becomes a
      separate chore (his choice). */
+  /* A LESSON IS ONE SITTING (~7 min). It used to be split into four passes of
+     five minutes each, which made a "lesson" 20-40 minutes — far too big for the
+     way he actually studies. Now the lesson is the atomic unit and the passes
+     happen INSIDE it: meet the words, then work them in mixed forms.
+
+     lessonChunks() survives as a single entry so progress logging (`chunk-done`)
+     and any older logs keep working. */
   const CHUNK_MODES = [
-    { mode: "meet",  label: "Meet the words", sub: "See them once. Recall before you reveal." },
-    { mode: "drill", label: "Write them",     sub: "Produce each one from the English." },
-    { mode: "say",   label: "Say them",       sub: "Whole sentences, out loud. This is the half that becomes speech." },
-    { mode: "ear",   label: "By ear",         sub: "Sound only — the half that counts for the Qur'an." },
+    { mode: "lesson", label: "Learn it", sub: "Meet the words, then work them — about seven minutes." },
   ];
 
   function lessonChunks(lesson) {
     const keys = lesson.keys || [];
-    const out = [];
-    for (const m of CHUNK_MODES) {
-      for (let i = 0; i < keys.length; i += CHUNK_ITEMS) {
-        const slice = keys.slice(i, i + CHUNK_ITEMS);
-        const part = keys.length > CHUNK_ITEMS ? " (" + (Math.floor(i / CHUNK_ITEMS) + 1) + ")" : "";
-        out.push({
-          id: lesson.id + ":" + m.mode + ":" + i,
-          lessonId: lesson.id, mode: m.mode,
-          label: m.label + part, sub: m.sub, keys: slice,
-        });
-      }
-    }
-    return out;
+    if (!keys.length) return [];
+    return [{
+      id: lesson.id + ":lesson",
+      lessonId: lesson.id, mode: "lesson",
+      label: "Learn it", sub: CHUNK_MODES[0].sub, keys,
+    }];
   }
 
   const chunkDone = (chunkId, log) => (log || []).some(e => e && e.e === "chunk-done" && e.chunk === chunkId);
@@ -819,12 +820,27 @@
     const cur = state.current;
     const perWeek = (ctx.curriculum.planning && ctx.curriculum.planning.minPerWeek) || 50;
 
-    let firstEvent = 0;
-    for (const e of (ctx.log || [])) if (e && e.t > 16e11 && (!firstEvent || e.t < firstEvent)) firstEvent = e.t;
-    if (!firstEvent || !cur) return { known: false };
+    /* The clock starts when the LADDER starts — the first chunk walked or test
+       sat — NOT at his first-ever logged event. He had months of history before
+       this curriculum existed, and measuring against that reported "6.1 weeks
+       behind" before he had done a single thing, which is both wrong and
+       dispiriting. Before he starts, there is no pace to report at all. */
+    let planStart = 0;
+    for (const e of (ctx.log || [])) {
+      if (!e || !e.t || e.t < 16e11) continue;
+      if (e.e !== "chunk-done" && e.e !== "exam-done" && e.e !== "exam-start") continue;
+      if (!planStart || e.t < planStart) planStart = e.t;
+    }
+    if (!cur) return { known: false };
+    if (!planStart) return { known: false, notStarted: true };
 
-    const elapsedWeeks = Math.max(1, (now - firstEvent) / (7 * DAY));
-    const weeksAhead = cur.plannedWeek - elapsedWeeks;
+    // pace only becomes meaningful once there is a week of it to measure
+    const elapsedWeeks = (now - planStart) / (7 * DAY);
+    if (elapsedWeeks < 1) return { known: false, tooEarly: true, elapsedWeeks };
+
+    // where the plan expected him to be by now, measured from the FIRST milestone
+    const startWeek = (state.milestones[0] && state.milestones[0].plannedWeek) || 1;
+    const weeksAhead = (cur.plannedWeek - startWeek) - elapsedWeeks;
 
     const mins = [];
     for (let i = 1; i <= 3; i++) mins.push(activeMinutesBetween(ctx.log, now - i * 7 * DAY, now - (i - 1) * 7 * DAY));
@@ -855,6 +871,84 @@
      Sectioned BY LESSON, so a section he aces marks that lesson mastered and it
      drops out of the milestone. Always open, unlimited retakes, reshuffled per
      attempt so he cannot memorise the paper. */
+  /* ONE test engine, three scopes (his question, 2026-08-29: "one test for each
+     lesson with a weekly test?"). Every question belongs to a lesson and is
+     scored per lesson at PASS; only the SELECTION differs:
+        · one lesson   — a sub-test
+        · a week       — everything unproved on that week's shelf
+        · a milestone  — everything unproved in the capability
+     Clearing a lesson clears it everywhere, so the wider scopes simply stop
+     asking about it. There is no separate kind of "weekly exam" to maintain. */
+  function examForLessons(lessonIds, ctx, opts) {
+    opts = opts || {};
+    const want = new Set(lessonIds);
+    const state = opts.state || milestoneState(ctx);
+    const items = [];
+    let seed = (((opts.seed || 1) * 2654435761) ^ ((opts.attempt || 0) * 40503)) % 2147483647;
+    if (seed <= 0) seed += 2147483646;
+    const rnd = () => (seed = (seed * 48271) % 2147483647) / 2147483647;
+    const isQuran = k => k.indexOf("qw:") === 0 || k.indexOf("qc:") === 0;
+
+    for (const m of (ctx.curriculum.milestones || [])) {
+      const mState = state.milestones.find(x => x.id === m.id);
+      for (const l of (m.lessons || [])) {
+        if (!want.has(l.id)) continue;
+        l.keys.forEach((k, i) => {
+          const form = isQuran(k) ? (i % 2 === 0 ? "ear" : "mean") : (i % 3 === 0 ? "ear" : i % 3 === 1 ? "mean" : "prod");
+          items.push({ key: k, lessonId: l.id, lessonTitle: l.title, milestoneId: m.id, section: l.id, form });
+        });
+      }
+    }
+    /* A LESSON TEST SHOULD FILL ITS 3 MINUTES. A six-word lesson would otherwise
+       be six questions and over in ninety seconds. So when one lesson is being
+       tested and there is room, each word is asked a SECOND time in a different
+       form — recognition and production are different skills, and testing both is
+       a better proof than testing one twice as fast. */
+    const single = new Set(items.map(i => i.lessonId)).size === 1;
+    if (single) {
+      const room = ((ctx.curriculum.planning || {}).maxLessonTestItems || 9) - items.length;
+      if (room > 0) {
+        const second = { ear: "mean", mean: "prod", prod: "ear" };
+        for (const it of items.slice(0, room)) {
+          items.push(Object.assign({}, it, { form: second[it.form] || "mean", second: true }));
+        }
+      }
+    }
+
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      const t = items[i]; items[i] = items[j]; items[j] = t;
+    }
+
+    /* NO TEST OVER ~7 MINUTES (his rule). A week's seven lessons hold ~42 items,
+       which would be a 15-minute sit. So a wide test SAMPLES — evenly across the
+       lessons, so every lesson is still represented and still scored. A lesson
+       needs enough questions for its score to mean anything: below CLEAR_MIN it
+       is reported but cannot clear the lesson, and the per-lesson test (which is
+       never sampled) stays the reliable way to prove one. */
+    /* A lesson test is ~3 minutes, a wider one ~7 (his rule). At roughly 20
+       seconds a question that is 9 items and 20 items respectively. */
+    const pl = ctx.curriculum.planning || {};
+    const lessonCount = new Set(items.map(i => i.lessonId)).size;
+    const cap = lessonCount <= 1 ? (pl.maxLessonTestItems || 9) : (pl.maxTestItems || 20);
+    let sampled = items, clearable = true;
+    if (items.length > cap) {
+      const byLesson = new Map();
+      for (const it of items) (byLesson.get(it.lessonId) || byLesson.set(it.lessonId, []).get(it.lessonId)).push(it);
+      const per = Math.max(1, Math.floor(cap / byLesson.size));
+      sampled = [];
+      for (const arr of byLesson.values()) sampled.push(...arr.slice(0, per));
+      let i = 0;
+      for (const arr of byLesson.values()) { if (sampled.length >= cap) break; if (arr[per]) sampled.push(arr[per]); i++; }
+      clearable = per >= CLEAR_MIN;
+    }
+    return {
+      total: sampled.length, items: sampled, passMark: PASS,
+      sampled: sampled.length < items.length, clearable,
+      minutes: Math.max(1, Math.round(sampled.length * 20 / 60)),
+    };
+  }
+
   function milestoneExam(ms, ctx, opts) {
     opts = opts || {};
     const only = opts.lessonIds && opts.lessonIds.length ? new Set(opts.lessonIds) : null;
@@ -913,11 +1007,92 @@
     };
   }
 
+
+  /* ---------- weeks as a GROUPING, not a deadline ----------
+     His ask: "shouldnt it show week 1 and week 2 lessons with the ability to do
+     any of the week1 lessons and do the sub test for each lesson" — then "in
+     fact shouldnt it show the 4 weeks worth of lessons".
+
+     So lessons are packed into ~50-minute weeks, in ladder order, deterministically
+     (the packing never shifts as he progresses — week 3 is always the same lessons).
+     A week is a shelf of work he can pick from in any order, NOT a deadline: the
+     milestone is still what gets achieved, and nothing is ever late. */
+  function weekPlan(ctx, state) {
+    state = state || milestoneState(ctx);
+    const pl = ctx.curriculum.planning || {};
+    const perWeek = pl.lessonsPerWeek || 7;          // seven 7-minute lessons
+    const minsEach = pl.minPerLesson || 7;
+    const quranPerWeek = pl.quranPerWeek || 4;
+
+    /* EVERY WEEK MIXES BOTH TRACKS (his rule, 2026-08-29: "the week needs to be
+       split between quranic and everyday language"). Drawing straight down the
+       ladder gave whole weeks of one track. So each track keeps its own queue and
+       a week is dealt from both — Qur'an slightly heavier, because it is his
+       ranked-first goal.
+
+       Class material comes FIRST. When he pastes a lesson from his teacher it is
+       added as a milestone flagged `source: "teacher"`, and those lessons head the
+       very next week — that is what "baked in" means. */
+    const quran = [], conv = [], teacher = [];
+    for (const m of state.milestones) {
+      for (const l of m.lessons) {
+        const row = { milestone: m, lesson: l, mins: minsEach };
+        if (m.source === "teacher" || m.track === "teacher") teacher.push(row);
+        else if (m.track === "quran") quran.push(row);
+        else conv.push(row);
+      }
+    }
+
+    const weeks = [];
+    while (teacher.length || quran.length || conv.length) {
+      const slot = { week: weeks.length + 1, lessons: [], mins: 0 };
+      // whatever his teacher just taught leads the week
+      while (teacher.length && slot.lessons.length < perWeek) slot.lessons.push(teacher.shift());
+      let q = 0, c = 0;
+      while (slot.lessons.length < perWeek && (quran.length || conv.length)) {
+        // keep the ratio honest as the week fills, and fall back to whichever
+        // queue still has work when one runs dry
+        const wantQuran = quran.length && (!conv.length || q * (perWeek - quranPerWeek) <= c * quranPerWeek);
+        if (wantQuran) { slot.lessons.push(quran.shift()); q++; }
+        else if (conv.length) { slot.lessons.push(conv.shift()); c++; }
+        else break;
+      }
+      slot.mins = slot.lessons.length * minsEach;
+      slot.quran = slot.lessons.filter(x => x.milestone.track === "quran").length;
+      slot.conv = slot.lessons.length - slot.quran;
+      weeks.push(slot);
+      if (slot.lessons.length === 0) break;
+    }
+    for (const wk of weeks) {
+      wk.done = wk.lessons.every(x => x.lesson.mastered);
+      wk.provedCount = wk.lessons.filter(x => x.lesson.mastered).length;
+    }
+    return weeks;
+  }
+
+  /* The week he is actually on: the first that still has something unproved. */
+  function currentWeek(weeks) {
+    const i = weeks.findIndex(w => !w.done);
+    return i === -1 ? weeks.length : i + 1;
+  }
+
+  /* The next unfinished chunk of ONE named lesson (he can pick any lesson,
+     not just whatever Continue would have chosen). */
+  function nextChunkOfLesson(lessonId, ctx) {
+    for (const m of (ctx.curriculum.milestones || [])) {
+      const l = (m.lessons || []).find(x => x.id === lessonId);
+      if (!l) continue;
+      const chunks = lessonChunks(l);
+      return { milestoneId: m.id, lesson: l, chunks, chunk: chunks.find(c => !chunkDone(c.id, ctx.log)) || null };
+    }
+    return null;
+  }
+
   return {
     SOLID_BOX, expandBasket, evalCriterion, trackLevel, levels,
     examKind, examScope, examResults, examAttempts, examTrajectory, examBuild, examScoreOf, examBand, examVerdict, levelSummary, groupOf,
     weekHistory, weekSize, weekProgress, weekLearned, weekObjectives, weekKeys, weekBounds, weekSelfSeed, activeMinutesBetween,
-    PASS, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
-    nextChunk, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
+    PASS, CLEAR_MIN, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
+    nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
   };
 });

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteu9wlm">
-  <link rel="stylesheet" href="css/style.css?v=mteu9wlm">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevg6nj">
+  <link rel="stylesheet" href="css/style.css?v=mtevg6nj">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -17,27 +17,27 @@
     .q-tr { text-align: center; color: var(--muted); font-size: 14px; }
     .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
     .prog { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 10px 0 0; }
-    .prog > i { display: block; height: 100%; background: var(--accent); }
+    .prog > i { display: block; height: 100%; background: var(--accent); transition: width .2s; }
     .tbl { width: 100%; border-collapse: collapse; font-size: 15px; }
     .tbl td { padding: 9px 8px; border-bottom: 1px solid var(--border); }
-    .tbl .ar { font-size: 22px; text-align: right; width: 42%; }
+    .tbl .ar { font-size: 22px; text-align: right; width: 44%; }
     .veil { color: transparent; background: var(--border); border-radius: 6px; cursor: pointer; }
     .veil.on { color: inherit; background: none; }
     .big { font-size: 46px; font-weight: 700; color: var(--accent); line-height: 1; }
     .pill { display:inline-block; font-size:12px; padding:2px 9px; border-radius:99px; background:var(--accent-soft); color:var(--accent); font-weight:600; }
     .lrow { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:14.5px; }
+    .hands { text-align:center; padding:26px 0; }
+    .hands .w { font-size: 34px; line-height:1.7; }
   </style>
 </head>
 <body>
-<main>
-  <div id="app"><p>Loading…</p></div>
-</main>
+<main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mteu9wlm"></script>
-<script src="js/curriculum.js?v=mteu9wlm"></script>
-<script src="js/app.js?v=mteu9wlm"></script>
-<script src="js/tracker.js?v=mteu9wlm"></script>
-<script src="js/plan.js?v=mteu9wlm"></script>
+<script src="js/progress-model.js?v=mtevg6nj"></script>
+<script src="js/curriculum.js?v=mtevg6nj"></script>
+<script src="js/app.js?v=mtevg6nj"></script>
+<script src="js/tracker.js?v=mtevg6nj"></script>
+<script src="js/plan.js?v=mtevg6nj"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -52,128 +52,143 @@ const P = new URLSearchParams(location.search);
   const state = Curriculum.milestoneState(ctx);
   if (!state.current) { app.innerHTML = "<h1>Everything achieved</h1><p>Nothing left on the ladder — ask your coach for more.</p>"; return; }
 
-  const msId = P.get("m") || state.current.id;
-  const ms = state.milestones.find(m => m.id === msId) || state.current;
+  const lessonId = P.get("lesson");
+  const lessonSet = (P.get("lessons") || "").split(",").filter(Boolean);
+  const findMs = id => (ctx.curriculum.milestones || []).find(m => (m.lessons || []).some(l => l.id === id));
 
-  if (P.get("test")) return runTest(ms, ctx, state);
+  // a week's worth, or a milestone's worth
+  if (lessonSet.length) return runTest(lessonSet, ctx, state, P.get("label") || "This week");
 
-  // a specific chunk, or whatever Continue decided
-  const want = P.get("chunk");
-  const src = ctx.curriculum.milestones.find(m => m.id === ms.id);
-  let target = null;
-  if (want) {
-    for (const l of src.lessons) {
-      const c = Curriculum.lessonChunks(l).find(x => x.id === want);
-      if (c) { target = { milestone: ms, lesson: ms.lessons.find(x => x.id === l.id), chunk: c }; break; }
-    }
+  if (lessonId) {
+    const src = findMs(lessonId);
+    if (!src) { location.href = "index.html"; return; }
+    if (P.get("test")) return runTest([lessonId], ctx, state);
+    const srcLesson = src.lessons.find(l => l.id === lessonId);
+    return runLesson(srcLesson, src, ctx, P.get("mode") === "hands");
   }
-  if (!target) target = Curriculum.nextChunk(ctx, state);
-  if (!target) { location.href = "index.html"; return; }
-  if (target.testNext || !target.chunk) return runTest(ms, ctx, state, target.skipToTest ? [target.lesson.id] : null);
-  runChunk(target, ctx);
+
+  if (P.get("test")) {
+    const ms = state.milestones.find(m => m.id === P.get("m")) || state.current;
+    const open = ms.lessons.filter(l => !l.mastered).map(l => l.id);
+    return runTest(open.length ? open : ms.lessons.map(l => l.id), ctx, state, ms.name);
+  }
+
+  // plain Continue
+  const next = Curriculum.nextChunk(ctx, state);
+  if (!next) { location.href = "index.html"; return; }
+  if (next.testNext) return runTest([next.lesson.id], ctx, state);
+  const src = findMs(next.lesson.id);
+  return runLesson(src.lessons.find(l => l.id === next.lesson.id), src, ctx, false);
 })();
 
-/* ============================ A CHUNK ============================
-   ~5 minutes, one pass over up to 8 items, with due reviews folded in at the
-   front so review is never a separate chore. */
-async function runChunk(t, ctx) {
-  const { milestone: ms, lesson, chunk } = t;
+/* ======================= A LESSON — one ~7-minute sitting =======================
+   Not four separate chunks any more: meet the words, then work them in mixed
+   forms, all in one go. Due reviews ride at the front so review is never a
+   separate chore. Every lesson can be done on screen OR hands-free. */
+async function runLesson(lesson, ms, ctx, handsFree) {
+  const chunk = Curriculum.lessonChunks(lesson)[0];
   const reviewKeys = Curriculum.reviewsFor(chunk, ctx);
-  const allKeys = reviewKeys.concat(chunk.keys);
-  const resolved = await resolveCards(allKeys);
+  const resolved = await resolveCards(reviewKeys.concat(lesson.keys));
   const items = resolved.map((r, i) => ({ key: r.key, v: r.v, review: i < reviewKeys.length })).filter(x => x.v && x.v.ar);
   if (!items.length) { app.innerHTML = "<p>Nothing to study here.</p>"; return; }
 
   primeSpeak();
-  const head = () => `
-    <div class="crumb">${esc(ms.name)} · ${esc(lesson.title)}</div>
-    <h1 style="margin-top:0">${esc(chunk.label)}</h1>
-    <p class="sub">${esc(chunk.sub)}${reviewKeys.length ? ` <span class="pill">+${reviewKeys.length} due for review</span>` : ""}</p>`;
+  const head = extra => `
+    <div class="crumb">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Everyday"} · ${esc(ms.name)}</div>
+    <h1 style="margin-top:0">${esc(lesson.title)}</h1>
+    <p class="sub">${extra || ""}${reviewKeys.length ? ` <span class="pill">+${reviewKeys.length} due for review</span>` : ""}</p>`;
 
-  if (chunk.mode === "meet") return meetMode();
-  return stepMode();
+  if (handsFree) return handsFreeRun();
+  return meet();
 
-  /* MEET — a table, recall before you reveal, then mark only the misses.
-     (his standing preference: tables over flashcards, minimal clicking) */
-  function meetMode() {
-    app.innerHTML = head() + `
+  /* ---- hands-free: audio only, no taps, nothing to look at ---- */
+  function handsFreeRun() {
+    let i = 0, pass = 1;
+    const PASSES = 2;
+    app.innerHTML = head("Hands-free. Screen off if you like — it plays straight through.") +
+      `<div class="card"><div class="hands"><div class="w" id="hw">…</div>
+        <p style="color:var(--muted);font-size:14px" id="hs"></p></div>
+        <div class="prog"><i id="hp" style="width:0%"></i></div>
+        <div class="row"><button id="stop">Stop</button></div></div>`;
+    document.getElementById("stop").onclick = () => finish(0, 0, "hands", true);
+    const w = document.getElementById("hw"), sub = document.getElementById("hs"), bar = document.getElementById("hp");
+
+    const step = () => {
+      if (i >= items.length) { if (++pass > PASSES) return finish(items.length, items.length, "hands"); i = 0; }
+      const it = items[i];
+      const total = items.length * PASSES, at = (pass - 1) * items.length + i;
+      bar.style.width = Math.round(100 * at / total) + "%";
+      w.textContent = it.v.ar;
+      sub.textContent = pass === 1 ? "what does it mean?" : "say it with me";
+      speak(it.v.ar, 0.8, () => {
+        setTimeout(() => {
+          sub.textContent = it.v.en;
+          speak(it.v.en, 0.95, () => { i++; setTimeout(step, 350); });
+        }, pass === 1 ? 2200 : 900);
+      });
+    };
+    step();
+  }
+
+  /* ---- meet: the table, recall before reveal, mark only the misses ---- */
+  function meet() {
+    app.innerHTML = head("First, meet them. Try to recall each meaning before you tap it.") + `
       <div class="card">
         <table class="tbl"><tbody>${items.map((it, i) => `
           <tr>
             <td class="ar arabic">${esc(it.v.ar)} <button class="small spk" data-i="${i}">🔊</button></td>
             <td><span class="veil en" data-i="${i}">${esc(it.v.en)}</span>
-                ${it.v.tr ? `<div style="font-size:12.5px;color:var(--muted)">${esc(it.v.tr)}</div>` : ""}</td>
-            <td style="width:80px;text-align:right"><button class="small miss" data-i="${i}">✗ missed</button></td>
+              ${it.v.tr ? `<div style="font-size:12.5px;color:var(--muted)">${esc(it.v.tr)}</div>` : ""}</td>
           </tr>`).join("")}</tbody></table>
         <div class="row" style="justify-content:flex-start">
           <button id="revealAll">Reveal all</button>
-          <button class="primary" id="done">Done — that's the chunk</button>
+          <button class="primary" id="go">Now work them →</button>
         </div>
       </div>`;
-    const missed = new Set();
     app.querySelectorAll(".spk").forEach(b => b.onclick = () => speak(items[+b.dataset.i].v.ar, 0.8));
     app.querySelectorAll(".en").forEach(el => el.onclick = () => el.classList.add("on"));
-    app.querySelectorAll(".miss").forEach(b => b.onclick = () => {
-      const i = +b.dataset.i;
-      if (missed.has(i)) { missed.delete(i); b.classList.remove("on"); }
-      else { missed.add(i); b.classList.add("on"); }
-      app.querySelector(`.en[data-i="${i}"]`).classList.add("on");
-    });
     document.getElementById("revealAll").onclick = () => app.querySelectorAll(".en").forEach(e => e.classList.add("on"));
-    document.getElementById("done").onclick = () => {
-      items.forEach((it, i) => gradeCard(it.key, missed.has(i) ? "again" : "good"));
-      finish(items.length - missed.size, items.length);
-    };
+    document.getElementById("go").onclick = work;
   }
 
-  /* DRILL / SAY / EAR — one item at a time. */
-  function stepMode() {
+  /* ---- work: mixed forms, one item at a time ---- */
+  function work() {
     let i = 0, right = 0;
+    const forms = ["mean", "prod", "ear"];
     const step = () => {
-      if (i >= items.length) return finish(right, items.length);
+      if (i >= items.length) return finish(right, items.length, "screen");
       const it = items[i];
-      const n = `<div class="crumb">${i + 1} of ${items.length}${it.review ? " · review" : ""}</div>`;
+      const form = forms[i % forms.length];
+      const n = `<div class="crumb">${i + 1} of ${items.length}${it.review ? " · review" : ""}</div>
+        <div class="prog"><i style="width:${Math.round(100 * i / items.length)}%"></i></div>`;
 
-      if (chunk.mode === "ear") {
+      if (form === "ear") {
         app.innerHTML = head() + `<div class="card">${n}
-          <p style="text-align:center;font-size:15px">Listen. What does it mean?</p>
+          <p style="text-align:center;font-size:15px;margin-top:14px">Listen. What does it mean?</p>
           <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
-          <div class="row"><button id="rev">show the answer</button></div></div>`;
+          <div class="row"><button id="rev">show me</button></div></div>`;
         document.getElementById("play").onclick = () => speak(it.v.ar, 0.85);
         speak(it.v.ar, 0.85);
         document.getElementById("rev").onclick = reveal;
-
-      } else if (chunk.mode === "say") {
+      } else if (form === "mean") {
         app.innerHTML = head() + `<div class="card">${n}
-          <div class="q-en">${esc(it.v.en)}</div>
           <div class="q-ar arabic">${esc(it.v.ar)}</div>
-          ${it.v.tr ? `<p class="q-tr">${esc(it.v.tr)}</p>` : ""}
-          <p style="text-align:center;font-size:14.5px;color:var(--muted)">Listen, then say it out loud.</p>
-          <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 hear it</button></div>
-          <div class="row">
-            <button id="no" style="min-width:130px">✗ stumbled</button>
-            <button class="primary" id="yes" style="min-width:130px">✓ said it</button>
-          </div></div>`;
-        document.getElementById("play").onclick = () => speak(it.v.ar, 0.8);
-        speak(it.v.ar, 0.8);
-        document.getElementById("yes").onclick = () => score(true);
-        document.getElementById("no").onclick = () => score(false);
-
-      } else { // drill
+          <p style="text-align:center;font-size:15px;color:var(--muted)">What does it mean?</p>
+          <div class="row"><button id="rev">show me</button></div></div>`;
+        document.getElementById("rev").onclick = reveal;
+      } else {
         app.innerHTML = head() + `<div class="card">${n}
           <div class="q-en">${esc(it.v.en)}</div>
-          <p style="text-align:center;font-size:13.5px;color:var(--muted)">Write it in Arabic — typing in English letters works too</p>
+          <p style="text-align:center;font-size:13.5px;color:var(--muted)">Write it in Arabic — English letters work too</p>
           <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
           <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button></div></div>`;
-        const inp = document.getElementById("ans");
-        inp.focus();
+        const inp = document.getElementById("ans"); inp.focus();
         inp.onkeydown = e => { if (e.key === "Enter") document.getElementById("chk").click(); };
         document.getElementById("chk").onclick = () => {
           const m = writeMatchAr(inp.value, it.v.ar);
-          const got = m.ok || arMatch(inp.value, it.v.ar);
-          feedback(got);
+          after(m.ok || arMatch(inp.value, it.v.ar));
         };
-        document.getElementById("skip").onclick = () => feedback(false);
+        document.getElementById("skip").onclick = () => after(false);
       }
 
       function reveal() {
@@ -189,75 +204,69 @@ async function runChunk(t, ctx) {
         document.getElementById("yes").onclick = () => score(true);
         document.getElementById("no").onclick = () => score(false);
       }
-      function feedback(got) {
+      function after(got) {
         app.innerHTML = head() + `<div class="card">${n}
           <p style="text-align:center;font-size:16px">${got ? "✓ right" : "✗ not quite"}</p>
           <div class="q-ar arabic">${esc(it.v.ar)}</div>
           ${it.v.tr ? `<p class="q-tr">${esc(it.v.tr)}</p>` : ""}
           <div class="row"><button class="primary" id="next">Next</button></div></div>`;
-        document.getElementById("next").onclick = () => score(got, true);
+        document.getElementById("next").onclick = () => score(got);
       }
-      function score(got, already) {
-        if (!already) { /* fallthrough */ }
+      function score(got) {
         gradeCard(it.key, got ? "good" : "again");
-        if (chunk.mode === "ear") logEvent({ e: "alisten-grade", key: it.key, ok: !!got, src: "chunk" });
-        if (chunk.mode === "say") logEvent({ e: "speak", key: it.key, ok: !!got, src: "chunk" });
+        if (form === "ear") logEvent({ e: "alisten-grade", key: it.key, ok: !!got, src: "lesson" });
         if (got) right++;
-        i++;
-        step();
+        i++; step();
       }
     };
     step();
   }
 
-  function finish(right, total) {
-    logEvent({ e: "chunk-done", chunk: chunk.id, lesson: lesson.id, milestone: ms.id, mode: chunk.mode, right, total });
+  function finish(right, total, how, stopped) {
+    if (!stopped) logEvent({ e: "chunk-done", chunk: chunk.id, lesson: lesson.id, milestone: ms.id, mode: how, right, total });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
-    curCtx().then(fresh => {
-      const st = Curriculum.milestoneState(fresh);
-      const nx = Curriculum.nextChunk(fresh, st);
-      const l = st.milestones.find(m => m.id === ms.id).lessons.find(x => x.id === lesson.id);
-      const allWalked = Curriculum.lessonChunks(fresh.curriculum.milestones.find(m => m.id === ms.id).lessons.find(x => x.id === lesson.id))
-        .every(c => Curriculum.chunkDone(c.id, fresh.log));
-      app.innerHTML = `
-        <h1>Chunk done</h1>
-        <div class="card">
-          <p style="font-size:16px;margin-top:0">${right} of ${total} without help.</p>
-          <p style="font-size:14.5px;color:var(--muted)">${esc(ms.name)} · ${esc(lesson.title)} — ${l.solid} of ${l.total} words holding.</p>
-          ${allWalked ? `<p style="font-size:15px"><strong>You've walked every part of this lesson.</strong> The test is what marks it mastered.</p>` : ""}
-          <div class="row" style="justify-content:flex-start">
-            ${allWalked
-              ? `<a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}"><button class="primary">Take the test</button></a>`
-              : `<a href="learn.html"><button class="primary">Next chunk</button></a>`}
-            <a href="index.html"><button>Stop here</button></a>
-          </div>
-        </div>`;
-    });
+    app.innerHTML = `
+      <h1>${stopped ? "Stopped" : "Lesson done"}</h1>
+      <div class="card">
+        ${total ? `<p style="font-size:16px;margin-top:0">${right} of ${total} without help.</p>` : ""}
+        <p style="font-size:14.5px;color:var(--muted)">${esc(ms.name)} · ${esc(lesson.title)}</p>
+        <p style="font-size:15px">${how === "hands"
+          ? "That was a listening pass — it doesn't prove the lesson on its own. The 3-minute test does."
+          : "Now prove it: the test takes about three minutes and marks the lesson done at 80."}</p>
+        <div class="row" style="justify-content:flex-start">
+          <a href="learn.html?test=1&lesson=${encodeURIComponent(lesson.id)}"><button class="primary">Take the test · ~3 min</button></a>
+          <a href="index.html"><button>Back</button></a>
+        </div>
+      </div>`;
   }
 }
 
-/* ============================ THE TEST ============================
-   Sectioned by lesson: a section at 80+ marks that lesson mastered. Always open,
-   unlimited retakes, reshuffled each time. Lessons already proved are skipped
-   entirely unless their re-verification has come due. */
-async function runTest(ms, ctx, state, onlyLessons) {
-  const attempts = (ctx.log || []).filter(e => e && e.e === "exam-done" && e.milestone === ms.id).length;
-  const ex = Curriculum.milestoneExam(ms, ctx, { attempt: attempts + 1, lessonIds: onlyLessons });
+/* ======================= A TEST — one engine, three scopes =======================
+   One lesson (~3 min), a week's seven (~7 min), or a milestone. Scoring is per
+   lesson at 80 in every case, so clearing a lesson clears it everywhere. */
+async function runTest(lessonIds, ctx, state, label) {
+  const attempts = (ctx.log || []).filter(e => e && e.e === "exam-done").length;
+  const all = state.milestones.flatMap(m => m.lessons);
+  const open = lessonIds.filter(id => { const l = all.find(x => x.id === id); return l && !l.mastered; });
+  const use = open.length ? open : lessonIds;
+  const ex = Curriculum.examForLessons(use, ctx, { attempt: attempts + 1, state, seed: use.length + (label ? label.length : 3) });
   if (!ex.items.length) {
-    app.innerHTML = `<h1>Nothing left to prove here</h1><p>Every lesson in “${esc(ms.name)}” is already proved and still fresh.</p>
+    app.innerHTML = `<h1>Nothing left to prove</h1><p>Everything here is already proved and still fresh.</p>
       <div class="row" style="justify-content:flex-start"><a href="index.html"><button class="primary">Back</button></a></div>`;
     return;
   }
   const resolved = await resolveCards(ex.items.map(i => i.key));
   const qs = ex.items.map((it, i) => Object.assign({}, it, { v: resolved[i] && resolved[i].v })).filter(q => q.v && q.v.ar);
 
+  const title = label || (use.length === 1 ? (all.find(l => l.id === use[0]) || {}).title : "The test");
   primeSpeak();
-  logEvent({ e: "exam-start", milestone: ms.id, total: qs.length, attempt: attempts + 1 });
+  logEvent({ e: "exam-start", lessons: use, total: qs.length, attempt: attempts + 1 });
   const answers = [];
   let i = 0;
 
-  const head = `<div class="crumb">${esc(ms.name)}</div><h1 style="margin-top:0">The test</h1>
-    <p class="sub">Pass mark ${Curriculum.PASS}. Each lesson is scored on its own — clear a lesson and it's done.</p>`;
+  const head = `<div class="crumb">Test</div><h1 style="margin-top:0">${esc(title)}</h1>
+    <p class="sub">${qs.length} questions, about ${ex.minutes} minute${ex.minutes === 1 ? "" : "s"}. Pass mark ${Curriculum.PASS}.
+    ${ex.sampled ? `A sample across ${use.length} lessons${ex.clearable ? "" : " — too few each to clear a lesson, so this one is a check"}.` : "Each lesson is scored on its own."}</p>`;
 
   ask();
   function ask() {
@@ -307,7 +316,7 @@ async function runTest(ms, ctx, state, onlyLessons) {
     }
     function score(ok, showAnswer) {
       answers.push({ key: q.key, lessonId: q.lessonId, lessonTitle: q.lessonTitle, form: q.form, ok: !!ok });
-      gradeCard(q.key, ok ? "good" : "again");           // the test is also revision
+      gradeCard(q.key, ok ? "good" : "again");     // the test is also revision
       if (q.form === "ear") logEvent({ e: "alisten-grade", key: q.key, ok: !!ok, src: "test" });
       i++;
       if (showAnswer && !ok) {
@@ -323,43 +332,40 @@ async function runTest(ms, ctx, state, onlyLessons) {
 
   function done() {
     const r = Curriculum.milestoneScoreOf(answers);
-    logEvent({ e: "exam-done", milestone: ms.id, attempt: attempts + 1, score: r.score,
-               correct: r.correct, total: r.total, lessons: r.lessons, sections: r.sections });
+    // a score from too few questions reports but must not clear a lesson
+    const lessons = ex.clearable ? r.lessons : {};
+    logEvent({ e: "exam-done", lessons: lessons, reported: r.lessons, attempt: attempts + 1,
+               score: r.score, correct: r.correct, total: r.total, sections: r.sections });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
 
-    curCtx().then(fresh => {
-      const st = Curriculum.milestoneState(fresh);
-      const m2 = st.milestones.find(x => x.id === ms.id);
-      const cleared = r.cleared.map(id => r.lessonTitles[id]);
-      const open = Object.keys(r.lessons).filter(id => r.lessons[id] < Curriculum.PASS);
-      const band = Curriculum.examBand(r.score);
-      app.innerHTML = `
-        <h1 style="margin-bottom:4px">${esc(ms.name)}</h1>
-        <div class="card" style="border-color:var(--accent)">
-          <div style="text-align:center">
-            <div class="big">${r.score}</div>
-            <div style="font-size:15px;font-weight:600;text-transform:capitalize">${esc(band.band)}</div>
-            ${r.sections.ear !== null ? `<div style="font-size:13px;color:var(--muted)">by ear: ${r.sections.ear}%</div>` : ""}
-          </div>
-          <div style="margin-top:16px">
-            ${Object.keys(r.lessons).map(id => `
-              <div class="lrow">
-                <span>${r.lessons[id] >= Curriculum.PASS ? "✓ " : ""}${esc(r.lessonTitles[id])}</span>
-                <strong style="color:${r.lessons[id] >= Curriculum.PASS ? "var(--accent)" : "var(--muted)"}">${r.lessons[id]}</strong>
-              </div>`).join("")}
-          </div>
-          <p style="font-size:14.5px;margin-top:14px">
-            ${cleared.length ? `<strong>Mastered:</strong> ${esc(cleared.join(", "))}. ` : ""}
-            ${open.length ? `Still open: ${esc(open.map(id => r.lessonTitles[id]).join(", "))} — those come back, the rest won't.`
-                          : `<strong>Milestone complete — you can ${esc(ms.can)}.</strong>`}
-          </p>
-          <div class="row" style="justify-content:flex-start">
-            ${open.length ? `<a href="learn.html"><button class="primary">Work on what's left</button></a>` : `<a href="learn.html"><button class="primary">Start the next milestone</button></a>`}
-            <a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}"><button>Take it again</button></a>
-            <a href="index.html"><button>Home</button></a>
-          </div>
-        </div>`;
-    });
+    const cleared = Object.keys(r.lessons).filter(id => r.lessons[id] >= Curriculum.PASS);
+    const stillOpen = Object.keys(r.lessons).filter(id => r.lessons[id] < Curriculum.PASS);
+    const band = Curriculum.examBand(r.score);
+    app.innerHTML = `
+      <h1 style="margin-bottom:4px">${esc(title)}</h1>
+      <div class="card" style="border-color:var(--accent)">
+        <div style="text-align:center">
+          <div class="big">${r.score}</div>
+          <div style="font-size:15px;font-weight:600;text-transform:capitalize">${esc(band.band)}</div>
+          ${r.sections.ear !== null ? `<div style="font-size:13px;color:var(--muted)">by ear: ${r.sections.ear}%</div>` : ""}
+        </div>
+        <div style="margin-top:16px">
+          ${Object.keys(r.lessons).map(id => `
+            <div class="lrow">
+              <span>${r.lessons[id] >= Curriculum.PASS && ex.clearable ? "✓ " : ""}${esc(r.lessonTitles[id])}</span>
+              <strong style="color:${r.lessons[id] >= Curriculum.PASS ? "var(--accent)" : "var(--muted)"}">${r.lessons[id]}</strong>
+            </div>`).join("")}
+        </div>
+        <p style="font-size:14.5px;margin-top:14px">
+          ${!ex.clearable ? `This was a spread across ${use.length} lessons — enough to show where you stand, not enough per lesson to mark them done. Take a lesson's own 3-minute test to clear it.`
+            : cleared.length ? `<strong>Proved:</strong> ${esc(cleared.map(id => r.lessonTitles[id]).join(", "))}.${stillOpen.length ? ` Still open: ${esc(stillOpen.map(id => r.lessonTitles[id]).join(", "))} — those come back, the rest won't.` : ""}`
+            : `Nothing cleared this time — 80 is the bar. Those lessons come back; anything you've already proved won't.`}
+        </p>
+        <div class="row" style="justify-content:flex-start">
+          <a href="index.html"><button class="primary">Back to your lessons</button></a>
+          <a href="${use.length === 1 ? `learn.html?test=1&lesson=${encodeURIComponent(use[0])}` : `learn.html?lessons=${encodeURIComponent(use.join(","))}&label=${encodeURIComponent(title)}`}"><button>Take it again</button></a>
+        </div>
+      </div>`;
   }
 }
 </script>
