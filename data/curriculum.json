@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "note": "The capability ladder. See CURRICULUM.md for the design contract — do not edit criteria without reading it. Levels are ordered; a level is earned only when EVERY criterion is met, and is never revoked.",
+  "baskets": {
+    "fatiha": { "surahs": ["fatiha"] },
+    "salah": { "surahs": ["fatiha", "ikhlas", "falaq", "nas", "kawthar", "asr", "qadr"] }
+  },
+  "tracks": [
+    {
+      "id": "quran",
+      "icon": "🎧",
+      "name": "Qur'an by ear",
+      "goal": "Understand the Qur'an as it is recited",
+      "rank": 1,
+      "levels": [
+        {
+          "id": "quran-a1",
+          "label": "A1",
+          "can": "you catch the words of Al-Fatiha as it is recited",
+          "criteria": [
+            { "type": "earCoverage", "basket": "fatiha", "min": 0.6, "label": "Al-Fatiha caught by ear" },
+            { "type": "examCount", "n": 2, "label": "weekly exams sat" },
+            { "type": "examAvg", "n": 2, "min": 60, "label": "average of your last 2 exams" }
+          ]
+        },
+        {
+          "id": "quran-a2",
+          "label": "A2",
+          "can": "you follow the short surahs you pray, by ear",
+          "criteria": [
+            { "type": "earCoverage", "basket": "salah", "min": 0.6, "label": "your salah words caught by ear" },
+            { "type": "placement", "test": "listen", "min": 0.6, "label": "listening test" },
+            { "type": "surahTests", "min": 3, "label": "surah tests passed" },
+            { "type": "examAvg", "n": 4, "min": 70, "label": "average of your last 4 exams" }
+          ]
+        },
+        {
+          "id": "quran-b1",
+          "label": "B1",
+          "can": "you catch the sense of a short surah you have never studied",
+          "criteria": [
+            { "type": "earCoverage", "basket": "salah", "min": 0.8, "label": "your salah words caught by ear" },
+            { "type": "placement", "test": "listen", "min": 0.75, "label": "listening test" },
+            { "type": "surahTests", "min": 5, "label": "surah tests passed" },
+            { "type": "examAvg", "n": 8, "min": 75, "label": "average of your last 8 exams" }
+          ]
+        },
+        {
+          "id": "quran-b2",
+          "label": "B2",
+          "can": "you follow connected recitation beyond what you have memorised",
+          "criteria": [
+            { "type": "earCoverage", "basket": "salah", "min": 0.9, "label": "your salah words caught by ear" },
+            { "type": "srsSolid", "keys": ["qc:"], "box": 4, "min": 0.7, "label": "the Qur'an's most frequent words" },
+            { "type": "placement", "test": "listen", "min": 0.85, "label": "listening test" }
+          ]
+        },
+        {
+          "id": "quran-c1",
+          "label": "C1",
+          "can": "you follow recitation across a juz'",
+          "criteria": [
+            { "type": "srsSolid", "keys": ["qc:"], "box": 5, "min": 0.9, "label": "the Qur'an's most frequent words" },
+            { "type": "placement", "test": "listen", "min": 0.9, "label": "listening test" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv",
+      "icon": "🗣",
+      "name": "Conversation",
+      "goal": "Hold a conversation in MSA, including Umrah",
+      "rank": 2,
+      "levels": [
+        {
+          "id": "conv-a1",
+          "label": "A1",
+          "can": "you can greet someone, introduce yourself and say what you need",
+          "criteria": [
+            { "type": "srsSolid", "keys": ["ph-greet:", "ph-intro:", "ph-need:"], "box": 3, "min": 0.8, "label": "greeting, introducing, asking" },
+            { "type": "outputMinutes", "min": 20, "label": "minutes spoken out loud" },
+            { "type": "examAvg", "n": 2, "min": 60, "label": "average of your last 2 exams" }
+          ]
+        },
+        {
+          "id": "conv-a2",
+          "label": "A2",
+          "can": "you can handle an Umrah trip end to end: directions, shopping, food and time",
+          "criteria": [
+            { "type": "srsSolid", "keys": ["ph-dir:", "ph-shop:", "ph-food:", "ph-time:"], "box": 3, "min": 0.8, "label": "directions, shopping, food, time" },
+            { "type": "placement", "test": "speak", "min": 0.5, "label": "oral exam" },
+            { "type": "outputMinutes", "min": 60, "label": "minutes spoken out loud" },
+            { "type": "examAvg", "n": 4, "min": 70, "label": "average of your last 4 exams" }
+          ]
+        },
+        {
+          "id": "conv-b1",
+          "label": "B1",
+          "can": "you can hold a short conversation about yourself, your family and your day",
+          "criteria": [
+            { "type": "srsSolid", "keys": ["ph-"], "box": 3, "min": 0.8, "label": "your whole phrase deck" },
+            { "type": "placement", "test": "speak", "min": 0.65, "label": "oral exam" },
+            { "type": "outputMinutes", "min": 180, "label": "minutes spoken out loud" },
+            { "type": "examAvg", "n": 8, "min": 75, "label": "average of your last 8 exams" }
+          ]
+        },
+        {
+          "id": "conv-b2",
+          "label": "B2",
+          "can": "you can discuss things beyond immediate daily needs",
+          "criteria": [
+            { "type": "srsSolid", "keys": ["ph-"], "box": 5, "min": 0.8, "label": "your whole phrase deck, held long-term" },
+            { "type": "placement", "test": "speak", "min": 0.8, "label": "oral exam" },
+            { "type": "outputMinutes", "min": 420, "label": "minutes spoken out loud" }
+          ]
+        },
+        {
+          "id": "conv-c1",
+          "label": "C1",
+          "can": "you can converse comfortably in MSA",
+          "criteria": [
+            { "type": "placement", "test": "speak", "min": 0.9, "label": "oral exam" },
+            { "type": "outputMinutes", "min": 900, "label": "minutes spoken out loud" }
+          ]
+        }
+      ]
+    }
+  ]
+}

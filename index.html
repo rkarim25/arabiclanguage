@@ -8,14 +8,41 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic Through Stories — العربية بالقصص</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtenjcvj">
-  <link rel="stylesheet" href="css/style.css?v=mtenjcvj">
+  <link rel="stylesheet" href="css/fonts.css?v=mteozy3h">
+  <link rel="stylesheet" href="css/style.css?v=mteozy3h">
 </head>
 <body>
 <main>
   <h1>Arabic Through Stories <span class="arabic" style="color:var(--accent)">العربية بالقصص</span></h1>
-  <p class="sub">Two goals, one path: <strong>understand the Quran as it's recited</strong>, and <strong>speak Arabic</strong>.
-  Everything is ordered by frequency — you only ever study the words that pay off most — and everything you do is tracked so your coach targets what you need.</p>
+
+  <!-- Milestones are the spine (CURRICULUM.md §1b): where he stands, what this
+       week asks, and the only two ways in. Everything else is machinery. -->
+  <div id="levelStrip" style="display:none;margin:0 0 14px"></div>
+
+  <div class="card" id="weekHero" style="border-color:var(--accent)">
+    <h2 style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
+      <span>📅 This week</span>
+      <a href="week.html" style="font-size:13px;font-weight:400">the target &amp; the test →</a>
+    </h2>
+    <div id="weekHeroBody">Loading your week…</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
+      <button class="primary" id="btnLesson" style="flex:1 1 200px;font-size:17px;padding:14px">▶ Lesson</button>
+      <a href="audio.html?commute=1" style="flex:1 1 200px;text-decoration:none">
+        <button style="width:100%;font-size:17px;padding:14px">🚗 Commute</button></a>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0" id="lessonHint">A lesson is one small chunk, picked for you. The commute version is the same week, hands-free.</p>
+  </div>
+
+  <div class="card">
+    <h2>Free practice</h2>
+    <p class="sub" style="margin-bottom:10px">Outside the week — for when you just want to turn the handle. It still counts in the test.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <a href="vocab.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>📖 Vocab</b><br><span style="font-size:13px;color:var(--muted)">Learn new words</span></a>
+      <a href="review.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>🔁 Review</b><br><span style="font-size:13px;color:var(--muted)" id="dueHint">Everything due today</span></a>
+      <a href="sentences.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>✍️ Sentences</b><br><span style="font-size:13px;color:var(--muted)">Build &amp; review</span></a>
+      <a href="more.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>⋯ Everything else</b><br><span style="font-size:13px;color:var(--muted)">Stories, Qur'an, grammar…</span></a>
+    </div>
+  </div>
 
   <!-- test-first (his 2026-08-09 drawing: audio and screen are two delivery lines
        that MEET AT THE TEST) — the check opens the sitting, before the plan -->
@@ -29,21 +56,25 @@
     <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
   </div>
 
-  <div class="card" style="border-color:var(--accent)">
-    <h2>▶ Today's plan</h2>
-    <div id="planCard">Building today's plan…</div>
-    <details style="margin-top:10px">
-      <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Browse everything instead</summary>
-      <div class="whatnow" id="whatNow" style="margin-top:10px"></div>
+  <div class="card">
+    <details id="planDetails">
+      <summary style="cursor:pointer;font-weight:700;font-size:15px">Today's chunks — see all of them</summary>
+      <div id="planCard" style="margin-top:10px">Building today's plan…</div>
+      <details style="margin-top:10px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Browse everything instead</summary>
+        <div class="whatnow" id="whatNow" style="margin-top:10px"></div>
+      </details>
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">🕌 One block after a salah — three prayers with a block each and the day is done, no willpower needed.</p>
     </details>
-    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">🕌 One block after a salah — three prayers with a block each and the day is done, no willpower needed.</p>
   </div>
 
   <div class="card" id="progressCard">
-    <h2 style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
-      <span>🎧🗣 Your two skills — reality &amp; forecast</span>
+    <details>
+    <summary style="cursor:pointer;font-weight:700;font-size:15px;list-style-position:outside">
+      The long view <span style="font-weight:400;font-size:13px;color:var(--muted)">— the underlying model, if you want it</span>
       <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span>
-    </h2>
+    </summary>
+    <p style="font-size:13px;color:var(--muted);margin:8px 0 0">Your levels above are the real measure. This is the engine underneath them — kept honest, kept out of the way.</p>
     <p class="sub" style="margin-bottom:10px">The <strong style="color:var(--accent)">solid line</strong> is the skill itself — how much recitation your <em>ear</em> catches, how much Arabic your <em>mouth</em> can deploy — estimated conservatively from every answer you've given. It rises when you practise and sags as memory fades (normal, not failure). The three <strong style="color:var(--amber)">dotted lines</strong> are futures: your current pace, one better, one worse. <strong style="color:#7b5ea8">◆ Placement tests</strong> anchor the line to measured reality — when a test disagrees with the model, the model recalibrates and the forecast moves.</p>
     <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap">Loading your curve…</div>
     <div id="pgNarrative" style="display:none;background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.65"></div>
@@ -70,6 +101,7 @@
       <p id="msStats" style="font-size:13px;color:var(--muted);margin:12px 0 0"></p>
     </details>
     <p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">Solid = replayed from your real answers since 4 Jul. Dotted = the site's own scheduler simulated forward at your measured accuracy and practice mix. One shared model (js/progress-model.js), calibrated from your answers, revalidated before every deploy.</p>
+    </details>
   </div>
 
   <div class="card" id="syncCard">
@@ -121,13 +153,69 @@
 </main>
 <footer>Audio uses your browser's built-in Arabic voice (best in Edge or Chrome). · <a href="keyboard.html">Phonetic keyboard tool</a></footer>
 
-<script src="js/app.js?v=mtenjcvj"></script>
-<script src="js/tracker.js?v=mtenjcvj"></script>
-<script src="js/plan.js?v=mtenjcvj"></script>
-<script src="js/progress-model.js?v=mtenjcvj"></script>
+<script src="js/progress-model.js?v=mteozy3h"></script>
+<script src="js/curriculum.js?v=mteozy3h"></script>
+<script src="js/app.js?v=mteozy3h"></script>
+<script src="js/tracker.js?v=mteozy3h"></script>
+<script src="js/plan.js?v=mteozy3h"></script>
 <script>
 renderNav("home");
 trackPage("dashboard");
+
+/* ---------- the week hero (CURRICULUM.md §1b) ----------
+   Milestones are the spine: where he stands, what this week asks, and the two
+   ways in. The Lesson button is the ONE decision on this page. */
+async function paintWeekHero() {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  {
+    const got = await weekGet();
+    if (!got) return;
+    const { week, ctx } = got;
+
+    const L = Curriculum.levels(ctx);
+    const strip = document.getElementById("levelStrip");
+    strip.style.display = "flex";
+    strip.style.cssText += ";gap:10px;flex-wrap:wrap";
+    strip.innerHTML = Object.values(L).map(t => `
+      <a href="week.html" style="flex:1 1 240px;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 13px">
+        <div style="font-size:13px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
+        <div style="font-size:19px;font-weight:700;color:var(--accent)">${t.current ? esc(t.current.label) : "—"}
+          <span style="font-size:12.5px;font-weight:400;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) + " " + Math.round(t.nextPct * 100) + "%" : "complete"}</span></div>
+        <div style="font-size:13px;line-height:1.5;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
+      </a>`).join("");
+
+    const p = Curriculum.weekProgress(week, ctx.srs, Date.now());
+    const left = weekDaysLeft(week);
+    const tr = Curriculum.examTrajectory(ctx.log, week.n);
+    const next = p.objectives.find(o => !o.mastered);
+    document.getElementById("weekHeroBody").innerHTML = `
+      <p style="margin:0;font-size:15px"><strong>${esc(week.title)}</strong></p>
+      <p style="margin:4px 0 0;font-size:14px">
+        <strong>${p.mastered} of ${p.objectiveCount}</strong> mastered${p.extra ? ` · <span style="color:var(--accent)">+${p.extra} extra</span>` : ""}
+        ${left !== null && left >= 0 ? ` · <span style="color:var(--muted)">${left === 0 ? "last day" : left + "d left"}</span>` : ""}
+        ${tr ? ` · <span style="color:var(--muted)">test: ${tr.scores.join(" → ")}</span>` : ""}</p>
+      ${next ? `<p style="margin:8px 0 0;font-size:14px;color:var(--muted)">Up next: <strong style="color:var(--text)">${esc(next.title)}</strong> — ${next.solid} of ${next.total} solid</p>`
+             : `<p style="margin:8px 0 0;font-size:14px;color:var(--accent);font-weight:600">Everything mastered. Test yourself, or carry on for bonus.</p>`}`;
+
+    const due = dueCards().length;
+    if (due) document.getElementById("dueHint").textContent = due + " word" + (due === 1 ? "" : "s") + " due today";
+
+    // ▶ Lesson = the next unfinished block of today's plan; no menu, no choosing
+    document.getElementById("btnLesson").onclick = () => {
+      try {
+        const plan = planGet();
+        const cur = planCurrent(plan);
+        if (cur && cur.url) { location.href = cur.url; return; }
+      } catch (e) {}
+      location.href = "review.html";
+    };
+    try {
+      const cur = planCurrent(planGet());
+      if (cur) document.getElementById("lessonHint").textContent = `Next chunk: ${cur.icon} ${cur.title} · ~5 min. The commute version is the same week, hands-free.`;
+    } catch (e) {}
+  }
+}
+paintWeekHero().catch(() => { /* the rest of the dashboard still works */ });
 
 /* today's plan — the front door (browse tiles live in the collapsed details) */
 planRenderCard(document.getElementById("planCard"));
@@ -279,6 +367,16 @@ async function loadCoach() {
       const pc = document.getElementById("planCard");
       if (pc && typeof planRenderCard === "function") planRenderCard(pc);
     } else if (!c.homework) store.set("ats-homework", null);
+    // the WEEK rides in the same payload (CURRICULUM.md §6) — cache it so the
+    // week hero and week.html show the coach's target instead of a self-seed
+    if (c.week && c.week.n) {
+      // only repaint when the coach's week actually CHANGED — an unconditional
+      // reload here would re-fetch, re-store and reload again, forever
+      const prev = store.get(WEEK_KEY, null);
+      const isNew = !prev || prev.n !== c.week.n || JSON.stringify(prev) !== JSON.stringify(c.week);
+      store.set(WEEK_KEY, c.week);
+      if (isNew && typeof paintWeekHero === "function") { try { await paintWeekHero(); } catch (e) {} }
+    }
     const who = whoami();
     if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
     document.getElementById("coachCard").style.display = "block";

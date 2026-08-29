@@ -1152,6 +1152,109 @@ const KB_LAYOUT = [
 ];
 
 /* ---------- shared nav ---------- */
+/* ============================================================================
+   THE WEEK — browser glue for js/curriculum.js. Contract: CURRICULUM.md.
+
+   curriculum.js is kept pure (no localStorage, no fetch) so scripts/test-curriculum.js
+   can exercise it in node. Everything that touches the device lives here.
+   ============================================================================ */
+const WEEK_KEY = "ats-week";          // the coach-set week, cached from coach:<email>
+let _curCtxP = null;
+function curLoad() {
+  if (!_curCtxP) {
+    _curCtxP = Promise.all([
+      fetch("data/curriculum.json").then(r => r.json()),
+      fetch("data/verses.json").then(r => r.json()),
+    ]).then(([curriculum, verses]) => ({ curriculum, verses }))
+      .catch(() => null);
+  }
+  return _curCtxP;
+}
+/* The engine groups keys but deliberately doesn't know content NAMES — that
+   lives here, where the manifests already are. Used to title objectives and to
+   describe exam results in words ("you held Al-Fatiha"). */
+function curNameFor(group) {
+  let m;
+  if ((m = group.match(/^surah:(.+)$/))) {
+    const s = QURAN_SURAHS.find(x => x.id === m[1]);
+    return s ? `Surah ${s.name}` : "a surah";
+  }
+  if (group === "qc") return "the Qur'an's most frequent words";
+  if (group === "tw") return "words you tapped to learn";
+  if ((m = group.match(/^story-(\d+)$/))) {
+    const s = STORY_LIST.find(x => x.id === group);
+    return s ? s.titleEn : "a story";
+  }
+  if ((m = group.match(/^ph-(.+)$/))) return (window._PH_NAMES && window._PH_NAMES[m[1]]) || "a set of phrases";
+  if ((m = group.match(/^ev-(.+)$/))) return (window._EV_NAMES && window._EV_NAMES[m[1]]) || "an everyday set";
+  if ((m = group.match(/^fam-(.+)$/))) {
+    const f = FAMILY_LIST.find(x => x.id === m[1]);
+    return f ? `the ${f.root} family` : "a root family";
+  }
+  return "some words";
+}
+
+/* Phrase/cluster titles come from data, so they stay right when content changes. */
+async function curLoadNames() {
+  if (window._PH_NAMES) return;
+  window._PH_NAMES = {}; window._EV_NAMES = {};
+  try {
+    const [ph, ev] = await Promise.all([
+      fetch("data/phrases.json").then(r => r.json()),
+      fetch("data/everyday.json").then(r => r.json()),
+    ]);
+    (ph.groups || []).forEach(g => { window._PH_NAMES[g.id] = g.en || g.title || g.id; });
+    (ev.groups || []).forEach(g => { window._EV_NAMES[g.id] = g.en || g.title || g.id; });
+  } catch (e) { /* names are a nicety; the week still works without them */ }
+}
+
+async function curCtx() {
+  const base = await curLoad();
+  if (!base) return null;
+  await curLoadNames();
+  return Object.assign({}, base, {
+    log: store.get("ats-log", []), srs: getSrs(), progress: getProgress(), now: Date.now(),
+    nameFor: curNameFor,
+  });
+}
+
+/* The current week: the coach's if there is one for this calendar week, otherwise
+   a self-seeded one so he NEVER opens the site to a blank slate. */
+async function weekGet() {
+  const ctx = await curCtx();
+  if (!ctx) return null;
+  const bounds = Curriculum.weekBounds(Date.now());
+  const saved = store.get(WEEK_KEY, null);
+  const usable = saved && Curriculum.weekKeys(saved).length && saved.to >= bounds.from;
+  const week = usable ? saved : Curriculum.weekSelfSeed(ctx);
+  weekAnnounce(week);
+  return { week, ctx };
+}
+
+/* Log week-start exactly once per week number — this IS the history (only the
+   log syncs; see CURRICULUM.md §6). */
+function weekAnnounce(week) {
+  if (!week || !week.n) return;
+  const seen = store.get("ats-log", []).some(e => e && e.e === "week-start" && e.n === week.n);
+  if (seen) return;
+  logEvent({
+    e: "week-start", n: week.n, title: week.title, from: week.from, to: week.to,
+    track: week.track, objectives: Curriculum.weekObjectives(week),
+    keys: Curriculum.weekKeys(week), sizedFor: week.sizedFor,
+  });
+}
+
+/* Days until the week closes. The TEST itself is always open (retakes are how
+   he sees progress and, by retrieval practice, how he learns) — this is only
+   about which attempt goes on the record. */
+function weekDaysLeft(week) {
+  if (!week || !week.to) return null;
+  return Math.ceil((new Date(week.to + "T23:59:59Z").getTime() - Date.now()) / 86400000);
+}
+function weekAttemptsSoFar(week) {
+  return Curriculum.examAttempts(store.get("ats-log", []), week.n).length;
+}
+
 function renderNav(active) {
   const due = dueCards().length;
   const el = document.createElement("nav");
@@ -1159,17 +1262,10 @@ function renderNav(active) {
     <a class="brand" href="index.html"><span class="ar">العربية بالقصص</span><span>Arabic Through Stories</span></a>
     <span class="spacer"></span>
     <a class="link ${active === "home" ? "active" : ""}" href="index.html">Home</a>
-    <a class="link ${active === "stories" ? "active" : ""}" href="stories.html">Stories</a>
-    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">Vocab</a>
-    <a class="link ${active === "lessons" ? "active" : ""}" href="vocab.html?view=lessons">Lessons</a>
-    <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">Quran</a>
-    <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">Grammar</a>
-    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">Sentences</a>
-    <a class="link ${active === "audio" ? "active" : ""}" href="audio.html">🎧 Audio</a>
-    <a class="link ${active === "speaking" ? "active" : ""}" href="speaking.html">Speak</a>
-    <a class="link ${active === "converse" ? "active" : ""}" href="converse.html">Converse</a>
-    <a class="link ${active === "review" ? "active" : ""}" href="review.html">Review${due ? `<span class="badge">${due}</span>` : ""}</a>
-    <a class="link ${active === "keyboard" ? "active" : ""}" href="keyboard.html">Keyboard</a>
+    <a class="link ${active === "week" ? "active" : ""}" href="week.html">📅 Week</a>
+    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">📖 Vocab${due ? `<span class="badge">${due}</span>` : ""}</a>
+    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences</a>
+    <a class="link ${active === "more" ? "active" : ""}" href="more.html">⋯ More</a>
   `;
   document.body.prepend(el);
   mountNotePen();

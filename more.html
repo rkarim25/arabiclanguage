@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>All activities — Arabic Through Stories</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mteozy3h">
+  <link rel="stylesheet" href="css/style.css?v=mteozy3h">
+  <style>
+    .act-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .act {
+      display: block; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 14px 16px; text-decoration: none; color: inherit; transition: transform .12s, border-color .12s;
+    }
+    .act:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .act b { display: block; font-size: 15.5px; margin-bottom: 3px; }
+    .act span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>All activities</h1>
+  <p class="sub">Everything the site can do. You don't need this page day to day — your
+  <a href="index.html">Lesson</a> already picks from all of it for you. It's here for when you
+  want something specific.</p>
+
+  <div class="card">
+    <h2>The two ways in</h2>
+    <div class="act-grid">
+      <a class="act" href="index.html"><b>▶ Lesson</b><span>One small chunk from this week, chosen for you.</span></a>
+      <a class="act" href="audio.html?commute=1"><b>🚗 Commute</b><span>Hands-free audio. Screen off, ears on.</span></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Free practice</h2>
+    <div class="act-grid">
+      <a class="act" href="vocab.html"><b>📖 Vocab — learn</b><span>Frequency-first words, in tables. Learn at your own pace.</span></a>
+      <a class="act" href="review.html"><b>🔁 Vocab — review</b><span>Everything due today, from every source.</span></a>
+      <a class="act" href="sentences.html"><b>✍️ Sentences — build</b><span>Conjugate and produce: I / we / they across the tenses.</span></a>
+      <a class="act" href="vocab.html?view=phrases"><b>💬 Phrases</b><span>Whole sentences you'll actually say.</span></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The engines your lesson draws on</h2>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:0">These are what a Lesson chunk actually runs. You can open any of them directly.</p>
+    <div class="act-grid">
+      <a class="act" href="stories.html"><b>📖 Stories</b><span>Six graded stories, word by word.</span></a>
+      <a class="act" href="quran.html"><b>🕌 Qur'an</b><span>Surahs word by word, with root families.</span></a>
+      <a class="act" href="grammar.html"><b>📐 Grammar</b><span>Practical patterns, taught through sentences you know.</span></a>
+      <a class="act" href="audio.html"><b>🎧 Audio Coach</b><span>Ears-only rounds. What you name by sound is certified by ear.</span></a>
+      <a class="act" href="speaking.html"><b>🎤 Speak</b><span>Say them out loud — the only thing that moves the speaking line.</span></a>
+      <a class="act" href="converse.html"><b>💬 Converse</b><span>Briefings for a conversation with any AI, plus the oral exam.</span></a>
+      <a class="act" href="vocab.html?view=lessons"><b>🎓 Teacher lessons</b><span>Everything from your Sunday lessons.</span></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Measurement &amp; settings</h2>
+    <div class="act-grid">
+      <a class="act" href="week.html"><b>📅 This week</b><span>Your target, your level, and every past week's score.</span></a>
+      <a class="act" href="placement.html"><b>🎯 Listening test</b><span>Five minutes. It anchors your level — not a drill.</span></a>
+      <a class="act" href="keyboard.html"><b>⌨️ Arabic keyboard</b><span>Type Arabic without switching your phone's keyboard.</span></a>
+      <a class="act" href="index.html#syncCard"><b>☁ Sync &amp; backup</b><span>Cloud sync, restore, export.</span></a>
+    </div>
+  </div>
+</main>
+
+<script src="js/progress-model.js?v=mteozy3h"></script>
+<script src="js/curriculum.js?v=mteozy3h"></script>
+<script src="js/app.js?v=mteozy3h"></script>
+<script src="js/tracker.js?v=mteozy3h"></script>
+<script src="js/plan.js?v=mteozy3h"></script>
+<script>
+  renderNav("more");
+  trackPage("more");
+</script>
+</body>
+</html>
