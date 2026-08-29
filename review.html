@@ -8,21 +8,21 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevtbsn">
-  <link rel="stylesheet" href="css/style.css?v=mtevtbsn">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevvqhd">
+  <link rel="stylesheet" href="css/style.css?v=mtevvqhd">
 </head>
 <body>
 <main>
   <h1>Daily Review <span class="arabic" style="color:var(--accent)">المُرَاجَعَة اليَوْمِيَّة</span></h1>
-  <p class="sub">Words come back on a spaced schedule. Look at the Arabic, recall the meaning, reveal, and mark only what you missed — missed words return sooner.</p>
+  <p class="sub" id="revIntro">Words come back on a spaced schedule. Look at the Arabic, recall the meaning, reveal, and mark only what you missed — missed words return sooner.</p>
   <div class="card" id="reviewCard">
     <div id="reviewArea">Loading…</div>
   </div>
 </main>
 
-<script src="js/app.js?v=mtevtbsn"></script>
-<script src="js/tracker.js?v=mtevtbsn"></script>
-<script src="js/plan.js?v=mtevtbsn"></script>
+<script src="js/app.js?v=mtevvqhd"></script>
+<script src="js/tracker.js?v=mtevvqhd"></script>
+<script src="js/plan.js?v=mtevvqhd"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -47,6 +47,9 @@ async function init() {
   if (REVIEW_ONLY) {
     const h1 = document.querySelector("h1");
     if (h1) h1.textContent = REVIEW_ONLY === "sentences" ? "Sentences — review" : "Vocabulary — review";
+    const intro = document.getElementById("revIntro");
+    if (intro && REVIEW_ONLY === "sentences") intro.textContent =
+      "Whole sentences come back on a spaced schedule. Read the Arabic, recall the meaning, reveal, and mark only what you missed.";
   }
   if (due.length === 0) {
     const t = totalCards();
@@ -80,7 +83,7 @@ async function init() {
 function renderTable(queue) {
   area.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-      <strong>${queue.length} word${queue.length > 1 ? "s" : ""} due</strong>
+      <strong>${queue.length} ${REVIEW_ONLY === "sentences" ? "sentence" : "word"}${queue.length > 1 ? "s" : ""} due</strong>
       <div style="display:flex;gap:8px">
         <button class="small" id="revealAll">Reveal all</button>
         <button class="small" id="cardMode">card mode</button>
