@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevqjbh">
-  <link rel="stylesheet" href="css/style.css?v=mtevqjbh">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevtbsn">
+  <link rel="stylesheet" href="css/style.css?v=mtevtbsn">
 </head>
 <body>
 <main>
@@ -20,19 +20,41 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtevqjbh"></script>
-<script src="js/tracker.js?v=mtevqjbh"></script>
-<script src="js/plan.js?v=mtevqjbh"></script>
+<script src="js/app.js?v=mtevtbsn"></script>
+<script src="js/tracker.js?v=mtevtbsn"></script>
+<script src="js/plan.js?v=mtevtbsn"></script>
 <script>
 renderNav("review");
 trackPage("review");
 
 const area = document.getElementById("reviewArea");
 
+/* Reviewing can be narrowed to WORDS or to SENTENCES, so that "Vocab — review"
+   and "Sentences — review" are genuinely parallel (his ask, 2026-08-30). Sentence
+   cards are whole utterances: the phrase deck, story sentences and grammar chunks.
+   Same rule as Curriculum.inventory(), so the two never disagree. */
+const REVIEW_ONLY = new URLSearchParams(location.search).get("only");
+const isSentenceKey = k => k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
+function dueFiltered() {
+  const all = dueCards();
+  if (REVIEW_ONLY === "sentences") return all.filter(isSentenceKey);
+  if (REVIEW_ONLY === "words") return all.filter(k => !isSentenceKey(k));
+  return all;
+}
+
 async function init() {
-  const due = dueCards(); // keys like "story-01:5"
+  const due = dueFiltered(); // keys like "story-01:5"
+  if (REVIEW_ONLY) {
+    const h1 = document.querySelector("h1");
+    if (h1) h1.textContent = REVIEW_ONLY === "sentences" ? "Sentences — review" : "Vocabulary — review";
+  }
   if (due.length === 0) {
     const t = totalCards();
+    if (REVIEW_ONLY) {
+      area.innerHTML = `<p style="font-size:17px">✅ No ${REVIEW_ONLY === "sentences" ? "sentences" : "words"} due right now.</p>
+        <p><a href="review.html">Review everything that's due</a> · <a href="index.html">back to your lessons</a></p>`;
+      return;
+    }
     area.innerHTML = t === 0
       ? `<p>Your deck is empty. Do a round of <a href="vocab.html?sheet=1">Vocab Learn</a> or study a <a href="index.html">story</a> — every word you meet appears here on a spaced schedule.</p>`
       : `<p style="font-size:18px">✅ Nothing due right now — all ${t} words are scheduled. Want more anyway? <a href="vocab.html?sheet=1">Vocab Learn</a> always has the next most-useful words.</p>`;
