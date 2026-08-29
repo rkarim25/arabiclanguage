@@ -556,7 +556,9 @@
         : `Earlier weeks slipped to ${result.sections.carry}% — older material needs a pass, not just new words.`);
     }
     if (shaky.length) lines.push(`Still shaky: ${listOf(shaky)}.`);
-    lines.push(band.say);
+    // band.say is already the headline, and for low scores it repeats nextWeek
+    // almost word for word — only fall back to it when there is nothing else
+    if (!lines.length) lines.push(band.say);
 
     return {
       band: band.band, headline: band.say, lines,

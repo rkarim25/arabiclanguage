@@ -262,7 +262,8 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   const v = C.examVerdict(r, answers, { nameFor: g => ({ "surah:fatiha": "Al-Fatiha", "ph-help": "asking for help" }[g] || g) });
   yes(v.held.includes("Al-Fatiha"), "the verdict names what he HELD, in content terms");
   yes(v.shaky.includes("asking for help"), "the verdict names what is still shaky, in content terms");
-  yes(v.lines.length >= 3, "the verdict is several sentences of description, not a bare number");
+  yes(v.lines.length >= 2, "the verdict is several sentences of description, not a bare number");
+  yes(!v.lines.some(l => l === v.nextWeek), "the verdict does not say the same thing twice");
   yes(/re-teaches|carries|steps up/.test(v.nextWeek), "the verdict closes the loop by saying what next week will DO");
   yes(v.lines.some(l => /by[- ]ear/i.test(l)), "the by-ear performance is described explicitly");
 
