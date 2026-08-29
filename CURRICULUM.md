@@ -41,12 +41,20 @@ So the unit of progress is a **capability**, and time is only an annotation.
     ↑ made of
   MILESTONE      a capability, as a can-do line    "you can order food and ask the price"
     ↑ made of
-  LESSON         one thing to master, own test     "Ordering" — 8 items
-    ↑ made of
-  CHUNK          ~5 min, reviews folded in         meet / write / say / by ear
+  LESSON         ONE ~7-minute sitting, own test   "Ordering" — 6 items
     ↑ made of
   WORDS + SENTENCES    the raw material
 ```
+
+**Seven lessons a week, seven minutes each** (his rule): *"each lesson should
+always aim to be roughly 7 minute long. there should be 7 lessons per week with 7
+tests and one weekly test which tests all those 7 combined but each test shouldnt
+take more than 7 minutes either."* So ~49 minutes a week, matching his 50-minute
+yardstick. A lesson used to be four 5-minute chunks, which made it 20–40 minutes
+and far too big; the passes now happen *inside* the single sitting.
+
+Any authored lesson longer than `lessonItems` (6) is split automatically and
+**evenly** — 13 items becomes 5+4+4, never 6+6+1, so no lesson is a stub.
 
 > "Lessons, words and sentences are the bedrock of the learning plan."
 
@@ -128,31 +136,59 @@ So `milestoneExam()`:
 Learning mode may repeat freely — repetition is how memory is built. The **test**
 is where repetition wastes his time.
 
-### Test-out
+### Test-out, and the three scopes
 
-The test is **always open, unlimited retakes**, reshuffled per attempt so the
-paper can't be memorised. Sections are **per lesson**, so acing one section clears
-that lesson and drops it out while the others stay. Every answer grades a real SRS
-card, so testing is also studying.
+The test is **always open, unlimited retakes**, reshuffled per attempt so the paper
+can't be memorised. Every answer grades a real SRS card, so testing is also
+studying.
+
+There is **one test engine at three scopes** — only the *selection* differs, and
+scoring is per lesson at 80 in every case, so clearing a lesson clears it
+everywhere:
+
+| Scope | Size | Time |
+|---|---|---|
+| **One lesson** | its ~6 items, each asked a **second time in a different form** when there is room | **~3 min** |
+| **A week** | 21 questions **sampled evenly** across its 7 lessons | **~7 min** |
+| **A milestone** | its unproved lessons, sampled the same way | ~7 min |
+
+Two consequences worth keeping:
+
+- **No test runs long.** A week holds ~42 items; asking them all would be fifteen
+  minutes. It samples instead — evenly, so every lesson is still represented and
+  still scored.
+- **A thin score cannot clear a lesson.** Below `CLEAR_MIN` (3) questions a score
+  is *reported but not allowed to master* the lesson, and the result screen says
+  so. The lesson's own 3-minute test is never sampled and stays the reliable way
+  to prove one.
 
 ---
 
-## 5. Chunks
+## 5. A lesson
 
-`lessonChunks()` splits a lesson into ~5-minute passes, at most 8 items each:
+One sitting, about seven minutes, and it runs the same way every time:
 
-| Mode | What happens |
-|---|---|
-| `meet` | A table: Arabic, meaning veiled, transliteration. Recall, reveal, mark **only the misses**. (His standing preference: tables over flashcards, minimal clicking.) |
-| `drill` | English → type the Arabic. Forgiving matching via `writeMatchAr`; Latin typing works. |
-| `say` | Hear the model, **say it out loud**, self-grade. This is what turns vocabulary into speech. |
-| `ear` | Sound only, recall the meaning, self-grade. The half that counts for the Qur'an. |
+1. **Meet them** — a table: Arabic, meaning veiled, transliteration. Recall before
+   revealing. (His standing preference: tables over flashcards, minimal clicking.)
+2. **Work them** — each item once, in rotating forms: recognise the meaning, write
+   it from English, catch it by ear. Recognition and production are different
+   skills and the lesson exercises both.
 
-**Due reviews are folded into the front of every chunk** (`reviewsFor`, 4 by
-default) and are never the chunk's own words. His choice, and the reason review
-never appears as a chore or a "73 due" wall.
+**Due reviews ride at the front of every lesson** (`reviewsFor`, 4 by default) and
+are never that lesson's own words. This is why review never appears as a chore or
+a "73 due" wall.
 
----
+### Two ways to do any lesson
+
+> "each lesson should have hands free or normal method of doing"
+
+- **Normal** — on screen, as above.
+- **🚗 Hands-free** — audio only, no taps: it plays the Arabic, leaves a gap to
+  recall, says the English, and goes twice through. It is offered on **every
+  lesson row**, not as one global button.
+
+A hands-free pass is honest about what it is: exposure, not proof. It says so on
+the finish screen, and the lesson still needs its test.
 
 ## 6. Levels
 
@@ -174,6 +210,25 @@ By-ear evidence comes from `ProgressModel.earEvidence`, deliberately reused so
 
 ---
 
+## 6b. How a week is built
+
+> "the week needs to be split between quranic and everyday language. when i put in
+> the class lessons it needs to be baked in as well"
+
+`weekPlan()` keeps a queue per track and **deals a week from both** — 4 Qur'an, 3
+everyday. Dealing straight down the ladder had produced whole weeks of one track.
+The Qur'an weighting reflects his ranked-first goal without crowding the other out.
+
+**Class material leads.** When he pastes a lesson from his teacher it is added as a
+milestone flagged `source: "teacher"`, and `weekPlan()` puts those lessons at the
+**front of the very next week**. That is what "baked in" means, and it is what makes
+the Sunday→Monday turnaround real.
+
+A week is a **shelf, not a deadline**: he can do its seven lessons in any order,
+and nothing is ever late.
+
+---
+
 ## 7. Pacing — real, but deliberately quiet
 
 Planning constants: **50 minutes a week** (`planning.minPerWeek`) and ~2.5 active
@@ -192,10 +247,12 @@ opposite responses:
 
 The pace line is one sentence, under the capability, never the headline.
 
-**Known limitation:** `pace()` measures elapsed time from his first-ever logged
-event, so a learner with history predating the ladder reads as permanently
-"behind". It should measure from when the ladder was adopted — stamp a plan-start
-and use it as the baseline.
+**The clock starts when the ladder does.** `pace()` measures from his first
+`chunk-done`/`exam-done`, not from his first-ever logged event — measuring from the
+latter reported *"6.1 weeks behind"* before he had done a single lesson, which he
+rightly called pointless. Before he starts, `pace()` returns `notStarted` and the UI
+shows nothing at all; for the first week it returns `tooEarly`. **Never show a pace
+figure for a plan that has not begun.**
 
 ---
 
@@ -207,7 +264,7 @@ sentences and ordering are editorial judgments); the **keys resolve from the rea
 content files**, so renaming or extending a phrase set cannot leave a milestone
 pointing at keys that don't exist.
 
-Currently **20 milestones, 59 lessons, 653 items** — about 33 weeks of runway,
+Currently **20 milestones, 128 lessons, 653 items** — about 19 weeks of runway,
 the two tracks interleaved so both advance. The repair kit ("keeping a
 conversation alive") comes early on purpose: without it, one unknown word ends the
 conversation.
@@ -217,7 +274,7 @@ not decoration.
 
 ### Outstanding content job: sentences
 
-`say` chunks currently use the item itself. That is right for the phrase deck and
+The lesson's "work them" pass uses the item itself. That is right for the phrase deck and
 story sentences (real, verified, already voiced). Lessons built from single words
 (Qur'an vocabulary, everyday clusters) therefore say the **word** aloud rather
 than a sentence containing it. He agreed to *"curated where they exist, written
