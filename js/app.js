@@ -1290,7 +1290,7 @@ function renderNav(active) {
     <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
     <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">📖 Vocabulary${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences</a>
-    <a class="link ${active === "more" || active === "map" ? "active" : ""}" href="more.html">⋯ More</a>
+    <a class="link ${active === "map" || active === "more" ? "active" : ""}" href="map.html">📈 Progress</a>
   `;
   document.body.prepend(el);
   mountNotePen();

@@ -8,11 +8,11 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevod75">
-  <link rel="stylesheet" href="css/style.css?v=mtevod75">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevqjbh">
+  <link rel="stylesheet" href="css/style.css?v=mtevqjbh">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-    .lvl { flex: 1 1 240px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
+    .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
     .lvl b { font-size: 19px; color: var(--accent); }
     .inv { display: flex; gap: 22px; flex-wrap: wrap; align-items: baseline; }
     .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
@@ -59,12 +59,6 @@
     <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
   </div>
 
-  <div class="card">
-    <h2>What's coming</h2>
-    <div id="upcoming"></div>
-    <p style="margin:10px 0 0"><a href="map.html">The long view — where this is taking you →</a></p>
-  </div>
-
   <div class="card" id="doneCard" style="display:none">
     <details><summary style="cursor:pointer;font-weight:700;font-size:15px">Achieved <span id="doneN" style="color:var(--accent)"></span></summary>
       <div id="doneList" style="margin-top:10px"></div>
@@ -77,17 +71,16 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
       <a href="vocab.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>📖 Vocabulary</b><br><span style="font-size:13px;color:var(--muted)">Learn &amp; review words</span></a>
       <a href="sentences.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>✍️ Sentences</b><br><span style="font-size:13px;color:var(--muted)">Build &amp; review sentences</span></a>
-      <a href="more.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>⋯ Everything else</b><br><span style="font-size:13px;color:var(--muted)">Stories, Qur'an, grammar, settings</span></a>
     </div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtevod75"></script>
-<script src="js/curriculum.js?v=mtevod75"></script>
-<script src="js/app.js?v=mtevod75"></script>
-<script src="js/tracker.js?v=mtevod75"></script>
-<script src="js/plan.js?v=mtevod75"></script>
-<script src="js/account.js?v=mtevod75"></script>
+<script src="js/progress-model.js?v=mtevqjbh"></script>
+<script src="js/curriculum.js?v=mtevqjbh"></script>
+<script src="js/app.js?v=mtevqjbh"></script>
+<script src="js/tracker.js?v=mtevqjbh"></script>
+<script src="js/plan.js?v=mtevqjbh"></script>
+<script src="js/account.js?v=mtevqjbh"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -105,12 +98,12 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
 
   /* the two levels */
   document.getElementById("lvls").innerHTML = Object.values(L).map(t => `
-    <a class="lvl" href="map.html">
+    <div class="lvl">
       <div style="font-size:12.5px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
       <div><b>${t.current ? esc(t.current.label) : "—"}</b>
         <span style="font-size:12px;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) : "complete"}</span></div>
       <div style="font-size:13px;line-height:1.45;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
-    </a>`).join("");
+    </div>`).join("");
 
   /* words and sentences — the bedrock, stated plainly */
   document.getElementById("inv").innerHTML = `
@@ -186,13 +179,6 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
       ${openIds.length > 1 ? `<p style="margin:8px 0 0"><a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="font-size:13.5px">Test the whole of week ${w.week} · ~7 min →</a></p>` : ""}
     </div>`;
   }).join("");
-
-  /* what's coming — capability, never a date */
-  document.getElementById("upcoming").innerHTML = state.upcoming.slice(0, 4).map(m => `
-    <div class="ms">
-      <h3>${m.track === "quran" ? "🎧" : "🗣"} ${esc(m.name)}</h3>
-      <p>you can ${esc(m.can)} — ${m.lessonCount} lessons, ${m.items} items</p>
-    </div>`).join("") || `<p style="font-size:14px;color:var(--muted)">Nothing queued beyond this one.</p>`;
 
   /* achieved */
   if (state.achieved.length) {
