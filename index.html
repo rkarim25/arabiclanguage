@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtew56mi">
-  <link rel="stylesheet" href="css/style.css?v=mtew56mi">
+  <link rel="stylesheet" href="css/fonts.css?v=mtewaqzu">
+  <link rel="stylesheet" href="css/style.css?v=mtewaqzu">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -75,12 +75,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtew56mi"></script>
-<script src="js/curriculum.js?v=mtew56mi"></script>
-<script src="js/app.js?v=mtew56mi"></script>
-<script src="js/tracker.js?v=mtew56mi"></script>
-<script src="js/plan.js?v=mtew56mi"></script>
-<script src="js/account.js?v=mtew56mi"></script>
+<script src="js/progress-model.js?v=mtewaqzu"></script>
+<script src="js/curriculum.js?v=mtewaqzu"></script>
+<script src="js/app.js?v=mtewaqzu"></script>
+<script src="js/tracker.js?v=mtewaqzu"></script>
+<script src="js/plan.js?v=mtewaqzu"></script>
+<script src="js/account.js?v=mtewaqzu"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -96,14 +96,23 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
   const inv = Curriculum.inventory(ctx);
   const pc = Curriculum.pace(ctx, state);
 
-  /* the two levels */
-  document.getElementById("lvls").innerHTML = Object.values(L).map(t => `
-    <div class="lvl">
-      <div style="font-size:12.5px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
-      <div><b>${t.current ? esc(t.current.label) : "—"}</b>
-        <span style="font-size:12px;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) : "complete"}</span></div>
-      <div style="font-size:13px;line-height:1.45;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
-    </div>`).join("");
+  /* THE LEVELS — shown only once one has been EARNED.
+     Before that both chips read "— → A1", which is a placeholder taking the top
+     of the page to say he has nothing yet, while the milestone card right below
+     already names what he is working toward. The CEFR labels were his ask and do
+     matter the day he earns one; until then the full ladder lives on Progress. */
+  const earned = Object.values(L).filter(t => t.current);
+  if (earned.length) {
+    document.getElementById("lvls").innerHTML = Object.values(L).map(t => `
+      <div class="lvl">
+        <div style="font-size:12.5px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
+        <div><b>${t.current ? esc(t.current.label) : "—"}</b>
+          <span style="font-size:12px;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) : "complete"}</span></div>
+        <div style="font-size:13px;line-height:1.45;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
+      </div>`).join("");
+  } else {
+    document.getElementById("lvls").remove();
+  }
 
   /* words and sentences — the bedrock, stated plainly */
   document.getElementById("inv").innerHTML = `

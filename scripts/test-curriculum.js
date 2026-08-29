@@ -499,6 +499,17 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   eq(C.scopeHistory(log, ["z"]).last, 5, "a different test keeps its own history");
 }
 
+
+/* ---------- the home page must not lead with an empty placeholder ---------- */
+{
+  const home = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/const earned = Object\.values\(L\)\.filter\(t => t\.current\)/.test(home),
+    "the level strip is conditional on a level actually being earned");
+  yes(/document\.getElementById\("lvls"\)\.remove\(\)/.test(home),
+    "…and is removed outright before then, rather than showing \"— → A1\"");
+  yes(!/What's coming/.test(home), "no 'What's coming' section — the week shelf already shows it");
+}
+
 /* ---------- calibration against real data, if given ---------- */
 const payloadPath = process.argv[2];
 if (payloadPath && fs.existsSync(payloadPath)) {
