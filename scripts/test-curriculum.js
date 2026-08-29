@@ -233,9 +233,20 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   const ex = C.examBuild(week, ctx({ srs, log: [], now: NOW }));
   const keys = ex.items.map(i => i.key);
   yes(keys.includes("qc:9"), "LEARN -> TEST: the exam covers the extra work, not just the list");
+  yes(keys.includes("qc:1") && keys.includes("qc:2"), "…and still covers the week's target");
+
+  // the union matters: testing only the MASTERED part would score ~100% every
+  // time and hide the movement he wants to watch
+  const early = {
+    n: 4, from: "2026-08-23", to: "2026-08-29",
+    objectives: [{ id: "g", title: "G", keys: ["qc:1", "qc:2", "qc:3", "qc:4", "qc:5"] }],
+  };
+  const earlySrs = { "qc:1": { box: 4, u: inWeek } };            // only one mastered so far
+  const earlyEx = C.examBuild(early, ctx({ srs: earlySrs, now: NOW }));
+  eq(earlyEx.items.length, 5, "early in the week the test still covers the WHOLE target, so the score can start low and climb");
 
   const fresh = C.examBuild({ n: 3, from: "2026-08-23", to: "2026-08-29", objectives: [{ id: "g", title: "G", keys: ["qc:1"] }] }, ctx({ srs: {}, now: NOW }));
-  yes(fresh.items.length > 0, "before anything is solid the exam falls back to the list, never empty");
+  yes(fresh.items.length > 0, "before anything is solid the exam is still built, never empty");
 }
 
 /* ---------- the verdict: a result is described, not just scored ---------- */

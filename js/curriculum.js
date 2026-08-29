@@ -442,7 +442,12 @@
     // listed or not; fall back to the list itself before anything is solid yet.
     const learned = weekLearned(week, ctx.srs || {}, ctx.now).map(l => l.key);
     const listedKeys = weekKeys(week);
-    const thisWeek = learned.length ? learned : listedKeys;
+    /* The UNION of the target and whatever else he learnt — not one or the other.
+       Testing only the mastered part would score ~100% every time and hide the
+       very thing he wants to watch move; testing only the list would ignore the
+       extra work he chose to do. Union means the score starts low and climbs as
+       the week is mastered, which is what "how far along have I gone" means. */
+    const thisWeek = [...new Set(listedKeys.concat(learned))];
 
     const carryPool = [];
     for (const w of hist) {
