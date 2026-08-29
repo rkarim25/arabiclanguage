@@ -6,14 +6,13 @@
 
 This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, `TEACHER-SYNC.md` (the lesson-capture loop) and **`CURRICULUM.md`** (weeks, levels and exams).
 
-> **⚠️ Read `CURRICULUM.md` before changing the home page, the nav, or anything about weeks/levels/tests.**
-> Since **2026-08-29** the site is organised around a capability ladder, not a forecast: two tracks
-> (Qur'an by ear, Conversation) each carrying a CEFR level plus a can-do line; a weekly target expressed
-> as **objectives to master** (time is the variable, never a quota of minutes); and an always-open,
-> unlimited-retake test that both measures and teaches. The nav is deliberately **four links** and the
-> home page offers exactly **two ways in** — ▶ Lesson and 🚗 Commute — plus free vocab/sentence practice.
-> Adding a new top-level destination requires removing one.
-
+> **⚠️ Read `CURRICULUM.md` before changing the home page, the nav, or anything about milestones, lessons or tests.**
+> Since **2026-08-29** the site is called **Arabic** and is organised around a **milestone ladder**, not a forecast:
+> a MILESTONE is a capability ("you can order food and ask the price"), made of LESSONS (one thing to master, each with
+> its own test section), made of ~5-minute CHUNKS with due reviews folded in. Two tracks (Qur'an by ear, Conversation)
+> each carry a CEFR level. **Nothing is mastered without scoring 80 on its test**, and a test never re-asks what is
+> already proved unless re-verification is due. Words and sentences held are shown as the raw-material inventory.
+> Weeks survive only as a quiet pacing line. Nav is four links; the home page has one Continue button.
 ## Mission & hard rules
 
 Reza's dual goal, in the shortest possible time:
