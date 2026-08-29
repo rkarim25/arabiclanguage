@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtewc1wx">
-  <link rel="stylesheet" href="css/style.css?v=mtewc1wx">
+  <link rel="stylesheet" href="css/fonts.css?v=mteweqg2">
+  <link rel="stylesheet" href="css/style.css?v=mteweqg2">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtewc1wx"></script>
-<script src="js/curriculum.js?v=mtewc1wx"></script>
-<script src="js/app.js?v=mtewc1wx"></script>
-<script src="js/tracker.js?v=mtewc1wx"></script>
-<script src="js/plan.js?v=mtewc1wx"></script>
+<script src="js/progress-model.js?v=mteweqg2"></script>
+<script src="js/curriculum.js?v=mteweqg2"></script>
+<script src="js/app.js?v=mteweqg2"></script>
+<script src="js/tracker.js?v=mteweqg2"></script>
+<script src="js/plan.js?v=mteweqg2"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -148,32 +148,85 @@ async function runLesson(lesson, ms, ctx, handsFree) {
   if (handsFree) return handsFreeRun();
   return meet();
 
-  /* ---- hands-free: audio only, no taps, nothing to look at ---- */
-  function handsFreeRun() {
-    let i = 0, pass = 1;
-    const PASSES = 2;
-    app.innerHTML = head("Hands-free. Screen off if you like — it plays straight through.") +
-      `<div class="card"><div class="hands"><div class="w" id="hw">…</div>
-        <p style="color:var(--muted);font-size:14px" id="hs"></p></div>
-        <div class="prog"><i id="hp" style="width:0%"></i></div>
-        <div class="row"><button id="stop">Stop</button></div></div>`;
-    document.getElementById("stop").onclick = () => finish(0, 0, "hands", true);
-    const w = document.getElementById("hw"), sub = document.getElementById("hs"), bar = document.getElementById("hp");
+  /* ---- hands-free ----
+     Plays through on its own, but he asked for two things: "allow to pause and
+     as well for me to feedback if it got it or not with one click."
 
-    const step = () => {
-      if (i >= items.length) { if (++pass > PASSES) return finish(items.length, items.length, "hands"); i = 0; }
+     So while a word is playing there are three big targets and nothing else:
+     ✓ got it · ✗ missed it · ⏸ pause. A tap grades that word for real (same
+     by-ear evidence as an Audio Coach round) and moves straight on. Not tapping
+     is fine — it plays the meaning and continues, and the word counts as
+     exposure rather than proof. Buttons are deliberately huge: this is used in
+     a car, at arm's length, without looking. */
+  function handsFreeRun() {
+    let i = 0, pass = 1, paused = false, timer = null, token = 0;
+    let graded = 0, right = 0;
+    const PASSES = 2;
+
+    app.innerHTML = head("Hands-free. It plays on its own — tap only if you want to mark a word.") + `
+      <div class="card">
+        <div class="hands"><div class="w" id="hw">…</div>
+          <p style="color:var(--muted);font-size:15px;min-height:22px" id="hs"></p></div>
+        <div class="prog"><i id="hp" style="width:0%"></i></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button id="hno"  style="flex:1;padding:22px 8px;font-size:17px">✗ missed it</button>
+          <button class="primary" id="hyes" style="flex:1;padding:22px 8px;font-size:17px">✓ got it</button>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button id="hpause" style="flex:1;padding:16px 8px;font-size:16px">⏸ Pause</button>
+          <button id="hstop"  style="flex:1;padding:16px 8px;font-size:16px">Finish</button>
+        </div>
+        <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0" id="hcount"></p>
+      </div>`;
+
+    const w = document.getElementById("hw"), sub = document.getElementById("hs"), bar = document.getElementById("hp");
+    const countEl = document.getElementById("hcount"), pauseBtn = document.getElementById("hpause");
+
+    const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
+    const later = (fn, ms) => { const t = token; clearTimer(); timer = setTimeout(() => { if (t === token && !paused) fn(); }, ms); };
+
+    document.getElementById("hyes").onclick = () => mark(true);
+    document.getElementById("hno").onclick = () => mark(false);
+    document.getElementById("hstop").onclick = () => { token++; clearTimer(); stopSpeak(); finish(right, graded, "hands", graded === 0); };
+    pauseBtn.onclick = () => {
+      if (paused) { paused = false; pauseBtn.textContent = "⏸ Pause"; step(); }
+      else { paused = true; token++; clearTimer(); stopSpeak(); pauseBtn.textContent = "▶ Resume"; sub.textContent = "paused"; }
+    };
+
+    /* one tap = a real by-ear verdict on the word playing right now */
+    function mark(ok) {
+      if (paused || i >= items.length) return;
+      const it = items[i];
+      gradeCard(it.key, ok ? "good" : "again");
+      logEvent({ e: "alisten-grade", key: it.key, ok: !!ok, src: "hands" });
+      graded++; if (ok) right++;
+      countEl.textContent = `${right} of ${graded} marked right`;
+      token++; clearTimer(); stopSpeak();
+      sub.textContent = ok ? "✓ got it — " + it.v.en : "✗ " + it.v.en;
+      i++;
+      later(step, 700);
+    }
+
+    function step() {
+      if (paused) return;
+      if (i >= items.length) { if (++pass > PASSES) return finish(right, graded, "hands"); i = 0; }
       const it = items[i];
       const total = items.length * PASSES, at = (pass - 1) * items.length + i;
       bar.style.width = Math.round(100 * at / total) + "%";
       w.textContent = it.v.ar;
       sub.textContent = pass === 1 ? "what does it mean?" : "say it with me";
+      const t = ++token;
       speak(it.v.ar, 0.8, () => {
-        setTimeout(() => {
+        if (t !== token || paused) return;
+        later(() => {
           sub.textContent = it.v.en;
-          speak(it.v.en, 0.95, () => { i++; setTimeout(step, 350); });
+          speak(it.v.en, 0.95, () => {
+            if (t !== token || paused) return;
+            i++; later(step, 350);
+          });
         }, pass === 1 ? 2200 : 900);
       });
-    };
+    }
     step();
   }
 
