@@ -4,6 +4,8 @@
 **Owner:** Reza (rkarim25 / rkarim88@gmail.com) · **Maintainer:** Claude (any chat session)
 **Learners (2026-07-15):** **Reza Karim** (rkarim88@gmail.com, standard) and **Saba Khan** (sabatarif.15@gmail.com, beginner) — separate cloud data, SRS, and personal coach notes; shared site content. `PROFILES` in `js/app.js` maps email → name/level. **Conflict rule:** one user's request must never degrade the other's experience — beginner material for Saba is ADDED (new clusters/levels), never swapped in over existing content.
 
+**▶ Starting a new session? Read `HANDOVER.md` first** — current state, what changed last, and what to do next.
+
 This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, `TEACHER-SYNC.md` (the lesson-capture loop) and **`CURRICULUM.md`** (milestones, lessons, chunks and proof).
 
 > **⚠️ Read `CURRICULUM.md` before changing the home page, the nav, or anything about milestones, lessons or tests.**
