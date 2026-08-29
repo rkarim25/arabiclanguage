@@ -1,4 +1,4 @@
-# The Curriculum — milestones, lessons, chunks and proof
+# The Curriculum — milestones, lessons and proof
 
 > **Read this before touching `index.html`, `learn.html`, `map.html`, the nav,
 > `data/curriculum.json`, `scripts/gen-curriculum.js` or `js/curriculum.js`.**
@@ -83,17 +83,17 @@ Eleven top-level tabs became **four**, after:
 
 | Page | What it is |
 |---|---|
-| `index.html` | **Home.** Two levels, what you hold, the milestone you're on with its lessons, one **Continue** button, what's coming, achieved. |
-| `learn.html` | **The doing.** Runs a chunk, or runs a milestone test. Nothing else. |
+| `index.html` | **Home.** Two levels, what you hold, the milestone you're on, and **the shelf: four weeks of seven lessons**, each with learn / hands-free / test. |
+| `learn.html` | **The doing.** Runs one lesson (normal or hands-free), or runs a test at any scope. Nothing else. |
 | `map.html` | **The long view.** Both goals, each level with its criteria, every milestone under the level it feeds, pace, and the old forecast model behind a disclosure. |
 | `more.html` | Everything else: free practice, the engines, sync and backup. |
 
 Rules:
 
-- **One decision on the home page:** Continue. The commute button is the same
-  material hands-free, not a rival to it.
+- **Continue is always there**, but the shelf lets him pick any lesson in the week.
+  Hands-free is offered per lesson, never as a rival destination.
 - **Exercise types are never a menu.** Stories, grammar, Qur'an, audio and
-  speaking are *engines* a chunk runs on. He never picks between them.
+  speaking are *engines* a lesson runs on. He never picks between them.
 - **Free practice sits outside the plan** (vocabulary, sentences) and is always
   available. It doesn't count toward a milestone, but anything it brings to solid
   is still examined — learning counts wherever it happened.
@@ -113,7 +113,7 @@ Rules:
   cards master nothing.
 - What solid cards *do* earn is **skipping the learning, never the proof**. A
   lesson whose words are ≥ 80% solid is flagged `readyToProve`, and Continue sends
-  him straight to its test rather than four chunks he doesn't need.
+  him straight to its test rather than a sitting he doesn't need.
 - **A milestone is achieved when every one of its lessons is proved.**
 - **A level is earned when every criterion is met** (§6) and is **never revoked**.
   A lesson may reopen; a level may not. Decay shows up as the next level moving
