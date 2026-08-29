@@ -1088,11 +1088,36 @@
     return null;
   }
 
+
+  /* ---------- what you scored last time ----------
+     His question (2026-08-30): "when i take a test will it display the last score
+     on it?" — yes. A test is identified by its SCOPE (the exact set of lessons it
+     covers), so retaking the same lesson or the same week lines up into a run of
+     scores he can watch move. That was the whole point of unlimited retakes. */
+  const scopeKey = lessonIds => lessonIds.slice().sort().join("|");
+
+  function scopeHistory(log, lessonIds) {
+    const key = scopeKey(lessonIds);
+    const runs = (log || [])
+      .filter(e => e && e.e === "exam-done" && typeof e.score === "number" && e.scope === key)
+      .sort((a, b) => a.t - b.t);
+    if (!runs.length) return null;
+    const scores = runs.map(r => r.score);
+    return {
+      attempts: runs.length, scores,
+      last: scores[scores.length - 1],
+      best: Math.max.apply(null, scores),
+      first: scores[0],
+      gain: scores[scores.length - 1] - scores[0],
+      at: runs[runs.length - 1].t,
+    };
+  }
+
   return {
     SOLID_BOX, expandBasket, evalCriterion, trackLevel, levels,
     examKind, examScope, examResults, examAttempts, examTrajectory, examBuild, examScoreOf, examBand, examVerdict, levelSummary, groupOf,
     weekHistory, weekSize, weekProgress, weekLearned, weekObjectives, weekKeys, weekBounds, weekSelfSeed, activeMinutesBetween,
     PASS, CLEAR_MIN, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
-    nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
+    nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, scopeKey, scopeHistory, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
   };
 });

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevhzl1">
-  <link rel="stylesheet" href="css/style.css?v=mtevhzl1">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevod75">
+  <link rel="stylesheet" href="css/style.css?v=mtevod75">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -82,12 +82,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtevhzl1"></script>
-<script src="js/curriculum.js?v=mtevhzl1"></script>
-<script src="js/app.js?v=mtevhzl1"></script>
-<script src="js/tracker.js?v=mtevhzl1"></script>
-<script src="js/plan.js?v=mtevhzl1"></script>
-<script src="js/account.js?v=mtevhzl1"></script>
+<script src="js/progress-model.js?v=mtevod75"></script>
+<script src="js/curriculum.js?v=mtevod75"></script>
+<script src="js/app.js?v=mtevod75"></script>
+<script src="js/tracker.js?v=mtevod75"></script>
+<script src="js/plan.js?v=mtevod75"></script>
+<script src="js/account.js?v=mtevod75"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -173,7 +173,7 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
             <div class="m">${x.milestone.track === "quran" ? "🎧" : "🗣"} ${esc(x.milestone.name)} ·
               ${l.mastered ? `proved — scored ${l.score}`
                 : l.readyToProve ? "you already hold these — just prove it"
-                : `${l.total} words${done ? " · learnt, not yet proved" : ""}`}</div>
+                : `${l.total} words${done ? " · learnt, not yet proved" : ""}${l.score !== null ? ` · last test ${l.score}` : ""}`}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center;white-space:nowrap">
             ${l.mastered ? "" : `

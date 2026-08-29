@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtevhzl1">
-  <link rel="stylesheet" href="css/style.css?v=mtevhzl1">
+  <link rel="stylesheet" href="css/fonts.css?v=mtevod75">
+  <link rel="stylesheet" href="css/style.css?v=mtevod75">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtevhzl1"></script>
-<script src="js/curriculum.js?v=mtevhzl1"></script>
-<script src="js/app.js?v=mtevhzl1"></script>
-<script src="js/tracker.js?v=mtevhzl1"></script>
-<script src="js/plan.js?v=mtevhzl1"></script>
+<script src="js/progress-model.js?v=mtevod75"></script>
+<script src="js/curriculum.js?v=mtevod75"></script>
+<script src="js/app.js?v=mtevod75"></script>
+<script src="js/tracker.js?v=mtevod75"></script>
+<script src="js/plan.js?v=mtevod75"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -259,14 +259,20 @@ async function runTest(lessonIds, ctx, state, label) {
   const qs = ex.items.map((it, i) => Object.assign({}, it, { v: resolved[i] && resolved[i].v })).filter(q => q.v && q.v.ar);
 
   const title = label || (use.length === 1 ? (all.find(l => l.id === use[0]) || {}).title : "The test");
+  const scope = Curriculum.scopeKey(use);
+  const prior = Curriculum.scopeHistory(ctx.log, use);
   primeSpeak();
-  logEvent({ e: "exam-start", lessons: use, total: qs.length, attempt: attempts + 1 });
+  logEvent({ e: "exam-start", lessons: use, scope, total: qs.length, attempt: attempts + 1 });
   const answers = [];
   let i = 0;
 
+  const priorLine = prior
+    ? `<span class="pill">last time: ${prior.last}${prior.attempts > 1 ? ` · ${prior.scores.join(" → ")}` : ""}</span>`
+    : "";
   const head = `<div class="crumb">Test</div><h1 style="margin-top:0">${esc(title)}</h1>
     <p class="sub">${qs.length} questions, about ${ex.minutes} minute${ex.minutes === 1 ? "" : "s"}. Pass mark ${Curriculum.PASS}.
-    ${ex.sampled ? `A sample across ${use.length} lessons${ex.clearable ? "" : " — too few each to clear a lesson, so this one is a check"}.` : "Each lesson is scored on its own."}</p>`;
+    ${ex.sampled ? `A sample across ${use.length} lessons${ex.clearable ? "" : " — too few each to clear a lesson, so this one is a check"}.` : "Each lesson is scored on its own."}
+    ${priorLine}</p>`;
 
   ask();
   function ask() {
@@ -334,7 +340,7 @@ async function runTest(lessonIds, ctx, state, label) {
     const r = Curriculum.milestoneScoreOf(answers);
     // a score from too few questions reports but must not clear a lesson
     const lessons = ex.clearable ? r.lessons : {};
-    logEvent({ e: "exam-done", lessons: lessons, reported: r.lessons, attempt: attempts + 1,
+    logEvent({ e: "exam-done", lessons: lessons, reported: r.lessons, scope, attempt: attempts + 1,
                score: r.score, correct: r.correct, total: r.total, sections: r.sections });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
 
@@ -347,6 +353,11 @@ async function runTest(lessonIds, ctx, state, label) {
         <div style="text-align:center">
           <div class="big">${r.score}</div>
           <div style="font-size:15px;font-weight:600;text-transform:capitalize">${esc(band.band)}</div>
+          ${prior ? `<div style="font-size:13.5px;color:${r.score > prior.last ? "var(--accent)" : "var(--muted)"};font-weight:600">
+              ${r.score > prior.last ? `up from ${prior.last} (+${r.score - prior.last})`
+                : r.score === prior.last ? `same as last time (${prior.last})`
+                : `down from ${prior.last} (${r.score - prior.last})`}</div>
+            <div style="font-size:12.5px;color:var(--muted)">${prior.scores.concat([r.score]).join(" → ")}</div>` : ""}
           ${r.sections.ear !== null ? `<div style="font-size:13px;color:var(--muted)">by ear: ${r.sections.ear}%</div>` : ""}
         </div>
         <div style="margin-top:16px">

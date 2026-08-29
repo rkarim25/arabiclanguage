@@ -478,6 +478,27 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   yes(typeof weekly.clearable === "boolean", "a test says whether it is dense enough to clear lessons");
 }
 
+
+/* ---------- "will it display the last score on it?" ---------- */
+{
+  const ids = ["a", "b"], key = C.scopeKey(ids);
+  eq(key, C.scopeKey(["b", "a"]), "a scope key does not depend on the order the lessons come in");
+  const log = [
+    { e: "exam-done", scope: key, score: 55, t: 1 },
+    { e: "exam-done", scope: key, score: 70, t: 2 },
+    { e: "exam-done", scope: C.scopeKey(["z"]), score: 5, t: 3 },
+    { e: "exam-done", scope: key, score: 88, t: 4 },
+  ];
+  const h = C.scopeHistory(log, ids);
+  eq(h.last, 88, "the last score for THIS test is available before he starts it");
+  eq(h.first, 55, "…along with where he began");
+  eq(h.gain, 33, "…and the movement between them");
+  eq(h.attempts, 3, "only attempts at the same scope count");
+  eq(h.scores.join(","), "55,70,88", "the run of scores is in order, for the trajectory line");
+  yes(C.scopeHistory(log, ["nothing"]) === null, "a test never taken has no score rather than a fake zero");
+  eq(C.scopeHistory(log, ["z"]).last, 5, "a different test keeps its own history");
+}
+
 /* ---------- calibration against real data, if given ---------- */
 const payloadPath = process.argv[2];
 if (payloadPath && fs.existsSync(payloadPath)) {
