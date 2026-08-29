@@ -74,7 +74,9 @@ i.e. whole utterances; everything else counts as a word.
 
 ## 3. The shape of the site
 
-Eleven top-level tabs became **four**, after:
+Eleven top-level tabs became four, and then **three** (2026-08-30: Vocabulary left
+the nav when the sentence became the unit of study — `vocab.html` and `review.html`
+survive as engines, reachable from Progress). After:
 
 > "the whole website needs to be much more simplified rather than story based …
 > is it possible to simplify it further, where either i just do a standard lesson
@@ -84,6 +86,7 @@ Eleven top-level tabs became **four**, after:
 | Page | What it is |
 |---|---|
 | `index.html` | **Home.** Two levels, what you hold, the milestone you're on, and **the shelf: four weeks of seven lessons**, each with learn / hands-free / test. |
+| `sentences.html` | **Free sentence practice** — and, since 2026-08-30, the only vocabulary destination in the nav. |
 | `learn.html` | **The doing.** Runs one lesson (normal or hands-free), or runs a test at any scope. Nothing else. |
 | `map.html` | **The long view.** Both goals, each level with its criteria, every milestone under the level it feeds, pace, and the old forecast model behind a disclosure. |
 | `more.html` | Everything else: free practice, the engines, sync and backup. |
@@ -164,19 +167,89 @@ Two consequences worth keeping:
 
 ---
 
-## 5. A lesson
+## 5. A lesson — THE SENTENCE IS THE UNIT OF STUDY
 
-One sitting, about seven minutes, and it runs the same way every time:
+Rebuilt 2026-08-30. He read a summary of how adults acquire a language and asked:
 
-1. **Meet them** — a table: Arabic, meaning veiled, transliteration. Recall before
-   revealing. (His standing preference: tables over flashcards, minimal clicking.)
-2. **Work them** — each item once, in rotating forms: recognise the meaning, write
-   it from English, catch it by ear. Recognition and production are different
-   skills and the lesson exercises both.
+> "should all the lessons be designed in this pattern? that first it gives a
+> meaning, then i hear it in arabic, then i repeat it myself and then i practise
+> variations of it … that would crucially imply no more vocab review, i just keep
+> working with sentences only and as primary method."
 
-**Due reviews ride at the front of every lesson** (`reviewsFor`, 4 by default) and
-are never that lesson's own words. This is why review never appears as a chore or
-a "73 due" wall.
+Yes — with one inversion, because the two tracks want opposite things.
+
+| | 🗣 Conversation | 🎧 Qur'an |
+|---|---|---|
+| 1 | the meaning, in English | the meaning, in English |
+| 2 | **hear** the Arabic | **he recites it** — from memory |
+| 3 | **produce** it (typed) | **decode** it by ear, at speed |
+| 4 | vary it | vary the pattern, never the ayah |
+
+**He has the Qur'an memorised**, so playing him the audio to teach him the sound
+teaches nothing. What he cannot do yet is understand it *as it is recited*. So the
+Qur'an loop takes the recitation from him and gives the audio back as the test —
+which is the actual goal, not a proxy for it. This is also why "I don't need to
+listen, I know it already" is only half true, and the site should keep saying so:
+he knows the sound, not the meaning at speed.
+
+**The ladder is unchanged.** A lesson still OWNS a set of word keys — that is what
+the test proves and what the SRS schedules. What changed is the *material*: those
+words are met inside whole sentences chosen to cover them.
+
+### The word is the unit of measurement
+
+His two conditions, both load-bearing:
+
+> "while i learn from setences and get tested on sentences, you have to maintain a
+> vocab list for me which you test and get me to repeat in sentence format …
+> you have to pick out words from there on what i am weak and design sentences in
+> this way."
+
+- Every sentence answer **grades every word inside it** (`writeMatchAr` already
+  reports which target words landed; they are matched by normalized form, not by
+  index, because sources split punctuation differently).
+- **Review comes back as sentences** (`reviewSentencesFor`), never as a word list.
+- `weakWords()` is the vocab list — it exists, it drives selection, he never sees it.
+- A production question in a **test** asks for the sentence and is scored on
+  whether the *target word* landed inside it.
+
+### Coverage is engineered, not accidental
+
+The one real argument for word lists is frequency. Dropping them makes coverage
+accidental unless something replaces it, so `sentencesFor()` is a **greedy set
+cover**: at each step take the sentence carrying the most of the lesson's
+still-uncovered words, tie-broken toward fewer unfamiliar extras, then toward
+commoner vocabulary. What no sentence reaches is met as a one-word item and
+counted as the content gap (§8).
+
+### Grammar, when a rule genuinely needs it
+
+> "the only crinkle is grammar. if there are grammar rules which i do need to
+> learn or understand then that needs to be added on from time to time."
+
+A sentence may name a pattern from `data/grammar.json`. The first time one turns
+up, the lesson opens with the rule, two examples, and nothing else; `pattern-seen`
+is logged and it is never explained again. Pattern detection is deliberately
+conservative — a wrong grammar note is worse than no grammar note.
+
+### data/sentence-bank.json
+
+Generated by `scripts/gen-sentences.js` from content **already on the site and
+already checked**: the Qur'an surahs, the phrase deck, the story sentences, the
+speaking prompts (which already carry the vocab keys they use), the grammar
+examples, and the conjugation frames.
+
+**Nothing in it is composed.** `scripts/test-sentences.js` traces every sentence
+back to its source and fails if one cannot be traced. Variations come only from
+the verified conjugation table, and **no ayah is ever slot-substituted** —
+revelation supplies the pattern, everyday Arabic supplies the drill.
+
+An ayah is the unit for the Qur'an track: measured across his 57 verses, 5.2 words
+on average and 49 of 57 at six words or fewer. Only Ayat al-Kursi is split, by
+hand, into nine clauses each with a real translation.
+
+**Due reviews ride at the front of every lesson** as sentences containing what is
+slipping. This is why review never appears as a chore or a "73 due" wall.
 
 ### Two ways to do any lesson
 
@@ -272,15 +345,30 @@ conversation.
 Every milestone must be justifiable in one sentence *to him* — the `why` field is
 not decoration.
 
-### Outstanding content job: sentences
+### Outstanding content job: THE REST OF THE SENTENCES
 
-The lesson's "work them" pass uses the item itself. That is right for the phrase deck and
-story sentences (real, verified, already voiced). Lessons built from single words
-(Qur'an vocabulary, everyday clusters) therefore say the **word** aloud rather
-than a sentence containing it. He agreed to *"curated where they exist, written
-where they don't"* — **the written half is not done**. Authoring one verified
-sentence per word-lesson, built from that lesson's own words, is the next content
-task.
+This is now the site's single biggest gap, and it is measured on every test run.
+
+The bank holds **341 verified sentences** and reaches **52% of the ladder's word
+keys**; **14 of 128 lessons** have no sentence at all and fall back to single
+words. His own target is the right one:
+
+> "lets say if i can understand a 500 sentences and variations of it maybe i can
+> understand arabic."
+
+The uncovered keys are concentrated and known: `qc:*` (frequent Qur'an words that
+do not appear in the 13 surahs on the site), and the `ev-numbers`, `ev-family`,
+`ev-opposites`, `ev-masjid`, `ev-medical` clusters. They need **one verified
+sentence each**, and the rule from §5 stands: nothing composed here, nothing that
+has not been checked by someone who knows. His Sunday class is the natural supply,
+and `scripts/test-sentences.js` reports coverage climbing as they land.
+
+**Real audio is the other half.** Everything is Edge neural TTS today (good, but
+synthetic). He asked for authentic audio — *"you will have to take some real audio
+from youtube or wherever for me to listen to as well and use that as sentence
+format."* Qur'an recitation is the honest place to start because it is his own
+memorised material; everyday MSA needs a rights-clean source, and copying audio
+into a public repo is not one. Recorded here as an open question, not a plan.
 
 ---
 

@@ -780,6 +780,135 @@
       .slice(0, n === undefined ? REVIEW_PER_CHUNK : n);
   }
 
+  /* ==========================================================================
+     SENTENCES — what he actually studies (his rule, 2026-08-30)
+
+       "i just keep working with sentences only and as primary method … while i
+        will never review the word by word but you have to pick out words from
+        there on what i am weak and design sentences in this way."
+
+     The ladder is untouched: a lesson still OWNS a set of word keys, and is
+     still proved at 80 like everything else. What changes is the MATERIAL — a
+     lesson's words are met inside whole sentences drawn from data/sentence-bank.json,
+     chosen so that between them they cover the lesson's words. The word is the
+     unit of measurement; the sentence is the unit of study.
+
+     Selection is a greedy set cover, which is exactly the "engineered coverage"
+     that word lists used to provide by accident: at each step take the sentence
+     that carries the most of the lesson's still-uncovered words, breaking ties
+     toward fewer unfamiliar extras (so a sentence doesn't smuggle in five new
+     words to teach one) and then toward the commoner vocabulary.
+     ========================================================================== */
+  const SENTENCE_MAX = 5;          // a ~7-minute sitting, four steps per sentence
+  /* lexicographic compare of the score tuples below — first field decides */
+  const cmp = (a, b) => { for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i]; return 0; };
+
+  function sentenceIndex(ctx) {
+    const bank = (ctx.bank && ctx.bank.sentences) || [];
+    if (!ctx._byKey) {
+      ctx._byKey = new Map();       // word key -> sentences containing it
+      ctx._byId = new Map();
+      bank.forEach(s => {
+        ctx._byId.set(s.key, s);
+        (s.teaches || []).forEach(k => {
+          if (!ctx._byKey.has(k)) ctx._byKey.set(k, []);
+          ctx._byKey.get(k).push(s);
+        });
+      });
+    }
+    return ctx._byKey;
+  }
+
+  /* How well he holds a word, 0 (never seen) to 1 (long-term). Drives both which
+     words are worth building a sentence around and the tie-breaks below. */
+  function holdOf(key, ctx) {
+    const c = (ctx.srs || {})[key];
+    if (!c) return 0;
+    return Math.min(1, (c.box || 0) / 5);
+  }
+
+  /* The sentences that teach a set of word keys. `track` biases the pick toward
+     the lesson's own track without excluding the other — a Qur'an word met in an
+     everyday sentence is still that word. */
+  function sentencesFor(targetKeys, ctx, opts) {
+    opts = opts || {};
+    const byKey = sentenceIndex(ctx);
+    const want = new Set((targetKeys || []).filter(Boolean));
+    if (!want.size) return [];
+    const limit = opts.limit || SENTENCE_MAX;
+    const track = opts.track;
+
+    const candidates = new Map();
+    want.forEach(k => (byKey.get(k) || []).forEach(s => candidates.set(s.key, s)));
+    if (!candidates.size) return [];
+
+    const chosen = [], covered = new Set(), used = new Set(opts.exclude || []);
+    while (chosen.length < limit && covered.size < want.size) {
+      let best = null, bestScore = null;
+      candidates.forEach(s => {
+        if (used.has(s.key)) return;
+        const gain = (s.teaches || []).filter(k => want.has(k) && !covered.has(k)).length;
+        if (!gain) return;
+        // unfamiliar extra baggage: words this sentence needs that are neither
+        // the lesson's nor already held
+        const extra = (s.teaches || []).filter(k => !want.has(k) && holdOf(k, ctx) < 0.4).length;
+        const score = [
+          -gain,                                   // cover the most first
+          s.track === track ? 0 : 1,               // then prefer this track
+          extra,                                   // then the least baggage
+          -(s.weight || 0),                        // then the commoner words
+        ];
+        if (!bestScore || cmp(score, bestScore) < 0) { best = s; bestScore = score; }
+      });
+      if (!best) break;
+      used.add(best.key);
+      chosen.push(best);
+      (best.teaches || []).forEach(k => { if (want.has(k)) covered.add(k); });
+    }
+    return chosen;
+  }
+
+  /* Review, his way: never a bare word list. Take the cards that are due or
+     slipping and hand back SENTENCES that contain them, so revision is reading
+     and saying real Arabic. Falls back to nothing rather than to word cards —
+     if no sentence carries a due word, the word simply waits for one. */
+  function reviewSentencesFor(chunk, ctx, n) {
+    const srs = ctx.srs || {}, now = ctx.now || Date.now();
+    const own = new Set(chunk.keys || []);
+    const due = Object.keys(srs)
+      .filter(k => !own.has(k) && (srs[k].due || 0) <= now)
+      .sort((a, b) => (srs[a].due || 0) - (srs[b].due || 0))
+      .slice(0, 40);
+    return sentencesFor(due, ctx, { limit: n === undefined ? 2 : n });
+  }
+
+  /* The words he is weakest on right now, worst first — what the coach uses to
+     decide which sentences to write next, and what the lesson strip reports. */
+  function weakWords(ctx, n) {
+    const srs = ctx.srs || {}, now = ctx.now || Date.now();
+    return Object.keys(srs)
+      .map(k => {
+        const c = srs[k] || {};
+        const overdue = Math.max(0, now - (c.due || now)) / 86400000;
+        return { key: k, box: c.box || 0, overdue, score: (5 - (c.box || 0)) + Math.min(5, overdue / 7) };
+      })
+      .filter(w => w.box < 5 || w.overdue > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, n || 20);
+  }
+
+  /* A grammar pattern is explained ONCE, the first time a sentence that uses it
+     comes up — his condition: "if there are grammar rules which i do need to
+     learn or understand then that needs to be added on from time to time."
+     Seen-ness is replayed from the log, like every other piece of history. */
+  function grammarToShow(sentences, ctx) {
+    const seen = new Set((ctx.log || []).filter(e => e && e.e === "pattern-seen").map(e => e.pattern));
+    for (const s of sentences || []) {
+      if (s.pattern && !seen.has(s.pattern)) return s.pattern;
+    }
+    return null;
+  }
+
   /* ---------- what he actually holds ----------
      His ask (2026-08-29): "if i do have a vocabulary of a certain number of
      words and if i can also say a certain number of sentences or at least
@@ -789,7 +918,10 @@
      SENTENCES are whole utterances (the phrase deck and story sentences) — those
      are what turn vocabulary into speech. Both counted at box >= 3 (held), with
      box >= 5 called out separately as long-term. */
-  const isSentenceKey = k => k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
+  /* `s:` is the sentence bank's own namespace (Qur'an ayah units, story
+     sentences, verb frames); ph- and story- sentences predate it and keep their
+     original keys so his history carries over. */
+  const isSentenceKey = k => k.startsWith("s:") || k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
   function inventory(ctx) {
     const srs = ctx.srs || {};
     let words = 0, wordsLong = 0, sents = 0, sentsLong = 0;
@@ -1119,5 +1251,6 @@
     weekHistory, weekSize, weekProgress, weekLearned, weekObjectives, weekKeys, weekBounds, weekSelfSeed, activeMinutesBetween,
     PASS, CLEAR_MIN, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
     nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, scopeKey, scopeHistory, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
+    SENTENCE_MAX, sentencesFor, reviewSentencesFor, weakWords, grammarToShow, holdOf,
   };
 });

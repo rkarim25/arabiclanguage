@@ -1258,7 +1258,10 @@ function curLoad() {
     _curCtxP = Promise.all([
       fetch("data/curriculum.json").then(r => r.json()),
       fetch("data/verses.json").then(r => r.json()),
-    ]).then(([curriculum, verses]) => ({ curriculum, verses }))
+      // the sentence bank is what he actually studies (CURRICULUM.md §5); a page
+      // that loads before it exists still works, it just has no sentences to pick
+      fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+    ]).then(([curriculum, verses, bank]) => ({ curriculum, verses, bank }))
       .catch(() => null);
   }
   return _curCtxP;
@@ -1381,8 +1384,7 @@ function renderNav(active) {
     <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
     <span class="spacer"></span>
     <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
-    <a class="link ${active === "vocab" ? "active" : ""}" href="vocab.html">📖 Vocabulary${due ? `<span class="badge">${due}</span>` : ""}</a>
-    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences</a>
+    <a class="link ${active === "sentences" || active === "vocab" ? "active" : ""}" href="sentences.html">✍️ Sentences${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "map" || active === "more" ? "active" : ""}" href="map.html">📈 Progress</a>
   `;
   document.body.prepend(el);

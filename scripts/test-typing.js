@@ -94,7 +94,10 @@ yes(writeMatchAr("كيف حالك", target).ok || arMatch("كيف حالك", tar
   const wired = (learn.match(/wireAnswer\("ans"/g) || []).length;
   yes(inputs > 0, `learn.html has ${inputs} answer box(es)`);
   yes(wired === inputs, `every one of them calls wireAnswer (${wired}/${inputs}) — this is the bug he reported`);
-  yes(/wireAnswer\("ans", "chk", \[q\.v\.ar\]\)/.test(learn), "the TEST box excludes the answer from its suggestions");
+  // the test asks for a whole sentence now, so what must be withheld is the
+  // whole target, not just the one word the question is scored on
+  yes(/const target = sent \? sent\.ar : q\.v\.ar;/.test(learn) && /wireAnswer\("ans", "chk", \[target\]\)/.test(learn),
+    "the TEST box excludes everything it is asking for from its suggestions");
   yes(/attachInlineTranslit/.test(learn), "learn.html uses the shared live-transliteration helper, not its own");
 }
 

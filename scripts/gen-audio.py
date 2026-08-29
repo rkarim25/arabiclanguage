@@ -100,6 +100,17 @@ for g in loadd("phrases.json")["groups"]:
         add("ar", m.get("ar"))
         add("en", m.get("en"))
 
+# THE SENTENCE BANK — what he actually studies now (CURRICULUM.md §5). Every
+# unit is spoken in both languages: the lesson plays the meaning first, then the
+# Arabic, and the Qur'an track plays the Arabic at speed as the test.
+bank = loadd("sentence-bank.json")
+for u in bank.get("sentences", []):
+    add("ar", u.get("ar"))
+    add("en", u.get("en"))
+    for var in (u.get("vary") or []):
+        add("ar", var.get("ar"))
+        add("en", var.get("en"))
+
 # fixed spoken UI lines (audio.html)
 add("en", "Audio coach. Listen, and recall the meaning before I say it.")
 add("en", "Commute session. Hands free. Recall each meaning in the gap, before I say it.")

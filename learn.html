@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtexh6xq">
-  <link rel="stylesheet" href="css/style.css?v=mtexh6xq">
+  <link rel="stylesheet" href="css/fonts.css?v=mteyu3co">
+  <link rel="stylesheet" href="css/style.css?v=mteyu3co">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtexh6xq"></script>
-<script src="js/curriculum.js?v=mtexh6xq"></script>
-<script src="js/app.js?v=mtexh6xq"></script>
-<script src="js/tracker.js?v=mtexh6xq"></script>
-<script src="js/plan.js?v=mtexh6xq"></script>
+<script src="js/progress-model.js?v=mteyu3co"></script>
+<script src="js/curriculum.js?v=mteyu3co"></script>
+<script src="js/app.js?v=mteyu3co"></script>
+<script src="js/tracker.js?v=mteyu3co"></script>
+<script src="js/plan.js?v=mteyu3co"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -129,41 +129,290 @@ async function wireAnswer(inputId, submitId, exclude) {
 })();
 
 /* ======================= A LESSON — one ~7-minute sitting =======================
-   Not four separate chunks any more: meet the words, then work them in mixed
-   forms, all in one go. Due reviews ride at the front so review is never a
-   separate chore. Every lesson can be done on screen OR hands-free. */
+   THE SENTENCE IS THE UNIT OF STUDY (CURRICULUM.md §5). His rule, 2026-08-30:
+
+     "first it gives a meaning, then i hear it in arabic, then i repeat it myself
+      and then i practise variations of it … i just keep working with sentences
+      only and as primary method."
+
+   So every lesson walks the same four steps per sentence, and the two tracks
+   differ in exactly one place — step 2 — because their goals are opposite:
+
+     🗣 conversation   meaning → HEAR it → produce it → vary it
+     🎧 Qur'an         meaning → RECITE it from memory → decode it by ear → vary
+
+   He has the Qur'an memorised, so being played the audio to learn it teaches him
+   nothing; what he cannot yet do is understand it AS it is recited. The Qur'an
+   loop therefore takes the recitation from him and gives the audio back as the
+   test — which is the actual goal ("understand the Qur'an as it is recited"),
+   not a proxy for it.
+
+   The lesson still OWNS its word keys: they are what the test proves and what the
+   SRS schedules. Every sentence answer grades the words inside it, so the vocab
+   list is maintained underneath without him ever seeing a word list — his second
+   condition ("you have to maintain a vocab list for me which you test and get me
+   to repeat in sentence format"). */
 async function runLesson(lesson, ms, ctx, handsFree) {
   const chunk = Curriculum.lessonChunks(lesson)[0];
-  const reviewKeys = Curriculum.reviewsFor(chunk, ctx);
-  const resolved = await resolveCards(reviewKeys.concat(lesson.keys));
-  const items = resolved.map((r, i) => ({ key: r.key, v: r.v, review: i < reviewKeys.length })).filter(x => x.v && x.v.ar);
+  const track = ms.track === "quran" ? "quran" : "conv";
+  const keys = lesson.keys || [];
+
+  // Review rides at the front as SENTENCES containing what is slipping — never
+  // as a word list, which is the thing he asked to stop doing.
+  const review = Curriculum.reviewSentencesFor(chunk, ctx, 2);
+  const taught = Curriculum.sentencesFor(keys, ctx, { track, limit: 4, exclude: review.map(s => s.key) });
+
+  const items = review.map(s => ({ s, review: true })).concat(taught.map(s => ({ s, review: false })));
+
+  /* Anything the chosen sentences don't reach is still this lesson's job and the
+     test will still ask it, so it is met as a one-word sentence rather than
+     silently dropped. This is also the honest fallback when no sentence in the
+     bank carries a word yet. */
+  const covered = new Set(items.flatMap(x => x.s.teaches || x.s.wordKeys || []));
+  const missing = keys.filter(k => !covered.has(k));
+  if (missing.length) {
+    const resolved = await resolveCards(missing);
+    resolved.forEach(r => {
+      if (!r || !r.v || !r.v.ar) return;
+      items.push({ s: {
+        key: r.key, ar: r.v.ar, en: r.v.en, tr: r.v.tr || "", track, single: true,
+        words: [{ ar: r.v.ar, en: r.v.en, tr: r.v.tr || "", key: r.key }],
+        wordKeys: [r.key], teaches: [r.key], note: r.v.note || null,
+      }, review: false });
+    });
+  }
   if (!items.length) { app.innerHTML = "<p>Nothing to study here.</p>"; return; }
 
   primeSpeak();
   const head = extra => `
-    <div class="crumb">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Everyday"} · ${esc(ms.name)}</div>
+    <div class="crumb">${track === "quran" ? "🎧 Qur'an" : "🗣 Everyday"} · ${esc(ms.name)}</div>
     <h1 style="margin-top:0">${esc(lesson.title)}</h1>
-    <p class="sub">${extra || ""}${reviewKeys.length ? ` <span class="pill">+${reviewKeys.length} due for review</span>` : ""}</p>`;
+    <p class="sub">${extra || ""}${review.length ? ` <span class="pill">+${review.length} to keep warm</span>` : ""}</p>`;
+
+  /* ---- word-level credit ----
+     A sentence answer is the only thing he does, so it has to be what feeds the
+     word cards. writeMatchAr already reports which target words landed; match
+     them to the sentence's words by normalized form (index alignment is not safe
+     — punctuation splits differently in different sources). */
+  function creditWords(s, m, fallbackOk) {
+    (s.words || []).forEach(w => {
+      if (!w.key) return;
+      let ok = fallbackOk;
+      if (m && m.words) {
+        const j = m.words.findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
+        if (j >= 0) ok = m.hits[j] !== "miss";
+      }
+      gradeCard(w.key, ok ? "good" : "again");
+    });
+  }
+  function gradeSentence(s, ok, m, byEar) {
+    if (s.key) gradeCard(s.key, ok ? "good" : "again");
+    creditWords(s, m, ok);
+    if (byEar) (s.wordKeys || []).forEach(k => logEvent({ e: "alisten-grade", key: k, ok: !!ok, src: "lesson" }));
+  }
+
+  const wordsHtmlFor = s => (s.words || []).filter(w => w.en).map(w =>
+    `<span style="display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border:1px solid var(--border);border-radius:8px;font-size:13px">
+       <span class="arabic" style="font-size:17px">${esc(w.ar)}</span>
+       <span style="color:var(--muted)"> ${esc(w.en)}</span></span>`).join("");
+
+  const sourceLine = s => s.ref ? `${esc(s.surah || "")} ${esc(s.ref)}${s.part ? ` · part ${esc(s.part)}` : ""}`
+    : s.theme ? esc(s.theme) : "";
 
   if (handsFree) return handsFreeRun();
-  return meet();
+  return grammarGate();
+
+  /* ---- grammar, when a rule genuinely needs explaining ----
+     His condition: "if there are grammar rules which i do need to learn or
+     understand then that needs to be added on from time to time." Shown ONCE,
+     the first time a sentence using the pattern comes up, then never again. */
+  async function grammarGate() {
+    const pat = Curriculum.grammarToShow(items.map(x => x.s), ctx);
+    if (!pat) return run();
+    let g = null;
+    try { g = (await fetch("data/grammar.json").then(r => r.json())).patterns.find(p => p.id === pat); } catch (e) {}
+    if (!g) return run();
+    logEvent({ e: "pattern-seen", pattern: pat });
+    app.innerHTML = head("One rule first — it turns up in what follows.") + `
+      <div class="card">
+        <div class="crumb">grammar</div>
+        <h2 style="margin:2px 0 8px">${esc(g.name)}</h2>
+        <div class="q-ar arabic" style="margin:6px 0">${esc(g.ar)}</div>
+        <p style="font-size:15px;line-height:1.75">${esc(g.what)}</p>
+        ${(g.examples || []).slice(0, 2).map(e => `
+          <div style="border-top:1px solid var(--border);padding-top:8px;margin-top:8px">
+            <div class="arabic" style="font-size:21px;direction:rtl;text-align:right">${esc(e.ar)}</div>
+            <div style="font-size:13.5px;color:var(--muted)">${esc(e.en)}</div>
+          </div>`).join("")}
+        <div class="row"><button class="primary" id="gok">Got it →</button></div>
+      </div>`;
+    document.getElementById("gok").onclick = run;
+  }
+
+  /* ---- the four steps, one sentence at a time ---- */
+  function run() {
+    let i = 0, right = 0, asked = 0;
+
+    const next = () => { i++; step(); };
+    const bar = () => `<div class="crumb">${i + 1} of ${items.length}${items[i].review ? " · keeping warm" : ""}
+        ${sourceLine(items[i].s) ? ` · ${sourceLine(items[i].s)}` : ""}</div>
+      <div class="prog"><i style="width:${Math.round(100 * i / items.length)}%"></i></div>`;
+
+    function step() {
+      if (i >= items.length) return finish(right, asked, "screen");
+      meaning(items[i].s);
+    }
+
+    /* 1 — the meaning, before any Arabic. Front-loading it is what lets the
+       Arabic land as language rather than as noise. */
+    function meaning(s) {
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <div class="q-en" style="font-size:20px">${esc(s.en)}</div>
+        ${s.verseEn && s.verseEn !== s.en ? `<p style="font-size:13px;color:var(--muted);text-align:center;line-height:1.6">the whole ayah: ${esc(s.verseEn)}</p>` : ""}
+        <p style="text-align:center;font-size:14px;color:var(--muted)">${track === "quran"
+          ? "You know this one by heart. Ready to say it?" : "That is what you are about to say."}</p>
+        <div class="row"><button class="primary" id="go">${track === "quran" ? "Say it →" : "Hear it →"}</button></div>
+      </div>`;
+      document.getElementById("go").onclick = () => (track === "quran" ? recite(s) : hear(s));
+    }
+
+    /* 2a — conversation: hear it, see it, see what each word is doing. */
+    function hear(s) {
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+        ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
+        <div class="q-en" style="font-size:15px;color:var(--muted)">${esc(s.en)}</div>
+        <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
+        ${s.note ? `<p style="font-size:13px;color:var(--muted);line-height:1.7">${esc(s.note)}</p>` : ""}
+        <div class="row"><button id="again">🔊 again</button><button class="primary" id="go">Now you say it →</button></div>
+      </div>`;
+      speak(s.ar, 0.85);
+      document.getElementById("again").onclick = () => speak(s.ar, 0.85);
+      document.getElementById("go").onclick = () => produce(s);
+    }
+
+    /* 2b — Qur'an: HE supplies the Arabic. This is the inversion: the recitation
+       is already his, so the site asks for it instead of teaching it. */
+    function recite(s) {
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <div class="q-en" style="font-size:17px;color:var(--muted)">${esc(s.en)}</div>
+        <p style="text-align:center;font-size:15px">Say it out loud from memory, then check yourself.</p>
+        <div class="row"><button class="primary" id="rev">Show me the Arabic</button></div>
+      </div>`;
+      document.getElementById("rev").onclick = () => {
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+          <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
+          ${s.note ? `<p style="font-size:13px;color:var(--muted);line-height:1.7">${esc(s.note)}</p>` : ""}
+          <p style="text-align:center;font-size:14px;color:var(--muted)">Did it come out right?</p>
+          <div class="row"><button id="no">✗ not quite</button><button class="primary" id="yes">✓ yes</button></div>
+        </div>`;
+        speak(s.ar, 0.85);
+        document.getElementById("yes").onclick = () => { asked++; right++; gradeSentence(s, true); decode(s); };
+        document.getElementById("no").onclick = () => { asked++; gradeSentence(s, false); decode(s); };
+      };
+    }
+
+    /* 3a — Qur'an: the real goal. Audio only, at speed. Does the meaning arrive? */
+    function decode(s) {
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <p style="text-align:center;font-size:15px;margin-top:14px">Now just listen. Does the meaning arrive on its own?</p>
+        <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
+        <div class="row"><button id="rev">show me</button></div>
+      </div>`;
+      speak(s.ar, 0.95);
+      document.getElementById("play").onclick = () => speak(s.ar, 0.95);
+      document.getElementById("rev").onclick = () => {
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <div class="q-ar arabic" dir="rtl" style="font-size:26px">${esc(s.ar)}</div>
+          <div class="q-en">${esc(s.en)}</div>
+          <p style="text-align:center;font-size:14px;color:var(--muted)">Did it arrive while it played?</p>
+          <div class="row"><button id="no">✗ no</button><button class="primary" id="yes">✓ yes</button></div>
+        </div>`;
+        document.getElementById("yes").onclick = () => { gradeSentence(s, true, null, true); vary(s); };
+        document.getElementById("no").onclick = () => { gradeSentence(s, false, null, true); vary(s); };
+      };
+    }
+
+    /* 3b — conversation: produce it. Typed, because typing is the only way the
+       site can actually check him — and every word inside is graded from it. */
+    function produce(s) {
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <div class="q-en">${esc(s.en)}</div>
+        <p style="text-align:center;font-size:13.5px;color:var(--muted)">Write the whole thing — type it the way it sounds</p>
+        <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
+        <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        ${TYPING_HELP}</div>`;
+      // a LESSON may suggest the sentence's own words — he is learning to spell them
+      wireAnswer("ans", "chk");
+      const submit = show => {
+        const inp = document.getElementById("ans");
+        const m = show ? null : writeMatchAr(inp.value, s.ar);
+        const ok = !!(m && m.ok);
+        asked++; if (ok) right++;
+        gradeSentence(s, ok, m);
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <p style="text-align:center;font-size:16px">${show ? "" : ok ? "✓ right" : (m && m.right ? `${m.right} of ${m.total} words` : "✗ not quite")}</p>
+          <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+          ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
+          <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
+          <div class="row"><button class="primary" id="next">Next</button></div>
+        </div>`;
+        speak(s.ar, 0.85);
+        document.getElementById("next").onclick = () => vary(s);
+      };
+      document.getElementById("chk").onclick = () => submit(false);
+      document.getElementById("skip").onclick = () => submit(true);
+    }
+
+    /* 4 — variations. Only ever VERIFIED mutations (the conjugation table), never
+       invented Arabic, and never a mutation of an ayah: revelation supplies the
+       pattern, everyday Arabic supplies the drill. Sentences with no verified
+       variation skip this step rather than fake one. */
+    function vary(s) {
+      const opts = (s.vary || []).filter(v => normalizeAr(v.ar) !== normalizeAr(s.ar));
+      if (!opts.length) return next();
+      const pick = opts[(i * 3) % opts.length];
+      app.innerHTML = head() + `<div class="card">${bar()}
+        <div class="crumb">same sentence, one thing changed</div>
+        <div class="q-en">${esc(pick.en)}</div>
+        <p style="text-align:center;font-size:13px;color:var(--muted)">You just wrote “${esc(s.en)}”. Change it.</p>
+        <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
+        <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+      </div>`;
+      wireAnswer("ans", "chk");
+      const done = show => {
+        const inp = document.getElementById("ans");
+        const m = show ? null : writeMatchAr(inp.value, pick.ar);
+        const ok = !!(m && m.ok);
+        asked++; if (ok) right++;
+        logEvent({ e: "vary", sentence: s.key, ok, form: pick.verb || "" });
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <p style="text-align:center;font-size:16px">${show ? "" : ok ? "✓ right" : "✗ not quite"}</p>
+          <div class="q-ar arabic" dir="rtl">${esc(pick.ar)}</div>
+          <div class="q-en" style="font-size:15px;color:var(--muted)">${esc(pick.en)}</div>
+          <div class="row"><button class="primary" id="next">Next</button></div>
+        </div>`;
+        speak(pick.ar, 0.85);
+        document.getElementById("next").onclick = next;
+      };
+      document.getElementById("chk").onclick = () => done(false);
+      document.getElementById("skip").onclick = () => done(true);
+    }
+
+    step();
+  }
 
   /* ---- hands-free ----
-     Plays through on its own, but he asked for two things: "allow to pause and
-     as well for me to feedback if it got it or not with one click."
-
-     So while a word is playing there are three big targets and nothing else:
-     ✓ got it · ✗ missed it · ⏸ pause. A tap grades that word for real (same
-     by-ear evidence as an Audio Coach round) and moves straight on. Not tapping
-     is fine — it plays the meaning and continues, and the word counts as
-     exposure rather than proof. Buttons are deliberately huge: this is used in
-     a car, at arm's length, without looking. */
+     Same material, no taps: the sentence's meaning, then the sentence. Three
+     oversized targets while it plays (his 2026-08-30 ask) — got it / missed it /
+     pause — and a tap grades the sentence and every word in it for real. */
   function handsFreeRun() {
     let i = 0, pass = 1, paused = false, timer = null, token = 0;
     let graded = 0, right = 0;
     const PASSES = 2;
 
-    app.innerHTML = head("Hands-free. It plays on its own — tap only if you want to mark a word.") + `
+    app.innerHTML = head("Hands-free. It plays on its own — tap only if you want to mark one.") + `
       <div class="card">
         <div class="hands"><div class="w" id="hw">…</div>
           <p style="color:var(--muted);font-size:15px;min-height:22px" id="hs"></p></div>
@@ -193,16 +442,14 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       else { paused = true; token++; clearTimer(); stopSpeak(); pauseBtn.textContent = "▶ Resume"; sub.textContent = "paused"; }
     };
 
-    /* one tap = a real by-ear verdict on the word playing right now */
     function mark(ok) {
       if (paused || i >= items.length) return;
-      const it = items[i];
-      gradeCard(it.key, ok ? "good" : "again");
-      logEvent({ e: "alisten-grade", key: it.key, ok: !!ok, src: "hands" });
+      const s = items[i].s;
+      gradeSentence(s, ok, null, true);
       graded++; if (ok) right++;
       countEl.textContent = `${right} of ${graded} marked right`;
       token++; clearTimer(); stopSpeak();
-      sub.textContent = ok ? "✓ got it — " + it.v.en : "✗ " + it.v.en;
+      sub.textContent = (ok ? "✓ " : "✗ ") + s.en;
       i++;
       later(step, 700);
     }
@@ -210,117 +457,24 @@ async function runLesson(lesson, ms, ctx, handsFree) {
     function step() {
       if (paused) return;
       if (i >= items.length) { if (++pass > PASSES) return finish(right, graded, "hands"); i = 0; }
-      const it = items[i];
+      const s = items[i].s;
       const total = items.length * PASSES, at = (pass - 1) * items.length + i;
       bar.style.width = Math.round(100 * at / total) + "%";
-      w.textContent = it.v.ar;
-      sub.textContent = pass === 1 ? "what does it mean?" : "say it with me";
       const t = ++token;
-      speak(it.v.ar, 0.8, () => {
+      // meaning first, then the Arabic — the same order as on screen
+      w.textContent = s.en;
+      sub.textContent = pass === 1 ? "how would you say it?" : "say it with me";
+      speak(s.en, 1.0, () => {
         if (t !== token || paused) return;
         later(() => {
-          sub.textContent = it.v.en;
-          speak(it.v.en, 0.95, () => {
+          w.textContent = s.ar;
+          speak(s.ar, 0.85, () => {
             if (t !== token || paused) return;
-            i++; later(step, 350);
+            i++; later(step, 400);
           });
-        }, pass === 1 ? 2200 : 900);
+        }, pass === 1 ? 2600 : 900);
       });
     }
-    step();
-  }
-
-  /* ---- meet: the table, recall before reveal, mark only the misses ---- */
-  function meet() {
-    app.innerHTML = head("First, meet them. Try to recall each meaning before you tap it.") + `
-      <div class="card">
-        <table class="tbl"><tbody>${items.map((it, i) => `
-          <tr>
-            <td class="ar arabic">${esc(it.v.ar)} <button class="small spk" data-i="${i}">🔊</button></td>
-            <td><span class="veil en" data-i="${i}">${esc(it.v.en)}</span>
-              ${it.v.tr ? `<div style="font-size:12.5px;color:var(--muted)">${esc(it.v.tr)}</div>` : ""}</td>
-          </tr>`).join("")}</tbody></table>
-        <div class="row" style="justify-content:flex-start">
-          <button id="revealAll">Reveal all</button>
-          <button class="primary" id="go">Now work them →</button>
-        </div>
-      </div>`;
-    app.querySelectorAll(".spk").forEach(b => b.onclick = () => speak(items[+b.dataset.i].v.ar, 0.8));
-    app.querySelectorAll(".en").forEach(el => el.onclick = () => el.classList.add("on"));
-    document.getElementById("revealAll").onclick = () => app.querySelectorAll(".en").forEach(e => e.classList.add("on"));
-    document.getElementById("go").onclick = work;
-  }
-
-  /* ---- work: mixed forms, one item at a time ---- */
-  function work() {
-    let i = 0, right = 0;
-    const forms = ["mean", "prod", "ear"];
-    const step = () => {
-      if (i >= items.length) return finish(right, items.length, "screen");
-      const it = items[i];
-      const form = forms[i % forms.length];
-      const n = `<div class="crumb">${i + 1} of ${items.length}${it.review ? " · review" : ""}</div>
-        <div class="prog"><i style="width:${Math.round(100 * i / items.length)}%"></i></div>`;
-
-      if (form === "ear") {
-        app.innerHTML = head() + `<div class="card">${n}
-          <p style="text-align:center;font-size:15px;margin-top:14px">Listen. What does it mean?</p>
-          <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
-          <div class="row"><button id="rev">show me</button></div></div>`;
-        document.getElementById("play").onclick = () => speak(it.v.ar, 0.85);
-        speak(it.v.ar, 0.85);
-        document.getElementById("rev").onclick = reveal;
-      } else if (form === "mean") {
-        app.innerHTML = head() + `<div class="card">${n}
-          <div class="q-ar arabic">${esc(it.v.ar)}</div>
-          <p style="text-align:center;font-size:15px;color:var(--muted)">What does it mean?</p>
-          <div class="row"><button id="rev">show me</button></div></div>`;
-        document.getElementById("rev").onclick = reveal;
-      } else {
-        app.innerHTML = head() + `<div class="card">${n}
-          <div class="q-en">${esc(it.v.en)}</div>
-          <p style="text-align:center;font-size:13.5px;color:var(--muted)">Type it the way it sounds — it turns into Arabic as you go</p>
-          <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
-          <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
-          ${TYPING_HELP}</div>`;
-        // a LESSON may suggest the item itself — he is learning to spell it
-        wireAnswer("ans", "chk");
-        document.getElementById("chk").onclick = () => {
-          const inp = document.getElementById("ans");
-          const m = writeMatchAr(inp.value, it.v.ar);
-          after(m.ok || arMatch(inp.value, it.v.ar));
-        };
-        document.getElementById("skip").onclick = () => after(false);
-      }
-
-      function reveal() {
-        app.innerHTML = head() + `<div class="card">${n}
-          <div class="q-ar arabic">${esc(it.v.ar)}</div>
-          <div class="q-en">${esc(it.v.en)}</div>
-          ${it.v.tr ? `<p class="q-tr">${esc(it.v.tr)}</p>` : ""}
-          <p style="text-align:center;font-size:14px;color:var(--muted)">Did you have it?</p>
-          <div class="row">
-            <button id="no" style="min-width:130px">✗ no</button>
-            <button class="primary" id="yes" style="min-width:130px">✓ yes</button>
-          </div></div>`;
-        document.getElementById("yes").onclick = () => score(true);
-        document.getElementById("no").onclick = () => score(false);
-      }
-      function after(got) {
-        app.innerHTML = head() + `<div class="card">${n}
-          <p style="text-align:center;font-size:16px">${got ? "✓ right" : "✗ not quite"}</p>
-          <div class="q-ar arabic">${esc(it.v.ar)}</div>
-          ${it.v.tr ? `<p class="q-tr">${esc(it.v.tr)}</p>` : ""}
-          <div class="row"><button class="primary" id="next">Next</button></div></div>`;
-        document.getElementById("next").onclick = () => score(got);
-      }
-      function score(got) {
-        gradeCard(it.key, got ? "good" : "again");
-        if (form === "ear") logEvent({ e: "alisten-grade", key: it.key, ok: !!got, src: "lesson" });
-        if (got) right++;
-        i++; step();
-      }
-    };
     step();
   }
 
@@ -358,7 +512,21 @@ async function runTest(lessonIds, ctx, state, label) {
     return;
   }
   const resolved = await resolveCards(ex.items.map(i => i.key));
-  const qs = ex.items.map((it, i) => Object.assign({}, it, { v: resolved[i] && resolved[i].v })).filter(q => q.v && q.v.ar);
+  /* HE IS TESTED IN SENTENCES (his rule, 2026-08-30: "you have to maintain a
+     vocab list for me which you test and get me to repeat in sentence format").
+     The exam still SELECTS words — they are what a lesson owns and what gets
+     scheduled — but a production question asks for the whole sentence the word
+     lives in, and the question is marked on whether that word landed. Short
+     sentences only: a nine-word ayah is a fair thing to study and an unfair
+     thing to make him type. */
+  const qs = ex.items.map((it, i) => {
+    const q = Object.assign({}, it, { v: resolved[i] && resolved[i].v });
+    if (q.form === "prod") {
+      const s = Curriculum.sentencesFor([q.key], ctx, { limit: 1 })[0];
+      if (s && (s.words || []).length >= 2 && (s.words || []).length <= 6) q.sentence = s;
+    }
+    return q;
+  }).filter(q => q.v && q.v.ar);
 
   const title = label || (use.length === 1 ? (all.find(l => l.id === use[0]) || {}).title : "The test");
   const scope = Curriculum.scopeKey(use);
@@ -397,18 +565,32 @@ async function runTest(lessonIds, ctx, state, label) {
         <div class="row"><button id="rev">show the answer</button></div></div>`;
       document.getElementById("rev").onclick = reveal;
     } else {
+      const sent = q.sentence;
+      const target = sent ? sent.ar : q.v.ar;
       app.innerHTML = head + `<div class="card">${n}
-        <div class="q-en">${esc(q.v.en)}</div>
-        <p style="text-align:center;font-size:13px;color:var(--muted)">Type it the way it sounds — it turns into Arabic as you go</p>
+        <div class="q-en">${esc(sent ? sent.en : q.v.en)}</div>
+        <p style="text-align:center;font-size:13px;color:var(--muted)">${sent
+          ? `Write the whole sentence — it is marked on <span class="arabic" style="font-size:16px">${esc(q.v.ar)}</span>`
+          : "Type it the way it sounds — it turns into Arabic as you go"}</p>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div class="row"><button class="primary" id="chk">Check</button><button id="skip">skip</button><button class="small" id="ansKb">⌨ keys</button></div>
         ${TYPING_HELP}</div>`;
       // a TEST excludes the answer's own words, so a chip can never give it away
-      wireAnswer("ans", "chk", [q.v.ar]);
+      wireAnswer("ans", "chk", [target]);
       document.getElementById("chk").onclick = () => {
         const inp = document.getElementById("ans");
-        const m = writeMatchAr(inp.value, q.v.ar);
-        score(m.ok || arMatch(inp.value, q.v.ar), true);
+        const m = writeMatchAr(inp.value, target);
+        if (!sent) return score(m.ok || arMatch(inp.value, q.v.ar), true);
+        // the question is this WORD; the sentence is only how it was asked
+        const j = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(q.v.ar));
+        const gotWord = j >= 0 ? m.hits[j] !== "miss" : m.ok;
+        // the rest of the sentence still counts as revision, as it does in a lesson
+        (sent.words || []).forEach(w => {
+          if (!w.key || normalizeAr(w.ar) === normalizeAr(q.v.ar)) return;
+          const k = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
+          if (k >= 0) gradeCard(w.key, m.hits[k] !== "miss" ? "good" : "again");
+        });
+        score(gotWord, true);
       };
       document.getElementById("skip").onclick = () => score(false, true);
     }
