@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteyu3co">
-  <link rel="stylesheet" href="css/style.css?v=mteyu3co">
+  <link rel="stylesheet" href="css/fonts.css?v=mteyy9ia">
+  <link rel="stylesheet" href="css/style.css?v=mteyy9ia">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mteyu3co"></script>
-<script src="js/curriculum.js?v=mteyu3co"></script>
-<script src="js/app.js?v=mteyu3co"></script>
-<script src="js/tracker.js?v=mteyu3co"></script>
-<script src="js/plan.js?v=mteyu3co"></script>
+<script src="js/progress-model.js?v=mteyy9ia"></script>
+<script src="js/curriculum.js?v=mteyy9ia"></script>
+<script src="js/app.js?v=mteyy9ia"></script>
+<script src="js/tracker.js?v=mteyy9ia"></script>
+<script src="js/plan.js?v=mteyy9ia"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -196,13 +196,16 @@ async function runLesson(lesson, ms, ctx, handsFree) {
      — punctuation splits differently in different sources). */
   function creditWords(s, m, fallbackOk) {
     (s.words || []).forEach(w => {
-      if (!w.key) return;
+      const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
+      if (!cards.length) return;
       let ok = fallbackOk;
       if (m && m.words) {
         const j = m.words.findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
         if (j >= 0) ok = m.hits[j] !== "miss";
       }
-      gradeCard(w.key, ok ? "good" : "again");
+      // one word, every card it has: ٱللَّهِ is both qc:1 and qw:fatiha:0:1, and
+      // letting those drift apart is what put the same word in a lesson twice
+      cards.forEach(k => gradeCard(k, ok ? "good" : "again"));
     });
   }
   function gradeSentence(s, ok, m, byEar) {
@@ -586,9 +589,10 @@ async function runTest(lessonIds, ctx, state, label) {
         const gotWord = j >= 0 ? m.hits[j] !== "miss" : m.ok;
         // the rest of the sentence still counts as revision, as it does in a lesson
         (sent.words || []).forEach(w => {
-          if (!w.key || normalizeAr(w.ar) === normalizeAr(q.v.ar)) return;
+          const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
+          if (!cards.length || normalizeAr(w.ar) === normalizeAr(q.v.ar)) return;
           const k = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
-          if (k >= 0) gradeCard(w.key, m.hits[k] !== "miss" ? "good" : "again");
+          if (k >= 0) cards.forEach(c => gradeCard(c, m.hits[k] !== "miss" ? "good" : "again"));
         });
         score(gotWord, true);
       };

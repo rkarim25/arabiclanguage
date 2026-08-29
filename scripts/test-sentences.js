@@ -79,6 +79,27 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
     "a deck sentence counts as teaching its own card");
 }
 
+/* ---------- one word, every card it has ----------
+   Found live on 2026-08-30: Al-Fatiha 1:1 was taught as a sentence and then
+   ٱللَّهِ was shown AGAIN as a bare word in the same lesson, because that word is
+   carded twice — qc:1 in the frequency list and qw:fatiha:0:1 inside the surah.
+   A sentence must count as teaching every card for a form, and grading must
+   advance all of them, or the two copies drift apart forever. */
+{
+  const allah = S.find(s => s.key === "s:q:fatiha:0");
+  yes(!!allah, "Al-Fatiha 1:1 is in the bank");
+  if (allah) {
+    const w = allah.words.find(x => norm(x.ar) === norm("ٱللَّهِ"));
+    yes(w && (w.keys || []).length > 1, `ٱللَّهِ carries all ${w ? (w.keys || []).length : 0} of its cards`);
+    yes(w && w.keys.some(k => k.startsWith("qc:")) && w.keys.some(k => k.startsWith("qw:")),
+      "…the frequency card and the in-surah card both");
+    yes((allah.teaches || []).some(k => k.startsWith("qw:fatiha:0:")),
+      "so the sentence covers the lesson key that asks for it");
+  }
+  const learn = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+  yes(/cards\.forEach\(k => gradeCard/.test(learn), "answering a sentence advances every card for each word in it");
+}
+
 /* ---------- Qur'an units are the right size ---------- */
 {
   const q = S.filter(s => s.track === "quran");
@@ -116,7 +137,7 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
     if (picked.length > 4) bad("a lesson was given more sentences than its limit");
   });
   const pct = 100 * cov / tot;
-  yes(pct >= 50, `the bank reaches ${pct.toFixed(1)}% of the ladder's words (floor 50%) — the rest fall back to single words and are the content job`);
+  yes(pct >= 60, `the bank reaches ${pct.toFixed(1)}% of the ladder's words (floor 60%) — the rest fall back to single words and are the content job`);
   yes(none <= 20, `${none} of ${lessons.length} lessons have no sentence yet`);
   console.log(`  · honest state: ${S.length} sentences, ${pct.toFixed(1)}% word coverage, ${none} lessons still word-only`);
 

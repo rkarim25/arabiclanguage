@@ -58,12 +58,15 @@ const normalizeAr = s => stripTashkeel(s)
 /* Every existing card, form -> key. Built in the order the site itself would
    prefer: frequency-ranked Qur'an core first, then verse words, then the decks.
    First writer wins, so a word he already meets as qc:3 stays qc:3. */
-const formToKey = new Map();
+const formToKey = new Map();      // form -> the card the site would prefer
+const formToKeys = new Map();     // form -> EVERY card for that form
 const gloss = new Map();          // form -> best English gloss we know
 const claim = (ar, key, en, tr) => {
   const f = normalizeAr(ar);
   if (!f) return;
   if (!formToKey.has(f)) formToKey.set(f, key);
+  if (!formToKeys.has(f)) formToKeys.set(f, []);
+  if (!formToKeys.get(f).includes(key)) formToKeys.get(f).push(key);
   if (en && !gloss.has(f)) gloss.set(f, { en, tr: tr || "" });
 };
 
@@ -81,6 +84,19 @@ const wordKey = ar => {
   if (!f) return null;
   return formToKey.get(f) || `w:${f}`;
 };
+/* THE SAME WORD IS OFTEN CARDED TWICE. ٱللَّهِ is qc:1 in the frequency list and
+   qw:fatiha:0:1 inside Al-Fatiha — one word, two cards. A sentence containing it
+   therefore has to count as teaching BOTH, or a lesson asking for the qw card
+   looks uncovered while the sentence that plainly teaches it sits right there.
+   (Caught on the live site, 2026-08-30: Al-Fatiha 1:1 was taught as a sentence
+   and then ٱللَّهِ was ALSO shown as a bare word in the same lesson.)
+   Grading follows the same rule — answer the sentence and every card for that
+   word advances, so the two can never drift apart again. */
+const wordKeysAll = ar => {
+  const f = normalizeAr(ar);
+  if (!f) return [];
+  return formToKeys.get(f) || [`w:${f}`];
+};
 
 /* Function words carry structure, not meaning worth drilling on their own. They
    are still part of the sentence and still shown — they just never become the
@@ -95,6 +111,7 @@ const words = (pairs) => pairs.map(([ar, en, tr]) => {
     en: en || (known ? known.en : ""),
     tr: tr || (known ? known.tr : ""),
     key: wordKey(ar),
+    keys: wordKeysAll(ar),
     fn: FUNCTION_WORDS.has(f) || undefined,
   };
 }).filter(w => normalizeAr(w.ar));
@@ -293,12 +310,12 @@ verses.surahs.forEach(s => s.verses.forEach(v => (v.words || []).forEach(w => {
 
 bank.forEach(u => {
   const content = u.words.filter(w => !w.fn);
-  u.wordKeys = [...new Set(u.words.concat([]).map(w => w.key).filter(Boolean).concat(u.declaredKeys || []))];
+  u.wordKeys = [...new Set(u.words.flatMap(w => w.keys || [w.key]).filter(Boolean).concat(u.declaredKeys || []))];
   // a source that states which cards it teaches is believed over form matching
   /* A sentence teaches its own card too. The phrase deck and the story
      sentences ARE cards in their own right (ph-*, story-*), and a lesson that
      owns one is asking for that whole utterance — not for its parts. */
-  u.teaches = [...new Set(content.map(w => w.key).filter(Boolean)
+  u.teaches = [...new Set(content.flatMap(w => w.keys || [w.key]).filter(Boolean)
     .concat(u.declaredKeys || [])
     .concat(u.key ? [u.key] : []))];
   delete u.declaredKeys;

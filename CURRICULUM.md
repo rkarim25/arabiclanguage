@@ -349,7 +349,7 @@ not decoration.
 
 This is now the site's single biggest gap, and it is measured on every test run.
 
-The bank holds **341 verified sentences** and reaches **52% of the ladder's word
+The bank holds **341 verified sentences** and reaches **62% of the ladder's word
 keys**; **14 of 128 lessons** have no sentence at all and fall back to single
 words. His own target is the right one:
 
