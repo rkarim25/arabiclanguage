@@ -802,6 +802,231 @@
    "keys": [],
    "source": "class-built",
    "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Straighten up, and close the gaps!",
+   "ar": "اِسْتَوُوا وَسُدُّوا الخَلَلَ",
+   "keys": [
+    "ev-masjid:0",
+    "ev-masjid:3"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "Straighten your rows — straight rows are part of the prayer.",
+   "ar": "سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ تَمَامِ الصَّلَاةِ",
+   "keys": [
+    "ev-questions:1",
+    "ev-masjid:2"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "Align yourselves and move forward.",
+   "ar": "اِعْتَدِلُوا وَتَقَدَّمُوا",
+   "keys": [
+    "ev-masjid:1"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "Complete the first row, then the one after it.",
+   "ar": "أَتِمُّوا الصَّفَّ الأَوَّلَ ثُمَّ الَّذِي يَلِيهِ",
+   "keys": [
+    "ev-masjid:5"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "The iqama has been given — the prayer has begun.",
+   "ar": "قَدْ قَامَتِ الصَّلَاةُ",
+   "keys": [
+    "ev-masjid:7"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "We are waiting for the iqama.",
+   "ar": "نَنْتَظِرُ الإِقَامَةَ",
+   "keys": [
+    "ev-masjid:6"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Congregational prayer is gathering!",
+   "ar": "الصَّلَاةُ جَامِعَةٌ",
+   "keys": [
+    "ev-masjid:8"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "After the prayer there is a funeral prayer.",
+   "ar": "بَعْدَ الصَّلَاةِ صَلَاةُ الجِنَازَةِ",
+   "keys": [
+    "ev-masjid:9"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram",
+   "heard": true
+  },
+  {
+   "en": "Please move forward, there is a place in the first row.",
+   "ar": "تَقَدَّمْ مِنْ فَضْلِكَ، هُنَاكَ مَكَانٌ فِي الصَّفِّ الأَوَّلِ",
+   "keys": [
+    "ev-questions:1",
+    "ev-greetings:6"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Where is the Kaaba from here?",
+   "ar": "أَيْنَ الكَعْبَةُ مِنْ هُنَا؟",
+   "keys": [
+    "ev-questions:2",
+    "ev-haram:1",
+    "ev-questions:1"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "I want to perform tawaf around the Kaaba.",
+   "ar": "أُرِيدُ أَنْ أَطُوفَ حَوْلَ الكَعْبَةِ",
+   "keys": [
+    "ev-want-need:0",
+    "ev-haram:1"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Where does the tawaf begin?",
+   "ar": "مِنْ أَيْنَ يَبْدَأُ الطَّوَافُ؟",
+   "keys": [
+    "ev-questions:1",
+    "ev-questions:2",
+    "ev-haram:2"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "The tawaf area is crowded now.",
+   "ar": "المَطَافُ مُزْدَحِمٌ الآنَ",
+   "keys": [
+    "ev-haram:9",
+    "ev-time:0"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Where does the sa'i begin?",
+   "ar": "مِنْ أَيْنَ يَبْدَأُ السَّعْيُ؟",
+   "keys": [
+    "ev-questions:1",
+    "ev-questions:2",
+    "ev-haram:3"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "The sa'i is between Safa and Marwa.",
+   "ar": "السَّعْيُ بَيْنَ الصَّفَا وَالمَرْوَةِ",
+   "keys": [
+    "ev-haram:3",
+    "ev-haram:4"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "I am performing Umrah today.",
+   "ar": "أَنَا أُؤَدِّي العُمْرَةَ اليَوْمَ",
+   "keys": [
+    "ev-people:0",
+    "ev-haram:6",
+    "ev-time:1"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "I am in ihram.",
+   "ar": "أَنَا مُحْرِمٌ",
+   "keys": [
+    "ev-people:0"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Where do I put on the ihram?",
+   "ar": "أَيْنَ أَلْبَسُ الإِحْرَامَ؟",
+   "keys": [
+    "ev-questions:2",
+    "ev-haram:7"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Where is the Station of Ibrahim?",
+   "ar": "أَيْنَ مَقَامُ إِبْرَاهِيمَ؟",
+   "keys": [
+    "ev-questions:2",
+    "ev-haram:8"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Is there Zamzam water here?",
+   "ar": "هَلْ يُوجَدُ مَاءُ زَمْزَمَ هُنَا؟",
+   "keys": [
+    "ev-questions:7",
+    "ev-food:0",
+    "ev-haram:5"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "Excuse me — where is the exit to the Haram?",
+   "ar": "لَوْ سَمَحْتَ، أَيْنَ المَخْرَجُ إِلَى الحَرَمِ؟",
+   "keys": [
+    "ev-questions:2",
+    "ev-haram:0"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
+  },
+  {
+   "en": "What time is the prayer in the Haram?",
+   "ar": "مَتَى الصَّلَاةُ فِي الحَرَمِ؟",
+   "keys": [
+    "ev-questions:3",
+    "ev-haram:0"
+   ],
+   "source": "built",
+   "lesson": "Masjid and Haram"
   }
  ]
 }

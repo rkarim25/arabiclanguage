@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg2ddfu">
-  <link rel="stylesheet" href="css/style.css?v=mtg2ddfu">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3dzel">
+  <link rel="stylesheet" href="css/style.css?v=mtg3dzel">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -50,7 +50,14 @@
     .lrow { padding: 7px 10px; border-radius: 8px; }
     .lrow:nth-child(odd) { background: rgba(0,0,0,.025); }
     .lrow.on { border-left: 3px solid var(--accent); }
-    .lrow .lar { font-family: var(--font-ar); font-size: 20px; line-height: 1.9; text-align: right; }
+    .lrow { display: block; }
+    .lhead { display: flex; align-items: center; gap: 8px; }
+    .lnum { font-size: 11.5px; color: var(--muted); min-width: 30px; font-variant-numeric: tabular-nums; }
+    .lplay { border: 1px solid var(--border); background: var(--card); border-radius: 8px;
+             font-size: 13px; padding: 2px 8px; cursor: pointer; line-height: 1.5; }
+    .lrow .lar { font-family: var(--font-ar); font-size: 20px; line-height: 1.9; text-align: right;
+                 flex: 1; direction: rtl; }
+    .ltr { font-size: 11.5px; color: var(--muted); }
     .lrow .len { font-size: 13px; color: var(--muted); }
     .lrow .lref, .vtag { font-size: 11px; color: var(--accent); }
     @media (prefers-color-scheme: dark) { .lrow:nth-child(odd) { background: rgba(255,255,255,.04); } }
@@ -62,11 +69,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/progress-model.js?v=mtg2ddfu"></script>
-<script src="js/curriculum.js?v=mtg2ddfu"></script>
-<script src="js/app.js?v=mtg2ddfu"></script>
-<script src="js/tracker.js?v=mtg2ddfu"></script>
-<script src="js/plan.js?v=mtg2ddfu"></script>
+<script src="js/progress-model.js?v=mtg3dzel"></script>
+<script src="js/curriculum.js?v=mtg3dzel"></script>
+<script src="js/app.js?v=mtg3dzel"></script>
+<script src="js/tracker.js?v=mtg3dzel"></script>
+<script src="js/plan.js?v=mtg3dzel"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -78,11 +85,17 @@ let DATA = null, TENSE_FILTER = "all";
 
 let BANK = { sentences: [] }, MODE = new URLSearchParams(location.search).get("view") === "list" ? "list" : "practise";
 /* friendly names for the sources the bank draws on, for the list's groupings */
+let LIST_CTX = null;    // the curriculum, for the "this week" box; the list works without it
 const SRC_NAMES = { prompts: "Things to say", sentences: "Verb frames you can bend", grammar: "Grammar in a sentence", phrases: "The phrase deck", quran: "Qur'an" };
 Promise.all([
   fetch("data/sentences.json").then(r => r.json()),
   fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
-]).then(([d, b]) => { DATA = d; BANK = b; start(); });
+]).then(async ([d, b]) => {
+  DATA = d; BANK = b;
+  // the week box needs the curriculum; the list works without it
+  try { LIST_CTX = await curCtx(); } catch (e) {}
+  start();
+});
 
 /* Build every verb × person × tense item, then take a frequency-weighted session.
    Verbs are pre-ordered most-frequent first, so a light weighting toward the top
@@ -288,54 +301,80 @@ function ask() {
   }
 }
 
-/* ---------- THE LIST — everything there is to master ----------
-   His question, 2026-08-30: "where is the list of sentences that i need to
-   master?" The home page had been reporting the COUNT (592 ayat + 952 everyday
-   utterances) without ever showing him the thing itself, which is a fair
-   complaint about a site whose whole premise is that the corpus is finite and
-   knowable.
+/* ---------- THE LIST — ordered queues you work through ----------
+   His instructions, 2026-08-30, over three messages while looking at this page:
 
-   Grouped, collapsed by default and rendered on demand: 954 sentences is far too
-   much DOM to lay out at once, and the useful view is "which sets exist and how
-   far through each am I", not a wall of Arabic. Every row states whether it is
-   held, so the list doubles as the progress record. */
+     "where is the option for me to listen to the whole sentence? where is the
+      option for me to mark if i already know some of these sentences and if to
+      repeat or not. i want to see a list by frequency of use and it should be
+      quranic or MSA, i.e. the list will be working through in order"
+     "you can create tags for sentences which allows to be in folders as well,
+      can be good to see stuff by topic"
+     "similarly for vocabulary as well, create tags of themes/topics for me to go
+      through stuff if needed but it should be frequency based"
+
+   The first version was 66 collapsible sets in arbitrary order. It answered
+   "what exists" and never "what do I do next", and it had neither audio nor any
+   way to mark a row. So:
+
+     · THREE QUEUES — 🎧 ayat, 🗣 everyday sentences, 📇 words — each ordered by
+       frequency of use, commonest first. That order IS the plan: work down it.
+     · TOPICS ARE A FILTER, NOT A STRUCTURE. Tags let him open "the flat" or
+       "Al-Falaq" when he wants to, and the order inside a topic is still
+       frequency. Ordering by topic would put him back where he started.
+     · AUDIO on every row — Alafasy's real recitation for an ayah, the generated
+       clip for everything else.
+     · THE FOUR BUCKETS on every row, so he can clear what he already knows
+       without sitting through a lesson for it.
+
+   `use` (scripts/gen-sentences.js) is the MEAN commonness of a sentence's words,
+   never the sum: a sum rewards length, and a long rare ayah is not more useful
+   than مَا هَذَا؟. Words rank on their own measured share (data/frequency.json).
+
+   Rendered a page at a time — 985 sentences and 800-odd words, each row carrying
+   an audio button and four bucket buttons, is far too much DOM to lay out at once. */
+let LIST_TRACK = "quran", LIST_TAG = "", LIST_SHOWN = 0, WORDS = null;
+const LIST_PAGE = 60;
+
+/* the everyday word list, built where the topics actually live */
+async function loadWords() {
+  if (WORDS) return WORDS;
+  let ev = { groups: [] }, core = { words: [] }, freq = { words: {} };
+  try {
+    [ev, core, freq] = await Promise.all([
+      fetch("data/everyday.json").then(r => r.json()),
+      fetch("data/quran-core.json").then(r => r.json()),
+      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
+    ]);
+  } catch (e) { return (WORDS = []); }
+  const short = t => String(t || "").split(/\s+[—–-]\s+/)[0].replace(/\s*\([^)]*\)\s*$/, "").trim();
+  const per10k = ar => {
+    const w = normalizeAr(ar), bare = w.replace(/^ال/, "");
+    const f = freq.words || {};
+    return Math.max(f[w] || 0, bare.length >= 3 ? (f[bare] || 0) : 0);
+  };
+  const out = [];
+  (ev.groups || []).forEach(g => (g.members || []).forEach((m, i) => {
+    if (!m.ar || !m.en) return;
+    out.push({ key: `ev-${g.id}:${i}`, ar: m.ar, en: m.en, tr: m.tr || "", note: m.note || "",
+               tag: short(g.theme) || g.id, use: per10k(m.ar) });
+  }));
+  (core.words || []).forEach((w, i) => out.push({
+    key: `qc:${i}`, ar: w.ar, en: w.en, tr: w.tr || "", note: "",
+    tag: "Qur'an — the commonest words", use: per10k(w.ar),
+  }));
+  out.sort((a, b) => b.use - a.use);
+  return (WORDS = out);
+}
+
 function renderList() {
   trackPage("sentences:list");
   const held = k => (getSrs()[k] || {}).box >= 3;
-  const groups = new Map();
-  (BANK.sentences || []).forEach(s => {
-    const g = s.track === "quran" ? (s.surah || "Qur'an") : (s.theme || SRC_NAMES[s.src] || "Everyday");
-    const key = s.track + "|" + g;
-    if (!groups.has(key)) groups.set(key, { track: s.track, name: g, items: [] });
-    groups.get(key).items.push(s);
-  });
-  const all = [...groups.values()];
-  const quran = all.filter(g => g.track === "quran").sort((a, b) => b.items.length - a.items.length);
-  const conv = all.filter(g => g.track !== "quran").sort((a, b) => b.items.length - a.items.length);
-
-  const tally = gs => {
-    const items = gs.flatMap(g => g.items);
-    const h = items.filter(s => held(s.key)).length;
-    const variants = items.reduce((a, s) => a + Math.max(1, (s.vary || []).length), 0);
-    return { n: items.length, h, variants };
-  };
-  const q = tally(quran), c = tally(conv);
-
-  const section = (title, sub, gs) => `
-    <h2 style="margin:22px 0 4px;font-size:17px">${title}</h2>
-    <p class="sp-meta" style="margin-bottom:10px">${sub}</p>
-    ${gs.map((g, i) => {
-      const h = g.items.filter(s => held(s.key)).length;
-      const pct = Math.round(100 * h / g.items.length);
-      return `<details class="lgrp" data-g="${g.track}|${i}">
-        <summary>
-          <span class="gname">${esc(g.name)}</span>
-          <span class="gbar"><i style="width:${pct}%"></i></span>
-          <span class="gnum">${h} / ${g.items.length}</span>
-        </summary>
-        <div class="gbody">loading…</div>
-      </details>`;
-    }).join("")}`;
+  const all = BANK.sentences || [];
+  const quran = all.filter(s => s.track === "quran");
+  const conv = all.filter(s => s.track !== "quran");
+  const variants = conv.reduce((a, s) => a + Math.max(1, (s.vary || []).length), 0);
+  const qHeld = quran.filter(s => held(s.key)).length, cHeld = conv.filter(s => held(s.key)).length;
 
   content.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -347,71 +386,136 @@ function renderList() {
       <button class="sel" data-m="list">📋 The list</button>
     </div></div>
     <div class="card" style="border-color:var(--accent)">
-      <p style="margin:0 0 8px;font-size:15px"><b>Everything there is to master.</b> It is a finite list — that is the point of it.</p>
+      <p style="margin:0 0 8px;font-size:15px"><b>Everything there is to master, commonest first.</b>
+      Work down it — the top of each list is what you are most likely to hear or need to say.</p>
       <div class="inv2">
-        <div><div class="n">${q.n}</div><div class="l">🎧 ayat — Al-Fatiha and all of juz' 'Amma<br><b>${q.h}</b> held</div></div>
-        <div><div class="n">${c.n}</div><div class="l">🗣 everyday sentences, ${c.variants} with their variants<br><b>${c.h}</b> held</div></div>
+        <div><div class="n">${quran.length}</div><div class="l">🎧 ayat — Al-Fatiha and all of juz' 'Amma<br><b>${qHeld}</b> held</div></div>
+        <div><div class="n">${conv.length}</div><div class="l">🗣 everyday sentences, ${variants} with their variants<br><b>${cHeld}</b> held</div></div>
       </div>
-      <p class="sp-meta" style="margin:10px 0 0">A sentence counts as held once it is at box 3 — met enough times to stick. The Qur'an side has no variants: an ayah is fixed text.</p>
+      <p class="sp-meta" style="margin:10px 0 0">🔊 plays the whole thing — for an ayah that is Mishary Alafasy's
+      recitation, not a synthetic voice. The four buttons are yours: ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat.</p>
     </div>
     <div id="weekBox"></div>
-    ${section("🎧 The short surahs", `${quran.length} surahs. Understand these and you understand what is recited in prayer.`, quran)}
-    ${section("🗣 Everyday Arabic", `${conv.length} sets. A ⟳ marks a frame you can bend across person and tense.`, conv)}
+    <div class="seg-row"><div class="seg" id="listTrack">
+      <button class="${LIST_TRACK === "quran" ? "sel" : ""}" data-t="quran">🎧 Qur'an</button>
+      <button class="${LIST_TRACK === "conv" ? "sel" : ""}" data-t="conv">🗣 Everyday</button>
+      <button class="${LIST_TRACK === "words" ? "sel" : ""}" data-t="words">📇 Words</button>
+    </div></div>
+    <div class="sp-chips" id="listTags"></div>
+    <p class="sp-meta" id="listHead" style="margin:0 0 10px"></p>
+    <div id="listBody"></div>
+    <div class="ex-row" style="margin-top:14px"><button id="listMore">Show more</button></div>
   `;
 
   document.querySelectorAll("#spMode button").forEach(b => b.onclick = () => {
     if (b.dataset.m === "practise") { MODE = "practise"; start(); }
   });
+  document.querySelectorAll("#listTrack button").forEach(b => b.onclick = () => {
+    if (b.dataset.t === LIST_TRACK) return;
+    LIST_TRACK = b.dataset.t; LIST_TAG = "";
+    renderList();
+  });
+  document.getElementById("listMore").onclick = () => page();
+  primeSpeak();
+  weekBox();
+  refresh();
 
-  /* THIS WEEK — the answer to "essentially every week i am trying to master
-     certain sentences, right?" Yes: seven lessons draw 12-16 distinct sentences
-     between them. That is the number he actually operates on, so it goes above
-     the full corpus rather than being buried in it. */
-  (async () => {
-    let ctx;
-    try { ctx = await curCtx(); } catch (e) { return; }
-    if (!ctx || typeof Curriculum === "undefined") return;
-    const state = Curriculum.milestoneState(ctx);
-    const wk = Curriculum.weekPlan(ctx, state);
-    const w = (wk || [])[0];
-    if (!w) return;
-    const seen = new Map();
-    w.lessons.forEach(l => {
-      const src = (ctx.curriculum.milestones || []).find(m => m.id === l.milestone.id) || l.milestone;
-      const les = (src.lessons || []).find(x => x.id === l.lesson.id) || l.lesson;
-      Curriculum.sentencesFor(les.keys || [], ctx, { track: l.milestone.track, limit: 4 })
-        .forEach(s2 => { if (!seen.has(s2.key)) seen.set(s2.key, { s: s2, from: l.lesson.title }); });
+  async function rowsFor() {
+    if (LIST_TRACK === "words") return await loadWords();
+    return (BANK.sentences || []).filter(s => (LIST_TRACK === "quran") === (s.track === "quran"));
+  }
+  /* a sentence's topic: its surah for the Qur'an, its theme otherwise */
+  const tagOf = r => LIST_TRACK === "words" ? r.tag
+    : LIST_TRACK === "quran" ? (r.surah || "Qur'an")
+    : String(r.theme || SRC_NAMES[r.src] || "Everyday").split(/\s+[—–-]\s+/)[0].trim();
+
+  async function refresh() {
+    const rows = await rowsFor();
+    // topics in the order their FIRST row appears, so the chip row is itself
+    // frequency-ordered rather than alphabetical
+    const tags = [];
+    const seen = new Set();
+    rows.forEach(r => { const t = tagOf(r); if (t && !seen.has(t)) { seen.add(t); tags.push(t); } });
+    document.getElementById("listTags").innerHTML =
+      `<span class="sp-chip ${LIST_TAG ? "" : "on"}" data-t="">All</span>` +
+      tags.map(t => `<span class="sp-chip ${LIST_TAG === t ? "on" : ""}" data-t="${esc(t)}">${esc(t)}</span>`).join("");
+    document.querySelectorAll("#listTags .sp-chip").forEach(c => c.onclick = () => {
+      LIST_TAG = c.dataset.t; LIST_SHOWN = 0; refresh();
     });
-    const rows = [...seen.values()];
-    if (!rows.length) return;
-    const h = rows.filter(r => held(r.s.key)).length;
+    LIST_SHOWN = 0;
+    document.getElementById("listBody").innerHTML = "";
+    page(rows);
+  }
+
+  async function page(rows) {
+    rows = rows || await rowsFor();
+    const shown = LIST_TAG ? rows.filter(r => tagOf(r) === LIST_TAG) : rows;
+    const body = document.getElementById("listBody");
+    const slice = shown.slice(LIST_SHOWN, LIST_SHOWN + LIST_PAGE);
+    fill(body, slice, LIST_SHOWN, LIST_SHOWN > 0);
+    LIST_SHOWN += slice.length;
+    const noun = LIST_TRACK === "words" ? "words" : LIST_TRACK === "quran" ? "ayat" : "everyday sentences";
+    const heldN = shown.filter(r => held(r.key)).length;
+    document.getElementById("listHead").innerHTML =
+      `${shown.length} ${esc(noun)}${LIST_TAG ? ` in <b>${esc(LIST_TAG)}</b>` : ""}, commonest first · <b>${heldN}</b> held · showing ${LIST_SHOWN}.`;
+    const more = document.getElementById("listMore");
+    more.style.display = LIST_SHOWN >= shown.length ? "none" : "";
+    more.textContent = `Show ${Math.min(LIST_PAGE, shown.length - LIST_SHOWN)} more`;
+  }
+
+  /* This week's sentences stay at the top: they are the answer to "every week I
+     am trying to master certain sentences, right?" */
+  function weekBox() {
+    if (typeof Curriculum === "undefined" || !LIST_CTX) return;
+    let sents = [];
+    try {
+      const state = Curriculum.milestoneState(LIST_CTX);
+      const weeks = Curriculum.weekPlan(LIST_CTX, state);
+      const wk = weeks[Curriculum.currentWeek(weeks) - 1];
+      if (!wk) return;
+      const seen = new Set();
+      wk.lessons.forEach(x => Curriculum.sentencesFor(x.lesson.keys || [], LIST_CTX,
+        { track: x.milestone.track === "quran" ? "quran" : "conv", limit: 4 })
+        .forEach(s => { if (!seen.has(s.key)) { seen.add(s.key); sents.push(s); } }));
+    } catch (e) { return; }
+    if (!sents.length) return;
+    const h = sents.filter(s => held(s.key)).length;
     document.getElementById("weekBox").innerHTML = `
       <h2 style="margin:22px 0 4px;font-size:17px">📌 This week</h2>
       <p class="sp-meta" style="margin-bottom:10px">Seven lessons, and between them these
-        <b>${rows.length} sentences</b> — that is what mastering this week actually means.
-        ${h} held so far.</p>
-      <div class="card" style="padding:8px 12px">
-        ${rows.map(r => `<div class="lrow${held(r.s.key) ? " on" : ""}">
-          <div class="lar arabic" dir="rtl">${esc(r.s.ar)}${(r.s.vary || []).length ? ` <span class="vtag">⟳ ${r.s.vary.length}</span>` : ""}</div>
-          <div class="len">${esc(r.s.en)} <span class="lref">${esc(r.from)}</span></div>
-        </div>`).join("")}
-      </div>`;
-  })();
+        <b>${sents.length} sentences</b> — that is what mastering this week actually means. ${h} held so far.</p>
+      <div class="card" id="weekRows" style="padding:8px 10px"></div>`;
+    fill(document.getElementById("weekRows"), sents, null);
+  }
 
-  // render a group's rows only when he opens it
-  const lookup = {};
-  quran.forEach((g, i) => lookup["quran|" + i] = g);
-  conv.forEach((g, i) => lookup["conv|" + i] = g);
-  document.querySelectorAll(".lgrp").forEach(d => d.addEventListener("toggle", () => {
-    if (!d.open || d.dataset.done) return;
-    d.dataset.done = "1";
-    const g = lookup[d.dataset.g];
-    d.querySelector(".gbody").innerHTML = g.items.map(s => `
-      <div class="lrow${held(s.key) ? " on" : ""}">
-        <div class="lar arabic" dir="rtl">${esc(s.ar)}${(s.vary || []).length ? ` <span class="vtag">⟳ ${s.vary.length}</span>` : ""}</div>
-        <div class="len">${esc(s.en)}${s.ref ? ` <span class="lref">${esc(s.ref)}</span>` : ""}</div>
+  /* one row: its place in the queue, the Arabic, 🔊, the meaning, the buckets */
+  function fill(host, rows, offset, append) {
+    const html = rows.map((s, i) => `
+      <div class="lrow${held(s.key) ? " on" : ""}" data-k="${esc(s.key)}">
+        <div class="lhead">
+          ${offset === null ? "" : `<span class="lnum">${offset + i + 1}</span>`}
+          <button class="lplay" data-ar="${esc(s.ar)}" title="hear it">🔊</button>
+          <div class="lar arabic" dir="rtl">${esc(s.ar)}${(s.vary || []).length ? ` <span class="vtag">⟳ ${s.vary.length}</span>` : ""}</div>
+        </div>
+        <div class="len">${esc(s.en)}${s.tr ? ` <span class="ltr">${esc(s.tr)}</span>` : ""}${s.ref ? ` <span class="lref">${esc(s.ref)}</span>` : ""}</div>
+        <div class="bucket-slot"></div>
       </div>`).join("");
-  }));
+    if (append) host.insertAdjacentHTML("beforeend", html); else host.innerHTML = html;
+    host.querySelectorAll(".lplay").forEach(b => {
+      if (b.dataset.wired) return;
+      b.dataset.wired = "1";
+      b.onclick = () => speak(b.dataset.ar, 0.85);
+    });
+    host.querySelectorAll(".lrow").forEach(r => {
+      const slot = r.querySelector(".bucket-slot");
+      if (!slot || slot.dataset.wired) return;
+      slot.dataset.wired = "1";
+      mountBucketBar(slot, r.dataset.k, b => {
+        // ✓ / ⏳ / ⊘ all mean "I have this" — reflect it immediately
+        r.classList.toggle("on", b !== "repeat");
+      });
+    });
+  }
 }
 
 function finish() {

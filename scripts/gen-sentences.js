@@ -371,9 +371,18 @@ bank.forEach(u => {
     .concat(u.key ? [u.key] : []))];
   delete u.declaredKeys;
   u.weight = content.reduce((a, w) => a + Math.log1p(freq.get(normalizeAr(w.ar)) || 1), 0);
+  /* HOW OFTEN THIS SENTENCE IS WORTH KNOWING. weight is a SUM, so it rewards
+     length — a nine-word ayah of rare words outranks مَا هَذَا؟. The list he works
+     through has to be ordered by usefulness, not by size, so `use` is the MEAN:
+     the average commonness of the words in it.
+
+     His instruction, 2026-08-30: "i want to see a list by frequency of use and it
+     should be quranic or MSA, i.e. the list will be working through in order." */
+  u.use = content.length ? +(u.weight / content.length).toFixed(3) : 0;
 });
 
-bank.sort((a, b) => (a.track === b.track ? 0 : a.track === "quran" ? -1 : 1) || b.weight - a.weight);
+// the bank IS the order he works through: commonest first, within each track
+bank.sort((a, b) => (a.track === b.track ? 0 : a.track === "quran" ? -1 : 1) || b.use - a.use || b.weight - a.weight);
 
 const out = {
   version: 1,

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg2ddfu">
-  <link rel="stylesheet" href="css/style.css?v=mtg2ddfu">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3dzel">
+  <link rel="stylesheet" href="css/style.css?v=mtg3dzel">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -17,10 +17,40 @@
     .inv { display: flex; gap: 22px; flex-wrap: wrap; align-items: baseline; }
     .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
     .inv .l { font-size: 13px; color: var(--muted); }
-    .lesson { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    /* THREE STATES, and they have to be readable at a glance (his ask,
+       2026-08-30: "i want the you are here to be in the lesson rather than week.
+       I want it to be clearly displayed what has been done"). Done recedes,
+       the one he is on is marked, everything else waits. */
+    .lesson { display: flex; align-items: center; gap: 10px; padding: 10px 0 10px 30px;
+              border-bottom: 1px solid var(--border); position: relative; }
     .lesson:last-child { border-bottom: 0; }
     .lesson .t { flex: 1; font-size: 15px; }
     .lesson .m { font-size: 12.5px; color: var(--muted); }
+    /* the status mark sits in the gutter so the titles stay aligned */
+    .lesson .mark { position: absolute; left: 0; top: 11px; width: 20px; text-align: center;
+                    font-size: 14px; line-height: 1.4; }
+    .lesson.done .mark { color: var(--accent); font-weight: 700; }
+    .lesson.done .t { color: var(--muted); }
+    .lesson.done .t b { font-weight: 400; }
+    .lesson.todo .mark { color: var(--border); }
+    .lesson.now { background: var(--accent-soft); border-radius: 10px; padding-left: 30px;
+                  padding-right: 12px; border-bottom-color: transparent; }
+    .lesson.now .mark { color: var(--accent); left: 8px; }
+    .lesson.now .t { font-weight: 600; }
+    .here { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em;
+            text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent);
+            border-radius: 999px; padding: 1px 8px; margin-left: 8px; vertical-align: 2px; }
+    /* the last score, next to the button that produced it (his ask, 2026-08-30:
+       "denote the test i took and the score next to the test button neatly") */
+    .acts { display: flex; gap: 10px; align-items: center; white-space: nowrap; }
+    .acts a { font-size: 13px; }
+    .pill { display: inline-flex; align-items: baseline; gap: 4px; font-size: 12.5px; font-weight: 700;
+            border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .pill.pass { background: var(--accent); color: #fff; }
+    .pill.near { background: var(--accent-soft); color: var(--accent); }
+    .pill.miss { background: var(--border); color: var(--muted); }
+    .pill .lbl { font-weight: 500; opacity: .85; font-size: 11px; }
+    .acts .untested { font-size: 12px; color: var(--muted); }
     .dots { letter-spacing: 2px; font-size: 13px; color: var(--muted); white-space: nowrap; }
     .ms { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
     .ms.done { border-color: var(--accent); background: var(--accent-soft); }
@@ -46,6 +76,7 @@
     and you can test a whole week in one go. Between them sit the occasional
     <strong>vocabulary</strong> and <strong>grammar</strong> bursts — short, and picked by how likely you are to
     actually need them.</p>
+    <div id="tally" style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 16px"></div>
     <div id="weeks">…</div>
   </div>
 
@@ -78,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtg2ddfu"></script>
-<script src="js/curriculum.js?v=mtg2ddfu"></script>
-<script src="js/app.js?v=mtg2ddfu"></script>
-<script src="js/tracker.js?v=mtg2ddfu"></script>
-<script src="js/plan.js?v=mtg2ddfu"></script>
-<script src="js/account.js?v=mtg2ddfu"></script>
+<script src="js/progress-model.js?v=mtg3dzel"></script>
+<script src="js/curriculum.js?v=mtg3dzel"></script>
+<script src="js/app.js?v=mtg3dzel"></script>
+<script src="js/tracker.js?v=mtg3dzel"></script>
+<script src="js/plan.js?v=mtg3dzel"></script>
+<script src="js/account.js?v=mtg3dzel"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -91,9 +122,19 @@ trackPage("home");
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, total - done));
 
+/* The last score, shown where the test is taken. Never tested reads as never
+   tested rather than as zero — a blank and a 0 are different facts. */
+function scorePill(l) {
+  if (l.score === null || l.score === undefined) return `<span class="untested">not tested</span>`;
+  const cls = l.mastered ? "pass" : l.score >= 60 ? "near" : "miss";
+  return `<span class="pill ${cls}" title="your last test on this lesson"><span class="lbl">last</span>${l.score}</span>`;
+}
+
 (async () => {
   const ctx = await curCtx();
   if (!ctx) { document.getElementById("now").textContent = "Couldn't load the curriculum."; return; }
+  let CLASSES = { classes: [] };
+  try { CLASSES = await fetch("data/classes.json").then(r => r.json()); } catch (e) {}
   const state = Curriculum.milestoneState(ctx);
   const L = Curriculum.levels(ctx);
   const inv = Curriculum.inventory(ctx);
@@ -195,6 +236,20 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
      bursts depend on what he holds today — drawing them onto week 4 would be
      showing a prediction dressed up as a plan. */
   const bursts = Curriculum.burstsFor(weeks[cw - 1], ctx);
+  /* "You're here" belongs on the lesson, not the week — a week is seven things
+     and pointing at all seven says nothing. This is the first lesson on the
+     shelf he has not proved: exactly what Continue would open. */
+  const hereId = (weeks.flatMap(w => w.lessons).find(x => !x.lesson.mastered) || { lesson: {} }).lesson.id;
+  /* a week that contains class material offers the class test too — his ask:
+     "add test the week, test the class at the bottom of week 1 as well" */
+  const classOfMs = {};
+  (CLASSES.classes || []).forEach(c => { if (c.milestone) classOfMs[c.milestone] = c.id; });
+  const classInWeek = w => {
+    for (const x of w.lessons) { const id = classOfMs[x.milestone.id]; if (id) return id; }
+    return null;
+  };
+  const allLessons = weeks.flatMap(w => w.lessons);
+  const provedAll = allLessons.filter(x => x.lesson.mastered).length;
   const burstRow = b => `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
       <div class="t">${b.kind === "vocab" ? "📇 Vocabulary burst" : "📐 Grammar burst"}
         <div class="m">${b.kind === "vocab"
@@ -204,35 +259,50 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
       <div style="white-space:nowrap"><a href="learn.html?burst=${b.kind}" style="font-size:13px">start</a></div>
     </div>`;
 
+  document.getElementById("tally").innerHTML = `
+    <strong style="font-size:15px">${provedAll} of ${allLessons.length} lessons proved</strong>
+    <span style="flex:1 1 120px;min-width:120px;height:8px;background:var(--border);border-radius:99px;overflow:hidden">
+      <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * provedAll / (allLessons.length || 1))}%"></i></span>
+    <span style="font-size:12.5px;color:var(--muted)">✓ proved · ◐ learnt, not proved · ○ not started</span>`;
+
   document.getElementById("weeks").innerHTML = show.map(w => {
     const openIds = w.lessons.filter(x => !x.lesson.mastered).map(x => x.lesson.id);
     const mine = w.week === cw ? bursts : [];
     return `
     <div style="margin-bottom:20px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-        <strong style="font-size:15px">Week ${w.week}${w.week === cw ? ` <span style="font-weight:400;color:var(--accent);font-size:13px">· you're here</span>` : ""}</strong>
+        <strong style="font-size:15px">Week ${w.week}</strong>
         <span style="font-size:12.5px;color:var(--muted)">${w.provedCount} of ${w.lessons.length} proved · 🎧 ${w.quran} · 🗣 ${w.conv} · ~${w.mins} min</span>
       </div>
       ${w.lessons.map((x, xi) => {
         const l = x.lesson, done = Curriculum.chunkDone(l.id + ":lesson", ctx.log);
         const before = mine.filter(b => b.at === xi).map(burstRow).join("");
-        return before + `<div class="lesson">
-          <div class="t">${l.mastered ? "✓ " : ""}${esc(l.title)}
+        const isNow = l.id === hereId;
+        const state = l.mastered ? "done" : isNow ? "now" : "todo";
+        // ✓ proved · ◐ learnt but not proved · ○ not started
+        const mark = l.mastered ? "✓" : done || l.readyToProve ? "◐" : "○";
+        return before + `<div class="lesson ${state}">
+          <span class="mark">${mark}</span>
+          <div class="t">${esc(l.title)}${isNow ? `<span class="here">you're here</span>` : ""}
             <div class="m">${x.milestone.track === "quran" ? "🎧" : "🗣"} ${esc(x.milestone.name)} ·
-              ${l.mastered ? `proved — scored ${l.score}`
+              ${l.mastered ? `proved`
                 : l.readyToProve ? "you already hold these — just prove it"
-                : `${l.total} words${done ? " · learnt, not yet proved" : ""}${l.score !== null ? ` · last test ${l.score}` : ""}`}</div>
+                : `${l.total} words${done ? " · learnt, not yet proved" : " · not started"}${l.score !== null ? ` · last test ${l.score}` : ""}`}</div>
           </div>
-          <div style="display:flex;gap:8px;align-items:center;white-space:nowrap">
+          <div class="acts">
+            ${scorePill(l)}
             ${l.mastered ? "" : `
-              <a href="learn.html?lesson=${encodeURIComponent(l.id)}" style="font-size:13px">${done ? "again" : "learn"}</a>
+              <a href="learn.html?lesson=${encodeURIComponent(l.id)}">${done ? "again" : "learn"}</a>
               <a href="learn.html?lesson=${encodeURIComponent(l.id)}&mode=hands" title="hands-free" style="font-size:14px">🚗</a>`}
-            <a href="learn.html?test=1&lesson=${encodeURIComponent(l.id)}" style="font-size:13px">test</a>
+            <a href="learn.html?test=1&lesson=${encodeURIComponent(l.id)}">${l.score === null ? "test" : "retake"}</a>
           </div>
         </div>`;
       }).join("")}
       ${mine.filter(b => b.at >= w.lessons.length).map(burstRow).join("")}
-      ${openIds.length > 1 ? `<p style="margin:8px 0 0"><a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="font-size:13.5px">Test the whole of week ${w.week} · ~7 min →</a></p>` : ""}
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0">
+        ${openIds.length > 1 ? `<a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="text-decoration:none"><button>📝 Test week ${w.week} · ~7 min</button></a>` : ""}
+        ${classInWeek(w) ? `<a href="learn.html?class=${encodeURIComponent(classInWeek(w))}" style="text-decoration:none"><button>🧑‍🏫 Test the class</button></a>` : ""}
+      </div>
     </div>`;
   }).join("");
 
@@ -243,8 +313,7 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
      is already routed all four ways; this is where he can see it as a class
      again, take a test over the whole of it, and read the passage. */
   try {
-    const cd = await fetch("data/classes.json").then(r => r.json());
-    const c = (cd.classes || [])[0];
+    const c = (CLASSES.classes || [])[0];
     if (c) {
       const srs = ctx.srs || {};
       const held = c.keys.filter(k => ((srs[k] || {}).box || 0) >= 3).length;

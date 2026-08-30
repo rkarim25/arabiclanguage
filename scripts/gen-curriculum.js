@@ -38,6 +38,50 @@ const surahKeys = (sid, vFrom, vTo) => {
 const qcKeys = (from, to) => core.words.map((w, i) => `qc:${i}`).slice(from, to);
 const storyKeys = (sid, from, to) => D(sid + ".json").vocab.map((w, i) => `${sid}:${i}`).slice(from || 0, to === undefined ? undefined : to);
 
+/* ---------- how often are these words actually used? ----------
+   His instruction, 2026-08-30: "i want you to get useful sooner. as a general
+   rule base everything on high frequency usage rather than comprehensiveness, i
+   want to create a positive feedback loop of language learning, no need for
+   completeness or perfection here."
+
+   So the conversation ladder is ORDERED BY MEASURED USE. Each milestone scores
+   the mean frequency of its own words (data/frequency.json, per 10,000 words of
+   real Arabic) and the commonest go first. Two exceptions, both deliberate:
+
+     · the Qur'an track keeps its authored order. It is already frequency-shaped
+       (Al-Fatiha, then the short surahs he prays, then the 50 commonest words),
+       and he is one pass from finishing its first milestone. Re-sorting it would
+       move the thing he is standing on.
+     · `pin` forces a position where he has given a direct instruction. Right now
+       that is the masjid and the Haram, which he asked to jump the queue —
+       "understand what might be said in a mosque in Makkah/Madinah" is half of
+       his definition of done, and it was sitting sixteenth. */
+const freq = (() => { try { return D("frequency.json").words || {}; } catch (e) { return {}; } })();
+const normAr = x => String(x).replace(/[ً-ْٰـۖ-ۭ]/g, "")
+  .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي")
+  .replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
+const per10k = ar => {
+  let best = 0;
+  for (const w of normAr(ar).split(" ")) {
+    if (!w) continue;
+    const bare = w.replace(/^ال/, "");
+    best = Math.max(best, freq[w] || 0, bare.length >= 3 ? (freq[bare] || 0) : 0);
+  }
+  return best;
+};
+/* key -> its Arabic, built from the same files the resolvers read */
+const FORM = {};
+phrases.groups.forEach(g => g.members.forEach((m, i) => { FORM[`ph-${g.id}:${i}`] = m.ar; }));
+everyday.groups.forEach(g => g.members.forEach((m, i) => { FORM[`ev-${g.id}:${i}`] = m.ar; }));
+core.words.forEach((w, i) => { FORM[`qc:${i}`] = w.ar; });
+verses.surahs.forEach(s => s.verses.forEach((v, vi) => v.words.forEach((w, wi) => {
+  FORM[`qw:${s.id}:${vi}:${wi}`] = w[0] || w.ar || "";
+})));
+fs.readdirSync(path.join(ROOT, "data")).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
+  const id = f.replace(/\.json$/, "");
+  (D(f).vocab || []).forEach((w, i) => { FORM[`${id}:${i}`] = w.ar; });
+});
+
 const resolve = src => {
   if (src.ph) return phKeys(src.ph, src.from, src.to);
   if (src.ev) return evKeys(src.ev, src.from, src.to);
@@ -69,7 +113,11 @@ const SPEC = [
       { title: "Class words — the flat", src: { ev: "lesson-home" } },
       { title: "Class words — the week", src: { ev: "lesson-week" } },
       { title: "Class words — where they meet the Qur'an", src: { ev: "lesson-divine" } },
-      { title: "Class words — weather", src: { ev: "lesson-weather" } },
+      /* NOT a lesson. He was asked whether the weather set was a real topic and
+         answered "it was side off" — so the words stay in everyday.json and stay
+         searchable, but they do not take a seven-minute sitting. His general
+         rule the same day: "base everything on high frequency usage rather than
+         comprehensiveness... no need for completeness or perfection here." */
       { title: "Samer looks for a flat — the reading", src: { story: "story-07" } },
     ] },
 
@@ -224,7 +272,11 @@ const SPEC = [
       { title: "Asking for help", src: { ev: "help" } },
     ] },
 
-  { id: "ms-masjid", track: "conv", level: "conv-b1",
+  /* PINNED to the front of the conversation ladder. His answer, 2026-08-30, to
+     "should mosque and Haram Arabic jump ahead of the duas?": "yes do that". It
+     is half of his own definition of done — "what might be said in a mosque in
+     Makkah/Madinah" — and it was sitting sixteenth. */
+  { id: "ms-masjid", track: "conv", level: "conv-b1", pin: 1,
     name: "In the masjid and the Haram",
     can: "understand what is said around you in the masjid and the Haram",
     why: "Where you will actually be, hearing Arabic spoken for real.",
@@ -288,7 +340,35 @@ const LESSONS_PER_WEEK = 7;            // => ~49 min/week, matching his 50-min y
 const MIN_PER_WEEK = MIN_PER_LESSON * LESSONS_PER_WEEK;
 
 let cumulativeMin = 0;
-const milestones = SPEC.map((m, order) => {
+/* Order the CONVERSATION ladder by measured use before anything is built, so
+   `order`, `plannedWeek` and the cumulative minutes all describe the real path.
+   Sort is stable within equal scores, so the authored order still breaks ties. */
+const scoreOf = m => {
+  const keys = m.lessons.flatMap(l => resolve(l.src));
+  if (!keys.length) return 0;
+  const hits = keys.map(k => per10k(FORM[k] || ""));
+  return hits.reduce((a, n) => a + n, 0) / hits.length;
+};
+const ORDERED = (() => {
+  const scored = SPEC.map((m, i) => ({ m, i, s: scoreOf(m) }));
+  const conv = scored.filter(x => x.m.track !== "quran");
+  const rest = scored.filter(x => x.m.track === "quran");
+  conv.sort((a, b) => {
+    // class material always leads; then anything he asked for by name; then use
+    const rank = x => x.m.source === "teacher" ? 0 : (x.m.pin || 9);
+    return rank(a) - rank(b) || b.s - a.s || a.i - b.i;
+  });
+  // rebuild the interleaved list, keeping each track's slots where they were
+  const out = [];
+  let ci = 0, qi = 0;
+  for (const x of scored) out.push(x.m.track === "quran" ? rest[qi++].m : conv[ci++].m);
+  return out;
+})();
+console.log("conversation ladder, by measured use:");
+ORDERED.filter(m => m.track !== "quran").forEach((m, i) =>
+  console.log(`  ${String(i + 1).padStart(2)} ${scoreOf(m).toFixed(1).padStart(6)}/10k  ${m.name}`));
+
+const milestones = ORDERED.map((m, order) => {
   /* Split any authored lesson that is bigger than one sitting. Splitting is even
      (13 items -> 5+4+4, never 6+6+1) so no lesson is a stub. */
   const lessons = [];

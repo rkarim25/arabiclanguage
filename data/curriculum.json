@@ -336,8 +336,8 @@
    "name": "Your flat, the week, and the family (class, 30 Aug)",
    "can": "describe a flat room by room, name any day of the week, and ask whether a place is available",
    "why": "Straight from Sunday's class, and it is the first vocabulary you have that describes where you actually live.",
-   "items": 65,
-   "plannedMin": 84,
+   "items": 59,
+   "plannedMin": 77,
    "plannedWeek": 2,
    "lessons": [
     {
@@ -431,18 +431,6 @@
     },
     {
      "id": "ms-class-0830-l9",
-     "title": "Class words — weather",
-     "keys": [
-      "ev-lesson-weather:0",
-      "ev-lesson-weather:1",
-      "ev-lesson-weather:2",
-      "ev-lesson-weather:3",
-      "ev-lesson-weather:4",
-      "ev-lesson-weather:5"
-     ]
-    },
-    {
-     "id": "ms-class-0830-l10",
      "title": "Samer looks for a flat — the reading (1 of 3)",
      "keys": [
       "story-07:0",
@@ -454,7 +442,7 @@
      ]
     },
     {
-     "id": "ms-class-0830-l11",
+     "id": "ms-class-0830-l10",
      "title": "Samer looks for a flat — the reading (2 of 3)",
      "keys": [
       "story-07:6",
@@ -466,7 +454,7 @@
      ]
     },
     {
-     "id": "ms-class-0830-l12",
+     "id": "ms-class-0830-l11",
      "title": "Samer looks for a flat — the reading (3 of 3)",
      "keys": [
       "story-07:12",
@@ -559,61 +547,80 @@
    ]
   },
   {
-   "id": "ms-hello",
+   "id": "ms-masjid",
    "order": 3,
    "track": "conv",
-   "level": "conv-a1",
-   "name": "Greeting and introducing yourself",
-   "can": "greet someone, introduce yourself and say where you are from",
-   "why": "The opening thirty seconds of every conversation you will ever have in Arabic.",
-   "items": 22,
-   "plannedMin": 28,
+   "level": "conv-b1",
+   "name": "In the masjid and the Haram",
+   "can": "understand what is said around you in the masjid and the Haram",
+   "why": "Where you will actually be, hearing Arabic spoken for real.",
+   "items": 29,
+   "plannedMin": 42,
    "plannedWeek": 4,
    "lessons": [
     {
-     "id": "ms-hello-l1",
-     "title": "Hello and goodbye",
+     "id": "ms-masjid-l1",
+     "title": "Mosque and worship (1 of 2)",
      "keys": [
-      "ph-greet:0",
-      "ph-greet:1",
-      "ph-greet:2",
-      "ph-greet:3",
-      "ph-greet:4",
-      "ph-greet:5"
+      "ph-deen:0",
+      "ph-deen:1",
+      "ph-deen:2",
+      "ph-deen:3",
+      "ph-deen:4"
      ]
     },
     {
-     "id": "ms-hello-l2",
-     "title": "Please, thank you, sorry",
+     "id": "ms-masjid-l2",
+     "title": "Mosque and worship (2 of 2)",
      "keys": [
-      "ph-greet:6",
-      "ph-greet:7",
-      "ph-greet:8",
-      "ph-greet:9",
-      "ph-greet:10",
-      "ph-greet:11"
+      "ph-deen:5",
+      "ph-deen:6",
+      "ph-deen:7",
+      "ph-deen:8"
      ]
     },
     {
-     "id": "ms-hello-l3",
-     "title": "Who I am (1 of 2)",
+     "id": "ms-masjid-l3",
+     "title": "Inside the Haram (1 of 2)",
      "keys": [
-      "ph-intro:0",
-      "ph-intro:1",
-      "ph-intro:2",
-      "ph-intro:3",
-      "ph-intro:4"
+      "ev-haram:0",
+      "ev-haram:1",
+      "ev-haram:2",
+      "ev-haram:3",
+      "ev-haram:4"
      ]
     },
     {
-     "id": "ms-hello-l4",
-     "title": "Who I am (2 of 2)",
+     "id": "ms-masjid-l4",
+     "title": "Inside the Haram (2 of 2)",
      "keys": [
-      "ph-intro:5",
-      "ph-intro:6",
-      "ph-intro:7",
-      "ph-intro:8",
-      "ph-intro:9"
+      "ev-haram:5",
+      "ev-haram:6",
+      "ev-haram:7",
+      "ev-haram:8",
+      "ev-haram:9"
+     ]
+    },
+    {
+     "id": "ms-masjid-l5",
+     "title": "What the imam says (1 of 2)",
+     "keys": [
+      "ev-masjid:0",
+      "ev-masjid:1",
+      "ev-masjid:2",
+      "ev-masjid:3",
+      "ev-masjid:4"
+     ]
+    },
+    {
+     "id": "ms-masjid-l6",
+     "title": "What the imam says (2 of 2)",
+     "keys": [
+      "ev-masjid:5",
+      "ev-masjid:6",
+      "ev-masjid:7",
+      "ev-masjid:8",
+      "ev-masjid:9"
      ]
     }
    ]
@@ -817,56 +824,82 @@
    ]
   },
   {
-   "id": "ms-food",
+   "id": "ms-ask",
    "order": 6,
    "track": "conv",
    "level": "conv-a1",
-   "name": "Ordering food and drink",
-   "can": "order a meal, ask for what you want and say you have had enough",
-   "why": "Three or four times a day on any trip, and the words repeat endlessly.",
-   "items": 17,
-   "plannedMin": 28,
-   "plannedWeek": 6,
+   "name": "Asking and needing",
+   "can": "ask a simple question and say what you want or need",
+   "why": "Questions are how you get anything done in a language you only half speak.",
+   "items": 31,
+   "plannedMin": 42,
+   "plannedWeek": 7,
    "lessons": [
     {
-     "id": "ms-food-l1",
-     "title": "Ordering (1 of 2)",
+     "id": "ms-ask-l1",
+     "title": "Question frames",
      "keys": [
-      "ph-food:0",
-      "ph-food:1",
-      "ph-food:2",
-      "ph-food:3"
+      "ph-ask:0",
+      "ph-ask:1",
+      "ph-ask:2",
+      "ph-ask:3",
+      "ph-ask:4",
+      "ph-ask:5"
      ]
     },
     {
-     "id": "ms-food-l2",
-     "title": "Ordering (2 of 2)",
+     "id": "ms-ask-l2",
+     "title": "More questions",
      "keys": [
-      "ph-food:4",
-      "ph-food:5",
-      "ph-food:6",
-      "ph-food:7"
+      "ph-ask:6",
+      "ph-ask:7",
+      "ph-ask:8",
+      "ph-ask:9",
+      "ph-ask:10",
+      "ph-ask:11"
      ]
     },
     {
-     "id": "ms-food-l3",
-     "title": "Food and drink words (1 of 2)",
+     "id": "ms-ask-l3",
+     "title": "I want, I need (1 of 2)",
      "keys": [
-      "ev-food:0",
-      "ev-food:1",
-      "ev-food:2",
-      "ev-food:3",
-      "ev-food:4"
+      "ph-need:0",
+      "ph-need:1",
+      "ph-need:2",
+      "ph-need:3",
+      "ph-need:4"
      ]
     },
     {
-     "id": "ms-food-l4",
-     "title": "Food and drink words (2 of 2)",
+     "id": "ms-ask-l4",
+     "title": "I want, I need (2 of 2)",
      "keys": [
-      "ev-food:5",
-      "ev-food:6",
-      "ev-food:7",
-      "ev-food:8"
+      "ph-need:5",
+      "ph-need:6",
+      "ph-need:7",
+      "ph-need:8",
+      "ph-need:9"
+     ]
+    },
+    {
+     "id": "ms-ask-l5",
+     "title": "Question words (1 of 2)",
+     "keys": [
+      "ev-questions:0",
+      "ev-questions:1",
+      "ev-questions:2",
+      "ev-questions:3",
+      "ev-questions:4"
+     ]
+    },
+    {
+     "id": "ms-ask-l6",
+     "title": "Question words (2 of 2)",
+     "keys": [
+      "ev-questions:5",
+      "ev-questions:6",
+      "ev-questions:7",
+      "ev-questions:8"
      ]
     }
    ]
@@ -996,82 +1029,61 @@
    ]
   },
   {
-   "id": "ms-ask",
+   "id": "ms-hello",
    "order": 8,
    "track": "conv",
    "level": "conv-a1",
-   "name": "Asking and needing",
-   "can": "ask a simple question and say what you want or need",
-   "why": "Questions are how you get anything done in a language you only half speak.",
-   "items": 31,
-   "plannedMin": 42,
+   "name": "Greeting and introducing yourself",
+   "can": "greet someone, introduce yourself and say where you are from",
+   "why": "The opening thirty seconds of every conversation you will ever have in Arabic.",
+   "items": 22,
+   "plannedMin": 28,
    "plannedWeek": 9,
    "lessons": [
     {
-     "id": "ms-ask-l1",
-     "title": "Question frames",
+     "id": "ms-hello-l1",
+     "title": "Hello and goodbye",
      "keys": [
-      "ph-ask:0",
-      "ph-ask:1",
-      "ph-ask:2",
-      "ph-ask:3",
-      "ph-ask:4",
-      "ph-ask:5"
+      "ph-greet:0",
+      "ph-greet:1",
+      "ph-greet:2",
+      "ph-greet:3",
+      "ph-greet:4",
+      "ph-greet:5"
      ]
     },
     {
-     "id": "ms-ask-l2",
-     "title": "More questions",
+     "id": "ms-hello-l2",
+     "title": "Please, thank you, sorry",
      "keys": [
-      "ph-ask:6",
-      "ph-ask:7",
-      "ph-ask:8",
-      "ph-ask:9",
-      "ph-ask:10",
-      "ph-ask:11"
+      "ph-greet:6",
+      "ph-greet:7",
+      "ph-greet:8",
+      "ph-greet:9",
+      "ph-greet:10",
+      "ph-greet:11"
      ]
     },
     {
-     "id": "ms-ask-l3",
-     "title": "I want, I need (1 of 2)",
+     "id": "ms-hello-l3",
+     "title": "Who I am (1 of 2)",
      "keys": [
-      "ph-need:0",
-      "ph-need:1",
-      "ph-need:2",
-      "ph-need:3",
-      "ph-need:4"
+      "ph-intro:0",
+      "ph-intro:1",
+      "ph-intro:2",
+      "ph-intro:3",
+      "ph-intro:4"
      ]
     },
     {
-     "id": "ms-ask-l4",
-     "title": "I want, I need (2 of 2)",
+     "id": "ms-hello-l4",
+     "title": "Who I am (2 of 2)",
      "keys": [
-      "ph-need:5",
-      "ph-need:6",
-      "ph-need:7",
-      "ph-need:8",
-      "ph-need:9"
-     ]
-    },
-    {
-     "id": "ms-ask-l5",
-     "title": "Question words (1 of 2)",
-     "keys": [
-      "ev-questions:0",
-      "ev-questions:1",
-      "ev-questions:2",
-      "ev-questions:3",
-      "ev-questions:4"
-     ]
-    },
-    {
-     "id": "ms-ask-l6",
-     "title": "Question words (2 of 2)",
-     "keys": [
-      "ev-questions:5",
-      "ev-questions:6",
-      "ev-questions:7",
-      "ev-questions:8"
+      "ph-intro:5",
+      "ph-intro:6",
+      "ph-intro:7",
+      "ph-intro:8",
+      "ph-intro:9"
      ]
     }
    ]
@@ -1223,109 +1235,56 @@
    ]
   },
   {
-   "id": "ms-family",
+   "id": "ms-food",
    "order": 11,
    "track": "conv",
    "level": "conv-a1",
-   "name": "Your family and your home",
-   "can": "talk about your family and describe where you live",
-   "why": "The first thing anyone asks you, and the material your teacher started with.",
-   "items": 46,
-   "plannedMin": 56,
+   "name": "Ordering food and drink",
+   "can": "order a meal, ask for what you want and say you have had enough",
+   "why": "Three or four times a day on any trip, and the words repeat endlessly.",
+   "items": 17,
+   "plannedMin": 28,
    "plannedWeek": 11,
    "lessons": [
     {
-     "id": "ms-family-l1",
-     "title": "Your family (1 of 3)",
+     "id": "ms-food-l1",
+     "title": "Ordering (1 of 2)",
      "keys": [
-      "ev-family:0",
-      "ev-family:1",
-      "ev-family:2",
-      "ev-family:3",
-      "ev-family:4",
-      "ev-family:5"
+      "ph-food:0",
+      "ph-food:1",
+      "ph-food:2",
+      "ph-food:3"
      ]
     },
     {
-     "id": "ms-family-l2",
-     "title": "Your family (2 of 3)",
+     "id": "ms-food-l2",
+     "title": "Ordering (2 of 2)",
      "keys": [
-      "ev-family:6",
-      "ev-family:7",
-      "ev-family:8",
-      "ev-family:9",
-      "ev-family:10"
+      "ph-food:4",
+      "ph-food:5",
+      "ph-food:6",
+      "ph-food:7"
      ]
     },
     {
-     "id": "ms-family-l3",
-     "title": "Your family (3 of 3)",
+     "id": "ms-food-l3",
+     "title": "Food and drink words (1 of 2)",
      "keys": [
-      "ev-family:11",
-      "ev-family:12",
-      "ev-family:13",
-      "ev-family:14",
-      "ev-family:15"
+      "ev-food:0",
+      "ev-food:1",
+      "ev-food:2",
+      "ev-food:3",
+      "ev-food:4"
      ]
     },
     {
-     "id": "ms-family-l4",
-     "title": "Around the house",
+     "id": "ms-food-l4",
+     "title": "Food and drink words (2 of 2)",
      "keys": [
-      "ev-home:0",
-      "ev-home:1",
-      "ev-home:2",
-      "ev-home:3",
-      "ev-home:4",
-      "ev-home:5"
-     ]
-    },
-    {
-     "id": "ms-family-l5",
-     "title": "My family and our home — the story (1 of 2)",
-     "keys": [
-      "story-02:0",
-      "story-02:1",
-      "story-02:2",
-      "story-02:3",
-      "story-02:4",
-      "story-02:5"
-     ]
-    },
-    {
-     "id": "ms-family-l6",
-     "title": "My family and our home — the story (2 of 2)",
-     "keys": [
-      "story-02:6",
-      "story-02:7",
-      "story-02:8",
-      "story-02:9",
-      "story-02:10",
-      "story-02:11"
-     ]
-    },
-    {
-     "id": "ms-family-l7",
-     "title": "…and the rest of the story (1 of 2)",
-     "keys": [
-      "story-02:12",
-      "story-02:13",
-      "story-02:14",
-      "story-02:15",
-      "story-02:16",
-      "story-02:17"
-     ]
-    },
-    {
-     "id": "ms-family-l8",
-     "title": "…and the rest of the story (2 of 2)",
-     "keys": [
-      "story-02:18",
-      "story-02:19",
-      "story-02:20",
-      "story-02:21",
-      "story-02:22",
-      "story-02:23"
+      "ev-food:5",
+      "ev-food:6",
+      "ev-food:7",
+      "ev-food:8"
      ]
     }
    ]
@@ -1340,7 +1299,7 @@
    "why": "Understanding the answer is the hard half, so the direction words come with the questions.",
    "items": 20,
    "plannedMin": 28,
-   "plannedWeek": 12,
+   "plannedWeek": 11,
    "lessons": [
     {
      "id": "ms-directions-l1",
@@ -1513,64 +1472,8 @@
    ]
   },
   {
-   "id": "ms-time",
-   "order": 14,
-   "track": "conv",
-   "level": "conv-a2",
-   "name": "Time and plans",
-   "can": "say when something happens and make a simple plan",
-   "why": "Arranging anything — a lesson, a meal, a taxi — runs on these.",
-   "items": 18,
-   "plannedMin": 28,
-   "plannedWeek": 14,
-   "lessons": [
-    {
-     "id": "ms-time-l1",
-     "title": "Time and plans (1 of 2)",
-     "keys": [
-      "ph-time:0",
-      "ph-time:1",
-      "ph-time:2",
-      "ph-time:3",
-      "ph-time:4"
-     ]
-    },
-    {
-     "id": "ms-time-l2",
-     "title": "Time and plans (2 of 2)",
-     "keys": [
-      "ph-time:5",
-      "ph-time:6",
-      "ph-time:7",
-      "ph-time:8"
-     ]
-    },
-    {
-     "id": "ms-time-l3",
-     "title": "Time words (1 of 2)",
-     "keys": [
-      "ev-time:0",
-      "ev-time:1",
-      "ev-time:2",
-      "ev-time:3",
-      "ev-time:4"
-     ]
-    },
-    {
-     "id": "ms-time-l4",
-     "title": "Time words (2 of 2)",
-     "keys": [
-      "ev-time:5",
-      "ev-time:6",
-      "ev-time:7",
-      "ev-time:8"
-     ]
-    }
-   ]
-  },
-  {
    "id": "ms-state",
-   "order": 15,
+   "order": 14,
    "track": "conv",
    "level": "conv-a2",
    "name": "Saying how you are",
@@ -1578,7 +1481,7 @@
    "why": "Opposites double your descriptive range for almost no effort.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 14,
+   "plannedWeek": 13,
    "lessons": [
     {
      "id": "ms-state-l1",
@@ -1625,7 +1528,7 @@
   },
   {
    "id": "ms-travel",
-   "order": 16,
+   "order": 15,
    "track": "conv",
    "level": "conv-a2",
    "name": "Hotels, taxis and getting help",
@@ -1633,7 +1536,7 @@
    "why": "The Umrah logistics that happen whether or not you have the words.",
    "items": 21,
    "plannedMin": 28,
-   "plannedWeek": 15,
+   "plannedWeek": 14,
    "lessons": [
     {
      "id": "ms-travel-l1",
@@ -1683,80 +1586,165 @@
    ]
   },
   {
-   "id": "ms-masjid",
+   "id": "ms-time",
+   "order": 16,
+   "track": "conv",
+   "level": "conv-a2",
+   "name": "Time and plans",
+   "can": "say when something happens and make a simple plan",
+   "why": "Arranging anything — a lesson, a meal, a taxi — runs on these.",
+   "items": 18,
+   "plannedMin": 28,
+   "plannedWeek": 15,
+   "lessons": [
+    {
+     "id": "ms-time-l1",
+     "title": "Time and plans (1 of 2)",
+     "keys": [
+      "ph-time:0",
+      "ph-time:1",
+      "ph-time:2",
+      "ph-time:3",
+      "ph-time:4"
+     ]
+    },
+    {
+     "id": "ms-time-l2",
+     "title": "Time and plans (2 of 2)",
+     "keys": [
+      "ph-time:5",
+      "ph-time:6",
+      "ph-time:7",
+      "ph-time:8"
+     ]
+    },
+    {
+     "id": "ms-time-l3",
+     "title": "Time words (1 of 2)",
+     "keys": [
+      "ev-time:0",
+      "ev-time:1",
+      "ev-time:2",
+      "ev-time:3",
+      "ev-time:4"
+     ]
+    },
+    {
+     "id": "ms-time-l4",
+     "title": "Time words (2 of 2)",
+     "keys": [
+      "ev-time:5",
+      "ev-time:6",
+      "ev-time:7",
+      "ev-time:8"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ms-family",
    "order": 17,
    "track": "conv",
-   "level": "conv-b1",
-   "name": "In the masjid and the Haram",
-   "can": "understand what is said around you in the masjid and the Haram",
-   "why": "Where you will actually be, hearing Arabic spoken for real.",
-   "items": 29,
-   "plannedMin": 42,
+   "level": "conv-a1",
+   "name": "Your family and your home",
+   "can": "talk about your family and describe where you live",
+   "why": "The first thing anyone asks you, and the material your teacher started with.",
+   "items": 46,
+   "plannedMin": 56,
    "plannedWeek": 16,
    "lessons": [
     {
-     "id": "ms-masjid-l1",
-     "title": "Mosque and worship (1 of 2)",
+     "id": "ms-family-l1",
+     "title": "Your family (1 of 3)",
      "keys": [
-      "ph-deen:0",
-      "ph-deen:1",
-      "ph-deen:2",
-      "ph-deen:3",
-      "ph-deen:4"
+      "ev-family:0",
+      "ev-family:1",
+      "ev-family:2",
+      "ev-family:3",
+      "ev-family:4",
+      "ev-family:5"
      ]
     },
     {
-     "id": "ms-masjid-l2",
-     "title": "Mosque and worship (2 of 2)",
+     "id": "ms-family-l2",
+     "title": "Your family (2 of 3)",
      "keys": [
-      "ph-deen:5",
-      "ph-deen:6",
-      "ph-deen:7",
-      "ph-deen:8"
+      "ev-family:6",
+      "ev-family:7",
+      "ev-family:8",
+      "ev-family:9",
+      "ev-family:10"
      ]
     },
     {
-     "id": "ms-masjid-l3",
-     "title": "Inside the Haram (1 of 2)",
+     "id": "ms-family-l3",
+     "title": "Your family (3 of 3)",
      "keys": [
-      "ev-haram:0",
-      "ev-haram:1",
-      "ev-haram:2",
-      "ev-haram:3",
-      "ev-haram:4"
+      "ev-family:11",
+      "ev-family:12",
+      "ev-family:13",
+      "ev-family:14",
+      "ev-family:15"
      ]
     },
     {
-     "id": "ms-masjid-l4",
-     "title": "Inside the Haram (2 of 2)",
+     "id": "ms-family-l4",
+     "title": "Around the house",
      "keys": [
-      "ev-haram:5",
-      "ev-haram:6",
-      "ev-haram:7",
-      "ev-haram:8",
-      "ev-haram:9"
+      "ev-home:0",
+      "ev-home:1",
+      "ev-home:2",
+      "ev-home:3",
+      "ev-home:4",
+      "ev-home:5"
      ]
     },
     {
-     "id": "ms-masjid-l5",
-     "title": "What the imam says (1 of 2)",
+     "id": "ms-family-l5",
+     "title": "My family and our home — the story (1 of 2)",
      "keys": [
-      "ev-masjid:0",
-      "ev-masjid:1",
-      "ev-masjid:2",
-      "ev-masjid:3",
-      "ev-masjid:4"
+      "story-02:0",
+      "story-02:1",
+      "story-02:2",
+      "story-02:3",
+      "story-02:4",
+      "story-02:5"
      ]
     },
     {
-     "id": "ms-masjid-l6",
-     "title": "What the imam says (2 of 2)",
+     "id": "ms-family-l6",
+     "title": "My family and our home — the story (2 of 2)",
      "keys": [
-      "ev-masjid:5",
-      "ev-masjid:6",
-      "ev-masjid:7",
-      "ev-masjid:8",
-      "ev-masjid:9"
+      "story-02:6",
+      "story-02:7",
+      "story-02:8",
+      "story-02:9",
+      "story-02:10",
+      "story-02:11"
+     ]
+    },
+    {
+     "id": "ms-family-l7",
+     "title": "…and the rest of the story (1 of 2)",
+     "keys": [
+      "story-02:12",
+      "story-02:13",
+      "story-02:14",
+      "story-02:15",
+      "story-02:16",
+      "story-02:17"
+     ]
+    },
+    {
+     "id": "ms-family-l8",
+     "title": "…and the rest of the story (2 of 2)",
+     "keys": [
+      "story-02:18",
+      "story-02:19",
+      "story-02:20",
+      "story-02:21",
+      "story-02:22",
+      "story-02:23"
      ]
     }
    ]
@@ -2087,7 +2075,7 @@
    "why": "The single most recited verse outside the short surahs, and long enough to be a real test of connected listening.",
    "items": 50,
    "plannedMin": 63,
-   "plannedWeek": 21,
+   "plannedWeek": 20,
    "lessons": [
     {
      "id": "ms-kursi-l1",

@@ -13,7 +13,7 @@
    ],
    "milestone": "ms-class-0830",
    "reading": "story-07",
-   "covered": "A flat room by room and the furniture in it; the seven days of the week; the mother's side of the family and the dual; weather words around ثَلْج; and a reading passage about Samer looking for a flat.",
+   "covered": "A flat room by room and the furniture in it; the seven days of the week; the mother's side of the family and how to make the dual; and a reading passage about Samer looking for a flat that she gave him to practise — he has not read it yet.",
    "grammar": [
     {
      "pattern": "have",
@@ -25,7 +25,7 @@
     },
     {
      "pattern": "dual",
-     "why": "خَالَانِ وَخَالَتَانِ. Arabic counts one, two, and many; the ـَانِ ending IS the two."
+     "why": "خَالَانِ وَخَالَتَانِ — she taught the dual AND how to form it, and he asked for it to be explained properly. Arabic counts one, two, and many; the ـَانِ ending IS the two, and it becomes ـَيْنِ after a preposition."
     },
     {
      "pattern": "idafa",
@@ -39,14 +39,16 @@
    "notes": [
     "أَرَادَ أَنْ + present (أَرَادَ أَنْ يَبْحَثَ — 'he wanted to look for') runs through the passage.",
     "Floors are ordinals: الدَّوْر الثَّالِث, the third floor.",
-    "Feminine agreement carries the whole description of the flat: الشَّقَّة جَمِيلَة وَوَاسِعَة."
+    "Feminine agreement carries the whole description of the flat: الشَّقَّة جَمِيلَة وَوَاسِعَة.",
+    "Weather (ثَلْج، مَطَر، سَحَاب) came up as an aside off ثَلْج, not as a topic. The words are carded but do not take a lesson."
    ],
-   "questions": [
-    "Did she teach the dual (خَالَانِ / خَالَتَانِ) as a rule, or did it just turn up in a sentence? It changes whether I drill it or only explain it.",
-    "The days — did she give them bare (الأَحَد) or with يَوْم in front (يَوْمَ الأَحَدِ)?",
-    "Was the passage about Samer read aloud in class, and is reading aloud what she expects next week?",
-    "Was the weather set (ثَلْج، مَطَر، سَحَاب) a real topic or an aside off ثَلْج?",
-    "What did she set as homework?"
+   "questions": [],
+   "answers": [
+    "The dual WAS taught as a rule, and how to form it — he did not follow it, so it is now a full grammar pattern with the ـَانِ / ـَيْنِ distinction and the ة → ت step, not just an example. (asked and answered 2026-08-30)",
+    "Days: normal usage — the bare name (الأَحَد) for 'today is Sunday', يَوْمَ الأَحَدِ for 'on Sunday'. Both are carded.",
+    "He has NOT read the Samer passage yet. She gave it to him to practise and to put on the site, so the reading is work still to do, not work done.",
+    "Weather was an aside off ثَلْج, not a topic. The words stay carded; it is no longer a seven-minute lesson.",
+    "No homework was set."
    ]
   }
  ]

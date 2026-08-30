@@ -1382,21 +1382,36 @@
         (isTeacher ? (isQuran ? tQuran : tConv) : (isQuran ? quran : conv)).push(row);
       }
     }
-    // class material sits at the head of its own track's queue
-    quran.unshift(...tQuran);
-    conv.unshift(...tConv);
 
+    /* CLASS MATERIAL LEADS, BUT DOES NOT MONOPOLISE.
+       His report, 2026-08-30: "why dont i see any sentences here other than sura
+       faitha?" — because the 30 Aug class is twelve lessons, and putting all
+       twelve at the head of the conversation queue gave him a fortnight in which
+       the entire everyday half was one class about a flat. Everything else he is
+       supposed to be learning to SAY was two weeks away.
+
+       So a class contributes at most CLASS_PER_WEEK lessons to any one week and
+       the rest of the everyday half comes from the ladder, which is now ordered
+       by how often the words are actually used. Both of his rules survive: the
+       class still leads, and the week is still a mix. */
+    const CLASS_PER_WEEK = 2;
     const weeks = [];
-    while (quran.length || conv.length) {
+    while (quran.length || conv.length || tQuran.length || tConv.length) {
       const slot = { week: weeks.length + 1, lessons: [], mins: 0 };
-      let q = 0, c = 0;
-      while (slot.lessons.length < perWeek && (quran.length || conv.length)) {
+      let q = 0, c = 0, cls = 0;
+      while (slot.lessons.length < perWeek && (quran.length || conv.length || tQuran.length || tConv.length)) {
         // keep the ratio honest as the week fills, and fall back to whichever
         // queue still has work when one runs dry
-        const wantQuran = quran.length && (!conv.length || q * (perWeek - quranPerWeek) <= c * quranPerWeek);
-        if (wantQuran) { slot.lessons.push(quran.shift()); q++; }
-        else if (conv.length) { slot.lessons.push(conv.shift()); c++; }
-        else break;
+        const qAvail = quran.length || tQuran.length, cAvail = conv.length || tConv.length;
+        const wantQuran = qAvail && (!cAvail || q * (perWeek - quranPerWeek) <= c * quranPerWeek);
+        // a class lesson goes first within its track, up to the week's share
+        const take = (teach, main) => (cls < CLASS_PER_WEEK && teach.length) ? (cls++, teach.shift())
+          : (main.length ? main.shift() : (teach.length ? (cls++, teach.shift()) : null));
+        let row = null;
+        if (wantQuran) { row = take(tQuran, quran); if (row) q++; }
+        else if (cAvail) { row = take(tConv, conv); if (row) c++; }
+        if (!row) break;
+        slot.lessons.push(row);
       }
       slot.mins = slot.lessons.length * minsEach;
       slot.quran = slot.lessons.filter(x => x.milestone.track === "quran").length;

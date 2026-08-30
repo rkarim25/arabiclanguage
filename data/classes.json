@@ -8,7 +8,7 @@
    "date": "2026-08-30",
    "title": "The flat, the week, the family",
    "teacher": "Sunday class",
-   "covered": "A flat room by room and the furniture in it; the seven days of the week; the mother's side of the family and the dual; weather words around ثَلْج; and a reading passage about Samer looking for a flat.",
+   "covered": "A flat room by room and the furniture in it; the seven days of the week; the mother's side of the family and how to make the dual; and a reading passage about Samer looking for a flat that she gave him to practise — he has not read it yet.",
    "milestone": "ms-class-0830",
    "lessons": [
     {
@@ -53,21 +53,16 @@
     },
     {
      "id": "ms-class-0830-l9",
-     "title": "Class words — weather",
-     "keys": 6
-    },
-    {
-     "id": "ms-class-0830-l10",
      "title": "Samer looks for a flat — the reading (1 of 3)",
      "keys": 6
     },
     {
-     "id": "ms-class-0830-l11",
+     "id": "ms-class-0830-l10",
      "title": "Samer looks for a flat — the reading (2 of 3)",
      "keys": 6
     },
     {
-     "id": "ms-class-0830-l12",
+     "id": "ms-class-0830-l11",
      "title": "Samer looks for a flat — the reading (3 of 3)",
      "keys": 6
     }
@@ -114,12 +109,6 @@
     "ev-lesson-divine:2",
     "ev-lesson-divine:3",
     "ev-lesson-divine:4",
-    "ev-lesson-weather:0",
-    "ev-lesson-weather:1",
-    "ev-lesson-weather:2",
-    "ev-lesson-weather:3",
-    "ev-lesson-weather:4",
-    "ev-lesson-weather:5",
     "story-07:0",
     "story-07:1",
     "story-07:2",
@@ -1031,8 +1020,8 @@
     {
      "pattern": "have",
      "why": "The spine of the whole class — عِنْدِي / عِنْدَكُمْ, and both ways to negate it (مَا عِنْدِي, لَيْسَ عِنْدِي), which she gave together.",
-     "name": "عِنْدَ — having, and not having",
-     "ar": "عِنْدِي",
+     "name": "عِندَ — having, and not having",
+     "ar": "عِندِي",
      "missing": false
     },
     {
@@ -1044,9 +1033,9 @@
     },
     {
      "pattern": "dual",
-     "why": "خَالَانِ وَخَالَتَانِ. Arabic counts one, two, and many; the ـَانِ ending IS the two.",
-     "name": "the dual — Arabic's word for exactly two",
-     "ar": "المُثَنَّى",
+     "why": "خَالَانِ وَخَالَتَانِ — she taught the dual AND how to form it, and he asked for it to be explained properly. Arabic counts one, two, and many; the ـَانِ ending IS the two, and it becomes ـَيْنِ after a preposition.",
+     "name": "the dual — how to make “exactly two”",
+     "ar": "المُثَنَّى",
      "missing": false
     },
     {
@@ -1096,15 +1085,10 @@
    "notes": [
     "أَرَادَ أَنْ + present (أَرَادَ أَنْ يَبْحَثَ — 'he wanted to look for') runs through the passage.",
     "Floors are ordinals: الدَّوْر الثَّالِث, the third floor.",
-    "Feminine agreement carries the whole description of the flat: الشَّقَّة جَمِيلَة وَوَاسِعَة."
+    "Feminine agreement carries the whole description of the flat: الشَّقَّة جَمِيلَة وَوَاسِعَة.",
+    "Weather (ثَلْج، مَطَر، سَحَاب) came up as an aside off ثَلْج, not as a topic. The words are carded but do not take a lesson."
    ],
-   "questions": [
-    "Did she teach the dual (خَالَانِ / خَالَتَانِ) as a rule, or did it just turn up in a sentence? It changes whether I drill it or only explain it.",
-    "The days — did she give them bare (الأَحَد) or with يَوْم in front (يَوْمَ الأَحَدِ)?",
-    "Was the passage about Samer read aloud in class, and is reading aloud what she expects next week?",
-    "Was the weather set (ثَلْج، مَطَر، سَحَاب) a real topic or an aside off ثَلْج?",
-    "What did she set as homework?"
-   ],
+   "questions": [],
    "counts": {
     "vocabulary": 53,
     "fromTeacher": 38,
