@@ -2,13 +2,14 @@
    - VERSIONED assets (?v=stamp), content-hashed /audio/ clips, and /fonts/ are
      immutable under their URL → CACHE-FIRST: instant repeat loads, network only
      the first time. A deploy changes the ?v= stamp, so freshness is safe.
-   - HTML navigations → NETWORK-FIRST (bypass HTTP cache) so a deploy always
-     pairs fresh HTML with its fresh ?v= assets; cache fallback offline.
+   - HTML navigations → NETWORK-FIRST with a 2.5s budget (bypass HTTP cache) so
+     a deploy always pairs fresh HTML with its fresh ?v= assets; cache answers
+     the moment the network is slow or absent, so the commute is unaffected.
    - Un-stamped data/*.json → network-first, but with a 3.5s budget: on a slow
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mtg2b2zq";
+const CACHE = "ats-mtg2ddfu";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -68,12 +69,20 @@ self.addEventListener("fetch", e => {
     return;
   }
 
-  // navigations + un-stamped data: STALE-WHILE-REVALIDATE (2026-08-09, "the
-  // website is slow to load"). The cached copy answers INSTANTLY and the
-  // network refresh lands in cache for the next visit — at most one visit
-  // stale. A one-visit-old page still works: its ?v= assets are served by the
-  // ignoreSearch fallback and GitHub keeps serving old files, and every deploy
-  // reinstalls fresh CORE pages anyway (new cache name → clean slate).
+  /* HTML NAVIGATIONS: NETWORK-FIRST, with a 2.5s budget.
+     This used to be stale-while-revalidate — the cached page answered instantly
+     and the fresh one landed for NEXT time, so every deploy was one visit late.
+     That is a real cost, not a theoretical one: on 2026-08-30 he spent a session
+     reporting bugs against a lesson UI and a test flow that had been replaced,
+     because his first visit after each deploy served him the previous build.
+     (The service worker also had a syntax error and had not updated at all, but
+     one-visit-stale was going to keep biting after that was fixed.)
+
+     HTML is a few KB. Ask the network first, and fall back to cache the moment
+     it is slow or absent, so the commute still works and a good connection
+     always shows what was actually deployed. Un-stamped data/*.json keeps the
+     old behaviour — those now carry the build stamp (js/app.js DATA_V), so they
+     cannot be paired with the wrong build any more. */
   const isNav = e.request.mode === "navigate";
   const req = isNav ? new Request(e.request.url, { cache: "no-cache" }) : e.request;
   e.respondWith((async () => {
@@ -82,13 +91,22 @@ self.addEventListener("fetch", e => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
       return res;
     }).catch(() => null);
+
+    if (isNav) {
+      const timeout = new Promise(r => setTimeout(() => r(null), 2500));
+      const fresh = await Promise.race([net, timeout]);
+      if (fresh && fresh.ok) return fresh;
+      if (cached) { try { e.waitUntil(net); } catch (err) {} return cached; }
+      const slow = await net;
+      if (slow) return slow;
+      const shell = await caches.match("index.html");
+      if (shell) return shell;
+      return Response.error();
+    }
+
     if (cached) { try { e.waitUntil(net); } catch (err) {} return cached; }
     const fresh = await net;
     if (fresh) return fresh;
-    if (isNav) {
-      const shell = await caches.match("index.html");
-      if (shell) return shell;
-    }
     return Response.error();
   })());
 });
