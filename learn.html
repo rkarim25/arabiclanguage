@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3xfr4">
-  <link rel="stylesheet" href="css/style.css?v=mtg3xfr4">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg5h4o9">
+  <link rel="stylesheet" href="css/style.css?v=mtg5h4o9">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg3xfr4"></script>
-<script src="js/curriculum.js?v=mtg3xfr4"></script>
-<script src="js/app.js?v=mtg3xfr4"></script>
-<script src="js/tracker.js?v=mtg3xfr4"></script>
-<script src="js/plan.js?v=mtg3xfr4"></script>
+<script src="js/progress-model.js?v=mtg5h4o9"></script>
+<script src="js/curriculum.js?v=mtg5h4o9"></script>
+<script src="js/app.js?v=mtg5h4o9"></script>
+<script src="js/tracker.js?v=mtg5h4o9"></script>
+<script src="js/plan.js?v=mtg5h4o9"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -140,13 +140,43 @@ const TYPING_HELP = `
    does want it. A bucket tap is itself an answer — ✓/⏳/⊘ mean he had it, ↻ means
    he didn't — and it REPLACES the automatic grade rather than being overwritten
    by it (gradeCard clears an explicit bucket by design; see js/app.js). */
+/* ---------- stepping BACK ----------
+   His ask, 2026-08-30, looking at a vocabulary burst: "can you put next and back
+   in these?" Every card in the site moved one way only, so a word that went past
+   before he had finished reading its example sentence was simply gone.
+
+   Back re-opens the previous card FRESH, ready to be answered again, rather than
+   as a read-only replay — answering again is the whole point of going back, and
+   the last answer wins, because an SRS card holds one state and the most recent
+   evidence is the truthful one. In a test the previous answer comes off the score
+   at the same moment, so no question is ever counted twice. */
+const BACK_BTN = enabled =>
+  `<button id="bk"${enabled ? "" : ' disabled style="opacity:.3"'}>← Back</button>`;
+
 /* Enter advances. Bound on the window with a capture listener and cleared on
    use: document.onkeydown was being lost whenever focus moved off the button,
    which is exactly what happens after an input is disabled. */
-let _enterOff = null;
+let _enterOff = null, _cardAt = 0;
+/* Every card render stamps this. Enter is then ignored for a moment afterwards,
+   which is what stops ONE keypress from doing two things.
+
+   His report, 2026-08-30: "what does enter do after typing? when i hit enter
+   after typing it says not quite even though answer is correct." The screenshot
+   showed the answer box EMPTY under "✗ not quite", which is the whole story: the
+   Enter that advanced from one card was still in flight when the next card
+   mounted its input, and submitted it blank. Two guards, because either alone
+   leaves a hole:
+     · a blank box is never submitted — pressing Enter with nothing typed does
+       nothing at all, which is what anyone would expect;
+     · and no Enter counts within 350ms of a card appearing. */
+function cardShown() { _cardAt = Date.now(); }
+function enterIsStale() { return Date.now() - _cardAt < 350; }
 function onEnterOnce(fn) {
   if (_enterOff) _enterOff();
-  const h = e => { if (e.key !== "Enter") return; e.preventDefault(); _enterOff(); fn(); };
+  const h = e => {
+    if (e.key !== "Enter" || enterIsStale()) return;
+    e.preventDefault(); _enterOff(); fn();
+  };
   _enterOff = () => { window.removeEventListener("keydown", h, true); _enterOff = null; };
   window.addEventListener("keydown", h, true);
 }
@@ -181,13 +211,14 @@ function wireJudge(id, key, answerHtml, done) {
    marks it. "show me" is still there and still free — but taking it reveals the
    answer, and only THEN can he self-grade, which is the honest order. The
    spaced-repetition buckets sit alongside either way. */
-function meaningPanel(id) {
+function meaningPanel(id, canBack) {
   return `<div class="row" style="margin-top:6px">
       <input id="${id}En" placeholder="what does it mean?" autocomplete="off"
         style="flex:1 1 240px;max-width:340px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:17px;text-align:center">
     </div>
     <div id="${id}Rev"></div>
     <div class="row" id="${id}Row">
+      ${BACK_BTN(canBack)}
       <button class="primary" id="${id}Chk">Check</button>
       <button id="${id}Show">show me</button>
     </div>
@@ -202,8 +233,14 @@ function wireMeaning(id, key, en, done) {
   const chk = document.getElementById(id + "Chk");
   const show = document.getElementById(id + "Show");
   const say = t => { rev.innerHTML = `<p style="text-align:center;font-size:16px;margin:10px 0 0">${t}</p>`; };
+  cardShown();
   inp.focus();
-  inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); chk.click(); } };
+  inp.onkeydown = e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (!inp.value.trim() || enterIsStale()) return;
+    chk.click();
+  };
   chk.onclick = () => {
     const ok = enMatch(inp.value, en);
     say(ok ? "✓ right" : `✗ not quite — you wrote “${esc(inp.value.trim())}”`);
@@ -232,6 +269,7 @@ async function wireAnswer(inputId, submitId, exclude) {
   /* `exclude` means this is a TEST: the answer's own words are out of the
      suggestion pool so a chip can't give it away. Say that, rather than offering
      whatever else happened to be close — three unrelated words is not help. */
+  cardShown();
   attachInlineTranslit(inp, {
     lexicon: await typingPool(exclude),
     strict: !!(exclude && exclude.length),
@@ -240,7 +278,15 @@ async function wireAnswer(inputId, submitId, exclude) {
       : "",
   });
   inp.focus();
-  inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); const b = document.getElementById(submitId); if (b) b.click(); } };
+  inp.onkeydown = e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    // an empty box is not an answer, and an Enter still travelling from the
+    // previous card is not one either
+    if (!inp.value.trim() || enterIsStale()) return;
+    const b = document.getElementById(submitId);
+    if (b) b.click();
+  };
   const kb = document.getElementById(inputId + "Kb");
   if (kb) kb.onclick = () => mountTranslitDock(() => document.getElementById(inputId));
 }
@@ -778,6 +824,13 @@ async function runTest(lessonIds, ctx, state, label, opts) {
   const answerHtml = q => `<div class="q-ar arabic" style="margin-top:10px">${esc(q.v.ar)}</div>
     <div class="q-en">${esc(q.v.en)}</div>${q.v.tr ? `<p class="q-tr">${esc(q.v.tr)}</p>` : ""}`;
 
+  /* Back from an UNANSWERED card: nothing has been recorded for this one, so only
+     the previous question's answer comes off the score. */
+  function wireBack() {
+    const bk = document.getElementById("bk");
+    if (bk && i > 0) bk.onclick = () => { answers.pop(); i--; ask(); };
+  }
+
   ask();
   function ask() {
     if (_enterOff) _enterOff();
@@ -790,16 +843,18 @@ async function runTest(lessonIds, ctx, state, label, opts) {
       app.innerHTML = head + `<div class="card">${n}
         <p style="text-align:center;font-size:15px;margin-top:14px">Listen. What does it mean?</p>
         <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
-        ${meaningPanel("j")}</div>`;
+        ${meaningPanel("j", i > 0)}</div>`;
       document.getElementById("play").onclick = () => speak(q.v.ar, 0.85);
       speak(q.v.ar, 0.85);
       wireMeaning("j", q.key, q.v.en, settle);
+      wireBack();
     } else if (q.form === "mean") {
       app.innerHTML = head + `<div class="card">${n}
         <div class="q-ar arabic">${esc(q.v.ar)}</div>
         <p style="text-align:center;font-size:15px;color:var(--muted)">What does it mean?</p>
-        ${meaningPanel("j")}</div>`;
+        ${meaningPanel("j", i > 0)}</div>`;
       wireMeaning("j", q.key, q.v.en, settle);
+      wireBack();
     } else {
       const sent = q.sentence;
       const target = sent ? sent.ar : q.v.ar;
@@ -810,13 +865,14 @@ async function runTest(lessonIds, ctx, state, label, opts) {
           : "Type it the way it sounds — it turns into Arabic as you go"}</p>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div id="jRev"></div>
-        <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        <div class="row" id="jRow">${BACK_BTN(i > 0)}<button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
           <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
         ${TYPING_HELP}</div>`;
       // a TEST excludes the answer's own words, so a chip can never give it away
       wireAnswer("ans", "chk", [target]);
+      wireBack();
       mountBucketBar(document.getElementById("jBkt"), q.key, b => settle(b !== "repeat", true));
       const check = shown => {
         const inp = document.getElementById("ans");
@@ -859,12 +915,15 @@ async function runTest(lessonIds, ctx, state, label, opts) {
       const rev = document.getElementById("jRev");
       rev.insertAdjacentHTML("beforeend", answerHtml(q));
       const row = document.getElementById("jRow");
-      const next = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+      const next = BACK_BTN(i > 0) + `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
       if (row) row.innerHTML = next;
       else rev.insertAdjacentHTML("afterend", `<div class="row">${next}</div>`);
       speak(speakAr || q.v.ar, 0.85);
       const nx = document.getElementById("nx");
       nx.onclick = () => { i++; ask(); };
+      // this card IS answered, so its own answer comes off too — two pops, not one
+      const bk = document.getElementById("bk");
+      if (bk && i > 0) bk.onclick = () => { answers.pop(); answers.pop(); i--; ask(); };
       nx.focus();
       onEnterOnce(() => nx.click());
     }
@@ -944,6 +1003,15 @@ async function runVocabBurst(ctx, state) {
   }
   primeSpeak();
   logEvent({ e: "burst-start", kind: "vocab", n: words.length });
+  /* SCORED ON THE FIRST ATTEMPT ONLY. His ask, 2026-08-30: "can i get some score
+     for vocabulary burst as well, so that i get a sense of if i should be
+     repeating it." The drill loops until nothing is left, so by the end
+     everything is right by construction and a final tally would always read 100%
+     — useless. What tells him whether to run it again is how many he had cold,
+     before any prompting, which is what this counts. Rounds are reported too: a
+     word that took four goes has not stuck. */
+  const first = { right: 0, seen: new Set() };
+  let roundsTaken = 1;
   const head = `<div class="crumb">📇 Vocabulary burst · between the lessons</div>
     <h1 style="margin-top:0">${words.length} words worth knowing</h1>
     <p class="sub">Not a new topic — these are the commonest words in the Qur'an and in everyday
@@ -980,8 +1048,10 @@ async function runVocabBurst(ctx, state) {
      burst any more, and a word he cannot produce after four goes is better met
      inside a sentence next week than ground down here. */
   function drill(queue, round) {
+    roundsTaken = Math.max(roundsTaken, round);
     if (!queue.length || round > 4) return finish();
     const miss = [];
+    const answered = new Set();     // so stepping back and forth cannot double-log a miss
     let at = 0;
     step();
     function step() {
@@ -993,13 +1063,18 @@ async function runVocabBurst(ctx, state) {
         <div class="q-en">${esc(w.en)}</div>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div id="jRev"></div>
-        <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        <div class="row" id="jRow">${BACK_BTN(at > 0)}<button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
           <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
         ${TYPING_HELP}</div>`;
       wireAnswer("ans", "chk", [w.ar]);
+      wireBurstBack();
       mountBucketBar(document.getElementById("jBkt"), w.key, b => settle(b !== "repeat", true));
+      function wireBurstBack() {
+        const bk = document.getElementById("bk");
+        if (bk && at > 0) bk.onclick = () => { at--; step(); };
+      }
       const check = shown => {
         const inp = document.getElementById("ans");
         const ok = !shown && (arMatch(inp.value, w.ar) || writeMatchAr(inp.value, w.ar).ok);
@@ -1014,13 +1089,18 @@ async function runVocabBurst(ctx, state) {
         if (settle.done) return;
         settle.done = true;
         if (!bucketed) (w.keys || [w.key]).forEach(k => gradeCard(k, ok ? "good" : "again"));
-        if (!ok) miss.push(w);
+        if (!ok && !answered.has(at)) miss.push(w);
+        answered.add(at);
+        // only the first sight of a word counts toward the score
+        if (round === 1 && !first.seen.has(w.key)) { first.seen.add(w.key); if (ok) first.right++; }
         document.getElementById("jRev").insertAdjacentHTML("beforeend",
           `<div class="q-ar arabic">${esc(w.ar)}</div><div class="q-en" style="font-size:15px;color:var(--muted)">${esc(w.en)}</div>
            ${w.example ? `<p style="text-align:center;font-size:17px;direction:rtl" class="arabic">${esc(w.example.ar)}</p>
              <p style="text-align:center;font-size:13px;color:var(--muted)">${esc(w.example.en)}</p>` : ""}`);
-        document.getElementById("jRow").innerHTML = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+        document.getElementById("jRow").innerHTML =
+          BACK_BTN(at > 0) + `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
         speak(w.example ? w.example.ar : w.ar, 0.85);
+        wireBurstBack();
         const nx = document.getElementById("nx");
         nx.onclick = () => { at++; step(); };
         nx.focus();
@@ -1031,11 +1111,31 @@ async function runVocabBurst(ctx, state) {
 
   function finish() {
     if (_enterOff) _enterOff();
-    logEvent({ e: "burst-done", kind: "vocab", n: words.length, keys: words.map(w => w.key) });
+    const total = words.length;
+    const score = Math.round(100 * first.right / (total || 1));
+    logEvent({ e: "burst-done", kind: "vocab", n: total, score, firstTry: first.right, rounds: roundsTaken,
+               keys: words.map(w => w.key) });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
+    /* The verdict is about whether to run it again, which is what he asked for —
+       not a grade. Cold recall of a word he met minutes ago is a low bar, so the
+       thresholds are set accordingly. */
+    const verdict = score >= 75
+      ? "These are yours. The review deck will bring them back on its own — no need to repeat this."
+      : score >= 40
+        ? "Worth running again tomorrow. About half went in; a second pass usually finishes the job."
+        : "Run it again tomorrow, and again the day after. Most of these did not stick on first sight, which is normal for words this new.";
+    const band = score >= 75 ? "var(--accent)" : score >= 40 ? "var(--warn,#d97706)" : "var(--red,#c0392b)";
     app.innerHTML = `<h1>Burst done</h1>
+      <div class="card" style="border-color:${band}">
+        <div style="text-align:center">
+          <div class="big" style="color:${band}">${score}</div>
+          <div style="font-size:15px;font-weight:600">${first.right} of ${total} on first sight</div>
+          <div style="font-size:13px;color:var(--muted)">${roundsTaken === 1 ? "one round" : roundsTaken + " rounds to clear them all"}</div>
+        </div>
+        <p style="font-size:15px;margin:14px 0 0">${verdict}</p>
+      </div>
       <div class="card">
-        <p style="margin-top:0">${words.length} words, each one now inside a sentence you can use. They join the
+        <p style="margin-top:0">${total} words, each one now inside a sentence you can use. They join the
         review deck like everything else — and anything you marked ⊘ won't come back.</p>
         <table class="tbl">${words.map(w => `<tr>
           <td class="ar arabic">${esc(w.ar)}</td>
@@ -1087,6 +1187,7 @@ async function runGrammarBurst(ctx, state) {
   document.getElementById("go").onclick = () => drill(0);
 
   const items = (g.test || []).slice(0, 3);
+  const gFirst = { right: 0, seen: new Set() };
   function drill(at) {
     if (at >= items.length) return finish();
     const t = items[at];
@@ -1098,12 +1199,13 @@ async function runGrammarBurst(ctx, state) {
       ${t.hint ? `<p class="q-tr">${esc(t.hint)}</p>` : ""}
       <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
       <div id="jRev"></div>
-      <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+      <div class="row" id="jRow">${BACK_BTN(at > 0)}<button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
       <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
         <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
       </div>
       ${TYPING_HELP}</div>`;
     wireAnswer("ans", "chk", [t.ar]);
+    if (at > 0) { const b0 = document.getElementById("bk"); if (b0) b0.onclick = () => drill(at - 1); }
     mountBucketBar(document.getElementById("jBkt"), key, b => settle(b !== "repeat", true));
     const check = shown => {
       const inp = document.getElementById("ans");
@@ -1119,10 +1221,14 @@ async function runGrammarBurst(ctx, state) {
       if (settle.done) return;
       settle.done = true;
       if (!bucketed) gradeCard(key, ok ? "good" : "again");
+      if (!gFirst.seen.has(at)) { gFirst.seen.add(at); if (ok) gFirst.right++; }
       document.getElementById("jRev").insertAdjacentHTML("beforeend",
         `<div class="q-ar arabic">${esc(t.ar)}</div>`);
-      document.getElementById("jRow").innerHTML = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+      document.getElementById("jRow").innerHTML =
+        BACK_BTN(at > 0) + `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
       speak(t.ar, 0.85);
+      const bk = document.getElementById("bk");
+      if (bk && at > 0) bk.onclick = () => drill(at - 1);
       const nx = document.getElementById("nx");
       nx.onclick = () => drill(at + 1);
       nx.focus();
@@ -1132,9 +1238,21 @@ async function runGrammarBurst(ctx, state) {
 
   function finish() {
     if (_enterOff) _enterOff();
-    logEvent({ e: "burst-done", kind: "grammar", pattern: id });
+    const total = items.length || 1;
+    const score = Math.round(100 * gFirst.right / total);
+    logEvent({ e: "burst-done", kind: "grammar", pattern: id, score, firstTry: gFirst.right, n: items.length });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
+    const band = score >= 67 ? "var(--accent)" : "var(--warn,#d97706)";
     app.innerHTML = `<h1>Burst done</h1>
+      <div class="card" style="border-color:${band}">
+        <div style="text-align:center">
+          <div class="big" style="color:${band}">${score}</div>
+          <div style="font-size:15px;font-weight:600">${gFirst.right} of ${items.length} applied correctly</div>
+        </div>
+        <p style="font-size:15px;margin:14px 0 0">${score >= 67
+          ? "The rule landed. It will not be explained again, but you will keep meeting it."
+          : "Worth re-reading — it is on <a href=\"grammar.html\" style=\"color:var(--accent)\">Others</a>, and the sentences ahead will drill it anyway."}</p>
+      </div>
       <div class="card">
         <p style="margin-top:0">${esc(g.name)} — you will meet it in ${used} of the sentences still ahead of you,
         and it won't be explained again.</p>
