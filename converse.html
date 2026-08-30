@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Conversation Partner — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3kied">
-  <link rel="stylesheet" href="css/style.css?v=mtg3kied">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3pzlm">
+  <link rel="stylesheet" href="css/style.css?v=mtg3pzlm">
   <style>
     .cv-steps { display: grid; gap: 10px; margin: 8px 0 2px; }
     .cv-step { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
@@ -35,9 +35,11 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mtg3kied"></script>
-<script src="js/tracker.js?v=mtg3kied"></script>
-<script src="js/plan.js?v=mtg3kied"></script>
+<script src="js/progress-model.js?v=mtg3pzlm"></script>
+<script src="js/curriculum.js?v=mtg3pzlm"></script>
+<script src="js/app.js?v=mtg3pzlm"></script>
+<script src="js/tracker.js?v=mtg3pzlm"></script>
+<script src="js/plan.js?v=mtg3pzlm"></script>
 <script>
 renderNav("converse");
 trackPage("converse");
@@ -54,14 +56,129 @@ const EXAM = {
   opener: "السَّلامُ عَلَيْكُم", openerTr: "as-salāmu ʿalaykum",
   success: "all eight tasks attempted and scored",
 };
+/* ---------- THE END-OF-WEEK SPEAKING BRIEF ----------
+   His ask, 2026-08-30:
+
+     "i want a neat option at the end of the week, which is a brief for me to type
+      and copy to any AI for me to have a voice chat. The idea here the AI should
+      try and get me to speak the sentences and try and get me to create some
+      basic variations, it should say stuff like how would you say this? also it
+      can say stuff like what does this mean? then at the end of the audio chat
+      session, it should create a summary for me to give to you so that you can
+      get a sense of how i am progressing and what i need to focus on"
+
+   This is the only briefing built from THIS WEEK'S actual material rather than
+   from a scenario, and the only one that is a drill rather than a conversation:
+   the AI's job is to make him produce the week's sentences out loud, bend them,
+   and say what they mean — the same four steps the on-screen lesson uses, done
+   with his mouth instead of a keyboard.
+
+   The Qur'an half is inverted, exactly as it is in the lesson: he already has
+   those memorised, so the AI says the ayah and he says what it means.
+
+   The report at the end is written for the COACH to read, not for him. It names
+   the sentences he could not produce and the sounds he got wrong — which is
+   precisely what typed answers can never show. */
+const WEEK_BRIEF = {
+  id: "week", titleEn: "🎙 This week, out loud", titleAr: "مُراجَعَةُ الأُسْبُوع",
+  goal: "Say this week's sentences out loud, bend them, and prove you understand them — then bring back a report.",
+  opener: "السَّلامُ عَلَيْكُم", openerTr: "as-salāmu ʿalaykum",
+  success: "every sentence of the week said aloud at least once, and a report to paste back",
+};
+let WCTX = null;
 Promise.all([
   fetch("data/conversations.json").then(r => r.json()).then(d => d.scenarios),
   fetch("data/everyday.json").then(r => r.json()).then(d => d.groups),
-]).then(([sc, ev]) => {
-  SCENARIOS = sc.concat([EXAM]); EVERYDAY = ev;
-  current = new URLSearchParams(location.search).get("exam") ? EXAM : sc[0];
+]).then(async ([sc, ev]) => {
+  SCENARIOS = [WEEK_BRIEF].concat(sc, [EXAM]); EVERYDAY = ev;
+  try { WCTX = await curCtx(); } catch (e) {}
+  current = new URLSearchParams(location.search).get("exam") ? EXAM : WEEK_BRIEF;
   render();
 });
+
+/* the week's sentences — exactly the ones this week's lessons draw on */
+function weekSentences() {
+  if (!WCTX || typeof Curriculum === "undefined") return [];
+  try {
+    const state = Curriculum.milestoneState(WCTX);
+    const weeks = Curriculum.weekPlan(WCTX, state);
+    const wk = weeks[Curriculum.currentWeek(weeks) - 1];
+    if (!wk) return [];
+    const seen = new Map();
+    wk.lessons.forEach(x => Curriculum.sentencesFor(x.lesson.keys || [], WCTX,
+      { track: x.milestone.track === "quran" ? "quran" : "conv", limit: 4 })
+      .forEach(s2 => { if (!seen.has(s2.key)) seen.set(s2.key, s2); }));
+    return [...seen.values()];
+  } catch (e) { return []; }
+}
+
+async function buildWeekBriefing() {
+  const sents = weekSentences();
+  const conv = sents.filter(s => s.track !== "quran");
+  const quran = sents.filter(s => s.track === "quran");
+  const weak = (WCTX ? Curriculum.weakWords(WCTX, 14) : []).map(w => w.key);
+  const weakR = weak.length ? await resolveCards(weak) : [];
+  const weakV = uniqByAr(weakR.map(x => x.v).filter(Boolean)).slice(0, 10);
+  const Q = String.fromCharCode(34);
+
+  const L = [];
+  L.push("=== ARABIC SPEAKING DRILL - END OF WEEK ===");
+  L.push("");
+  L.push("You are running a SPOKEN drill: not a conversation, not a lesson. I am a 37-year-old");
+  L.push("English and Bengali speaker learning Modern Standard Arabic. My goals are to understand");
+  L.push("the Qur'an as it is recited, and to handle Arabic in a mosque in Makkah or Madinah.");
+  L.push("Speak to me in English. The Arabic is the part I have to produce.");
+  L.push("");
+  L.push("## HOW TO RUN IT");
+  L.push("1. Take ONE sentence from the list below at a time, in order.");
+  L.push("2. Give me the English and ask: " + Q + "How would you say this?" + Q + " Then wait. Let me try.");
+  L.push("3. If I get it, say so in a few words and move on. If I do not, say the Arabic slowly,");
+  L.push("   have me repeat it, and bring that sentence back later in the session.");
+  L.push("4. Then BEND it. Ask for one small variation: change the person (I -> he -> they),");
+  L.push("   change the tense, make it a question, or make it negative. One change at a time.");
+  L.push("5. Every few sentences, say one of the Arabic sentences yourself and ask:");
+  L.push("   " + Q + "What does this mean?" + Q + " - that tests the other direction, which is the harder one.");
+  L.push("6. Do NOT introduce vocabulary that is not on this page. If I reach for a word I do not");
+  L.push("   have, give it to me once in English and Arabic, and note it for the report.");
+  L.push("7. Keep it moving - about fifteen minutes. Praise briefly, correct plainly, never lecture.");
+  L.push("");
+  if (conv.length) {
+    L.push("## SENTENCES I MUST BE ABLE TO SAY (" + conv.length + ")");
+    conv.forEach(s => L.push("- " + s.ar + "  =  " + s.en));
+    L.push("");
+  }
+  if (quran.length) {
+    L.push("## AYAT I AM LEARNING TO UNDERSTAND BY EAR (" + quran.length + ")");
+    L.push("For these, do the OPPOSITE: recite the Arabic and ask me what it means. Never ask me to");
+    L.push("produce them - I have them memorised already, and understanding them is the whole skill.");
+    quran.forEach(s => L.push("- " + s.ar + "  =  " + s.en + (s.ref ? "  (" + s.ref + ")" : "")));
+    L.push("");
+  }
+  if (weakV.length) {
+    L.push("## WORDS I AM WEAKEST ON - work these in wherever they fit");
+    weakV.forEach(v => L.push(fmt(v)));
+    L.push("");
+  }
+  L.push("## WHEN I TYPE " + Q + "END" + Q);
+  L.push("Stop the drill and write this report EXACTLY in this format, and nothing else:");
+  L.push("");
+  L.push("=== SESSION REPORT ===");
+  L.push("Scenario: week");
+  L.push("Minutes: <how long we actually spoke>");
+  L.push("Said unaided: <n> of <total>   (sentences I produced with no help)");
+  L.push("Needed prompting: <the English of every sentence I could not produce>");
+  L.push("Variations: <n attempted>, <n correct>   (person and tense changes)");
+  L.push("Understood by ear: <n> of <n>   (the ayat and sentences you said to me)");
+  L.push("Pronunciation: <the specific sounds I got wrong, e.g. ain as a, taa as t, haa as h>");
+  L.push("Grammar slips: <the actual mistakes, e.g. used the ana form for huwa>");
+  L.push("New words I reached for: <words I wanted and did not have>");
+  L.push("Focus next week: <two or three specific things>");
+  L.push("EXAM SCORE: <0-100>%   (the share of sentences I produced unaided)");
+  L.push("=== END REPORT ===");
+  L.push("");
+  L.push("Start now, with your first " + Q + "How would you say..." + Q);
+  return L.join("\n");
+}
 
 function render() {
   content.innerHTML = `
@@ -69,7 +186,9 @@ function render() {
       <span>Conversation Partner</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">مُحادَثَة</span>
     </h1>
-    <p class="sub">Practise real conversation with any AI — Gemini, Claude or ChatGPT — tuned to exactly the words you know. The file below teaches the AI your level, your goal, and how to keep you talking. Save the AI's report at the end and next time picks up where you left off.</p>
+    <p class="sub">Practise out loud with any AI — Gemini, Claude or ChatGPT — tuned to exactly the words you know.
+    <b>🎙 This week, out loud</b> is the end-of-week one: it hands the AI this week's actual sentences and tells it to make you
+    say them, bend them, and prove you understand them. Paste the report it gives you back here and your coach reads it.</p>
 
     <div class="card">
       <div class="cv-steps">
@@ -174,6 +293,7 @@ async function buildExamBriefing() {
 
 async function buildBriefing(s) {
   if (s.id === "exam") return buildExamBriefing();
+  if (s.id === "week") return buildWeekBriefing();
   const srs = getSrs();
   const learntKeys = Object.keys(srs).filter(isLearnt);
   const learningKeys = Object.keys(srs).filter(k => !isLearnt(k));
