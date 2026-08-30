@@ -337,12 +337,12 @@
    "can": "describe a flat room by room, name any day of the week, and ask whether a place is available",
    "why": "Straight from Sunday's class, and it is the first vocabulary you have that describes where you actually live.",
    "items": 65,
-   "plannedMin": 91,
+   "plannedMin": 84,
    "plannedWeek": 2,
    "lessons": [
     {
      "id": "ms-class-0830-l1",
-     "title": "The flat, room by room",
+     "title": "Class words — the flat (1 of 5)",
      "keys": [
       "ev-lesson-home:0",
       "ev-lesson-home:1",
@@ -354,47 +354,41 @@
     },
     {
      "id": "ms-class-0830-l2",
-     "title": "Furniture she drilled (1 of 2)",
+     "title": "Class words — the flat (2 of 5)",
      "keys": [
       "ev-lesson-home:6",
       "ev-lesson-home:7",
       "ev-lesson-home:8",
-      "ev-lesson-home:9"
+      "ev-lesson-home:9",
+      "ev-lesson-home:10"
      ]
     },
     {
      "id": "ms-class-0830-l3",
-     "title": "Furniture she drilled (2 of 2)",
+     "title": "Class words — the flat (3 of 5)",
      "keys": [
-      "ev-lesson-home:10",
       "ev-lesson-home:11",
-      "ev-lesson-home:12"
+      "ev-lesson-home:12",
+      "ev-lesson-home:13",
+      "ev-lesson-home:14",
+      "ev-lesson-home:15"
      ]
     },
     {
      "id": "ms-class-0830-l4",
-     "title": "Fittings and floors (1 of 2)",
+     "title": "Class words — the flat (4 of 5)",
      "keys": [
-      "ev-lesson-home:13",
-      "ev-lesson-home:14",
-      "ev-lesson-home:15",
-      "ev-lesson-home:16"
+      "ev-lesson-home:16",
+      "ev-lesson-home:17",
+      "ev-lesson-home:18",
+      "ev-lesson-home:19",
+      "ev-lesson-home:20"
      ]
     },
     {
      "id": "ms-class-0830-l5",
-     "title": "Fittings and floors (2 of 2)",
+     "title": "Class words — the flat (5 of 5)",
      "keys": [
-      "ev-lesson-home:17",
-      "ev-lesson-home:18",
-      "ev-lesson-home:19"
-     ]
-    },
-    {
-     "id": "ms-class-0830-l6",
-     "title": "The rest of the flat",
-     "keys": [
-      "ev-lesson-home:20",
       "ev-lesson-home:21",
       "ev-lesson-home:22",
       "ev-lesson-home:23",
@@ -403,8 +397,8 @@
      ]
     },
     {
-     "id": "ms-class-0830-l7",
-     "title": "The days of the week (1 of 2)",
+     "id": "ms-class-0830-l6",
+     "title": "Class words — the week (1 of 2)",
      "keys": [
       "ev-lesson-week:0",
       "ev-lesson-week:1",
@@ -414,8 +408,8 @@
      ]
     },
     {
-     "id": "ms-class-0830-l8",
-     "title": "The days of the week (2 of 2)",
+     "id": "ms-class-0830-l7",
+     "title": "Class words — the week (2 of 2)",
      "keys": [
       "ev-lesson-week:5",
       "ev-lesson-week:6",
@@ -425,8 +419,8 @@
      ]
     },
     {
-     "id": "ms-class-0830-l9",
-     "title": "Where the house words meet the Quran",
+     "id": "ms-class-0830-l8",
+     "title": "Class words — where they meet the Qur'an",
      "keys": [
       "ev-lesson-divine:0",
       "ev-lesson-divine:1",
@@ -436,8 +430,8 @@
      ]
     },
     {
-     "id": "ms-class-0830-l10",
-     "title": "Weather",
+     "id": "ms-class-0830-l9",
+     "title": "Class words — weather",
      "keys": [
       "ev-lesson-weather:0",
       "ev-lesson-weather:1",
@@ -448,7 +442,7 @@
      ]
     },
     {
-     "id": "ms-class-0830-l11",
+     "id": "ms-class-0830-l10",
      "title": "Samer looks for a flat — the reading (1 of 3)",
      "keys": [
       "story-07:0",
@@ -460,7 +454,7 @@
      ]
     },
     {
-     "id": "ms-class-0830-l12",
+     "id": "ms-class-0830-l11",
      "title": "Samer looks for a flat — the reading (2 of 3)",
      "keys": [
       "story-07:6",
@@ -472,7 +466,7 @@
      ]
     },
     {
-     "id": "ms-class-0830-l13",
+     "id": "ms-class-0830-l12",
      "title": "Samer looks for a flat — the reading (3 of 3)",
      "keys": [
       "story-07:12",
@@ -1260,14 +1254,14 @@
       "ev-family:7",
       "ev-family:8",
       "ev-family:9",
-      "ev-family:10",
-      "ev-family:11"
+      "ev-family:10"
      ]
     },
     {
      "id": "ms-family-l3",
      "title": "Your family (3 of 3)",
      "keys": [
+      "ev-family:11",
       "ev-family:12",
       "ev-family:13",
       "ev-family:14",
@@ -1584,7 +1578,7 @@
    "why": "Opposites double your descriptive range for almost no effort.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 15,
+   "plannedWeek": 14,
    "lessons": [
     {
      "id": "ms-state-l1",
@@ -2163,38 +2157,38 @@
       "qw:kursi:0:31",
       "qw:kursi:0:32",
       "qw:kursi:0:33",
-      "qw:kursi:0:34",
-      "qw:kursi:0:35"
+      "qw:kursi:0:34"
      ]
     },
     {
      "id": "ms-kursi-l7",
      "title": "Ayat al-Kursi, part 1 (7 of 9)",
      "keys": [
+      "qw:kursi:0:35",
       "qw:kursi:0:36",
       "qw:kursi:0:37",
       "qw:kursi:0:38",
-      "qw:kursi:0:39",
-      "qw:kursi:0:40",
-      "qw:kursi:0:41"
+      "qw:kursi:0:39"
      ]
     },
     {
      "id": "ms-kursi-l8",
      "title": "Ayat al-Kursi, part 1 (8 of 9)",
      "keys": [
+      "qw:kursi:0:40",
+      "qw:kursi:0:41",
       "qw:kursi:0:42",
       "qw:kursi:0:43",
-      "qw:kursi:0:44",
-      "qw:kursi:0:45",
-      "qw:kursi:0:46",
-      "qw:kursi:0:47"
+      "qw:kursi:0:44"
      ]
     },
     {
      "id": "ms-kursi-l9",
      "title": "Ayat al-Kursi, part 1 (9 of 9)",
      "keys": [
+      "qw:kursi:0:45",
+      "qw:kursi:0:46",
+      "qw:kursi:0:47",
       "qw:kursi:0:48",
       "qw:kursi:0:49"
      ]

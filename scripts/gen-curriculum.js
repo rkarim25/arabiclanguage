@@ -66,13 +66,10 @@ const SPEC = [
     can: "describe a flat room by room, name any day of the week, and ask whether a place is available",
     why: "Straight from Sunday's class, and it is the first vocabulary you have that describes where you actually live.",
     lessons: [
-      { title: "The flat, room by room", src: { ev: "lesson-home", from: 0, to: 6 } },
-      { title: "Furniture she drilled", src: { ev: "lesson-home", from: 6, to: 13 } },
-      { title: "Fittings and floors", src: { ev: "lesson-home", from: 13, to: 20 } },
-      { title: "The rest of the flat", src: { ev: "lesson-home", from: 20, to: 26 } },
-      { title: "The days of the week", src: { ev: "lesson-week", from: 0, to: 10 } },
-      { title: "Where the house words meet the Quran", src: { ev: "lesson-divine", from: 0, to: 5 } },
-      { title: "Weather", src: { ev: "lesson-weather", from: 0, to: 6 } },
+      { title: "Class words — the flat", src: { ev: "lesson-home" } },
+      { title: "Class words — the week", src: { ev: "lesson-week" } },
+      { title: "Class words — where they meet the Qur'an", src: { ev: "lesson-divine" } },
+      { title: "Class words — weather", src: { ev: "lesson-weather" } },
       { title: "Samer looks for a flat — the reading", src: { story: "story-07" } },
     ] },
 
@@ -299,9 +296,15 @@ const milestones = SPEC.map((m, order) => {
     const keys = resolve(l.src);
     if (!keys.length) throw new Error(`lesson "${l.title}" in ${m.id} resolved to no keys`);
     const parts = Math.max(1, Math.ceil(keys.length / LESSON_ITEMS));
-    const size = Math.ceil(keys.length / parts);
+    /* Spread the remainder instead of dumping it in the last part. A fixed
+       ceil() size gave 26 items as 6+6+6+6+2 — exactly the stub this split was
+       written to avoid. 6+5+5+5+5 is what "even" meant. */
+    const base = Math.floor(keys.length / parts), extra = keys.length % parts;
+    let at = 0;
     for (let p = 0; p < parts; p++) {
-      const slice = keys.slice(p * size, (p + 1) * size);
+      const size = base + (p < extra ? 1 : 0);
+      const slice = keys.slice(at, at + size);
+      at += size;
       if (!slice.length) continue;
       lessons.push({
         id: `${m.id}-l${lessons.length + 1}`,

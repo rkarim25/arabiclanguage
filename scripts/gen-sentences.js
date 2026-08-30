@@ -41,6 +41,13 @@ const D = f => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8"));
 const verses = D("verses.json"), phrases = D("phrases.json"), core = D("quran-core.json");
 const everyday = D("everyday.json"), families = D("families.json"), sentences = D("sentences.json");
 const prompts = D("prompts.json"), grammar = D("grammar.json");
+/* How much of real verb use each person/tense cell accounts for, measured by
+   scripts/gen-frequency.js. Variants are ordered by it so he drills what he will
+   actually meet — his rule: "i dont want to waste time going over variants which
+   are not going to be used." */
+let cellFreq = { cells: [] };
+try { cellFreq = D("frequency.json"); } catch (e) { /* optional until it is generated */ }
+const CELL_SHARE = Object.fromEntries((cellFreq.cells || []).map(c => [c.cell, c.share]));
 /* The short surahs, imported from his own Qur'an site by
    scripts/import-quran-sentences.js. Optional: the site still builds without it,
    it just teaches 13 surahs instead of the whole of juz' 'Amma. */
@@ -294,7 +301,13 @@ grammar.patterns.forEach(pat => (pat.examples || []).forEach((e, i) => add({
 /* --- conjugation frames: these ARE the variation engine ---
    One frame per verb (the "I …" past form), carrying the whole verified
    person×tense table so a lesson can mutate it without inventing anything. */
-const PERSONS = [["ana", "I"], ["nahnu", "we"], ["hum", "they"]];
+/* The persons actually drilled are decided by measured frequency and written
+   into data/sentences.json by scripts/gen-verb-frames.js — read them from there
+   rather than assuming, or the variants silently collapse to whichever ones
+   happen to be hardcoded here. */
+const PERSON_EN = { ana: "I", anta: "you", anti: "you", huwa: "he", hiya: "she", nahnu: "we", antum: "you all", hum: "they" };
+const PERSONS = ((sentences.persons || []).map(p => [p.key, PERSON_EN[p.key] || p.en || p.key]));
+if (!PERSONS.length) PERSONS.push(["ana", "I"], ["nahnu", "we"], ["hum", "they"]);
 sentences.verbs.forEach((v, vi) => {
   const form = v.forms.ana && v.forms.ana.past;
   if (!form) return;
@@ -317,10 +330,19 @@ sentences.verbs.forEach((v, vi) => {
     vary: PERSONS.flatMap(([pk, pen]) => ["past", "pres", "fut"].map(tk => {
       const f = v.forms[pk] && v.forms[pk][tk];
       if (!f) return null;
+      // he/she takes the -s in the present: "he worships", not "he worship"
+      const third = pk === "huwa" || pk === "hiya";
+      const pres = third ? String(v.base).replace(/(s|sh|ch|x|o)$/, "$1e").replace(/y$/, "ie") + "s" : v.base;
       const en = tk === "fut" ? j(`${pen} will ${v.base}`, v.obj.en)
-        : j(`${pen} ${tk === "past" ? v.past : v.base}`, v.obj.en);
-      return { ar: j(f, v.obj.ar), en: String(en).replace(/\s+/g, " ").trim(), person: pk, tense: tk, verb: f };
-    }).filter(Boolean)),
+        : j(`${pen} ${tk === "past" ? v.past : pres}`, v.obj.en);
+      return { ar: j(f, v.obj.ar), en: String(en).replace(/\s+/g, " ").trim(), person: pk, tense: tk, verb: f,
+               // the future is سَ + present, so it inherits the present's share,
+               // heavily discounted: it is far rarer than either base tense
+               share: tk === "fut" ? +(((CELL_SHARE[`${pk}:pres`] || 0) * 0.2).toFixed(2))
+                                   : (CELL_SHARE[`${pk}:${tk}`] || 0) };
+    }).filter(Boolean)
+      // commonest first: he drills what he will actually meet
+      .sort((a, b) => b.share - a.share)),
   });
 });
 

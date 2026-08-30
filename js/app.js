@@ -1135,6 +1135,21 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
   playRecitation([{ n: surahN, ayah }], null, err => { if (err) speak(fallbackText, rate); });
 }
 
+/* ---------- data files carry the build stamp ----------
+   js and css are stamped in the markup by scripts/bump-version.js; data/*.json
+   are fetched from code and were not, so a deploy could pair a NEW
+   curriculum.json with a CACHED everyday.json. On 2026-08-30 that rendered him a
+   lesson whose own four words could not resolve, leaving only its review items —
+   the lesson looked like unrelated nonsense. Stamping the data URLs makes the
+   pairing impossible: a new build asks for a URL the old cache does not hold.
+   The service worker still answers offline via its ignoreSearch fallback. */
+const DATA_V = "mtg0msja";
+if (typeof window !== "undefined" && window.fetch) {
+  const _f = window.fetch.bind(window);
+  window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
+    ? _f(u + "?v=" + DATA_V, o) : _f(u, o);
+}
+
 /* ---------- Phonetic Latin -> Arabic (from the rkarim25 keyboard) ---------- */
 const LATIN_TO_AR = {
   A: "ا", aa: "ا", b: "ب", t: "ت", T: "ط", th: "ث",

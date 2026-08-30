@@ -35,6 +35,14 @@ pages.forEach(f => {
   if (html !== before) { fs.writeFileSync(p, html, "utf8"); changed++; }
 });
 
+// stamp the data-file version too — see the DATA_V comment in js/app.js
+const appPath = path.join(root, "js", "app.js");
+if (fs.existsSync(appPath)) {
+  const before = fs.readFileSync(appPath, "utf8");
+  const after = before.replace(/const DATA_V = "[a-z0-9]*"/, `const DATA_V = "${v}"`);
+  if (after !== before) { fs.writeFileSync(appPath, after); }
+}
+
 // stamp the service-worker cache name too — a deploy must always retire the old offline cache
 const swPath = path.join(root, "sw.js");
 if (fs.existsSync(swPath)) {
