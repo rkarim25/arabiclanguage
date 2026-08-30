@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtfhd7l7">
-  <link rel="stylesheet" href="css/style.css?v=mtfhd7l7">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg07kj9">
+  <link rel="stylesheet" href="css/style.css?v=mtg07kj9">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -33,6 +33,27 @@
       border-radius: 0 8px 8px 0; padding: 8px 10px; }
     .sp-diag .arabic { font-size: 17px; }
     }
+    .seg-row { margin: 6px 0 12px; }
+    .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .seg button { border: 0; background: var(--card); padding: 7px 16px; font-size: 14px; cursor: pointer; color: var(--muted); }
+    .seg button.sel { background: var(--accent); color: #fff; }
+    .inv2 { display: flex; gap: 26px; flex-wrap: wrap; }
+    .inv2 .n { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .inv2 .l { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+    .lgrp { border-bottom: 1px solid var(--border); }
+    .lgrp summary { display: flex; align-items: center; gap: 10px; padding: 9px 2px; cursor: pointer; font-size: 14.5px; }
+    .lgrp .gname { flex: 1; }
+    .lgrp .gbar { width: 84px; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; flex: none; }
+    .lgrp .gbar > i { display: block; height: 100%; background: var(--accent); }
+    .lgrp .gnum { font-size: 12.5px; color: var(--muted); min-width: 56px; text-align: right; flex: none; }
+    .gbody { padding: 4px 0 12px; }
+    .lrow { padding: 7px 10px; border-radius: 8px; }
+    .lrow:nth-child(odd) { background: rgba(0,0,0,.025); }
+    .lrow.on { border-left: 3px solid var(--accent); }
+    .lrow .lar { font-family: var(--font-ar); font-size: 20px; line-height: 1.9; text-align: right; }
+    .lrow .len { font-size: 13px; color: var(--muted); }
+    .lrow .lref, .vtag { font-size: 11px; color: var(--accent); }
+    @media (prefers-color-scheme: dark) { .lrow:nth-child(odd) { background: rgba(255,255,255,.04); } }
   </style>
 </head>
 <body>
@@ -41,9 +62,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mtfhd7l7"></script>
-<script src="js/tracker.js?v=mtfhd7l7"></script>
-<script src="js/plan.js?v=mtfhd7l7"></script>
+<script src="js/progress-model.js?v=mtg07kj9"></script>
+<script src="js/curriculum.js?v=mtg07kj9"></script>
+<script src="js/app.js?v=mtg07kj9"></script>
+<script src="js/tracker.js?v=mtg07kj9"></script>
+<script src="js/plan.js?v=mtg07kj9"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -52,7 +75,13 @@ const content = document.getElementById("content");
 const SESSION = 8;
 let DATA = null, TENSE_FILTER = "all";
 
-fetch("data/sentences.json").then(r => r.json()).then(d => { DATA = d; start(); });
+let BANK = { sentences: [] }, MODE = new URLSearchParams(location.search).get("view") === "list" ? "list" : "practise";
+/* friendly names for the sources the bank draws on, for the list's groupings */
+const SRC_NAMES = { prompts: "Things to say", sentences: "Verb frames you can bend", grammar: "Grammar in a sentence", phrases: "The phrase deck", quran: "Qur'an" };
+Promise.all([
+  fetch("data/sentences.json").then(r => r.json()),
+  fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+]).then(([d, b]) => { DATA = d; BANK = b; start(); });
 
 /* Build every verb × person × tense item, then take a frequency-weighted session.
    Verbs are pre-ordered most-frequent first, so a light weighting toward the top
@@ -112,6 +141,7 @@ function pickSession() {
 let queue = [], done = 0, got = 0, exactCount = 0;
 
 function start() {
+  if (MODE === "list") return renderList();
   queue = pickSession(); done = 0; got = 0; exactCount = 0;
   content.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -119,6 +149,10 @@ function start() {
       <span class="arabic" style="color:var(--accent)" dir="rtl">بِناءُ الجُمَل</span>
     </h1>
     <p class="sub">Build the whole sentence yourself from a verb you already know — the point is the <b>conjugation</b>: I / we / they across past, present and future. Write it, then reveal. High-frequency verbs only, a short set at a time — no endless drilling.</p>
+    <div class="seg-row"><div class="seg" id="spMode">
+      <button class="sel" data-m="practise">✍️ Practise</button>
+      <button data-m="list">📋 The list</button>
+    </div></div>
     <div class="sp-chips" id="spChips">
       ${[["all","Mixed"],["past","Past"],["pres","Present"],["fut","Future"]]
         .map(([k,l]) => `<span class="sp-chip ${TENSE_FILTER===k?"on":""}" data-k="${k}">${l}</span>`).join("")}
@@ -127,6 +161,9 @@ function start() {
   `;
   document.querySelectorAll("#spChips .sp-chip").forEach(c => c.onclick = () => {
     TENSE_FILTER = c.dataset.k; start();
+  });
+  document.querySelectorAll("#spMode button").forEach(b => b.onclick = () => {
+    if (b.dataset.m === "list") { MODE = "list"; renderList(); }
   });
   ask();
 }
@@ -211,6 +248,132 @@ function ask() {
     done++;
     ask();
   }
+}
+
+/* ---------- THE LIST — everything there is to master ----------
+   His question, 2026-08-30: "where is the list of sentences that i need to
+   master?" The home page had been reporting the COUNT (592 ayat + 952 everyday
+   utterances) without ever showing him the thing itself, which is a fair
+   complaint about a site whose whole premise is that the corpus is finite and
+   knowable.
+
+   Grouped, collapsed by default and rendered on demand: 954 sentences is far too
+   much DOM to lay out at once, and the useful view is "which sets exist and how
+   far through each am I", not a wall of Arabic. Every row states whether it is
+   held, so the list doubles as the progress record. */
+function renderList() {
+  trackPage("sentences:list");
+  const held = k => (getSrs()[k] || {}).box >= 3;
+  const groups = new Map();
+  (BANK.sentences || []).forEach(s => {
+    const g = s.track === "quran" ? (s.surah || "Qur'an") : (s.theme || SRC_NAMES[s.src] || "Everyday");
+    const key = s.track + "|" + g;
+    if (!groups.has(key)) groups.set(key, { track: s.track, name: g, items: [] });
+    groups.get(key).items.push(s);
+  });
+  const all = [...groups.values()];
+  const quran = all.filter(g => g.track === "quran").sort((a, b) => b.items.length - a.items.length);
+  const conv = all.filter(g => g.track !== "quran").sort((a, b) => b.items.length - a.items.length);
+
+  const tally = gs => {
+    const items = gs.flatMap(g => g.items);
+    const h = items.filter(s => held(s.key)).length;
+    const variants = items.reduce((a, s) => a + Math.max(1, (s.vary || []).length), 0);
+    return { n: items.length, h, variants };
+  };
+  const q = tally(quran), c = tally(conv);
+
+  const section = (title, sub, gs) => `
+    <h2 style="margin:22px 0 4px;font-size:17px">${title}</h2>
+    <p class="sp-meta" style="margin-bottom:10px">${sub}</p>
+    ${gs.map((g, i) => {
+      const h = g.items.filter(s => held(s.key)).length;
+      const pct = Math.round(100 * h / g.items.length);
+      return `<details class="lgrp" data-g="${g.track}|${i}">
+        <summary>
+          <span class="gname">${esc(g.name)}</span>
+          <span class="gbar"><i style="width:${pct}%"></i></span>
+          <span class="gnum">${h} / ${g.items.length}</span>
+        </summary>
+        <div class="gbody">loading…</div>
+      </details>`;
+    }).join("")}`;
+
+  content.innerHTML = `
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Sentences</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">الجُمَل</span>
+    </h1>
+    <div class="seg-row"><div class="seg" id="spMode">
+      <button data-m="practise">✍️ Practise</button>
+      <button class="sel" data-m="list">📋 The list</button>
+    </div></div>
+    <div class="card" style="border-color:var(--accent)">
+      <p style="margin:0 0 8px;font-size:15px"><b>Everything there is to master.</b> It is a finite list — that is the point of it.</p>
+      <div class="inv2">
+        <div><div class="n">${q.n}</div><div class="l">🎧 ayat — Al-Fatiha and all of juz' 'Amma<br><b>${q.h}</b> held</div></div>
+        <div><div class="n">${c.n}</div><div class="l">🗣 everyday sentences, ${c.variants} with their variants<br><b>${c.h}</b> held</div></div>
+      </div>
+      <p class="sp-meta" style="margin:10px 0 0">A sentence counts as held once it is at box 3 — met enough times to stick. The Qur'an side has no variants: an ayah is fixed text.</p>
+    </div>
+    <div id="weekBox"></div>
+    ${section("🎧 The short surahs", `${quran.length} surahs. Understand these and you understand what is recited in prayer.`, quran)}
+    ${section("🗣 Everyday Arabic", `${conv.length} sets. A ⟳ marks a frame you can bend across person and tense.`, conv)}
+  `;
+
+  document.querySelectorAll("#spMode button").forEach(b => b.onclick = () => {
+    if (b.dataset.m === "practise") { MODE = "practise"; start(); }
+  });
+
+  /* THIS WEEK — the answer to "essentially every week i am trying to master
+     certain sentences, right?" Yes: seven lessons draw 12-16 distinct sentences
+     between them. That is the number he actually operates on, so it goes above
+     the full corpus rather than being buried in it. */
+  (async () => {
+    let ctx;
+    try { ctx = await curCtx(); } catch (e) { return; }
+    if (!ctx || typeof Curriculum === "undefined") return;
+    const state = Curriculum.milestoneState(ctx);
+    const wk = Curriculum.weekPlan(ctx, state);
+    const w = (wk || [])[0];
+    if (!w) return;
+    const seen = new Map();
+    w.lessons.forEach(l => {
+      const src = (ctx.curriculum.milestones || []).find(m => m.id === l.milestone.id) || l.milestone;
+      const les = (src.lessons || []).find(x => x.id === l.lesson.id) || l.lesson;
+      Curriculum.sentencesFor(les.keys || [], ctx, { track: l.milestone.track, limit: 4 })
+        .forEach(s2 => { if (!seen.has(s2.key)) seen.set(s2.key, { s: s2, from: l.lesson.title }); });
+    });
+    const rows = [...seen.values()];
+    if (!rows.length) return;
+    const h = rows.filter(r => held(r.s.key)).length;
+    document.getElementById("weekBox").innerHTML = `
+      <h2 style="margin:22px 0 4px;font-size:17px">📌 This week</h2>
+      <p class="sp-meta" style="margin-bottom:10px">Seven lessons, and between them these
+        <b>${rows.length} sentences</b> — that is what mastering this week actually means.
+        ${h} held so far.</p>
+      <div class="card" style="padding:8px 12px">
+        ${rows.map(r => `<div class="lrow${held(r.s.key) ? " on" : ""}">
+          <div class="lar arabic" dir="rtl">${esc(r.s.ar)}${(r.s.vary || []).length ? ` <span class="vtag">⟳ ${r.s.vary.length}</span>` : ""}</div>
+          <div class="len">${esc(r.s.en)} <span class="lref">${esc(r.from)}</span></div>
+        </div>`).join("")}
+      </div>`;
+  })();
+
+  // render a group's rows only when he opens it
+  const lookup = {};
+  quran.forEach((g, i) => lookup["quran|" + i] = g);
+  conv.forEach((g, i) => lookup["conv|" + i] = g);
+  document.querySelectorAll(".lgrp").forEach(d => d.addEventListener("toggle", () => {
+    if (!d.open || d.dataset.done) return;
+    d.dataset.done = "1";
+    const g = lookup[d.dataset.g];
+    d.querySelector(".gbody").innerHTML = g.items.map(s => `
+      <div class="lrow${held(s.key) ? " on" : ""}">
+        <div class="lar arabic" dir="rtl">${esc(s.ar)}${(s.vary || []).length ? ` <span class="vtag">⟳ ${s.vary.length}</span>` : ""}</div>
+        <div class="len">${esc(s.en)}${s.ref ? ` <span class="lref">${esc(s.ref)}</span>` : ""}</div>
+      </div>`).join("");
+  }));
 }
 
 function finish() {
