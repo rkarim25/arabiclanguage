@@ -7,6 +7,7 @@ const STORY_LIST = [
   { id: "story-04", level: 1, n: 4, titleAr: "يَوْمُ الجُمُعَةِ", titleEn: "Friday", desc: "Ghusl, the walk to the masjid, the khutbah, the prayer.", words: 38 },
   { id: "story-05", level: 1, n: 5, titleAr: "فِي المَطْعَمِ", titleEn: "At the Restaurant", desc: "Your first full dialogue — ordering dinner, start to bill.", words: 32 },
   { id: "story-06", level: 1, n: 6, titleAr: "حِصَّةٌ مَعَ المُعَلِّمَةِ", titleEn: "The Teacher Session", desc: "A day built around your Arabic lesson — weaving in your Bayna Yadayk Unit 1 words.", words: 27 },
+  { id: "story-07", level: 2, n: 7, titleAr: "سَامِر يَبْحَثُ عَنْ شَقَّةٍ", titleEn: "Samer looks for a flat", desc: "Your 30 Aug class reading — the flat, the days of the week, and asking the owner.", words: 18 },
 ];
 
 /* Root-family manifest (full data in data/families.json) */
@@ -55,6 +56,10 @@ const EVERYDAY_LIST = [
   { id: "questions", title: "أَدَوَات الاِسْتِفْهَام", hint: "question words" },
   { id: "numbers", title: "الأَرْقَام", hint: "numbers 1–10" },
   { id: "time", title: "كَلِمَات الوَقْت", hint: "now, today, tomorrow" },
+  { id: "lesson-home", title: "شَقَّتُك", hint: "your flat, room by room — class, 30 Aug" },
+  { id: "lesson-week", title: "أَيَّام الأُسْبُوع", hint: "the days of the week — class, 30 Aug" },
+  { id: "lesson-divine", title: "أَسْمَاء وَبَيْت", hint: "household words that meet the Quran — class, 30 Aug" },
+  { id: "lesson-weather", title: "الجَوّ", hint: "weather — the set thalj belongs to" },
   { id: "want-need", title: "أُرِيد وَأَحْتَاج", hint: "want, need, can" },
   { id: "people", title: "النَّاس وَالضَّمَائِر", hint: "people & pronouns" },
   { id: "opposites", title: "الأَضْدَاد", hint: "adjective opposites in pairs" },

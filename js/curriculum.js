@@ -1209,24 +1209,28 @@
        a week is dealt from both — Qur'an slightly heavier, because it is his
        ranked-first goal.
 
-       Class material comes FIRST. When he pastes a lesson from his teacher it is
-       added as a milestone flagged `source: "teacher"`, and those lessons head the
-       very next week — that is what "baked in" means. */
-    const quran = [], conv = [], teacher = [];
+       Class material comes FIRST — but first WITHIN ITS OWN TRACK, not ahead of
+       the whole week. A single class can be thirteen lessons (30 Aug was), and
+       letting it head the week outright emptied the Qur'an half for a month,
+       which breaks the rule above. So a teacher lesson jumps its track's queue
+       and the mix is preserved. Both of his rules survive. */
+    const quran = [], conv = [];
+    const tQuran = [], tConv = [];
     for (const m of state.milestones) {
       for (const l of m.lessons) {
         const row = { milestone: m, lesson: l, mins: minsEach };
-        if (m.source === "teacher" || m.track === "teacher") teacher.push(row);
-        else if (m.track === "quran") quran.push(row);
-        else conv.push(row);
+        const isTeacher = m.source === "teacher" || m.track === "teacher";
+        const isQuran = m.track === "quran";
+        (isTeacher ? (isQuran ? tQuran : tConv) : (isQuran ? quran : conv)).push(row);
       }
     }
+    // class material sits at the head of its own track's queue
+    quran.unshift(...tQuran);
+    conv.unshift(...tConv);
 
     const weeks = [];
-    while (teacher.length || quran.length || conv.length) {
+    while (quran.length || conv.length) {
       const slot = { week: weeks.length + 1, lessons: [], mins: 0 };
-      // whatever his teacher just taught leads the week
-      while (teacher.length && slot.lessons.length < perWeek) slot.lessons.push(teacher.shift());
       let q = 0, c = 0;
       while (slot.lessons.length < perWeek && (quran.length || conv.length)) {
         // keep the ratio honest as the week fills, and fall back to whichever

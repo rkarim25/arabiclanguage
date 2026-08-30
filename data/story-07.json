@@ -1,0 +1,153 @@
+{
+ "id": "story-07",
+ "level": 2,
+ "source": "teacher",
+ "lesson": "Class — 30 Aug: looking for a flat",
+ "titleAr": "سَامِر يَبْحَثُ عَنْ شَقَّةٍ",
+ "titleEn": "Samer looks for a flat",
+ "grammar": "أَرَادَ أَنْ + present (wanted to…), يُمْكِنُكَ + verbal noun (you can…), and the feminine agreement that runs right through the description of the flat",
+ "sentences": [
+  {
+   "ar": "فِي يَوْمِ الأَحَدِ، أَرَادَ سَامِر أَنْ يَبْحَثَ عَنْ بَيْتٍ جَدِيدٍ لِلسَّكَنِ.",
+   "en": "On Sunday, Samer wanted to look for a new house to live in.",
+   "words": [
+    ["فِي", "in / on"],
+    ["يَوْمِ", "the day of"],
+    ["الأَحَدِ", "Sunday"],
+    ["أَرَادَ", "he wanted"],
+    ["سَامِر", "Samer (a name)"],
+    ["أَنْ", "to (before a verb)"],
+    ["يَبْحَثَ", "he searches / to look"],
+    ["عَنْ", "for / about"],
+    ["بَيْتٍ", "a house"],
+    ["جَدِيدٍ", "new"],
+    ["لِلسَّكَنِ", "to live in / for housing"]
+   ]
+  },
+  {
+   "ar": "ذَهَبَ مَعَ أَخِيهِ إِلَى حَيِّ الجَامِعَةِ، وَشَاهَدَا شَقَّةً جَمِيلَةً فِيهَا غُرْفَةُ جُلُوسٍ وَاسِعَةٌ وَغُرْفَةُ نَوْمٍ مُرِيحَةٌ وَمَطْبَخٌ صَغِيرٌ.",
+   "en": "He went with his brother to the university neighbourhood, and the two of them saw a beautiful flat with a spacious living room, a comfortable bedroom and a small kitchen.",
+   "words": [
+    ["ذَهَبَ", "he went"],
+    ["مَعَ", "with"],
+    ["أَخِيهِ", "his brother"],
+    ["إِلَى", "to"],
+    ["حَيِّ", "the neighbourhood of"],
+    ["الجَامِعَةِ", "the university"],
+    ["وَشَاهَدَا", "and the two of them saw"],
+    ["شَقَّةً", "a flat"],
+    ["جَمِيلَةً", "beautiful"],
+    ["فِيهَا", "in it (f.)"],
+    ["غُرْفَةُ", "a room of"],
+    ["جُلُوسٍ", "sitting"],
+    ["وَاسِعَةٌ", "spacious"],
+    ["وَغُرْفَةُ", "and a room of"],
+    ["نَوْمٍ", "sleep"],
+    ["مُرِيحَةٌ", "comfortable"],
+    ["وَمَطْبَخٌ", "and a kitchen"],
+    ["صَغِيرٌ", "small"]
+   ]
+  },
+  {
+   "ar": "كَانَ فِي غُرْفَةِ النَّوْمِ سَرِيرٌ وَمِرْآةٌ، وَفِي المَطْبَخِ فُرْنٌ جَدِيدٌ.",
+   "en": "In the bedroom there was a bed and a mirror, and in the kitchen a new oven.",
+   "words": [
+    ["كَانَ", "there was"],
+    ["فِي", "in"],
+    ["غُرْفَةِ", "the room of"],
+    ["النَّوْمِ", "sleep"],
+    ["سَرِيرٌ", "a bed"],
+    ["وَمِرْآةٌ", "and a mirror"],
+    ["وَفِي", "and in"],
+    ["المَطْبَخِ", "the kitchen"],
+    ["فُرْنٌ", "an oven"],
+    ["جَدِيدٌ", "new"]
+   ]
+  },
+  {
+   "ar": "سَأَلَ سَامِر صَاحِبَ البَيْتِ: مِنْ فَضْلِكَ، هَلْ هَذِهِ الشَّقَّةُ مُتَاحَةٌ يَوْمَ الثُّلَاثَاءِ؟",
+   "en": "Samer asked the owner of the house: please, is this flat available on Tuesday?",
+   "words": [
+    ["سَأَلَ", "he asked"],
+    ["سَامِر", "Samer"],
+    ["صَاحِبَ", "the owner of"],
+    ["البَيْتِ", "the house"],
+    ["مِنْ", "from"],
+    ["فَضْلِكَ", "your kindness — 'please'"],
+    ["هَلْ", "(opens a yes/no question)"],
+    ["هَذِهِ", "this (f.)"],
+    ["الشَّقَّةُ", "the flat"],
+    ["مُتَاحَةٌ", "available"],
+    ["يَوْمَ", "on the day of"],
+    ["الثُّلَاثَاءِ", "Tuesday"]
+   ]
+  },
+  {
+   "ar": "فَأَجَابَهُ: نَعَمْ، يُمْكِنُكَ الدُّخُولُ يَوْمَ الثُّلَاثَاءِ، وَإِذَا أَرَدْتَ يُمْكِنُكَ الانْتِقَالُ يَوْمَ الخَمِيسِ.",
+   "en": "So he answered him: yes, you can move in on Tuesday, and if you want you can move on Thursday.",
+   "words": [
+    ["فَأَجَابَهُ", "so he answered him"],
+    ["نَعَمْ", "yes"],
+    ["يُمْكِنُكَ", "you can"],
+    ["الدُّخُولُ", "entering / moving in"],
+    ["يَوْمَ", "on the day of"],
+    ["الثُّلَاثَاءِ", "Tuesday"],
+    ["وَإِذَا", "and if"],
+    ["أَرَدْتَ", "you wanted"],
+    ["الانْتِقَالُ", "moving / relocating"],
+    ["الخَمِيسِ", "Thursday"]
+   ]
+  },
+  {
+   "ar": "أَعْجَبَتْ سَامِر الشَّقَّةُ، فَقَالَ: أُرِيدُ أَنْ أَسْكُنَ هُنَا، فَالبَيْتُ جَمِيلٌ وَالحَيُّ هَادِئٌ.",
+   "en": "The flat pleased Samer, so he said: I want to live here — the house is beautiful and the neighbourhood is quiet.",
+   "words": [
+    ["أَعْجَبَتْ", "it pleased"],
+    ["سَامِر", "Samer"],
+    ["الشَّقَّةُ", "the flat"],
+    ["فَقَالَ", "so he said"],
+    ["أُرِيدُ", "I want"],
+    ["أَنْ", "to"],
+    ["أَسْكُنَ", "I live / to live"],
+    ["هُنَا", "here"],
+    ["فَالبَيْتُ", "for the house is"],
+    ["جَمِيلٌ", "beautiful"],
+    ["وَالحَيُّ", "and the neighbourhood is"],
+    ["هَادِئٌ", "quiet"]
+   ]
+  }
+ ],
+ "vocab": [
+  { "ar": "شَقَّة", "en": "flat, apartment", "tr": "shaqqa", "note": "from شَقَّ — to split; a flat is a 'split off' part of a building" },
+  { "ar": "حَيّ", "en": "neighbourhood, quarter", "tr": "ḥayy", "note": "same root as حَيّ 'alive' — أَسْكُنُ فِي حَيِّ المَطَارِ" },
+  { "ar": "سَكَن", "en": "housing, dwelling", "tr": "sakan", "note": "root س‑ك‑ن — to settle, dwell; also سَكِينَة 'tranquillity'" },
+  { "ar": "غُرْفَةُ جُلُوسٍ", "en": "living room", "tr": "ghurfatu julūs", "note": "literally 'room of sitting'" },
+  { "ar": "غُرْفَةُ نَوْمٍ", "en": "bedroom", "tr": "ghurfatu nawm", "note": "literally 'room of sleep'" },
+  { "ar": "مَطْبَخ", "en": "kitchen", "tr": "maṭbakh", "note": "place-noun from طَبَخَ — to cook" },
+  { "ar": "سَرِير", "en": "bed", "tr": "sarīr", "note": "plural سُرُر" },
+  { "ar": "مِرْآة", "en": "mirror", "tr": "mirʾāt", "note": "instrument-noun from رَأَى — to see; the thing you see with" },
+  { "ar": "فُرْن", "en": "oven", "tr": "furn", "note": "also a bakery" },
+  { "ar": "مُتَاح", "en": "available", "tr": "mutāḥ", "note": "passive participle — 'made available'" },
+  { "ar": "وَاسِع", "en": "spacious, wide", "tr": "wāsiʿ", "note": "الوَاسِع is also a name of Allah — the All-Encompassing" },
+  { "ar": "مُرِيح", "en": "comfortable", "tr": "murīḥ", "note": "from رَاحَة — rest, comfort" },
+  { "ar": "هَادِئ", "en": "quiet, calm", "tr": "hādiʾ", "note": "active participle — 'being calm'" },
+  { "ar": "صَاحِب", "en": "owner; companion", "tr": "ṣāḥib", "note": "plural أَصْحَاب — the Quran's 'companions of…'" },
+  { "ar": "الدُّخُول", "en": "entering, moving in", "tr": "ad-dukhūl", "note": "verbal noun of دَخَلَ — to enter" },
+  { "ar": "الانْتِقَال", "en": "moving, relocating", "tr": "al-intiqāl", "note": "verbal noun of انْتَقَلَ — to move from place to place" },
+  { "ar": "أَعْجَبَ", "en": "to please, to appeal to", "tr": "aʿjaba", "note": "Arabic says 'the flat pleased Samer', not 'Samer liked the flat'" },
+  { "ar": "يُمْكِنُكَ", "en": "you can, it is possible for you", "tr": "yumkinuka", "note": "followed by a verbal noun: يُمْكِنُكَ الدُّخُولُ" }
+ ],
+ "questions": [
+  { "q": "مَاذَا أَرَادَ سَامِر يَوْمَ الأَحَدِ؟", "options": ["أَنْ يَبْحَثَ عَنْ بَيْتٍ جَدِيدٍ", "أَنْ يَذْهَبَ إِلَى الجَامِعَةِ", "أَنْ يَشْتَرِيَ سَرِيرًا", "أَنْ يَطْبُخَ فِي المَطْبَخِ"], "answer": 0 },
+  { "q": "مَعَ مَنْ ذَهَبَ سَامِر؟", "options": ["مَعَ أَخِيهِ", "مَعَ أَبِيهِ", "مَعَ صَاحِبِ البَيْتِ", "وَحْدَهُ"], "answer": 0 },
+  { "q": "مَاذَا كَانَ فِي غُرْفَةِ النَّوْمِ؟", "options": ["سَرِيرٌ وَمِرْآةٌ", "فُرْنٌ جَدِيدٌ", "مَائِدَةٌ وَكَرَاسِي", "سَجَّادَةٌ"], "answer": 0 },
+  { "q": "مَتَى يُمْكِنُهُ الانْتِقَالُ؟", "options": ["يَوْمَ الخَمِيسِ", "يَوْمَ الأَحَدِ", "يَوْمَ الجُمُعَةِ", "يَوْمَ السَّبْتِ"], "answer": 0 },
+  { "q": "لِمَاذَا أَعْجَبَتْهُ الشَّقَّةُ؟", "options": ["البَيْتُ جَمِيلٌ وَالحَيُّ هَادِئٌ", "لِأَنَّهَا رَخِيصَةٌ", "لِأَنَّهَا قَرِيبَةٌ مِنَ المَطَارِ", "لِأَنَّ فِيهَا سَجَّادَةً"], "answer": 0 }
+ ],
+ "dictation": [0, 2, 5],
+ "translate": [
+  { "en": "I want to live here.", "ar": "أُرِيدُ أَنْ أَسْكُنَ هُنَا." },
+  { "en": "Is this flat available on Tuesday?", "ar": "هَلْ هَذِهِ الشَّقَّةُ مُتَاحَةٌ يَوْمَ الثُّلَاثَاءِ؟" },
+  { "en": "In the kitchen there is a new oven.", "ar": "فِي المَطْبَخِ فُرْنٌ جَدِيدٌ." }
+ ]
+}

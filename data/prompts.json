@@ -484,6 +484,324 @@
     "story-04:8",
     "story-04:9"
    ]
+  },
+  {
+   "en": "I don't have…",
+   "ar": "مَا عِنْدِي",
+   "keys": [],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I don't have… (the other way to say it)",
+   "ar": "لَيْسَ عِنْدِي",
+   "keys": [],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I have two uncles and two aunts.",
+   "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
+   "keys": [],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "What furniture is there in your house?",
+   "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
+   "keys": [
+    "ev-questions:0",
+    "ev-questions:1"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "There is a table, chairs and beds.",
+   "ar": "يُوجَدُ مَائِدَةٌ وَكَرَاسِي وَسُرُرٌ",
+   "keys": [
+    "ev-lesson-home:9"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I live in the airport neighbourhood.",
+   "ar": "أَسْكُنُ فِي حَيِّ المَطَارِ",
+   "keys": [],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Allah is Ever-Living, He does not die.",
+   "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
+   "keys": [],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "What floor is your house on?",
+   "ar": "كَمْ طَابِقٍ بَيْتُكَ؟",
+   "keys": [
+    "ev-questions:6",
+    "ev-lesson-home:20"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I have a curtain for the window.",
+   "ar": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ",
+   "keys": [
+    "ev-lesson-home:16"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Allah is the Concealer of faults.",
+   "ar": "اللهُ هُوَ السَّتَّارُ",
+   "keys": [
+    "ev-people:3",
+    "ev-lesson-divine:3"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "How many times a day do you prostrate?",
+   "ar": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
+   "keys": [
+    "ev-questions:6",
+    "ev-lesson-divine:4"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "This is a beautiful Pakistani carpet.",
+   "ar": "هَذِهِ سَجَّادَةٌ بَاكِسْتَانِيَّةٌ جَمِيلَةٌ",
+   "keys": [
+    "ev-lesson-home:18"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The flat has a bedroom, a living room and a kitchen.",
+   "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
+   "keys": [
+    "ev-home:1",
+    "ev-lesson-home:3",
+    "ev-lesson-home:4"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "What furniture is there in the flat?",
+   "ar": "مَاذَا يُوجَدُ فِي الشَّقَّةِ مِنَ الأَثَاثِ؟",
+   "keys": [
+    "ev-questions:0",
+    "ev-questions:1"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "In the living room there is a sofa and a chair.",
+   "ar": "فِي غُرْفَةِ الجُلُوسِ أَرِيكَةٌ وَكُرْسِيٌّ",
+   "keys": [
+    "ev-home:1",
+    "ev-lesson-home:7"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "We have many sofas and chairs.",
+   "ar": "عِنْدَنَا أَرَائِكُ وَكَرَاسِي كَثِيرَةٌ",
+   "keys": [
+    "ev-lesson-home:8"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "In the kitchen there is a fridge and an oven.",
+   "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ",
+   "keys": [
+    "ev-lesson-home:14"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I have a big cupboard in the bedroom.",
+   "ar": "عِنْدِي خَزَانَةٌ كَبِيرَةٌ فِي غُرْفَةِ النَّوْمِ",
+   "keys": [
+    "ev-lesson-home:12",
+    "ev-home:1"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The cupboards are new.",
+   "ar": "الخَزَائِنُ جَدِيدَةٌ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "I open the window in the morning.",
+   "ar": "أَفْتَحُ الشُّبَّاكَ فِي الصَّبَاحِ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The mirror is in the bedroom.",
+   "ar": "المِرْآةُ فِي غُرْفَةِ النَّوْمِ",
+   "keys": [
+    "ev-home:1"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The lamp is small.",
+   "ar": "المِصْبَاحُ صَغِيرٌ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "My house is on the third floor.",
+   "ar": "بَيْتِي فِي الدَّوْرِ الثَّالِثِ",
+   "keys": [
+    "ev-directions:4"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Do you have a lift?",
+   "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟",
+   "keys": [
+    "ev-questions:7",
+    "ev-shopping:3"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Today is Monday and tomorrow is Tuesday.",
+   "ar": "اليَوْمُ الاثْنَيْنِ وَغَدًا الثُّلَاثَاءُ",
+   "keys": [
+    "ev-time:1",
+    "ev-lesson-week:1",
+    "ev-lesson-week:2"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Wednesday is after Tuesday.",
+   "ar": "الأَرْبِعَاءُ بَعْدَ الثُّلَاثَاءِ",
+   "keys": [
+    "ev-lesson-week:3",
+    "ev-lesson-week:2"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "Saturday and Sunday are a holiday.",
+   "ar": "السَّبْتُ وَالأَحَدُ عُطْلَةٌ",
+   "keys": [
+    "ev-lesson-week:6",
+    "ev-lesson-week:8"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The week is seven days.",
+   "ar": "الأُسْبُوعُ سَبْعَةُ أَيَّامٍ",
+   "keys": [
+    "ev-numbers:6"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "On Tuesday I go to the lesson.",
+   "ar": "يَوْمَ الثُّلَاثَاءِ أَذْهَبُ إِلَى الدَّرْسِ",
+   "keys": [
+    "ev-lesson-week:2",
+    "ev-commands:3",
+    "ev-lesson-week:9"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The weather is cold and there is snow.",
+   "ar": "الجَوُّ بَارِدٌ وَفِيهِ ثَلْجٌ",
+   "keys": [
+    "ev-lesson-weather:0"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The rain comes down from the clouds.",
+   "ar": "المَطَرُ يَنْزِلُ مِنَ السَّحَابِ",
+   "keys": [
+    "ev-questions:1"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "The sun is hot and the wind is cold.",
+   "ar": "الشَّمْسُ حَارَّةٌ وَالرِّيحُ بَارِدَةٌ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "My sister is in the house.",
+   "ar": "أُخْتِي فِي البَيْتِ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "My uncle and my aunt are from my mother's side.",
+   "ar": "خَالِي وَخَالَتِي مِنْ أُمِّي",
+   "keys": [
+    "ev-questions:1"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "This is my sister's husband.",
+   "ar": "هَذَا زَوْجُ أُخْتِي",
+   "keys": [
+    "ev-family:14"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "en": "His wife is a teacher.",
+   "ar": "زَوْجَتُهُ مُعَلِّمَةٌ",
+   "keys": [],
+   "source": "class-built",
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
   }
  ]
 }

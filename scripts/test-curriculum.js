@@ -460,7 +460,15 @@ yes(!C.examScope("weekly").levelTest, "the weekly exam does not include a level 
   });
   const cctx = Object.assign({}, mctx({}), { curriculum: withClass });
   const cw = C.weekPlan(cctx, C.milestoneState(cctx));
-  eq(cw[0].lessons[0].lesson.id, "ms-class-l1", "what his teacher just taught leads the very next week");
+  /* Class material leads its OWN TRACK, not the whole week. A single class can
+     be thirteen lessons (30 Aug was), and letting it head the week outright
+     emptied the Qur'an half for a month — which breaks the mixing rule three
+     assertions above. Both rules have to hold at once. */
+  yes(cw[0].lessons.some(l => l.lesson.id === "ms-class-l1"),
+    "what his teacher just taught is in the very next week");
+  const convOf0 = cw[0].lessons.filter(l => l.milestone.track === "conv");
+  eq(convOf0[0].lesson.id, "ms-class-l1", "…at the head of the everyday queue, ahead of the rest of the ladder");
+  yes(cw[0].quran >= 3, "…and the Qur'an half of that week survives it");
 
   // no test may run long
   const wk1 = weeks[0].lessons.map(x => x.lesson.id);

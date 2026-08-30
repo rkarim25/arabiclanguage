@@ -52,6 +52,30 @@ const resolve = src => {
    ear) leads, conversation follows, and the repair kit comes early because
    without it one unknown word ends the conversation. */
 const SPEC = [
+  /* CLASS MATERIAL LEADS (CURRICULUM.md 6b). Flagged source:"teacher" so
+     weekPlan() puts these at the FRONT of the very next week — the Sunday to
+     Monday turnaround he was promised. Captured 2026-08-30 from photos of the
+     board plus the reading passage he pasted.
+
+     His instruction on the vocabulary: "the teacher can be a bit shotgun and
+     unstructured. i need you to give it as much structure as possible." So her
+     scattered words were sorted into the sets they belong to and each set was
+     completed — every item carries from:"teacher" or from:"complete". */
+  { id: "ms-class-0830", track: "conv", level: "conv-a1", source: "teacher",
+    name: "Your flat, the week, and the family (class, 30 Aug)",
+    can: "describe a flat room by room, name any day of the week, and ask whether a place is available",
+    why: "Straight from Sunday's class, and it is the first vocabulary you have that describes where you actually live.",
+    lessons: [
+      { title: "The flat, room by room", src: { ev: "lesson-home", from: 0, to: 6 } },
+      { title: "Furniture she drilled", src: { ev: "lesson-home", from: 6, to: 13 } },
+      { title: "Fittings and floors", src: { ev: "lesson-home", from: 13, to: 20 } },
+      { title: "The rest of the flat", src: { ev: "lesson-home", from: 20, to: 26 } },
+      { title: "The days of the week", src: { ev: "lesson-week", from: 0, to: 10 } },
+      { title: "Where the house words meet the Quran", src: { ev: "lesson-divine", from: 0, to: 5 } },
+      { title: "Weather", src: { ev: "lesson-weather", from: 0, to: 6 } },
+      { title: "Samer looks for a flat — the reading", src: { story: "story-07" } },
+    ] },
+
   { id: "ms-fatiha", track: "quran", level: "quran-a1",
     name: "Al-Fatiha by ear",
     can: "catch every word of Al-Fatiha while it is being recited",
@@ -291,6 +315,9 @@ const milestones = SPEC.map((m, order) => {
   cumulativeMin += mins;
   return {
     id: m.id, order: order + 1, track: m.track, level: m.level,
+    // class material must stay flagged: weekPlan() reads this to put it at the
+    // front of the very next week (CURRICULUM.md 6b)
+    ...(m.source ? { source: m.source } : {}),
     name: m.name, can: m.can, why: m.why,
     items, plannedMin: mins,
     // the pacing annotation — deliberately secondary to the capability
