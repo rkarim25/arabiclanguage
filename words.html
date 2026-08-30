@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Words — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3kied">
+  <link rel="stylesheet" href="css/style.css?v=mtg3kied">
+  <style>
+    .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 10px; }
+    .sp-chip { font-size: 12.5px; border: 1px solid var(--border); border-radius: 999px;
+               padding: 3px 11px; cursor: pointer; background: var(--card); }
+    .sp-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .sp-meta { font-size: 12.5px; color: var(--muted); }
+    .inv2 { display: flex; gap: 26px; flex-wrap: wrap; }
+    .inv2 .n { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .inv2 .l { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+    .lrow { padding: 7px 10px; border-radius: 8px; }
+    .lrow:nth-child(odd) { background: rgba(0,0,0,.025); }
+    .lrow.on { border-left: 3px solid var(--accent); }
+    .lhead { display: flex; align-items: center; gap: 8px; }
+    .lnum { font-size: 11.5px; color: var(--muted); min-width: 30px; font-variant-numeric: tabular-nums; }
+    .lplay { border: 1px solid var(--border); background: var(--card); border-radius: 8px;
+             font-size: 13px; padding: 2px 8px; cursor: pointer; line-height: 1.5; }
+    .lrow .lar { font-family: var(--font-ar); font-size: 21px; line-height: 1.9; text-align: right; flex: 1; direction: rtl; }
+    .lrow .len { font-size: 13.5px; }
+    .ltr, .lnote { font-size: 11.5px; color: var(--muted); }
+    @media (prefers-color-scheme: dark) { .lrow:nth-child(odd) { background: rgba(255,255,255,.04); } }
+  </style>
+</head>
+<body>
+<main><div id="content">Loading…</div></main>
+
+<script src="js/progress-model.js?v=mtg3kied"></script>
+<script src="js/curriculum.js?v=mtg3kied"></script>
+<script src="js/app.js?v=mtg3kied"></script>
+<script src="js/tracker.js?v=mtg3kied"></script>
+<script src="js/plan.js?v=mtg3kied"></script>
+<script>
+renderNav("words");
+trackPage("words");
+
+/* ---------- WORDS — the same queue idea as Sentences ----------
+   His instruction, 2026-08-30: "similarly for vocabulary as well, create tags of
+   themes/topics for me to go through stuff if needed but it should be frequency
+   based", and then plainly: "the most commonly used words and sentences is what
+   i want to master."
+
+   So this is one list, ordered by measured share of real Arabic
+   (data/frequency.json), with topics as a FILTER rather than a structure —
+   ordering by topic would put him back in the folders he asked to get out of.
+   Every row plays and every row carries the four spaced-repetition buckets, so
+   he can clear what he already knows without sitting through a lesson for it.
+
+   The old Vocab Lab (vocab.html) still exists behind ⋯ More with its flashcards,
+   sheets and drills. This page is the LIST. */
+const content = document.getElementById("content");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+let TAG = "", SHOWN = 0, ROWS = [];
+const PAGE = 60;
+
+(async () => {
+  const short = t => String(t || "").split(/\s+[—–-]\s+/)[0].replace(/\s*\([^)]*\)\s*$/, "").trim();
+  let ev = { groups: [] }, core = { words: [] }, fam = { families: [] }, freq = { words: {} };
+  try {
+    [ev, core, fam, freq] = await Promise.all([
+      fetch("data/everyday.json").then(r => r.json()),
+      fetch("data/quran-core.json").then(r => r.json()),
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
+      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
+    ]);
+  } catch (e) { content.textContent = "Couldn't load the words."; return; }
+
+  const F = freq.words || {};
+  const per10k = ar => {
+    const w = normalizeAr(ar), bare = w.replace(/^ال/, "");
+    return Math.max(F[w] || 0, bare.length >= 3 ? (F[bare] || 0) : 0);
+  };
+  const seen = new Set();
+  const push = (key, m, tag) => {
+    if (!m || !m.ar || !m.en) return;
+    const n = normalizeAr(m.ar);
+    if (!n || seen.has(n)) return;          // one row per word, first source wins
+    seen.add(n);
+    ROWS.push({ key, ar: m.ar, en: m.en, tr: m.tr || "", note: m.note || "", tag, use: per10k(m.ar) });
+  };
+  /* The Qur'an core list is already a frequency list, so it goes in first and
+     owns any word both sources have. */
+  (core.words || []).forEach((w, i) => push(`qc:${i}`, w, "Qur'an — the commonest words"));
+  (ev.groups || []).forEach(g => (g.members || []).forEach((m, i) =>
+    push(`ev-${g.id}:${i}`, m, short(g.theme) || g.id)));
+  (fam.families || []).forEach(f => (f.members || []).forEach((m, i) =>
+    push(`fam-${f.id}:${i}`, m, "Root families")));
+  ROWS.sort((a, b) => b.use - a.use);
+
+  render();
+  primeSpeak();
+})();
+
+function render() {
+  const held = k => (getSrs()[k] || {}).box >= 3;
+  const heldAll = ROWS.filter(r => held(r.key)).length;
+  const measured = ROWS.filter(r => r.use > 0).length;
+
+  // topics in the order their FIRST word appears, so the chips are themselves
+  // frequency-ordered rather than alphabetical
+  const tags = [], t0 = new Set();
+  ROWS.forEach(r => { if (r.tag && !t0.has(r.tag)) { t0.add(r.tag); tags.push(r.tag); } });
+
+  content.innerHTML = `
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Words</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">المُفْرَدَات</span>
+    </h1>
+    <div class="card" style="border-color:var(--accent)">
+      <p style="margin:0 0 8px;font-size:15px"><b>Commonest first — work down it.</b>
+      Ordered by how often each word actually occurs in the Qur'an and in everyday Arabic, not by topic.</p>
+      <div class="inv2">
+        <div><div class="n">${ROWS.length}</div><div class="l">words on the list<br><b>${heldAll}</b> held</div></div>
+        <div><div class="n">${measured}</div><div class="l">of them measured against<br>a real corpus</div></div>
+      </div>
+      <p class="sp-meta" style="margin:10px 0 0">🔊 hears it. The four buttons are yours:
+      ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat — mark what you already know and it stops coming back.
+      Words are still taught inside <a href="sentences.html" style="color:var(--accent)">sentences</a>; this is the list, not the lesson.</p>
+    </div>
+    <div class="sp-chips" id="tags">
+      <span class="sp-chip ${TAG ? "" : "on"}" data-t="">All</span>
+      ${tags.map(t => `<span class="sp-chip ${TAG === t ? "on" : ""}" data-t="${esc(t)}">${esc(t)}</span>`).join("")}
+    </div>
+    <p class="sp-meta" id="head" style="margin:0 0 10px"></p>
+    <div id="body"></div>
+    <div class="ex-row" style="margin-top:14px"><button id="more">Show more</button></div>`;
+
+  document.querySelectorAll("#tags .sp-chip").forEach(c => c.onclick = () => {
+    TAG = c.dataset.t; SHOWN = 0;
+    document.querySelectorAll("#tags .sp-chip").forEach(x => x.classList.toggle("on", x.dataset.t === TAG));
+    document.getElementById("body").innerHTML = "";
+    page();
+  });
+  document.getElementById("more").onclick = () => page();
+  SHOWN = 0;
+  page();
+
+  function page() {
+    const rows = TAG ? ROWS.filter(r => r.tag === TAG) : ROWS;
+    const slice = rows.slice(SHOWN, SHOWN + PAGE);
+    const html = slice.map((r, i) => `
+      <div class="lrow${held(r.key) ? " on" : ""}" data-k="${esc(r.key)}">
+        <div class="lhead">
+          <span class="lnum">${SHOWN + i + 1}</span>
+          <button class="lplay" data-ar="${esc(r.ar)}" title="hear it">🔊</button>
+          <div class="lar arabic" dir="rtl">${esc(r.ar)}</div>
+        </div>
+        <div class="len">${esc(r.en)}${r.tr ? ` <span class="ltr">${esc(r.tr)}</span>` : ""}</div>
+        ${r.note ? `<div class="lnote">${esc(r.note)}</div>` : ""}
+        <div class="bucket-slot"></div>
+      </div>`).join("");
+    const body = document.getElementById("body");
+    body.insertAdjacentHTML("beforeend", html);
+    SHOWN += slice.length;
+
+    body.querySelectorAll(".lplay").forEach(b => {
+      if (b.dataset.wired) return;
+      b.dataset.wired = "1";
+      b.onclick = () => speak(b.dataset.ar, 0.85);
+    });
+    body.querySelectorAll(".lrow").forEach(row => {
+      const slot = row.querySelector(".bucket-slot");
+      if (!slot || slot.dataset.wired) return;
+      slot.dataset.wired = "1";
+      mountBucketBar(slot, row.dataset.k, b => row.classList.toggle("on", b !== "repeat"));
+    });
+
+    const h = rows.filter(r => held(r.key)).length;
+    document.getElementById("head").innerHTML =
+      `${rows.length} words${TAG ? ` in <b>${esc(TAG)}</b>` : ""}, commonest first · <b>${h}</b> held · showing ${SHOWN}.`;
+    const more = document.getElementById("more");
+    more.style.display = SHOWN >= rows.length ? "none" : "";
+    more.textContent = `Show ${Math.min(PAGE, rows.length - SHOWN)} more`;
+  }
+}
+</script>
+</body>
+</html>

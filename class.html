@@ -7,9 +7,9 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Your classes — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3g2ho">
-  <link rel="stylesheet" href="css/style.css?v=mtg3g2ho">
+  <title>Lessons — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3kied">
+  <link rel="stylesheet" href="css/style.css?v=mtg3kied">
   <style>
     .cnt { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; margin: 10px 0 0; }
     .cnt .n { font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; }
@@ -33,20 +33,25 @@
 </head>
 <body>
 <main>
-  <h1>Your classes <span class="arabic" style="color:var(--accent)">الدُّرُوس</span></h1>
-  <p class="sub">Everything the teacher has given, sorted into the four things the site actually teaches:
-  <strong>vocabulary</strong>, <strong>sentences</strong>, <strong>grammar</strong> and a <strong>reading</strong> passage.
-  Nothing here is a copy — each row is the live card, so what it says about you is what the rest of the site says.</p>
+  <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <span>Lessons</span>
+    <span class="arabic" style="color:var(--accent)" dir="rtl">الدُّرُوس</span>
+  </h1>
+  <p class="sub">The record of every lesson your teacher has given — what was covered, and where each
+  part of it went. A class is never stored as a class: it is split into <strong>vocabulary</strong>,
+  <strong>sentences</strong>, <strong>grammar</strong> and a <strong>reading</strong> passage, and each
+  part goes into the file that teaches that kind of thing. Nothing here is a copy — every row is the live
+  card, so what it says about you is what the rest of the site says.</p>
   <div id="out">Loading…</div>
 </main>
 
-<script src="js/progress-model.js?v=mtg3g2ho"></script>
-<script src="js/curriculum.js?v=mtg3g2ho"></script>
-<script src="js/app.js?v=mtg3g2ho"></script>
-<script src="js/tracker.js?v=mtg3g2ho"></script>
-<script src="js/plan.js?v=mtg3g2ho"></script>
+<script src="js/progress-model.js?v=mtg3kied"></script>
+<script src="js/curriculum.js?v=mtg3kied"></script>
+<script src="js/app.js?v=mtg3kied"></script>
+<script src="js/tracker.js?v=mtg3kied"></script>
+<script src="js/plan.js?v=mtg3kied"></script>
 <script>
-renderNav("more");
+renderNav("classes");
 trackPage("classes");
 
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));

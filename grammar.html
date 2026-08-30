@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3g2ho">
-  <link rel="stylesheet" href="css/style.css?v=mtg3g2ho">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3kied">
+  <link rel="stylesheet" href="css/style.css?v=mtg3kied">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,9 +34,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mtg3g2ho"></script>
-<script src="js/tracker.js?v=mtg3g2ho"></script>
-<script src="js/plan.js?v=mtg3g2ho"></script>
+<script src="js/app.js?v=mtg3kied"></script>
+<script src="js/tracker.js?v=mtg3kied"></script>
+<script src="js/plan.js?v=mtg3kied"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -44,36 +44,69 @@ trackPage("grammar");
 const content = document.getElementById("content");
 let PATTERNS = null;
 
-fetch("data/grammar.json").then(r => r.json()).then(d => {
+fetch("data/grammar.json").then(r => r.json()).then(async d => {
   PATTERNS = d.patterns;
   const params = new URLSearchParams(location.search);
   if (params.get("g") === "verbears") return renderVerbEars();
   const p = PATTERNS.find(x => x.id === params.get("g"));
-  if (p) renderPattern(p);
-  else renderList();
+  if (p) return renderPattern(p);
+  await loadReach();          // the list is ordered by it, so wait for it
+  renderList();
 });
 
 function gDone(id) { return !!stepsDone("gr-" + id).test; }
 
+/* ---------- OTHERS — the rules and tricks worth having ----------
+   His instruction, 2026-08-30, setting out the site's shape:
+
+     "sentences, words, others, progress. in others it should be mostly commonly
+      used grammar, rules, tricks etc that i need to master, it can keep on
+      developing as i go along."
+
+   So this page is no longer an alphabet of grammar topics: it is an ORDERED list
+   of the rules that unlock the most Arabic, commonest first, exactly like the
+   sentence and word queues. Reach — how many sentences in the bank actually use a
+   pattern — is the measure, because a rule used by 225 sentences is worth an
+   evening and one used by 2 is not. New rules are appended as they come up in
+   class or in the lessons; the order re-sorts itself. */
+let REACH = {};
+async function loadReach() {
+  try {
+    const bank = await fetch("data/sentence-bank.json").then(r => r.json());
+    (bank.sentences || []).forEach(s => { if (s.pattern) REACH[s.pattern] = (REACH[s.pattern] || 0) + 1; });
+  } catch (e) {}
+}
 function renderList() {
   trackPage("grammar:list");
+  const sorted = PATTERNS.slice().sort((a, b) => (REACH[b.id] || 0) - (REACH[a.id] || 0));
+  const doneN = sorted.filter(p => gDone(p.id)).length;
   content.innerHTML = `
-    <h1>Practical Grammar <span class="arabic" style="color:var(--accent)">قَوَاعِد عَمَلِيَّة</span></h1>
-    <p class="sub">No tables to memorize. Nine patterns that carry most Quranic sentences — each taught through verses you already know, with a 1-minute test. Deeper notes appear word-by-word inside the <a href="quran.html">Quran lessons</a> (ⓘ نحو).</p>
+    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>Others</span>
+      <span class="arabic" style="color:var(--accent)" dir="rtl">قَوَاعِد وَحِيَل</span>
+    </h1>
+    <p class="sub">The rules and tricks that unlock the most Arabic — ordered by how many sentences
+    you have still to learn actually use them. No tables to memorise: each one is taught through
+    sentences you already know, with a one-minute test. This list grows as things come up in class.</p>
     <div class="card" style="border-color:var(--accent);margin-bottom:16px">
+      <p style="margin:0 0 8px;font-size:15px"><b>${doneN} of ${sorted.length} done.</b>
+      A rule is also explained once, on its own, the first time a lesson needs it — so you may meet
+      one here having already been shown it.</p>
       <p style="margin:0;font-size:14.5px">🎧 <a href="grammar.html?g=verbears" style="color:var(--accent);font-weight:600">Who's acting?</a> —
       hear a verb form, name the person (he / they / we / I…). For following recitation at speed, verb endings ARE the grammar. ${gDone("verbears") ? "✓ passed" : ""}</p>
     </div>
     <div class="g-grid" id="gGrid"></div>
   `;
   const grid = document.getElementById("gGrid");
-  PATTERNS.forEach(p => {
+  sorted.forEach((p, i) => {
     const div = document.createElement("div");
     div.className = "g-card";
+    const n = REACH[p.id] || 0;
     div.innerHTML = `
       <div class="g-ar">${p.ar}</div>
       <div class="g-name">${p.name}</div>
-      <div class="meta">${p.examples.length} verses · ${p.test.length}-question test ${gDone(p.id) ? "· ✓ done" : ""}</div>
+      <div class="meta">${n ? `used by <b>${n}</b> sentences you have to learn` : "from your class"}
+        · ${p.test.length}-question test ${gDone(p.id) ? "· ✓ done" : ""}</div>
     `;
     div.onclick = () => { history.pushState({}, "", `grammar.html?g=${p.id}`); renderPattern(p); };
     grid.appendChild(div);

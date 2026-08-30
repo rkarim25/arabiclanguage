@@ -1324,7 +1324,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg3g2ho";
+const DATA_V = "mtg3kied";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -1588,6 +1588,13 @@ function weekAttemptsSoFar(week) {
   return Curriculum.examAttempts(store.get("ats-log", []), week.n).length;
 }
 
+/* THE NAV IS HIS, 2026-08-30: "sentences, words, others, progress" — plus
+   "there should be a tab of lessons (from preply, which just maintains the
+   database of the lessons, what was taught etc)."
+
+   This deliberately breaks the no-new-destination rule that has held since the
+   eleven-tab sprawl, because the sprawl was pages nobody asked for; these five
+   are the five things he says he works on. Anything else stays behind ⋯ More. */
 function renderNav(active) {
   const due = dueCards().length;
   const el = document.createElement("nav");
@@ -1595,7 +1602,10 @@ function renderNav(active) {
     <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
     <span class="spacer"></span>
     <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
-    <a class="link ${active === "sentences" || active === "vocab" ? "active" : ""}" href="sentences.html">✍️ Sentences${due ? `<span class="badge">${due}</span>` : ""}</a>
+    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences${due ? `<span class="badge">${due}</span>` : ""}</a>
+    <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
+    <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">📐 Others</a>
+    <a class="link ${active === "classes" ? "active" : ""}" href="class.html">🧑‍🏫 Lessons</a>
     <a class="link ${active === "map" || active === "more" ? "active" : ""}" href="map.html">📈 Progress</a>
   `;
   document.body.prepend(el);

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3g2ho">
-  <link rel="stylesheet" href="css/style.css?v=mtg3g2ho">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3kied">
+  <link rel="stylesheet" href="css/style.css?v=mtg3kied">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -69,11 +69,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/progress-model.js?v=mtg3g2ho"></script>
-<script src="js/curriculum.js?v=mtg3g2ho"></script>
-<script src="js/app.js?v=mtg3g2ho"></script>
-<script src="js/tracker.js?v=mtg3g2ho"></script>
-<script src="js/plan.js?v=mtg3g2ho"></script>
+<script src="js/progress-model.js?v=mtg3kied"></script>
+<script src="js/curriculum.js?v=mtg3kied"></script>
+<script src="js/app.js?v=mtg3kied"></script>
+<script src="js/tracker.js?v=mtg3kied"></script>
+<script src="js/plan.js?v=mtg3kied"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -317,8 +317,10 @@ function ask() {
    "what exists" and never "what do I do next", and it had neither audio nor any
    way to mark a row. So:
 
-     · THREE QUEUES — 🎧 ayat, 🗣 everyday sentences, 📇 words — each ordered by
-       frequency of use, commonest first. That order IS the plan: work down it.
+     · TWO QUEUES — 🎧 ayat and 🗣 everyday sentences — each ordered by frequency
+       of use, commonest first. That order IS the plan: work down it. (Words got
+       their own page, words.html, when he set out the site's shape: "sentences,
+       words, others, progress".)
      · TOPICS ARE A FILTER, NOT A STRUCTURE. Tags let him open "the flat" or
        "Al-Falaq" when he wants to, and the order inside a topic is still
        frequency. Ordering by topic would put him back where he started.
@@ -333,39 +335,8 @@ function ask() {
 
    Rendered a page at a time — 985 sentences and 800-odd words, each row carrying
    an audio button and four bucket buttons, is far too much DOM to lay out at once. */
-let LIST_TRACK = "quran", LIST_TAG = "", LIST_SHOWN = 0, WORDS = null;
+let LIST_TRACK = "quran", LIST_TAG = "", LIST_SHOWN = 0;
 const LIST_PAGE = 60;
-
-/* the everyday word list, built where the topics actually live */
-async function loadWords() {
-  if (WORDS) return WORDS;
-  let ev = { groups: [] }, core = { words: [] }, freq = { words: {} };
-  try {
-    [ev, core, freq] = await Promise.all([
-      fetch("data/everyday.json").then(r => r.json()),
-      fetch("data/quran-core.json").then(r => r.json()),
-      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
-    ]);
-  } catch (e) { return (WORDS = []); }
-  const short = t => String(t || "").split(/\s+[—–-]\s+/)[0].replace(/\s*\([^)]*\)\s*$/, "").trim();
-  const per10k = ar => {
-    const w = normalizeAr(ar), bare = w.replace(/^ال/, "");
-    const f = freq.words || {};
-    return Math.max(f[w] || 0, bare.length >= 3 ? (f[bare] || 0) : 0);
-  };
-  const out = [];
-  (ev.groups || []).forEach(g => (g.members || []).forEach((m, i) => {
-    if (!m.ar || !m.en) return;
-    out.push({ key: `ev-${g.id}:${i}`, ar: m.ar, en: m.en, tr: m.tr || "", note: m.note || "",
-               tag: short(g.theme) || g.id, use: per10k(m.ar) });
-  }));
-  (core.words || []).forEach((w, i) => out.push({
-    key: `qc:${i}`, ar: w.ar, en: w.en, tr: w.tr || "", note: "",
-    tag: "Qur'an — the commonest words", use: per10k(w.ar),
-  }));
-  out.sort((a, b) => b.use - a.use);
-  return (WORDS = out);
-}
 
 function renderList() {
   trackPage("sentences:list");
@@ -399,7 +370,6 @@ function renderList() {
     <div class="seg-row"><div class="seg" id="listTrack">
       <button class="${LIST_TRACK === "quran" ? "sel" : ""}" data-t="quran">🎧 Qur'an</button>
       <button class="${LIST_TRACK === "conv" ? "sel" : ""}" data-t="conv">🗣 Everyday</button>
-      <button class="${LIST_TRACK === "words" ? "sel" : ""}" data-t="words">📇 Words</button>
     </div></div>
     <div class="sp-chips" id="listTags"></div>
     <p class="sp-meta" id="listHead" style="margin:0 0 10px"></p>
@@ -421,12 +391,10 @@ function renderList() {
   refresh();
 
   async function rowsFor() {
-    if (LIST_TRACK === "words") return await loadWords();
     return (BANK.sentences || []).filter(s => (LIST_TRACK === "quran") === (s.track === "quran"));
   }
   /* a sentence's topic: its surah for the Qur'an, its theme otherwise */
-  const tagOf = r => LIST_TRACK === "words" ? r.tag
-    : LIST_TRACK === "quran" ? (r.surah || "Qur'an")
+  const tagOf = r => LIST_TRACK === "quran" ? (r.surah || "Qur'an")
     : String(r.theme || SRC_NAMES[r.src] || "Everyday").split(/\s+[—–-]\s+/)[0].trim();
 
   async function refresh() {
@@ -454,7 +422,7 @@ function renderList() {
     const slice = shown.slice(LIST_SHOWN, LIST_SHOWN + LIST_PAGE);
     fill(body, slice, LIST_SHOWN, LIST_SHOWN > 0);
     LIST_SHOWN += slice.length;
-    const noun = LIST_TRACK === "words" ? "words" : LIST_TRACK === "quran" ? "ayat" : "everyday sentences";
+    const noun = LIST_TRACK === "quran" ? "ayat" : "everyday sentences";
     const heldN = shown.filter(r => held(r.key)).length;
     document.getElementById("listHead").innerHTML =
       `${shown.length} ${esc(noun)}${LIST_TAG ? ` in <b>${esc(LIST_TAG)}</b>` : ""}, commonest first · <b>${heldN}</b> held · showing ${LIST_SHOWN}.`;
