@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
-  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgcad4o">
+  <link rel="stylesheet" href="css/style.css?v=mtgcad4o">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -69,11 +69,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/progress-model.js?v=mtgc19p6"></script>
-<script src="js/curriculum.js?v=mtgc19p6"></script>
-<script src="js/app.js?v=mtgc19p6"></script>
-<script src="js/tracker.js?v=mtgc19p6"></script>
-<script src="js/plan.js?v=mtgc19p6"></script>
+<script src="js/progress-model.js?v=mtgcad4o"></script>
+<script src="js/curriculum.js?v=mtgcad4o"></script>
+<script src="js/app.js?v=mtgcad4o"></script>
+<script src="js/tracker.js?v=mtgcad4o"></script>
+<script src="js/plan.js?v=mtgcad4o"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -336,6 +336,9 @@ function ask() {
    Rendered a page at a time — 985 sentences and 800-odd words, each row carrying
    an audio button and four bucket buttons, is far too much DOM to lay out at once. */
 let LIST_TRACK = "quran", LIST_TAG = "", LIST_SHOWN = 0;
+/* ?held=1 — the sentences he actually holds, so the number on the progress page
+   is something he can open and read rather than a claim he has to take on trust. */
+let LIST_HELD = new URLSearchParams(location.search).get("held") === "1";
 const LIST_PAGE = 60;
 
 function renderList() {
@@ -371,6 +374,10 @@ function renderList() {
       <button class="${LIST_TRACK === "quran" ? "sel" : ""}" data-t="quran">🎧 Qur'an</button>
       <button class="${LIST_TRACK === "conv" ? "sel" : ""}" data-t="conv">🗣 Everyday</button>
     </div></div>
+    <div class="sp-chips" style="margin-bottom:2px">
+      <span class="sp-chip ${LIST_HELD ? "" : "on"}" id="allS">All</span>
+      <span class="sp-chip ${LIST_HELD ? "on" : ""}" id="heldS">✓ Only the ${qHeld + cHeld} I hold</span>
+    </div>
     <div class="sp-chips" id="listTags"></div>
     <p class="sp-meta" id="listHead" style="margin:0 0 10px"></p>
     <div id="listBody"></div>
@@ -386,12 +393,15 @@ function renderList() {
     renderList();
   });
   document.getElementById("listMore").onclick = () => page();
+  document.getElementById("allS").onclick = () => { if (!LIST_HELD) return; LIST_HELD = false; renderList(); };
+  document.getElementById("heldS").onclick = () => { if (LIST_HELD) return; LIST_HELD = true; renderList(); };
   primeSpeak();
   weekBox();
   refresh();
 
   async function rowsFor() {
-    return (BANK.sentences || []).filter(s => (LIST_TRACK === "quran") === (s.track === "quran"));
+    const all = (BANK.sentences || []).filter(s => (LIST_TRACK === "quran") === (s.track === "quran"));
+    return LIST_HELD ? all.filter(s => held(s.key)) : all;
   }
   /* a sentence's topic: its surah for the Qur'an, its theme otherwise */
   const tagOf = r => LIST_TRACK === "quran" ? (r.surah || "Qur'an")
@@ -425,7 +435,7 @@ function renderList() {
     const noun = LIST_TRACK === "quran" ? "ayat" : "everyday sentences";
     const heldN = shown.filter(r => held(r.key)).length;
     document.getElementById("listHead").innerHTML =
-      `${shown.length} ${esc(noun)}${LIST_TAG ? ` in <b>${esc(LIST_TAG)}</b>` : ""}, commonest first · <b>${heldN}</b> held · showing ${LIST_SHOWN}.`;
+      `${shown.length} ${LIST_HELD ? esc(noun) + " you hold" : esc(noun)}${LIST_TAG ? ` in <b>${esc(LIST_TAG)}</b>` : ""}, commonest first${LIST_HELD ? "" : ` · <b>${heldN}</b> held`} · showing ${LIST_SHOWN}.`;
     const more = document.getElementById("listMore");
     more.style.display = LIST_SHOWN >= shown.length ? "none" : "";
     more.textContent = `Show ${Math.min(LIST_PAGE, shown.length - LIST_SHOWN)} more`;

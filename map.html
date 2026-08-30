@@ -7,137 +7,196 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>The long view — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
-  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
+  <title>Progress — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mtgcad4o">
+  <link rel="stylesheet" href="css/style.css?v=mtgcad4o">
   <style>
-    .lvlblock { border-left: 3px solid var(--border); padding-left: 14px; margin-bottom: 22px; }
-    .lvlblock.now { border-left-color: var(--accent); }
-    .lvlhead { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-    .lvlhead b { font-size: 20px; color: var(--accent); }
-    .msrow { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; font-size: 14.5px; }
-    .msrow .tick { width: 18px; flex: none; }
-    .msrow.done { color: var(--muted); }
-    .msrow.now { font-weight: 600; }
-    .crit { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 6px 0 0; padding: 0; list-style: none; }
-    .crit li.met { color: var(--text); }
-    .bar { height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 7px 0 0; }
+    .hold { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .hold a { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border);
+              border-radius: 12px; padding: 12px 14px; background: var(--card); }
+    .hold a:hover { border-color: var(--accent); }
+    .hold .n { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .hold .l { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+    .hold .go { font-size: 12.5px; color: var(--accent); margin-top: 6px; }
+
+    .lvl { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+    .lvl.now { border-color: var(--accent); background: var(--accent-soft); }
+    .lvl .tag { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .lvl h3 { margin: 2px 0 4px; font-size: 17px; }
+    .lvl .can { font-size: 14.5px; line-height: 1.55; }
+    .bar { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin: 10px 0 4px; }
     .bar > i { display: block; height: 100%; background: var(--accent); }
-    .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+
+    .crit { list-style: none; margin: 10px 0 0; padding: 0; }
+    .crit li { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--border); font-size: 14px; }
+    .crit li:first-child { border-top: 0; }
+    .crit .tick { width: 16px; flex: none; }
+    .crit .what { flex: 1; }
+    .crit .num { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; font-size: 13px; }
+    .crit li.met .what { color: var(--muted); }
+    .crit li.met .tick { color: var(--accent); }
+    .crit .do { font-size: 12.5px; }
+
+    .msrow { display: flex; gap: 8px; align-items: baseline; padding: 5px 0; font-size: 14px; }
+    .msrow.done { color: var(--muted); }
+    .msrow .tick { width: 14px; flex: none; }
   </style>
 </head>
 <body>
 <main>
-  <h1>The long view</h1>
-  <p class="sub">Your two goals, the capabilities that get you there, and where you actually are.
-  There are no dates here — only what you can do and what comes next.</p>
+  <h1>Progress <span class="arabic" style="color:var(--accent)" dir="rtl">التَّقَدُّم</span></h1>
+  <p class="sub">What you hold, what it is worth, and exactly what stands between you and the next level.
+  No dates and no forecasts — only things you can check.</p>
 
-  <div class="card" id="paceCard"><div id="pace">…</div></div>
-  <div class="card"><h2>What you hold</h2><div class="inv" id="inv" style="display:flex;gap:22px;flex-wrap:wrap"></div>
-    <p style="font-size:13px;color:var(--muted);margin:10px 0 0" id="invBand"></p></div>
-
-  <div class="card"><h2>🎧 Understand the Qur'an as it is recited</h2><div id="track-quran">…</div></div>
-  <div class="card"><h2>🗣 Hold a conversation in Arabic</h2><div id="track-conv">…</div></div>
-
-  <div class="card" id="commuteCard" style="display:none;border-color:var(--accent)"></div>
-
-  <div class="card">
-    <details>
-      <summary style="cursor:pointer;font-weight:700;font-size:15px">The forecast model
-        <span style="font-weight:400;font-size:13px;color:var(--muted)">— the engine underneath, if you want the raw view</span>
-        <span id="pgToday" style="font-size:13px;color:var(--accent);font-weight:600"></span></summary>
-      <p style="font-size:13px;color:var(--muted);margin:8px 0 0">The milestones above are the real measure. This is the conservative model that sets the pacing —
-      it discounts screen knowledge for the ear, discounts again for connected speech, and floors speaking at your logged output time.</p>
-      <div id="pgPanels" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">Loading…</div>
-      <div id="pgNarrative" style="display:none;background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:13.5px;line-height:1.65"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
-        <a href="placement.html"><button class="primary">🎧 5-minute listening test</button></a>
-        <a href="converse.html?exam=1"><button>🎤 Oral exam (via any AI chat)</button></a>
-      </div>
-      <div id="pgSkills" style="display:none;border-top:1px dashed var(--border);margin-top:12px;padding-top:10px">
-        <div id="pgSkillRows" style="font-size:13px;line-height:1.65"></div>
-      </div>
-    </details>
+  <div class="card"><h2 style="margin-top:0">What you hold</h2>
+    <p class="sub" style="margin-top:0">Every one of these opens the actual list. If a number here can't be
+    clicked into and read, it isn't evidence.</p>
+    <div class="hold" id="hold"></div>
   </div>
+
+  <div id="tracks"></div>
+
   <div class="card">
-    <h2>Everything else</h2>
-    <p class="sub" style="margin-bottom:10px">The individual engines your lessons draw on, plus sync and backup.
+    <h2 style="margin-top:0">The ladder</h2>
+    <p class="sub" style="margin-top:0">Milestones, in the order the weeks draw on them.</p>
+    <div id="ladder">…</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Everything else</h2>
+    <p class="sub" style="margin-bottom:10px">The engines your lessons draw on, sync and backup.
     You don't need these day to day.</p>
-    <a href="more.html">Stories, Qur'an, grammar, audio, speaking, sync &amp; backup →</a>
+    <a href="more.html">Stories, Qur'an, audio, speaking, sync &amp; backup →</a>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtgc19p6"></script>
-<script src="js/curriculum.js?v=mtgc19p6"></script>
-<script src="js/app.js?v=mtgc19p6"></script>
-<script src="js/tracker.js?v=mtgc19p6"></script>
-<script src="js/plan.js?v=mtgc19p6"></script>
+<script src="js/progress-model.js?v=mtgcad4o"></script>
+<script src="js/curriculum.js?v=mtgcad4o"></script>
+<script src="js/app.js?v=mtgcad4o"></script>
+<script src="js/tracker.js?v=mtgcad4o"></script>
+<script src="js/plan.js?v=mtgcad4o"></script>
 <script>
 renderNav("map");
 trackPage("map");
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+/* ============================================================================
+   PROGRESS, REBUILT — 2026-08-30.
+
+   His verdict on the old page: "the charts i think have lost power now. i also
+   dont [know] what the commute effect is doing. are the sentences i know
+   actually real? would i be able to see those sentences? should it be more
+   useful like x amount of sentences and words and possibly other things gets me
+   to Quranic A1 or Everyday A1."
+
+   Every one of those is right, and they point the same way. What went:
+
+     · THE FORECAST PANEL. Three projected curves and a decay model, built when
+       the site measured two skill axes and needed to guess at a date. The site
+       now measures capabilities that are either proved or not, so the forecast
+       was answering a question nobody asks any more. js/longview.js is deleted
+       rather than hidden: code no page loads is code that rots.
+     · THE COMMUTE EFFECT. An honest experiment — trained words versus matched
+       control words, to find out whether commute listening beat normal study —
+       but it needed 10 answers of each to say anything, never got them, and so
+       showed him a permanent "measuring…" line he could not act on. A card that
+       has said nothing for weeks is noise.
+     · THE PACE LINE. "Two weeks behind" against a plan that is explicitly not a
+       deadline. It contradicted the page's own first sentence.
+
+   What replaced them: the levels, stated as a bill. A1 is not a mood, it is a
+   list of specific things, and every line now says what it needs, what he has,
+   and links to the one place that moves it. And every count of what he holds
+   opens the list behind it, because his question — are they real, can I see
+   them — deserved a yes you can click.
+   ============================================================================ */
 (async () => {
   const ctx = await curCtx();
-  if (!ctx) return;
+  if (!ctx) { document.getElementById("tracks").textContent = "Couldn't load your progress."; return; }
   const state = Curriculum.milestoneState(ctx);
   const L = Curriculum.levels(ctx);
   const inv = Curriculum.inventory(ctx);
-  const pc = Curriculum.pace(ctx, state);
+  const tm = inv.toMaster;
 
-  document.getElementById("inv").innerHTML = `
-    <div><div class="n">${inv.words}</div><div style="font-size:13px;color:var(--muted)">words you hold${inv.wordsLong ? ` · ${inv.wordsLong} long-term` : ""}</div></div>
-    <div><div class="n">${inv.sentences}</div><div style="font-size:13px;color:var(--muted)">sentences you can use${inv.sentencesLong ? ` · ${inv.sentencesLong} long-term` : ""}</div></div>
-    <div><div class="n">${state.achieved.length}<span style="font-size:15px;color:var(--muted)">/${state.milestones.length}</span></div><div style="font-size:13px;color:var(--muted)">milestones achieved</div></div>`;
-  document.getElementById("invBand").textContent = inv.nextBand
-    ? `At about ${inv.nextBand.at} words, ${inv.nextBand.say}.`
-    : "You have the vocabulary for ordinary conversation — what's left is fluency, not words.";
+  /* ---- what you hold: each tile opens the thing it counts ---- */
+  document.getElementById("hold").innerHTML = `
+    <a href="words.html?held=1">
+      <div class="n">${inv.words}</div>
+      <div class="l">words you hold${inv.wordsLong ? `<br>${inv.wordsLong} of them long-term` : ""}</div>
+      <div class="go">see them →</div></a>
+    <a href="sentences.html?view=list&held=1">
+      <div class="n">${inv.sentences}</div>
+      <div class="l">sentences you can use${inv.sentencesLong ? `<br>${inv.sentencesLong} long-term` : ""}</div>
+      <div class="go">see them →</div></a>
+    <a href="index.html">
+      <div class="n">${state.achieved.length}<span style="font-size:16px;color:var(--muted)">/${state.milestones.length}</span></div>
+      <div class="l">milestones proved at 80</div>
+      <div class="go">the ladder →</div></a>
+    ${tm ? `<a href="sentences.html?view=list">
+      <div class="n">${tm.total}</div>
+      <div class="l">the whole corpus — ${tm.quran.sentences} ayat and ${tm.conv.utterances} everyday utterances</div>
+      <div class="go">the full list →</div></a>` : ""}`;
 
-  /* pace: reported, but deliberately secondary to the capabilities */
-  document.getElementById("pace").innerHTML = state.current
-    ? `<p style="margin:0;font-size:15px">You're working on <strong>${esc(state.current.name)}</strong> — when it's done you can ${esc(state.current.can)}.</p>
-       <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">${esc(state.current.why || "")}</p>
-       <p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">
-         ${state.current.lessonCount} lessons · ${state.current.items} words · about ${state.current.chunks} short sittings.</p>
-       ${pc.known ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">Against the plan you're
-         <strong style="color:var(--text)">${pc.state === "on track" ? "on track" : Math.abs(pc.weeksAhead) + " week" + (Math.abs(pc.weeksAhead) === 1 ? "" : "s") + " " + pc.state}</strong>
-         — ${esc(pc.reason)}. Weeks are only how the plan was drawn; the milestones are the thing.</p>`
-       : pc.notStarted ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">No pace yet — the clock starts when you do, not before.</p>`
-       : pc.tooEarly ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--muted)">Just started — I'll tell you how you're pacing once there's a week of it to measure.</p>` : ""}`
-    : `<p style="margin:0">Every milestone achieved.</p>`;
+  /* ---- what a level actually costs ----
+     Criteria come straight from data/curriculum.json, so this page can never
+     drift from what the engine will actually award. Each one gains a link to the
+     single place that moves it, because "listening test 0/1" with no way to sit
+     one is a complaint, not a plan. */
+  const ACTION = {
+    earCoverage: ["🎧 hear them in a lesson", "learn.html"],
+    srsSolid: ["✍️ drill them", "sentences.html"],
+    examCount: ["📝 sit a test", "index.html"],
+    examAvg: ["📝 sit a test", "index.html"],
+    placement: ["🎧 take the placement test", "placement.html"],
+    surahTests: ["🎧 prove a surah", "index.html"],
+    outputMinutes: ["🎙 speak out loud", "converse.html?week=1"],
+  };
+  const critRow = c => {
+    const act = ACTION[c.type] || null;
+    const have = Math.round(c.have * 10) / 10, need = Math.round(c.need * 10) / 10;
+    return `<li class="${c.met ? "met" : ""}">
+      <span class="tick">${c.met ? "✓" : "○"}</span>
+      <span class="what">${esc(c.label)}
+        ${!c.met && act ? `<a class="do" href="${act[1]}" style="color:var(--accent);margin-left:6px">${act[0]} →</a>` : ""}</span>
+      <span class="num">${have} / ${need}${c.unit ? " " + esc(c.unit) : ""}</span>
+    </li>`;
+  };
 
-  /* each track: its levels, and the milestones that feed each level */
-  for (const t of Object.values(L)) {
-    const byLevel = {};
-    for (const m of state.milestones) (byLevel[m.level] = byLevel[m.level] || []).push(m);
-    const track = ctx.curriculum.tracks.find(x => x.id === t.id);
-    const html = track.levels.map(lv => {
-      const mine = (byLevel[lv.id] || []);
-      if (!mine.length) return "";
-      const earned = t.earned.some(e => e.id === lv.id);
-      const isNext = t.next && t.next.id === lv.id;
-      const lvState = earned ? t.earned.find(e => e.id === lv.id) : (isNext ? t.next : null);
-      return `
-        <div class="lvlblock ${isNext ? "now" : ""}">
-          <div class="lvlhead"><b>${esc(lv.label)}</b>
-            <span style="font-size:14.5px">${esc(lv.can)}</span>
-            ${earned ? `<span style="font-size:12px;color:var(--accent);font-weight:600">✓ earned</span>` : ""}</div>
-          ${isNext ? `<div class="bar"><i style="width:${Math.round(t.nextPct * 100)}%"></i></div>
-            <ul class="crit">${t.next.criteria.map(c => `<li class="${c.met ? "met" : ""}">${c.met ? "✓" : "·"} ${esc(c.label)} — ${esc(c.have)}/${esc(c.need)} ${esc(c.unit)}</li>`).join("")}</ul>` : ""}
-          <div style="margin-top:8px">
-            ${mine.map(m => `<div class="msrow ${m.achieved ? "done" : ""} ${state.current && state.current.id === m.id ? "now" : ""}">
-              <span class="tick">${m.achieved ? "✓" : "○"}</span>
-              <span>${esc(m.name)} — <span style="color:var(--muted)">you can ${esc(m.can)}</span>
-                ${m.achieved && m.score !== null ? ` <span style="color:var(--accent)">${m.score}</span>` : ""}
-                ${!m.achieved ? ` <span style="color:var(--muted);font-size:13px">(${m.lessonsDone}/${m.lessonCount} lessons)</span>` : ""}</span>
-            </div>`).join("")}
-          </div>
-        </div>`;
-    }).join("");
-    document.getElementById("track-" + t.id).innerHTML = html || "<p>No milestones defined for this track yet.</p>";
-  }
+  const TITLE = { quran: "🎧 Understand the Qur'an as it is recited", conv: "🗣 Hold a conversation in Arabic" };
+  document.getElementById("tracks").innerHTML = Object.values(L).map(t => {
+    const cur = t.current, nxt = t.next;
+    const left = nxt ? nxt.criteria.filter(c => !c.met) : [];
+    return `<div class="card">
+      <h2 style="margin-top:0">${TITLE[t.id] || esc(t.name)}</h2>
+      <div class="lvl ${cur ? "" : "now"}">
+        <div class="tag">${cur ? "where you are" : "not yet"}</div>
+        <h3>${cur ? esc(cur.label) : "Below A1"}</h3>
+        <div class="can">${cur ? esc(cur.can) : "Nothing proved on this track yet — the first level is below."}</div>
+      </div>
+      ${nxt ? `<div class="lvl now">
+        <div class="tag">next — ${left.length} thing${left.length === 1 ? "" : "s"} left</div>
+        <h3>${esc(nxt.label)}</h3>
+        <div class="can">${esc(nxt.can)}</div>
+        <div class="bar"><i style="width:${Math.round(t.nextPct * 100)}%"></i></div>
+        <p style="font-size:12.5px;color:var(--muted);margin:0">${Math.round(t.nextPct * 100)}% of the way. A level needs
+        <b>every</b> line ticked, and is never taken away once earned.</p>
+        <ul class="crit">${nxt.criteria.map(critRow).join("")}</ul>
+      </div>` : `<div class="lvl"><div class="tag">complete</div>
+        <h3>Every level earned</h3><div class="can">There is nothing above this on the ladder.</div></div>`}
+      ${t.earned.length > 1 ? `<p style="font-size:13px;color:var(--muted);margin:0">
+        Earned so far: ${t.earned.map(e => esc(e.label)).join(", ")}.</p>` : ""}
+    </div>`;
+  }).join("");
+
+  /* ---- the ladder, condensed ---- */
+  document.getElementById("ladder").innerHTML = state.milestones.map(m => `
+    <div class="msrow ${m.achieved ? "done" : ""}">
+      <span class="tick" style="${m.achieved ? "color:var(--accent)" : "color:var(--border)"}">${m.achieved ? "✓" : "○"}</span>
+      <span>${m.track === "quran" ? "🎧" : "🗣"} ${esc(m.name)}
+        ${m.achieved && m.score !== null ? `<span style="color:var(--accent);font-weight:600"> ${m.score}</span>`
+          : `<span style="color:var(--muted)"> — ${m.lessonsDone}/${m.lessonCount} lessons</span>`}</span>
+    </div>`).join("");
 })();
 </script>
-<script src="js/longview.js?v=mtgc19p6"></script>
 </body>
 </html>

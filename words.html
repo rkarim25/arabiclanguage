@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Words — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
-  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgcad4o">
+  <link rel="stylesheet" href="css/style.css?v=mtgcad4o">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 10px; }
     .sp-chip { font-size: 12.5px; border: 1px solid var(--border); border-radius: 999px;
@@ -35,11 +35,11 @@
 <body>
 <main><div id="content">Loading…</div></main>
 
-<script src="js/progress-model.js?v=mtgc19p6"></script>
-<script src="js/curriculum.js?v=mtgc19p6"></script>
-<script src="js/app.js?v=mtgc19p6"></script>
-<script src="js/tracker.js?v=mtgc19p6"></script>
-<script src="js/plan.js?v=mtgc19p6"></script>
+<script src="js/progress-model.js?v=mtgcad4o"></script>
+<script src="js/curriculum.js?v=mtgcad4o"></script>
+<script src="js/app.js?v=mtgcad4o"></script>
+<script src="js/tracker.js?v=mtgcad4o"></script>
+<script src="js/plan.js?v=mtgcad4o"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -61,7 +61,11 @@ trackPage("words");
 const content = document.getElementById("content");
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+/* ?held=1 shows only what he actually holds. His question about the progress
+   page, 2026-08-30: "are the sentences i know actually real? would i be able to
+   see those sentences?" A count nobody can click into is a claim, not a fact. */
 let TAG = "", SHOWN = 0, ROWS = [];
+let HELD_ONLY = new URLSearchParams(location.search).get("held") === "1";
 const PAGE = 60;
 
 (async () => {
@@ -128,6 +132,10 @@ function render() {
       ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat — mark what you already know and it stops coming back.
       Words are still taught inside <a href="sentences.html" style="color:var(--accent)">sentences</a>; this is the list, not the lesson.</p>
     </div>
+    <div class="sp-chips" style="margin-bottom:2px">
+      <span class="sp-chip ${HELD_ONLY ? "" : "on"}" id="allW">All ${ROWS.length}</span>
+      <span class="sp-chip ${HELD_ONLY ? "on" : ""}" id="heldW">✓ Only the ${heldAll} I hold</span>
+    </div>
     <div class="sp-chips" id="tags">
       <span class="sp-chip ${TAG ? "" : "on"}" data-t="">All</span>
       ${tags.map(t => `<span class="sp-chip ${TAG === t ? "on" : ""}" data-t="${esc(t)}">${esc(t)}</span>`).join("")}
@@ -143,11 +151,14 @@ function render() {
     page();
   });
   document.getElementById("more").onclick = () => page();
+  document.getElementById("allW").onclick = () => { HELD_ONLY = false; render(); };
+  document.getElementById("heldW").onclick = () => { HELD_ONLY = true; render(); };
   SHOWN = 0;
   page();
 
   function page() {
-    const rows = TAG ? ROWS.filter(r => r.tag === TAG) : ROWS;
+    let rows = HELD_ONLY ? ROWS.filter(r => held(r.key)) : ROWS;
+    if (TAG) rows = rows.filter(r => r.tag === TAG);
     const slice = rows.slice(SHOWN, SHOWN + PAGE);
     const html = slice.map((r, i) => `
       <div class="lrow${held(r.key) ? " on" : ""}" data-k="${esc(r.key)}">
@@ -178,7 +189,7 @@ function render() {
 
     const h = rows.filter(r => held(r.key)).length;
     document.getElementById("head").innerHTML =
-      `${rows.length} words${TAG ? ` in <b>${esc(TAG)}</b>` : ""}, commonest first · <b>${h}</b> held · showing ${SHOWN}.`;
+      `${rows.length} ${HELD_ONLY ? "words you hold" : "words"}${TAG ? ` in <b>${esc(TAG)}</b>` : ""}, commonest first${HELD_ONLY ? "" : ` · <b>${h}</b> held`} · showing ${SHOWN}.`;
     const more = document.getElementById("more");
     more.style.display = SHOWN >= rows.length ? "none" : "";
     more.textContent = `Show ${Math.min(PAGE, rows.length - SHOWN)} more`;

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
-  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgcad4o">
+  <link rel="stylesheet" href="css/style.css?v=mtgcad4o">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtgc19p6"></script>
-<script src="js/curriculum.js?v=mtgc19p6"></script>
-<script src="js/app.js?v=mtgc19p6"></script>
-<script src="js/tracker.js?v=mtgc19p6"></script>
-<script src="js/plan.js?v=mtgc19p6"></script>
-<script src="js/account.js?v=mtgc19p6"></script>
+<script src="js/progress-model.js?v=mtgcad4o"></script>
+<script src="js/curriculum.js?v=mtgcad4o"></script>
+<script src="js/app.js?v=mtgcad4o"></script>
+<script src="js/tracker.js?v=mtgcad4o"></script>
+<script src="js/plan.js?v=mtgcad4o"></script>
+<script src="js/account.js?v=mtgcad4o"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -312,6 +312,8 @@ function scorePill(l) {
       </div>
       <div class="acts">
         ${last ? `<span class="pill ${cls}" title="how many you had cold last time"><span class="lbl">last</span>${last.score}</span>` : ""}
+        ${b.kind === "vocab" && last && (last.missed || []).length
+          ? `<a href="learn.html?burst=vocab&only=missed" title="just the ones you didn't have first time">↻ ${last.missed.length} missed</a>` : ""}
         <a href="learn.html?burst=${b.kind}">${last ? "run it again" : "start"}</a>
       </div>
     </div>`;

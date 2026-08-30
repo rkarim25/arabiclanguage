@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
-  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgcad4o">
+  <link rel="stylesheet" href="css/style.css?v=mtgcad4o">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtgc19p6"></script>
-<script src="js/curriculum.js?v=mtgc19p6"></script>
-<script src="js/app.js?v=mtgc19p6"></script>
-<script src="js/tracker.js?v=mtgc19p6"></script>
-<script src="js/plan.js?v=mtgc19p6"></script>
+<script src="js/progress-model.js?v=mtgcad4o"></script>
+<script src="js/curriculum.js?v=mtgcad4o"></script>
+<script src="js/app.js?v=mtgcad4o"></script>
+<script src="js/tracker.js?v=mtgcad4o"></script>
+<script src="js/plan.js?v=mtgcad4o"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -1146,13 +1146,36 @@ async function runTest(lessonIds, ctx, state, label, opts) {
 async function runVocabBurst(ctx, state) {
   const weeks = Curriculum.weekPlan(ctx, state);
   const cw = weeks[Curriculum.currentWeek(weeks) - 1];
-  const words = Curriculum.vocabBurst(ctx, {
-    exclude: cw ? cw.lessons.flatMap(x => x.lesson.keys || []) : [],
-  });
+  /* ONLY THE ONES HE MISSED. His ask, 2026-08-30: "in vocabulary burst, also
+     give me option to run only the ones i couldnt do."
+
+     Right, and it is the cheapest win on the page: after a burst the words he
+     already had are settled and re-drilling them is time he does not have. The
+     misses are logged by KEY on the way out, so this rebuilds the short list from
+     the last run rather than recomputing from frequency — otherwise it would
+     quietly hand him a different set of words and call it the same burst. */
+  let words;
+  const onlyMissed = P.get("only") === "missed";
+  if (onlyMissed) {
+    const last = (ctx.log || []).filter(e => e && e.e === "burst-done" && e.kind === "vocab" && (e.missed || []).length).slice(-1)[0];
+    const want = new Set((last && last.missed) || []);
+    const byKey = new Map();
+    Curriculum.wordIndex(ctx).forEach(w => byKey.set(w.key, w));
+    words = [...want].map(k => byKey.get(k)).filter(Boolean);
+  } else {
+    words = Curriculum.vocabBurst(ctx, {
+      exclude: cw ? cw.lessons.flatMap(x => x.lesson.keys || []) : [],
+    });
+  }
   if (!words.length) {
-    app.innerHTML = `<h1>Nothing to add</h1>
-      <p>Every high-frequency word the site knows about is already yours, or already in this week's lessons.</p>
-      <div class="row" style="justify-content:flex-start"><a href="index.html"><button class="primary">Back</button></a></div>`;
+    app.innerHTML = onlyMissed
+      ? `<h1>Nothing missed</h1><p>Your last burst had no misses to redo.</p>
+         <div class="row" style="justify-content:flex-start">
+           <a href="learn.html?burst=vocab"><button class="primary">Run a fresh burst</button></a>
+           <a href="index.html"><button>Back</button></a></div>`
+      : `<h1>Nothing to add</h1>
+         <p>Every high-frequency word the site knows about is already yours, or already in this week's lessons.</p>
+         <div class="row" style="justify-content:flex-start"><a href="index.html"><button class="primary">Back</button></a></div>`;
     return;
   }
   primeSpeak();
@@ -1164,12 +1187,17 @@ async function runVocabBurst(ctx, state) {
      — useless. What tells him whether to run it again is how many he had cold,
      before any prompting, which is what this counts. Rounds are reported too: a
      word that took four goes has not stuck. */
-  const first = { right: 0, seen: new Set() };
+  const first = { right: 0, seen: new Set(), missed: [] };
   let roundsTaken = 1;
-  const head = `<div class="crumb">📇 Vocabulary burst · between the lessons</div>
-    <h1 style="margin-top:0">${words.length} words worth knowing</h1>
-    <p class="sub">Not a new topic — these are the commonest words in the Qur'an and in everyday
-    Arabic that you don't hold yet, so each one buys you a lot of sentences. About four minutes.</p>`;
+  const head = onlyMissed
+    ? `<div class="crumb">📇 Vocabulary burst · the ones you missed</div>
+       <h1 style="margin-top:0">${words.length} to go back over</h1>
+       <p class="sub">Just the ones you didn't have first time last round. The rest are settled — no point
+       drilling them again.</p>`
+    : `<div class="crumb">📇 Vocabulary burst · between the lessons</div>
+       <h1 style="margin-top:0">${words.length} words worth knowing</h1>
+       <p class="sub">Not a new topic — these are the commonest words in the Qur'an and in everyday
+       Arabic that you don't hold yet, so each one buys you a lot of sentences. About four minutes.</p>`;
 
   table();
 
@@ -1268,7 +1296,10 @@ async function runVocabBurst(ctx, state) {
         if (!ok && !answered.has(at)) miss.push(w);
         answered.add(at);
         // only the first sight of a word counts toward the score
-        if (round === 1 && !first.seen.has(w.key)) { first.seen.add(w.key); if (ok) first.right++; }
+        if (round === 1 && !first.seen.has(w.key)) {
+          first.seen.add(w.key);
+          if (ok) first.right++; else first.missed.push(w.key);
+        }
         document.getElementById("jRev").insertAdjacentHTML("beforeend",
           `<div class="q-ar arabic">${esc(w.ar)}</div><div class="q-en" style="font-size:15px;color:var(--muted)">${esc(w.en)}</div>
            ${w.example ? `<p style="text-align:center;font-size:17px;direction:rtl" class="arabic">${esc(w.example.ar)}</p>
@@ -1290,7 +1321,7 @@ async function runVocabBurst(ctx, state) {
     const total = words.length;
     const score = Math.round(100 * first.right / (total || 1));
     logEvent({ e: "burst-done", kind: "vocab", n: total, score, firstTry: first.right, rounds: roundsTaken,
-               keys: words.map(w => w.key) });
+               keys: words.map(w => w.key), missed: first.missed });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
     /* The verdict is about whether to run it again, which is what he asked for —
        not a grade. Cold recall of a word he met minutes ago is a low bar, so the
@@ -1318,7 +1349,8 @@ async function runVocabBurst(ctx, state) {
           <td>${esc(w.en)}${w.example ? `<div style="font-size:13px;color:var(--muted);direction:rtl;text-align:right" class="arabic">${esc(w.example.ar)}</div>` : ""}</td>
         </tr>`).join("")}</table>
         <div class="row" style="justify-content:flex-start">
-          <a href="index.html"><button class="primary">Back to your lessons</button></a>
+          ${first.missed.length ? `<a href="learn.html?burst=vocab&only=missed"><button class="primary">↻ Just the ${first.missed.length} I missed</button></a>` : ""}
+          <a href="index.html"><button class="${first.missed.length ? "" : "primary"}">Back to your lessons</button></a>
           <a href="learn.html"><button>Next lesson →</button></a>
         </div>
       </div>`;
