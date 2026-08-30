@@ -153,5 +153,27 @@ const bank = D("sentence-bank.json");
   yes(bursts.every(b => b.mins <= 4), "no burst is longer than four minutes — the week is still sentences");
 }
 
+/* ---------- 7. a level's bill is measured against the WHOLE deck ---------- */
+{
+  /* It used to count only cards already in his SRS, so "80% of the greeting,
+     introducing and asking decks" read as "0 / 1 cards solid" after he had seen
+     one card — and the level could have been earned by holding a single word.
+     He asked on 2026-08-30 whether the numbers on the progress page were real.
+     This one was not. */
+  const verses = D("verses.json");
+  const one = { bank, curriculum: cur, verses, log: [], now: Date.now(),
+                srs: { "ph-greet:0": { box: 5, due: 0 } } };
+  const L = C.levels(one);
+  const conv = L.conv && L.conv.next;
+  yes(!!conv, "the conversation track has a next level to reach");
+  if (conv) {
+    const deck = conv.criteria.find(c => c.type === "srsSolid");
+    yes(!!deck && deck.need > 10,
+      "a deck criterion counts the whole deck, not just the part he has met (needs " + (deck ? deck.need : "?") + ")");
+    yes(!!deck && deck.have === 1, "and counts only the cards he actually holds");
+    yes(!!deck && !deck.met, "one solid card out of a whole deck does not earn the level");
+  }
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

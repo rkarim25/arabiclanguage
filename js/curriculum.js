@@ -90,8 +90,26 @@
         };
       }
       case "srsSolid": {
-        const keys = Object.keys(ctx.srs || {}).filter(k => (c.keys || []).some(p => k.startsWith(p)));
-        const solid = keys.filter(k => (ctx.srs[k].box || 0) >= (c.box || SOLID_BOX)).length;
+        /* THE DENOMINATOR IS THE WHOLE DECK, not the part of it he has met.
+           This counted only keys already IN his SRS, so a level asking for 80% of
+           the greeting, introducing and asking decks reported "0 / 1 cards solid"
+           after he had seen a single card — and could have been earned by holding
+           one word. He asked on 2026-08-30 whether the numbers on this page were
+           real; this one was not. The catalogue comes from the sentence bank,
+           which carries every card key the site teaches, and falls back to the
+           old behaviour when no bank is loaded (node tests, older pages). */
+        if (!ctx._catalogue && ctx.bank) {
+          ctx._catalogue = new Set();
+          (ctx.bank.sentences || []).forEach(s => {
+            if (s.key) ctx._catalogue.add(s.key);
+            (s.teaches || []).forEach(k => ctx._catalogue.add(k));
+            (s.wordKeys || []).forEach(k => ctx._catalogue.add(k));
+          });
+        }
+        const pool = ctx._catalogue && ctx._catalogue.size
+          ? [...ctx._catalogue] : Object.keys(ctx.srs || {});
+        const keys = pool.filter(k => (c.keys || []).some(p => k.startsWith(p)));
+        const solid = keys.filter(k => ((ctx.srs || {})[k] || {}).box >= (c.box || SOLID_BOX)).length;
         const total = keys.length;
         const frac = pct(solid, total);
         return {
