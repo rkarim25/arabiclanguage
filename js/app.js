@@ -1324,7 +1324,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg283r5";
+const DATA_V = "mtg2b2zq";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -1788,13 +1788,16 @@ function attachInlineTranslit(el, opts) {
         const fix = cands.find(c => !c.comp);
         if (fix) top.push(fix);
       }
-      /* IN A TEST the answer's own word is held out of the pool on purpose — a
-         chip must never hand him the thing being marked. What was left was
-         noise: typing "sarir" for سَرِير offered صبر, سعر, صرط, three unrelated
-         words at edit distance 2. Worse than nothing, because it reads as the
-         site's best guess. So when the pool is restricted, only a near-certain
-         match is offered and anything vaguer gives way to the note. */
-      cands = opts && opts.strict ? top.filter(c => c.best < 0.3) : top;
+      /* IN A TEST there are no chips at all. The answer's own word is held out
+         of the pool on purpose — a chip must never hand him the thing being
+         marked — which means every chip that CAN appear is, by construction, a
+         different word from the answer. Typing "sarir" for سَرِير offered صبر,
+         سعر, صرط; tightening the threshold only changed which wrong words it
+         offered (سرر, صورة, صغير), because the folds that make suggestions
+         generous also make near-misses look certain. A distractor presented as
+         the site's best guess is worse than silence, so in a test it says what
+         is actually true instead: roughly right is accepted. */
+      cands = opts && opts.strict ? [] : top;
     }
     bar.innerHTML = "";
     // Some callers hold a word back on purpose (Sentence Practice keeps the verb
