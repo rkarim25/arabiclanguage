@@ -233,8 +233,17 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
   yes(/function vary\(/.test(learn), "variations are a step in the lesson");
   yes(/grammarGate/.test(learn), "a new grammar rule is explained before the sentences that use it");
   const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
-  yes(!/href="vocab\.html">📖 Vocabulary/.test(app), "Vocabulary is no longer a top-level destination");
-  yes((app.match(/class="link /g) || []).length === 3, "the nav is three links");
+  /* THE NAV IS HIS, and it is now five, not three. He set it out on 2026-08-30:
+     "sentences, words, others, progress" plus "a tab of lessons (from preply...)".
+     The old assertion pinned three links to stop the eleven-tab sprawl coming
+     back; the rule it was protecting is "no destination nobody asked for", not
+     "three". So it now pins the EXACT set he named — which still fails the moment
+     anything creeps in that he did not. */
+  const NAV = ["index.html", "sentences.html", "words.html", "grammar.html", "class.html", "map.html"];
+  const links = [...app.matchAll(/class="link \$\{[^}]*\}"\s+href="([^"]+)"/g)].map(m => m[1]);
+  yes(links.length === NAV.length && NAV.every(h => links.includes(h)),
+    `the nav is exactly the ${NAV.length} destinations he asked for (${links.join(", ")})`);
+  yes(!/href="vocab\.html">📖 Vocabulary/.test(app), "the old Vocab Lab is not one of them");
   yes(/sentence-bank\.json/.test(app), "the sentence bank is loaded with the curriculum");
 }
 
