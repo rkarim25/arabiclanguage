@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg5h4o9">
-  <link rel="stylesheet" href="css/style.css?v=mtg5h4o9">
+  <link rel="stylesheet" href="css/fonts.css?v=mtga4lw5">
+  <link rel="stylesheet" href="css/style.css?v=mtga4lw5">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -26,7 +26,8 @@
 <body>
 <main>
   <h1>Speaking <span class="arabic" style="color:var(--accent)">تَكَلَّمْ</span></h1>
-  <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked. Tap 🎤 again any time to retry, and ▶ plays your own take back.</p>
+  <p class="sub">Speaking is produced, not absorbed — say everything out loud. Best in Chrome or Edge; allow microphone access when asked. Tap 🎤 again any time to retry.
+  <button class="small" id="hearToggle" type="button" style="margin-left:6px"></button></p>
 
   <div class="card" id="micCard">
     <h2>🎤 Is the mic working?</h2>
@@ -66,119 +67,15 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtg5h4o9"></script>
-<script src="js/tracker.js?v=mtg5h4o9"></script>
-<script src="js/plan.js?v=mtg5h4o9"></script>
+<script src="js/app.js?v=mtga4lw5"></script>
+<script src="js/tracker.js?v=mtga4lw5"></script>
+<script src="js/plan.js?v=mtga4lw5"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
 
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const BATCH = 10;
 
-/* ---------- one shared dictation pipeline ----------
-   His 2026-08-07 notes: rows stuck on "listening…", no retry, and "should i be
-   able to hear back what i said". Root cause: every 🎤 spun up its own
-   SpeechRecognition — the browser allows ONE, so competing rows hung forever.
-   Now: one live recognition (starting a new one resets the old row), a 9s
-   watchdog so nothing hangs, every 🎤 stays tappable for retries, and a
-   best-effort MediaRecorder captures the take for "▶ hear yourself" (dropped
-   automatically if this device's recognition can't share the mic). */
-let _live = null;      // { rec, mediaRec, stream, watchdog, reset }
-let _recOwnVoice = true; // flips off if recording breaks recognition on this device
-let _recFails = 0;       // consecutive empty takes while also recording
-function stopDictation() {
-  const L = _live;
-  if (!L) return;
-  _live = null;
-  clearTimeout(L.watchdog);
-  try { L.rec.onresult = L.rec.onerror = L.rec.onend = null; L.rec.abort(); } catch (e) {}
-  try { if (L.mediaRec && L.mediaRec.state !== "inactive") { L.mediaRec.onstop = null; L.mediaRec.stop(); } } catch (e) {}
-  try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
-  if (L.reset) L.reset();
-}
-function dictate(btn, idleLabel, cb) {
-  // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
-  stopDictation(); stopSpeak();
-  const rec = new SR();
-  // interimResults ON (his 08-13 note: "i am saying it but doesnt get recorded
-  // and keeps saying didnt get it"). Two reasons: he SEES the words appear as he
-  // speaks, and — the actual bug — some engines emit interim text but never a
-  // final result for ar-SA, so the take used to be thrown away as silence. The
-  // last interim is now kept and used if no final arrives.
-  rec.lang = "ar-SA"; rec.interimResults = true;
-  const L = { rec, interim: "", reset: () => { btn.textContent = idleLabel; } };
-  _live = L;
-  btn.textContent = "🔴 listening…";
-  const chunks = [];
-  const finish = (heard, errMsg) => {
-    if (!heard && L.interim) { heard = L.interim; errMsg = null; }   // partial beats nothing
-    if (_live !== L) return;                 // superseded by a newer dictation
-    _live = null;
-    clearTimeout(L.watchdog);
-    // If recording rode along and the recognizer still heard nothing twice in a
-    // row, this device won't share the mic — drop self-recording so dictation
-    // gets it alone (his 08-11 note: "I press microphone but nothing records").
-    if (heard) { _recFails = 0; _noHeard = 0; }
-    else {
-      _noHeard++; setTimeout(micTrouble, 0);
-      if (L.mediaRec && ++_recFails >= 2 && _recOwnVoice) {
-        _recOwnVoice = false;
-        errMsg = "didn't catch that — tap 🎤 once more (▶ hear-yourself is now off so the mic can listen properly)";
-      }
-    }
-    L.reset();
-    try { rec.onend = null; rec.stop(); } catch (e) {}
-    const done = url => cb(heard, url, errMsg);
-    try {
-      if (L.mediaRec && L.mediaRec.state !== "inactive") {
-        L.mediaRec.onstop = () => {
-          let url = null;
-          try { if (heard && chunks.length) url = URL.createObjectURL(new Blob(chunks, { type: L.mediaRec.mimeType || "audio/webm" })); } catch (e) {}
-          try { L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
-          done(url);
-        };
-        L.mediaRec.stop();
-        return;
-      }
-    } catch (e) {}
-    try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
-    done(null);
-  };
-  rec.onresult = ev => {
-    let final = "", interim = "";
-    for (let i = ev.resultIndex; i < ev.results.length; i++) {
-      const r = ev.results[i];
-      if (r.isFinal) final += r[0].transcript; else interim += r[0].transcript;
-    }
-    if (interim.trim()) { L.interim = interim.trim(); btn.textContent = "🔴 " + L.interim.slice(-22); }
-    if (final.trim()) finish(final.trim(), null);
-  };
-  rec.onerror = ev => {
-    if (ev.error === "aborted" && L.mediaRec) _recOwnVoice = false; // recording likely stole the mic here
-    finish(null, ev.error === "not-allowed" ? "mic blocked — allow it in the address bar"
-      : ev.error === "audio-capture" ? "no microphone found"
-      : ev.error === "no-speech" ? "heard silence — is the right mic selected? try 🎤 Test my mic above"
-      : "didn't catch that — tap 🎤 to try again");
-  };
-  rec.onend = () => finish(null, "didn't catch that — tap 🎤 to try again");
-  // The watchdog must resolve the take itself: rec.stop() on a recognizer that
-  // never started throws (swallowed) and leaves the row on "listening…" forever.
-  L.watchdog = setTimeout(() => finish(null, "didn't catch that — tap 🎤 to try again"), 9000);
-  const start = () => { try { rec.start(); } catch (e) { finish(null, "mic is busy — tap 🎤 to try again"); } };
-  if (_recOwnVoice && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      if (_live !== L) { stream.getTracks().forEach(t => t.stop()); return; }
-      try {
-        L.stream = stream;
-        L.mediaRec = new MediaRecorder(stream);
-        L.mediaRec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-        L.mediaRec.start();
-      } catch (e) { L.mediaRec = null; }
-      start();
-    }).catch(() => { if (_live === L) start(); });
-  } else start();
-}
 /* ---------- mic self-test + self-grading fallback ----------
    His 08-13 notes: "this audio still doesnt seem to work… keeps saying didnt get
    it" and "maybe somewhay to test if microphone is working… at least displaying
@@ -188,7 +85,17 @@ function dictate(btn, idleLabel, cb) {
    usable — self-grading keeps the speaking work going. */
 const SELF_KEY = "ats-selfgrade";
 let MIC = !!SR && !store.get(SELF_KEY, false);
-let _noHeard = 0;
+
+/* Recording your own voice needs the microphone at the same time as the
+   recogniser, and on Windows that combination is what stopped the mic working at
+   all (see js/app.js, FIX 1). So it is off unless he asks — and if he does ask
+   and takes start failing, this is the first thing to turn back off. */
+function paintHearToggle() {
+  const b = document.getElementById("hearToggle");
+  if (!b) return;
+  b.textContent = hearYourselfOn() ? "▶ hear-yourself: on — turn off if the mic stops hearing you" : "▶ hear yourself back: off";
+  b.onclick = () => { setHearYourself(!hearYourselfOn()); logEvent({ e: "hear-yourself", on: hearYourselfOn() }); paintHearToggle(); };
+}
 
 function paintSelfToggle() {
   const b = document.getElementById("selfToggle");
@@ -200,6 +107,7 @@ function setSelfGrade(on) {
   MIC = !!SR && !on;
   logEvent({ e: "mic-mode", self: on });
   paintSelfToggle();
+  paintHearToggle();
   drillPool = null; renderDrill(); renderPrompts(); renderShadow();
 }
 function micTrouble() {

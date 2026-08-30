@@ -618,6 +618,154 @@ function trMatch(typed, tr, ar) {
   });
 }
 /* accept a spoken transcript if it contains the target (or either half of a pair) */
+/* ============================================================================
+   SPEAKING INTO THE SITE — one shared dictation pipeline.
+
+   Lifted out of speaking.html on 2026-08-30 so that lessons, tests and the
+   vocabulary burst can all take a spoken answer: "is it possible to use audio
+   input from me to repeat the words rather than writing it?" — which is a better
+   fit for his goals than typing ever was, since he has said writing is not a
+   priority and the whole point is the Qur'an by ear and speech in a mosque.
+
+   The history in the comments below is real and hard-won; the three fixes marked
+   FIX 1/2/3 are what "it wasnt working before, it needs to work" turned out to
+   mean.
+   ============================================================================ */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+/* ---------- one shared dictation pipeline ----------
+   His 2026-08-07 notes: rows stuck on "listening…", no retry, and "should i be
+   able to hear back what i said". Root cause: every 🎤 spun up its own
+   SpeechRecognition — the browser allows ONE, so competing rows hung forever.
+   Now: one live recognition (starting a new one resets the old row), a 9s
+   watchdog so nothing hangs, every 🎤 stays tappable for retries, and a
+   best-effort MediaRecorder captures the take for "▶ hear yourself" (dropped
+   automatically if this device's recognition can't share the mic). */
+let _live = null;      // { rec, mediaRec, stream, watchdog, reset }
+let _noHeard = 0;      // consecutive takes where nothing was heard at all
+let _recFails = 0;     // consecutive empty takes while also recording
+
+/* ---- WHY THE MICROPHONE KEPT NOT WORKING (2026-08-30) ----
+   "it wasnt working before, it needs to work."
+
+   The pipeline was recording his voice with MediaRecorder AT THE SAME TIME as
+   SpeechRecognition was listening, so it could offer "▶ hear yourself".
+   SpeechRecognition opens its own capture, and on Windows Chrome and Edge two
+   simultaneous holds on the same microphone routinely make the recogniser fire
+   `aborted` or hear silence. The code already knew this — it flipped recording
+   off after two failures — but that is two wasted takes EVERY PAGE LOAD, which
+   is exactly what "it doesn't work" feels like from the outside.
+
+   So recording is now OFF unless he turns it on, and the choice is remembered.
+   Recognition gets the microphone to itself, which is the job that matters. */
+const OWN_VOICE_KEY = "ats-hear-yourself";
+let _recOwnVoice = (() => { try { return !!store.get(OWN_VOICE_KEY, false); } catch (e) { return false; } })();
+function setHearYourself(on) { _recOwnVoice = !!on; try { store.set(OWN_VOICE_KEY, !!on); } catch (e) {} }
+function hearYourselfOn() { return _recOwnVoice; }
+function stopDictation() {
+  const L = _live;
+  if (!L) return;
+  _live = null;
+  clearTimeout(L.watchdog);
+  try { L.rec.onresult = L.rec.onerror = L.rec.onend = null; L.rec.abort(); } catch (e) {}
+  try { if (L.mediaRec && L.mediaRec.state !== "inactive") { L.mediaRec.onstop = null; L.mediaRec.stop(); } } catch (e) {}
+  try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+  if (L.reset) L.reset();
+}
+function dictate(btn, idleLabel, cb) {
+  // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
+  stopDictation(); stopSpeak();
+  const rec = new SR();
+  // interimResults ON (his 08-13 note: "i am saying it but doesnt get recorded
+  // and keeps saying didnt get it"). Two reasons: he SEES the words appear as he
+  // speaks, and — the actual bug — some engines emit interim text but never a
+  // final result for ar-SA, so the take used to be thrown away as silence. The
+  // last interim is now kept and used if no final arrives.
+  /* FIX 2: ask for ALTERNATIVES. Arabic recognition is not confident, and its
+     top guess is frequently a homophone of the right word while guess three is
+     the word itself. Grading against only the first was throwing away correct
+     answers. Every alternative is passed back and the grader may accept any. */
+  rec.lang = "ar-SA"; rec.interimResults = true; rec.maxAlternatives = 5;
+  const L = { rec, interim: "", reset: () => { btn.textContent = idleLabel; } };
+  _live = L;
+  btn.textContent = "🔴 listening…";
+  const chunks = [];
+  let alts = [];
+  const finish = (heard, errMsg) => {
+    if (!heard && L.interim) { heard = L.interim; errMsg = null; }   // partial beats nothing
+    if (_live !== L) return;                 // superseded by a newer dictation
+    _live = null;
+    clearTimeout(L.watchdog);
+    // If recording rode along and the recognizer still heard nothing twice in a
+    // row, this device won't share the mic — drop self-recording so dictation
+    // gets it alone (his 08-11 note: "I press microphone but nothing records").
+    if (heard) { _recFails = 0; _noHeard = 0; }
+    else {
+      _noHeard++;
+      if (typeof micTrouble === "function") setTimeout(micTrouble, 0);
+      if (L.mediaRec && ++_recFails >= 2 && _recOwnVoice) {
+        _recOwnVoice = false;
+        errMsg = "didn't catch that — tap 🎤 once more (▶ hear-yourself is now off so the mic can listen properly)";
+      }
+    }
+    L.reset();
+    try { rec.onend = null; rec.stop(); } catch (e) {}
+    const done = url => cb(heard, url, errMsg, alts);
+    try {
+      if (L.mediaRec && L.mediaRec.state !== "inactive") {
+        L.mediaRec.onstop = () => {
+          let url = null;
+          try { if (heard && chunks.length) url = URL.createObjectURL(new Blob(chunks, { type: L.mediaRec.mimeType || "audio/webm" })); } catch (e) {}
+          try { L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+          done(url);
+        };
+        L.mediaRec.stop();
+        return;
+      }
+    } catch (e) {}
+    try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    done(null);
+  };
+  rec.onresult = ev => {
+    let final = "", interim = "";
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const r = ev.results[i];
+      if (r.isFinal) {
+        final += r[0].transcript;
+        for (let a = 0; a < r.length; a++) if (r[a] && r[a].transcript) alts.push(r[a].transcript.trim());
+      } else interim += r[0].transcript;
+    }
+    if (interim.trim()) { L.interim = interim.trim(); btn.textContent = "🔴 " + L.interim.slice(-22); }
+    if (final.trim()) finish(final.trim(), null);
+  };
+  rec.onerror = ev => {
+    if (ev.error === "aborted" && L.mediaRec) _recOwnVoice = false; // recording likely stole the mic here
+    finish(null, ev.error === "not-allowed" ? "mic blocked — allow it in the address bar"
+      : ev.error === "audio-capture" ? "no microphone found"
+      : ev.error === "no-speech" ? "heard silence — is the right mic selected? try 🎤 Test my mic above"
+      : "didn't catch that — tap 🎤 to try again");
+  };
+  rec.onend = () => finish(null, "didn't catch that — tap 🎤 to try again");
+  // The watchdog must resolve the take itself: rec.stop() on a recognizer that
+  // never started throws (swallowed) and leaves the row on "listening…" forever.
+  /* FIX 3: 9 seconds cut him off part-way through anything longer than a few
+     words, and a truncated take reads as "it didn't work". */
+  L.watchdog = setTimeout(() => finish(null, "didn't catch that — tap 🎤 to try again"), 15000);
+  const start = () => { try { rec.start(); } catch (e) { finish(null, "mic is busy — tap 🎤 to try again"); } };
+  if (_recOwnVoice && navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      if (_live !== L) { stream.getTracks().forEach(t => t.stop()); return; }
+      try {
+        L.stream = stream;
+        L.mediaRec = new MediaRecorder(stream);
+        L.mediaRec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+        L.mediaRec.start();
+      } catch (e) { L.mediaRec = null; }
+      start();
+    }).catch(() => { if (_live === L) start(); });
+  } else start();
+}
+
 function speakMatch(heard, target) {
   const h = normalizeAr(heard);
   if (!h) return false;
@@ -1324,7 +1472,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg5h4o9";
+const DATA_V = "mtga4lw5";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

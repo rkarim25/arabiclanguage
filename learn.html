@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg5h4o9">
-  <link rel="stylesheet" href="css/style.css?v=mtg5h4o9">
+  <link rel="stylesheet" href="css/fonts.css?v=mtga4lw5">
+  <link rel="stylesheet" href="css/style.css?v=mtga4lw5">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg5h4o9"></script>
-<script src="js/curriculum.js?v=mtg5h4o9"></script>
-<script src="js/app.js?v=mtg5h4o9"></script>
-<script src="js/tracker.js?v=mtg5h4o9"></script>
-<script src="js/plan.js?v=mtg5h4o9"></script>
+<script src="js/progress-model.js?v=mtga4lw5"></script>
+<script src="js/curriculum.js?v=mtga4lw5"></script>
+<script src="js/app.js?v=mtga4lw5"></script>
+<script src="js/tracker.js?v=mtga4lw5"></script>
+<script src="js/plan.js?v=mtga4lw5"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -140,6 +140,55 @@ const TYPING_HELP = `
    does want it. A bucket tap is itself an answer — ✓/⏳/⊘ mean he had it, ↻ means
    he didn't — and it REPLACES the automatic grade rather than being overwritten
    by it (gradeCard clears an explicit bucket by design; see js/app.js). */
+/* ---------- SAYING IT INSTEAD OF TYPING IT ----------
+   His ask, 2026-08-30: "is it possible to use audio input from me to repeat the
+   words rather than writing it?" — followed by "it wasnt working before, it
+   needs to work."
+
+   It is the better input for him and always was: his goals are the Qur'an by ear
+   and speech in a mosque, he has said in as many words that writing is not a
+   priority, and typing Arabic is a tax on every single answer. Speaking is the
+   skill; typing was only ever the thing the site could check.
+
+   Three rules make this honest rather than infuriating:
+
+     1. Arabic recognition is NOT reliable enough to fail him on. If what it
+        heard matches, he is right. If it does not, the site shows him what it
+        heard and asks HIM — because the likeliest explanation is the recogniser,
+        not him. Self-judgment after a genuine attempt is exactly what the Qur'an
+        recite step already does.
+     2. Every alternative the engine offers is checked, not just its first guess
+        (js/app.js FIX 2). Arabic homophones make the top guess wrong far more
+        often than the third one is.
+     3. Typing never goes away. The box stays; the microphone sits beside it. */
+const CAN_MIC = typeof SR !== "undefined" && !!SR;
+function micRow(id) {
+  // An absent button is indistinguishable from a broken one, and he has been on
+  // the wrong end of that already. If the browser cannot do it, say so.
+  if (!CAN_MIC) return `<p style="text-align:center;font-size:12px;color:var(--muted);margin:6px 0 0">
+    This browser can't take a spoken answer — Chrome or Edge can.</p>`;
+  return `<div class="row" style="margin-top:2px">
+      <button id="${id}" style="font-size:16px">🎤 say it instead</button>
+      <span id="${id}Msg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
+    </div>`;
+}
+/* onSaid(ok, heard) — ok is null when nothing usable was heard */
+function wireMic(id, target, onSaid) {
+  if (!CAN_MIC) return;
+  const btn = document.getElementById(id);
+  const msg = document.getElementById(id + "Msg");
+  if (!btn) return;
+  btn.onclick = () => {
+    msg.textContent = "";
+    dictate(btn, "🎤 say it instead", (heard, url, err, alts) => {
+      if (!heard) { msg.textContent = err || "didn't catch that — tap 🎤 to try again"; return; }
+      const tries = [heard].concat(alts || []);
+      const ok = tries.some(t => speakMatch(t, target) || writeMatchAr(t, target).ok);
+      onSaid(ok, heard);
+    });
+  };
+}
+
 /* ---------- stepping BACK ----------
    His ask, 2026-08-30, looking at a vocabulary burst: "can you put next and back
    in these?" Every card in the site moved one way only, so a word that went past
@@ -586,9 +635,37 @@ async function runLesson(lesson, ms, ctx, handsFree) {
         <p style="text-align:center;font-size:13.5px;color:var(--muted)">Write the whole thing — type it the way it sounds</p>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div class="row"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        ${micRow("pmic")}
         ${TYPING_HELP}</div>`;
       // a LESSON may suggest the sentence's own words — he is learning to spell them
       wireAnswer("ans", "chk");
+      /* SAYING a sentence is closer to the goal than typing it, so in a lesson a
+         spoken attempt is simply accepted as the answer — right if the recogniser
+         agrees, his call if it does not. */
+      wireMic("pmic", s.ar, (ok, heard) => {
+        if (ok) { asked++; right++; gradeSentence(s, true); showProduced(s, true, heard); return; }
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <p style="text-align:center;font-size:15px">It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”,
+          which isn't a match — but Arabic recognition is unreliable. Was what you said right?</p>
+          <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+          ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
+          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button></div>
+        </div>`;
+        speak(s.ar, 0.85);
+        document.getElementById("micYes").onclick = () => { asked++; right++; gradeSentence(s, true); vary(s); };
+        document.getElementById("micNo").onclick = () => { asked++; gradeSentence(s, false); vary(s); };
+      });
+      const showProduced = (sn, ok, heard) => {
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <p style="text-align:center;font-size:16px">${ok ? "✓ right" : "✗ not quite"}${heard ? ` — heard “${esc(heard)}”` : ""}</p>
+          <div class="q-ar arabic" dir="rtl">${esc(sn.ar)}</div>
+          ${sn.tr ? `<p class="q-tr">${esc(sn.tr)}</p>` : ""}
+          <div style="text-align:right;direction:rtl">${wordsHtmlFor(sn)}</div>
+          <div class="row"><button class="primary" id="next">Next</button></div>
+        </div>`;
+        speak(sn.ar, 0.85);
+        document.getElementById("next").onclick = () => vary(sn);
+      };
       const submit = show => {
         const inp = document.getElementById("ans");
         const m = show ? null : writeMatchAr(inp.value, s.ar);
@@ -866,6 +943,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div id="jRev"></div>
         <div class="row" id="jRow">${BACK_BTN(i > 0)}<button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        ${micRow("mic")}
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
           <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
@@ -873,6 +951,23 @@ async function runTest(lessonIds, ctx, state, label, opts) {
       // a TEST excludes the answer's own words, so a chip can never give it away
       wireAnswer("ans", "chk", [target]);
       wireBack();
+      wireMic("mic", target, (ok, heard) => {
+        const rev = document.getElementById("jRev");
+        if (ok) {
+          rev.innerHTML = `<p style="text-align:center;font-size:16px;margin:10px 0 0">✓ right — heard “${esc(heard)}”</p>`;
+          document.getElementById("ans").disabled = true;
+          settle(true, false, target);
+          return;
+        }
+        // the recogniser is the weak link here, so he judges, not it
+        rev.innerHTML = `<p style="text-align:center;font-size:15px;margin:10px 0 0">
+            It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”, which isn't a match —
+            but Arabic recognition is unreliable. Was what you said right?</p>
+          <div class="q-ar arabic" dir="rtl" style="font-size:24px">${esc(target)}</div>
+          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button></div>`;
+        document.getElementById("micYes").onclick = () => settle(true, false, target);
+        document.getElementById("micNo").onclick = () => settle(false, false, target);
+      });
       mountBucketBar(document.getElementById("jBkt"), q.key, b => settle(b !== "repeat", true));
       const check = shown => {
         const inp = document.getElementById("ans");
@@ -1064,12 +1159,19 @@ async function runVocabBurst(ctx, state) {
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
         <div id="jRev"></div>
         <div class="row" id="jRow">${BACK_BTN(at > 0)}<button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        ${micRow("bmic")}
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
           <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
         ${TYPING_HELP}</div>`;
       wireAnswer("ans", "chk", [w.ar]);
       wireBurstBack();
+      wireMic("bmic", w.ar, (ok, heard) => {
+        const rev = document.getElementById("jRev");
+        rev.innerHTML = `<p style="text-align:center;font-size:16px;margin:10px 0 0">${
+          ok ? `✓ right — heard “${esc(heard)}”` : `heard “${esc(heard)}” — not a match, but say it again if that was you`}</p>`;
+        if (ok) { document.getElementById("ans").disabled = true; settle(true, false); }
+      });
       mountBucketBar(document.getElementById("jBkt"), w.key, b => settle(b !== "repeat", true));
       function wireBurstBack() {
         const bk = document.getElementById("bk");
