@@ -1324,7 +1324,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg23sx8";
+const DATA_V = "mtg283r5";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -1788,13 +1788,19 @@ function attachInlineTranslit(el, opts) {
         const fix = cands.find(c => !c.comp);
         if (fix) top.push(fix);
       }
-      cands = top;
+      /* IN A TEST the answer's own word is held out of the pool on purpose — a
+         chip must never hand him the thing being marked. What was left was
+         noise: typing "sarir" for سَرِير offered صبر, سعر, صرط, three unrelated
+         words at edit distance 2. Worse than nothing, because it reads as the
+         site's best guess. So when the pool is restricted, only a near-certain
+         match is offered and anything vaguer gives way to the note. */
+      cands = opts && opts.strict ? top.filter(c => c.best < 0.3) : top;
     }
     bar.innerHTML = "";
     // Some callers hold a word back on purpose (Sentence Practice keeps the verb
     // out — it is the thing being proved). Silence there reads as "the
     // suggestions are broken", which is exactly how he reported it, so say so.
-    if (!cands.length && opts && opts.heldBackNote && parts.length === 1 && last.length >= 2) {
+    if (!cands.length && opts && opts.heldBackNote && last.length >= 2) {
       const n = document.createElement("span");
       n.style.cssText = "font-size:12.5px;color:var(--muted);direction:ltr";
       n.textContent = opts.heldBackNote;

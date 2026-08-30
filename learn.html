@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
-  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg283r5">
+  <link rel="stylesheet" href="css/style.css?v=mtg283r5">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg23sx8"></script>
-<script src="js/curriculum.js?v=mtg23sx8"></script>
-<script src="js/app.js?v=mtg23sx8"></script>
-<script src="js/tracker.js?v=mtg23sx8"></script>
-<script src="js/plan.js?v=mtg23sx8"></script>
+<script src="js/progress-model.js?v=mtg283r5"></script>
+<script src="js/curriculum.js?v=mtg283r5"></script>
+<script src="js/app.js?v=mtg283r5"></script>
+<script src="js/tracker.js?v=mtg283r5"></script>
+<script src="js/plan.js?v=mtg283r5"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -99,6 +99,16 @@ const TYPING_HELP = `
    does want it. A bucket tap is itself an answer — ✓/⏳/⊘ mean he had it, ↻ means
    he didn't — and it REPLACES the automatic grade rather than being overwritten
    by it (gradeCard clears an explicit bucket by design; see js/app.js). */
+/* Enter advances. Bound on the window with a capture listener and cleared on
+   use: document.onkeydown was being lost whenever focus moved off the button,
+   which is exactly what happens after an input is disabled. */
+let _enterOff = null;
+function onEnterOnce(fn) {
+  if (_enterOff) _enterOff();
+  const h = e => { if (e.key !== "Enter") return; e.preventDefault(); _enterOff(); fn(); };
+  _enterOff = () => { window.removeEventListener("keydown", h, true); _enterOff = null; };
+  window.addEventListener("keydown", h, true);
+}
 function judgePanel(id) {
   return `<div id="${id}Rev"></div>
     <div class="row">
@@ -178,7 +188,16 @@ function wireMeaning(id, key, en, done) {
 async function wireAnswer(inputId, submitId, exclude) {
   const inp = document.getElementById(inputId);
   if (!inp) return;
-  attachInlineTranslit(inp, { lexicon: await typingPool(exclude) });
+  /* `exclude` means this is a TEST: the answer's own words are out of the
+     suggestion pool so a chip can't give it away. Say that, rather than offering
+     whatever else happened to be close — three unrelated words is not help. */
+  attachInlineTranslit(inp, {
+    lexicon: await typingPool(exclude),
+    strict: !!(exclude && exclude.length),
+    heldBackNote: exclude && exclude.length
+      ? "no suggestion for this one — it's the answer. Roughly right is accepted."
+      : "",
+  });
   inp.focus();
   inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); const b = document.getElementById(submitId); if (b) b.click(); } };
   const kb = document.getElementById(inputId + "Kb");
@@ -713,7 +732,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
 
   ask();
   function ask() {
-    document.onkeydown = null;
+    if (_enterOff) _enterOff();
     if (i >= qs.length) return done();
     const q = qs[i];
     const n = `<div class="crumb">${i + 1} of ${qs.length} · ${esc(q.lessonTitle)}${q.form === "ear" ? " · by ear" : ""}</div>
@@ -799,7 +818,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
       const nx = document.getElementById("nx");
       nx.onclick = () => { i++; ask(); };
       nx.focus();
-      document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); nx.click(); } };
+      onEnterOnce(() => nx.click());
     }
   }
 
@@ -957,13 +976,13 @@ async function runVocabBurst(ctx, state) {
         const nx = document.getElementById("nx");
         nx.onclick = () => { at++; step(); };
         nx.focus();
-        document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); document.onkeydown = null; nx.click(); } };
+        onEnterOnce(() => nx.click());
       }
     }
   }
 
   function finish() {
-    document.onkeydown = null;
+    if (_enterOff) _enterOff();
     logEvent({ e: "burst-done", kind: "vocab", n: words.length, keys: words.map(w => w.key) });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
     app.innerHTML = `<h1>Burst done</h1>
@@ -1059,12 +1078,12 @@ async function runGrammarBurst(ctx, state) {
       const nx = document.getElementById("nx");
       nx.onclick = () => drill(at + 1);
       nx.focus();
-      document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); document.onkeydown = null; nx.click(); } };
+      onEnterOnce(() => nx.click());
     }
   }
 
   function finish() {
-    document.onkeydown = null;
+    if (_enterOff) _enterOff();
     logEvent({ e: "burst-done", kind: "grammar", pattern: id });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
     app.innerHTML = `<h1>Burst done</h1>
