@@ -826,6 +826,116 @@ function micListen(lang, ms, onText) {
   });
 }
 
+/* ---------- WHICH OF HIS SIX MICROPHONES IS HE ACTUALLY TALKING INTO ----------
+   2026-08-30, verdict B on Chrome: the browser opened a microphone and peaked at
+   1%, while Windows Voice Recorder records him perfectly. His machine offers six
+   inputs — an HP dock headset, the Intel array, a Jabra Evolve2, a Logitech
+   BRIO, plus the Default and Communications aliases, and Windows' default is the
+   Jabra.
+
+   The trap is that CHROME KEEPS ITS OWN microphone choice, per site, entirely
+   separate from the Windows default. So Chrome can sit on a dock headset that is
+   unplugged, or a headset whose boom arm is up (the Evolve2 mutes itself that
+   way), and hear nothing at all while every Windows app is happily using
+   something else. No amount of changing the Windows default fixes that.
+
+   Guessing between six devices is hopeless, so this opens each one in turn and
+   measures it. Two and a half seconds each, one at a time, never overlapping.
+   Whatever lights up is the device he is talking into — and then he sets that
+   one in Chrome's own dropdown, which is the only thing that will actually move
+   speech recognition, because SpeechRecognition offers no way to pick a device
+   from code. This test cannot fix it for him; it can tell him exactly what to
+   pick, which is the next best thing and much better than a list of guesses. */
+async function micSweep(host) {
+  if (!host) return;
+  const bar = (pct, on) => `<span style="display:inline-block;width:120px;height:9px;background:var(--border);border-radius:99px;overflow:hidden;vertical-align:middle">
+      <i style="display:block;height:100%;width:${Math.min(100, pct)}%;background:${on ? "var(--accent)" : "var(--muted)"}"></i></span>`;
+
+  let devices = [];
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true }).then(s => s.getTracks().forEach(t => t.stop()));
+    devices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === "audioinput");
+  } catch (e) {
+    host.innerHTML = `<p style="font-size:14px">The browser would not open a microphone at all — allow it from the 🎤 icon in the address bar first.</p>`;
+    return;
+  }
+  if (!devices.length) { host.innerHTML = `<p style="font-size:14px">No inputs found.</p>`; return; }
+
+  const rows = devices.map(d => ({ id: d.deviceId, name: d.label || "(unnamed input)", peak: 0, done: false }));
+  const paint = (i) => {
+    host.innerHTML = `<p style="margin:0 0 8px;font-size:14px"><b>Keep talking, out loud, until this finishes.</b>
+      Testing each input for two and a half seconds — ${i + 1} of ${rows.length}.</p>` +
+      rows.map((r, k) => `<div style="display:flex;gap:10px;align-items:center;padding:3px 0;font-size:13px">
+        ${bar(Math.round(r.peak * 220), r.peak >= 0.05)}
+        <span style="flex:1${k === i ? ";font-weight:700" : ""}">${r.name}</span>
+        <span style="color:var(--muted);min-width:44px;text-align:right">${r.done ? Math.round(r.peak * 100) + "%" : (k === i ? "…" : "")}</span>
+      </div>`).join("");
+  };
+  paint(0);
+
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    let stream = null, ctx = null, raf = null;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: r.id } } });
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const src = ctx.createMediaStreamSource(stream);
+      const an = ctx.createAnalyser(); an.fftSize = 512;
+      src.connect(an);
+      const buf = new Uint8Array(an.fftSize);
+      const tick = () => {
+        an.getByteTimeDomainData(buf);
+        let peak = 0;
+        for (let j = 0; j < buf.length; j++) peak = Math.max(peak, Math.abs(buf[j] - 128) / 128);
+        r.peak = Math.max(r.peak, peak);
+        paint(i);
+        raf = requestAnimationFrame(tick);
+      };
+      tick();
+      await new Promise(res => setTimeout(res, 2500));
+    } catch (e) { /* a device that refuses to open just scores zero */ }
+    if (raf) cancelAnimationFrame(raf);
+    try { if (stream) stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    try { if (ctx) await ctx.close(); } catch (e) {}
+    r.done = true;
+    paint(Math.min(i + 1, rows.length - 1));
+    await new Promise(res => setTimeout(res, 200));
+  }
+
+  const live = rows.filter(r => r.peak >= 0.05).sort((x, y) => y.peak - x.peak);
+  const dead = rows.filter(r => r.peak < 0.05);
+  const best = live[0];
+  const chrome = /Chrome\//.test(navigator.userAgent) && !/Edg\//.test(navigator.userAgent);
+  let verdict;
+  if (!live.length) {
+    verdict = `<b style="color:var(--red)">None of them heard you.</b> Every input the browser can open is silent, while
+      Windows records fine — so something is muting the microphone for the BROWSER only. On a Jabra Evolve2 the boom arm
+      being up is a hardware mute; check that first. Then Windows Settings → Privacy &amp; security → Microphone →
+      <i>Let apps access your microphone</i> and <i>Let desktop apps access your microphone</i>, both on.`;
+  } else {
+    verdict = `<b style="color:var(--accent)">Your voice is on: ${best.name}</b> (peak ${Math.round(best.peak * 100)}%).
+      ${dead.length ? `Silent: ${dead.map(d => d.name).join(", ")}.` : ""}
+      <br><br><b>Now point ${chrome ? "Chrome" : "the browser"} at it.</b> Chrome keeps its OWN microphone choice, separate
+      from the Windows default — which is why Windows can be perfectly happy while this page hears 1%.
+      <br>Click the <b>🎤 or 🔒 icon at the left of the address bar</b> → <b>Microphone</b> → choose
+      <b>${best.name}</b> → then reload this page.
+      <br>If it is not offered there: paste <code>chrome://settings/content/microphone</code> into a new tab and set it
+      at the top.`;
+  }
+  host.innerHTML = `<div style="font-size:14px;line-height:1.7">${verdict}</div>
+    <div style="margin-top:8px">${rows.map(r => `<div style="display:flex;gap:10px;align-items:center;padding:2px 0;font-size:13px">
+        ${bar(Math.round(r.peak * 220), r.peak >= 0.05)}
+        <span style="flex:1">${r.name}</span>
+        <span style="color:var(--muted);min-width:44px;text-align:right">${Math.round(r.peak * 100)}%</span></div>`).join("")}</div>
+    <div class="row" style="justify-content:flex-start;margin-top:10px">
+      <button class="small" id="msAgain">test them again</button></div>`;
+  const again = document.getElementById("msAgain");
+  if (again) again.onclick = () => micSweep(host);
+  logEvent({ e: "micsweep", n: rows.length, live: live.length,
+             best: best ? best.name.slice(0, 60) : "", peak: best ? Math.round(best.peak * 100) : 0 });
+  try { if (typeof autoSync === "function") autoSync(); } catch (e) {}
+}
+
 async function micDiagnose(host) {
   if (!host) return;
   const say = html => { host.innerHTML = html; };
@@ -903,10 +1013,17 @@ async function micDiagnose(host) {
     msg = `<b style="color:var(--red)">The speech service could not be reached.</b> Browser speech recognition is a
       CLOUD service — it needs the internet, and a work VPN or firewall can block it while everything else works.`;
   } else if (!micOk) {
+    /* This is where he landed. Listing six devices and telling him to guess is
+       not an answer — the sweep opens each one and measures it. */
     msg = `<b style="color:var(--red)">B — the browser opened a microphone but heard almost nothing</b>
-      (peak ${Math.round(res.peak * 100)}%), even though Windows records fine. That means the browser is on a
-      DIFFERENT input from the one Voice Recorder used. Check the inputs listed below, and set the right one as the
-      Windows default: right-click the speaker icon → Sound settings → Input.`;
+      (peak ${Math.round(res.peak * 100)}%), even though Windows records fine. The browser is on a different input from
+      the one Windows uses — and ${res.browser === "chrome" ? "Chrome keeps its own microphone choice, per site, separate from the Windows default"
+      : "the browser keeps its own microphone choice, separate from the Windows default"}, so changing Windows will not fix it.
+      <br><br><b>Find out which one your voice is actually on:</b>`;
+    setTimeout(() => {
+      const slot = document.getElementById("mdSweep");
+      if (slot) document.getElementById("mdSweepBtn").onclick = () => micSweep(slot);
+    }, 0);
   } else if (res.ar) {
     msg = `<b style="color:var(--accent)">✓ Working.</b> Mic peaked at ${Math.round(res.peak * 100)}% and Arabic came
       back as <span class="arabic" dir="rtl">${res.ar}</span>. If a drill still misses, wait for "🔴 speak now"
@@ -929,7 +1046,10 @@ async function micDiagnose(host) {
   const note = `<p style="font-size:13px;color:var(--muted);margin:12px 0 0">
     Either way, <b>you are not blocked</b>: tap 🎤 and choose <b>“I said it — mark it myself”</b>. Saying it out loud is
     the skill; the recogniser was only ever the thing that could check it for you.</p>`;
-  say(`<div style="font-size:14px;line-height:1.7">${msg}</div>${note}${devList}
+  const sweepUi = !micOk && !res.err
+    ? `<div class="row" style="justify-content:flex-start;margin-top:8px">
+         <button class="small" id="mdSweepBtn">🎚 test each microphone</button></div><div id="mdSweep"></div>` : "";
+  say(`<div style="font-size:14px;line-height:1.7">${msg}</div>${sweepUi}${note}${devList}
        <div class="row" style="justify-content:flex-start;margin-top:10px">
          <button class="small" id="mdAgain">run it again</button></div>`);
   const again = document.getElementById("mdAgain");
@@ -1645,7 +1765,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtgaw2nc";
+const DATA_V = "mtgbczrs";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
