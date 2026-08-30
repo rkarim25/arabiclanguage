@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3se8g">
-  <link rel="stylesheet" href="css/style.css?v=mtg3se8g">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3t2lt">
+  <link rel="stylesheet" href="css/style.css?v=mtg3t2lt">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg3se8g"></script>
-<script src="js/curriculum.js?v=mtg3se8g"></script>
-<script src="js/app.js?v=mtg3se8g"></script>
-<script src="js/tracker.js?v=mtg3se8g"></script>
-<script src="js/plan.js?v=mtg3se8g"></script>
+<script src="js/progress-model.js?v=mtg3t2lt"></script>
+<script src="js/curriculum.js?v=mtg3t2lt"></script>
+<script src="js/app.js?v=mtg3t2lt"></script>
+<script src="js/tracker.js?v=mtg3t2lt"></script>
+<script src="js/plan.js?v=mtg3t2lt"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -117,7 +117,7 @@ function judgePanel(id) {
       <button id="${id}Show">show me</button>
     </div>
     <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
-      <span style="font-size:12px;color:var(--muted)">bring it back:</span>
+      <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span>
       <span id="${id}Bkt"></span>
     </div>`;
 }
@@ -151,7 +151,7 @@ function meaningPanel(id) {
       <button id="${id}Show">show me</button>
     </div>
     <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
-      <span style="font-size:12px;color:var(--muted)">bring it back:</span>
+      <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span>
       <span id="${id}Bkt"></span>
     </div>`;
 }
@@ -723,8 +723,15 @@ async function runTest(lessonIds, ctx, state, label, opts) {
      verdict and the full answer appear INSIDE it, and it advances only when he
      says Next. Everything is marked where the site can mark it — typed English
      for meaning and by-ear, typed Arabic for production — and the four
-     spaced-repetition buckets sit on every card, so what happens to a word next
-     is his call rather than the scheduler's guess.
+     spaced-repetition buckets sit on every card as an OVERRIDE.
+
+     To be clear about which drives which, because he asked (2026-08-30: "is it
+     baking in the spaced repetition engine automatically based on my answer? …
+     i wont do it for every word"): the ANSWER schedules the card, every time,
+     with no tapping. Right moves it up a box — 1, 3, 7, 14, 30 days — and wrong
+     drops it to box 0 and ten minutes. The four buttons exist only for the cases
+     the answer cannot express ("I know this one, stop asking"), and when he taps
+     one it REPLACES the automatic grade rather than being overwritten by it.
 
      Enter is bound throughout: answer, Enter, read, Enter. That is the whole loop. */
   const answerHtml = q => `<div class="q-ar arabic" style="margin-top:10px">${esc(q.v.ar)}</div>
@@ -764,7 +771,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
         <div id="jRev"></div>
         <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
-          <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+          <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
         ${TYPING_HELP}</div>`;
       // a TEST excludes the answer's own words, so a chip can never give it away
@@ -947,7 +954,7 @@ async function runVocabBurst(ctx, state) {
         <div id="jRev"></div>
         <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
         <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
-          <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+          <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
         </div>
         ${TYPING_HELP}</div>`;
       wireAnswer("ans", "chk", [w.ar]);
@@ -1052,7 +1059,7 @@ async function runGrammarBurst(ctx, state) {
       <div id="jRev"></div>
       <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
       <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
-        <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+        <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span><span id="jBkt"></span>
       </div>
       ${TYPING_HELP}</div>`;
     wireAnswer("ans", "chk", [t.ar]);
