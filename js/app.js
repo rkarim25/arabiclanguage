@@ -773,46 +773,75 @@ function dictate(btn, idleLabel, cb) {
 }
 
 /* ---------- WHY IS THE MICROPHONE NOT WORKING ----------
-   He tried the new spoken answer and got "heard silence" (2026-08-30). That is
-   the recogniser's `no-speech`: it started, listened, and no audio arrived. Only
-   three things cause it, and guessing between them wastes his evening:
+   Round two, 2026-08-30. He still gets "heard silence", AND he has just recorded
+   himself successfully with the Windows Voice Recorder — so the hardware, the
+   driver and the Windows default input all work. That eliminates every
+   device-level explanation and leaves the ones inside the browser.
 
-     A. the browser never got the microphone      -> permission
-     B. the browser has a microphone but it is silent -> wrong input device, or muted
-     C. audio IS arriving and the speech engine still hears nothing
-        -> Chrome and Edge run speech recognition on the SYSTEM DEFAULT recording
-           device, which is not necessarily the device getUserMedia just used.
-           This is the case nobody guesses, and it is invisible without a test.
+   The decisive test is therefore not "is the microphone working" — he has already
+   answered that — but "can this browser recognise ARABIC specifically". So phase
+   3 repeats the listening test in ENGLISH. If English comes back and Arabic does
+   not, the microphone is irrelevant: it is the ar-SA model, and the fixes are
+   completely different (use Chrome, or switch on Windows' online speech
+   recognition) from anything to do with input devices.
 
-   So this measures, in two SEPARATE phases, never at once — the old test on
-   speaking.html ran the level meter and the recogniser simultaneously, which is
-   the very conflict that broke dictation in the first place, so it could report
-   "your mic works but Arabic recognition returned nothing" when the truth was
-   that the two were fighting over the microphone.
+     phase 1  level meter, 4s, then everything released
+     phase 2  recognition in Arabic, alone, 6s
+     phase 3  recognition in English, alone, 5s — only if Arabic heard nothing
 
-   Phase 1: getUserMedia + an analyser, 4 seconds, then the stream is fully
-   stopped and the AudioContext closed.
-   Phase 2: recognition alone, 6 seconds, with nothing else holding the mic. */
+   The phases never overlap. The old test ran the meter and the recogniser at the
+   same time, which is the conflict that broke dictation in the first place. */
+function micBrowser() {
+  const ua = navigator.userAgent;
+  if (/Edg\//.test(ua)) return "edge";
+  if (/OPR\//.test(ua)) return "opera";
+  if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) return "chrome";
+  if (/Firefox\//.test(ua)) return "firefox";
+  if (/Safari\//.test(ua)) return "safari";
+  return "other";
+}
+/* one listening pass, with nothing else holding the microphone */
+function micListen(lang, ms, onText) {
+  return new Promise(resolve => {
+    if (!SR) return resolve({ heard: "", err: "no-sr" });
+    let rec = null, done = false, heard = "", err = "";
+    const fin = () => {
+      if (done) return; done = true;
+      try { if (rec) { rec.onresult = rec.onerror = rec.onend = null; rec.abort(); } } catch (e) {}
+      resolve({ heard: heard.trim(), err });
+    };
+    try {
+      rec = new SR();
+      rec.lang = lang; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 3;
+      rec.onresult = ev => {
+        let txt = "";
+        for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
+        heard = txt;
+        if (onText) onText(txt.trim());
+      };
+      rec.onerror = ev => { err = ev.error; if (ev.error !== "no-speech") fin(); };
+      rec.start();
+    } catch (e) { err = "start-failed"; return fin(); }
+    setTimeout(fin, ms);
+  });
+}
+
 async function micDiagnose(host) {
   if (!host) return;
   const say = html => { host.innerHTML = html; };
-  const dev = async () => {
-    try {
-      const list = await navigator.mediaDevices.enumerateDevices();
-      const ins = list.filter(d => d.kind === "audioinput");
-      return ins.length ? ins.map(d => d.label || "(unnamed input)") : [];
-    } catch (e) { return []; }
-  };
+  const res = { peak: 0, err: "", ar: "", en: "", devices: [], browser: micBrowser() };
 
   /* ---- phase 1: is any audio reaching the browser at all? ---- */
-  say(`<p style="margin:0 0 6px;font-size:14px"><b>1 of 2 — say anything, in any language, for four seconds.</b></p>
+  say(`<p style="margin:0 0 6px;font-size:14px"><b>1 of 3 — say anything at all, for four seconds.</b></p>
        <div style="height:10px;background:var(--border);border-radius:99px;overflow:hidden">
          <i id="mdBar" style="display:block;height:100%;width:0;background:var(--accent)"></i></div>`);
-  const res = { peak: 0, err: "", heard: "", devices: [] };
   let stream = null, ctx = null, raf = null;
   try {
     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    res.devices = await dev();
+    try {
+      const list = await navigator.mediaDevices.enumerateDevices();
+      res.devices = list.filter(d => d.kind === "audioinput").map(d => d.label || "(unnamed)");
+    } catch (e) {}
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     const src = ctx.createMediaStreamSource(stream);
     const an = ctx.createAnalyser(); an.fftSize = 512;
@@ -831,80 +860,82 @@ async function micDiagnose(host) {
     await new Promise(r => setTimeout(r, 4000));
   } catch (e) { res.err = (e && e.name) || "mic-denied"; }
   if (raf) cancelAnimationFrame(raf);
-  // release EVERYTHING before phase 2 — this is the whole point
   try { if (stream) stream.getTracks().forEach(t => t.stop()); } catch (e) {}
   try { if (ctx) await ctx.close(); } catch (e) {}
   await new Promise(r => setTimeout(r, 400));
-
   const micOk = res.peak >= 0.05;
 
-  /* ---- phase 2: recognition, alone ---- */
+  /* ---- phase 2: Arabic, alone ---- */
   if (SR && !res.err) {
-    say(`<p style="margin:0 0 6px;font-size:14px"><b>2 of 2 — now say an Arabic word, on its own.</b>
-         Nothing else is holding the microphone this time.</p>
-         <div id="mdHeard" class="arabic" dir="rtl" style="font-size:20px;min-height:28px"></div>`);
-    await new Promise(resolve => {
-      let rec = null, done = false;
-      const fin = () => { if (done) return; done = true;
-        try { if (rec) { rec.onresult = rec.onerror = rec.onend = null; rec.abort(); } } catch (e) {}
-        resolve(); };
-      try {
-        rec = new SR();
-        rec.lang = "ar-SA"; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 3;
-        rec.onresult = ev => {
-          let txt = "";
-          for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
-          res.heard = txt.trim();
-          const h = document.getElementById("mdHeard");
-          if (h) h.textContent = res.heard;
-        };
-        rec.onerror = ev => { if (!res.err) res.err = ev.error; fin(); };
-        rec.start();
-      } catch (e) { res.err = "start-failed"; fin(); }
-      setTimeout(fin, 6000);
+    say(`<p style="margin:0 0 6px;font-size:14px"><b>2 of 3 — now say one Arabic word.</b>
+         Wait for this line to change, then speak.</p>
+         <div id="mdHeard" class="arabic" dir="rtl" style="font-size:20px;min-height:28px;color:var(--accent)">listening…</div>`);
+    const r2 = await micListen("ar-SA", 6000, t => {
+      const h = document.getElementById("mdHeard"); if (h) h.textContent = t;
     });
+    res.ar = r2.heard; if (r2.err && r2.err !== "no-speech") res.err = r2.err;
   }
 
-  /* ---- the verdict, and what to actually DO about it ---- */
+  /* ---- phase 3: English, alone — the discriminator ---- */
+  if (SR && !res.err && !res.ar) {
+    say(`<p style="margin:0 0 6px;font-size:14px"><b>3 of 3 — now say something in ENGLISH.</b>
+         "hello hello hello" is fine. This separates your microphone from Arabic recognition.</p>
+         <div id="mdHeard2" style="font-size:18px;min-height:26px;color:var(--accent)">listening…</div>`);
+    const r3 = await micListen("en-US", 5000, t => {
+      const h = document.getElementById("mdHeard2"); if (h) h.textContent = t;
+    });
+    res.en = r3.heard;
+  }
+
+  /* ---- the verdict ---- */
   const devList = res.devices.length
-    ? `<p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">Inputs this browser can see: ${res.devices.map(d => `<code>${d}</code>`).join(", ")}</p>` : "";
+    ? `<p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">Inputs seen: ${res.devices.map(d => `<code>${d}</code>`).join(", ")}</p>` : "";
+  const winSpeech = `<b>Windows:</b> Settings → Privacy &amp; security → <b>Speech</b> → turn <b>Online speech recognition ON</b>.
+    Browser speech needs it, and Voice Recorder does not — which is exactly why recording can work while this does not.`;
   let msg;
   if (res.err === "NotAllowedError" || res.err === "not-allowed" || res.err === "SecurityError") {
     msg = `<b style="color:var(--red)">A — the browser is blocking the microphone.</b>
-      Click the 🔒 or 🎤 icon at the left of the address bar → Microphone → Allow, then reload.
-      If it is not offered there, Windows is blocking it: Settings → Privacy &amp; security → Microphone →
-      turn on <i>Let apps access your microphone</i> and <i>Let desktop apps access your microphone</i>.`;
+      Click the 🔒 or 🎤 icon at the left of the address bar → Microphone → Allow, then reload.`;
   } else if (res.err === "NotFoundError" || res.err === "audio-capture") {
-    msg = `<b style="color:var(--red)">A — no microphone found.</b> If a headset is plugged in, Windows may have
-      selected it and it may be muted or switched off at the cable.`;
+    msg = `<b style="color:var(--red)">A — no microphone found by the browser</b>, even though Windows has one.
+      Close anything else using the mic (Teams, Zoom) and reload.`;
+  } else if (res.err === "network") {
+    msg = `<b style="color:var(--red)">The speech service could not be reached.</b> Browser speech recognition is a
+      CLOUD service — it needs the internet, and a work VPN or firewall can block it while everything else works.`;
   } else if (!micOk) {
-    msg = `<b style="color:var(--red)">B — the microphone opened but heard almost nothing</b> (peak ${Math.round(res.peak * 100)}%).
-      Wrong input selected, or it is muted. Windows: right-click the speaker icon → Sound settings → <i>Input</i> →
-      pick the mic you are actually speaking into and watch its test bar move. Then come back.`;
-  } else if (res.heard) {
-    msg = `<b style="color:var(--accent)">✓ Both halves work.</b> The mic peaked at ${Math.round(res.peak * 100)}%
-      and Arabic recognition heard <span class="arabic" dir="rtl">${res.heard}</span>.
-      If a drill still misses, speak a little closer and give it a clear second before and after the word.`;
-  } else if (!SR) {
-    msg = `<b style="color:var(--red)">This browser has no speech recognition.</b> Chrome or Edge do.`;
+    msg = `<b style="color:var(--red)">B — the browser opened a microphone but heard almost nothing</b>
+      (peak ${Math.round(res.peak * 100)}%), even though Windows records fine. That means the browser is on a
+      DIFFERENT input from the one Voice Recorder used. Check the inputs listed below, and set the right one as the
+      Windows default: right-click the speaker icon → Sound settings → Input.`;
+  } else if (res.ar) {
+    msg = `<b style="color:var(--accent)">✓ Working.</b> Mic peaked at ${Math.round(res.peak * 100)}% and Arabic came
+      back as <span class="arabic" dir="rtl">${res.ar}</span>. If a drill still misses, wait for "🔴 speak now"
+      before you start.`;
+  } else if (res.en) {
+    msg = `<b style="color:var(--amber,#d97706)">C — your microphone is fine and English recognition works,
+      but this browser returned nothing for Arabic.</b> It heard you say "${res.en}". So this is not your mic and
+      not your setup — it is the <b>ar-SA</b> model in ${res.browser === "edge" ? "Edge" : "this browser"}.
+      ${res.browser === "edge" ? `<br><br><b>Edge is the likely culprit</b> — its Arabic recognition is far less
+      reliable than Chrome's. Open the site in <b>Google Chrome</b> and try again; that is usually the whole fix.`
+      : `<br><br>Try <b>Google Chrome</b>, which has the most complete Arabic support.`}
+      <br><br>${winSpeech}`;
   } else {
     msg = `<b style="color:var(--amber,#d97706)">C — audio is reaching the browser</b> (peak ${Math.round(res.peak * 100)}%)
-      <b style="color:var(--amber,#d97706)">but the speech engine heard nothing.</b> This is the one people never guess:
-      Chrome and Edge run speech recognition on the <b>system default recording device</b>, not the one this page just used.
-      If Windows' default input is a disconnected headset, "Stereo Mix", or a virtual device, recognition hears silence
-      no matter how well the meter moves.<br><br>
-      <b>Fix:</b> right-click the speaker icon → <i>Sound settings</i> → under <i>Input</i>, set your real microphone as the
-      default device (and check the same in <i>More sound settings → Recording → Set Default</i>). Then reload this page and try again.
-      <br><br>Until then, typing still works everywhere, and <a href="converse.html?week=1" style="color:var(--accent)">the weekly speaking brief</a>
-      gives you real speaking practice with no microphone needed on our side.`;
+      <b style="color:var(--amber,#d97706)">but no speech came back in either language.</b> Your hardware is fine —
+      Voice Recorder proved that — so the recognition service itself is not running. Two causes, in order of likelihood:
+      <br><br>${winSpeech}
+      <br><br><b>Then the browser:</b> ${res.browser === "edge" ? "Edge's speech recognition is the weaker one. Try <b>Google Chrome</b>." : "try <b>Google Chrome</b>, which has the most complete Arabic support."}`;
   }
-  say(`<div style="font-size:14px;line-height:1.7">${msg}</div>${devList}
+  const note = `<p style="font-size:13px;color:var(--muted);margin:12px 0 0">
+    Either way, <b>you are not blocked</b>: tap 🎤 and choose <b>“I said it — mark it myself”</b>. Saying it out loud is
+    the skill; the recogniser was only ever the thing that could check it for you.</p>`;
+  say(`<div style="font-size:14px;line-height:1.7">${msg}</div>${note}${devList}
        <div class="row" style="justify-content:flex-start;margin-top:10px">
          <button class="small" id="mdAgain">run it again</button></div>`);
   const again = document.getElementById("mdAgain");
   if (again) again.onclick = () => micDiagnose(host);
-  logEvent({ e: "mictest", peak: Math.round(res.peak * 100) / 100, heard: res.heard ? 1 : 0,
-             err: res.err || "", sr: !!SR, ua: navigator.userAgent.slice(0, 120) });
+  logEvent({ e: "mictest", peak: Math.round(res.peak * 100) / 100, ar: res.ar ? 1 : 0, en: res.en ? 1 : 0,
+             err: res.err || "", browser: res.browser, ua: navigator.userAgent.slice(0, 120) });
   try { if (typeof autoSync === "function") autoSync(); } catch (e) {}
 }
 
@@ -1614,7 +1645,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtgahnsh";
+const DATA_V = "mtgatlpe";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgahnsh">
-  <link rel="stylesheet" href="css/style.css?v=mtgahnsh">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgatlpe">
+  <link rel="stylesheet" href="css/style.css?v=mtgatlpe">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtgahnsh"></script>
-<script src="js/curriculum.js?v=mtgahnsh"></script>
-<script src="js/app.js?v=mtgahnsh"></script>
-<script src="js/tracker.js?v=mtgahnsh"></script>
-<script src="js/plan.js?v=mtgahnsh"></script>
+<script src="js/progress-model.js?v=mtgatlpe"></script>
+<script src="js/curriculum.js?v=mtgatlpe"></script>
+<script src="js/app.js?v=mtgatlpe"></script>
+<script src="js/tracker.js?v=mtgatlpe"></script>
+<script src="js/plan.js?v=mtgatlpe"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -162,19 +162,34 @@ const TYPING_HELP = `
         often than the third one is.
      3. Typing never goes away. The box stays; the microphone sits beside it. */
 const CAN_MIC = typeof SR !== "undefined" && !!SR;
+/* SPEAKING MUST NOT DEPEND ON RECOGNITION WORKING.
+   2026-08-30, after two rounds of "heard silence" and him proving his microphone
+   records perfectly well in the Windows Voice Recorder: the recogniser is a
+   convenience, and it was standing between him and the thing he actually asked
+   for. He wanted to SAY the answers instead of typing them. Saying them out loud
+   is the skill; the recogniser was only ever the thing that could check it.
+
+   So there are always two ways to answer by voice — let it listen, or say it and
+   mark it yourself — and the second one needs nothing but a mouth. This is the
+   same self-judgment the Qur'an recite step has used since the beginning, and it
+   is the reason that step has never once been reported as broken. */
 function micRow(id) {
-  // An absent button is indistinguishable from a broken one, and he has been on
-  // the wrong end of that already. If the browser cannot do it, say so.
-  if (!CAN_MIC) return `<p style="text-align:center;font-size:12px;color:var(--muted);margin:6px 0 0">
-    This browser can't take a spoken answer — Chrome or Edge can.</p>`;
+  const self = `<button id="${id}Self">🗣 I said it — mark it myself</button>`;
+  if (!CAN_MIC) return `<div class="row" style="margin-top:2px">${self}</div>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin:6px 0 0">
+      This browser can't listen, but you can still answer out loud and mark yourself.</p>`;
   return `<div class="row" style="margin-top:2px">
       <button id="${id}" style="font-size:16px">🎤 say it instead</button>
+      ${self}
       <span id="${id}Msg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
     </div>
     <div id="${id}Diag" style="margin-top:8px"></div>`;
 }
-/* onSaid(ok, heard) — ok is null when nothing usable was heard */
-function wireMic(id, target, onSaid) {
+/* onSaid(ok, heard) — heard is "" when he marked himself */
+function wireMic(id, target, onSaid, onSelf) {
+  // the self-marked route is always available, recogniser or not
+  const selfBtn = document.getElementById(id + "Self");
+  if (selfBtn) selfBtn.onclick = () => (onSelf || (() => {}))();
   if (!CAN_MIC) return;
   const btn = document.getElementById(id);
   const msg = document.getElementById(id + "Msg");
@@ -668,6 +683,17 @@ async function runLesson(lesson, ms, ctx, handsFree) {
         speak(s.ar, 0.85);
         document.getElementById("micYes").onclick = () => { asked++; right++; gradeSentence(s, true); vary(s); };
         document.getElementById("micNo").onclick = () => { asked++; gradeSentence(s, false); vary(s); };
+      }, () => {
+        app.innerHTML = head() + `<div class="card">${bar()}
+          <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+          ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
+          <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
+          <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
+          <div class="row"><button class="primary" id="micYes">✓ yes</button><button id="micNo">✗ not quite</button></div>
+        </div>`;
+        speak(s.ar, 0.85);
+        document.getElementById("micYes").onclick = () => { asked++; right++; gradeSentence(s, true); vary(s); };
+        document.getElementById("micNo").onclick = () => { asked++; gradeSentence(s, false); vary(s); };
       });
       const showProduced = (sn, ok, heard) => {
         app.innerHTML = head() + `<div class="card">${bar()}
@@ -981,6 +1007,16 @@ async function runTest(lessonIds, ctx, state, label, opts) {
           <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button></div>`;
         document.getElementById("micYes").onclick = () => settle(true, false, target);
         document.getElementById("micNo").onclick = () => settle(false, false, target);
+      }, () => {
+        // said out loud, judged by him — the answer is shown first so the
+        // judgment is against the real thing, not against memory
+        document.getElementById("jRev").innerHTML =
+          `<div class="q-ar arabic" dir="rtl" style="margin-top:10px">${esc(target)}</div>
+           <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
+           <div class="row"><button class="primary" id="micYes">✓ yes</button><button id="micNo">✗ not quite</button></div>`;
+        speak(target, 0.85);
+        document.getElementById("micYes").onclick = () => settle(true, false, target);
+        document.getElementById("micNo").onclick = () => settle(false, false, target);
       });
       mountBucketBar(document.getElementById("jBkt"), q.key, b => settle(b !== "repeat", true));
       const check = shown => {
@@ -1185,6 +1221,15 @@ async function runVocabBurst(ctx, state) {
         rev.innerHTML = `<p style="text-align:center;font-size:16px;margin:10px 0 0">${
           ok ? `✓ right — heard “${esc(heard)}”` : `heard “${esc(heard)}” — not a match, but say it again if that was you`}</p>`;
         if (ok) { document.getElementById("ans").disabled = true; settle(true, false); }
+      }, () => {
+        document.getElementById("jRev").innerHTML =
+          `<div class="q-ar arabic" dir="rtl" style="margin-top:10px">${esc(w.ar)}</div>
+           <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
+           <div class="row"><button class="primary" id="bYes">✓ yes</button><button id="bNo">✗ not quite</button></div>`;
+        speak(w.ar, 0.85);
+        document.getElementById("ans").disabled = true;
+        document.getElementById("bYes").onclick = () => settle(true, false);
+        document.getElementById("bNo").onclick = () => settle(false, false);
       });
       mountBucketBar(document.getElementById("jBkt"), w.key, b => settle(b !== "repeat", true));
       function wireBurstBack() {
