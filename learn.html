@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg0msja">
-  <link rel="stylesheet" href="css/style.css?v=mtg0msja">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg0msja"></script>
-<script src="js/curriculum.js?v=mtg0msja"></script>
-<script src="js/app.js?v=mtg0msja"></script>
-<script src="js/tracker.js?v=mtg0msja"></script>
-<script src="js/plan.js?v=mtg0msja"></script>
+<script src="js/progress-model.js?v=mtg23sx8"></script>
+<script src="js/curriculum.js?v=mtg23sx8"></script>
+<script src="js/app.js?v=mtg23sx8"></script>
+<script src="js/tracker.js?v=mtg23sx8"></script>
+<script src="js/plan.js?v=mtg23sx8"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -81,6 +81,98 @@ const TYPING_HELP = `
     </div>
   </details>`;
 
+/* ---------- ONE SCREEN, NOT TWO ----------
+   His ask, 2026-08-30: "it should be show me, got it, didnt get it all in one
+   setting rather than show me and then saying yes or no. the extra step isnt
+   necessary. if i have it i can quickly say got it, in fact maybe repeating
+   again or dont repeat or repeat later options should also be there again for
+   the spaced repetition engine to be there."
+
+   He is right, and the old flow was worse than merely slow: forcing him through
+   "show me" before he could say he knew it meant the site saw the answer before
+   he committed to one, which is not a recall test. So every self-graded card now
+   offers, on the SAME screen:
+
+     ✓ got it   ✗ didn't get it   show me   + the four spaced-repetition buckets
+
+   "show me" reveals in place rather than navigating, so it costs nothing when he
+   does want it. A bucket tap is itself an answer — ✓/⏳/⊘ mean he had it, ↻ means
+   he didn't — and it REPLACES the automatic grade rather than being overwritten
+   by it (gradeCard clears an explicit bucket by design; see js/app.js). */
+function judgePanel(id) {
+  return `<div id="${id}Rev"></div>
+    <div class="row">
+      <button class="primary" id="${id}Yes">✓ got it</button>
+      <button id="${id}No">✗ didn't get it</button>
+      <button id="${id}Show">show me</button>
+    </div>
+    <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
+      <span style="font-size:12px;color:var(--muted)">bring it back:</span>
+      <span id="${id}Bkt"></span>
+    </div>`;
+}
+/* answer(html) fills the reveal slot; done(ok, bucketed) ends the card. */
+function wireJudge(id, key, answerHtml, done) {
+  const rev = document.getElementById(id + "Rev");
+  const show = document.getElementById(id + "Show");
+  if (show) show.onclick = () => { rev.innerHTML = answerHtml; show.remove(); };
+  document.getElementById(id + "Yes").onclick = () => done(true, false);
+  document.getElementById(id + "No").onclick = () => { rev.innerHTML = answerHtml; done(false, false); };
+  if (key) mountBucketBar(document.getElementById(id + "Bkt"), key,
+    b => done(b !== "repeat", true));
+}
+
+/* ---------- a meaning question, actually marked ----------
+   His ask, 2026-08-30: "in the test, why not give me the option to type in
+   english word? here you have to take my word for it, not a proper test."
+
+   So a meaning question takes a typed English answer and enMatch (js/app.js)
+   marks it. "show me" is still there and still free — but taking it reveals the
+   answer, and only THEN can he self-grade, which is the honest order. The
+   spaced-repetition buckets sit alongside either way. */
+function meaningPanel(id) {
+  return `<div class="row" style="margin-top:6px">
+      <input id="${id}En" placeholder="what does it mean?" autocomplete="off"
+        style="flex:1 1 240px;max-width:340px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:17px;text-align:center">
+    </div>
+    <div id="${id}Rev"></div>
+    <div class="row" id="${id}Row">
+      <button class="primary" id="${id}Chk">Check</button>
+      <button id="${id}Show">show me</button>
+    </div>
+    <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
+      <span style="font-size:12px;color:var(--muted)">bring it back:</span>
+      <span id="${id}Bkt"></span>
+    </div>`;
+}
+function wireMeaning(id, key, en, done) {
+  const inp = document.getElementById(id + "En");
+  const rev = document.getElementById(id + "Rev");
+  const chk = document.getElementById(id + "Chk");
+  const show = document.getElementById(id + "Show");
+  const say = t => { rev.innerHTML = `<p style="text-align:center;font-size:16px;margin:10px 0 0">${t}</p>`; };
+  inp.focus();
+  inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); chk.click(); } };
+  chk.onclick = () => {
+    const ok = enMatch(inp.value, en);
+    say(ok ? "✓ right" : `✗ not quite — you wrote “${esc(inp.value.trim())}”`);
+    inp.disabled = true;
+    done(ok, false);
+  };
+  /* "show me" is one tap and reveals in place. Only THEN can he self-grade — that
+     order is the whole point: seeing the answer first and then claiming he knew
+     it is not a test, which is what he objected to. */
+  show.onclick = () => {
+    say("the answer:");
+    inp.disabled = true;
+    document.getElementById(id + "Row").innerHTML =
+      `<button class="primary" id="${id}Yes">✓ I had it</button><button id="${id}No">✗ I didn't</button>`;
+    document.getElementById(id + "Yes").onclick = () => done(true, false);
+    document.getElementById(id + "No").onclick = () => done(false, false);
+  };
+  if (key) mountBucketBar(document.getElementById(id + "Bkt"), key, b => done(b !== "repeat", true));
+}
+
 /* Wire a freshly-rendered answer box: live conversion, suggestion chips, a tap
    keyboard, and Enter to submit. */
 async function wireAnswer(inputId, submitId, exclude) {
@@ -98,6 +190,26 @@ async function wireAnswer(inputId, submitId, exclude) {
   if (!ctx) { app.innerHTML = "<p>Couldn't load the curriculum.</p>"; return; }
   const state = Curriculum.milestoneState(ctx);
   if (!state.current) { app.innerHTML = "<h1>Everything achieved</h1><p>Nothing left on the ladder — ask your coach for more.</p>"; return; }
+
+  /* the interleaved bursts — scheduled by Curriculum.burstsFor(), run below */
+  if (P.get("burst") === "vocab") return runVocabBurst(ctx, state);
+  if (P.get("burst") === "grammar") return runGrammarBurst(ctx, state);
+
+  /* THE CLASS TEST. His ask, 2026-08-30: "put another test of class ready which
+     helps me master the content of the class." Unlike a lesson or milestone test
+     this one deliberately covers EVERYTHING the class brought, proved or not —
+     the point is mastering her material, not clearing the ladder — so it is a
+     spread across all of its lessons and reports where he stands rather than
+     clearing anything. Retake it as often as he likes; the score history lines up
+     because the scope is identical every time. */
+  const classId = P.get("class");
+  if (classId) {
+    let cls = null;
+    try { cls = (await fetch("data/classes.json").then(r => r.json())).classes.find(c => c.id === classId); } catch (e) {}
+    if (!cls) { location.href = "index.html"; return; }
+    return runTest(cls.lessons.map(l => l.id), ctx, state,
+      `Class test — ${cls.title}`, { all: true });
+  }
 
   const lessonId = P.get("lesson");
   const lessonSet = (P.get("lessons") || "").split(",").filter(Boolean);
@@ -214,10 +326,39 @@ async function runLesson(lesson, ms, ctx, handsFree) {
     if (byEar) (s.wordKeys || []).forEach(k => logEvent({ e: "alisten-grade", key: k, ok: !!ok, src: "lesson" }));
   }
 
-  const wordsHtmlFor = s => (s.words || []).filter(w => w.en).map(w =>
-    `<span style="display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border:1px solid var(--border);border-radius:8px;font-size:13px">
+  /* ---- the words under a sentence, each one retirable ----
+     His ask, 2026-08-30: "give me the option where i can click dont repeat as
+     well. there are words like Allah which really i dont need to repeat."
+     One tap on the ⊘ retires that word everywhere — it stops being taught,
+     tested, reviewed and counted as weak, and it still counts as held, because
+     retiring is him saying he knows it. Tapping again brings it straight back.
+     The full four-bucket bar would be twenty-four buttons under a six-word
+     sentence, so the sentence surfaces the one control he asked for by name; the
+     other three live on the card-sized rows (the class page and the vocabulary
+     burst), where there is room for them. */
+  const wordsHtmlFor = s => (s.words || []).filter(w => w.en).map((w, wi) => {
+    const k = (w.keys && w.keys[0]) || w.key || "";
+    const off = k && isRetired(k);
+    return `<span class="wchip" data-k="${esc(k)}" data-i="${wi}" style="display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border:1px solid var(--border);border-radius:8px;font-size:13px;${off ? "opacity:.5" : ""}">
        <span class="arabic" style="font-size:17px">${esc(w.ar)}</span>
-       <span style="color:var(--muted)"> ${esc(w.en)}</span></span>`).join("");
+       <span style="color:var(--muted)"> ${esc(w.en)}</span>
+       ${k ? `<button type="button" class="wret" title="${off ? "bring this word back" : "don't repeat this word"}"
+          style="border:0;background:none;cursor:pointer;font-size:13px;padding:0 0 0 5px;color:${off ? "var(--accent)" : "var(--muted)"}">${off ? "↺" : "⊘"}</button>` : ""}
+     </span>`;
+  }).join("");
+  /* delegated once, so it survives every re-render of the card */
+  document.addEventListener("click", e => {
+    const b = e.target.closest && e.target.closest(".wret");
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    const chip = b.closest(".wchip"), k = chip && chip.dataset.k;
+    if (!k) return;
+    const now = toggleRetire(k);
+    chip.style.opacity = now ? ".5" : "";
+    b.textContent = now ? "↺" : "⊘";
+    b.style.color = now ? "var(--accent)" : "var(--muted)";
+    b.title = now ? "bring this word back" : "don't repeat this word";
+  });
 
   const sourceLine = s => s.ref ? `${esc(s.surah || "")} ${esc(s.ref)}${s.part ? ` · part ${esc(s.part)}` : ""}`
     : s.theme ? esc(s.theme) : "";
@@ -300,20 +441,17 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       app.innerHTML = head() + `<div class="card">${bar()}
         <div class="q-en" style="font-size:17px;color:var(--muted)">${esc(s.en)}</div>
         <p style="text-align:center;font-size:15px">Say it out loud from memory, then check yourself.</p>
-        <div class="row"><button class="primary" id="rev">Show me the Arabic</button></div>
+        ${judgePanel("r")}
       </div>`;
-      document.getElementById("rev").onclick = () => {
-        app.innerHTML = head() + `<div class="card">${bar()}
-          <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
-          <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
-          ${s.note ? `<p style="font-size:13px;color:var(--muted);line-height:1.7">${esc(s.note)}</p>` : ""}
-          <p style="text-align:center;font-size:14px;color:var(--muted)">Did it come out right?</p>
-          <div class="row"><button id="no">✗ not quite</button><button class="primary" id="yes">✓ yes</button></div>
-        </div>`;
+      const shown = `<div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
+        <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
+        ${s.note ? `<p style="font-size:13px;color:var(--muted);line-height:1.7">${esc(s.note)}</p>` : ""}`;
+      wireJudge("r", s.key, shown, (ok, bucketed) => {
+        asked++; if (ok) right++;
+        if (!bucketed) gradeSentence(s, ok); else creditWords(s, null, ok);
         speak(s.ar, 0.85);
-        document.getElementById("yes").onclick = () => { asked++; right++; gradeSentence(s, true); decode(s); };
-        document.getElementById("no").onclick = () => { asked++; gradeSentence(s, false); decode(s); };
-      };
+        decode(s);
+      });
     }
 
     /* 3a — Qur'an: the real goal. Audio only, at speed. Does the meaning arrive? */
@@ -321,20 +459,17 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       app.innerHTML = head() + `<div class="card">${bar()}
         <p style="text-align:center;font-size:15px;margin-top:14px">Now just listen. Does the meaning arrive on its own?</p>
         <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
-        <div class="row"><button id="rev">show me</button></div>
+        ${judgePanel("d")}
       </div>`;
       speak(s.ar, 0.95);
       document.getElementById("play").onclick = () => speak(s.ar, 0.95);
-      document.getElementById("rev").onclick = () => {
-        app.innerHTML = head() + `<div class="card">${bar()}
-          <div class="q-ar arabic" dir="rtl" style="font-size:26px">${esc(s.ar)}</div>
-          <div class="q-en">${esc(s.en)}</div>
-          <p style="text-align:center;font-size:14px;color:var(--muted)">Did it arrive while it played?</p>
-          <div class="row"><button id="no">✗ no</button><button class="primary" id="yes">✓ yes</button></div>
-        </div>`;
-        document.getElementById("yes").onclick = () => { gradeSentence(s, true, null, true); vary(s); };
-        document.getElementById("no").onclick = () => { gradeSentence(s, false, null, true); vary(s); };
-      };
+      const shown = `<div class="q-ar arabic" dir="rtl" style="font-size:26px">${esc(s.ar)}</div>
+        <div class="q-en">${esc(s.en)}</div>`;
+      wireJudge("d", s.key, shown, (ok, bucketed) => {
+        if (!bucketed) gradeSentence(s, ok, null, true);
+        else { creditWords(s, null, ok); (s.wordKeys || []).forEach(k => logEvent({ e: "alisten-grade", key: k, ok: !!ok, src: "lesson" })); }
+        vary(s);
+      });
     }
 
     /* 3b — conversation: produce it. Typed, because typing is the only way the
@@ -503,11 +638,13 @@ async function runLesson(lesson, ms, ctx, handsFree) {
 /* ======================= A TEST — one engine, three scopes =======================
    One lesson (~3 min), a week's seven (~7 min), or a milestone. Scoring is per
    lesson at 80 in every case, so clearing a lesson clears it everywhere. */
-async function runTest(lessonIds, ctx, state, label) {
+async function runTest(lessonIds, ctx, state, label, opts) {
+  opts = opts || {};
   const attempts = (ctx.log || []).filter(e => e && e.e === "exam-done").length;
   const all = state.milestones.flatMap(m => m.lessons);
   const open = lessonIds.filter(id => { const l = all.find(x => x.id === id); return l && !l.mastered; });
-  const use = open.length ? open : lessonIds;
+  // opts.all: cover the whole scope even where it is already proved (the class test)
+  const use = opts.all || !open.length ? lessonIds : open;
   const ex = Curriculum.examForLessons(use, ctx, { attempt: attempts + 1, state, seed: use.length + (label ? label.length : 3) });
   if (!ex.items.length) {
     app.innerHTML = `<h1>Nothing left to prove</h1><p>Everything here is already proved and still fresh.</p>
@@ -547,26 +684,55 @@ async function runTest(lessonIds, ctx, state, label) {
     ${ex.sampled ? `A sample across ${use.length} lessons${ex.clearable ? "" : " — too few each to clear a lesson, so this one is a check"}.` : "Each lesson is scored on its own."}
     ${priorLine}</p>`;
 
+  /* ---------- ONE CARD PER QUESTION ----------
+     His report, 2026-08-30: "when i click check it just moves to next word. the
+     testing setup doesnt work very well. please think about this deeply and fix
+     it. test is crucial for me to get right."
+
+     He is right, and the old flow had three faults that all pointed the same way
+     — it was never clear what had just happened:
+
+       1. a CORRECT answer advanced silently. He never saw that he was right, nor
+          the spelling he should have written, nor the transliteration. Only wrong
+          answers got a screen, so the test taught him nothing when he was right.
+       2. a MEANING question was self-graded — the answer appeared and he told the
+          site whether he had had it, which proves nothing.
+       3. every reveal was a page swap, so the question he had just answered was
+          gone before he could compare it against the answer.
+
+     So: one card per question, and it never navigates. He answers in it, the
+     verdict and the full answer appear INSIDE it, and it advances only when he
+     says Next. Everything is marked where the site can mark it — typed English
+     for meaning and by-ear, typed Arabic for production — and the four
+     spaced-repetition buckets sit on every card, so what happens to a word next
+     is his call rather than the scheduler's guess.
+
+     Enter is bound throughout: answer, Enter, read, Enter. That is the whole loop. */
+  const answerHtml = q => `<div class="q-ar arabic" style="margin-top:10px">${esc(q.v.ar)}</div>
+    <div class="q-en">${esc(q.v.en)}</div>${q.v.tr ? `<p class="q-tr">${esc(q.v.tr)}</p>` : ""}`;
+
   ask();
   function ask() {
+    document.onkeydown = null;
     if (i >= qs.length) return done();
     const q = qs[i];
     const n = `<div class="crumb">${i + 1} of ${qs.length} · ${esc(q.lessonTitle)}${q.form === "ear" ? " · by ear" : ""}</div>
       <div class="prog"><i style="width:${Math.round(100 * i / qs.length)}%"></i></div>`;
+
     if (q.form === "ear") {
       app.innerHTML = head + `<div class="card">${n}
         <p style="text-align:center;font-size:15px;margin-top:14px">Listen. What does it mean?</p>
         <div class="row"><button class="primary" id="play" style="font-size:17px">🔊 play</button></div>
-        <div class="row"><button id="rev">show the answer</button></div></div>`;
+        ${meaningPanel("j")}</div>`;
       document.getElementById("play").onclick = () => speak(q.v.ar, 0.85);
       speak(q.v.ar, 0.85);
-      document.getElementById("rev").onclick = reveal;
+      wireMeaning("j", q.key, q.v.en, settle);
     } else if (q.form === "mean") {
       app.innerHTML = head + `<div class="card">${n}
         <div class="q-ar arabic">${esc(q.v.ar)}</div>
         <p style="text-align:center;font-size:15px;color:var(--muted)">What does it mean?</p>
-        <div class="row"><button id="rev">show the answer</button></div></div>`;
-      document.getElementById("rev").onclick = reveal;
+        ${meaningPanel("j")}</div>`;
+      wireMeaning("j", q.key, q.v.en, settle);
     } else {
       const sent = q.sentence;
       const target = sent ? sent.ar : q.v.ar;
@@ -576,54 +742,64 @@ async function runTest(lessonIds, ctx, state, label) {
           ? `Write the whole sentence — it is marked on <span class="arabic" style="font-size:16px">${esc(q.v.ar)}</span>`
           : "Type it the way it sounds — it turns into Arabic as you go"}</p>
         <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
-        <div class="row"><button class="primary" id="chk">Check</button><button id="skip">skip</button><button class="small" id="ansKb">⌨ keys</button></div>
+        <div id="jRev"></div>
+        <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
+          <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+        </div>
         ${TYPING_HELP}</div>`;
       // a TEST excludes the answer's own words, so a chip can never give it away
       wireAnswer("ans", "chk", [target]);
-      document.getElementById("chk").onclick = () => {
+      mountBucketBar(document.getElementById("jBkt"), q.key, b => settle(b !== "repeat", true));
+      const check = shown => {
         const inp = document.getElementById("ans");
-        const m = writeMatchAr(inp.value, target);
-        if (!sent) return score(m.ok || arMatch(inp.value, q.v.ar), true);
-        // the question is this WORD; the sentence is only how it was asked
-        const j = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(q.v.ar));
-        const gotWord = j >= 0 ? m.hits[j] !== "miss" : m.ok;
-        // the rest of the sentence still counts as revision, as it does in a lesson
-        (sent.words || []).forEach(w => {
-          const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
-          if (!cards.length || normalizeAr(w.ar) === normalizeAr(q.v.ar)) return;
-          const k = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
-          if (k >= 0) cards.forEach(c => gradeCard(c, m.hits[k] !== "miss" ? "good" : "again"));
-        });
-        score(gotWord, true);
+        const m = shown ? null : writeMatchAr(inp.value, target);
+        let ok = false;
+        if (shown) ok = false;
+        else if (!sent) ok = m.ok || arMatch(inp.value, q.v.ar);
+        else {
+          // the question is this WORD; the sentence is only how it was asked
+          const j = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(q.v.ar));
+          ok = j >= 0 ? m.hits[j] !== "miss" : m.ok;
+          // the rest of the sentence still counts as revision, as it does in a lesson
+          (sent.words || []).forEach(w => {
+            const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
+            if (!cards.length || normalizeAr(w.ar) === normalizeAr(q.v.ar)) return;
+            const k = (m.words || []).findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
+            if (k >= 0) cards.forEach(c => gradeCard(c, m.hits[k] !== "miss" ? "good" : "again"));
+          });
+        }
+        // what he wrote, marked word by word, so a near miss reads as a near miss
+        const detail = sent && m ? `<p style="text-align:center;font-size:19px;direction:rtl" class="arabic">${wordsHtml(m)}</p>` : "";
+        document.getElementById("jRev").innerHTML =
+          `<p style="text-align:center;font-size:16px;margin:10px 0 0">${shown ? "the answer:" : ok ? "✓ right" : (m && m.right ? `${m.right} of ${m.total} words` : "✗ not quite")}</p>${detail}`;
+        inp.disabled = true;
+        settle(ok, false, target);
       };
-      document.getElementById("skip").onclick = () => score(false, true);
+      document.getElementById("chk").onclick = () => check(false);
+      document.getElementById("skip").onclick = () => check(true);
     }
-    function reveal() {
-      app.innerHTML = head + `<div class="card">${n}
-        <div class="q-ar arabic">${esc(q.v.ar)}</div>
-        <div class="q-en">${esc(q.v.en)}</div>
-        ${q.v.tr ? `<p class="q-tr">${esc(q.v.tr)}</p>` : ""}
-        <p style="text-align:center;font-size:14px;color:var(--muted)">Did you have it?</p>
-        <div class="row">
-          <button id="no" style="min-width:130px">✗ no</button>
-          <button class="primary" id="yes" style="min-width:130px">✓ yes</button>
-        </div></div>`;
-      document.getElementById("yes").onclick = () => score(true);
-      document.getElementById("no").onclick = () => score(false);
-    }
-    function score(ok, showAnswer) {
+
+    /* ---- the verdict, in the same card, and it waits for him ---- */
+    function settle(ok, bucketed, speakAr) {
+      if (settle.done) return;                 // a bucket tap after answering must not double-count
+      settle.done = true;
       answers.push({ key: q.key, lessonId: q.lessonId, lessonTitle: q.lessonTitle, form: q.form, ok: !!ok });
-      gradeCard(q.key, ok ? "good" : "again");     // the test is also revision
+      // an explicit bucket IS his scheduling decision — don't overwrite it
+      if (!bucketed) gradeCard(q.key, ok ? "good" : "again");     // the test is also revision
       if (q.form === "ear") logEvent({ e: "alisten-grade", key: q.key, ok: !!ok, src: "test" });
-      i++;
-      if (showAnswer && !ok) {
-        app.innerHTML = head + `<div class="card">${n}
-          <p style="text-align:center;font-size:16px">✗ not quite</p>
-          <div class="q-ar arabic">${esc(q.v.ar)}</div>
-          <div class="q-en">${esc(q.v.en)}</div>
-          <div class="row"><button class="primary" id="next">Next</button></div></div>`;
-        document.getElementById("next").onclick = ask;
-      } else ask();
+
+      const rev = document.getElementById("jRev");
+      rev.insertAdjacentHTML("beforeend", answerHtml(q));
+      const row = document.getElementById("jRow");
+      const next = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+      if (row) row.innerHTML = next;
+      else rev.insertAdjacentHTML("afterend", `<div class="row">${next}</div>`);
+      speak(speakAr || q.v.ar, 0.85);
+      const nx = document.getElementById("nx");
+      nx.onclick = () => { i++; ask(); };
+      nx.focus();
+      document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); nx.click(); } };
     }
   }
 
@@ -666,6 +842,238 @@ async function runTest(lessonIds, ctx, state, label) {
         <div class="row" style="justify-content:flex-start">
           <a href="index.html"><button class="primary">Back to your lessons</button></a>
           <a href="${use.length === 1 ? `learn.html?test=1&lesson=${encodeURIComponent(use[0])}` : `learn.html?lessons=${encodeURIComponent(use.join(","))}&label=${encodeURIComponent(title)}`}"><button>Take it again</button></a>
+        </div>
+      </div>`;
+  }
+}
+
+/* ======================= THE INTERLEAVED BURSTS =======================
+   His spec, 2026-08-30: "at times I memorise some vocabulary to help me along and
+   get me to build sentences quicker. then at times i learn some grammar which
+   also helps build sentences quicker" — then "okay schedule that in. also it is
+   based on probability of use."
+
+   Curriculum.burstsFor() decides WHEN and WHAT (js/curriculum.js); these two
+   functions are how they are run. Both are short on purpose: the week is still
+   overwhelmingly sentences, and a burst that ran long would be a lesson wearing
+   a different hat. */
+
+/* ---- vocabulary: the commonest words he does not hold, met and then recalled ----
+   His format, not a flashcard deck: the table first (recall-then-show, his own
+   preference), then a recall pass that drills ONLY the ones he missed until none
+   are left, then each word shown inside a real sentence so it leaves as language
+   rather than as an entry. Every row carries the four spaced-repetition buckets. */
+async function runVocabBurst(ctx, state) {
+  const weeks = Curriculum.weekPlan(ctx, state);
+  const cw = weeks[Curriculum.currentWeek(weeks) - 1];
+  const words = Curriculum.vocabBurst(ctx, {
+    exclude: cw ? cw.lessons.flatMap(x => x.lesson.keys || []) : [],
+  });
+  if (!words.length) {
+    app.innerHTML = `<h1>Nothing to add</h1>
+      <p>Every high-frequency word the site knows about is already yours, or already in this week's lessons.</p>
+      <div class="row" style="justify-content:flex-start"><a href="index.html"><button class="primary">Back</button></a></div>`;
+    return;
+  }
+  primeSpeak();
+  logEvent({ e: "burst-start", kind: "vocab", n: words.length });
+  const head = `<div class="crumb">📇 Vocabulary burst · between the lessons</div>
+    <h1 style="margin-top:0">${words.length} words worth knowing</h1>
+    <p class="sub">Not a new topic — these are the commonest words in the Qur'an and in everyday
+    Arabic that you don't hold yet, so each one buys you a lot of sentences. About four minutes.</p>`;
+
+  table();
+
+  function rank(w) {
+    // per-10,000 words of real Arabic — the measure the whole list is sorted by
+    return w.per10k >= 10 ? "very common" : w.per10k >= 2 ? "common" : "worth having";
+  }
+
+  function table() {
+    app.innerHTML = head + `<div class="card">
+      <p class="sub" style="margin-top:0">Try to recall each one before you look. Tap 🔊 to hear it.</p>
+      <table class="tbl">${words.map((w, i) => `
+        <tr>
+          <td class="ar arabic">${esc(w.ar)}</td>
+          <td style="width:34px"><button class="small" data-say="${i}">🔊</button></td>
+          <td><span class="veil" data-veil="${i}">${esc(w.en)}</span>
+            <div style="font-size:12.5px;color:var(--muted)">${esc(w.tr)} · ${rank(w)}</div>
+            <div class="bucket-slot" data-b="${i}"></div></td>
+        </tr>`).join("")}</table>
+      <div class="row"><button id="all">Reveal all</button><button class="primary" id="go">Now recall them →</button></div>
+    </div>`;
+    document.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(words[+b.dataset.say].ar, 0.85));
+    document.querySelectorAll("[data-veil]").forEach(v => v.onclick = () => v.classList.add("on"));
+    document.querySelectorAll("[data-b]").forEach(sl => mountBucketBar(sl, words[+sl.dataset.b].key));
+    document.getElementById("all").onclick = () => document.querySelectorAll(".veil").forEach(v => v.classList.add("on"));
+    document.getElementById("go").onclick = () => drill(words.slice(), 1);
+  }
+
+  /* Only the misses come back. Four rounds is the cap — past that it is not a
+     burst any more, and a word he cannot produce after four goes is better met
+     inside a sentence next week than ground down here. */
+  function drill(queue, round) {
+    if (!queue.length || round > 4) return finish();
+    const miss = [];
+    let at = 0;
+    step();
+    function step() {
+      if (at >= queue.length) return drill(miss, round + 1);
+      const w = queue[at];
+      app.innerHTML = head + `<div class="card">
+        <div class="crumb">round ${round} · ${at + 1} of ${queue.length}</div>
+        <div class="prog"><i style="width:${Math.round(100 * at / queue.length)}%"></i></div>
+        <div class="q-en">${esc(w.en)}</div>
+        <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
+        <div id="jRev"></div>
+        <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+        <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
+          <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+        </div>
+        ${TYPING_HELP}</div>`;
+      wireAnswer("ans", "chk", [w.ar]);
+      mountBucketBar(document.getElementById("jBkt"), w.key, b => settle(b !== "repeat", true));
+      const check = shown => {
+        const inp = document.getElementById("ans");
+        const ok = !shown && (arMatch(inp.value, w.ar) || writeMatchAr(inp.value, w.ar).ok);
+        document.getElementById("jRev").innerHTML =
+          `<p style="text-align:center;font-size:16px;margin:10px 0 0">${shown ? "the answer:" : ok ? "✓ right" : "✗ not quite"}</p>`;
+        inp.disabled = true;
+        settle(ok, false);
+      };
+      document.getElementById("chk").onclick = () => check(false);
+      document.getElementById("skip").onclick = () => check(true);
+      function settle(ok, bucketed) {
+        if (settle.done) return;
+        settle.done = true;
+        if (!bucketed) (w.keys || [w.key]).forEach(k => gradeCard(k, ok ? "good" : "again"));
+        if (!ok) miss.push(w);
+        document.getElementById("jRev").insertAdjacentHTML("beforeend",
+          `<div class="q-ar arabic">${esc(w.ar)}</div><div class="q-en" style="font-size:15px;color:var(--muted)">${esc(w.en)}</div>
+           ${w.example ? `<p style="text-align:center;font-size:17px;direction:rtl" class="arabic">${esc(w.example.ar)}</p>
+             <p style="text-align:center;font-size:13px;color:var(--muted)">${esc(w.example.en)}</p>` : ""}`);
+        document.getElementById("jRow").innerHTML = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+        speak(w.example ? w.example.ar : w.ar, 0.85);
+        const nx = document.getElementById("nx");
+        nx.onclick = () => { at++; step(); };
+        nx.focus();
+        document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); document.onkeydown = null; nx.click(); } };
+      }
+    }
+  }
+
+  function finish() {
+    document.onkeydown = null;
+    logEvent({ e: "burst-done", kind: "vocab", n: words.length, keys: words.map(w => w.key) });
+    try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
+    app.innerHTML = `<h1>Burst done</h1>
+      <div class="card">
+        <p style="margin-top:0">${words.length} words, each one now inside a sentence you can use. They join the
+        review deck like everything else — and anything you marked ⊘ won't come back.</p>
+        <table class="tbl">${words.map(w => `<tr>
+          <td class="ar arabic">${esc(w.ar)}</td>
+          <td>${esc(w.en)}${w.example ? `<div style="font-size:13px;color:var(--muted);direction:rtl;text-align:right" class="arabic">${esc(w.example.ar)}</div>` : ""}</td>
+        </tr>`).join("")}</table>
+        <div class="row" style="justify-content:flex-start">
+          <a href="index.html"><button class="primary">Back to your lessons</button></a>
+          <a href="learn.html"><button>Next lesson →</button></a>
+        </div>
+      </div>`;
+  }
+}
+
+/* ---- grammar: the one rule that unlocks the most of what is coming ----
+   Chosen by reach across the sentence bank, not by syllabus order, and shown once
+   ever — the same pattern-seen log the in-lesson gate uses, so the two can never
+   both spend a slot on the same rule. */
+async function runGrammarBurst(ctx, state) {
+  const weeks = Curriculum.weekPlan(ctx, state);
+  const cw = weeks[Curriculum.currentWeek(weeks) - 1];
+  const keys = cw ? cw.lessons.flatMap(x => x.lesson.keys || []) : [];
+  const sents = Curriculum.sentencesFor(keys, ctx, { limit: 12, maxWords: 999 });
+  const id = Curriculum.grammarBurst(ctx, { sentences: sents });
+  let g = null;
+  try { g = (await fetch("data/grammar.json").then(r => r.json())).patterns.find(p => p.id === id); } catch (e) {}
+  if (!g) {
+    app.innerHTML = `<h1>No rule due</h1><p>Every pattern the site teaches has already been explained to you once.</p>
+      <div class="row" style="justify-content:flex-start"><a href="index.html"><button class="primary">Back</button></a></div>`;
+    return;
+  }
+  primeSpeak();
+  logEvent({ e: "pattern-seen", pattern: id, src: "burst" });
+  logEvent({ e: "burst-start", kind: "grammar", pattern: id });
+  const used = (ctx.bank.sentences || []).filter(s => s.pattern === id).length;
+  const head = `<div class="crumb">📐 Grammar burst · between the lessons</div>
+    <h1 style="margin-top:0">${esc(g.name)}</h1>
+    <p class="sub">Worth three minutes because ${used} of the sentences you have still to learn use it.</p>`;
+
+  app.innerHTML = head + `<div class="card">
+    <div class="q-ar arabic" style="margin:6px 0">${esc(g.ar)}</div>
+    <p style="font-size:15px;line-height:1.75">${esc(g.what)}</p>
+    ${(g.examples || []).map(e => `
+      <div style="border-top:1px solid var(--border);padding-top:8px;margin-top:8px">
+        <div class="arabic" style="font-size:21px;direction:rtl;text-align:right">${esc(e.ar)}</div>
+        <div style="font-size:13.5px;color:var(--muted)">${esc(e.en)}</div>
+      </div>`).join("")}
+    <div class="row"><button class="primary" id="go">Now use it →</button></div>
+  </div>`;
+  document.getElementById("go").onclick = () => drill(0);
+
+  const items = (g.test || []).slice(0, 3);
+  function drill(at) {
+    if (at >= items.length) return finish();
+    const t = items[at];
+    const key = `gt:${id}:${at}`;
+    app.innerHTML = head + `<div class="card">
+      <div class="crumb">${at + 1} of ${items.length}</div>
+      <div class="prog"><i style="width:${Math.round(100 * at / items.length)}%"></i></div>
+      <div class="q-en">${esc(t.prompt)}</div>
+      ${t.hint ? `<p class="q-tr">${esc(t.hint)}</p>` : ""}
+      <input id="ans" dir="rtl" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:22px;text-align:center">
+      <div id="jRev"></div>
+      <div class="row" id="jRow"><button class="primary" id="chk">Check</button><button id="skip">show me</button><button class="small" id="ansKb">⌨ keys</button></div>
+      <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
+        <span style="font-size:12px;color:var(--muted)">bring it back:</span><span id="jBkt"></span>
+      </div>
+      ${TYPING_HELP}</div>`;
+    wireAnswer("ans", "chk", [t.ar]);
+    mountBucketBar(document.getElementById("jBkt"), key, b => settle(b !== "repeat", true));
+    const check = shown => {
+      const inp = document.getElementById("ans");
+      const ok = !shown && writeMatchAr(inp.value, t.ar).ok;
+      document.getElementById("jRev").innerHTML =
+        `<p style="text-align:center;font-size:16px;margin:10px 0 0">${shown ? "the answer:" : ok ? "✓ right" : "✗ not quite"}</p>`;
+      inp.disabled = true;
+      settle(ok, false);
+    };
+    document.getElementById("chk").onclick = () => check(false);
+    document.getElementById("skip").onclick = () => check(true);
+    function settle(ok, bucketed) {
+      if (settle.done) return;
+      settle.done = true;
+      if (!bucketed) gradeCard(key, ok ? "good" : "again");
+      document.getElementById("jRev").insertAdjacentHTML("beforeend",
+        `<div class="q-ar arabic">${esc(t.ar)}</div>`);
+      document.getElementById("jRow").innerHTML = `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
+      speak(t.ar, 0.85);
+      const nx = document.getElementById("nx");
+      nx.onclick = () => drill(at + 1);
+      nx.focus();
+      document.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); document.onkeydown = null; nx.click(); } };
+    }
+  }
+
+  function finish() {
+    document.onkeydown = null;
+    logEvent({ e: "burst-done", kind: "grammar", pattern: id });
+    try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
+    app.innerHTML = `<h1>Burst done</h1>
+      <div class="card">
+        <p style="margin-top:0">${esc(g.name)} — you will meet it in ${used} of the sentences still ahead of you,
+        and it won't be explained again.</p>
+        <div class="row" style="justify-content:flex-start">
+          <a href="index.html"><button class="primary">Back to your lessons</button></a>
+          <a href="learn.html"><button>Next lesson →</button></a>
         </div>
       </div>`;
   }

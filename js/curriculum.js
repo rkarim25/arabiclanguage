@@ -36,6 +36,20 @@
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const pct = (a, b) => (b > 0 ? clamp(a / b, 0, 1) : 0);
 
+  /* ---------- "don't repeat this one" ----------
+     His ask, 2026-08-30: "give me the option where i can click dont repeat as
+     well. there are words like Allah which really i dont need to repeat."
+
+     The store already had a retire bucket (b === "never", app.js setBucket) from
+     the old word-card pages, and review/speaking/vocab already honoured it — but
+     nothing in the sentence engine did, so retiring a word still left it being
+     taught, tested and counted as weak. Every selector below now asks this
+     first. A retired card keeps box 5 and a year-2100 due date, so it still
+     counts as HELD: retiring is him saying "I know this", which is the same
+     claim the ✓ self-grade already makes, and it must not quietly delete the
+     word from his inventory. Getting one wrong un-retires it (see gradeCard). */
+  const isRetired = (key, ctx) => ((ctx.srs || {})[key] || {}).b === "never";
+
   /* ---------- baskets ---------- */
   /* A basket id from curriculum.json -> the qw: SRS keys it covers. Key format
      must match scripts/gen-progress.js qwKeys(): qw:<surahId>:<verseIdx>:<wordIdx> */
@@ -775,7 +789,7 @@
     const srs = ctx.srs || {}, now = ctx.now || Date.now();
     const own = new Set(chunk.keys || []);
     return Object.keys(srs)
-      .filter(k => !own.has(k) && (srs[k].due || 0) <= now)
+      .filter(k => !own.has(k) && !isRetired(k, ctx) && (srs[k].due || 0) <= now)
       .sort((a, b) => (srs[a].due || 0) - (srs[b].due || 0))
       .slice(0, n === undefined ? REVIEW_PER_CHUNK : n);
   }
@@ -838,7 +852,7 @@
   function sentencesFor(targetKeys, ctx, opts) {
     opts = opts || {};
     const byKey = sentenceIndex(ctx);
-    const want = new Set((targetKeys || []).filter(Boolean));
+    const want = new Set((targetKeys || []).filter(k => k && !isRetired(k, ctx)));
     if (!want.size) return [];
     const limit = opts.limit || SENTENCE_MAX;
     const track = opts.track;
@@ -853,7 +867,7 @@
     while (chosen.length < limit && covered.size < want.size) {
       let best = null, bestScore = null;
       candidates.forEach(s => {
-        if (used.has(s.key)) return;
+        if (used.has(s.key) || isRetired(s.key, ctx)) return;
         const gain = (s.teaches || []).filter(k => want.has(k) && !covered.has(k)).length;
         if (!gain) return;
         // unfamiliar extra baggage: words this sentence needs that are neither
@@ -887,7 +901,7 @@
     const srs = ctx.srs || {}, now = ctx.now || Date.now();
     const own = new Set(chunk.keys || []);
     const due = Object.keys(srs)
-      .filter(k => !own.has(k) && (srs[k].due || 0) <= now)
+      .filter(k => !own.has(k) && !isRetired(k, ctx) && (srs[k].due || 0) <= now)
       .sort((a, b) => (srs[a].due || 0) - (srs[b].due || 0))
       .slice(0, 40);
     return sentencesFor(due, ctx, { limit: n === undefined ? 2 : n });
@@ -903,7 +917,7 @@
         const overdue = Math.max(0, now - (c.due || now)) / 86400000;
         return { key: k, box: c.box || 0, overdue, score: (5 - (c.box || 0)) + Math.min(5, overdue / 7) };
       })
-      .filter(w => w.box < 5 || w.overdue > 0)
+      .filter(w => !isRetired(w.key, ctx) && (w.box < 5 || w.overdue > 0))
       .sort((a, b) => b.score - a.score)
       .slice(0, n || 20);
   }
@@ -918,6 +932,150 @@
       if (s.pattern && !seen.has(s.pattern)) return s.pattern;
     }
     return null;
+  }
+
+
+  /* ==========================================================================
+     INTERLEAVING — vocabulary and grammar bursts between the sentence lessons
+     ==========================================================================
+     His spec, 2026-08-30:
+
+       "the idea is that i learn XY sentences which are high probability. Then at
+        times I memorise some vocabulary to help me along and get me to build
+        sentences quicker. then at times i learn some grammar which also helps
+        build sentences quicker."
+       — and then, plainly: "okay schedule that in. also it is based on
+        probability of use."
+
+     So a burst is not decoration between lessons; it has to EARN its slot by
+     removing a bottleneck. Both kinds are chosen the same way — by measured
+     probability of use (data/frequency.json), never by theme or by what looks
+     tidy.
+
+       · a VOCABULARY burst  — the commonest words in the language he does not
+         hold yet, each one shown inside a real sentence from the bank, because
+         the site's rule is that words are met in sentences.
+       · a GRAMMAR burst     — the unseen pattern that unlocks the most sentences
+         he has still to meet. Reach IS the frequency measure here: a pattern
+         used by 225 bank sentences is worth a slot, one used by 2 is not.
+
+     Placement: one of each per week at most, after the 2nd and 5th lesson, so a
+     week is still overwhelmingly sentences (his primary method) and a burst is
+     the exception it was described as. Computed for the CURRENT week only —
+     bursts depend on what he holds today, so drawing them onto week 4 would be
+     showing him a prediction dressed as a plan. */
+
+  const BURST_WORDS = 8;             // a ~4-minute sitting, recall-then-show
+  const BURST_AT = { vocab: 2, grammar: 5 };
+
+  /* Must match scripts/gen-frequency.js norm() exactly — that is what the keys
+     of frequency.json were built with. */
+  const normAr = s => String(s).replace(/[\u064B-\u0652\u0670\u0640\u06D6-\u06ED]/g, "")
+    .replace(/[\u0623\u0625\u0622\u0671]/g, "\u0627").replace(/\u0649/g, "\u064A")
+    .replace(/[^\u0600-\u06FF\s]/g, "").replace(/\s+/g, " ").trim();
+
+  /* Every distinct word the sentence bank teaches, with how likely it is to be
+     used and how many sentences it appears in. Built once per ctx. */
+  function wordIndex(ctx) {
+    if (ctx._wordIdx) return ctx._wordIdx;
+    const freq = (ctx.freq && ctx.freq.words) || {};
+    /* An article-stripped fallback is right for nouns — الشَّقَّة is counted under
+       شقة — but only when what is left is still a word. Without the length guard
+       الآن stripped to "ان" and inherited إِنَّ's score, which put "now" into the
+       burst at the frequency of "indeed". */
+    const per10k = form => {
+      const bare = form.replace(/^ال/, "");
+      return Math.max(freq[form] || 0, bare.length >= 3 ? (freq[bare] || 0) : 0);
+    };
+    /* Display comes from data/lexicon.json when it has the word — the CURATED
+       gloss, ordered by quality in gen-lexicon.js. The bank's own words carry
+       whatever gloss their source used, and for Qur'anic tokens that is
+       contextual and Uthmani: فِي glossed "(will be) in", أَنَا۠ written with a
+       superscript alif. Neither is a vocabulary entry. The card KEYS still come
+       from the bank, so the burst grades exactly what the lessons grade. */
+    const lex = ctx.lexicon || null;
+    const m = new Map();
+    ((ctx.bank && ctx.bank.sentences) || []).forEach(s => {
+      (s.words || []).forEach(w => {
+        if (!w.en || !w.ar || !w.key) return;
+        const form = normAr(w.ar);
+        if (form.length < 2) return;
+        let e = m.get(form);
+        if (!e) {
+          const L = lex && (lex[form] || lex[form.replace(/^ال/, "")]);
+          m.set(form, e = {
+            form, ar: (L && L[0]) || w.ar, en: (L && L[2]) || w.en, tr: (L && L[1]) || w.tr || "",
+            key: w.key, keys: (w.keys && w.keys.length ? w.keys : [w.key]),
+            per10k: per10k(form), reach: 0, example: null, curated: !!L,
+          });
+        }
+        e.reach++;
+        // the shortest sentence carrying it — that is the one worth showing
+        if (!e.example || (s.words || []).length < (e.example.words || []).length) e.example = s;
+      });
+    });
+    return (ctx._wordIdx = m);
+  }
+
+  /* The vocabulary burst: highest probability of use FIRST, and only words he
+     does not already hold. Words the coming week's lessons will teach anyway are
+     excluded — the burst exists to get ahead of the ladder, not to duplicate it. */
+  function vocabBurst(ctx, opts) {
+    opts = opts || {};
+    const srs = ctx.srs || {};
+    /* A burst is ADDITIVE or it is nothing. Everything any lesson owns is skipped
+       here rather than by the caller, so the guarantee holds wherever this is
+       called from: a burst that teaches a word the ladder was going to teach a
+       fortnight later is not an accelerator, it is a duplicate. */
+    if (!ctx._ladderKeys) ctx._ladderKeys = new Set((ctx.curriculum.milestones || [])
+      .flatMap(ms => (ms.lessons || []).flatMap(l => l.keys || [])));
+    const skip = new Set([...ctx._ladderKeys, ...(opts.exclude || [])]);
+    const out = [];
+    wordIndex(ctx).forEach(w => {
+      if (!w.per10k) return;                                  // unmeasured is not "high probability"
+      if (!w.curated) return;                                 // no curated gloss = not a vocabulary entry
+      if (isRetired(w.key, ctx)) return;                       // he has told us to stop
+      if (((srs[w.key] || {}).box || 0) >= SOLID_BOX) return;  // already his
+      if (w.keys.some(k => skip.has(k))) return;               // something else already teaches it
+      out.push(w);
+    });
+    out.sort((a, b) => (b.per10k - a.per10k) || (b.reach - a.reach));
+    return out.slice(0, opts.n || BURST_WORDS);
+  }
+
+  /* The grammar burst: the unseen pattern with the widest reach across the bank,
+     preferring one this week's own sentences actually use so the rule lands on
+     material he is about to meet. Returns the pattern id; grammar.json supplies
+     the explanation, exactly as the in-lesson gate does. */
+  function grammarBurst(ctx, opts) {
+    opts = opts || {};
+    const seen = new Set((ctx.log || []).filter(e => e && e.e === "pattern-seen").map(e => e.pattern));
+    const reach = new Map();
+    ((ctx.bank && ctx.bank.sentences) || []).forEach(s => {
+      if (!s.pattern || seen.has(s.pattern)) return;
+      reach.set(s.pattern, (reach.get(s.pattern) || 0) + 1);
+    });
+    if (!reach.size) return null;
+    const soon = new Set((opts.sentences || []).map(s => s.pattern).filter(p => p && !seen.has(p)));
+    const rank = p => [soon.has(p) ? 0 : 1, -(reach.get(p) || 0)];
+    let best = null;
+    reach.forEach((n, p) => { if (!best || cmp(rank(p), rank(best)) < 0) best = p; });
+    return best && (reach.get(best) || 0) >= 2 ? best : null;
+  }
+
+  /* What to interleave into ONE week, as insertion points its renderer can use.
+     Returns [] rather than a half-full burst when there is nothing worth the
+     slot — a burst that teaches four words he half-knows is worse than none. */
+  function burstsFor(week, ctx) {
+    if (!week) return [];
+    const weekKeys = new Set(week.lessons.flatMap(x => x.lesson.keys || []));
+    const out = [];
+    const words = vocabBurst(ctx, {});
+    if (words.length >= 4) out.push({ kind: "vocab", at: BURST_AT.vocab, words, mins: 4 });
+    const sents = sentencesFor([...weekKeys], ctx, { limit: 12, maxWords: 999 });
+    const pat = grammarBurst(ctx, { sentences: sents });
+    if (pat) out.push({ kind: "grammar", at: BURST_AT.grammar, pattern: pat, mins: 3 });
+    return out;
   }
 
   /* ---------- what he actually holds ----------
@@ -1072,7 +1230,7 @@
       const mState = state.milestones.find(x => x.id === m.id);
       for (const l of (m.lessons || [])) {
         if (!want.has(l.id)) continue;
-        l.keys.forEach((k, i) => {
+        l.keys.filter(k => !isRetired(k, ctx)).forEach((k, i) => {
           const form = isQuran(k) ? (i % 2 === 0 ? "ear" : "mean") : (i % 3 === 0 ? "ear" : i % 3 === 1 ? "mean" : "prod");
           items.push({ key: k, lessonId: l.id, lessonTitle: l.title, milestoneId: m.id, section: l.id, form });
         });
@@ -1153,7 +1311,7 @@
         if (!st.reverifyDue) continue;                       // proved and still fresh — skip entirely
         keys = l.keys.slice(0, Math.max(2, Math.ceil(l.keys.length * 0.3)));   // a spot-check only
       }
-      keys.forEach((k, i) => {
+      keys.filter(k => !isRetired(k, ctx)).forEach((k, i) => {
         // at least half of Qur'an-track items by EAR — the honest gap
         const form = isQuran(k) ? (i % 2 === 0 ? "ear" : "mean") : (i % 3 === 0 ? "ear" : i % 3 === 1 ? "mean" : "prod");
         items.push({ key: k, lessonId: l.id, lessonTitle: l.title, section: l.id, form });
@@ -1302,6 +1460,7 @@
     weekHistory, weekSize, weekProgress, weekLearned, weekObjectives, weekKeys, weekBounds, weekSelfSeed, activeMinutesBetween,
     PASS, CLEAR_MIN, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
     nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, scopeKey, scopeHistory, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
-    SENTENCE_MAX, sentencesFor, reviewSentencesFor, weakWords, grammarToShow, holdOf,
+    SENTENCE_MAX, sentencesFor, reviewSentencesFor, weakWords, grammarToShow, holdOf, isRetired,
+    BURST_WORDS, wordIndex, vocabBurst, grammarBurst, burstsFor,
   };
 });

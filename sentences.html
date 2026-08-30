@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg0msja">
-  <link rel="stylesheet" href="css/style.css?v=mtg0msja">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
   <style>
     .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
     .sp-chip {
@@ -62,11 +62,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/progress-model.js?v=mtg0msja"></script>
-<script src="js/curriculum.js?v=mtg0msja"></script>
-<script src="js/app.js?v=mtg0msja"></script>
-<script src="js/tracker.js?v=mtg0msja"></script>
-<script src="js/plan.js?v=mtg0msja"></script>
+<script src="js/progress-model.js?v=mtg23sx8"></script>
+<script src="js/curriculum.js?v=mtg23sx8"></script>
+<script src="js/app.js?v=mtg23sx8"></script>
+<script src="js/tracker.js?v=mtg23sx8"></script>
+<script src="js/plan.js?v=mtg23sx8"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -140,6 +140,42 @@ function pickSession() {
 }
 
 let queue = [], done = 0, got = 0, exactCount = 0;
+
+/* ---------- Sentence Practice feeds the SRS too ----------
+   His rule, 2026-08-30: "For the entire website i hope words, sentences or
+   anything else has the spaced repitition engine built in."
+
+   It didn't here. This page logged a `spract` event and stopped — so twenty
+   minutes of conjugation drill moved nothing: the sentence never came back, the
+   words in it were never scheduled, and none of it counted toward anything. It
+   was the one practice surface in the site writing to the record but not to the
+   scheduler.
+
+   The verb frames are in the sentence bank already, so the answer is a lookup:
+   the drilled Arabic is either a frame's base sentence or one of its verified
+   variants, and either way it resolves to that frame's card and to the word
+   cards underneath it — exactly what a lesson would grade. */
+let _drillIdx = null;
+function drillIndex() {
+  if (_drillIdx) return _drillIdx;
+  _drillIdx = new Map();
+  (BANK.sentences || []).forEach(s => {
+    const put = ar => { const k = normalizeAr(ar); if (k && !_drillIdx.has(k)) _drillIdx.set(k, s); };
+    put(s.ar);
+    (s.vary || []).forEach(v => put(v.ar));
+  });
+  return _drillIdx;
+}
+function gradeDrilled(ar, ok) {
+  const s = drillIndex().get(normalizeAr(ar));
+  if (!s) return;
+  const g = ok ? "good" : "again";
+  if (s.key) gradeCard(s.key, g);
+  (s.words || []).forEach(w => {
+    const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
+    cards.forEach(k => gradeCard(k, g));
+  });
+}
 
 function start() {
   if (MODE === "list") return renderList();
@@ -243,6 +279,7 @@ function ask() {
     logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok,
       ...(m.rom ? { rom: true } : {}), ...(m.fuzzy ? { fuzzy: true } : {}),
       ...(diag ? { wrongCell: diag.person.key + ":" + diag.tense.key } : {}) });
+    gradeDrilled(it.ar, ok);
     if (exact) exactCount++;
     if (ok) got++;
     else queue.push(it); // drill-the-misses: requeue at the end of the set

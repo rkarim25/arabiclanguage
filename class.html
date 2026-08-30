@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Your classes — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
+  <style>
+    .cnt { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; margin: 10px 0 0; }
+    .cnt .n { font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .cnt .l { font-size: 12.5px; color: var(--muted); }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .tbl td { padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .tbl .ar { font-size: 21px; text-align: right; width: 34%; font-family: var(--font-ar); }
+    .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px;
+           background: var(--accent-soft); color: var(--accent); margin-left: 6px; vertical-align: middle; }
+    .tag.add { background: var(--border); color: var(--muted); }
+    .held { color: var(--accent); font-weight: 700; }
+    .srow { padding: 9px 0; border-bottom: 1px solid var(--border); }
+    .srow .a { font-size: 20px; direction: rtl; text-align: right; font-family: var(--font-ar); }
+    .srow .e { font-size: 13.5px; color: var(--muted); }
+    details.sec { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
+    details.sec > summary { cursor: pointer; font-weight: 700; font-size: 15.5px; list-style: none; display: flex;
+                            justify-content: space-between; gap: 10px; align-items: baseline; }
+    details.sec > summary::-webkit-details-marker { display: none; }
+    .qn { font-size: 14.5px; line-height: 1.7; margin: 0 0 8px; padding-left: 18px; text-indent: -18px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Your classes <span class="arabic" style="color:var(--accent)">الدُّرُوس</span></h1>
+  <p class="sub">Everything the teacher has given, sorted into the four things the site actually teaches:
+  <strong>vocabulary</strong>, <strong>sentences</strong>, <strong>grammar</strong> and a <strong>reading</strong> passage.
+  Nothing here is a copy — each row is the live card, so what it says about you is what the rest of the site says.</p>
+  <div id="out">Loading…</div>
+</main>
+
+<script src="js/progress-model.js?v=mtg23sx8"></script>
+<script src="js/curriculum.js?v=mtg23sx8"></script>
+<script src="js/app.js?v=mtg23sx8"></script>
+<script src="js/tracker.js?v=mtg23sx8"></script>
+<script src="js/plan.js?v=mtg23sx8"></script>
+<script>
+renderNav("more");
+trackPage("classes");
+
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+(async () => {
+  const out = document.getElementById("out");
+  let data;
+  try { data = await fetch("data/classes.json").then(r => r.json()); }
+  catch (e) { out.textContent = "Couldn't load your classes."; return; }
+  const srs = getSrs();
+  const held = k => ((srs[k] || {}).box || 0) >= 3;
+
+  out.innerHTML = data.classes.map((c, ci) => {
+    const kHeld = c.keys.filter(held).length;
+    const proved = c.lessons.length;
+    const vHeld = c.vocabulary.filter(v => held(v.key)).length;
+    const sHeld = c.sentences.filter(s => s.key && held(s.key)).length;
+
+    return `
+    <div class="card" style="border-color:var(--accent)">
+      <div class="crumb" style="font-size:12.5px;color:var(--muted)">${esc(c.teacher)} · ${esc(c.date)}</div>
+      <h2 style="margin:2px 0 6px">${esc(c.title)}</h2>
+      <p style="font-size:14.5px;line-height:1.65;margin:0">${esc(c.covered)}</p>
+      <div class="cnt">
+        <div><div class="n">${c.counts.vocabulary}</div><div class="l">words · <b>${vHeld}</b> held</div></div>
+        <div><div class="n">${c.counts.sentences}</div><div class="l">sentences · <b>${sHeld}</b> held</div></div>
+        <div><div class="n">${c.counts.grammar}</div><div class="l">grammar points</div></div>
+        <div><div class="n">${c.reading ? c.reading.sentences : 0}</div><div class="l">reading sentences</div></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin:10px 0 0">
+        On the ladder as <strong>${proved} lessons</strong> · ${kHeld} of ${c.keys.length} cards held.</p>
+      <div class="row" style="justify-content:flex-start;margin-top:12px">
+        <a href="learn.html?class=${encodeURIComponent(c.id)}"><button class="primary">📝 Test this class</button></a>
+        ${c.reading && !c.reading.missing ? `<a href="story.html?id=${encodeURIComponent(c.reading.id)}"><button>📖 Read the passage</button></a>` : ""}
+        ${c.lessons.length ? `<a href="learn.html?lesson=${encodeURIComponent(c.lessons[0].id)}"><button>▶ First lesson</button></a>` : ""}
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">The class test covers everything she gave, proved or not,
+      and each retake asks a different sample — so retaking it is how you get through all of it.</p>
+    </div>
+
+    <details class="sec" data-c="${ci}" data-k="vocab" open>
+      <summary><span>📇 Vocabulary</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${vHeld} / ${c.counts.vocabulary} held</span></summary>
+      <p style="font-size:12.5px;color:var(--muted);margin:8px 0 4px">
+        <span class="tag">hers</span> came out of the lesson · <span class="tag add">added</span> written here to make the set usable.
+        The four buttons are your spaced repetition: ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat.</p>
+      <div class="body"></div>
+    </details>
+
+    <details class="sec" data-c="${ci}" data-k="sent">
+      <summary><span>💬 Sentences</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${sHeld} / ${c.counts.sentences} held</span></summary>
+      <div class="body"></div>
+    </details>
+
+    <details class="sec" data-c="${ci}" data-k="gram">
+      <summary><span>📐 Grammar</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${c.counts.grammar} points</span></summary>
+      <div class="body"></div>
+    </details>
+
+    ${c.reading && !c.reading.missing ? `
+    <details class="sec" data-c="${ci}" data-k="read">
+      <summary><span>📖 Reading — ${esc(c.reading.titleEn)}</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${c.reading.sentences} sentences</span></summary>
+      <div class="body"></div>
+    </details>` : ""}
+
+    ${c.questions.length ? `
+    <div class="card">
+      <h3 style="margin:0 0 6px;font-size:15.5px">❓ What I still need to ask you about this class</h3>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 10px">Answer any of these next time and the material
+      gets rebuilt around it — these are the places where the photos left it ambiguous.</p>
+      ${c.questions.map(q => `<p class="qn">· ${esc(q)}</p>`).join("")}
+    </div>` : ""}
+    `;
+  }).join("");
+
+  /* Rows are rendered when a section is opened: a class is ~100 rows and every
+     vocabulary row carries a four-button bucket bar, which is a lot of DOM to
+     build for sections he may not look at. */
+  const R = {
+    vocab: c => `<table class="tbl">${c.vocabulary.map((v, i) => `
+      <tr>
+        <td class="ar">${esc(v.ar)}</td>
+        <td>
+          <span class="${held(v.key) ? "held" : ""}">${esc(v.en)}</span>
+          <span class="tag ${v.from === "teacher" ? "" : "add"}">${v.from === "teacher" ? "hers" : "added"}</span>
+          <div style="font-size:12.5px;color:var(--muted)">${esc(v.tr)}${v.note ? ` · ${esc(v.note)}` : ""}</div>
+          <div class="bucket-slot" data-key="${esc(v.key)}"></div>
+        </td>
+        <td style="width:34px"><button class="small" data-say="${esc(v.ar)}">🔊</button></td>
+      </tr>`).join("")}</table>`,
+    sent: c => c.sentences.map(s => `
+      <div class="srow">
+        <div class="a ${s.key && held(s.key) ? "held" : ""}">${esc(s.ar)}
+          <button class="small" data-say="${esc(s.ar)}">🔊</button></div>
+        <div class="e">${esc(s.en)}<span class="tag ${s.from === "teacher" ? "" : "add"}">${s.from === "teacher" ? "hers" : "written to carry her words"}</span></div>
+      </div>`).join(""),
+    gram: c => c.grammar.map(g => `
+      <div class="srow">
+        <div style="font-size:15px;font-weight:600">${esc(g.name || g.pattern)}
+          ${g.ar ? `<span class="arabic" style="color:var(--accent)"> ${esc(g.ar)}</span>` : ""}</div>
+        <div class="e">${esc(g.why)}</div>
+        <a href="grammar.html?g=${encodeURIComponent(g.pattern)}" style="font-size:13px;color:var(--accent)">the rule and its drill →</a>
+      </div>`).join("") + (c.notes.length ? `
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0"><b>Also noted in the material:</b></p>
+      ${c.notes.map(n => `<p class="qn" style="color:var(--muted)">· ${esc(n)}</p>`).join("")}` : ""),
+    read: c => `
+      <p style="font-size:14px;line-height:1.7">${esc(c.reading.titleEn)} — ${c.reading.sentences} sentences,
+      ${c.reading.words} words glossed one by one, ${c.reading.vocab} vocabulary cards and ${c.reading.questions} comprehension questions.
+      Tap any word in the passage to hear it and see what it is doing.</p>
+      <div class="row" style="justify-content:flex-start">
+        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=listen"><button>🎧 Listen</button></a>
+        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=read"><button class="primary">📖 Read word by word</button></a>
+        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=quiz"><button>❓ Quiz</button></a>
+      </div>`,
+  };
+  document.querySelectorAll("details.sec").forEach(d => {
+    const fill = () => {
+      if (d.dataset.done) return;
+      d.dataset.done = "1";
+      const c = data.classes[+d.dataset.c];
+      d.querySelector(".body").innerHTML = R[d.dataset.k](c);
+      d.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.preventDefault(); speak(b.dataset.say, 0.85); });
+      d.querySelectorAll(".bucket-slot").forEach(sl => mountBucketBar(sl, sl.dataset.key));
+    };
+    d.addEventListener("toggle", () => { if (d.open) fill(); });
+    if (d.open) fill();
+  });
+  primeSpeak();
+})();
+</script>
+</body>
+</html>

@@ -144,5 +144,52 @@
         { "prompt": "'upon him'", "ar": "عَلَيْهِ", "hint": "ʿalayhi" }
       ]
     }
+  ,
+    {
+      "id": "have",
+      "ar": "عِندِي",
+      "name": "عِندَ — having, and not having",
+      "what": "Arabic has no verb 'to have'. It says \"at me\" — عِندِي بَيْتٌ, literally 'at me is a house'. The pronoun sticks on the end: عِندِي (I have), عِندَكَ (you have), عِندَهُ (he has), عِندَنا (we have), عِندَكُمْ (you all have). To say you DON'T have it, put مَا or لَيْسَ in front: مَا عِندِي and لَيْسَ عِندِي both mean 'I don't have' — لَيْسَ is the more formal one. From the class of 30 Aug.",
+      "examples": [
+        { "ar": "عِندِي خَزَانَةٌ كَبِيرَةٌ", "en": "I have a big cupboard." },
+        { "ar": "هَلْ عِندَكُمْ مِصْعَدٌ؟", "en": "Do you have a lift?" },
+        { "ar": "مَا عِندِي وَقْتٌ", "en": "I don't have time." }
+      ],
+      "test": [
+        { "prompt": "'I have a big cupboard.'", "ar": "عِندِي خَزَانَةٌ كَبِيرَةٌ", "hint": "3indii khazaanatun kabiira" },
+        { "prompt": "'Do you have a lift?' (asking a household)", "ar": "هَلْ عِندَكُمْ مِصْعَدٌ؟", "hint": "hal 3indakum mis3ad" },
+        { "prompt": "'I don't have' — the لَيْسَ way", "ar": "لَيْسَ عِندِي", "hint": "laysa 3indii" }
+      ]
+    },
+    {
+      "id": "dual",
+      "ar": "المُثَنَّى",
+      "name": "the dual — Arabic's word for exactly two",
+      "what": "English has one and many. Arabic has one, TWO, and many. For exactly two, add ـَانِ to the noun: خَال (uncle) → خَالَانِ (two uncles), خَالَة → خَالَتَانِ (two aunts), غُرْفَة → غُرْفَتَانِ (two rooms). You never say 'two' as a separate word — the ending IS the two. From the class of 30 Aug.",
+      "examples": [
+        { "ar": "عِندِي خَالَانِ وَخَالَتَانِ", "en": "I have two uncles and two aunts." },
+        { "ar": "فِي الشَّقَّةِ غُرْفَتَانِ", "en": "In the flat there are two rooms." },
+        { "ar": "وَالِدَانِ", "en": "two parents (a father and a mother)" }
+      ],
+      "test": [
+        { "prompt": "'two uncles and two aunts' (mother's side)", "ar": "خَالَانِ وَخَالَتَانِ", "hint": "khaalaani wa khaalataani" },
+        { "prompt": "'two rooms'", "ar": "غُرْفَتَانِ", "hint": "ghurfataani" }
+      ]
+    },
+    {
+      "id": "wujud",
+      "ar": "يُوجَدُ",
+      "name": "يُوجَدُ — there is, there are",
+      "what": "To say something exists somewhere, Arabic uses يُوجَدُ ('is found'), or just puts the place first with no verb at all: فِي المَطْبَخِ ثَلَّاجَةٌ — 'in the kitchen (is) a fridge'. There is no word for 'is'. The question form is the one she put on the board: مَاذَا يُوجَدُ فِي بَيْتِكَ؟",
+      "examples": [
+        { "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟", "en": "What furniture is there in your house?" },
+        { "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ", "en": "In the kitchen there is a fridge and an oven." },
+        { "ar": "لَا يُوجَدُ مِصْعَدٌ", "en": "There is no lift." }
+      ],
+      "test": [
+        { "prompt": "'In the kitchen there is a fridge and an oven.'", "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ", "hint": "fii l-matbakhi thallaajatun wa furn" },
+        { "prompt": "'What is there in your house, of furniture?'", "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟", "hint": "maadhaa yuujadu fii baytika mina l-athaath" }
+      ]
+    }
   ]
 }

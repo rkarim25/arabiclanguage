@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg0msja">
-  <link rel="stylesheet" href="css/style.css?v=mtg0msja">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mtg0msja"></script>
-<script src="js/tracker.js?v=mtg0msja"></script>
-<script src="js/plan.js?v=mtg0msja"></script>
+<script src="js/app.js?v=mtg23sx8"></script>
+<script src="js/tracker.js?v=mtg23sx8"></script>
+<script src="js/plan.js?v=mtg23sx8"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -523,7 +523,10 @@ async function prefetchClips() {
     if (typeof _audioManLoading !== "undefined" && _audioManLoading) await _audioManLoading;
     const [w, s] = await Promise.all([buildWords(), buildSentences()]);
     const urls = new Set(["audio/ui/gap3.wav", "audio/ui/gap5.wav"]);
-    const addT = t => { const f = typeof _audioFileFor === "function" ? _audioFileFor(t) : null; if (f) urls.add(f); };
+    // LOCAL clips only: the offline cache cannot hold the remote recitation, and
+    // asking for it here would spend the prefetch on something that still needs
+    // the network. Qur'an sentences fall back to their generated clip offline.
+    const addT = t => { const f = typeof _audioFileFor === "function" ? _audioFileFor(t) : null; if (f && !f.real) urls.add(f.src); };
     addT("Commute session. Hands free. Recall each meaning in the gap, before I say it.");
     addT("That's your commute session done. Every word counted. Well done.");
     addT("Audio coach. Listen, and recall the meaning before I say it.");

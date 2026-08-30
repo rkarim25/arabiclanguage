@@ -8,7 +8,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mtg0msja";
+const CACHE = "ats-mtg23sx8";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -20,13 +20,17 @@ const CORE = [
   "data/quran-core.json", "data/everyday.json", "data/families.json",
   "data/grammar.json", "data/prompts.json", "data/verses.json",
   "data/story-01.json", "data/story-02.json", "data/story-03.json",
-  "data/story-04.json", "data/story-05.json", "data/story-06.json" "data/story-07.json",
+  "data/story-04.json", "data/story-05.json", "data/story-06.json", "data/story-07.json",
   "data/sentences.json", "data/conversations.json", "data/mnemonics.json", "data/conjugations.json",
   "data/lexicon.json", "data/audio-manifest.json", "data/phrases.json", "data/quran-word-audio.json",
   "js/progress-model.js", "js/plan.js", "data/progress-series.json",
   "js/curriculum.js", "data/curriculum.json", "js/account.js", "js/longview.js",
   "data/sentence-bank.json",          // what every lesson is built from — must work on the commute
   "data/quran-sentences.json",        // the short surahs: Al-Fatiha + juz' 'Amma
+  "data/frequency.json",              // probability of use — what the bursts are ranked by
+  "data/ayah-audio.json",             // which ayat have a real recitation
+  "data/classes.json",                // the class repository
+  "class.html",
 ];
 
 self.addEventListener("install", e => {

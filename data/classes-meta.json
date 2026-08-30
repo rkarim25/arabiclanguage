@@ -1,0 +1,53 @@
+{
+ "version": 1,
+ "note": "THE CLASS REGISTRY — hand-written, one record per lesson she gives. Reza, 2026-08-30: \"i want you to maintain a repository of lesson material putting into category of vocabulary, sentences and anything else (that can be grammar/etc)\". Only the FRAME lives here: what the class was, which tags its content carries, what grammar came up, and what is still unanswered about it. The vocabulary and sentences themselves are NOT copied here — scripts/gen-classes.js reads them out of the files that actually teach them (everyday.json, prompts.json, story-*.json) by matching `lesson` tags, so the repository can never drift from the content. Add a record here, tag the content, run the generator.",
+ "classes": [
+  {
+   "id": "c-2026-08-30",
+   "date": "2026-08-30",
+   "title": "The flat, the week, the family",
+   "teacher": "Sunday class",
+   "tags": [
+    "Class — 30 Aug: the flat, the week, the family",
+    "Class — 30 Aug: looking for a flat"
+   ],
+   "milestone": "ms-class-0830",
+   "reading": "story-07",
+   "covered": "A flat room by room and the furniture in it; the seven days of the week; the mother's side of the family and the dual; weather words around ثَلْج; and a reading passage about Samer looking for a flat.",
+   "grammar": [
+    {
+     "pattern": "have",
+     "why": "The spine of the whole class — عِنْدِي / عِنْدَكُمْ, and both ways to negate it (مَا عِنْدِي, لَيْسَ عِنْدِي), which she gave together."
+    },
+    {
+     "pattern": "wujud",
+     "why": "Her board question مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟ — the way Arabic says 'there is'."
+    },
+    {
+     "pattern": "dual",
+     "why": "خَالَانِ وَخَالَتَانِ. Arabic counts one, two, and many; the ـَانِ ending IS the two."
+    },
+    {
+     "pattern": "idafa",
+     "why": "غُرْفَةُ نَوْمٍ, غُرْفَةُ الجُلُوسِ — two nouns pushed together with no word for 'of'. Already on the site; this class is where it earns its keep in everyday speech."
+    },
+    {
+     "pattern": "negation",
+     "why": "مَا and لَيْسَ, as she used them with عِنْدَ."
+    }
+   ],
+   "notes": [
+    "أَرَادَ أَنْ + present (أَرَادَ أَنْ يَبْحَثَ — 'he wanted to look for') runs through the passage.",
+    "Floors are ordinals: الدَّوْر الثَّالِث, the third floor.",
+    "Feminine agreement carries the whole description of the flat: الشَّقَّة جَمِيلَة وَوَاسِعَة."
+   ],
+   "questions": [
+    "Did she teach the dual (خَالَانِ / خَالَتَانِ) as a rule, or did it just turn up in a sentence? It changes whether I drill it or only explain it.",
+    "The days — did she give them bare (الأَحَد) or with يَوْم in front (يَوْمَ الأَحَدِ)?",
+    "Was the passage about Samer read aloud in class, and is reading aloud what she expects next week?",
+    "Was the weather set (ثَلْج، مَطَر، سَحَاب) a real topic or an aside off ثَلْج?",
+    "What did she set as homework?"
+   ]
+  }
+ ]
+}

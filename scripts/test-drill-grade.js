@@ -49,7 +49,14 @@ const t = (label, typed, ar, want) => {
 
 console.log("His real drill inputs (2026-08-19, ph-help):");
 // was: flat ✗ with no credit, and he quit two items later
-t("'العَرَبِيَتِ بَصيت' for عَرَبِيَّتِي بَسِيطَة", "العَرَبِيَتِ بَصيت", "عَرَبِيَّتِي بَسِيطَة", "part");
+/* WAS "part" until 2026-08-30. He wrote both words — عربيت for عربيتي, بصيت for
+   بسيطة — and got partial credit for an answer that is right out loud: one
+   dropped ي and one ص/س. His instruction that day, looking at a comparable case:
+   "dont you think i got it mostly right? … given that my writing isnt as much of
+   my priority it probably needs to be easier for me to type and autocorrect."
+   The whole-utterance tier in writeMatchAr now marks it right BY SOUND, which is
+   amber, not green: the correct spelling is still shown back to him every time. */
+t("'العَرَبِيَتِ بَصيت' for عَرَبِيَّتِي بَسِيطَة", "العَرَبِيَتِ بَصيت", "عَرَبِيَّتِي بَسِيطَة", "sound");
 t("blank for تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك", "", "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك", "miss");
 
 console.log("\nPerfect answers still read perfect (no regression):");
@@ -67,7 +74,9 @@ console.log("\nSound-right whole answers count (amber ✓, spelling shown):");
 t("ذ→ز twice in one phrase", "مازا يعني هزا", "ماذا يَعْنِي هٰذا؟", "sound");
 // Mixed Latin/Arabic never reaches submit (the box converts as he types), but if
 // it did it still earns word credit rather than a flat ✗
-t("mixed script still earns credit", "maza yaعni haza", "ماذا يَعْنِي هٰذا؟", "part");
+/* also WAS "part": every word here is right by sound, half of it typed in Latin
+   letters and converted. Typing is not the skill under test. */
+t("mixed script still earns credit", "maza yaعni haza", "ماذا يَعْنِي هٰذا؟", "sound");
 
 console.log("\nPartial credit where he earned it:");
 t("1 of 2 words", "أَعِدْ فلان", "أَعِدْ مِنْ فَضْلِك", "part");

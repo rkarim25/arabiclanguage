@@ -166,10 +166,14 @@ function totalCards() { return Object.keys(getSrs()).length; }
 /* ---------- explicit buckets: know / repeat / later / never ---------- */
 const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
 const BUCKETS = [
-  { id: "know", label: "✓", name: "know — learnt (30d check)", days: 30, box: 5 },
-  { id: "repeat", label: "↻", name: "repeat — see it again soon", days: 0, box: 0 },
-  { id: "later", label: "⏳", name: "repeat much later (7d)", days: 7, box: 3 },
-  { id: "never", label: "🚫", name: "retire — never show this word again", days: null, box: 5 },
+  /* His words, 2026-08-30: "categories of got it, repeat, dont repeat, repeat
+     much later for me to use spaced repitition." Same four buckets the store has
+     always had; named the way he named them, because a tooltip that says
+     something else is a tooltip he has to translate. */
+  { id: "know", label: "✓", name: "got it — back in 30 days", days: 30, box: 5 },
+  { id: "repeat", label: "↻", name: "repeat — back in ~10 minutes", days: 0, box: 0 },
+  { id: "later", label: "⏳", name: "repeat much later — back in 7 days", days: 7, box: 3 },
+  { id: "never", label: "⊘", name: "don't repeat — never show this again", days: null, box: 5 },
 ];
 function setBucket(key, b) {
   const srs = getSrs();
@@ -179,6 +183,28 @@ function setBucket(key, b) {
   srs[key] = { box: def.box, due, b, u: Date.now() };
   store.set("ats-srs", srs);
 }
+/* ---------- ⊘ don't repeat ----------
+   His ask, 2026-08-30: "give me the option where i can click dont repeat as
+   well. there are words like Allah which really i dont need to repeat."
+   The retire bucket already existed for the old word-card pages; this is the
+   one-tap toggle the sentence lessons and the vocabulary burst use. Retiring
+   sets box 5 and a year-2100 due date, so the word still counts as HELD — it is
+   him claiming he knows it, not him deleting it. Un-retiring hands it straight
+   back to the scheduler as due now, so it reappears in the next lesson. */
+function isRetired(key) { return (getSrs()[key] || {}).b === "never"; }
+function toggleRetire(key) {
+  if (isRetired(key)) {
+    const srs = getSrs();
+    srs[key] = { box: Math.max(1, (srs[key].box || 0) - 1), due: Date.now(), u: Date.now() };
+    store.set("ats-srs", srs);
+    logEvent({ e: "unretire", key });
+    return false;
+  }
+  setBucket(key, "never");
+  logEvent({ e: "retire", key });
+  return true;
+}
+
 /* categories (not mutually exclusive): every word is Quran and/or MSA */
 function catsOf(key) {
   const sid = key.split(":")[0];
@@ -207,6 +233,57 @@ function editDist(a, b, cap) {
   }
   return Math.min(dp[m], cap + 1);
 }
+/* ---- how forgiving a SUGGESTION is allowed to be ----
+     His report, 2026-08-30: "i typed shukka but it didnt get me the shaqqah
+     option to chose, can this be improved further and have more of a autocorrect
+     and easier typing feature?"
+
+     Two separate faults, and the second one is the worse of the two:
+
+       · شَقَّة ends in ة, which romanization writes as a bare "-a" — so even the
+         CORRECT spelling "shaqqa" converted to شَقَّ and never matched شقة. Every
+         ta-marbuta word in the lexicon was unreachable this way.
+       · the emphatic letters have no English spelling at all. ط ص ض ظ sound like
+         t s d dh to an English ear and the help text asks for capitals; ق and ك
+         are both "k" to most people (which is exactly the shukka/shaqqa slip).
+
+     So a suggestion — NOT a grade — is matched through an extra fold that treats
+     those pairs as the same letter, and the probe is also tried with a ة on the
+     end. This makes the chips generous on purpose: a chip is something he taps to
+     accept, so a wrong one costs a glance, while a missing one costs the answer.
+     writeMatchAr and friends are untouched — the marking stays strict. */
+function sugFoldW(w) { return normalizeAr(String(w)).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء"); }
+function sugFoldLoose(w) { return sugFoldW(w)
+    .replace(/ط/g, "ت").replace(/ص/g, "س").replace(/ض/g, "د").replace(/ظ/g, "ذ")
+    .replace(/ق/g, "ك").replace(/ث/g, "س").replace(/ز/g, "ذ").replace(/غ/g, "ع")
+    /* and the long vowels, which romanization doubles ("sariir", "kitaab") and
+       nobody actually types that way — سَرِير reached from "sarir", كِتَاب from
+       "kitab". Word-initial ones stay: they carry the alif that starts ال. */
+    .replace(/(?!^)[اوي]/g, "");
+}
+
+function sugScore(wn, probe) {
+    if (!probe || probe.length < 2 || wn === probe) return null;
+    // A completion is what he is actually doing — he stopped mid-word — so it
+    // outranks every edit-distance correction (those start at 1.1). Scoring it
+    // by half its remaining length used to bury the right long word: typing
+    // الص offered إِلَى before الصَّالِحَاتِ.
+    if (wn.startsWith(probe)) return 0.05 * (wn.length - probe.length);
+    // ...and so is a word he typed the body of but not its ة: شق → شقه
+    if (wn === probe + "ه") return 0.06;
+    const wf = sugFoldLoose(wn), pf = sugFoldLoose(probe);
+    if (wf === pf) return 0.15;                       // right word, English letters
+    if (wf === pf + "ه") return 0.16;
+    if (wf.startsWith(pf) && pf.length >= 2) return 0.25 + 0.05 * (wf.length - pf.length);
+    // the floor is 2, not 3: Arabic roots are three letters and a stripped
+    // probe is routinely two, which is how شق never reached شقة
+    if (pf.length >= 2) {
+      const d = editDist(wf, pf, 2);
+      if (d <= (wf.length >= 5 ? 2 : 1)) return d + 0.1;
+    }
+    return null;
+}
+
 /* ---------- the fold every typed answer is compared through ----------
    Arabic writes things romanized typing simply cannot reach, and the site's own
    transliteration doesn't distinguish them either:
@@ -417,9 +494,79 @@ function writeMatchAr(typed, targetAr) {
     else if (dp[i][j] === dp[i + 1][j]) i++;
     else j++;
   }
-  const right = hits.filter(h => h !== "miss").length;
-  const phon = hits.some(h => h === "phon");
-  return { ok: right === m && n === m, phon, hits, words, right, total: m };
+  let right = hits.filter(h => h !== "miss").length;
+  let phon = hits.some(h => h === "phon");
+  let ok = right === m && n === m;
+
+  /* ---- THE WHOLE UTTERANCE, RUN TOGETHER ----
+     His report, 2026-08-30, typing "bedroom": «غُرفَتُل نَوَم» for غُرْفَةُ نَوْمٍ —
+     "dont you think i got it mostly right? … given that my writing isnt as much
+     of my priority it probably needs to be easier for me to type and autocorrect."
+
+     He did have it right. What defeated the word-by-word alignment is where the
+     definite article LANDS: Arabic says ghurfatu n-nawm, so an English ear writes
+     the ل onto the end of the previous word and every word after it is out of
+     step. Marking that wrong is marking his ear correct and his spacing wrong,
+     which is not the skill being tested — the site exists for understanding and
+     speech, and he has said writing is not his priority.
+
+     So when the word-by-word pass fails, the two sides are compared again as ONE
+     run-together stream with the spaces and the article taken out. It is scored
+     as "right by sound", never letter-perfect, and the exact spelling is still
+     shown back to him. The budget scales with length (one slip per six letters)
+     and the lengths must be close, so it forgives a boundary, not a guess. */
+  if (!ok && m) {
+    const stream = x => fold(normalizeAr(String(x))).replace(/\s+/g, "")
+      .replace(/ال/g, "")                  // the article, wherever he attached it
+      .replace(/(.)/g, "$1")            // a shadda he typed as a double letter
+      .replace(/(?!^)[اوي]/g, "");         // long vowels romanization drops or adds
+    const a = stream(conv), b = stream(targetAr);
+    const len = Math.max(a.length, b.length);
+    const cap = 1 + Math.floor(len / 6);
+    if (a && b && Math.abs(a.length - b.length) <= cap && editDist(a, b, cap) <= cap) {
+      hits.fill("phon"); right = m; phon = true; ok = true;
+    }
+  }
+  return { ok, phon, hits, words, right, total: m };
+}
+
+/* ---------- marking an ENGLISH answer ----------
+   His ask, 2026-08-30, looking at a meaning question: "in the test, why not give
+   me the option to type in english word? here you have to take my word for it,
+   not a proper test."
+
+   Right — a self-graded recall question proves nothing, because the answer is on
+   screen before he commits. So meaning questions take a typed English answer and
+   mark it. The marking has to be generous about ENGLISH, though, because English
+   is not what is being tested: a gloss in the data may read "flat, apartment" or
+   "he searches / to look" or "sofa (armchair)", and any one of those is a right
+   answer. So the target is split on its alternatives, both sides are stripped of
+   articles, brackets, punctuation and plural -s, and a one-letter typo in a long
+   answer is forgiven. What is NOT forgiven is a different word: "kitchen" for
+   مَطْبَخ passes, "bedroom" does not. */
+function enMatch(typed, target) {
+  const stop = /\b(the|a|an|to|of|for|is|are|am|be|it|its|i|my|you|your|he|his|she|her|we|our|they|their|some|any)\b/g;
+  const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(stop, " ")
+    .replace(/\b(\w+?)s\b/g, "$1")          // plural -s, both sides
+    .replace(/\s+/g, " ").trim();
+  const t = norm(typed);
+  if (!t) return false;
+  const alts = String(target).split(/[\/;,·]|\bor\b/).map(norm).filter(Boolean);
+  if (!alts.length) return false;
+  return alts.some(a => {
+    if (a === t) return true;
+    // his answer inside the gloss, or the gloss inside his answer, on WORD
+    // boundaries — "look" must not pass for "book"
+    const aw = a.split(" "), tw = t.split(" ");
+    // half the gloss's content words, all of them his own: "think" answers
+    // "I think so", but "look" never answers "book"
+    if (aw.length > 1 && tw.every(w => aw.includes(w)) && tw.length >= Math.ceil(aw.length / 2)) return true;
+    if (tw.length > 1 && aw.every(w => tw.includes(w))) return true;
+    return a.length >= 5 && editDist(a, t, 1) <= 1;   // one typo in a long answer
+  });
 }
 
 /* Render a writeMatchAr result word-by-word: green = letter-perfect, amber =
@@ -994,18 +1141,30 @@ function bestEnglishVoice() { _loadVoices(); return _enVoice; }
    beats any browser voice. speak() plays the recording when one exists for the
    text and quietly falls back to speechSynthesis when not (or offline+uncached). */
 let _audioMan = null, _audioManLoading = null;
+/* REAL RECITATION, where a real recording exists.
+   His ask, 2026-08-30: "for all sentences include audio and also get real live
+   audio wherever possible as well." Every sentence has a synthesised clip; the
+   592 ayat also have Alafasy's actual recitation (scripts/gen-ayah-audio.js),
+   and for the Qur'an that is not a nicety — his goal is to understand it AS IT
+   IS RECITED, and a TTS voice has no tajwīd, no madd and none of the rhythm his
+   ear has to learn. Practising against the synthetic voice would train the wrong
+   signal. It is remote, so it needs the network; when it fails, speak() falls
+   through to the local clip and the commute still works. */
+let _ayahAud = null;
 function loadAudioManifest() {
   if (_audioMan || _audioManLoading) return;
   _audioManLoading = fetch("data/audio-manifest.json").then(r => r.json())
     .then(d => (_audioMan = d)).catch(() => (_audioMan = { ar: {}, en: {} }));
+  fetch("data/ayah-audio.json").then(r => r.json()).then(d => (_ayahAud = d)).catch(() => {});
 }
 loadAudioManifest();
 function _audioFileFor(text) {
-  if (!_audioMan) return null;
   const isAr = /[؀-ۿ]/.test(text);
   const key = isAr ? normalizeAr(text) : String(text).trim().toLowerCase().replace(/\s+/g, " ");
+  if (isAr && _ayahAud && _ayahAud.map[key]) return { src: _ayahAud.base + _ayahAud.map[key] + ".mp3", real: true };
+  if (!_audioMan) return null;
   const name = (_audioMan[isAr ? "ar" : "en"] || {})[key];
-  return name ? `audio/${isAr ? "ar" : "en"}/${name}.mp3` : null;
+  return name ? { src: `audio/${isAr ? "ar" : "en"}/${name}.mp3`, real: false } : null;
 }
 /* ONE shared element, reused for every clip. Mobile autoplay policy blesses a
    media element the user has started once — a fresh `new Audio()` per clip is
@@ -1032,19 +1191,41 @@ function speak(text, rate, onend) {
   const file = _audioFileFor(text);
   if (file) {
     const a = _getSpeakEl();
-    // clips are generated slightly slow already; don't slow them twice
-    const pr = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+    // A generated clip is already slightly slow, so don't slow it twice. A REAL
+    // recitation is played as recorded — retiming a reciter is exactly the thing
+    // the by-ear goal cannot afford.
+    const pr = file.real ? 1 : Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
     let done = false;
-    const fin = ok => { if (done) return; done = true; a.onended = null; a.onerror = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
+    // if the recitation cannot be reached (no signal), the local clip answers,
+    // and only if THAT fails does the browser voice
+    const fin = ok => {
+      if (done) return; done = true; a.onended = null; a.onerror = null;
+      if (ok) { if (onend) onend(); return; }
+      const local = file.real && _audioMan && (_audioMan.ar || {})[normalizeAr(text)];
+      if (local) _playFile({ src: `audio/ar/${local}.mp3`, real: false }, text, rate, onend);
+      else _speakTts(text, rate, onend);
+    };
     a.onended = () => fin(true);
     a.onerror = () => fin(false);
-    a.src = file;
+    a.src = file.src;
     a.playbackRate = pr;
     const p = a.play();
-    if (p && p.then) p.then(() => { a.playbackRate = pr; if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
+    if (p && p.then) p.then(() => { a.playbackRate = pr; if (onend) setTimeout(() => fin(true), 30000); }).catch(() => fin(false));
     return;
   }
   _speakTts(text, rate, onend);
+}
+/* the fallback leg of speak() — a local clip after a remote one failed */
+function _playFile(file, text, rate, onend) {
+  const a = _getSpeakEl();
+  let done = false;
+  const fin = ok => { if (done) return; done = true; a.onended = null; a.onerror = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
+  a.onended = () => fin(true);
+  a.onerror = () => fin(false);
+  a.src = file.src;
+  a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+  const p = a.play();
+  if (p && p.then) p.then(() => { if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
 }
 function _speakTts(text, rate, onend) {
   if (!window.speechSynthesis) { if (onend) onend(); return; }
@@ -1143,7 +1324,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg0msja";
+const DATA_V = "mtg23sx8";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -1286,7 +1467,12 @@ function curLoad() {
       // the sentence bank is what he actually studies (CURRICULUM.md §5); a page
       // that loads before it exists still works, it just has no sentences to pick
       fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
-    ]).then(([curriculum, verses, bank]) => ({ curriculum, verses, bank }))
+      // measured probability of use — what the interleaved bursts are ranked by
+      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {}, cells: [] })),
+      // the curated gloss for any word — a vocabulary burst must not show the
+      // contextual Qur'anic gloss a bank sentence happens to carry
+      fetch("data/lexicon.json").then(r => r.json()).catch(() => ({})),
+    ]).then(([curriculum, verses, bank, freq, lexicon]) => ({ curriculum, verses, bank, freq, lexicon }))
       .catch(() => null);
   }
   return _curCtxP;
@@ -1555,7 +1741,7 @@ function attachInlineTranslit(el, opts) {
   let raw = "", committed = "";
   const lex = [...new Set(((opts && opts.lexicon) || []).filter(Boolean))];
   let bar = null;
-  const foldW = w => normalizeAr(String(w)).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
+  const foldW = sugFoldW;
   const suggest = () => {
     if (!lex.length) return;
     if (!bar) {
@@ -1568,19 +1754,7 @@ function attachInlineTranslit(el, opts) {
     const prev = parts.length >= 2 ? foldW(parts[parts.length - 2]) : "";
     const joined = prev ? prev + last : "";   // "ال مشجد" typed with a space → المشجد
     // lower score = closer match; null = no match
-    const scoreAgainst = (wn, probe) => {
-      if (!probe || probe.length < 2 || wn === probe) return null;
-      // A completion is what he is actually doing — he stopped mid-word — so it
-      // outranks every edit-distance correction (those start at 1.1). Scoring it
-      // by half its remaining length used to bury the right long word: typing
-      // الص offered إِلَى before الصَّالِحَاتِ.
-      if (wn.startsWith(probe)) return 0.05 * (wn.length - probe.length);
-      if (probe.length >= 3) {
-        const d = editDist(wn, probe, 2);
-        if (d <= (wn.length >= 6 ? 2 : 1)) return d + 0.1;
-      }
-      return null;
-    };
+    const scoreAgainst = sugScore;
     let cands = [];
     if (last.length >= 2 || joined.length >= 3) {
       cands = lex.map(w => {
@@ -1595,10 +1769,26 @@ function attachInlineTranslit(el, opts) {
          [sJoin, 0, 2]].forEach(([s, pen, sp]) => {
           if (s !== null && (best === null || s + pen < best)) { best = s + pen; span = sp; }
         });
-        return best === null ? null : { w, best, span };
+        // a COMPLETION (he stopped mid-word) and a CORRECTION (he finished the
+        // word and got a letter wrong) are different offers, and the ranking
+        // below deliberately keeps them apart
+        const comp = wn.startsWith(last) || (bare !== wn && bare.startsWith(last));
+        return best === null ? null : { w, best, span, comp };
       }).filter(Boolean)
-        .sort((a, b) => a.best - b.best || a.w.length - b.w.length)
-        .slice(0, 3);
+        .sort((a, b) => a.best - b.best || Math.abs(a.w.length - last.length) - Math.abs(b.w.length - last.length))
+        .slice(0, 8);
+      /* ONE SLOT IS ALWAYS KEPT FOR A CORRECTION. Completions score better than
+         corrections by design (a word he is halfway through is usually the word
+         he means), but that rule made شَقَّة unreachable: typing "shukka" offered
+         شكر, شكرا, شكرًا — three completions of شك — and the word he wanted never
+         appeared. So take the top three, and if they are all completions, add the
+         best correction behind them. That is the case he reported. */
+      const top = cands.slice(0, 3);
+      if (cands.length && top.every(c => c.comp)) {
+        const fix = cands.find(c => !c.comp);
+        if (fix) top.push(fix);
+      }
+      cands = top;
     }
     bar.innerHTML = "";
     // Some callers hold a word back on purpose (Sentence Practice keeps the verb
@@ -1850,10 +2040,10 @@ function mountMnem(tr, btnHost, ar, key) {
    a wrong-answer ✗ tap here would silently retire the word forever. */
 function bucketSaidText(id) {
   return ({
-    know: "saved — back in 30 days",
-    repeat: "saved — back in ~10 min",
-    later: "saved — back in 7 days",
-    never: "retired — won't show again",
+    know: "got it — back in 30 days",
+    repeat: "repeat — back in ~10 min",
+    later: "much later — back in 7 days",
+    never: "won't show again",
   })[id] || "saved";
 }
 function mountBucketBar(slot, key, onSet) {

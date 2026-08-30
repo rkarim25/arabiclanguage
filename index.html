@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg0msja">
-  <link rel="stylesheet" href="css/style.css?v=mtg0msja">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg23sx8">
+  <link rel="stylesheet" href="css/style.css?v=mtg23sx8">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -43,7 +43,9 @@
     <h2>Your lessons</h2>
     <p class="sub" style="margin-bottom:12px">Seven lessons a week, about seven minutes each, always a mix of
     Qur'an and everyday Arabic. Do them in any order — on screen or 🚗 hands-free. Each has its own 3-minute test,
-    and you can test a whole week in one go.</p>
+    and you can test a whole week in one go. Between them sit the occasional
+    <strong>vocabulary</strong> and <strong>grammar</strong> bursts — short, and picked by how likely you are to
+    actually need them.</p>
     <div id="weeks">…</div>
   </div>
 
@@ -76,12 +78,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtg0msja"></script>
-<script src="js/curriculum.js?v=mtg0msja"></script>
-<script src="js/app.js?v=mtg0msja"></script>
-<script src="js/tracker.js?v=mtg0msja"></script>
-<script src="js/plan.js?v=mtg0msja"></script>
-<script src="js/account.js?v=mtg0msja"></script>
+<script src="js/progress-model.js?v=mtg23sx8"></script>
+<script src="js/curriculum.js?v=mtg23sx8"></script>
+<script src="js/app.js?v=mtg23sx8"></script>
+<script src="js/tracker.js?v=mtg23sx8"></script>
+<script src="js/plan.js?v=mtg23sx8"></script>
+<script src="js/account.js?v=mtg23sx8"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -186,17 +188,35 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
   const weeks = Curriculum.weekPlan(ctx, state);
   const cw = Curriculum.currentWeek(weeks);
   const show = weeks.slice(cw - 1, cw + 3);
+
+  /* INTERLEAVING (his spec, 2026-08-30: "at times I memorise some vocabulary…
+     then at times i learn some grammar… okay schedule that in. also it is based
+     on probability of use"). Computed for the CURRENT week only, because both
+     bursts depend on what he holds today — drawing them onto week 4 would be
+     showing a prediction dressed up as a plan. */
+  const bursts = Curriculum.burstsFor(weeks[cw - 1], ctx);
+  const burstRow = b => `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
+      <div class="t">${b.kind === "vocab" ? "📇 Vocabulary burst" : "📐 Grammar burst"}
+        <div class="m">${b.kind === "vocab"
+          ? `${b.words.length} of the commonest words you don't hold yet — they make the sentences ahead easier`
+          : "one rule, chosen because more of what's coming uses it than any other"} · ~${b.mins} min</div>
+      </div>
+      <div style="white-space:nowrap"><a href="learn.html?burst=${b.kind}" style="font-size:13px">start</a></div>
+    </div>`;
+
   document.getElementById("weeks").innerHTML = show.map(w => {
     const openIds = w.lessons.filter(x => !x.lesson.mastered).map(x => x.lesson.id);
+    const mine = w.week === cw ? bursts : [];
     return `
     <div style="margin-bottom:20px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">
         <strong style="font-size:15px">Week ${w.week}${w.week === cw ? ` <span style="font-weight:400;color:var(--accent);font-size:13px">· you're here</span>` : ""}</strong>
         <span style="font-size:12.5px;color:var(--muted)">${w.provedCount} of ${w.lessons.length} proved · 🎧 ${w.quran} · 🗣 ${w.conv} · ~${w.mins} min</span>
       </div>
-      ${w.lessons.map(x => {
+      ${w.lessons.map((x, xi) => {
         const l = x.lesson, done = Curriculum.chunkDone(l.id + ":lesson", ctx.log);
-        return `<div class="lesson">
+        const before = mine.filter(b => b.at === xi).map(burstRow).join("");
+        return before + `<div class="lesson">
           <div class="t">${l.mastered ? "✓ " : ""}${esc(l.title)}
             <div class="m">${x.milestone.track === "quran" ? "🎧" : "🗣"} ${esc(x.milestone.name)} ·
               ${l.mastered ? `proved — scored ${l.score}`
@@ -211,9 +231,42 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
           </div>
         </div>`;
       }).join("")}
+      ${mine.filter(b => b.at >= w.lessons.length).map(burstRow).join("")}
       ${openIds.length > 1 ? `<p style="margin:8px 0 0"><a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="font-size:13.5px">Test the whole of week ${w.week} · ~7 min →</a></p>` : ""}
     </div>`;
   }).join("");
+
+  /* ---- SUNDAY'S CLASS, as one thing ----
+     His instruction, 2026-08-30: "when i give a lesson, you can put it into
+     category of vocabulary and sentences as well to unify the learning approach.
+     if she gives a whole lesson, you can put it in reading section." The material
+     is already routed all four ways; this is where he can see it as a class
+     again, take a test over the whole of it, and read the passage. */
+  try {
+    const cd = await fetch("data/classes.json").then(r => r.json());
+    const c = (cd.classes || [])[0];
+    if (c) {
+      const srs = ctx.srs || {};
+      const held = c.keys.filter(k => ((srs[k] || {}).box || 0) >= 3).length;
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <h2 style="margin-top:0">🧑‍🏫 Sunday's class <span style="font-weight:400;font-size:13px;color:var(--muted)">${esc(c.date)}</span></h2>
+        <p style="font-size:15px;margin:0 0 4px"><strong>${esc(c.title)}</strong></p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 10px">${esc(c.covered)}</p>
+        <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:0 0 6px">
+          <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * held / (c.keys.length || 1))}%"></i></div>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
+          ${c.counts.vocabulary} words · ${c.counts.sentences} sentences · ${c.counts.grammar} grammar points ·
+          a ${c.reading ? c.reading.sentences : 0}-sentence reading · <strong style="color:var(--text)">${held} of ${c.keys.length} held</strong></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="learn.html?class=${encodeURIComponent(c.id)}" style="text-decoration:none"><button class="primary">📝 Test the class</button></a>
+          ${c.reading ? `<a href="story.html?id=${encodeURIComponent(c.reading.id)}" style="text-decoration:none"><button>📖 Read the passage</button></a>` : ""}
+          <a href="class.html" style="text-decoration:none"><button>All of it, sorted →</button></a>
+        </div>`;
+      document.getElementById("nowCard").after(el);
+    }
+  } catch (e) { /* no classes yet — the card simply isn't there */ }
 
   /* achieved */
   if (state.achieved.length) {

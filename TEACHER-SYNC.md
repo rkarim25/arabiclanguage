@@ -92,3 +92,50 @@ Rules for the coach writing it:
 ## Next build
 
 A **per-lesson retention view** feeding a **teacher-facing progress sheet** (an honest what's-retained-vs-stuck summary Reza can paste to his teacher before lessons — the readiness strip is the seed of it).
+
+## Every class is decomposed into FOUR streams (2026-08-30, his rule)
+
+> "when i give a lesson, you can put it into category of vocabulary and sentences
+> as well to unify the learning approach. if she gives a whole lesson, you can put
+> it in reading section with word by word and audio for me to read and understand
+> or listen to and see if i understand."
+>
+> "i want you to maintain a repository of lesson material putting into category of
+> vocabulary, sentences and anything else (that can be grammar/etc) you will have
+> to figure it out from the images i send you and you can ask me questions to
+> better understand what was covered in the class."
+
+A class drop is never filed as "a class". It is split on arrival into the four
+things the site actually teaches, and each part goes into the file that teaches
+that kind of thing:
+
+| stream | file | tag it needs |
+|---|---|---|
+| **vocabulary** | `data/everyday.json` — a new group, or members added to an existing one | group `lesson: "<class tag>"`, and every member `from: "teacher"` (hers) or `from: "complete"` (added here to make the set usable) |
+| **sentences** | `data/prompts.json` | `lesson: "<class tag>"`, `source: "teacher"` or `"class-built"` |
+| **grammar** | `data/grammar.json` — a new pattern where the rule is real and reusable | named in the class record's `grammar[]` with a `why` |
+| **reading** | `data/story-NN.json` — the whole passage, every word glossed | `source: "teacher"`, `lesson: "<class tag>"`, named in the class record's `reading` |
+
+Then add ONE record to **`data/classes-meta.json`** — id, date, title, its tags,
+its milestone, its reading, its grammar points, anything else worth noting, and
+**the questions you still have about what she covered** — and run:
+
+```
+node scripts/gen-classes.js   # -> data/classes.json, the repository view
+node scripts/gen-curriculum.js <payload>   # the ladder lessons
+node scripts/gen-sentences.js && node scripts/gen-lexicon.js
+python scripts/gen-audio.py
+node scripts/test-shell.js    # every class row must resolve to a live card
+```
+
+`data/classes.json` is GENERATED and holds no content of its own — every row it
+shows is a pointer into the file that teaches it, so the repository can never
+drift from the material. `class.html` renders it, and `learn.html?class=<id>`
+is the class test: everything she gave, proved or not, a different sample each
+retake.
+
+**Ask him the questions.** The record carries a `questions[]` list precisely
+because photographs of a whiteboard are ambiguous — whether a rule was taught or
+merely appeared, what the homework was, whether a topic was real or an aside.
+They show on `class.html` and should be put to him in chat. Answers change what
+gets built, so they are worth one message.
