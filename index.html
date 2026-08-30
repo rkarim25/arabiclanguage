@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgbiq7t">
-  <link rel="stylesheet" href="css/style.css?v=mtgbiq7t">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgbyww2">
+  <link rel="stylesheet" href="css/style.css?v=mtgbyww2">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtgbiq7t"></script>
-<script src="js/curriculum.js?v=mtgbiq7t"></script>
-<script src="js/app.js?v=mtgbiq7t"></script>
-<script src="js/tracker.js?v=mtgbiq7t"></script>
-<script src="js/plan.js?v=mtgbiq7t"></script>
-<script src="js/account.js?v=mtgbiq7t"></script>
+<script src="js/progress-model.js?v=mtgbyww2"></script>
+<script src="js/curriculum.js?v=mtgbyww2"></script>
+<script src="js/app.js?v=mtgbyww2"></script>
+<script src="js/tracker.js?v=mtgbyww2"></script>
+<script src="js/plan.js?v=mtgbyww2"></script>
+<script src="js/account.js?v=mtgbyww2"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -250,14 +250,40 @@ function scorePill(l) {
   };
   const allLessons = weeks.flatMap(w => w.lessons);
   const provedAll = allLessons.filter(x => x.lesson.mastered).length;
-  const burstRow = b => `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
+  /* HOW HE DID LAST TIME. His ask, 2026-08-30: "for the vocabulary burst can i
+     get a score based on how i did when i practised?" The burst has scored itself
+     since this morning, but only on its own finish screen — which is the one place
+     he is not standing when he decides whether to run it again. The number belongs
+     on the row that starts it. */
+  const burstRuns = kind => (ctx.log || [])
+    .filter(e => e && e.e === "burst-done" && e.kind === kind && typeof e.score === "number");
+  const lastBurst = kind => burstRuns(kind).slice(-1)[0] || null;
+  const ago = t => {
+    const d = Math.floor((Date.now() - t) / 86400000);
+    return d <= 0 ? "today" : d === 1 ? "yesterday" : `${d} days ago`;
+  };
+  const burstRow = b => {
+    const runs = burstRuns(b.kind);
+    const last = runs[runs.length - 1] || null;
+    // a run of scores is the thing worth seeing — one number says nothing about
+    // whether it is going in
+    const trend = runs.length > 1 ? runs.slice(-4).map(r => r.score).join(" → ") : "";
+    const cls = !last ? "" : last.score >= 75 ? "pass" : last.score >= 40 ? "near" : "miss";
+    return `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
       <div class="t">${b.kind === "vocab" ? "📇 Vocabulary burst" : "📐 Grammar burst"}
         <div class="m">${b.kind === "vocab"
           ? `${b.words.length} of the commonest words you don't hold yet — they make the sentences ahead easier`
-          : "one rule, chosen because more of what's coming uses it than any other"} · ~${b.mins} min</div>
+          : "one rule, chosen because more of what's coming uses it than any other"} · ~${b.mins} min${
+          last ? ` · ${ago(last.t)} you got <strong style="color:var(--text)">${last.firstTry !== undefined ? `${last.firstTry} of ${last.n}` : `${last.score}%`}</strong> first time${
+            last.rounds > 1 ? `, ${last.rounds} rounds to clear` : ""}` : ""}${
+          trend ? ` · ${trend}` : ""}</div>
       </div>
-      <div style="white-space:nowrap"><a href="learn.html?burst=${b.kind}" style="font-size:13px">start</a></div>
+      <div class="acts">
+        ${last ? `<span class="pill ${cls}" title="how many you had cold last time"><span class="lbl">last</span>${last.score}</span>` : ""}
+        <a href="learn.html?burst=${b.kind}">${last ? "run it again" : "start"}</a>
+      </div>
     </div>`;
+  };
 
   document.getElementById("tally").innerHTML = `
     <strong style="font-size:15px">${provedAll} of ${allLessons.length} lessons proved</strong>
