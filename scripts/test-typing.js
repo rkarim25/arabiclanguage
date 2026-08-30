@@ -143,7 +143,7 @@ for (const [typed, target, why] of [
   }
   const pct = 100 * ok_ / n;
   yes(n > 700, `${n} lexicon words carry a transliteration to type back`);
-  yes(pct >= 92, `typing the site's own transliteration is accepted ${pct.toFixed(1)}% of the time (floor 92%)`);
+  yes(pct >= 96, `typing the site's own transliteration is accepted ${pct.toFixed(1)}% of the time (floor 96%)`);
   /* The other half of the bargain: forgiving cannot mean indiscriminate. A word
      he did not write must not be accepted, or "proved" means nothing. */
   for (const [typed, target] of [["3alayhi", "اللَّه"], ["ma3", "مَا"], ["qaala", "قَالُوا"], ["madrasa", "مَسْجِد"]]) {
