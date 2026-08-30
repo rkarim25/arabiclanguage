@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3dzel">
-  <link rel="stylesheet" href="css/style.css?v=mtg3dzel">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3g2ho">
+  <link rel="stylesheet" href="css/style.css?v=mtg3g2ho">
 </head>
 <body>
 <main>
@@ -20,9 +20,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtg3dzel"></script>
-<script src="js/tracker.js?v=mtg3dzel"></script>
-<script src="js/plan.js?v=mtg3dzel"></script>
+<script src="js/app.js?v=mtg3g2ho"></script>
+<script src="js/tracker.js?v=mtg3g2ho"></script>
+<script src="js/plan.js?v=mtg3g2ho"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -34,12 +34,20 @@ const area = document.getElementById("reviewArea");
    cards are whole utterances: the phrase deck, story sentences and grammar chunks.
    Same rule as Curriculum.inventory(), so the two never disagree. */
 const REVIEW_ONLY = new URLSearchParams(location.search).get("only");
-const isSentenceKey = k => k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
+/* `s:` is the sentence bank's namespace and it was MISSING here, so all 985 of
+   his sentence cards were being counted and reviewed as words — which is why the
+   plan bar offered "72 due words" and Sentences-review looked empty. This must
+   stay identical to Curriculum.isSentenceKey; that is what the comment above
+   promises and it had quietly stopped being true. */
+const isSentenceKey = k => k.startsWith("s:") || k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
 function dueFiltered() {
   const all = dueCards();
   if (REVIEW_ONLY === "sentences") return all.filter(isSentenceKey);
   if (REVIEW_ONLY === "words") return all.filter(k => !isSentenceKey(k));
-  return all;
+  /* Unfiltered review leads with SENTENCES. His point, 2026-08-30 — "always good
+     to review some sentences, dont you think?" — is the site's own rule: a word
+     is met inside a sentence, never on its own. */
+  return all.slice().sort((a, b) => (isSentenceKey(b) ? 1 : 0) - (isSentenceKey(a) ? 1 : 0));
 }
 
 async function init() {

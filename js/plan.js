@@ -51,7 +51,14 @@ function planDaysSince(evName) {
 /* ---- the block catalog: everything a 5-minute unit can be ----
    done: the log event that completes it (observed via the logEvent wrap). */
 const PLAN_BLOCKS = {
-  review:    { icon: "🔁", title: n => `Clear your ${n} due words`, sub: "Reviews first — they protect everything the other blocks build.", url: "review.html", page: "review", done: ["review-done"] },
+  /* REVIEW IS SENTENCES, NOT WORDS. His point, 2026-08-30: "shouldnt this also
+     be clear some sentences as well, rather than just words. always good to
+     review some sentences, dont you think?" — and he is right, because the whole
+     site is built on the rule that a word is met inside a sentence and never on
+     its own. The block was offering the one thing the lessons deliberately
+     stopped doing. review.html mixes both when no `only` is passed, and the
+     wording now says so. */
+  review:    { icon: "🔁", title: n => `Review your ${n} due — in sentences`, sub: "Reviews first — they protect everything the other blocks build. Words come back inside the sentences they live in.", url: "review.html", page: "review", done: ["review-done"] },
   newwords:  { icon: "📝", title: () => "A few new words", sub: "Frequency-first — fill the column, check, stop.", url: "vocab.html?sheet=1", page: "vocab", done: ["sheet-done"] },
   audio:     { icon: "🎧", title: () => "Audio Coach round", sub: "Ears only — every word you name by sound is certified by ear and lifts the listening line. On the move? The 🚗 commute session counts fully.", url: "audio.html", page: "audio", done: ["alisten-done", "commute-done"] },
   salah:     { icon: "📖", title: c => `Surah ${c} — word by word`, sub: "The salah basket: meaning mapped onto sound you already recite.", url: c => `quran.html?s=${c}`, page: "quran", done: ["qtest-part", "qtest-done", "qlisten-test"] },
