@@ -1324,7 +1324,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtg3pzlm";
+const DATA_V = "mtg3se8g";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -1958,6 +1958,12 @@ async function resolveCards(keys) {
     else if (sid === "qw") needVerses = true;
     else if (sid === "gt") needGrammar = true;
     else if (sid === "tw") { /* tapped-word cards resolve from local store */ }
+    /* `s:` is the sentence bank and `w:` is form-based — neither is a WORD card,
+       and neither is a story. Without this they fell through to the story branch
+       and the page fetched data/s.json and data/w.json on every load, 404ing
+       twice and silently dropping those keys. Caught in the network trace on
+       2026-08-30 while checking the week briefing. */
+    else if (sid === "s" || sid === "w") { /* sentence-level keys: not word cards */ }
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;
     else if (sid.startsWith("ph-")) needPhrases = true;
