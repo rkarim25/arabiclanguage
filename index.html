@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgbyww2">
-  <link rel="stylesheet" href="css/style.css?v=mtgbyww2">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgc19p6">
+  <link rel="stylesheet" href="css/style.css?v=mtgc19p6">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtgbyww2"></script>
-<script src="js/curriculum.js?v=mtgbyww2"></script>
-<script src="js/app.js?v=mtgbyww2"></script>
-<script src="js/tracker.js?v=mtgbyww2"></script>
-<script src="js/plan.js?v=mtgbyww2"></script>
-<script src="js/account.js?v=mtgbyww2"></script>
+<script src="js/progress-model.js?v=mtgc19p6"></script>
+<script src="js/curriculum.js?v=mtgc19p6"></script>
+<script src="js/app.js?v=mtgc19p6"></script>
+<script src="js/tracker.js?v=mtgc19p6"></script>
+<script src="js/plan.js?v=mtgc19p6"></script>
+<script src="js/account.js?v=mtgc19p6"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -262,6 +262,38 @@ function scorePill(l) {
     const d = Math.floor((Date.now() - t) / 86400000);
     return d <= 0 ? "today" : d === 1 ? "yesterday" : `${d} days ago`;
   };
+  /* THE PASSAGE SHE SET HIM. His question, 2026-08-30, looking at week 1: "where
+     is the lesson paragraph/story i am meant to read and understand".
+
+     It was not there, and that was wrong. The reading's ladder lessons teach its
+     vocabulary and they sit at the END of the class queue, which — now that a
+     class contributes only two lessons a week — put them in week five. But the
+     passage is not a vocabulary lesson: it is the one thing his teacher actually
+     asked him to do, and she asked this week. So while it is unfinished it rides
+     at the top of the current week as its own row, the way the bursts do, and it
+     says how far through it he is. */
+  const readingRow = () => {
+    const c = (CLASSES.classes || [])[0];
+    if (!c || !c.reading || c.reading.missing) return "";
+    const id = c.reading.id;
+    const done = stepsDone(id);
+    const n = STEPS.filter(st => done[st.key]).length;
+    if (n >= STEPS.length) return "";
+    const next = STEPS.find(st => !done[st.key]) || STEPS[0];
+    return `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
+      <span class="mark" style="left:8px;color:var(--accent)">📖</span>
+      <div class="t">Read “${esc(c.reading.titleEn)}”${n === 0 ? `<span class="here">set by your teacher</span>` : ""}
+        <div class="m">${n === 0
+          ? `She gave you this to practise. ${c.reading.sentences} sentences, every word glossed, tap any of them to hear it.`
+          : `${n} of ${STEPS.length} steps done — next is ${next.en.toLowerCase()}.`}</div>
+      </div>
+      <div class="acts">
+        ${n ? `<span class="pill near"><span class="lbl">done</span>${n}/${STEPS.length}</span>` : ""}
+        <a href="story.html?id=${encodeURIComponent(id)}&step=${next.key}">${n ? "continue" : "read it"}</a>
+      </div>
+    </div>`;
+  };
+
   const burstRow = b => {
     const runs = burstRuns(b.kind);
     const last = runs[runs.length - 1] || null;
@@ -300,6 +332,7 @@ function scorePill(l) {
         <strong style="font-size:15px">Week ${w.week}</strong>
         <span style="font-size:12.5px;color:var(--muted)">${w.provedCount} of ${w.lessons.length} proved · 🎧 ${w.quran} · 🗣 ${w.conv} · ~${w.mins} min</span>
       </div>
+      ${w.week === cw ? readingRow() : ""}
       ${w.lessons.map((x, xi) => {
         const l = x.lesson, done = Curriculum.chunkDone(l.id + ":lesson", ctx.log);
         const before = mine.filter(b => b.at === xi).map(burstRow).join("");
