@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgbczrs">
-  <link rel="stylesheet" href="css/style.css?v=mtgbczrs">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgbiq7t">
+  <link rel="stylesheet" href="css/style.css?v=mtgbiq7t">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtgbczrs"></script>
-<script src="js/curriculum.js?v=mtgbczrs"></script>
-<script src="js/app.js?v=mtgbczrs"></script>
-<script src="js/tracker.js?v=mtgbczrs"></script>
-<script src="js/plan.js?v=mtgbczrs"></script>
+<script src="js/progress-model.js?v=mtgbiq7t"></script>
+<script src="js/curriculum.js?v=mtgbiq7t"></script>
+<script src="js/app.js?v=mtgbiq7t"></script>
+<script src="js/tracker.js?v=mtgbiq7t"></script>
+<script src="js/plan.js?v=mtgbiq7t"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -211,8 +211,9 @@ function wireMic(id, target, onSaid, onSelf) {
         }
         return;
       }
+      // every alternative the engine offered is another chance to be right
       const tries = [heard].concat(alts || []);
-      const ok = tries.some(t => speakMatch(t, target) || writeMatchAr(t, target).ok);
+      const ok = tries.some(t => heardMatch(t, target) || speakMatch(t, target) || writeMatchAr(t, target).ok);
       onSaid(ok, heard);
     });
   };
@@ -1004,7 +1005,10 @@ async function runTest(lessonIds, ctx, state, label, opts) {
             It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”, which isn't a match —
             but Arabic recognition is unreliable. Was what you said right?</p>
           <div class="q-ar arabic" dir="rtl" style="font-size:24px">${esc(target)}</div>
-          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button></div>`;
+          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button>
+            <button id="micRetry">🎤 try again</button></div>`;
+        const rt = document.getElementById("micRetry");
+        if (rt) rt.onclick = () => { rev.innerHTML = ""; document.getElementById(id).click(); };
         document.getElementById("micYes").onclick = () => settle(true, false, target);
         document.getElementById("micNo").onclick = () => settle(false, false, target);
       }, () => {

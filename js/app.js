@@ -569,6 +569,62 @@ function enMatch(typed, target) {
   });
 }
 
+/* ---------- MARKING WHAT HE SAID ----------
+   2026-08-30, once the microphone was finally on the right device: "is there
+   something you can do to improve the audio pickup? i say it but it doesnt quite
+   get the right word."
+
+   The pickup is as good as it is going to get — Chrome's ar-SA model is a cloud
+   service and nothing on this page can retrain it. What CAN change is what
+   counts as a match, and that had been wrong: spoken answers were being graded
+   with writeMatchAr, which was built for TYPED input. The two fail in completely
+   different ways.
+
+     · typing goes wrong by ORTHOGRAPHY — a hamza seat, a ة, a long vowel he did
+       not double. The letters are nearly right.
+     · recognition goes wrong by WORD. It returns a real, correctly-spelled
+       Arabic word that simply is not the one he said: a homophone, a near-rhyme,
+       or the same root in another form. سَرِير comes back as سرر or سرار.
+
+   So spoken answers get their own grader. It compares on the phonetic skeleton
+   only — short vowels gone, the emphatics folded to their plain partners, long
+   vowels dropped, ة/ت/ه as one letter — because that skeleton is what he
+   actually produced with his mouth, and everything the recogniser adds on top is
+   the recogniser's guess, not his pronunciation.
+
+   For a SENTENCE it asks how much of it came through rather than demanding all
+   of it: recognition drops small words constantly, and a sentence whose content
+   words are all there was said correctly. The bar is 70%.
+
+   Being generous here is the right trade and not a loose one: this only ever runs
+   against ONE known target, never as a search, and when it says no he is asked
+   rather than marked wrong. A false accept costs a card scheduled slightly early;
+   a false reject costs him the belief that speaking works at all. */
+function spokenFold(s) {
+  return sugFoldLoose(String(s))
+    .replace(/[ًٌٍَُِّْ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function heardMatch(heard, target) {
+  const H = spokenFold(heard), T = spokenFold(target);
+  if (!H || !T) return false;
+  if (H === T) return true;
+  /* The definite article comes and goes in recognition — it hears السرير for
+     سرير about as often as not, and neither is him saying the wrong word. */
+  const bare = w => { const b = w.replace(/^ال/, ""); return b.length >= 2 ? b : w; };
+  const hw = H.split(" ").filter(Boolean).map(bare);
+  const tw = T.split(" ").filter(Boolean).map(bare);
+  // does one spoken token stand for one target word?
+  const hit = t => hw.some(h => h === t
+    || (t.length >= 3 && h.length >= 3 && editDist(h, t, 1) <= 1)
+    || (t.length >= 4 && (h.indexOf(t) >= 0 || t.indexOf(h) >= 0)));
+  if (tw.length === 1) return hit(tw[0]);
+  // a phrase: how much of it came through?
+  const got = tw.filter(hit).length;
+  return got / tw.length >= 0.7;
+}
+
 /* Render a writeMatchAr result word-by-word: green = letter-perfect, amber =
    right by sound (exact spelling shown so it stays honest), faded = missed.
    maskMisses hides the words he still has to produce (dictation), otherwise
@@ -685,7 +741,7 @@ function dictate(btn, idleLabel, cb) {
      top guess is frequently a homophone of the right word while guess three is
      the word itself. Grading against only the first was throwing away correct
      answers. Every alternative is passed back and the grader may accept any. */
-  rec.lang = "ar-SA"; rec.interimResults = true; rec.maxAlternatives = 5;
+  rec.lang = "ar-SA"; rec.interimResults = true; rec.maxAlternatives = 8;
   const L = { rec, interim: "", reset: () => { btn.textContent = idleLabel; } };
   _live = L;
   /* The recogniser does not start the instant the button is tapped — there is a
@@ -1765,7 +1821,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtgbczrs";
+const DATA_V = "mtgbiq7t";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

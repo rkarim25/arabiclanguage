@@ -35,7 +35,7 @@ class Audio {}
 
 eval(region("function editDist(", "function wordsHtml(") +
      "\n" + region("function stripTashkeel(", "function curLoad("));
-for (const n of ["stripTashkeel", "normalizeAr", "latinToArabic", "arMatch", "writeMatchAr"]) {
+for (const n of ["stripTashkeel", "normalizeAr", "latinToArabic", "arMatch", "writeMatchAr", "heardMatch"]) {
   if (typeof eval(n) !== "function") throw new Error("could not load " + n + "() from js/app.js");
 }
 
@@ -199,6 +199,29 @@ yes(!sentenceMatchAr("qultu alHaqqa", "قَالُوا الحَقَّ", "قَال
     yes(/attachInlineTranslit/.test(html), `${page} converts English letters as he types`);
   }
 }
+
+/* ---------- SPOKEN answers are graded differently from typed ones ----------
+   His report once the mic was finally on the right device (2026-08-30): "i say
+   it but it doesnt quite get the right word." Recognition fails by WORD — it
+   returns a real, correctly spelled Arabic word that is not the one he said —
+   where typing fails by ORTHOGRAPHY. heardMatch compares the phonetic skeleton
+   only, and for a sentence asks how much of it came through rather than all.
+
+   These are the shapes that actually come back from Chrome's ar-SA model. The
+   negatives matter as much as the positives: generous is right, but a DIFFERENT
+   WORD must still be wrong, or the microphone stops meaning anything. */
+console.log("");
+console.log("Spoken answers (heardMatch):");
+[
+  ["سرير", "سَرِير", true, "exactly right"],
+  ["سرر", "سَرِير", true, "a dropped long vowel"],
+  ["السرير", "سَرِير", true, "an article it added by itself"],
+  ["شقه", "شَقَّة", true, "ة heard as ه"],
+  ["مدرسة", "مَطْبَخ", false, "a DIFFERENT word is still wrong"],
+  ["في المطبخ ثلاجة", "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ", true, "most of a sentence came through"],
+  ["الحمد لله", "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ", false, "a different sentence is still wrong"],
+  ["", "سَرِير", false, "silence is not an answer"],
+].forEach(([h, t, want, why]) => yes(heardMatch(h, t) === want, why));
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);
