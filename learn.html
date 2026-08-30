@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtg3t2lt">
-  <link rel="stylesheet" href="css/style.css?v=mtg3t2lt">
+  <link rel="stylesheet" href="css/fonts.css?v=mtg3xfr4">
+  <link rel="stylesheet" href="css/style.css?v=mtg3xfr4">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtg3t2lt"></script>
-<script src="js/curriculum.js?v=mtg3t2lt"></script>
-<script src="js/app.js?v=mtg3t2lt"></script>
-<script src="js/tracker.js?v=mtg3t2lt"></script>
-<script src="js/plan.js?v=mtg3t2lt"></script>
+<script src="js/progress-model.js?v=mtg3xfr4"></script>
+<script src="js/curriculum.js?v=mtg3xfr4"></script>
+<script src="js/app.js?v=mtg3xfr4"></script>
+<script src="js/tracker.js?v=mtg3xfr4"></script>
+<script src="js/plan.js?v=mtg3xfr4"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -68,16 +68,57 @@ async function typingPool(exclude) {
   return LEXICON.filter(w => !out.has(normalizeAr(w)));
 }
 
+/* The full key list. He asked (2026-08-30, looking at أَثَاث after typing
+   "athath"): "how to write ta marbuta and also how could i have gotten the hamza
+   to display or the short vowels to display. for this example not sure how i
+   could have done it, tell me."
+
+   Every one of these already worked — none of them was written down anywhere,
+   which is the same as not existing. Each row below was checked against
+   latinToArabic before being claimed here. The heading matters as much as the
+   table: none of it is REQUIRED, because the marking is on sound. */
 const TYPING_HELP = `
   <details style="margin-top:8px">
     <summary style="cursor:pointer;font-size:12.5px;color:var(--muted)">How to type Arabic here</summary>
-    <div style="font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:6px">
-      Just type it the way it sounds — <code>kitab</code> → <span dir="rtl">كتاب</span>. It converts as you go.<br>
-      <b>Long vowels:</b> <code>aa</code>=ا · <code>ee</code>/<code>ii</code>=ي · <code>oo</code>/<code>uu</code>=و ·
-      <b>tricky letters:</b> <code>H</code>=ح · <code>kh</code>=خ · <code>th</code>=ث · <code>dh</code>=ذ ·
-      <code>sh</code>=ش · <code>gh</code>=غ · <code>3</code>=ع · <code>S</code>=ص · <code>T</code>=ط ·
-      <b>"the":</b> <code>al-kitab</code> → <span dir="rtl">الكتاب</span>.<br>
-      Close spellings are accepted, and the chips under the box fix a word with one tap.
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.8;margin-top:6px">
+      <p style="margin:0 0 8px"><b>You never need any of this.</b> Type it the way it sounds —
+      <code>kitab</code> → <span dir="rtl">كتاب</span> — and an answer that is right by sound is marked right.
+      The keys below are for when you want the letters exactly.</p>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Long vowels</b></td>
+            <td><code>aa</code>=<span dir="rtl">ا</span> · <code>ee</code>/<code>ii</code>=<span dir="rtl">ي</span> ·
+                <code>oo</code>/<code>uu</code>=<span dir="rtl">و</span></td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Short vowels</b></td>
+            <td><code>a</code>=<span dir="rtl">◌َ</span> · <code>i</code>=<span dir="rtl">◌ِ</span> ·
+                <code>u</code>=<span dir="rtl">◌ُ</span> — they appear exactly where you type them.
+                <code>^</code>=sukūn <span dir="rtl">◌ْ</span>, <code>*</code>=shadda <span dir="rtl">◌ّ</span>
+                (or just double the letter: <code>qq</code>).</td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Tanwīn</b></td>
+            <td><code>a~</code> <code>i~</code> <code>u~</code> — <code>shukra~</code> → <span dir="rtl">شُكْرًا</span></td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Tāʾ marbūṭa</b></td>
+            <td><code>t:</code> — <code>ghurfat:</code> → <span dir="rtl">غُرْفَة</span>,
+                <code>shaqqat:</code> → <span dir="rtl">شَقَّة</span></td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Hamza, by seat</b></td>
+            <td><code>'</code> alone = <span dir="rtl">ء</span> ·
+                <code>A'</code>=<span dir="rtl">أ</span> · <code>a'</code>=<span dir="rtl">إ</span> ·
+                <code>w'</code>=<span dir="rtl">ؤ</span> · <code>y'</code>=<span dir="rtl">ئ</span>.
+                So <code>A'athaath</code> → <span dir="rtl">أَثَاث</span> and
+                <code>suw'aal</code> → <span dir="rtl">سُؤَال</span>.</td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Tricky letters</b></td>
+            <td><code>H</code>=<span dir="rtl">ح</span> · <code>kh</code>=<span dir="rtl">خ</span> ·
+                <code>th</code>=<span dir="rtl">ث</span> · <code>dh</code>=<span dir="rtl">ذ</span> ·
+                <code>sh</code>=<span dir="rtl">ش</span> · <code>gh</code>=<span dir="rtl">غ</span> ·
+                <code>3</code>=<span dir="rtl">ع</span> · <code>S</code>=<span dir="rtl">ص</span> ·
+                <code>T</code>=<span dir="rtl">ط</span> · <code>D</code>=<span dir="rtl">ض</span> ·
+                <code>Z</code>=<span dir="rtl">ظ</span> · <code>Y</code>=<span dir="rtl">ى</span></td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>Chat numbers</b></td>
+            <td><code>2</code>=<span dir="rtl">ء</span> · <code>5</code>=<span dir="rtl">خ</span> ·
+                <code>6</code>=<span dir="rtl">ط</span> · <code>7</code>=<span dir="rtl">ح</span> ·
+                <code>9</code>=<span dir="rtl">ق</span> — if you already type Arabizi</td></tr>
+        <tr><td style="padding:3px 8px 3px 0;white-space:nowrap"><b>"the"</b></td>
+            <td><code>al-kitab</code> → <span dir="rtl">الكتاب</span></td></tr>
+      </table>
+      <p style="margin:8px 0 0">The ⌨ keys button opens a tap keyboard with all of these on it.</p>
     </div>
   </details>`;
 
