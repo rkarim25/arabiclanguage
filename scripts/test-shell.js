@@ -175,5 +175,26 @@ const bank = D("sentence-bank.json");
   }
 }
 
+/* ---------- 8. every exam counts as its own exam ---------- */
+{
+  /* examResults grouped by e.n, the WEEK number, which the exam engine stopped
+     stamping when tests became scope-based. Three real exams at 95, 100 and 100
+     collapsed into one bucket keyed `undefined`, so "average of your last 2
+     exams" reported "not enough exams yet" and both A1 levels were held hostage
+     by a criterion that could never be met. Found by the gap hunt, 2026-08-30. */
+  const log = [
+    { e: "exam-done", score: 95, scope: "a", t: 1 },
+    { e: "exam-done", score: 100, scope: "b", t: 2 },
+    { e: "exam-done", score: 100, scope: "c", t: 3 },
+  ];
+  yes(C.examResults(log).length === 3, "three tests of different scopes count as three exams");
+  const retaken = log.concat([{ e: "exam-done", score: 40, scope: "a", t: 4 }]);
+  const r = C.examResults(retaken);
+  yes(r.length === 3, "retaking one of them does not add a fourth");
+  yes(r.some(x => x.scope === "a" && x.score === 40), "…and the retake replaces the earlier attempt");
+  const legacy = [{ e: "exam-done", score: 70, n: 1, t: 1 }, { e: "exam-done", score: 80, n: 2, t: 2 }];
+  yes(C.examResults(legacy).length === 2, "old week-stamped exams still count separately");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

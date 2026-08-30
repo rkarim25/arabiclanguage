@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtgcebxw">
-  <link rel="stylesheet" href="css/style.css?v=mtgcebxw">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgd0e6c">
+  <link rel="stylesheet" href="css/style.css?v=mtgd0e6c">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,9 +34,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mtgcebxw"></script>
-<script src="js/tracker.js?v=mtgcebxw"></script>
-<script src="js/plan.js?v=mtgcebxw"></script>
+<script src="js/app.js?v=mtgd0e6c"></script>
+<script src="js/tracker.js?v=mtgd0e6c"></script>
+<script src="js/plan.js?v=mtgd0e6c"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -69,17 +69,30 @@ function gDone(id) { return !!stepsDone("gr-" + id).test; }
    pattern — is the measure, because a rule used by 225 sentences is worth an
    evening and one used by 2 is not. New rules are appended as they come up in
    class or in the lessons; the order re-sorts itself. */
-let REACH = {};
+let REACH = {}, SEEN = new Set();
 async function loadReach() {
   try {
     const bank = await fetch("data/sentence-bank.json").then(r => r.json());
     (bank.sentences || []).forEach(s => { if (s.pattern) REACH[s.pattern] = (REACH[s.pattern] || 0) + 1; });
   } catch (e) {}
+  // which have already been explained to him, once, ever
+  (store.get("ats-log", []) || []).forEach(e => { if (e && e.e === "pattern-seen" && e.pattern) SEEN.add(e.pattern); });
 }
 function renderList() {
   trackPage("grammar:list");
+  /* THE ORDER IS THE PLAN. His ask, 2026-08-30: "make sure it has the minimum
+     required and there is a plan for it to be introduced to me."
+
+     A rule is introduced in one of two ways, and both are automatic: a grammar
+     burst takes the widest-reaching rule he has not met, once a week; and a
+     lesson explains a rule the first time one of its own sentences needs it.
+     Both write the same pattern-seen mark, so neither repeats the other's work.
+     Sorting by reach here shows exactly the queue the burst will follow — so
+     this list IS the schedule, not a catalogue. */
   const sorted = PATTERNS.slice().sort((a, b) => (REACH[b.id] || 0) - (REACH[a.id] || 0));
   const doneN = sorted.filter(p => gDone(p.id)).length;
+  const left = sorted.filter(p => !SEEN.has(p.id));
+  const nextUp = left[0] ? left[0].id : null;
   content.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>Others</span>
@@ -89,9 +102,12 @@ function renderList() {
     you have still to learn actually use them. No tables to memorise: each one is taught through
     sentences you already know, with a one-minute test. This list grows as things come up in class.</p>
     <div class="card" style="border-color:var(--accent);margin-bottom:16px">
-      <p style="margin:0 0 8px;font-size:15px"><b>${doneN} of ${sorted.length} done.</b>
-      A rule is also explained once, on its own, the first time a lesson needs it — so you may meet
-      one here having already been shown it.</p>
+      <p style="margin:0 0 8px;font-size:15px"><b>${SEEN.size} of ${sorted.length} explained, ${doneN} drilled and passed.</b>
+      ${left.length ? `At one grammar burst a week, the remaining ${left.length} are introduced over the next
+        ${left.length} weeks — sooner where a lesson needs one earlier.` : "Every rule has been introduced."}</p>
+      <p style="margin:0 0 8px;font-size:13.5px;color:var(--muted)">Nothing here is optional reading. A rule reaches you
+      one of two ways, both automatic: the weekly <b>grammar burst</b> takes the widest-reaching one you have not met,
+      and a <b>lesson</b> explains one the moment its own sentences need it. This list is that queue, in order.</p>
       <p style="margin:0;font-size:14.5px">🎧 <a href="grammar.html?g=verbears" style="color:var(--accent);font-weight:600">Who's acting?</a> —
       hear a verb form, name the person (he / they / we / I…). For following recitation at speed, verb endings ARE the grammar. ${gDone("verbears") ? "✓ passed" : ""}</p>
     </div>
@@ -102,11 +118,19 @@ function renderList() {
     const div = document.createElement("div");
     div.className = "g-card";
     const n = REACH[p.id] || 0;
+    const seen = SEEN.has(p.id);
+    const isNext = p.id === nextUp;
+    const queuePos = left.findIndex(x => x.id === p.id);
+    const status = gDone(p.id) ? `<span style="color:var(--accent);font-weight:600">✓ passed</span>`
+      : seen ? `<span style="color:var(--accent)">explained — test not passed</span>`
+      : isNext ? `<span style="color:var(--accent);font-weight:600">▶ next burst</span>`
+      : `<span style="color:var(--muted)">in about ${queuePos + 1} week${queuePos ? "s" : ""}</span>`;
+    if (isNext) div.style.borderColor = "var(--accent)";
     div.innerHTML = `
       <div class="g-ar">${p.ar}</div>
       <div class="g-name">${p.name}</div>
       <div class="meta">${n ? `used by <b>${n}</b> sentences you have to learn` : "from your class"}
-        · ${p.test.length}-question test ${gDone(p.id) ? "· ✓ done" : ""}</div>
+        · ${p.test.length}-question test<br>${status}</div>
     `;
     div.onclick = () => { history.pushState({}, "", `grammar.html?g=${p.id}`); renderPattern(p); };
     grid.appendChild(div);

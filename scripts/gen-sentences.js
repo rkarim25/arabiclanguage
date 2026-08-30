@@ -137,7 +137,15 @@ const words = (pairs) => pairs.map(([ar, en, tr]) => {
    needs understanding. Detection is deliberately conservative — a pattern is
    claimed only when its marker is unmistakable, because a wrong grammar note is
    worse than none. The notes themselves live in data/grammar.json. */
+/* Ordered: the first unmistakable marker wins. The newer entries go FIRST
+   because they are more specific than the broad ones underneath — a question
+   opening with مَاذَا would otherwise be swallowed by the negation test, which
+   matches any leading مَا. */
 const PATTERN_TESTS = [
+  ["questions", /^(هَلْ|هل|أَيْنَ|اين|أين|مَتَى|متى|كَيْفَ|كيف|كَمْ|كم|مَاذَا|ماذا|لِمَاذَا|لماذا|مَنْ\s|من\s)/],
+  ["demonstratives", /(هَذَا|هذا|هَذِهِ|هذه|ذَلِكَ|ذلك|ذَٰلِكَ|تِلْكَ|تلك)/],
+  ["kana", /(^|\s)(كَانَ|كان|كَانَتْ|كانت|كَانُوا|كانوا|يَكُنْ|يكن)(\s|$)/],
+  ["imperative", /^(قُلْ|قل\s|اقْرَأْ|اقرأ|اِذْهَبْ|اذهب|اِسْتَوُوا|استووا|تَقَدَّمُوا|تقدموا|اُنْظُرْ|انظر)/],
   ["inna", /^(إِنَّ|إِنَّا|إِنَّهُ|إِنَّكَ|إنا|إنه|إن\s)/],
   ["alladhina", /الَّذِين|الَّذِي|ٱلَّذِين|الذين|الذي/],
   ["negation", /(^|\s)(لَا|لا|مَا|ما|لَم|لم|لَن|لن)\s/],

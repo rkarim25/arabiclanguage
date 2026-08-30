@@ -210,13 +210,27 @@
   }
 
   /* One result per week (the latest attempt) — this is what level criteria use. */
+  /* ONE RESULT PER TEST, not per week.
+     This grouped by `e.n`, the week number — which the exam engine stopped
+     stamping when tests became scope-based (a lesson, a week's lessons, a class).
+     Every exam he has ever sat therefore collapsed into a single bucket keyed
+     `undefined`, so "average of your last 2 exams" reported "not enough exams
+     yet" while he had three on record at 95, 100 and 100. Another criterion that
+     could never be satisfied, found by the gap hunt on 2026-08-30.
+
+     A test is identified by its SCOPE — the exact set of lessons it covers —
+     which is what scopeKey() already builds and what the retake history on the
+     test screen already lines up. Retaking the same scope still replaces the
+     earlier attempt, which was the original intent of "later attempts overwrite
+     earlier"; the week was only ever a proxy for identity. */
   function examResults(log, kind) {
-    const byWeek = new Map();
+    const byScope = new Map();
     for (const e of examAttempts(log)) {
       if (kind && e.kind !== kind) continue;
-      byWeek.set(e.n, e);                             // later attempts overwrite earlier
+      const id = e.scope || (e.n !== undefined ? "week:" + e.n : "t:" + e.t);
+      byScope.set(id, e);                             // later attempts overwrite earlier
     }
-    return [...byWeek.values()].sort((a, b) => a.t - b.t);
+    return [...byScope.values()].sort((a, b) => a.t - b.t);
   }
 
   /* "How far along have I gone" — the shape of the retakes within one week. */
@@ -1078,7 +1092,11 @@
     const rank = p => [soon.has(p) ? 0 : 1, -(reach.get(p) || 0)];
     let best = null;
     reach.forEach((n, p) => { if (!best || cmp(rank(p), rank(best)) < 0) best = p; });
-    return best && (reach.get(best) || 0) >= 2 ? best : null;
+    /* Every rule gets its turn. This used to require a reach of 2, which meant
+       يُوجَدُ (reach 1, written for his own class) and the plurals rule could never
+       be scheduled at all — a rule the site teaches but can never introduce is
+       worse than one it does not have. Reach still decides the ORDER. */
+    return best || null;
   }
 
   /* What to interleave into ONE week, as insertion points its renderer can use.

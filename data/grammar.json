@@ -457,5 +457,101 @@
         }
       ]
     }
+,
+    {
+      "id": "nominal",
+      "ar": "الجُمْلَة الاسْمِيَّة",
+      "name": "sentences with no verb at all",
+      "what": "Arabic has no word for 'is'. To say 'the flat is beautiful' you just put the two words next to each other: الشَّقَّةُ جَمِيلَةٌ — literally 'the flat, beautiful'. The giveaway is that the first word has ال and the second does not: that gap is where the 'is' would be. الْحَمْدُ لِلَّهِ is the same shape — 'the praise, to Allah'. Half of everyday Arabic and a great deal of the Qur'an is built this way, so when you hear two nouns and no verb, put an 'is' between them.",
+      "examples": [
+        { "ar": "الْحَمْدُ لِلَّهِ", "en": "(All) praise is to Allah. (1:2)" },
+        { "ar": "اللَّهُ أَحَدٌ", "en": "Allah is One. (112:1)" },
+        { "ar": "المِصْبَاحُ صَغِيرٌ", "en": "The lamp is small." }
+      ],
+      "test": [
+        { "prompt": "'The lamp is small.'", "ar": "المِصْبَاحُ صَغِيرٌ", "hint": "al-misbaahu saghiir — no verb" },
+        { "prompt": "'Praise is to Allah' (1:2)", "ar": "الْحَمْدُ لِلَّهِ", "hint": "al-hamdu lillaah" },
+        { "prompt": "'My mother is a teacher.'", "ar": "أُمِّي مُعَلِّمَةٌ", "hint": "ummii mu3allima" }
+      ]
+    },
+    {
+      "id": "questions",
+      "ar": "أَدَوَات الاسْتِفْهَام",
+      "name": "the question words",
+      "what": "Eight words open almost every question you will hear. هَلْ turns a statement into a yes/no question — هَلْ عِنْدَكُمْ مِصْعَدٌ؟ 'do you have a lift?'. Then the ones that ask for information: مَا / مَاذَا what, مَنْ who, أَيْنَ where, مَتَى when, كَيْفَ how, كَمْ how many, لِمَاذَا why. They come first in the sentence, and the rest of it does not change order the way English's does. The Qur'an asks constantly — مَا الْقَارِعَةُ, and every أَلَمْ تَرَ is a question too.",
+      "examples": [
+        { "ar": "مَا الْقَارِعَةُ", "en": "What is the Striking Calamity? (101:2)" },
+        { "ar": "أَيْنَ الكَعْبَةُ مِنْ هُنَا؟", "en": "Where is the Kaaba from here?" },
+        { "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟", "en": "Do you have a lift?" }
+      ],
+      "test": [
+        { "prompt": "'Where is the wudu area?'", "ar": "أَيْنَ مَكَانُ الوُضُوءِ؟", "hint": "ayna makaanu l-wuduu'" },
+        { "prompt": "'What is this?'", "ar": "مَا هَذَا؟", "hint": "maa haadhaa" },
+        { "prompt": "'Do you have a lift?'", "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟", "hint": "hal 3indakum mis3ad" }
+      ]
+    },
+    {
+      "id": "plurals",
+      "ar": "الجَمْع",
+      "name": "plurals — and the rule nobody warns you about",
+      "what": "Three kinds. Sound masculine adds ـُونَ or ـِينَ: مُسْلِم → مُسْلِمُونَ. Sound feminine adds ـَات: مُعَلِّمَة → مُعَلِّمَات. And broken plurals rebuild the word from the inside — كِتَاب → كُتُب, بَيْت → بُيُوت, غُرْفَة → غُرَف. Broken ones have to be learnt with the word; there is no shortcut.\n\nTHE RULE THAT CATCHES EVERYONE: a plural of NON-HUMAN things is treated as feminine SINGULAR. Not الْكُتُبُ جُدُدٌ but الْكُتُبُ جَدِيدَةٌ — 'the books, she is new'. Same in the Qur'an: الْأَنْهَارُ تَجْرِي, the rivers 'she' flows. People take normal plural agreement; everything else does not.",
+      "examples": [
+        { "ar": "الخَزَائِنُ جَدِيدَةٌ", "en": "The cupboards are new — 'new' is feminine singular, because cupboards are not people." },
+        { "ar": "إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ", "en": "Indeed those who believed and did righteous deeds (a sound feminine plural)." },
+        { "ar": "عِنْدَنَا أَرَائِكُ وَكَرَاسِي كَثِيرَةٌ", "en": "We have many sofas and chairs — again feminine singular." }
+      ],
+      "test": [
+        { "prompt": "'The cupboards are new.'", "ar": "الخَزَائِنُ جَدِيدَةٌ", "hint": "al-khazaa'inu jadiida — not jadiiduun" },
+        { "prompt": "the plural of كِتَاب", "ar": "كُتُب", "hint": "kutub — a broken plural" },
+        { "prompt": "the plural of مُعَلِّمَة", "ar": "مُعَلِّمَات", "hint": "mu3allimaat" }
+      ]
+    },
+    {
+      "id": "imperative",
+      "ar": "الأَمْر",
+      "name": "telling someone to do something",
+      "what": "Take the present tense, cut the يَـ / تَـ off the front, and if what is left will not start a word, put an ا on the front to help: يَذْهَبُ → اذْهَبْ go!, يَقْرَأُ → اقْرَأْ read!, يَقُولُ → قُلْ say!. Speaking to more than one person, add ـُوا: اسْتَوُوا straighten up!, تَقَدَّمُوا move forward!.\n\nYou will hear this more than you say it. The Qur'an opens surahs with it — قُلْ, اقْرَأْ — and everything the imam says before prayer is in this form.",
+      "examples": [
+        { "ar": "قُلْ هُوَ اللَّهُ أَحَدٌ", "en": "Say: He is Allah, One. (112:1)" },
+        { "ar": "اقْرَأْ بِاسْمِ رَبِّكَ", "en": "Read, in the name of your Lord. (96:1)" },
+        { "ar": "اِسْتَوُوا وَسُدُّوا الخَلَلَ", "en": "Straighten up and close the gaps! (what the imam says)" }
+      ],
+      "test": [
+        { "prompt": "'Say!' — the command that opens Al-Ikhlas", "ar": "قُلْ", "hint": "qul" },
+        { "prompt": "'Go!' (to one person)", "ar": "اِذْهَبْ", "hint": "idhhab" },
+        { "prompt": "'Move forward!' (to everyone)", "ar": "تَقَدَّمُوا", "hint": "taqaddamuu" }
+      ]
+    },
+    {
+      "id": "demonstratives",
+      "ar": "أَسْمَاء الإِشَارَة",
+      "name": "this and that",
+      "what": "هَذَا this (masculine), هَذِهِ this (feminine), ذَلِكَ that, تِلْكَ that (feminine). They must match what they point at: هَذَا زَوْجُ أُخْتِي but هَذِهِ الشَّقَّةُ.\n\nOne thing to watch: هَذَا الْبَيْتُ with ال on the noun means 'THIS house', while هَذَا بَيْتٌ without it means 'this IS a house'. The ال is doing the work of the missing verb, exactly as in the no-verb sentences.",
+      "examples": [
+        { "ar": "ذَلِكَ الْكِتَابُ لَا رَيْبَ فِيهِ", "en": "That is the Book, no doubt in it. (2:2)" },
+        { "ar": "هَذَا زَوْجُ أُخْتِي", "en": "This is my sister's husband." },
+        { "ar": "هَلْ هَذِهِ الشَّقَّةُ مُتَاحَةٌ؟", "en": "Is this flat available?" }
+      ],
+      "test": [
+        { "prompt": "'This is my sister's husband.'", "ar": "هَذَا زَوْجُ أُخْتِي", "hint": "haadhaa zawju ukhtii" },
+        { "prompt": "'this flat' (feminine)", "ar": "هَذِهِ الشَّقَّةُ", "hint": "haadhihi sh-shaqqa" },
+        { "prompt": "'What is this?'", "ar": "مَا هَذَا؟", "hint": "maa haadhaa" }
+      ]
+    },
+    {
+      "id": "kana",
+      "ar": "كَانَ",
+      "name": "كَانَ — the past tense of 'is'",
+      "what": "Since Arabic has no 'is' in the present, it needs a word for 'was': كَانَ. كَانَ الْبَيْتُ كَبِيرًا — the house was big. Note the ending on the second word: after كَانَ the description takes -an (كَبِيرًا, غَفُورًا), which is the single clearest signal in the language that كَانَ is in play. Its negative is لَمْ يَكُنْ, and you already know it from Al-Ikhlas: لَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ.",
+      "examples": [
+        { "ar": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", "en": "And there was none comparable to Him. (112:4)" },
+        { "ar": "كَانَ فِي غُرْفَةِ النَّوْمِ سَرِيرٌ وَمِرْآةٌ", "en": "In the bedroom there was a bed and a mirror." },
+        { "ar": "كَانَ اللَّهُ غَفُورًا رَحِيمًا", "en": "Allah was ever Forgiving, Merciful." }
+      ],
+      "test": [
+        { "prompt": "'In the bedroom there was a bed.'", "ar": "كَانَ فِي غُرْفَةِ النَّوْمِ سَرِيرٌ", "hint": "kaana fii ghurfati n-nawmi sariir" },
+        { "prompt": "'there was none' — the phrase from Al-Ikhlas", "ar": "لَمْ يَكُنْ", "hint": "lam yakun" }
+      ]
+    }
   ]
 }
