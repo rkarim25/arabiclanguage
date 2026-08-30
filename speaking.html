@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtga4lw5">
-  <link rel="stylesheet" href="css/style.css?v=mtga4lw5">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgahnsh">
+  <link rel="stylesheet" href="css/style.css?v=mtgahnsh">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -67,9 +67,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtga4lw5"></script>
-<script src="js/tracker.js?v=mtga4lw5"></script>
-<script src="js/plan.js?v=mtga4lw5"></script>
+<script src="js/app.js?v=mtgahnsh"></script>
+<script src="js/tracker.js?v=mtgahnsh"></script>
+<script src="js/plan.js?v=mtgahnsh"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -118,78 +118,19 @@ function micTrouble() {
   v.innerHTML = `<span style="color:var(--amber)">Three takes in a row with nothing heard. Run the 5-second test above — or just switch to self-grading and keep speaking; your ✓/✗ counts the same in your Review.</span>`;
 }
 
+/* The old five-second test ran the level meter and the recogniser AT THE SAME
+   TIME, which is the exact conflict that stopped dictation working (js/app.js,
+   FIX 1) — so it could report "your mic works but Arabic recognition returned
+   nothing" when the real answer was that the two were fighting over the mic.
+   micDiagnose() in js/app.js runs the two halves in sequence instead. */
 async function runMicTest() {
   const btn = document.getElementById("micTest");
   const wrap = document.getElementById("micLevelWrap");
-  const bar = document.getElementById("micLevel");
-  const heardBox = document.getElementById("micHeard");
-  const verdict = document.getElementById("micVerdict");
-  btn.disabled = true; btn.textContent = "🔴 say something in Arabic…";
-  wrap.style.display = "block"; heardBox.textContent = ""; verdict.textContent = "";
-  const res = { sr: !!SR, secure: window.isSecureContext !== false, peak: 0, heard: "", err: "" };
-
-  let stream = null, ctx = null, raf = null;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const src = ctx.createMediaStreamSource(stream);
-    const an = ctx.createAnalyser(); an.fftSize = 512;
-    src.connect(an);
-    const buf = new Uint8Array(an.fftSize);
-    const tick = () => {
-      an.getByteTimeDomainData(buf);
-      let peak = 0;
-      for (let i = 0; i < buf.length; i++) peak = Math.max(peak, Math.abs(buf[i] - 128) / 128);
-      res.peak = Math.max(res.peak, peak);
-      bar.style.width = Math.min(100, Math.round(peak * 220)) + "%";
-      raf = requestAnimationFrame(tick);
-    };
-    tick();
-  } catch (e) {
-    res.err = (e && e.name) || "mic-denied";
-  }
-
-  // recognition runs alongside, purely to show him live text
-  let rec = null;
-  if (SR && !res.err) {
-    try {
-      rec = new SR();
-      rec.lang = "ar-SA"; rec.interimResults = true; rec.continuous = true;
-      rec.onresult = ev => {
-        let txt = "";
-        for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
-        res.heard = txt.trim();
-        heardBox.textContent = res.heard;
-      };
-      rec.onerror = ev => { if (!res.err) res.err = ev.error; };
-      rec.start();
-    } catch (e) { rec = null; }
-  }
-
-  await new Promise(r => setTimeout(r, 5000));
-  if (raf) cancelAnimationFrame(raf);
-  try { if (rec) { rec.onresult = rec.onerror = null; rec.abort(); } } catch (e) {}
-  try { if (stream) stream.getTracks().forEach(t => t.stop()); } catch (e) {}
-  try { if (ctx) ctx.close(); } catch (e) {}
-  bar.style.width = "0";
-  btn.disabled = false; btn.textContent = "🎤 Test my mic (5s)";
-
-  const micOk = res.peak >= 0.05;
-  let msg;
-  if (res.err === "NotAllowedError" || res.err === "not-allowed" || res.err === "SecurityError") {
-    msg = `<span style="color:var(--red)">The browser is blocking the microphone.</span> Tap the 🔒/🎤 icon in the address bar → allow microphone, then test again. (On iPhone: Settings → Safari → Microphone.)`;
-  } else if (res.err === "NotFoundError" || res.err === "audio-capture") {
-    msg = `<span style="color:var(--red)">No microphone found on this device.</span> If you're on a laptop with a headset plugged in, check which input is selected.`;
-  } else if (!micOk) {
-    msg = `<span style="color:var(--red)">The mic is open but heard almost nothing (peak ${Math.round(res.peak * 100)}%).</span> Wrong input selected, muted headset, or something else is holding the mic. Fix that and the drills will work — meanwhile self-grading below keeps you moving.`;
-  } else if (res.heard) {
-    msg = `<span style="color:var(--accent);font-weight:600">✓ Both working.</span> Mic peaked at ${Math.round(res.peak * 100)}% and it heard: <span class="arabic" dir="rtl">${res.heard}</span>. If a drill still says "didn't catch that", speak a touch louder and closer — it needs a clear couple of seconds.`;
-  } else {
-    msg = `<span style="color:var(--amber)">Your mic works (peak ${Math.round(res.peak * 100)}%) — but this browser returned no Arabic text.</span> That's the browser's recognition, not you${SR ? "" : " (it has no speech recognition at all)"}. Best options: open the site in <strong>Chrome or Edge</strong>, or use self-grading (button above) and a <a href="converse.html">live AI partner</a> for real speaking practice.`;
-  }
-  verdict.innerHTML = msg;
-  logEvent({ e: "mictest", sr: res.sr, peak: Math.round(res.peak * 100) / 100, heard: res.heard ? 1 : 0, err: res.err || "", ua: navigator.userAgent.slice(0, 120) });
-  autoSync();
+  if (wrap) wrap.style.display = "none";
+  btn.disabled = true;
+  await micDiagnose(document.getElementById("micVerdict"));
+  btn.disabled = false;
+  btn.textContent = "🎤 Test my mic";
 }
 
 /* ▶ hear yourself + keep the URL tidy: each row remembers its last take */

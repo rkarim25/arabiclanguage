@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtga4lw5">
-  <link rel="stylesheet" href="css/style.css?v=mtga4lw5">
+  <link rel="stylesheet" href="css/fonts.css?v=mtgahnsh">
+  <link rel="stylesheet" href="css/style.css?v=mtgahnsh">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtga4lw5"></script>
-<script src="js/curriculum.js?v=mtga4lw5"></script>
-<script src="js/app.js?v=mtga4lw5"></script>
-<script src="js/tracker.js?v=mtga4lw5"></script>
-<script src="js/plan.js?v=mtga4lw5"></script>
+<script src="js/progress-model.js?v=mtgahnsh"></script>
+<script src="js/curriculum.js?v=mtgahnsh"></script>
+<script src="js/app.js?v=mtgahnsh"></script>
+<script src="js/tracker.js?v=mtgahnsh"></script>
+<script src="js/plan.js?v=mtgahnsh"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -170,7 +170,8 @@ function micRow(id) {
   return `<div class="row" style="margin-top:2px">
       <button id="${id}" style="font-size:16px">🎤 say it instead</button>
       <span id="${id}Msg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
-    </div>`;
+    </div>
+    <div id="${id}Diag" style="margin-top:8px"></div>`;
 }
 /* onSaid(ok, heard) — ok is null when nothing usable was heard */
 function wireMic(id, target, onSaid) {
@@ -181,7 +182,20 @@ function wireMic(id, target, onSaid) {
   btn.onclick = () => {
     msg.textContent = "";
     dictate(btn, "🎤 say it instead", (heard, url, err, alts) => {
-      if (!heard) { msg.textContent = err || "didn't catch that — tap 🎤 to try again"; return; }
+      if (!heard) {
+        msg.textContent = err || "didn't catch that — tap 🎤 to try again";
+        /* A failed take is the only moment the diagnosis is worth anything, so
+           it is offered HERE rather than on a page he would have to go and find.
+           "heard silence" in particular has three quite different causes and
+           guessing between them wastes an evening. */
+        const dg = document.getElementById(id + "Diag");
+        if (dg && !dg.dataset.on) {
+          dg.dataset.on = "1";
+          dg.innerHTML = `<button class="small" id="${id}Fix">🔧 find out why</button>`;
+          document.getElementById(id + "Fix").onclick = () => micDiagnose(dg);
+        }
+        return;
+      }
       const tries = [heard].concat(alts || []);
       const ok = tries.some(t => speakMatch(t, target) || writeMatchAr(t, target).ok);
       onSaid(ok, heard);
