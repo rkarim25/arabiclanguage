@@ -1194,6 +1194,8 @@ const _ORTHO = {
   allah: "الله", allaah: "الله", allahu: "اللهُ", allaahu: "اللهُ",
   // the site's own transliteration elides the alif after a vowel: "rasūlu llāh"
   llah: "الله", llaah: "الله", llahu: "اللهُ", llaahu: "اللهُ",
+  // the shadda makes this word round-trip short ("allha"), and people type it that way
+  allha: "الله", allaha: "الله", allhu: "اللهُ",
   ana: "أنا", anaa: "أنا",
   ila: "إلى", ilaa: "إلى", ilay: "إلى",
   ala: "على", alaa: "على", "3ala": "على", "3alaa": "على",
@@ -1227,7 +1229,10 @@ function latinToArabic(text) {
       if (LATIN_TO_AR[part]) {
         const ch = LATIN_TO_AR[part];
         i += len;
-        if (atStart && /^[aiueo]$/.test(part)) out += "ا";
+        // a word may START with a long vowel (أُومِنُ "uuminu", أُوحِي "uuHii"): the
+        // carrier alif is still written, so emit it before the long letter too
+        if (atStart && /^(aa|uu|ii|oo|ee|ou)$/.test(part)) out += "ا" + ch;
+        else if (atStart && /^[aiueo]$/.test(part)) out += "ا";
         else if (consonant(ch) && text.slice(i, i + len) === part) { out += ch + "ّ"; i += len; }
         else out += ch;
         matched = true; atStart = false; break;

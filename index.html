@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mteyy9ia">
-  <link rel="stylesheet" href="css/style.css?v=mteyy9ia">
+  <link rel="stylesheet" href="css/fonts.css?v=mtffc94i">
+  <link rel="stylesheet" href="css/style.css?v=mtffc94i">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -76,12 +76,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mteyy9ia"></script>
-<script src="js/curriculum.js?v=mteyy9ia"></script>
-<script src="js/app.js?v=mteyy9ia"></script>
-<script src="js/tracker.js?v=mteyy9ia"></script>
-<script src="js/plan.js?v=mteyy9ia"></script>
-<script src="js/account.js?v=mteyy9ia"></script>
+<script src="js/progress-model.js?v=mtffc94i"></script>
+<script src="js/curriculum.js?v=mtffc94i"></script>
+<script src="js/app.js?v=mtffc94i"></script>
+<script src="js/tracker.js?v=mtffc94i"></script>
+<script src="js/plan.js?v=mtffc94i"></script>
+<script src="js/account.js?v=mtffc94i"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -122,6 +122,22 @@ const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, tota
   document.getElementById("invBand").textContent = inv.nextBand
     ? `At about ${inv.nextBand.at} words, ${inv.nextBand.say}.`
     : "You have the vocabulary for ordinary conversation — what's left is fluency, not words.";
+
+  /* THE WHOLE THING, COUNTED (his ask: "X sentences and Y variants, X x Y to be
+     mastered"). Stated per track because they are different in kind — an ayah is
+     never conjugated, so the Qur'an side has no variants and saying otherwise
+     would be padding. */
+  const tm = inv.toMaster;
+  if (tm) {
+    const el = document.createElement("p");
+    el.style.cssText = "font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.7;border-top:1px solid var(--border);padding-top:8px";
+    el.innerHTML = `<b>The whole thing, counted.</b><br>
+      🎧 <b>${tm.quran.sentences}</b> ayat — Al-Fatiha and the whole of juz' 'Amma, which is what "understand the short surahs" means. Fixed text, so no variants. <b>${tm.quran.held}</b> held.<br>
+      🗣 <b>${tm.conv.sentences}</b> sentences, of which <b>${tm.conv.frames}</b> are frames you can bend
+      ${tm.conv.variantsPerFrame ? `× <b>${tm.conv.variantsPerFrame}</b> person/tense variants each` : ""}
+      = <b>${tm.conv.utterances}</b> things you can say. <b>${tm.conv.held}</b> held.`;
+    document.getElementById("invBand").after(el);
+  }
 
   /* the milestone you're on */
   const nowEl = document.getElementById("now");

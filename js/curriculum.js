@@ -800,6 +800,11 @@
      words to teach one) and then toward the commoner vocabulary.
      ========================================================================== */
   const SENTENCE_MAX = 5;          // a ~7-minute sitting, four steps per sentence
+  /* A lesson is seven MINUTES, not five sentences. Ayat run from two words to
+     twenty-one (median 4, but 73:20 is long), so counting sentences would make one
+     lesson a stroll and another a slog. Size by words instead, with at least one
+     sentence always taken: a long ayah is simply a lesson on its own. */
+  const LESSON_WORDS = 26;
   /* lexicographic compare of the score tuples below — first field decides */
   const cmp = (a, b) => { for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i]; return 0; };
 
@@ -843,6 +848,8 @@
     if (!candidates.size) return [];
 
     const chosen = [], covered = new Set(), used = new Set(opts.exclude || []);
+    const budget = opts.maxWords || LESSON_WORDS;
+    let spent = 0;
     while (chosen.length < limit && covered.size < want.size) {
       let best = null, bestScore = null;
       candidates.forEach(s => {
@@ -861,8 +868,12 @@
         if (!bestScore || cmp(score, bestScore) < 0) { best = s; bestScore = score; }
       });
       if (!best) break;
+      const cost = (best.words || []).length || 1;
+      // always take the first, then stop once the sitting is full
+      if (chosen.length && spent + cost > budget) break;
       used.add(best.key);
       chosen.push(best);
+      spent += cost;
       (best.teaches || []).forEach(k => { if (want.has(k)) covered.add(k); });
     }
     return chosen;
@@ -939,7 +950,43 @@
       : words < 500 ? { at: 500, say: "you follow the gist of simple spoken Arabic" }
       : words < 1000 ? { at: 1000, say: "most ordinary conversation becomes followable" }
       : null;
-    return { words, wordsLong, sentences: sents, sentencesLong: sentsLong, nextBand };
+    return { words, wordsLong, sentences: sents, sentencesLong: sentsLong, nextBand, toMaster: toMaster(ctx, srs) };
+  }
+
+  /* ---------- X × Y: the whole thing to be mastered, counted ----------
+     His ask, 2026-08-30: "i also want to know the list of sentences then the
+     times of its variants. so something like X sentences and Y variants. so
+     X x Y to be mastered."
+
+     Counted separately per track, because they differ in kind and averaging them
+     would be a lie: an ayah is fixed revelation and is never conjugated, so the
+     Qur'an track has no variants at all. The everyday track is where X × Y is
+     real — a frame times its person/tense cells.
+
+     The Qur'an total is not a guess either. It is the corpus behind his own
+     definition of the goal: Al-Fatiha + juz' 'Amma, the short surahs. */
+  function toMaster(ctx, srs) {
+    const bank = (ctx.bank && ctx.bank.sentences) || [];
+    if (!bank.length) return null;
+    const held = k => ((srs || {})[k] || {}).box >= SOLID_BOX;
+
+    const quran = bank.filter(s => s.track === "quran");
+    const conv = bank.filter(s => s.track !== "quran");
+    const frames = conv.filter(s => (s.vary || []).length);
+    const variants = frames.reduce((a, s) => a + s.vary.length, 0);
+    // a plain sentence is one utterance; a frame is as many as it has cells
+    const convTotal = conv.length - frames.length + variants;
+
+    return {
+      quran: { sentences: quran.length, held: quran.filter(s => held(s.key)).length, variants: 0 },
+      conv: {
+        sentences: conv.length, held: conv.filter(s => held(s.key)).length,
+        frames: frames.length,
+        variantsPerFrame: frames.length ? Math.round(variants / frames.length) : 0,
+        utterances: convTotal,
+      },
+      total: quran.length + convTotal,
+    };
   }
 
   /* ---------- pace ----------

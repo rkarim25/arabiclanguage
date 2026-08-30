@@ -157,19 +157,18 @@ live page was driven.
 1. **Sunday's class → Monday's week.** He confirmed lessons are still on. When he
    pastes photos or text, run the `TEACHER-SYNC.md` pipeline, add it to
    `gen-curriculum.js` as a `source:"teacher"` milestone, regenerate, deploy.
-2. **Grow the sentence bank.** *The one real content gap, and now measured on
-   every test run.* The bank reaches **62% of the ladder's word keys**; **14 of
-   128 lessons** still have no sentence and fall back to single words. His target:
-   *"if i can understand a 500 sentences and variations of it maybe i can
-   understand arabic."* The uncovered keys are named in CURRICULUM.md §8 —
-   `qc:*` plus the `ev-numbers`, `ev-family`, `ev-opposites`, `ev-masjid`,
-   `ev-medical` clusters. **Do not close this by composing Arabic**; the Sunday
-   class is the natural supply, and the traceability test will reject anything
-   invented.
-   Also open: he asked for **real audio** ("take some real audio from youtube or
-   wherever … and use that as sentence format"). Everything is Edge neural TTS
-   today. Qur'an recitation is the honest place to start; everyday MSA needs a
-   rights-clean source, and copying audio into a public repo is not one.
+2. **Finish the defined corpus.** The target is named and finite (CURRICULUM.md
+   §8): the short surahs ✅ (592 ayat, imported from his own Qur'an site), the
+   everyday frames ✅ (79 × 9 = 952), and still open — **duas** and **mosque /
+   Haram Arabic**. His words: *"minimum sufficient for me to be considered basic
+   fluent in arabic and in quran (meaning i understand the short suras, duas and
+   what might be said in a mosque in Makkah/Madinah)."*
+   **The system must supply itself** — he corrected me on exactly this: *"my
+   sunday class is complementary and this should be standalone and self
+   sufficient system."* Both existing generators show the pattern: find the
+   verified supply the repo already owns and import it. Do NOT compose Arabic;
+   `test-sentences.js` traces every sentence to a source and will reject it.
+   Ladder coverage is 65%; 7 of 128 lessons are still word-only.
 3. **Watch for the first `exam-done` event.** It is the whole loop proving itself.
 4. **Diagnose the nightly.** `arabic-coach-nightly` missed 21–24 Aug entirely and
    half-ran on the 28th (coach note updated, no journal line, no commit).

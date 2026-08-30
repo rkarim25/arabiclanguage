@@ -345,32 +345,68 @@ conversation.
 Every milestone must be justifiable in one sentence *to him* — the `why` field is
 not decoration.
 
-### Outstanding content job: THE REST OF THE SENTENCES
+### The corpus is DEFINED, and the system supplies itself
 
-This is now the site's single biggest gap, and it is measured on every test run.
+Reza, 2026-08-30, correcting a design error of mine — I had recorded the sentence
+gap as something his Sunday class would fill:
 
-The bank holds **341 verified sentences** and reaches **62% of the ladder's word
-keys**; **14 of 128 lessons** have no sentence at all and fall back to single
-words. His own target is the right one:
+> "No my sunday class is complementary and this should be standalone and self
+> sufficient system."
 
-> "lets say if i can understand a 500 sentences and variations of it maybe i can
-> understand arabic."
+Then he defined what complete means:
 
-The uncovered keys are concentrated and known: `qc:*` (frequent Qur'an words that
-do not appear in the 13 surahs on the site), and the `ev-numbers`, `ev-family`,
-`ev-opposites`, `ev-masjid`, `ev-medical` clusters. They need **one verified
-sentence each**, and the rule from §5 stands: nothing composed here, nothing that
-has not been checked by someone who knows. His Sunday class is the natural supply,
-and `scripts/test-sentences.js` reports coverage climbing as they land.
+> "the whole sentence series needs to be minimum sufficient for me to considered
+> basic fluent in arabic and in quran (meaning i understand the short suras, duas
+> and what might be said in a mosque in Makkah/Madinah)."
 
-**Real audio is the other half.** Everything is Edge neural TTS today (good, but
-synthetic). He asked for authentic audio — *"you will have to take some real audio
-from youtube or wherever for me to listen to as well and use that as sentence
-format."* Qur'an recitation is the honest place to start because it is his own
-memorised material; everyday MSA needs a rights-clean source, and copying audio
-into a public repo is not one. Recorded here as an open question, not a plan.
+So the target is no longer "however many sentences we managed". It is a **named,
+finite corpus**, and every part of it has a supply the repo owns.
 
----
+| Corpus | What it is | Supply | State |
+|---|---|---|---|
+| **The short surahs** | Al-Fatiha + juz' 'Amma = 592 ayat | `scripts/import-quran-sentences.js` pulls the real text, translation and word-by-word from **his own Qur'an site** (`rkarim25.github.io/Quran`) | ✅ complete |
+| **Everyday frames** | verb × person × tense | `scripts/gen-verb-frames.js` from the **verified conjugation table** already in the repo (82 verbs) | ✅ 79 frames |
+| **Duas** | the common daily adhkar + the Qur'anic `rabbanā` duas | the Qur'anic ones are extractable from the same corpus; the hadith ones are not yet sourced | ⬜ not started |
+| **Mosque / Haram Arabic** | adhan, iqama, the imam's instructions, Haram practicalities | `ev-masjid` / `ev-haram` clusters exist as words; they need sentences | ⬜ partial |
+
+**Teaching the ayat, not their vocabulary, is the point.** Covering the short
+surahs by word list would need ~800 more surface forms, because Arabic inflects
+and one root arrives in a dozen shapes. The 592 ayat are smaller, they *are* the
+goal, and he already recites them — which is exactly what the recite-from-memory
+step is built on.
+
+### X × Y — the whole thing, counted
+
+> "i also want to know the list of sentences then the times of its variants. so
+> something like X sentences and Y variants. so X x Y to be mastered"
+
+`Curriculum.inventory().toMaster` reports it, and the home page states it.
+Counted **separately per track, never averaged**, because they differ in kind:
+
+| | X | Y | to master |
+|---|---|---|---|
+| 🎧 Qur'an | **592** ayat | — | **592** |
+| 🗣 Everyday | 320 sentences, of which **79** are frames | **× 9** person/tense cells | **952** |
+| | | | **1,544** |
+
+**The Qur'an side has no variants and must never be given any.** An ayah is fixed
+revelation; it is not conjugated, and padding the number by pretending otherwise
+would be a lie about the size of the job. Variation is drilled on the *pattern*,
+in everyday Arabic.
+
+### What is still missing, with numbers
+
+The bank reaches **65% of the ladder's word keys**; **7 of 128 lessons** still
+fall back to single words. Remaining gaps are the two empty rows above (duas,
+mosque Arabic) plus a handful of `ev-*` clusters. The rule from §5 stands and is
+enforced by `scripts/test-sentences.js`: **nothing composed, everything traceable
+to a checked source.** The two generators above are the pattern for closing the
+rest — find the verified supply the repo already owns, and import it.
+
+**Real audio remains open.** Everything is Edge neural TTS. He asked for authentic
+recordings; Qur'an recitation is the obvious first candidate now that the corpus
+is the whole of juz' 'Amma, and his Qur'an site may already carry per-ayah audio
+worth wiring up. Everyday MSA still needs a rights-clean source.
 
 ## 9. Data contracts
 

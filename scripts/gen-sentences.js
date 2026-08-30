@@ -41,6 +41,11 @@ const D = f => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8"));
 const verses = D("verses.json"), phrases = D("phrases.json"), core = D("quran-core.json");
 const everyday = D("everyday.json"), families = D("families.json"), sentences = D("sentences.json");
 const prompts = D("prompts.json"), grammar = D("grammar.json");
+/* The short surahs, imported from his own Qur'an site by
+   scripts/import-quran-sentences.js. Optional: the site still builds without it,
+   it just teaches 13 surahs instead of the whole of juz' 'Amma. */
+let quranSents = { ayahs: [] };
+try { quranSents = D("quran-sentences.json"); } catch (e) { console.log("  (no quran-sentences.json — run scripts/import-quran-sentences.js)"); }
 const STORY_IDS = fs.readdirSync(path.join(ROOT, "data")).filter(f => /^story-\d+\.json$/.test(f)).map(f => f.replace(".json", "")).sort();
 const stories = Object.fromEntries(STORY_IDS.map(id => [id, D(id + ".json")]));
 
@@ -76,6 +81,10 @@ verses.surahs.forEach(s => s.verses.forEach((v, vi) =>
 everyday.groups.forEach(g => g.members.forEach((m, i) => claim(m.ar, `ev-${g.id}:${i}`, m.en, m.tr)));
 families.families.forEach(f => f.members.forEach((m, i) => claim(m.ar, `fam-${f.id}:${i}`, m.en, m.tr)));
 STORY_IDS.forEach(sid => (stories[sid].vocab || []).forEach((w, i) => claim(w.ar, `${sid}:${i}`, w.en, w.tr)));
+/* Words that occur ONLY in the imported short surahs still need an identity, a
+   gloss and a card, or the corpus would teach words the site cannot name. */
+(quranSents.ayahs || []).forEach(a => a.words.forEach((w, i) =>
+  claim(w[0], `qs:${a.ref}:${i}`, w[2], w[1])));
 
 /* A word with no card of its own is still a word: give it a form-based key so it
    can be scheduled, counted and reported on like any other. */
@@ -208,6 +217,23 @@ verses.surahs.forEach(surah => {
   });
 });
 
+/* --- the short surahs (juz' 'Amma + Al-Fatiha) ---
+   THE finite corpus behind "I understand the short suras". Real text, real
+   translations, straight from the Qur'an. Ayat already in verses.json were
+   filtered out at import time, so nothing is taught twice. */
+(quranSents.ayahs || []).forEach(a => add({
+  id: `qs:${a.ref}`,
+  key: `s:qs:${a.ref}`,
+  track: "quran",
+  ar: a.ar, en: a.en,
+  tr: a.words.map(w => w[1]).filter(Boolean).join(" "),
+  ref: a.ref,
+  words: words(a.words.map(w => [w[0], w[2], w[1]])),
+  pattern: patternFor(a.ar),
+  src: "quran",
+  surah: a.surahName,
+}));
+
 /* --- the phrase deck: already whole utterances, already carded --- */
 phrases.groups.forEach(g => g.members.forEach((m, i) => add({
   id: `ph:${g.id}:${i}`,
@@ -272,13 +298,16 @@ const PERSONS = [["ana", "I"], ["nahnu", "we"], ["hum", "they"]];
 sentences.verbs.forEach((v, vi) => {
   const form = v.forms.ana && v.forms.ana.past;
   if (!form) return;
-  const ar = `${form} ${v.obj.ar}`;
+  // a frame may have no object at all — "I sat" is a whole sentence — so join
+  // and trim rather than leaving a trailing space in the Arabic and the English
+  const j = (a, b) => [a, b].filter(x => String(x || "").trim()).join(" ").trim();
+  const ar = j(form, v.obj.ar);
   add({
     id: `vb:${vi}`,
     key: `s:vb:${vi}`,
     track: "conv",
     ar,
-    en: `I ${v.past} ${v.obj.en}`,
+    en: j(`I ${v.past}`, v.obj.en),
     tr: "",
     words: words([[form, `I ${v.past}`], ...String(v.obj.ar).split(/\s+/).map(w => [w])]),
     pattern: "tenses",
@@ -288,9 +317,9 @@ sentences.verbs.forEach((v, vi) => {
     vary: PERSONS.flatMap(([pk, pen]) => ["past", "pres", "fut"].map(tk => {
       const f = v.forms[pk] && v.forms[pk][tk];
       if (!f) return null;
-      const en = tk === "fut" ? `${pen} will ${v.base} ${v.obj.en}`
-        : `${pen} ${tk === "past" ? v.past : v.base} ${v.obj.en}`;
-      return { ar: `${f} ${v.obj.ar}`, en, person: pk, tense: tk, verb: f };
+      const en = tk === "fut" ? j(`${pen} will ${v.base}`, v.obj.en)
+        : j(`${pen} ${tk === "past" ? v.past : v.base}`, v.obj.en);
+      return { ar: j(f, v.obj.ar), en: String(en).replace(/\s+/g, " ").trim(), person: pk, tense: tk, verb: f };
     }).filter(Boolean)),
   });
 });
@@ -338,7 +367,15 @@ fs.writeFileSync(path.join(ROOT, "data", "sentence-bank.json"), JSON.stringify(o
 
 const withPattern = bank.filter(u => u.pattern).length;
 const withVary = bank.filter(u => u.vary && u.vary.length).length;
+const variants = bank.reduce((a, u) => a + ((u.vary || []).length || 0), 0);
+const conv = bank.filter(u => u.track === "conv");
+const convVariants = conv.reduce((a, u) => a + Math.max(1, (u.vary || []).length), 0);
 const newWords = new Set(bank.flatMap(u => u.wordKeys).filter(k => k && k.startsWith("w:")));
 console.log(`sentence bank: ${bank.length} units (${out.tracks.quran} Qur'an, ${out.tracks.conv} everyday)`);
 console.log(`  ${withPattern} demonstrate a grammar pattern, ${withVary} carry verified variations`);
+/* His framing, 2026-08-30: "X sentences and Y variants. so X x Y to be mastered."
+   Stated honestly per track, because they differ in kind: an ayah is fixed text
+   and is never conjugated, so the Qur'an track's count is ayat, full stop. */
+console.log(`  TO MASTER — Qur'an: ${out.tracks.quran} ayat (fixed text, no variants by design)`);
+console.log(`              everyday: ${conv.length} sentences, ${variants} verified variants => ${convVariants} utterances`);
 console.log(`  ${new Set(bank.flatMap(u => u.wordKeys)).size} distinct words underneath, ${newWords.size} of them not previously carded`);
