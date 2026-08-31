@@ -238,5 +238,106 @@ const bank = D("sentence-bank.json");
   yes(LOG.length === 1, "a REBUILT self-seeded week labelled source:coach cannot supersede the real one");
 }
 
+
+/* ---------- 9. THE STUMBLE: three levels, and the middle one holds ----------
+   His pen note, 2026-08-31: "when i say i said it, i should be able to say how
+   accurate i got it. making it binary might not be the best thing."
+
+   Two things are pinned here, because both were free to regress silently:
+   (a) gradeCard("hard") must HOLD the box and pull the card back to tomorrow.
+       A stumble that advanced the box would be the old lie with a nicer label,
+       and a stumble that reset to box 0 would throw away real knowledge.
+   (b) the spoken self-grade must LOG. Before today nothing on the lesson page
+       recorded that he had spoken at all, which is why every gap hunt read his
+       speaking as zero — and story.html's speak-self had been logged for weeks
+       and counted by nothing at all. */
+{
+  console.log("\n-- the spoken self-grade --");
+  const learn = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+
+  // (a) gradeCard, run for real out of app.js
+  const gcSrc = (appSrc.match(/function gradeCard\(key, grade\) \{[\s\S]*?\n\}/) || [])[0];
+  yes(!!gcSrc, "gradeCard is extractable from app.js");
+  if (gcSrc) {
+    const DAY = 86400000, BOX_DAYS = [0, 1, 3, 7, 14, 30];
+    let SRS = {};
+    const store = { get: () => SRS, set: (k, v) => { SRS = v; } };
+    const gradeCard = new Function("getSrs", "store", "BOX_DAYS", "DAY",
+      gcSrc + "; return gradeCard;")(() => SRS, store, BOX_DAYS, DAY);
+
+    const at = (box, dueDays) => { SRS = { k: { box, due: Date.now() + dueDays * DAY } }; };
+    const box = () => SRS.k.box, dueInDays = () => (SRS.k.due - Date.now()) / DAY;
+
+    at(3, 7); gradeCard("k", "good");
+    yes(box() === 4, "a clean answer advances the box (3 → 4)");
+
+    at(3, 7); gradeCard("k", "again");
+    yes(box() === 0 && dueInDays() < 0.02, "a miss resets to box 0 and comes back in minutes");
+
+    at(3, 7); gradeCard("k", "hard");
+    yes(box() === 3, "A STUMBLE HOLDS THE BOX — it is not a pass");
+    yes(Math.abs(dueInDays() - 1) < 0.02, "...and brings the card back tomorrow, not in a week");
+
+    at(5, 30); gradeCard("k", "hard");
+    yes(box() === 5 && Math.abs(dueInDays() - 1) < 0.02,
+      "...a stumble on a box-5 word pulls it back without demoting what he knows");
+
+    // a retired word stays retired unless he actually MISSES it
+    SRS = { k: { box: 5, due: 0, b: "never" } };
+    gradeCard("k", "hard");
+    yes(SRS.k.b === "never", "a stumble does not un-retire a ⊘ word (only a real miss does)");
+  }
+
+  // (b) three levels, wired, logged — and the binary gone
+  yes(/SELF_GRADES\s*=\s*\[/.test(learn), "learn.html declares the three self-grade levels");
+  ["clean", "stumble", "no"].forEach(id =>
+    yes(new RegExp(`id: "${id}"`).test(learn), `...the "${id}" level exists`));
+  yes(/id: "stumble"[\s\S]{0,60}grade: "hard"/.test(learn),
+    "...and the stumble is the one that grades \"hard\"");
+  yes(!/id="micYes"/.test(learn) && !/id="bYes"/.test(learn),
+    "no binary ✓/✗ pair survives on any spoken-answer route in learn.html");
+  yes(/logEvent\(\{ e: "speak-self"/.test(learn),
+    "a self-marked spoken answer is LOGGED — the lesson page recorded nothing before");
+
+  // (c) and the thing that logs it is actually counted
+  const pm = fs.readFileSync(path.join(ROOT, "js", "progress-model.js"), "utf8");
+  const plan = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  yes(/"speak-self"/.test(pm), "progress-model counts speak-self toward spoken output");
+  yes(/"speak-self"/.test(plan), "the day plan counts speak-self in the practice mix");
+  yes(/"speak-self"/.test(appSrc), "the milestone ladder counts speak-self as a spoken attempt");
+  ["speaking.html", "story.html"].forEach(f => {
+    const src = fs.readFileSync(path.join(ROOT, f), "utf8");
+    yes(/level: "stumble"|said\("stumble"/.test(src), `${f} offers the stumble too`);
+  });
+}
+
+/* ---------- 10. TWO SPEEDS ----------
+   "maybe i can do do 2 speeds of listening to all audios." One switch that every
+   call to speak() obeys. Normal must be a multiplier of exactly 1, or today's
+   audio changes for a man who never asked for it to. */
+{
+  console.log("\n-- two listening speeds --");
+  yes(/const SPEAK_SLOW = 0\.75;/.test(appSrc), "app.js defines the slow speed");
+  yes(/function _speedMul\(\)/.test(appSrc), "…and one multiplier every player asks");
+  const mul = new Function("store",
+    (appSrc.match(/const SPEAK_SLOW[\s\S]*?\nfunction _speedMul\(\) \{[^}]*\}/) || [""])[0] +
+    "; return _speedMul;");
+  const normal = mul({ get: (k, d) => d });
+  yes(normal() === 1, "NORMAL IS EXACTLY 1 — nothing changes until he asks for slow");
+  const slow = mul({ get: () => "slow" });
+  yes(slow() === 0.75, "slow is 0.75");
+  // every place a rate is finally consumed must go through it
+  // every place a rate is finally set: through the switch, or through `pr`,
+  // which is the one variable that already carries it
+  const consumers = appSrc.match(/playbackRate = [^;]+;|u\.rate = [^;]+;/g) || [];
+  yes(consumers.length >= 5, `${consumers.length} places set a playback rate`);
+  const deaf = consumers.filter(c => !c.includes("_speedMul()") && !/= pr;/.test(c));
+  yes(deaf.length === 0,
+    deaf.length ? `a player ignores the switch and would stay fast: ${deaf.join(" ")}`
+                : "EVERY player applies the switch — including the qari and the word-by-word clips");
+  yes(/speedToggleHtml\(\)/.test(fs.readFileSync(path.join(ROOT, "learn.html"), "utf8")),
+    "the switch is on the lesson page, where he wrote the note");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

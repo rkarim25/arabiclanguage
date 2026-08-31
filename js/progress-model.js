@@ -493,7 +493,10 @@
       if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
       else if (e.e === "review" || e.e === "qfill") graded++;
       else if (e.e === "alisten-grade" || e.e === "commute-check") { graded++; ear++; }
-      else if (e.e === "speak" || e.e === "spract" || e.e === "trans") { graded++; out++; }
+      /* speak-self is a spoken attempt he marked himself. It has been logged by
+         story.html since that page was written and counted by NOTHING — which is
+         a large part of why every read of this log says his speaking is zero. */
+      else if (e.e === "speak" || e.e === "speak-self" || e.e === "spract" || e.e === "trans") { graded++; out++; }
     }
     return {
       earShare: Math.max(SKILL_CAL.EAR_SHARE_FLOOR, graded ? ear / graded : 0),
@@ -504,7 +507,7 @@
     let m = 0;
     for (const e of log || []) {
       if (!e || !e.t || e.t < 16e11 || (uptoT && e.t > uptoT)) continue;
-      if (e.e === "speak") m += 0.5;
+      if (e.e === "speak" || e.e === "speak-self") m += 0.5;
       else if (e.e === "spract") m += 0.4;
       else if (e.e === "alisten-sent") m += 0.3;
       else if (e.e === "trans") m += 0.5;

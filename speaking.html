@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mth4bln9">
-  <link rel="stylesheet" href="css/style.css?v=mth4bln9">
+  <link rel="stylesheet" href="css/fonts.css?v=mthgac47">
+  <link rel="stylesheet" href="css/style.css?v=mthgac47">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -67,9 +67,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mth4bln9"></script>
-<script src="js/tracker.js?v=mth4bln9"></script>
-<script src="js/plan.js?v=mth4bln9"></script>
+<script src="js/app.js?v=mthgac47"></script>
+<script src="js/tracker.js?v=mthgac47"></script>
+<script src="js/plan.js?v=mthgac47"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -214,7 +214,7 @@ function renderDrill() {
   const attempted = new Set();
   let right = 0;
 
-  function finishRow(i, key, ok, resultHtml) {
+  function finishRow(i, key, ok, resultHtml, grade) {
     if (attempted.has(i)) return;
     attempted.add(i);
     if (ok) right++;
@@ -226,7 +226,8 @@ function renderDrill() {
       ans.innerHTML = `${batch[i].v.ar} <span class="row-speak" style="cursor:pointer">🔊</span>`;
       ans.querySelector(".row-speak").onclick = () => speak(batch[i].v.ar, 0.75);
     }
-    gradeCard(key, ok ? "good" : "again");
+    // a stumble is a correct answer that must not advance the card — gradeCard "hard"
+    gradeCard(key, grade || (ok ? "good" : "again"));
     mountBucketBar(row.querySelector(".bucket-slot"), key);
     if (attempted.size === batch.length) {
       drillDone += batch.length;
@@ -274,10 +275,19 @@ function renderDrill() {
       tr.querySelector(".reveal").onclick = () => {
         const res = tr.querySelector(".res");
         res.innerHTML = `<span class="arabic" style="font-size:20px" dir="rtl">${v.ar}</span> <span class="row-speak" style="cursor:pointer">🔊</span>
-          <button class="small self-ok">✓ said it</button> <button class="small self-no">✗ struggled</button>`;
+          <button class="small self-ok">✓ clean</button> <button class="small self-mid">~ stumbled</button> <button class="small self-no">✗ couldn't</button>`;
         res.querySelector(".row-speak").onclick = () => speak(v.ar, 0.75);
-        res.querySelector(".self-ok").onclick = () => { logEvent({ e: "vspeak-self", key, ok: true }); finishRow(i, key, true, `<span style="color:var(--accent)">✓ noted</span>`); };
-        res.querySelector(".self-no").onclick = () => { logEvent({ e: "vspeak-self", key, ok: false }); finishRow(i, key, false, `<span style="color:var(--red)">noted — practice it</span>`); };
+        /* three levels, not two — his note, 2026-08-31: "when i say i said it, i
+           should be able to say how accurate i got it. making it binary might not
+           be the best thing." The middle holds the card and brings it back
+           tomorrow rather than pretending a stumble is fluency. */
+        const said = (level, grade, ok, html) => {
+          logEvent({ e: "speak-self", key, level, ok, src: "speaking" });
+          finishRow(i, key, ok, html, grade);
+        };
+        res.querySelector(".self-ok").onclick = () => said("clean", "good", true, `<span style="color:var(--accent)">✓ noted</span>`);
+        res.querySelector(".self-mid").onclick = () => said("stumble", "hard", true, `<span style="color:var(--accent)">~ noted — back tomorrow</span>`);
+        res.querySelector(".self-no").onclick = () => said("no", "again", false, `<span style="color:var(--red)">noted — practice it</span>`);
       };
     }
   });

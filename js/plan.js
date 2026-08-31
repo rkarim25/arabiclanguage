@@ -38,7 +38,7 @@ function planMix() {
     if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
     else if (e.e === "review" || e.e === "qfill") graded++;
     else if (e.e === "alisten-grade" || e.e === "commute-check") { graded++; ear++; }
-    else if (e.e === "vspeak" || e.e === "vspeak-self" || e.e === "spract" || e.e === "trans" || e.e === "prompt") { graded++; out++; }
+    else if (e.e === "speak-self" || e.e === "vspeak" || e.e === "vspeak-self" || e.e === "spract" || e.e === "trans" || e.e === "prompt") { graded++; out++; }
   }
   return { earShare: graded ? ear / graded : 0, outShare: graded ? out / graded : 0, graded };
 }

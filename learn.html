@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mth4bln9">
-  <link rel="stylesheet" href="css/style.css?v=mth4bln9">
+  <link rel="stylesheet" href="css/fonts.css?v=mthgac47">
+  <link rel="stylesheet" href="css/style.css?v=mthgac47">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mth4bln9"></script>
-<script src="js/curriculum.js?v=mth4bln9"></script>
-<script src="js/app.js?v=mth4bln9"></script>
-<script src="js/tracker.js?v=mth4bln9"></script>
-<script src="js/plan.js?v=mth4bln9"></script>
+<script src="js/progress-model.js?v=mthgac47"></script>
+<script src="js/curriculum.js?v=mthgac47"></script>
+<script src="js/app.js?v=mthgac47"></script>
+<script src="js/tracker.js?v=mthgac47"></script>
+<script src="js/plan.js?v=mthgac47"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -173,6 +173,46 @@ const CAN_MIC = typeof SR !== "undefined" && !!SR;
    mark it yourself — and the second one needs nothing but a mouth. This is the
    same self-judgment the Qur'an recite step has used since the beginning, and it
    is the reason that step has never once been reported as broken. */
+/* ---- THE STUMBLE IS THE HONEST ANSWER, and until 2026-08-31 it had no button ----
+   His pen note, written on the class-words lesson while doing this exact step:
+   "when i say i said it, i should be able to say how accurate i got it. making it
+   binary might not be the best thing."
+
+   ✓/✗ forced him to lie in one direction or the other. A hesitant third attempt
+   that got there had to be called a clean pass — which advances the box and takes
+   the word out of rotation — or a miss, which sends a word he genuinely produced
+   back to box 0. Neither is what happened. The honest answer had nowhere to go, so
+   speaking never registered as movement, which is a fair description of why his
+   log holds 203 by-ear grades and nothing spoken.
+
+   Three levels. The middle one is the whole point: it holds the box and brings the
+   card back tomorrow (gradeCard "hard").
+
+   AND IT LOGS. Every self-marked spoken answer now emits `speak-self`. Until today
+   this page recorded nothing at all to say he had opened his mouth — a self-marked
+   answer was indistinguishable from a typed one in the record, which is why every
+   gap hunt read his speaking as zero when the truth was simply unmeasured. */
+const SELF_GRADES = [
+  { id: "clean",   label: "✓ said it clean",    grade: "good",  ok: true,  verdict: "✓ said it clean" },
+  { id: "stumble", label: "~ got it, stumbled", grade: "hard",  ok: true,  verdict: "~ got it — back again tomorrow" },
+  { id: "no",      label: "✗ couldn't",         grade: "again", ok: false, verdict: "✗ not yet" },
+];
+function selfGradeRow(prefix) {
+  return `<div class="row">` + SELF_GRADES.map((g, i) =>
+    `<button ${i === 0 ? 'class="primary" ' : ""}id="${prefix}${g.id}">${g.label}</button>`).join("") + `</div>`;
+}
+/* onPick receives the SELF_GRADES entry — its .ok for the score, its .grade for the card */
+function wireSelfGrade(prefix, key, onPick) {
+  SELF_GRADES.forEach(g => {
+    const b = document.getElementById(prefix + g.id);
+    if (!b) return;
+    b.onclick = () => {
+      logEvent({ e: "speak-self", key: key || "", level: g.id, ok: g.ok, src: "learn" });
+      onPick(g);
+    };
+  });
+}
+
 function micRow(id) {
   const self = `<button id="${id}Self">🗣 I said it — mark it myself</button>`;
   if (!CAN_MIC) return `<div class="row" style="margin-top:2px">${self}</div>
@@ -484,30 +524,34 @@ async function runLesson(lesson, ms, ctx, handsFree) {
   const head = extra => `
     <div class="crumb">${track === "quran" ? "🎧 Qur'an" : "🗣 Everyday"} · ${esc(ms.name)}</div>
     <h1 style="margin-top:0">${esc(lesson.title)}</h1>
-    <p class="sub">${extra || ""}${review.length ? ` <span class="pill">+${review.length} to keep warm</span>` : ""}</p>`;
+    <p class="sub">${extra || ""}${review.length ? ` <span class="pill">+${review.length} to keep warm</span>` : ""}
+      ${speedToggleHtml()}</p>`;
 
   /* ---- word-level credit ----
      A sentence answer is the only thing he does, so it has to be what feeds the
      word cards. writeMatchAr already reports which target words landed; match
      them to the sentence's words by normalized form (index alignment is not safe
      — punctuation splits differently in different sources). */
-  function creditWords(s, m, fallbackOk) {
+  function creditWords(s, m, fallbackOk, fallbackGrade) {
     (s.words || []).forEach(w => {
       const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
       if (!cards.length) return;
-      let ok = fallbackOk;
+      let ok = fallbackOk, checked = false;
       if (m && m.words) {
         const j = m.words.findIndex(t => normalizeAr(t) === normalizeAr(w.ar));
-        if (j >= 0) ok = m.hits[j] !== "miss";
+        if (j >= 0) { ok = m.hits[j] !== "miss"; checked = true; }
       }
       // one word, every card it has: ٱللَّهِ is both qc:1 and qw:fatiha:0:1, and
       // letting those drift apart is what put the same word in a lesson twice
-      cards.forEach(k => gradeCard(k, ok ? "good" : "again"));
+      // a word the typed check actually MATCHED is a clean hit however the whole
+      // sentence sounded; a word nothing checked inherits the sentence's grade,
+      // stumble included
+      cards.forEach(k => gradeCard(k, (!checked && fallbackGrade) ? fallbackGrade : (ok ? "good" : "again")));
     });
   }
-  function gradeSentence(s, ok, m, byEar) {
-    if (s.key) gradeCard(s.key, ok ? "good" : "again");
-    creditWords(s, m, ok);
+  function gradeSentence(s, ok, m, byEar, grade) {
+    if (s.key) gradeCard(s.key, grade || (ok ? "good" : "again"));
+    creditWords(s, m, ok, grade);
     if (byEar) (s.wordKeys || []).forEach(k => logEvent({ e: "alisten-grade", key: k, ok: !!ok, src: "lesson" }));
   }
 
@@ -679,22 +723,20 @@ async function runLesson(lesson, ms, ctx, handsFree) {
           which isn't a match — but Arabic recognition is unreliable. Was what you said right?</p>
           <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
           ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
-          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button></div>
+          ${selfGradeRow("pj")}
         </div>`;
         speak(s.ar, 0.85);
-        document.getElementById("micYes").onclick = () => { asked++; right++; gradeSentence(s, true); vary(s); };
-        document.getElementById("micNo").onclick = () => { asked++; gradeSentence(s, false); vary(s); };
+        wireSelfGrade("pj", s.key, g => { asked++; if (g.ok) right++; gradeSentence(s, g.ok, null, false, g.grade); vary(s); });
       }, () => {
         app.innerHTML = head() + `<div class="card">${bar()}
           <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
           ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
           <div style="text-align:right;direction:rtl">${wordsHtmlFor(s)}</div>
           <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
-          <div class="row"><button class="primary" id="micYes">✓ yes</button><button id="micNo">✗ not quite</button></div>
+          ${selfGradeRow("ps")}
         </div>`;
         speak(s.ar, 0.85);
-        document.getElementById("micYes").onclick = () => { asked++; right++; gradeSentence(s, true); vary(s); };
-        document.getElementById("micNo").onclick = () => { asked++; gradeSentence(s, false); vary(s); };
+        wireSelfGrade("ps", s.key, g => { asked++; if (g.ok) right++; gradeSentence(s, g.ok, null, false, g.grade); vary(s); });
       });
       const showProduced = (sn, ok, heard) => {
         app.innerHTML = head() + `<div class="card">${bar()}
@@ -1005,27 +1047,24 @@ async function runTest(lessonIds, ctx, state, label, opts) {
             It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”, which isn't a match —
             but Arabic recognition is unreliable. Was what you said right?</p>
           <div class="q-ar arabic" dir="rtl" style="font-size:24px">${esc(target)}</div>
-          <div class="row"><button class="primary" id="micYes">✓ I said it right</button><button id="micNo">✗ no, I didn't</button>
-            <button id="micRetry">🎤 try again</button></div>`;
+          ${selfGradeRow("tj")}
+          <div class="row"><button id="micRetry">🎤 try again</button></div>`;
         const rt = document.getElementById("micRetry");
         if (rt) rt.onclick = () => { rev.innerHTML = ""; document.getElementById(id).click(); };
-        document.getElementById("micYes").onclick = () => settle(true, false, target);
-        document.getElementById("micNo").onclick = () => settle(false, false, target);
+        wireSelfGrade("tj", q.key, g => settle(g.ok, false, target, g.grade));
       }, () => {
         // said out loud, judged by him — the answer is shown first so the
         // judgment is against the real thing, not against memory
         document.getElementById("jRev").innerHTML =
           `<div class="q-ar arabic" dir="rtl" style="margin-top:10px">${esc(target)}</div>
            <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
-           <div class="row"><button class="primary" id="micYes">✓ yes</button><button id="micNo">✗ not quite</button></div>`;
+           ${selfGradeRow("tk")}`;
         speak(target, 0.85);
-        const judged = ok => {
+        wireSelfGrade("tk", q.key, g => {
           document.getElementById("jRev").innerHTML =
-            `<p style="text-align:center;font-size:16px;margin:10px 0 0">${ok ? "✓ said it" : "✗ not quite"}</p>`;
-          settle(ok, false, target);
-        };
-        document.getElementById("micYes").onclick = () => judged(true);
-        document.getElementById("micNo").onclick = () => judged(false);
+            `<p style="text-align:center;font-size:16px;margin:10px 0 0">${g.verdict}</p>`;
+          settle(g.ok, false, target, g.grade);
+        });
       });
       mountBucketBar(document.getElementById("jBkt"), q.key, b => settle(b !== "repeat", true));
       const check = shown => {
@@ -1058,12 +1097,14 @@ async function runTest(lessonIds, ctx, state, label, opts) {
     }
 
     /* ---- the verdict, in the same card, and it waits for him ---- */
-    function settle(ok, bucketed, speakAr) {
+    function settle(ok, bucketed, speakAr, grade) {
       if (settle.done) return;                 // a bucket tap after answering must not double-count
       settle.done = true;
       answers.push({ key: q.key, lessonId: q.lessonId, lessonTitle: q.lessonTitle, form: q.form, ok: !!ok });
-      // an explicit bucket IS his scheduling decision — don't overwrite it
-      if (!bucketed) gradeCard(q.key, ok ? "good" : "again");     // the test is also revision
+      // an explicit bucket IS his scheduling decision — don't overwrite it.
+      // A stumble is a CORRECT answer that must not advance the card: the score
+      // keeps it, the schedule holds it — see gradeCard "hard".
+      if (!bucketed) gradeCard(q.key, grade || (ok ? "good" : "again"));     // the test is also revision
       if (q.form === "ear") logEvent({ e: "alisten-grade", key: q.key, ok: !!ok, src: "test" });
 
       const rev = document.getElementById("jRev");
@@ -1262,17 +1303,15 @@ async function runVocabBurst(ctx, state) {
         document.getElementById("jRev").innerHTML =
           `<div class="q-ar arabic" dir="rtl" style="margin-top:10px">${esc(w.ar)}</div>
            <p style="text-align:center;font-size:14px;color:var(--muted)">Is that what you said?</p>
-           <div class="row"><button class="primary" id="bYes">✓ yes</button><button id="bNo">✗ not quite</button></div>`;
+           ${selfGradeRow("bj")}`;
         speak(w.ar, 0.85);
         document.getElementById("ans").disabled = true;
         // clear the prompt before settling, or its dead buttons sit above the verdict
-        const judged = ok => {
+        wireSelfGrade("bj", w.key, g => {
           document.getElementById("jRev").innerHTML =
-            `<p style="text-align:center;font-size:16px;margin:10px 0 0">${ok ? "✓ said it" : "✗ not quite"}</p>`;
-          settle(ok, false);
-        };
-        document.getElementById("bYes").onclick = () => judged(true);
-        document.getElementById("bNo").onclick = () => judged(false);
+            `<p style="text-align:center;font-size:16px;margin:10px 0 0">${g.verdict}</p>`;
+          settle(g.ok, false, g.grade);
+        });
       });
       mountBucketBar(document.getElementById("jBkt"), w.key, b => settle(b !== "repeat", true));
       function wireBurstBack() {
@@ -1289,10 +1328,10 @@ async function runVocabBurst(ctx, state) {
       };
       document.getElementById("chk").onclick = () => check(false);
       document.getElementById("skip").onclick = () => check(true);
-      function settle(ok, bucketed) {
+      function settle(ok, bucketed, grade) {
         if (settle.done) return;
         settle.done = true;
-        if (!bucketed) (w.keys || [w.key]).forEach(k => gradeCard(k, ok ? "good" : "again"));
+        if (!bucketed) (w.keys || [w.key]).forEach(k => gradeCard(k, grade || (ok ? "good" : "again")));
         if (!ok && !answered.has(at)) miss.push(w);
         answered.add(at);
         // only the first sight of a word counts toward the score

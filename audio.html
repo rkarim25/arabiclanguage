@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mth4bln9">
-  <link rel="stylesheet" href="css/style.css?v=mth4bln9">
+  <link rel="stylesheet" href="css/fonts.css?v=mthgac47">
+  <link rel="stylesheet" href="css/style.css?v=mthgac47">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -38,9 +38,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=mth4bln9"></script>
-<script src="js/tracker.js?v=mth4bln9"></script>
-<script src="js/plan.js?v=mth4bln9"></script>
+<script src="js/app.js?v=mthgac47"></script>
+<script src="js/tracker.js?v=mthgac47"></script>
+<script src="js/plan.js?v=mthgac47"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -299,6 +299,8 @@ function render(state) {
       <button class="ac-btn primary" id="acYes" style="flex:1;max-width:220px">✓ I had it</button>
     </div>
     <div class="ac-controls" id="acControls"></div>
+    <!-- the commute is where "slower, please" is most often the whole ask -->
+    <div class="ac-controls" style="margin-top:10px">${speedToggleHtml()}</div>
     <div class="ac-meta"><span id="acCount"></span></div>
     <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
     Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mth4bln9">
-  <link rel="stylesheet" href="css/style.css?v=mth4bln9">
+  <link rel="stylesheet" href="css/fonts.css?v=mthgac47">
+  <link rel="stylesheet" href="css/style.css?v=mthgac47">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mth4bln9"></script>
-<script src="js/tracker.js?v=mth4bln9"></script>
-<script src="js/plan.js?v=mth4bln9"></script>
+<script src="js/app.js?v=mthgac47"></script>
+<script src="js/tracker.js?v=mthgac47"></script>
+<script src="js/plan.js?v=mthgac47"></script>
 <script>
 renderNav("stories");
 
@@ -507,7 +507,7 @@ function renderSpeak() {
     li.innerHTML = `
       <button class="small play">▸</button>
       <span class="txt">${s.ar}</span>
-      ${SR ? `<button class="small mic">🎤</button>` : `<button class="small self-good">✓ said it</button><button class="small self-hard">✗ struggled</button>`}
+      ${SR ? `<button class="small mic">🎤</button>` : `<button class="small self-good">✓ clean</button><button class="small self-mid">~ stumbled</button><button class="small self-hard">✗ couldn't</button>`}
       <div class="check-result" style="flex-basis:100%"></div>
     `;
     const result = li.querySelector(".check-result");
@@ -544,18 +544,18 @@ function renderSpeak() {
         rec.start();
       };
     } else {
-      li.querySelector(".self-good").onclick = () => {
-        logEvent({ e: "speak-self", story: storyId, s: i, rate: "good" });
+      /* three levels here too — the same `level` field the lesson and the
+         speaking drill now log, so one query answers "did he speak this week" */
+      const said = (level, ok, text) => {
+        logEvent({ e: "speak-self", story: storyId, s: i, level, ok });
         attempted.add(i);
-        result.className = "check-result ok"; result.textContent = "✓ noted";
+        result.className = "check-result " + (ok ? "ok" : "no");
+        result.textContent = text;
         checkAll();
       };
-      li.querySelector(".self-hard").onclick = () => {
-        logEvent({ e: "speak-self", story: storyId, s: i, rate: "hard" });
-        attempted.add(i);
-        result.className = "check-result no"; result.textContent = "noted — replay and try again";
-        checkAll();
-      };
+      li.querySelector(".self-good").onclick = () => said("clean", true, "✓ noted");
+      li.querySelector(".self-mid").onclick = () => said("stumble", true, "~ noted — play it again");
+      li.querySelector(".self-hard").onclick = () => said("no", false, "noted — replay and try again");
     }
     list.appendChild(li);
   });

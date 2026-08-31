@@ -150,6 +150,17 @@ function gradeCard(key, grade) {
   if (c.b === "never" && grade !== "again") return;
   delete c.b; // an actual test result replaces any explicit bucket mark
   if (grade === "again") { c.box = 0; c.due = Date.now() + 10 * 60 * 1000; }
+  /* "hard" — he PRODUCED it, but not cleanly.
+     His pen note, 2026-08-31, written on the class-words lesson: "when i say i
+     said it, i should be able to say how accurate i got it. making it binary
+     might not be the best thing." He is right, and the binary was costing more
+     than accuracy. A hesitant, second-attempt reading is neither "good" — which
+     advances the box and takes the word out of rotation for days — nor "again",
+     which throws away knowledge he demonstrably has. So a stumble HOLDS the box
+     where it is and brings the card back tomorrow: the one grade here that
+     changes when he next sees a word without changing what the site claims he
+     knows about it. */
+  else if (grade === "hard") { c.due = Date.now() + DAY; }
   else if (grade === "good") { c.box = Math.min(c.box + 1, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
   else { c.box = Math.min(c.box + 2, 5); c.due = Date.now() + BOX_DAYS[c.box] * DAY; }
   c.u = Date.now(); // write time — sync merge resolves retire/un-retire by latest intent
@@ -1234,7 +1245,7 @@ async function computeMilestones() {
   const grammarDone = ["inna", "alladhina", "idafa", "pronouns", "tenses", "negation", "connectors", "prep-pron", "verbears"]
     .filter(g => stepsDone("gr-" + g).test).length;
   const log = store.get("ats-log", []);
-  const spokenAttempts = log.filter(x => ["speak", "qspeak", "vspeak", "vspeak-self", "prompt"].includes(x.e)).length;
+  const spokenAttempts = log.filter(x => ["speak", "speak-self", "qspeak", "vspeak", "vspeak-self", "prompt"].includes(x.e)).length;
   const listenClicks = log.filter(x => x.e === "listen-click").length;
 
   const goalStages = {
@@ -1683,6 +1694,43 @@ function primeSpeak() {
     _speakPrimed = true;
   } catch (e) { a.muted = false; }
 }
+/* ---------- TWO SPEEDS, EVERYWHERE HE LISTENS ----------
+   His pen note, 2026-08-31: "maybe i can do do 2 speeds of listening to all
+   audios." Every 🔊 on the site plays at whatever rate its own page happened to
+   hard-code, and there was no way to ask for it slower — story.html has a speed
+   slider and nothing else does, which is precisely backwards: the story is the
+   page where he already knows the words.
+
+   So rather than a second button beside every one of the dozens of 🔊s, it is ONE
+   switch that every call to speak() obeys and the site remembers. "normal" is a
+   multiplier of exactly 1, so nothing about today's audio changes until he asks
+   for slow; slow is 0.75, which separates the words without distorting the
+   vowels. Slow applies to real recitation too — the standing rule against
+   retiming a reciter is about the site doing it silently, not about him asking. */
+const SPEAK_SLOW = 0.75;
+function speakSpeed() { return store.get("ats-speak-speed", "normal") === "slow" ? "slow" : "normal"; }
+function setSpeakSpeed(s) { store.set("ats-speak-speed", s === "slow" ? "slow" : "normal"); }
+function _speedMul() { return speakSpeed() === "slow" ? SPEAK_SLOW : 1; }
+function _speedBtns() {
+  const slow = speakSpeed() === "slow";
+  const on = "font-weight:700;border-color:var(--accent);color:var(--accent)";
+  return `<button type="button" class="small" data-sp="normal" style="${slow ? "" : on}">🔊 normal</button>` +
+         `<button type="button" class="small" data-sp="slow" style="${slow ? on : ""}">🐢 slow</button>`;
+}
+/* drop this anywhere audio is played; it needs no wiring — the listener below is
+   delegated, so it survives every re-render of the card it sits in */
+function speedToggleHtml() {
+  return `<span class="speed-sw" style="display:inline-flex;gap:4px;vertical-align:middle">${_speedBtns()}</span>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-sp]");
+  if (!b) return;
+  e.preventDefault();
+  setSpeakSpeed(b.dataset.sp);
+  try { logEvent({ e: "speak-speed", to: speakSpeed() }); } catch (err) {}
+  document.querySelectorAll(".speed-sw").forEach(el => { el.innerHTML = _speedBtns(); });
+});
+
 function speak(text, rate, onend) {
   stopSpeak();
   const file = _audioFileFor(text);
@@ -1691,7 +1739,7 @@ function speak(text, rate, onend) {
     // A generated clip is already slightly slow, so don't slow it twice. A REAL
     // recitation is played as recorded — retiming a reciter is exactly the thing
     // the by-ear goal cannot afford.
-    const pr = file.real ? 1 : Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+    const pr = (file.real ? 1 : Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2))) * _speedMul();
     let done = false;
     // if the recitation cannot be reached (no signal), the local clip answers,
     // and only if THAT fails does the browser voice
@@ -1720,7 +1768,7 @@ function _playFile(file, text, rate, onend) {
   a.onended = () => fin(true);
   a.onerror = () => fin(false);
   a.src = file.src;
-  a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2));
+  a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2)) * _speedMul();
   const p = a.play();
   if (p && p.then) p.then(() => { if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
 }
@@ -1733,7 +1781,7 @@ function _speakTts(text, rate, onend) {
   u.lang = isAr ? "ar-SA" : "en-US";
   const v = isAr ? _arVoice : _enVoice;
   if (v) { u.voice = v; if (!isAr) u.lang = v.lang; }
-  u.rate = rate || 0.85;
+  u.rate = (rate || 0.85) * _speedMul();
   if (onend) u.onend = onend;
   speechSynthesis.speak(u);
 }
@@ -1770,6 +1818,7 @@ function playRecitation(items, onEach, onDone) {
     if (onEach) onEach(it, i);
     const a = new Audio(recitationUrl(it.n, it.ayah));
     _recAudio = a;
+    a.playbackRate = _speedMul();
     a.onended = () => { i++; next(); };
     a.onerror = () => { _recAudio = null; if (onDone) onDone("audio-failed"); };
     a.play().catch(() => { _recAudio = null; if (onDone) onDone("blocked"); });
@@ -1800,7 +1849,7 @@ function speakQuranWord(surahId, vi, wi, text, rate) {
     if (done) return;
     if (i >= urls.length) { done = true; a.onended = null; a.onerror = null; return; }
     a.src = _qwbw.base + urls[i++];
-    a.playbackRate = 1;
+    a.playbackRate = _speedMul();
     const p = a.play();
     if (p && p.catch) p.catch(fail);
   };
@@ -1821,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mth4bln9";
+const DATA_V = "mthgac47";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
