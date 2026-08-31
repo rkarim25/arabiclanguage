@@ -1821,7 +1821,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtgjw1wu";
+const DATA_V = "mth4bln9";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2045,16 +2045,30 @@ async function weekGet() {
   return { week, ctx };
 }
 
-/* Log week-start exactly once per week number — this IS the history (only the
-   log syncs; see CURRICULUM.md §6). */
+/* Log week-start once per week number — this IS the history (only the log
+   syncs; see CURRICULUM.md §6).
+
+   ONE EXCEPTION, and it is the difference between the coach's week reaching him
+   and quietly not: weekOf() can self-seed and announce week N before
+   loadCoach() has finished fetching coach:<email>. The coach's week then wins
+   the HERO (it overwrites ats-week) while the HISTORY still holds the
+   self-seeded objectives — so carry-over and the exam scope run off a week he
+   was never shown. A coach-set week is therefore allowed to supersede a
+   self-seeded announcement of the same number exactly once; weekHistory()
+   replays with Object.assign, so the later record simply wins.
+
+   `coachSet` is stamped rather than inferred from `source`, because
+   weekSelfSeed() rebuilds an already-started week with source "coach" — the
+   flag that matters is whether a human coach set it, not what it is labelled. */
 function weekAnnounce(week) {
   if (!week || !week.n) return;
-  const seen = store.get("ats-log", []).some(e => e && e.e === "week-start" && e.n === week.n);
-  if (seen) return;
+  const coachSet = week.source === "coach" && !week.selfSeeded;
+  const prior = store.get("ats-log", []).filter(e => e && e.e === "week-start" && e.n === week.n);
+  if (prior.length && !(coachSet && !prior[prior.length - 1].coachSet)) return;
   logEvent({
     e: "week-start", n: week.n, title: week.title, from: week.from, to: week.to,
     track: week.track, objectives: Curriculum.weekObjectives(week),
-    keys: Curriculum.weekKeys(week), sizedFor: week.sizedFor,
+    keys: Curriculum.weekKeys(week), sizedFor: week.sizedFor, coachSet,
   });
 }
 

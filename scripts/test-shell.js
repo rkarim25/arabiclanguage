@@ -196,5 +196,47 @@ const bank = D("sentence-bank.json");
   yes(C.examResults(legacy).length === 2, "old week-stamped exams still count separately");
 }
 
+/* ---------- the coach's week must survive the self-seeder announcing first ----------
+   weekOf() can self-seed and announce week N before loadCoach() has fetched
+   coach:<email>. The coach week then wins the hero but NOT the history, so
+   carry-over and the exam scope would run off a week he was never shown.
+   weekAnnounce() lets a coach-set week supersede a self-seeded record of the
+   same number exactly once. Tested against the real weekHistory() replay. */
+{
+  const CC = require(path.join(ROOT, "js", "curriculum.js"));
+  const appSrc = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const mm = appSrc.match(/function weekAnnounce\(week\) \{[\s\S]*?\n\}/);
+  yes(!!mm, "app.js still defines weekAnnounce");
+
+  let LOG = [], tick = 0;
+  const fakeStore = { get: (k, d) => (k === "ats-log" ? LOG : d) };
+  const fakeLog = e => LOG.push(Object.assign({ t: ++tick }, e));
+  const announce = new Function("store", "logEvent", "Curriculum",
+    mm[0] + "\nreturn weekAnnounce;")(fakeStore, fakeLog, CC);
+
+  const objs = ks => [{ id: "o", title: "o", keys: ks }];
+  const selfWeek = { n: 2, title: "Week 2", from: "2026-08-31", to: "2026-09-06", objectives: objs(["a"]) };
+  const coachWeek = { n: 2, title: "Her flat, her week", from: "2026-08-31", to: "2026-09-06", source: "coach", objectives: objs(["b"]) };
+
+  announce(selfWeek);
+  yes(LOG.length === 1, "the self-seeder announces week 2");
+  announce(selfWeek);
+  yes(LOG.length === 1, "...and does not announce it twice");
+
+  announce(coachWeek);
+  yes(LOG.length === 2, "a coach-set week SUPERSEDES the self-seeded record of the same number");
+  const h2 = CC.weekHistory(LOG).filter(w => w.n === 2);
+  yes(h2.length === 1, "...history still has exactly one week 2, not two");
+  yes(h2[0].title === "Her flat, her week", "...and it is the coach's week that survives the replay");
+
+  announce(coachWeek);
+  yes(LOG.length === 2, "...and the coach week does not re-announce on every page load");
+
+  LOG = [];
+  announce(coachWeek);
+  announce({ n: 2, source: "coach", selfSeeded: true, from: "2026-08-31", to: "2026-09-06", objectives: objs(["c"]) });
+  yes(LOG.length === 1, "a REBUILT self-seeded week labelled source:coach cannot supersede the real one");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);
