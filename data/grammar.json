@@ -429,7 +429,7 @@
       "id": "wujud",
       "ar": "يُوجَدُ",
       "name": "يُوجَدُ — there is, there are",
-      "what": "To say something exists somewhere, Arabic uses يُوجَدُ ('is found'), or just puts the place first with no verb at all: فِي المَطْبَخِ ثَلَّاجَةٌ — 'in the kitchen (is) a fridge'. There is no word for 'is'. The question form is the one she put on the board: مَاذَا يُوجَدُ فِي بَيْتِكَ؟",
+      "what": "His question, 2026-08-31, asked on يُوجَدُ مَائِدَةٌ وَكَرَاسِي وَسُرُرٌ: \"where is 'there'?\" It is nowhere — and it is nowhere in the English either. Point at the word 'there' in 'there is a table': it names no place. It is a dummy English is forced to insert because an English sentence must have a subject. Arabic has no such rule, so it simply names the thing. Three ways, all three in this class. (1) PLACE FIRST, then stop: فِي المَطْبَخِ ثَلَّاجَةٌ — 'in the kitchen, a fridge'. No verb at all, and by far the commonest. (2) يُوجَدُ, literally 'is found' — the answering form, and the one she put on the board: مَاذَا يُوجَدُ فِي بَيْتِكَ؟ (3) فِيهَا, 'in it': الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ — 'the flat, in it a bedroom'. There is no word for 'is' in any of them.",
       "examples": [
         {
           "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
@@ -442,6 +442,10 @@
         {
           "ar": "لَا يُوجَدُ مِصْعَدٌ",
           "en": "There is no lift."
+        },
+        {
+          "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
+          "en": "The flat has a bedroom, a living room and a kitchen."
         }
       ],
       "test": [
@@ -454,6 +458,11 @@
           "prompt": "'What is there in your house, of furniture?'",
           "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
           "hint": "maadhaa yuujadu fii baytika mina l-athaath"
+        },
+        {
+          "prompt": "'The flat has a bedroom, a living room and a kitchen.'",
+          "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
+          "hint": "ash-shaqqatu fiihaa ghurfatu nawmin wa ghurfatu juluusin wa matbakh"
         }
       ]
     }
