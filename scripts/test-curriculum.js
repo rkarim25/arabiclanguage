@@ -11,6 +11,12 @@ const C = require(path.join(ROOT, "js", "curriculum.js"));
 const D = f => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8"));
 
 const curriculum = D("curriculum.json"), verses = D("verses.json");
+/* THE BANK IS NOT OPTIONAL. srsSolid takes its DENOMINATOR from the sentence
+   bank — the whole deck the site teaches. Evaluate a level without it and the
+   denominator silently collapses to "whatever of the deck he happens to have
+   met", which awards Conversation A1 on 5 cards out of 26. This harness ran
+   without it and printed exactly that false level for a day. */
+const bank = D("sentence-bank.json");
 let fails = 0;
 const ok = m => console.log("  ✓ " + m);
 const bad = m => { console.log("  ✗ " + m); fails++; };
@@ -18,7 +24,7 @@ const eq = (a, b, m) => (a === b ? ok(m) : bad(`${m} — got ${JSON.stringify(a)
 const yes = (c, m) => (c ? ok(m) : bad(m));
 
 const NOW = Date.UTC(2026, 7, 29, 12, 0, 0);
-const ctx = o => Object.assign({ curriculum, verses, log: [], srs: {}, progress: {}, now: NOW }, o);
+const ctx = o => Object.assign({ curriculum, verses, bank, log: [], srs: {}, progress: {}, now: NOW }, o);
 
 /* ---------- baskets ---------- */
 const salah = C.expandBasket("salah", ctx());
@@ -39,9 +45,17 @@ const earLog = n => fatiha.slice(0, n).map(k => ({ e: "alisten-grade", key: k, o
   yes(!C.evalCriterion(c, ctx({ log: screen })).met, "earCoverage: SCREEN recall does not count as by-ear (the honest gap)");
 }
 {
-  const srs = {}; for (let i = 0; i < 10; i++) srs["ph-greet:" + i] = { box: i < 9 ? 4 : 0 };
+  /* Built from the REAL deck, not ten invented cards. A fixture that invents its
+     own keys silently tests the fallback pool instead of the bank, which is the
+     very substitution that made a part-met deck look complete. */
+  const deck = [...new Set((bank.sentences || []).flatMap(s =>
+    [s.key, ...(s.teaches || []), ...(s.wordKeys || [])]))].filter(k => k && k.startsWith("ph-greet:"));
+  const solidN = n => { const srs = {}; deck.slice(0, n).forEach(k => (srs[k] = { box: 4 })); return srs; };
   const c = { type: "srsSolid", keys: ["ph-greet:"], box: 3, min: 0.8 };
-  yes(C.evalCriterion(c, ctx({ srs })).met, "srsSolid: 9/10 at box>=3 meets 80%");
+  yes(deck.length >= 5, `the ph-greet deck is read from the bank, not invented (${deck.length} cards)`);
+  yes(C.evalCriterion(c, ctx({ srs: solidN(deck.length) })).met, "srsSolid: the whole deck solid meets 80%");
+  yes(!C.evalCriterion(c, ctx({ srs: solidN(Math.floor(deck.length * 0.7)) })).met,
+    "srsSolid: 70% of the REAL deck misses 80% — the denominator is the deck, not what he has met");
   yes(!C.evalCriterion(c, ctx({ srs: {} })).met, "srsSolid: an empty deck fails rather than dividing by zero into a pass");
 }
 {
@@ -539,6 +553,17 @@ if (payloadPath && fs.existsSync(payloadPath)) {
   yes(L.quran.nextPct > 0.05, "calibration: A1 is visibly in reach, not a standing start");
   yes(seed.objectives.length >= 2, "calibration: a real week is several described objectives, not one blob");
   yes(C.weekKeys(seed).length >= 6, "calibration: a real self-seeded week has enough to do");
+
+  /* The harness must never again grade a level without the bank. Pinned as a
+     DIFFERENCE, not a constant: the same payload evaluated bankless must award
+     strictly more than it does with the bank, and the real run must be the
+     stricter one. */
+  const bankless = Object.assign({}, real); delete bankless.bank; delete bankless._catalogue;
+  const Lb = C.levels(bankless);
+  yes(Lb.conv.earned.length > L.conv.earned.length,
+    "a bankless ctx really does hand out a level it has not earned (this is why bank is required)");
+  yes(L.conv.earned.length === 0,
+    "…and the real, bank-loaded run does NOT award Conversation A1 on a part-met deck");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
