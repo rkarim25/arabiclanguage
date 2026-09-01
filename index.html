@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtiy9l6p">
-  <link rel="stylesheet" href="css/style.css?v=mtiy9l6p">
+  <link rel="stylesheet" href="css/fonts.css?v=mtiydq4y">
+  <link rel="stylesheet" href="css/style.css?v=mtiydq4y">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtiy9l6p"></script>
-<script src="js/curriculum.js?v=mtiy9l6p"></script>
-<script src="js/app.js?v=mtiy9l6p"></script>
-<script src="js/tracker.js?v=mtiy9l6p"></script>
-<script src="js/plan.js?v=mtiy9l6p"></script>
-<script src="js/account.js?v=mtiy9l6p"></script>
+<script src="js/progress-model.js?v=mtiydq4y"></script>
+<script src="js/curriculum.js?v=mtiydq4y"></script>
+<script src="js/app.js?v=mtiydq4y"></script>
+<script src="js/tracker.js?v=mtiydq4y"></script>
+<script src="js/plan.js?v=mtiydq4y"></script>
+<script src="js/account.js?v=mtiydq4y"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -381,6 +381,19 @@ function scorePill(l) {
       const held = c.keys.filter(k => ((srs[k] || {}).box || 0) >= 3).length;
       const el = document.createElement("div");
       el.className = "card";
+      /* THE CLASS IS FOUR THINGS, NOT ONE. 2026-09-01: the bar said "4 of 59 held"
+         and the only buttons under it were the whole-class test and the passage —
+         so the seven days and the divine attributes had no way in from the page he
+         actually opens. The homework contract already knows every part; show them,
+         with each one's own count, and let him tap the one he has not touched. */
+      let partsRow = "";
+      try {
+        const hw = typeof planHomework === "function" ? planHomework() : null;
+        if (hw && !hw.past && hw.parts && hw.parts.length > 1) {
+          partsRow = `<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px">` + hw.parts.map(p =>
+            `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:${p.shakyN === 0 ? "var(--accent)" : "var(--text)"}">${p.shakyN === 0 ? "✓ " : ""}${esc(p.label)} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`).join("") + `</div>`;
+        }
+      } catch (e) { /* no contract — the card is just as good without the row */ }
       el.innerHTML = `
         <h2 style="margin-top:0">🧑‍🏫 Sunday's class <span style="font-weight:400;font-size:13px;color:var(--muted)">${esc(c.date)}</span></h2>
         <p style="font-size:15px;margin:0 0 4px"><strong>${esc(c.title)}</strong></p>
@@ -390,6 +403,7 @@ function scorePill(l) {
         <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
           ${c.counts.vocabulary} words · ${c.counts.sentences} sentences · ${c.counts.grammar} grammar points ·
           a ${c.reading ? c.reading.sentences : 0}-sentence reading · <strong style="color:var(--text)">${held} of ${c.keys.length} held</strong></p>
+        ${partsRow}
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <a href="learn.html?class=${encodeURIComponent(c.id)}" style="text-decoration:none"><button class="primary">📝 Test the class</button></a>
           ${c.reading ? `<a href="story.html?id=${encodeURIComponent(c.reading.id)}" style="text-decoration:none"><button>📖 Read the passage</button></a>` : ""}
