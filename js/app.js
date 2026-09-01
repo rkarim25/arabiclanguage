@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtiydq4y";
+const DATA_V = "mtiyhhk5";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2862,7 +2862,28 @@ function wordAtPoint(x, y) {
   while (a > 0 && _AR_CH.test(text[a - 1])) a--;
   while (b < text.length && _AR_CH.test(text[b])) b++;
   const w = text.slice(a, b).trim();
-  return _AR_CH.test(w) ? w : null;
+  if (!_AR_CH.test(w) || a === b) return null;
+
+  try {
+    const range = document.createRange();
+    range.setStart(node, a);
+    range.setEnd(node, b);
+    const rects = range.getClientRects();
+    const pad = 4;
+    let hit = false;
+    for (let i = 0; i < rects.length; i++) {
+      const r = rects[i];
+      if (x >= r.left - pad && x <= r.right + pad && y >= r.top - pad && y <= r.bottom + pad) {
+        hit = true;
+        break;
+      }
+    }
+    if (!hit) return null;
+  } catch (_) {
+    return null;
+  }
+
+  return w;
 }
 let _wordPop = null;
 function closeWordPop() { if (_wordPop) { _wordPop.remove(); _wordPop = null; } }
