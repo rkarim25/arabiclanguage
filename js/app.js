@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtj57c9a";
+const DATA_V = "mtj5mmjl";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2788,7 +2788,7 @@ function conjLookupStrict(word) {
 /* His 2026-08-07 asks, all in one place: readable headings, transliteration on
    every form ("this is something i struggle with"), and BOLD the persons worth
    internalising first — the rest stay visible but dimmed. */
-const CONJ_FOCUS = ["ana", "anta", "huwa", "nahnu", "hum"];
+const CONJ_FOCUS = ["huwa", "ana", "anta", "hiya", "nahnu", "hum"];
 function conjStripHTML(hit, opts) {
   const v = hit.v, noEn = !!(opts && opts.noEn); // noEn: the row is a test — don't leak the meaning
   const ar = s => `<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${s}</span>`;
@@ -2808,7 +2808,7 @@ function conjStripHTML(hit, opts) {
         }).join("")}</tbody>
       </table>
       <div class="conj-fut">future = ${ar("سَـ")} + present — ${ar("سَ" + v.pres.ana)} <i class="conj-tr-inline">sa-${translitAr(v.pres.ana)}</i>${noEn ? "" : ` “I will ${v.base}”`}</div>
-      <div class="conj-pattern">the pattern — <b>past</b> = verb + ending: ‑tu <i>I</i> · ‑ta <i>you</i> · ‑a <i>he</i> · ‑nā <i>we</i> · ‑ū <i>they</i> &nbsp; <b>present</b> = prefix + verb: a‑ <i>I</i> · ta‑ <i>you</i> · ya‑ <i>he</i> · na‑ <i>we</i> · ya‑…‑ūna <i>they</i>. Start with the <b>bold five</b>; the dimmed rows follow the same music.</div>
+      <div class="conj-pattern">the pattern — <b>past</b> = verb + ending: ‑a <i>he</i> · ‑tu <i>I</i> · ‑ta <i>you</i> · ‑at <i>she</i> · ‑nā <i>we</i> · ‑ū <i>they</i> &nbsp; <b>present</b> = prefix + verb: ya‑ <i>he</i> · a‑ <i>I</i> · ta‑ <i>you</i> · ta‑ <i>she</i> · na‑ <i>we</i> · ya‑…‑ūna <i>they</i>. Ordered by frequency — the top rows matter most.</div>
     </div>
   </div>`;
 }

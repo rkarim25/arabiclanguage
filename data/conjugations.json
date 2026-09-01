@@ -2,6 +2,11 @@
   "note": "Conjugation library behind the tap-any-word popover (his 2026-07-21 pen note: every word should show 'conjugation and present and past form'). Every form is indexed at load, so tapping ANY conjugated form anywhere on the site finds its verb and shows the full table. Future = سَـ + present, taught as a rule (one row in the table footer), not stored. Persons kept to the practical 8 — dual and feminine plurals wait until the basics are automatic. Keep every form verified; this is a reference surface, errors here teach errors.",
   "persons": [
     {
+      "key": "huwa",
+      "ar": "هُوَ",
+      "en": "he"
+    },
+    {
       "key": "ana",
       "ar": "أَنَا",
       "en": "I"
@@ -10,16 +15,6 @@
       "key": "anta",
       "ar": "أَنْتَ",
       "en": "you (m)"
-    },
-    {
-      "key": "anti",
-      "ar": "أَنْتِ",
-      "en": "you (f)"
-    },
-    {
-      "key": "huwa",
-      "ar": "هُوَ",
-      "en": "he"
     },
     {
       "key": "hiya",
@@ -32,14 +27,19 @@
       "en": "we"
     },
     {
+      "key": "hum",
+      "ar": "هُمْ",
+      "en": "they"
+    },
+    {
       "key": "antum",
       "ar": "أَنْتُمْ",
       "en": "you (pl)"
     },
     {
-      "key": "hum",
-      "ar": "هُمْ",
-      "en": "they"
+      "key": "anti",
+      "ar": "أَنْتِ",
+      "en": "you (f)"
     }
   ],
   "verbs": [

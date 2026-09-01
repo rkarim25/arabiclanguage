@@ -17,7 +17,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const PERSONS = ["ana", "anta", "anti", "huwa", "hiya", "nahnu", "antum", "hum"];
+const PERSONS = ["huwa", "ana", "anta", "hiya", "nahnu", "hum", "antum", "anti"];
 const FATHA = "َ", DAMMA = "ُ", KASRA = "ِ", SUKUN = "ْ", SHADDA = "ّ";
 
 /* This file writes a short vowel BEFORE any shadda (kun-nā = ك ُ ن َ ّ ا), so a
