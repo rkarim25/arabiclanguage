@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mthgicw6">
-  <link rel="stylesheet" href="css/style.css?v=mthgicw6">
+  <link rel="stylesheet" href="css/fonts.css?v=mthze6a4">
+  <link rel="stylesheet" href="css/style.css?v=mthze6a4">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mthgicw6"></script>
-<script src="js/curriculum.js?v=mthgicw6"></script>
-<script src="js/app.js?v=mthgicw6"></script>
-<script src="js/tracker.js?v=mthgicw6"></script>
-<script src="js/plan.js?v=mthgicw6"></script>
+<script src="js/progress-model.js?v=mthze6a4"></script>
+<script src="js/curriculum.js?v=mthze6a4"></script>
+<script src="js/app.js?v=mthze6a4"></script>
+<script src="js/tracker.js?v=mthze6a4"></script>
+<script src="js/plan.js?v=mthze6a4"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -981,8 +981,23 @@ async function runTest(lessonIds, ctx, state, label, opts) {
      one it REPLACES the automatic grade rather than being overwritten by it.
 
      Enter is bound throughout: answer, Enter, read, Enter. That is the whole loop. */
+  /* The reveal can be REPLAYED — his note, 2026-08-31, written mid-test: "can i
+     hear things again on this page". He abandoned that attempt right after. The
+     word (and the sentence, when the question came wrapped in one) plays again
+     as often as he likes; hearing the answer he just missed IS the study. */
   const answerHtml = q => `<div class="q-ar arabic" style="margin-top:10px">${esc(q.v.ar)}</div>
-    <div class="q-en">${esc(q.v.en)}</div>${q.v.tr ? `<p class="q-tr">${esc(q.v.tr)}</p>` : ""}`;
+    <div class="q-en">${esc(q.v.en)}</div>${q.v.tr ? `<p class="q-tr">${esc(q.v.tr)}</p>` : ""}
+    ${q.v.note ? `<p style="font-size:13px;color:var(--muted);line-height:1.7;text-align:center">${esc(q.v.note)}</p>` : ""}
+    <div class="row" style="margin-top:4px">
+      <button type="button" id="jHear">🔊 hear it</button>
+      ${q.sentence ? `<button type="button" id="jHearSent">🔊 the sentence</button>` : ""}
+    </div>`;
+  function wireAnswerAudio(q) {
+    const hw = document.getElementById("jHear");
+    if (hw) hw.onclick = () => speak(q.v.ar, 0.85);
+    const hs = document.getElementById("jHearSent");
+    if (hs) hs.onclick = () => speak(q.sentence.ar, 0.85);
+  }
 
   /* Back from an UNANSWERED card: nothing has been recorded for this one, so only
      the previous question's answer comes off the score. */
@@ -1109,6 +1124,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
 
       const rev = document.getElementById("jRev");
       rev.insertAdjacentHTML("beforeend", answerHtml(q));
+      wireAnswerAudio(q);
       const row = document.getElementById("jRow");
       const next = BACK_BTN(i > 0) + `<button class="primary" id="nx" style="min-width:150px">Next →</button>`;
       if (row) row.innerHTML = next;

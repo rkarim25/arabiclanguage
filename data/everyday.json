@@ -1209,7 +1209,7 @@
      "ar": "شَقَّة",
      "en": "flat, apartment",
      "tr": "shaqqa",
-     "note": "from شَقَّ to split — a part split off a building",
+     "note": "from شَقَّ to split — a part split off a building · plural: شُقَق shuqaq",
      "from": "teacher"
     },
     {
@@ -1223,14 +1223,14 @@
      "ar": "مَطْبَخ",
      "en": "kitchen",
      "tr": "maṭbakh",
-     "note": "place-noun from طَبَخَ to cook",
+     "note": "place-noun from طَبَخَ to cook · plural: مَطَابِخ maṭābikh",
      "from": "teacher"
     },
     {
      "ar": "غُرْفَةُ نَوْمٍ",
      "en": "bedroom",
      "tr": "ghurfatu nawm",
-     "note": "literally 'room of sleep'",
+     "note": "literally 'room of sleep' · plural of غُرْفَة: غُرَف ghuraf",
      "from": "teacher"
     },
     {
@@ -1244,7 +1244,8 @@
      "ar": "سَرِير",
      "en": "bed",
      "tr": "sarīr",
-     "from": "teacher"
+     "from": "teacher",
+     "note": "plural: سُرُر surur — the next card"
     },
     {
      "ar": "سُرُر",
@@ -1257,7 +1258,8 @@
      "ar": "أَرِيكَة",
      "en": "sofa",
      "tr": "arīka",
-     "from": "teacher"
+     "from": "teacher",
+     "note": "plural: أَرَائِك arāʾik — the next card"
     },
     {
      "ar": "أَرَائِك",
@@ -1270,14 +1272,14 @@
      "ar": "مَائِدَة",
      "en": "dining table",
      "tr": "māʾida",
-     "note": "Surah 5 is named after it — المَائِدَة",
+     "note": "Surah 5 is named after it — المَائِدَة · plural: مَوَائِد mawāʾid",
      "from": "teacher"
     },
     {
      "ar": "كُرْسِيّ",
      "en": "chair",
      "tr": "kursī",
-     "note": "the same word as the كُرْسِيّ of Ayat al-Kursi",
+     "note": "the same word as the كُرْسِيّ of Ayat al-Kursi · plural: كَرَاسِي karāsī — the next card",
      "from": "teacher"
     },
     {
@@ -1290,7 +1292,8 @@
      "ar": "خَزَانَة",
      "en": "cupboard, closet",
      "tr": "khazāna",
-     "from": "teacher"
+     "from": "teacher",
+     "note": "plural: خَزَائِن khazāʾin — the next card"
     },
     {
      "ar": "خَزَائِن",
@@ -1303,82 +1306,84 @@
      "ar": "ثَلَّاجَة",
      "en": "fridge",
      "tr": "thallāja",
-     "note": "from ثَلْج ice — the 'ice-maker'",
+     "note": "from ثَلْج ice — the 'ice-maker' · plural: ثَلَّاجَات thallājāt",
      "from": "teacher"
     },
     {
      "ar": "فُرْن",
      "en": "oven",
      "tr": "furn",
-     "note": "also a bakery",
+     "note": "also a bakery · plural: أَفْرَان afrān",
      "from": "teacher"
     },
     {
      "ar": "سِتَارَة",
      "en": "curtain",
      "tr": "sitāra",
-     "note": "her Quran link: اللهُ هُوَ السَّتَّار — the Concealer",
+     "note": "her Quran link: اللهُ هُوَ السَّتَّار — the Concealer · plural: سَتَائِر satāʾir",
      "from": "teacher"
     },
     {
      "ar": "شُبَّاك",
      "en": "window",
      "tr": "shubbāk",
-     "note": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ",
+     "note": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ · plural: شَبَابِيك shabābīk",
      "from": "teacher"
     },
     {
      "ar": "سَجَّادَة",
      "en": "carpet; prayer mat",
      "tr": "sajjāda",
-     "note": "from سَجَدَ to prostrate — the thing you prostrate on",
+     "note": "from سَجَدَ to prostrate — the thing you prostrate on · plural: سَجَاجِيد sajājīd",
      "from": "teacher"
     },
     {
      "ar": "مِرْآة",
      "en": "mirror",
      "tr": "mirʾāt",
-     "note": "instrument-noun from رَأَى to see",
+     "note": "instrument-noun from رَأَى to see · plural: مَرَايَا marāyā",
      "from": "teacher"
     },
     {
      "ar": "طَابِق",
      "en": "floor, storey",
      "tr": "ṭābiq",
-     "note": "كَمْ طَابِقٍ بَيْتُكَ؟",
+     "note": "كَمْ طَابِقٍ بَيْتُكَ؟ · plural: طَوَابِق ṭawābiq",
      "from": "teacher"
     },
     {
      "ar": "دَوْر",
      "en": "floor, storey; turn",
      "tr": "dawr",
-     "note": "the everyday alternative to طَابِق",
+     "note": "the everyday alternative to طَابِق · plural: أَدْوَار adwār",
      "from": "teacher"
     },
     {
      "ar": "بَاب",
      "en": "door",
      "tr": "bāb",
-     "from": "complete"
+     "from": "complete",
+     "note": "plural: أَبْوَاب abwāb"
     },
     {
      "ar": "مِصْبَاح",
      "en": "lamp",
      "tr": "miṣbāḥ",
-     "note": "from صُبْح dawn — light; the Quran's مِصْبَاح in Ayat an-Nur",
+     "note": "from صُبْح dawn — light; the Quran's مِصْبَاح in Ayat an-Nur · plural: مَصَابِيح maṣābīḥ",
      "from": "complete"
     },
     {
      "ar": "سُلَّم",
      "en": "stairs, ladder",
      "tr": "sullam",
-     "from": "complete"
+     "from": "complete",
+     "note": "plural: سَلَالِم salālim"
     },
     {
      "ar": "مِصْعَد",
      "en": "lift, elevator",
      "tr": "miṣʿad",
-     "note": "from صَعِدَ to go up",
+     "note": "from صَعِدَ to go up · plural: مَصَاعِد maṣāʿid",
      "from": "complete"
     }
    ]

@@ -84,6 +84,14 @@ fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
 });
 // 6. Quran verse words (contextual — lowest priority)
 read("verses.json").surahs.forEach(s => s.verses.forEach(v => v.words.forEach(w => put(w[0], w[1], w[2], s.id))));
+// 6b. the imported short surahs (Al-Fatiha + juz' 'Amma) — word-by-word for
+//     every ayah. Their verse tie-ins appear inside class lessons, so
+//     tap-any-word must answer for them (wtap miss on مَّرْفُوعَةٞ, his note
+//     2026-08-31: "the word by word should work"). Same contextual tier as
+//     verses.json, which stays ahead of it. No tr: the corpus transliteration
+//     ("l-naba-i", "mukh'talifūna") is not the site's own convention and would
+//     not be accepted typed back — same rule as story text (source 5b).
+read("quran-sentences.json").ayahs.forEach(a => a.words.forEach(w => put(w[0], "", w[2], a.ref)));
 // 7. conversational phrases — single-word entries land as tappable words;
 //    multi-word keys are harmless (taps only ever look up one word)
 read("phrases.json").groups.forEach(g => g.members.forEach(m => put(m.ar, m.tr, m.en, "phrase")));
