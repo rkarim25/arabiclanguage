@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtiyitla";
+const DATA_V = "mtizrydk";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2704,6 +2704,9 @@ function loadLexicon() {
 }
 function lexLookup(word) {
   if (!_lex) return null;
+  const bare = stripTashkeel(word).replace(/[^؀-ۿ\s]/g, "").trim();
+  if (_lex[bare]) return _lex[bare];
+  if (_lex[bare.replace(/^ال/, "")]) return _lex[bare.replace(/^ال/, "")];
   const n = normalizeAr(word);
   return _lex[n] || _lex[n.replace(/^ال/, "")] || null;
 }

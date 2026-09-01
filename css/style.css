@@ -13,7 +13,7 @@
   --radius: 14px;
   --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 14px rgba(0,0,0,.04);
   --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-ar: 'Amiri', 'Traditional Arabic', serif;
+  --font-ar: 'Noto Sans Arabic', 'Segoe UI Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }

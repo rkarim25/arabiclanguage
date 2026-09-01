@@ -378,7 +378,7 @@
   {
    "ar": "أَنْ",
    "tr": "an",
-   "en": "that; to",
+   "en": "to (before verbs); that",
    "n": 578
   },
   {
@@ -912,6 +912,12 @@
    "tr": "zakāh",
    "en": "almsgiving",
    "n": 32
+  },
+  {
+   "ar": "عَنْ",
+   "tr": "ʿan",
+   "en": "about; for (with search); from",
+   "n": 465
   }
  ]
 }

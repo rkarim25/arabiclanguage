@@ -623,6 +623,18 @@
           "ar": "طَيِّب",
           "tr": "ṭayyib",
           "en": "okay, fine"
+        },
+        {
+          "ar": "أَنْ",
+          "tr": "an",
+          "en": "to (before verbs); that",
+          "note": "connects wanted to / like to / must to a verb: أَرَادَ أَنْ يَبْحَثَ"
+        },
+        {
+          "ar": "عَنْ",
+          "tr": "ʿan",
+          "en": "about; for (with search / ask)",
+          "note": "pairs with searching or asking: يَبْحَثُ عَنْ (searches for)"
         }
       ]
     },

@@ -26,8 +26,16 @@ function put(ar, tr, en, src) {
   const full = normalizeAr(ar);
   if (!full || full.length < 2) return;
   const entry = [String(ar).trim(), String(tr || "").trim(), String(en).trim().slice(0, 120), src];
-  if (lex[full]) return;
-  lex[full] = entry;
+  
+  // Index by exact stripped form (preserves distinct hamza seats like أن vs إن)
+  const bareAr = stripTashkeel(ar).replace(/[^؀-ۿ\s]/g, "").trim();
+  if (bareAr && bareAr.length >= 2 && !lex[bareAr]) {
+    lex[bareAr] = entry;
+  }
+
+  if (!lex[full]) {
+    lex[full] = entry;
+  }
   added++;
   // remember an article-less alias, applied AFTER all real words are in so an
   // alias can never shadow a real word (الله must not file under له)

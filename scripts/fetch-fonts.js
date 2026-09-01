@@ -9,8 +9,8 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
-const CSS_URL = "https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap";
-const KEEP = { Amiri: ["arabic", "latin"], Inter: ["latin"] };
+const CSS_URL = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap";
+const KEEP = { "Noto Sans Arabic": ["arabic", "latin"], Inter: ["latin"] };
 
 (async () => {
   const css = await fetch(CSS_URL, { headers: { "User-Agent": UA } }).then(r => r.text());
