@@ -339,5 +339,84 @@ const bank = D("sentence-bank.json");
     "the switch is on the lesson page, where he wrote the note");
 }
 
+/* ---------- 11. A LESSON IS NOT ONE GROUP ----------
+   2026-09-01: the homework contract held 59 keys across FOUR groups, but the 📚
+   block built its link from a single `hw.group`, so 33 of the 59 words had no
+   route in — while readiness counted all 59, making the bar unreachable. Four
+   evenings before her class, 48 of those words had never been shown once. The
+   pin that would have caught it: every key the contract counts must belong to a
+   part that has a URL. */
+{
+  console.log("\n-- the homework reaches the WHOLE lesson --");
+  const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  const from = planSrc.indexOf("function planHwGid(");
+  const to = planSrc.indexOf("function planHwTaskDone(");
+  yes(from > 0 && to > from, "plan.js exposes the homework-part derivation");
+  const mk = new Function("store", "getSrs",
+    planSrc.slice(from, to) + "; return { planHomework, planHwNextPart, planHwGid };");
+
+  const KEYS = []
+    .concat(Array.from({ length: 26 }, (_, i) => `ev-lesson-home:${i}`))
+    .concat(Array.from({ length: 10 }, (_, i) => `ev-lesson-week:${i}`))
+    .concat(Array.from({ length: 5 },  (_, i) => `ev-lesson-divine:${i}`))
+    .concat(Array.from({ length: 18 }, (_, i) => `story-07:${i}`));
+  const HW = {
+    label: "Sunday class", lessonAt: new Date(Date.now() + 4 * 86400000).toISOString(),
+    group: "ev-lesson-home", keys: KEYS, tasks: [{ id: "t1", label: "read it" }],
+  };
+  // his real state on 2026-09-01: lesson-home barely started, everything else untouched
+  const SRS = {};
+  ["ev-lesson-home:0", "ev-lesson-home:1", "ev-lesson-home:2", "ev-lesson-home:3"].forEach(k => SRS[k] = { box: 5, due: 0 });
+  const api = mk({ get: (k, d) => (k === "ats-homework" ? HW : k === "ats-hw-done" ? {} : d) }, () => SRS);
+  const hw = api.planHomework();
+
+  yes(hw.parts.length === 4, `${hw.parts.length} parts derived from the keys (expected 4)`);
+  const covered = hw.parts.reduce((n, p) => n + p.total, 0);
+  yes(covered === hw.keys.length,
+    covered === hw.keys.length
+      ? `EVERY one of the ${hw.keys.length} keys readiness counts belongs to a part with a route in`
+      : `${hw.keys.length - covered} key(s) are counted against him with NO WAY TO REACH THEM`);
+  yes(hw.parts.every(p => p.url && p.url.length > 8), "every part has a URL");
+
+  // the block must walk to the part furthest behind — not always the first group
+  const next = api.planHwNextPart(hw);
+  yes(next.gid === "ev-lesson-home",
+    `furthest behind is ${next.gid} (22 of 26 unmet) — the block goes there first`);
+  KEYS.filter(k => k.startsWith("ev-lesson-home")).forEach(k => SRS[k] = { box: 3, due: 0 });
+  const hw2 = api.planHomework();
+  yes(api.planHwNextPart(hw2).gid === "story-07",
+    "once that group is solid the block moves ON to the next part, instead of hammering the same one");
+
+  // a story part is NOT an everyday group — the old code would have sent him to vocab.html?ev=story-07
+  const story = hw.parts.find(p => p.gid === "story-07");
+  yes(/^story\.html\?id=story-07&step=memorize$/.test(story.url), `the passage routes to the story page (${story.url})`);
+  // the step name must be one story.html actually knows — an unknown one is not an
+  // error, it silently falls back to wherever he left off, which was the LISTEN
+  // step: six minutes of tapping words that grade nothing.
+  {
+    const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+    const stepKeys = (app.match(/const STEPS = \[([\s\S]*?)\];/) || ["", ""])[1].match(/key: "([a-z]+)"/g).map(s => s.slice(6, -1));
+    const wanted = story.url.split("step=")[1];
+    yes(stepKeys.includes(wanted), `"${wanted}" is a real story step (${stepKeys.join(", ")})`);
+    const storySrc = fs.readFileSync(path.join(ROOT, "story.html"), "utf8");
+    yes(/currentStep === "memorize"[\s\S]{0,4000}gradeCard/.test(storySrc) || /gradeCard\(`\$\{storyId\}:\$\{i\}`/.test(storySrc),
+      "…and it is the step that actually grades the passage's cards");
+  }
+  yes(story.doneEvs.includes("story-step"), "…and completes on the events that page actually fires");
+  const week = hw.parts.find(p => p.gid === "ev-lesson-week");
+  yes(week.url.includes("vocab.html?ev=lesson-week"), `the seven days route to their own group (${week.url})`);
+
+  // qw keys split by surah, not into one undifferentiated heap
+  yes(api.planHwGid("qw:asr:2:4") === "qw:asr", "a Qur'an word part is the SURAH, not the whole corpus");
+  yes(api.planHwGid("ev-lesson-home:12") === "ev-lesson-home", "an everyday key keeps its group");
+
+  // and the block itself must use the part, not hw.group
+  yes(/const part = planHwNextPart\(hw\)/.test(planSrc), "the 📚 block asks for the part");
+  yes(/url: part \? part\.url/.test(planSrc), "…and links to it");
+  yes(/cur\.doneEvs \|\| PLAN_BLOCKS\[cur\.type\]\.done/.test(planSrc),
+    "…and completion listens to that part's own events");
+  yes(/hw\.parts\.map\(p =>/.test(planSrc), "the lesson strip lists every part, so none is invisible");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

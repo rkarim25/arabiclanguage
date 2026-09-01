@@ -81,6 +81,38 @@ const PLAN_SURAHS = ["fatiha", "ikhlas", "falaq", "nas", "kawthar", "asr", "qadr
    is "solid" once it survives a spaced gap (box ≥ 2, or an explicit know
    bucket), so cramming the night before cannot fake readiness — the plan
    surfaces homework early precisely so the spacing fits before the lesson. */
+/* A LESSON IS NOT ONE GROUP. 2026-09-01: the contract carried 59 keys across FOUR
+   groups — lesson-home, lesson-week, lesson-divine and story-07 — but the block
+   built its link from a single `hw.group` field, so 33 of the 59 words (the seven
+   days, the divine attributes, and every word of the passage she set) had NO ROUTE
+   IN. Readiness meanwhile counted all 59, so the bar was an unreachable target: he
+   could click that block every night until Sunday and it would still top out near
+   44%. Four evenings before her class, 48 of 59 words had never been shown once —
+   not because he had not studied, but because the one button pointing at the
+   homework could only reach part of it. The contract's keys are now the truth: the
+   parts are DERIVED from them, the block walks to whichever part is furthest
+   behind, and the strip lists every part so nothing is orphaned. */
+function planHwGid(key) {
+  // qw:asr:2:4 → qw:asr (a surah is the unit); everything else splits at the first colon
+  const seg = String(key).split(":");
+  return seg[0] === "qw" && seg.length > 2 ? seg[0] + ":" + seg[1] : seg[0];
+}
+function planHwPartRoute(gid, mode) {
+  let m;
+  if ((m = gid.match(/^ev-(.+)$/)))    return { url: `vocab.html?ev=${m[1]}&mode=${mode}`, done: ["fill-done", "drill-done", "sheet-done"] };
+  if ((m = gid.match(/^ph-(.+)$/)))    return { url: `vocab.html?ph=${m[1]}&mode=drill`,   done: ["fill-done", "drill-done"] };
+  if ((m = gid.match(/^(story-\d+)$/)))return { url: `story.html?id=${m[1]}&step=memorize`, done: ["story-step", "review"] };  // "memorize" is the step that GRADES the passage's words — there is no "vocab" step, and an unknown one silently falls back to wherever he left off
+  if ((m = gid.match(/^qw:(.+)$/)))    return { url: `quran.html?s=${m[1]}`,               done: ["qtest-part", "qtest-done", "qlisten-test"] };
+  return { url: "vocab.html?view=lessons", done: ["fill-done", "drill-done", "sheet-done"] };
+}
+function planHwPartLabel(hw, gid) {
+  const given = (hw.partLabels || {})[gid];
+  if (given) return given;
+  let m;
+  if ((m = gid.match(/^story-0*(\d+)$/))) return `Story ${m[1]} — the passage`;
+  if ((m = gid.match(/^qw:(.+)$/))) return `Surah ${m[1]}`;
+  return gid.replace(/^(ev|ph)-/, "").replace(/^lesson-/, "").replace(/-/g, " ").replace(/^./, c => c.toUpperCase());
+}
 function planHomework() {
   const hw = store.get("ats-homework", null);
   if (!hw || !hw.lessonAt) return null;
@@ -90,7 +122,8 @@ function planHomework() {
   if (daysLeft < -0.5) return { ...hw, past: true, daysLeft };
   const srs = getSrs();
   const keys = hw.keys || [];
-  const solid = keys.filter(k => { const e = srs[k]; return e && (e.box >= 2 || e.b === "know"); });
+  const isSolid = k => { const e = srs[k]; return !!(e && (e.box >= 2 || e.b === "know")); };
+  const solid = keys.filter(isSolid);
   const started = keys.filter(k => srs[k]);
   const done = store.get("ats-hw-done", {});
   const tasks = (hw.tasks || []).map(t => ({ ...t, done: !!done[t.id] }));
@@ -98,8 +131,29 @@ function planHomework() {
   const wordReadiness = keys.length ? solid.length / keys.length : 1;
   const taskReadiness = tasks.length ? (tasks.length - tasksLeft) / tasks.length : 1;
   const readiness = Math.round(100 * (keys.length || tasks.length ? (wordReadiness * (keys.length ? 0.7 : 0) + taskReadiness * (tasks.length ? 0.3 : 0)) / ((keys.length ? 0.7 : 0) + (tasks.length ? 0.3 : 0)) : 1));
-  return { ...hw, past: false, daysLeft, lessonT, keys, tasks, tasksLeft, readiness,
+  // every group the contract's keys actually name, in contract order
+  const parts = [];
+  const byGid = {};
+  keys.forEach(k => {
+    const gid = planHwGid(k);
+    if (!byGid[gid]) { byGid[gid] = { gid, label: planHwPartLabel(hw, gid), total: 0, solidN: 0 }; parts.push(byGid[gid]); }
+    byGid[gid].total++;
+    if (isSolid(k)) byGid[gid].solidN++;
+  });
+  const preCheck = daysLeft <= 1.5;
+  parts.forEach(p => {
+    p.shakyN = p.total - p.solidN;
+    const r = planHwPartRoute(p.gid, preCheck ? "fill" : "study");
+    p.url = r.url; p.doneEvs = r.done;
+  });
+  return { ...hw, past: false, daysLeft, lessonT, keys, tasks, tasksLeft, readiness, parts,
     solidN: solid.length, startedN: started.length, shakyN: keys.length - solid.length };
+}
+/* the part furthest behind, contract order breaking ties — so consecutive days
+   walk the whole lesson instead of hammering the group that happens to be first */
+function planHwNextPart(hw) {
+  if (!hw || !hw.parts || !hw.parts.length) return null;
+  return hw.parts.reduce((best, p) => (p.shakyN > best.shakyN ? p : best), hw.parts[0]);
 }
 function planHwTaskDone(id) {
   const done = store.get("ats-hw-done", {});
@@ -196,15 +250,21 @@ function planMakeBlock(type, date, dueN) {
   if (type === "homework") {
     const hw = planHomework();
     const preCheck = hw.daysLeft <= 1.5;
+    const part = planHwNextPart(hw);
+    const when = hw.daysLeft < 1 ? "TOMORROW" : "in " + Math.ceil(hw.daysLeft) + " days";
     return {
-      type, content: hw.group || null,
+      type, content: part ? part.gid : (hw.group || null),
       icon: "📚",
-      title: preCheck ? "Pre-lesson check — prove the homework" : `Teacher homework — ${hw.label || "this week's lesson"}`,
+      title: preCheck ? "Pre-lesson check — prove the homework" : `Teacher homework — ${part ? part.label : (hw.label || "this week's lesson")}`,
       sub: preCheck
         ? `Test yourself on the lesson words before ${hw.teacher || "your teacher"} does — pass it and you walk in ready.`
-        : `${hw.shakyN} word${hw.shakyN === 1 ? "" : "s"} not yet solid${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""} — lesson ${hw.daysLeft < 1 ? "TOMORROW" : "in " + Math.ceil(hw.daysLeft) + " days"}.`,
-      url: hw.group ? `vocab.html?ev=${hw.group.replace(/^ev-/, "")}&mode=${preCheck ? "fill" : "study"}` : "vocab.html?view=lessons",
-      page: "vocab", mins: PLAN_BLOCK_MIN, done: false, sec: 0,
+        : part
+          ? `${part.shakyN} of ${part.total} not solid here — ${hw.shakyN} across the whole lesson. Lesson ${when}.`
+          : `${hw.shakyN} word${hw.shakyN === 1 ? "" : "s"} not yet solid${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""} — lesson ${when}.`,
+      url: part ? part.url : (hw.group ? `vocab.html?ev=${hw.group.replace(/^ev-/, "")}&mode=${preCheck ? "fill" : "study"}` : "vocab.html?view=lessons"),
+      page: part ? (part.url.split(".html")[0] || "vocab") : "vocab",
+      doneEvs: part ? part.doneEvs : null,
+      mins: PLAN_BLOCK_MIN, done: false, sec: 0,
     };
   }
   const def = PLAN_BLOCKS[type];
@@ -332,14 +392,17 @@ function planObserve(ev) {
     }
     const cur = planCurrent(p);
     if (!cur) return;
-    const def = PLAN_BLOCKS[cur.type];
-    if (def.done.includes(ev.e)) planFinishBlock(p, cur, "event");
+    // a block may carry its own completion events (the homework block's do depend
+    // on WHICH part of the lesson it routed to — a story vocab round finishes on
+    // story-step/review, an everyday group on fill-done)
+    const doneEvs = cur.doneEvs || PLAN_BLOCKS[cur.type].done;
+    if (doneEvs.includes(ev.e)) planFinishBlock(p, cur, "event");
     return;
   }
   // day complete — ⚡ boost blocks (extra, opt-in) still listen for their events
   if (p.boost && p.boost.some(b => !b.done)) {
     const cur = p.boost.find(b => !b.done);
-    if (!PLAN_BLOCKS[cur.type].done.includes(ev.e)) return;
+    if (!(cur.doneEvs || PLAN_BLOCKS[cur.type].done).includes(ev.e)) return;
     cur.done = true; cur.doneT = Date.now();
     logEvent({ e: "plan-block-done", type: cur.type, how: "event", boost: true });
     if (!p.boost.some(b => !b.done)) { logEvent({ e: "boost-done" }); autoSync(); }
@@ -437,6 +500,14 @@ function planLessonStripHTML() {
   const tasksHtml = hw.tasks.map(t =>
     `<label style="display:block;font-size:12.5px;margin-top:2px;cursor:pointer"><input type="checkbox" data-hw-task="${t.id}" ${t.done ? "checked disabled" : ""}> ${t.label}</label>`).join("");
   const ready = hw.readiness >= 100;
+  // EVERY part of the lesson, each a link. The readiness number counts all of
+  // them, so all of them have to be reachable — see planHomework's note.
+  const partsHtml = (hw.parts || []).length > 1
+    ? `<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">` + hw.parts.map(p => {
+        const doneP = p.shakyN === 0;
+        return `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:${doneP ? "var(--accent)" : "var(--fg)"}">${doneP ? "✓ " : ""}${p.label} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`;
+      }).join("") + `</div>`
+    : "";
   return `<div class="plan-lesson">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px">
       <strong>📚 ${hw.label || "Teacher lesson"}</strong>
@@ -448,6 +519,7 @@ function planLessonStripHTML() {
         ? `✅ Fully ready — every word holds on a spaced schedule and the tasks are done. Walk in and tell her so.`
         : `${hw.readiness}% ready — ${hw.solidN}/${hw.keys.length} words solid (solid = survived a spaced gap, not crammed)${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""}`}
     </div>
+    ${partsHtml}
     ${tasksHtml}
   </div>`;
 }
