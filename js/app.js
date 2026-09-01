@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtizrydk";
+const DATA_V = "mtj57c9a";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2598,8 +2598,17 @@ function whoami() {
    fallback covers phrases. */
 let MNEM = {};
 fetch("data/mnemonics.json").then(r => r.json()).then(d => { MNEM = d; }).catch(() => {});
-function mnemKey(ar) { return normalizeAr(ar || "").replace(/^ال/, ""); }
-function mnemFor(ar) { if (!ar) return null; return MNEM[mnemKey(ar)] || MNEM[mnemKey(ar.split(/\s+/)[0])] || null; }
+function mnemFor(ar) {
+  if (!ar) return null;
+  const bare = stripTashkeel(ar).replace(/[^؀-ۿ\s]/g, "").replace(/^ال/, "").trim();
+  if (MNEM[bare]) return MNEM[bare];
+  const firstWord = stripTashkeel(ar.split(/\s+/)[0]).replace(/[^؀-ۿ\s]/g, "").replace(/^ال/, "").trim();
+  if (MNEM[firstWord]) return MNEM[firstWord];
+  const norm = normalizeAr(ar).replace(/^ال/, "");
+  if (MNEM[norm]) return MNEM[norm];
+  const firstNorm = normalizeAr(ar.split(/\s+/)[0]).replace(/^ال/, "");
+  return MNEM[firstNorm] || null;
+}
 /* Put a 💡 in btnHost and a hidden full-width hook row right after tr.
    Call AFTER tr is in the DOM. No-op for words without a hook. */
 function mountMnem(tr, btnHost, ar, key) {
