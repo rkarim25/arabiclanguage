@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtj5mmjl">
-  <link rel="stylesheet" href="css/style.css?v=mtj5mmjl">
+  <link rel="stylesheet" href="css/fonts.css?v=mtjexnkp">
+  <link rel="stylesheet" href="css/style.css?v=mtjexnkp">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtj5mmjl"></script>
-<script src="js/tracker.js?v=mtj5mmjl"></script>
-<script src="js/plan.js?v=mtj5mmjl"></script>
+<script src="js/app.js?v=mtjexnkp"></script>
+<script src="js/tracker.js?v=mtjexnkp"></script>
+<script src="js/plan.js?v=mtjexnkp"></script>
 <script>
 renderNav("stories");
 
@@ -40,6 +40,10 @@ const nextBtn = document.getElementById("nextStepBtn");
 
 loadStory(storyId).then(s => {
   story = s;
+  // This story's words have proper cards (story-NN:i) — route ＋Learn and the
+  // 3-tap seed onto them, and adopt any tw: twins created before this existed,
+  // so passage study counts toward the homework contract instead of a shadow deck.
+  registerWordKeys(Object.fromEntries(s.vocab.map((v, i) => [normalizeAr(v.ar).replace(/^ال/, ""), `${storyId}:${i}`])));
   document.title = `${s.titleEn} — Arabic`;
   header.innerHTML = `
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">

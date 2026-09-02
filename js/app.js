@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtj5mmjl";
+const DATA_V = "mtjexnkp";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2672,13 +2672,52 @@ function mountBucketBar(slot, key, onSet) {
   slot.appendChild(said);
 }
 
+/* ---------- page word-key registry ----------
+   A page whose words already have proper SRS cards (story vocab, clusters)
+   registers norm → key here, so ＋Learn and the 3-tap seed land on the card
+   the curriculum and the homework contract count — not a parallel tw: twin.
+   Registering also repairs twins made before the mapping existed: the twin's
+   state moves onto the proper key and the twin is dropped. Idempotent and
+   re-run on every page load, so a twin resurrected by a stale device's sync
+   is cleaned again on the next visit. */
+let _pageWordKeys = null;
+/* exact norm first; else fold a feminine ة onto its lemma (واسعة → واسع) —
+   only as a fallback, so a distinct ة-word with its own card still wins */
+function _wordKeyFor(norm) {
+  if (!_pageWordKeys || !norm) return null;
+  return _pageWordKeys[norm] || (norm.endsWith("ة") ? _pageWordKeys[norm.slice(0, -1)] : null) || null;
+}
+function registerWordKeys(map) {
+  _pageWordKeys = map;
+  const srs = getSrs();
+  let fixed = 0;
+  for (const id of Object.keys(srs)) {
+    if (!id.startsWith("tw:")) continue;
+    const key = _wordKeyFor(id.slice(3));
+    if (!key) continue;
+    const twin = srs[id];
+    const own = srs[key];
+    if (!own) srs[key] = { ...twin, u: Date.now() };
+    else if ((twin.box || 0) > (own.box || 0)) { own.box = twin.box; own.u = Date.now(); }
+    delete srs[id];
+    fixed++;
+  }
+  if (fixed) {
+    store.set("ats-srs", srs);
+    logEvent({ e: "tw-adopt", n: fixed });
+  }
+}
+function pageWordKey(disp) {
+  return _wordKeyFor(normalizeAr(String(disp)).replace(/^ال/, ""));
+}
+
 /* ---------- tap-to-review ----------
    A word you keep tapping for help is a word you don't know. On the 3rd tap
    it quietly joins the review deck: qw/story keys resolve normally; free
    words get a tw:<norm> card whose content lives in ats-tapwords (synced). */
 function noteWordTap(opts) {
   const norm = opts.norm || (opts.content && opts.content.ar ? normalizeAr(opts.content.ar).replace(/^ال/, "") : null);
-  const id = opts.key || (norm ? "tw:" + norm : null);
+  const id = opts.key || _wordKeyFor(norm) || (norm ? "tw:" + norm : null);
   if (!id) return;
   const counts = store.get("ats-tapcounts", {});
   counts[id] = (counts[id] || 0) + 1;
@@ -2908,8 +2947,9 @@ function showWordPop(word, x, y, o) {
   closeWordPop();
   const hit = o.hit;
   const disp = hit ? hit[0] : word;
-  const already = !!getSrs()[o.qkey || ("tw:" + normalizeAr(disp).replace(/^ال/, ""))];
-  const canLearn = o.qkey || hit;
+  const properKey = o.qkey || pageWordKey(disp);
+  const already = !!getSrs()[properKey || ("tw:" + normalizeAr(disp).replace(/^ال/, ""))];
+  const canLearn = properKey || hit;
   const pop = document.createElement("div");
   pop.id = "wordPop";
   pop.style.cssText = "position:fixed;z-index:95;background:var(--card,#fff);color:var(--ink,#222);border:1px solid var(--border,#ddd);border-radius:14px;padding:12px 16px;box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:250px;font-family:var(--font-ui,sans-serif);font-size:14px;text-align:center";
@@ -2966,7 +3006,7 @@ function showWordPop(word, x, y, o) {
   const lb = pop.querySelector(".wp-learn");
   if (lb && !already) lb.onclick = () => {
     const srs = getSrs();
-    let id = o.qkey;
+    let id = properKey;
     if (!id) {
       const norm = normalizeAr(disp).replace(/^ال/, "");
       id = "tw:" + norm;

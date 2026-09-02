@@ -418,5 +418,43 @@ const bank = D("sentence-bank.json");
   yes(/hw\.parts\.map\(p =>/.test(planSrc), "the lesson strip lists every part, so none is invisible");
 }
 
+/* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
+   2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
+   the homework — and every one became a tw: shadow card, so the contract still
+   read story-07 "seen 0/18". A page that owns proper cards must register them,
+   ＋Learn must use them, and twins made before the mapping existed must be
+   adopted onto the real key. */
+{
+  const seg = appSrc.match(/let _pageWordKeys[\s\S]*?function pageWordKey\(disp\) \{[\s\S]*?\n\}/);
+  yes(!!seg, "app.js has the page word-key registry (registerWordKeys / pageWordKey)");
+  if (seg) {
+    const nrm = new Function(
+      appSrc.match(/function stripTashkeel\(s\) \{[\s\S]*?\n\}/)[0] + "\n" +
+      appSrc.match(/function normalizeAr\(s\) \{[\s\S]*?\n\}/)[0] + "\nreturn normalizeAr;")();
+    const srs = {
+      "tw:صاحب": { box: 2, due: 1 },              // exact lemma match — box must carry over
+      "tw:واسعة": { box: 0, due: 1 },             // feminine form of the lemma card واسع
+      "tw:قلنا": { box: 5, due: 1, b: "know" },   // belongs to another page — untouched
+    };
+    const logged = [];
+    const api = new Function("getSrs", "store", "logEvent", "normalizeAr",
+      seg[0] + "\nreturn { registerWordKeys, pageWordKey };")(
+      () => srs, { set: () => {} }, e => logged.push(e), nrm);
+    const story = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "story-07.json"), "utf8"));
+    api.registerWordKeys(Object.fromEntries(story.vocab.map((v, i) => [nrm(v.ar).replace(/^ال/, ""), `story-07:${i}`])));
+    yes(!srs["tw:صاحب"] && srs["story-07:13"] && srs["story-07:13"].box === 2,
+      "an exact twin is adopted onto its story card, box intact");
+    yes(!srs["tw:واسعة"] && !!srs["story-07:10"],
+      "a feminine form (واسعة) folds onto its lemma's card (واسع)");
+    yes(!!srs["tw:قلنا"], "a twin from some other page is left alone");
+    yes(api.pageWordKey("المُرِيحَة") === "story-07:11",
+      "＋Learn on an ال-prefixed, vowelled feminine form resolves to the proper key");
+    yes(logged.some(e => e.e === "tw-adopt"), "the adoption is logged, so the coach can see it happened");
+  }
+  const storySrc12 = fs.readFileSync(path.join(ROOT, "story.html"), "utf8");
+  yes(/registerWordKeys\(/.test(storySrc12), "story.html registers its vocab keys on load");
+  yes(/_wordKeyFor\(norm\)/.test(appSrc), "the 3-tap seed (noteWordTap) consults the registry too");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);
