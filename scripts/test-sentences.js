@@ -53,6 +53,7 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
     }));
   }));
   phrases.groups.forEach(g => g.members.forEach(m => sources.add(norm(m.ar))));
+  D("everyday.json").groups.forEach(g => g.members.forEach(m => sources.add(norm(m.ar))));
   prompts.prompts.forEach(p => sources.add(norm(p.ar)));
   grammar.patterns.forEach(p => (p.examples || []).forEach(e => sources.add(norm(e.ar))));
   fs.readdirSync(path.join(ROOT, "data")).filter(f => /^story-\d+\.json$/.test(f)).forEach(f =>

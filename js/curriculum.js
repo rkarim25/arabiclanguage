@@ -909,6 +909,7 @@
           -gain,                                   // cover the most first
           s.track === track ? 0 : 1,               // then prefer this track
           extra,                                   // then the least baggage
+          -(s.use || 0),                           // then the densest high-frequency vocabulary
           -(s.weight || 0),                        // then the commoner words
         ];
         if (!bestScore || cmp(score, bestScore) < 0) { best = s; bestScore = score; }

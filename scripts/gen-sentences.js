@@ -85,7 +85,12 @@ const claim = (ar, key, en, tr) => {
 core.words.forEach((w, i) => claim(w.ar, `qc:${i}`, w.en, w.tr));
 verses.surahs.forEach(s => s.verses.forEach((v, vi) =>
   (v.words || []).forEach((w, wi) => claim(w[0], `qw:${s.id}:${vi}:${wi}`, w[2], w[1]))));
-everyday.groups.forEach(g => g.members.forEach((m, i) => claim(m.ar, `ev-${g.id}:${i}`, m.en, m.tr)));
+everyday.groups.forEach(g => g.members.forEach((m, i) => {
+  claim(m.ar, `ev-${g.id}:${i}`, m.en, m.tr);
+  if (m.ar.includes("/")) {
+    m.ar.split("/").map(s => s.trim()).filter(Boolean).forEach(part => claim(part, `ev-${g.id}:${i}`, m.en, m.tr));
+  }
+}));
 families.families.forEach(f => f.members.forEach((m, i) => claim(m.ar, `fam-${f.id}:${i}`, m.en, m.tr)));
 STORY_IDS.forEach(sid => (stories[sid].vocab || []).forEach((w, i) => claim(w.ar, `${sid}:${i}`, w.en, w.tr)));
 /* Words that occur ONLY in the imported short surahs still need an identity, a
@@ -98,7 +103,10 @@ STORY_IDS.forEach(sid => (stories[sid].vocab || []).forEach((w, i) => claim(w.ar
 const wordKey = ar => {
   const f = normalizeAr(ar);
   if (!f) return null;
-  return formToKey.get(f) || `w:${f}`;
+  if (formToKey.has(f)) return formToKey.get(f);
+  const bare = f.replace(/^ال/, "");
+  if (bare !== f && bare.length >= 2 && f !== "الله" && f !== "اللهم" && formToKey.has(bare)) return formToKey.get(bare);
+  return `w:${f}`;
 };
 /* THE SAME WORD IS OFTEN CARDED TWICE. ٱللَّهِ is qc:1 in the frequency list and
    qw:fatiha:0:1 inside Al-Fatiha — one word, two cards. A sentence containing it
@@ -111,7 +119,12 @@ const wordKey = ar => {
 const wordKeysAll = ar => {
   const f = normalizeAr(ar);
   if (!f) return [];
-  return formToKeys.get(f) || [`w:${f}`];
+  const direct = formToKeys.get(f) || [];
+  const bare = f.replace(/^ال/, "");
+  const bareKeys = (bare !== f && bare.length >= 2 && f !== "الله" && f !== "اللهم" && formToKeys.get(bare)) || [];
+  const withAlKeys = (bare === f && f !== "الله" && formToKeys.get("ال" + f)) || [];
+  const all = [...new Set([...direct, ...bareKeys, ...withAlKeys])];
+  return all.length ? all : [`w:${f}`];
 };
 
 /* Function words carry structure, not meaning worth drilling on their own. They
@@ -261,6 +274,23 @@ phrases.groups.forEach(g => g.members.forEach((m, i) => add({
   theme: g.theme.split("—")[0].trim(),
 })));
 
+/* --- everyday multi-word phrases: natural utterances carded in everyday.json --- */
+everyday.groups.forEach(g => g.members.forEach((m, i) => {
+  const wordsInPhrase = String(m.ar).trim().split(/\s+/);
+  if (wordsInPhrase.length >= 2 && !m.ar.includes("/")) {
+    add({
+      id: `ev:${g.id}:${i}`,
+      key: `ev-${g.id}:${i}`,
+      track: "conv",
+      ar: m.ar, en: m.en, tr: m.tr || "",
+      words: words(wordsInPhrase.map(w => [w])),
+      pattern: patternFor(m.ar),
+      src: "everyday",
+      theme: g.theme || g.title || g.id,
+    });
+  }
+}));
+
 /* --- story sentences: real connected prose, with per-word glosses --- */
 STORY_IDS.forEach(sid => (stories[sid].sentences || []).forEach((s, i) => add({
   id: `st:${sid}:${i}`,
@@ -368,16 +398,20 @@ verses.surahs.forEach(s => s.verses.forEach(v => (v.words || []).forEach(w => {
 })));
 
 bank.forEach(u => {
-  const content = u.words.filter(w => !w.fn);
   u.wordKeys = [...new Set(u.words.flatMap(w => w.keys || [w.key]).filter(Boolean).concat(u.declaredKeys || []))];
   // a source that states which cards it teaches is believed over form matching
   /* A sentence teaches its own card too. The phrase deck and the story
      sentences ARE cards in their own right (ph-*, story-*), and a lesson that
      owns one is asking for that whole utterance — not for its parts. */
-  u.teaches = [...new Set(content.flatMap(w => w.keys || [w.key]).filter(Boolean)
+  u.teaches = [...new Set(u.words.flatMap(w => {
+    // Function words only teach their cards if they are explicit curriculum targets
+    if (w.fn) return (w.keys || []).filter(k => !k.startsWith("w:"));
+    return w.keys || [w.key];
+  }).filter(Boolean)
     .concat(u.declaredKeys || [])
     .concat(u.key ? [u.key] : []))];
   delete u.declaredKeys;
+  const content = u.words.filter(w => !w.fn);
   u.weight = content.reduce((a, w) => a + Math.log1p(freq.get(normalizeAr(w.ar)) || 1), 0);
   /* HOW OFTEN THIS SENTENCE IS WORTH KNOWING. weight is a SUM, so it rewards
      length — a nine-word ayah of rare words outranks مَا هَذَا؟. The list he works
