@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtlvg0yb">
-  <link rel="stylesheet" href="css/style.css?v=mtlvg0yb">
+  <link rel="stylesheet" href="css/fonts.css?v=mtlzsx8a">
+  <link rel="stylesheet" href="css/style.css?v=mtlzsx8a">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,9 +52,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mtlvg0yb"></script>
-<script src="js/tracker.js?v=mtlvg0yb"></script>
-<script src="js/plan.js?v=mtlvg0yb"></script>
+<script src="js/app.js?v=mtlzsx8a"></script>
+<script src="js/tracker.js?v=mtlzsx8a"></script>
+<script src="js/plan.js?v=mtlzsx8a"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -718,6 +718,8 @@ async function renderBrowseView(body) {
 function renderGroup(obj, mode, prefix) {
   trackPage(`vocab:${prefix}${obj.id}:${mode}`);
   window.scrollTo({ top: 0 });
+  // 📥 the whole set's clips, now, while there is a signal (offlinePack, app.js)
+  try { if (typeof offlinePack === "function") offlinePack((obj.members || []).flatMap(m => [m.ar, m.en])); } catch (e) {}
   const arTitle = obj.root || obj.title || "";   // a class-captured group may have no Arabic title yet; an empty span beats the word "undefined"
   const label = prefix === "fam-" ? "Root family" : prefix === "ph-" ? "Phrase set" : "Everyday cluster";
   const backView = prefix === "fam-" ? "roots" : prefix === "ph-" ? "phrases" : "everyday";

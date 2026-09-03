@@ -1870,7 +1870,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtlvg0yb";
+const DATA_V = "mtlzsx8a";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3206,6 +3206,64 @@ function mountNotePen() {
       if (typeof autoSync === "function") setTimeout(autoSync, 50);
     };
   };
+}
+
+/* ---------- OFFLINE PACK (2026-09-03) ----------
+   His ask tonight: "is it possible that the website works offline at least in
+   batches? maybe a quick open and then it loads some stuff for me to use it with
+   patchy internet connection." Pages and data already live in the service
+   worker's CORE; the CLIPS were the gap — every 🔊 fetched its mp3 on demand,
+   and on a patchy connection that fetch fails and speak() falls to the phone's
+   voice, which has no Arabic ("the audio didn't work on mobile"). So a page
+   open now warms the audio cache with every clip the material in front of him
+   would play: the home page packs this week's lessons, their sentences and the
+   whole homework contract; a cluster or story page packs itself. Six at a time,
+   in the background, never blocking. The cache is the one sw.js already serves
+   cache-first, so a packed clip plays with no signal at all. */
+const PACK_CACHE = "ats-audio-v1";   // MUST equal AUDIO_CACHE in sw.js — a different name is a cache the worker never reads
+async function offlinePack(texts, onProgress) {
+  if (!window.caches || !navigator.onLine) return { n: 0, total: 0, fetched: 0, skipped: true };
+  try { await _audioManLoading; } catch (e) {}
+  const urls = [...new Set((texts || []).filter(Boolean).map(t => {
+    const f = _audioFileFor(String(t));
+    return f && !f.real ? f.src : null;   // a real recitation is remote and cross-origin — not ours to pack
+  }).filter(Boolean))];
+  let cache; try { cache = await caches.open(PACK_CACHE); } catch (e) { return { n: 0, total: urls.length, fetched: 0, skipped: true }; }
+  let n = 0, fetched = 0;
+  const one = async url => {
+    try {
+      if (await cache.match(url)) { n++; }
+      else { const r = await fetch(url); if (r.ok) { await cache.put(url, r); n++; fetched++; } }
+    } catch (e) { /* patchy — the next open tries again */ }
+    if (onProgress) onProgress(n, urls.length);
+  };
+  const q = urls.slice();
+  await Promise.all(Array.from({ length: 6 }, async () => { while (q.length) await one(q.shift()); }));
+  return { n, total: urls.length, fetched, skipped: false };
+}
+/* the words behind a set of card keys — from the sentence bank first (the same
+   text the lessons show), then the data files for keys the bank never met */
+async function packTextsForKeys(keys, ctx) {
+  const out = [];
+  const byKey = new Map();
+  ((ctx && ctx.bank && ctx.bank.sentences) || []).forEach(s => (s.words || []).forEach(w => {
+    if (!w.key) return;
+    [w.key].concat(w.keys || []).forEach(k => { if (!byKey.has(k)) byKey.set(k, w); });
+  }));
+  const need = { ev: new Set(), ph: new Set(), story: new Set() };
+  (keys || []).forEach(k => {
+    const w = byKey.get(k);
+    if (w) { out.push(w.ar, w.en); return; }
+    let m;
+    if ((m = k.match(/^ev-(.+):(\d+)$/))) need.ev.add(m[1]);
+    else if ((m = k.match(/^ph-(.+):(\d+)$/))) need.ph.add(m[1]);
+    else if ((m = k.match(/^(story-\d+):(\d+)$/))) need.story.add(m[1]);
+  });
+  const J = f => fetch(f).then(r => r.json()).catch(() => null);
+  if (need.ev.size) { const d = await J("data/everyday.json"); ((d && d.groups) || []).forEach(g => { if (need.ev.has(g.id)) (g.members || []).forEach(w => out.push(w.ar, w.en)); }); }
+  if (need.ph.size) { const d = await J("data/phrases.json"); ((d && d.groups) || []).forEach(g => { if (need.ph.has(g.id)) (g.members || []).forEach(w => out.push(w.ar, w.en)); }); }
+  for (const id of need.story) { const d = await J(`data/${id}.json`); if (d) { (d.vocab || []).forEach(w => out.push(w.ar, w.en)); (d.sentences || []).forEach(s => out.push(s.ar, s.en)); } }
+  return out;
 }
 
 /* ---------- offline (PWA) ---------- */

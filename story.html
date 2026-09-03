@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtlvg0yb">
-  <link rel="stylesheet" href="css/style.css?v=mtlvg0yb">
+  <link rel="stylesheet" href="css/fonts.css?v=mtlzsx8a">
+  <link rel="stylesheet" href="css/style.css?v=mtlzsx8a">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mtlvg0yb"></script>
-<script src="js/tracker.js?v=mtlvg0yb"></script>
-<script src="js/plan.js?v=mtlvg0yb"></script>
+<script src="js/app.js?v=mtlzsx8a"></script>
+<script src="js/tracker.js?v=mtlzsx8a"></script>
+<script src="js/plan.js?v=mtlzsx8a"></script>
 <script>
 renderNav("stories");
 
@@ -162,6 +162,8 @@ fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f
 function renderRead() {
   const VOCAB_TR = {};
   (story.vocab || []).forEach(v => { if (v.tr) VOCAB_TR[normalizeAr(v.ar).replace(/^ال/, "")] = v.tr; });
+  // 📥 every line and every word of this story, now, while there is a signal (offlinePack, app.js)
+  try { if (typeof offlinePack === "function") offlinePack([].concat((story.vocab || []).flatMap(v => [v.ar, v.en]), (story.sentences || []).flatMap(s => [s.ar, s.en]))); } catch (e) {}
   body.innerHTML = `
     <div class="card">
       <h2>Read — tap any word to hear it, see its meaning, and where it links</h2>

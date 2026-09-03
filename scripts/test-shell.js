@@ -486,6 +486,35 @@ const bank = D("sentence-bank.json");
   yes(/p\.prep \? "⭐ "/.test(home), "…and stars the prep chips");
 }
 
+/* ---------- 14. THE OFFLINE PACK ----------
+   2026-09-03: "the audio didn't work on mobile" + "is it possible that the
+   website works offline at least in batches?". Every clip was fetched on demand;
+   patchy signal → no clip → the phone's voice, which has no Arabic. The pack
+   warms the SAME cache sw.js serves cache-first. The pin that matters: the two
+   cache names must be one name — a pack into a cache the worker never reads
+   would look like it worked and play nothing. */
+{
+  console.log("\n-- a quick open packs the clips the week needs --");
+  const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const sw = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
+  const packName = (app.match(/const PACK_CACHE = "([^"]+)"/) || [])[1];
+  const swName = (sw.match(/const AUDIO_CACHE = "([^"]+)"/) || [])[1];
+  yes(!!packName && packName === swName, `the pack fills the cache the worker serves (${packName} = ${swName})`);
+  yes(/\/audio\//.test(sw) && /caches\.match\(e\.request\)/.test(sw), "…and the worker answers /audio/ from cache first");
+  yes(/async function offlinePack\(/.test(app) && /async function packTextsForKeys\(/.test(app), "app.js defines the pack and the key→text resolver");
+  yes(/f && !f\.real \? f\.src : null/.test(app), "a real recitation (remote, cross-origin) is never packed");
+  yes(/navigator\.onLine/.test(app), "the pack does nothing without a signal instead of erroring");
+  const home = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/await packTextsForKeys\(/.test(home) && /await offlinePack\(texts/.test(home), "the home page packs on open");
+  yes(/hwc\.keys/.test(home), "…including every word of the homework contract");
+  yes(/Curriculum\.sentencesFor\(\(l\.lesson && l\.lesson\.keys\)/.test(home), "…and the sentences each of this week's lessons will play");
+  yes(/id = "packLine"/.test(home), "…and says how many clips are on the phone");
+  yes(/offlinePack\(\(obj\.members/.test(fs.readFileSync(path.join(ROOT, "vocab.html"), "utf8")), "a cluster page packs its own set");
+  yes(/offlinePack\(\[\]\.concat\(\(story\.vocab/.test(fs.readFileSync(path.join(ROOT, "story.html"), "utf8")), "a story page packs its own lines and words");
+  // the resolver must know the everyday / phrase / story key shapes the contract uses
+  yes(/\^ev-\(\.\+\):\(\\d\+\)\$/.test(app) && /\^\(story-\\d\+\):/.test(app), "keys the bank never met still resolve through the data files");
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

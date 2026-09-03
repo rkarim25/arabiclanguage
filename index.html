@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtlvg0yb">
-  <link rel="stylesheet" href="css/style.css?v=mtlvg0yb">
+  <link rel="stylesheet" href="css/fonts.css?v=mtlzsx8a">
+  <link rel="stylesheet" href="css/style.css?v=mtlzsx8a">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtlvg0yb"></script>
-<script src="js/curriculum.js?v=mtlvg0yb"></script>
-<script src="js/app.js?v=mtlvg0yb"></script>
-<script src="js/tracker.js?v=mtlvg0yb"></script>
-<script src="js/plan.js?v=mtlvg0yb"></script>
-<script src="js/account.js?v=mtlvg0yb"></script>
+<script src="js/progress-model.js?v=mtlzsx8a"></script>
+<script src="js/curriculum.js?v=mtlzsx8a"></script>
+<script src="js/app.js?v=mtlzsx8a"></script>
+<script src="js/tracker.js?v=mtlzsx8a"></script>
+<script src="js/plan.js?v=mtlzsx8a"></script>
+<script src="js/account.js?v=mtlzsx8a"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -421,6 +421,30 @@ function scorePill(l) {
       document.getElementById("nowCard").after(el);
     }
   } catch (e) { /* no classes yet — the card simply isn't there */ }
+
+  /* 📥 OFFLINE PACK — a quick open on a good signal loads what this week needs
+     (his ask, 2026-09-03). This week's seven lessons, their sentences, and every
+     word of the homework contract. See offlinePack in app.js. */
+  try {
+    const cwk = weeks[cw - 1];
+    const packKeys = [];
+    ((cwk && cwk.lessons) || []).forEach(l => packKeys.push(...((l.lesson && l.lesson.keys) || [])));
+    const hwc = typeof planHomework === "function" ? planHomework() : null;
+    if (hwc && !hwc.past) packKeys.push(...(hwc.keys || []));
+    const texts = await packTextsForKeys([...new Set(packKeys)], ctx);
+    ((cwk && cwk.lessons) || []).forEach(l => {
+      try { Curriculum.sentencesFor((l.lesson && l.lesson.keys) || [], ctx, { limit: 12, maxWords: 999 }).forEach(s => texts.push(s.ar, s.en)); } catch (e) {}
+    });
+    const line = document.createElement("p");
+    line.id = "packLine"; line.style.cssText = "font-size:12.5px;color:var(--muted);margin:10px 0 0";
+    line.textContent = "📥 Loading this week's audio for offline use…";
+    document.getElementById("nowCard").appendChild(line);
+    const r = await offlinePack(texts, (n, t) => { line.textContent = `📥 Offline pack: ${n} of ${t} clips ready…`; });
+    line.textContent = r.skipped
+      ? "📥 Offline pack: needs a signal once — open this page on wifi and it loads itself"
+      : `📥 Offline pack: ${r.n} of ${r.total} clips on this phone — this week's lessons and Sunday's words play with no signal`;
+    if (r.fetched) logEvent({ e: "pack", n: r.n, total: r.total, fetched: r.fetched });
+  } catch (e) { /* the pack is a convenience — the page is complete without it */ }
 
   /* achieved */
   if (state.achieved.length) {
