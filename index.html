@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtku26uv">
-  <link rel="stylesheet" href="css/style.css?v=mtku26uv">
+  <link rel="stylesheet" href="css/fonts.css?v=mtlvg0yb">
+  <link rel="stylesheet" href="css/style.css?v=mtlvg0yb">
   <style>
     .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
     .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
@@ -109,12 +109,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtku26uv"></script>
-<script src="js/curriculum.js?v=mtku26uv"></script>
-<script src="js/app.js?v=mtku26uv"></script>
-<script src="js/tracker.js?v=mtku26uv"></script>
-<script src="js/plan.js?v=mtku26uv"></script>
-<script src="js/account.js?v=mtku26uv"></script>
+<script src="js/progress-model.js?v=mtlvg0yb"></script>
+<script src="js/curriculum.js?v=mtlvg0yb"></script>
+<script src="js/app.js?v=mtlvg0yb"></script>
+<script src="js/tracker.js?v=mtlvg0yb"></script>
+<script src="js/plan.js?v=mtlvg0yb"></script>
+<script src="js/account.js?v=mtlvg0yb"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -390,8 +390,17 @@ function scorePill(l) {
       try {
         const hw = typeof planHomework === "function" ? planHomework() : null;
         if (hw && !hw.past && hw.parts && hw.parts.length > 1) {
-          partsRow = `<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px">` + hw.parts.map(p =>
-            `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:${p.shakyN === 0 ? "var(--accent)" : "var(--text)"}">${p.shakyN === 0 ? "✓ " : ""}${esc(p.label)} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`).join("") + `</div>`;
+          /* THE HONEST TRADE (2026-09-03): close to the class with the bar far off,
+             the plan names the ten words that make it feel prepared (hw.prep) —
+             those chips lead, the rest step back, and the sentence says the rest
+             carries over. See planHomework. */
+          const prepLine = hw.prep
+            ? `<p style="font-size:13.5px;margin:0 0 8px"><strong>Class prep: ${hw.prep.solidN} of ${hw.prep.total}</strong> — ${esc(hw.prep.label)}. <span style="color:var(--muted)">All ${hw.keys.length} won't hold by Sunday; these ${hw.prep.total} make the class feel prepared, the rest carry into next week.</span></p>`
+            : "";
+          partsRow = prepLine + `<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px">` + hw.parts.map(p => {
+            const doneP = p.shakyN === 0, dim = hw.prep && !p.prep && !doneP;
+            return `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:${p.prep ? "2px solid var(--accent)" : "1px solid var(--border)"};border-radius:999px;padding:4px 10px;${dim ? "opacity:.55;" : ""}color:${doneP ? "var(--accent)" : "var(--text)"}">${doneP ? "✓ " : p.prep ? "⭐ " : ""}${esc(p.label)} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`;
+          }).join("") + `</div>`;
         }
       } catch (e) { /* no contract — the card is just as good without the row */ }
       el.innerHTML = `

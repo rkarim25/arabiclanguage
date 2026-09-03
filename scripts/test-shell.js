@@ -418,6 +418,74 @@ const bank = D("sentence-bank.json");
   yes(/hw\.parts\.map\(p =>/.test(planSrc), "the lesson strip lists every part, so none is invisible");
 }
 
+/* ---------- 13. THE HONEST TRADE ----------
+   2026-09-03, Thursday night: 7 of 59 solid, the seven days 0 of 10, three
+   evenings to the class. A bar that cannot be reached moves nothing. Close to
+   the class and far from ready, the plan must name the ten words that make it
+   feel prepared — whole parts, the biggest that fit — send the block THERE, and
+   leave the honest overall number exactly as it was. */
+{
+  console.log("\n-- close to the class, the target becomes the ten that make it feel prepared --");
+  const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  const from = planSrc.indexOf("function planHwGid(");
+  const to = planSrc.indexOf("function planHwTaskDone(");
+  const mk = new Function("store", "getSrs",
+    planSrc.slice(from, to) + "; return { planHomework, planHwNextPart };");
+  const KEYS = []
+    .concat(Array.from({ length: 26 }, (_, i) => `ev-lesson-home:${i}`))
+    .concat(Array.from({ length: 10 }, (_, i) => `ev-lesson-week:${i}`))
+    .concat(Array.from({ length: 5 },  (_, i) => `ev-lesson-divine:${i}`))
+    .concat(Array.from({ length: 18 }, (_, i) => `story-07:${i}`));
+  const hwAt = days => ({ label: "Sunday class", lessonAt: new Date(Date.now() + days * 86400000).toISOString(),
+    group: "ev-lesson-home", keys: KEYS, tasks: [{ id: "t1", label: "read it" }, { id: "t2", label: "retake" }] });
+  // his real 2026-09-03 state: 7 of the flat solid, the other three parts untouched
+  const srs = () => { const S = {}; for (let i = 0; i < 7; i++) S[`ev-lesson-home:${i}`] = { box: 3, due: 0 }; return S; };
+  const run = (hw, S) => mk({ get: (k, d) => (k === "ats-homework" ? hw : k === "ats-hw-done" ? {} : d) }, () => S);
+
+  let api = run(hwAt(2.5), srs());
+  let hw = api.planHomework();
+  yes(!!hw.prep, `2.5 days out at ${hw.readiness}% ready, prep mode is ON`);
+  yes(hw.prep && hw.prep.gids.join() === "ev-lesson-week",
+    `it picks the seven days — the biggest part that fits ten — not the smallest (${hw.prep && hw.prep.gids.join(", ")})`);
+  yes(hw.prep && hw.prep.total === 10 && hw.prep.solidN === 0, "…and reads 0 of 10, a number that can move tonight");
+  yes(api.planHwNextPart(hw).gid === "ev-lesson-week",
+    "the 📚 block goes to the ten, not to the flat's 19-word hole");
+  yes(hw.readiness === Math.round(100 * 0.7 * 7 / 59), `the overall readiness is untouched by prep (${hw.readiness}%) — the honest number the coach quotes`);
+  yes(hw.parts.filter(p => p.prep).length === 1 && hw.parts.find(p => p.gid === "story-07").prep !== true,
+    "only the prep part is flagged; the passage steps back");
+
+  // not close: no prep, the block walks the biggest hole as before
+  api = run(hwAt(5), srs());
+  hw = api.planHomework();
+  yes(!hw.prep, "five days out there is no trade to make — prep stays OFF");
+  yes(api.planHwNextPart(hw).gid === "ev-lesson-home", "…and the block still goes to the part furthest behind");
+
+  // close but nearly ready: no prep
+  { const S = srs(); KEYS.slice(0, 40).forEach(k => S[k] = { box: 3, due: 0 });
+    hw = run(hwAt(2.5), S).planHomework();
+    yes(!hw.prep, `at ${hw.readiness}% ready the whole bar is reachable — prep stays OFF`); }
+
+  // the ten are done: prep moves ON to the next part that fits
+  { const S = srs(); KEYS.filter(k => k.startsWith("ev-lesson-week")).forEach(k => S[k] = { box: 2, due: 0 });
+    hw = run(hwAt(2), S).planHomework();
+    yes(hw.prep && hw.prep.gids.join() === "ev-lesson-divine",
+      `once the seven days hold, the next ten is the divine attributes (${hw.prep && hw.prep.gids.join(", ")})`);
+    yes(hw.parts.find(p => p.gid === "ev-lesson-week").shakyN === 0, "…and the seven days chip shows ✓"); }
+
+  // nothing fits: there is still exactly one target — the smallest part
+  { const S = srs(); KEYS.filter(k => /lesson-(week|divine)/.test(k)).forEach(k => S[k] = { box: 2, due: 0 });
+    hw = run(hwAt(2), S).planHomework();
+    yes(hw.prep && hw.prep.gids.join() === "story-07",
+      `when no part fits ten, prep names the smallest one left (${hw.prep && hw.prep.gids.join(", ")}) rather than nothing`); }
+
+  // the surfaces say it
+  yes(/Class prep — \$\{part\.label\}/.test(planSrc), "the 📚 block is titled as class prep in prep mode");
+  yes(/carry into next week/.test(planSrc), "…and says the rest carries into next week");
+  const home = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/hw\.prep/.test(home) && /carry into next week/.test(home), "the Sunday's class card — the surface he opens — shows the prep line");
+  yes(/p\.prep \? "⭐ "/.test(home), "…and stars the prep chips");
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

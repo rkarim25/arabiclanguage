@@ -113,6 +113,15 @@ function planHwPartLabel(hw, gid) {
   if ((m = gid.match(/^qw:(.+)$/))) return `Surah ${m[1]}`;
   return gid.replace(/^(ev|ph)-/, "").replace(/^lesson-/, "").replace(/-/g, " ").replace(/^./, c => c.toUpperCase());
 }
+/* THE HONEST TRADE (2026-09-03). Thursday night, 7 of 59 solid, three evenings
+   left: a bar that cannot be reached moves nothing, and he could see it could
+   not. When the class is ≤ PLAN_PREP_DAYS out and readiness is under
+   PLAN_PREP_BELOW, the target becomes the ~PLAN_PREP_WORDS words that make the
+   class feel prepared — WHOLE parts, the biggest that still fit, so a chip can
+   actually turn ✓ — and the rest is said out loud to carry into next week rather
+   than pretended at. `readiness` itself stays honest (it is what the coach and
+   the nightly quote); prep is a second, reachable number laid over it. */
+const PLAN_PREP_DAYS = 3, PLAN_PREP_BELOW = 40, PLAN_PREP_WORDS = 10;
 function planHomework() {
   const hw = store.get("ats-homework", null);
   if (!hw || !hw.lessonAt) return null;
@@ -146,14 +155,28 @@ function planHomework() {
     const r = planHwPartRoute(p.gid, preCheck ? "fill" : "study");
     p.url = r.url; p.doneEvs = r.done;
   });
-  return { ...hw, past: false, daysLeft, lessonT, keys, tasks, tasksLeft, readiness, parts,
+  let prep = null;
+  if (daysLeft <= PLAN_PREP_DAYS && readiness < PLAN_PREP_BELOW && keys.length - solid.length > PLAN_PREP_WORDS) {
+    const open = parts.filter(p => p.shakyN > 0).sort((a, b) => b.shakyN - a.shakyN);  // biggest first, contract order on ties
+    const pick = []; let left = PLAN_PREP_WORDS;
+    open.forEach(p => { if (p.shakyN <= left) { pick.push(p); left -= p.shakyN; } });
+    if (!pick.length && open.length) pick.push(open[open.length - 1]);  // nothing fits: the smallest part, so there is always ONE target
+    if (pick.length) {
+      pick.forEach(p => { p.prep = true; });
+      const sum = f => pick.reduce((n, p) => n + p[f], 0);
+      prep = { gids: pick.map(p => p.gid), label: pick.map(p => p.label).join(" + "),
+        total: sum("total"), solidN: sum("solidN"), shakyN: sum("shakyN") };
+    }
+  }
+  return { ...hw, past: false, daysLeft, lessonT, keys, tasks, tasksLeft, readiness, parts, prep,
     solidN: solid.length, startedN: started.length, shakyN: keys.length - solid.length };
 }
 /* the part furthest behind, contract order breaking ties — so consecutive days
    walk the whole lesson instead of hammering the group that happens to be first */
 function planHwNextPart(hw) {
   if (!hw || !hw.parts || !hw.parts.length) return null;
-  return hw.parts.reduce((best, p) => (p.shakyN > best.shakyN ? p : best), hw.parts[0]);
+  const pool = hw.prep ? hw.parts.filter(p => p.prep) : hw.parts;   // in prep mode the block goes to the ten, not to the biggest hole
+  return pool.reduce((best, p) => (p.shakyN > best.shakyN ? p : best), pool[0]);
 }
 function planHwTaskDone(id) {
   const done = store.get("ats-hw-done", {});
@@ -255,9 +278,13 @@ function planMakeBlock(type, date, dueN) {
     return {
       type, content: part ? part.gid : (hw.group || null),
       icon: "📚",
-      title: preCheck ? "Pre-lesson check — prove the homework" : `Teacher homework — ${part ? part.label : (hw.label || "this week's lesson")}`,
+      title: preCheck ? "Pre-lesson check — prove the homework"
+        : hw.prep && part ? `Class prep — ${part.label}`
+        : `Teacher homework — ${part ? part.label : (hw.label || "this week's lesson")}`,
       sub: preCheck
         ? `Test yourself on the lesson words before ${hw.teacher || "your teacher"} does — pass it and you walk in ready.`
+        : hw.prep && part
+          ? `${part.shakyN} of ${part.total} to bring in — the ${hw.prep.total} words that make the class feel prepared. The other ${hw.shakyN - hw.prep.shakyN} carry into next week. Lesson ${when}.`
         : part
           ? `${part.shakyN} of ${part.total} not solid here — ${hw.shakyN} across the whole lesson. Lesson ${when}.`
           : `${hw.shakyN} word${hw.shakyN === 1 ? "" : "s"} not yet solid${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""} — lesson ${when}.`,
@@ -505,8 +532,12 @@ function planLessonStripHTML() {
   const partsHtml = (hw.parts || []).length > 1
     ? `<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">` + hw.parts.map(p => {
         const doneP = p.shakyN === 0;
-        return `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:${doneP ? "var(--accent)" : "var(--fg)"}">${doneP ? "✓ " : ""}${p.label} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`;
+        const dim = hw.prep && !p.prep && !doneP;
+        return `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:${p.prep ? "2px solid var(--accent)" : "1px solid var(--line)"};border-radius:999px;padding:3px 9px;${dim ? "opacity:.55;" : ""}color:${doneP ? "var(--accent)" : "var(--fg)"}">${doneP ? "✓ " : p.prep ? "⭐ " : ""}${p.label} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`;
       }).join("") + `</div>`
+    : "";
+  const prepHtml = hw.prep
+    ? `<div style="font-size:12.5px;margin-top:6px"><strong>Class prep: ${hw.prep.solidN}/${hw.prep.total}</strong> — ${hw.prep.label}. <span style="color:var(--muted)">All ${hw.keys.length} won't hold by the lesson; these ${hw.prep.total} make it feel prepared, the rest carry into next week.</span></div>`
     : "";
   return `<div class="plan-lesson">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px">
@@ -519,6 +550,7 @@ function planLessonStripHTML() {
         ? `✅ Fully ready — every word holds on a spaced schedule and the tasks are done. Walk in and tell her so.`
         : `${hw.readiness}% ready — ${hw.solidN}/${hw.keys.length} words solid (solid = survived a spaced gap, not crammed)${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""} left` : ""}`}
     </div>
+    ${prepHtml}
     ${partsHtml}
     ${tasksHtml}
   </div>`;
