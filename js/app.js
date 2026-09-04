@@ -733,14 +733,111 @@ function stopDictation() {
   const L = _live;
   if (!L) return;
   _live = null;
+  if (L.whisper) { L.finish("superseded"); return; }   // a Whisper take releases itself
   clearTimeout(L.watchdog);
   try { L.rec.onresult = L.rec.onerror = L.rec.onend = null; L.rec.abort(); } catch (e) {}
   try { if (L.mediaRec && L.mediaRec.state !== "inactive") { L.mediaRec.onstop = null; L.mediaRec.stop(); } } catch (e) {}
   try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
   if (L.reset) L.reset();
 }
+/* ---------- WHISPER (2026-09-04) ----------
+   "can you improve arabic audio recognition?" — yes, by not asking the browser.
+   Chrome's ar-SA recogniser produced 27 takes in two months, most of them
+   "heard silence", and phones are worse. A take is now RECORDED (MediaRecorder,
+   which never fought the recogniser for the mic because there is no recogniser
+   running), ends itself after ~1.2 s of quiet once he has spoken (or on a second
+   tap, or at 12 s), and goes to the worker's /transcribe, where Whisper on
+   Workers AI transcribes it. The callback contract is unchanged, so every 🎤 on
+   the site gets the better ear for free — and "▶ hear yourself" is free too,
+   since the recording is the take. If there is no session or no signal, or the
+   worker fails, the browser recogniser takes the next minute of takes. */
+const WHISPER_KEY = "ats-whisper";           // "off" opts out; the browser recogniser is then used as before
+let _whisperDownUntil = 0;
+function whisperOn() { try { return store.get(WHISPER_KEY, "on") !== "off"; } catch (e) { return true; } }
+function whisperReady() {
+  return whisperOn() && navigator.onLine && Date.now() >= _whisperDownUntil
+    && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder)
+    && typeof getSession === "function" && !!getSession() && typeof wReq === "function";
+}
+function dictateWhisper(btn, idleLabel, cb) {
+  stopDictation(); stopSpeak();
+  const L = { whisper: true, btn, spoke: false, reset: () => { btn.textContent = idleLabel; } };
+  _live = L;
+  btn.textContent = "… getting the mic";
+  const chunks = [];
+  let finished = false, actx = null;
+  L.finish = async why => {
+    if (finished) return; finished = true;
+    if (_live === L) _live = null;
+    clearTimeout(L.watchdog); clearInterval(L.meter);
+    try { if (L.mediaRec && L.mediaRec.state !== "inactive") await new Promise(r => { L.mediaRec.onstop = r; L.mediaRec.stop(); setTimeout(r, 800); }); } catch (e) {}
+    try { if (L.stream) L.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    try { if (actx) actx.close(); } catch (e) {}
+    if (why === "superseded") return;
+    if (why === "denied") { L.reset(); cb(null, null, "mic blocked — allow it in the address bar", []); return; }
+    if (!L.spoke || !chunks.length) {
+      L.reset(); _noHeard++;
+      if (typeof micTrouble === "function") setTimeout(micTrouble, 0);
+      cb(null, null, "heard silence — tap 🎤 and speak straight away", []);
+      return;
+    }
+    const blob = new Blob(chunks, { type: (L.mediaRec && L.mediaRec.mimeType) || "audio/webm" });
+    let url = null; try { url = URL.createObjectURL(blob); } catch (e) {}
+    btn.textContent = "… listening back";
+    let j = null;
+    try {
+      const r = await wReq("/transcribe?lang=ar", { method: "POST", headers: { "Content-Type": blob.type || "application/octet-stream" }, body: blob });
+      if (r.status === 401 && typeof setSession === "function") setSession(null);
+      j = r.ok ? await r.json() : null;
+      if (!r.ok) throw new Error("http " + r.status);
+    } catch (e) {
+      _whisperDownUntil = Date.now() + 60000;   // the worker is unreachable — the browser recogniser gets the next minute
+      L.reset();
+      cb(null, url, "the good recogniser is out of reach — tap 🎤 again to use the phone's own", []);
+      return;
+    }
+    L.reset();
+    const text = j && j.text ? String(j.text).trim() : "";
+    if (text) { _noHeard = 0; _recFails = 0; logEvent({ e: "whisper", ms: j.ms, bytes: j.bytes, model: j.model, n: text.split(/\s+/).length }); cb(text, url, null, [text]); return; }
+    _noHeard++;
+    cb(null, url, "heard you but caught no words — tap 🎤 and say it once more", []);
+  };
+  const AC = window.AudioContext || window.webkitAudioContext;
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    if (_live !== L) { stream.getTracks().forEach(t => t.stop()); return; }
+    L.stream = stream;
+    try {
+      L.mediaRec = new MediaRecorder(stream);
+      L.mediaRec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      L.mediaRec.start(250);
+    } catch (e) { L.finish("denied"); return; }
+    btn.textContent = "🔴 speak now · tap to stop";
+    const t0 = Date.now(); let lastVoice = 0;
+    // end the take on quiet: ~1.2 s of silence after speech; 6 s of nothing at all; 12 s hard cap
+    try {
+      if (AC) {
+        actx = new AC();
+        const src = actx.createMediaStreamSource(stream), an = actx.createAnalyser();
+        an.fftSize = 1024; src.connect(an);
+        const buf = new Uint8Array(an.fftSize);
+        L.meter = setInterval(() => {
+          an.getByteTimeDomainData(buf);
+          let peak = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i] - 128) / 128; if (v > peak) peak = v; }
+          const now = Date.now();
+          if (peak > 0.05) { if (!L.spoke) btn.textContent = "🔴 got it — keep going, or tap to stop"; L.spoke = true; lastVoice = now; }
+          if (L.spoke && now - lastVoice > 1200) L.finish("silence");
+          else if (!L.spoke && now - t0 > 6000) L.finish("nothing");
+        }, 100);
+      } else { L.spoke = true; }   // no meter (old WebKit): the take is whatever he says before tapping or the cap
+    } catch (e) { L.spoke = true; }
+    L.watchdog = setTimeout(() => L.finish("cap"), 12000);
+  }).catch(() => L.finish("denied"));
+}
 function dictate(btn, idleLabel, cb) {
   // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
+  // a second tap on a live Whisper take ends it and sends it
+  if (_live && _live.whisper && _live.btn === btn) { _live.finish(_live.spoke ? "tap" : "nothing"); return; }
+  if (whisperReady()) return dictateWhisper(btn, idleLabel, cb);
   stopDictation(); stopSpeak();
   const rec = new SR();
   // interimResults ON (his 08-13 note: "i am saying it but doesnt get recorded
@@ -1870,7 +1967,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtm9idjq";
+const DATA_V = "mtneza1e";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

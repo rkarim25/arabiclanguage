@@ -515,6 +515,37 @@ const bank = D("sentence-bank.json");
   yes(/\^ev-\(\.\+\):\(\\d\+\)\$/.test(app) && /\^\(story-\\d\+\):/.test(app), "keys the bank never met still resolve through the data files");
 }
 
+/* ---------- 15. WHISPER HEARS THE TAKE ----------
+   2026-09-04: "can you improve arabic audio recognition?". The browser's ar-SA
+   recogniser heard silence more often than words. A take is now recorded and
+   transcribed by Whisper on the worker; the browser recogniser is the fallback.
+   The pins that matter: the route sits BEHIND the session check, the worker has
+   the AI binding it calls, and every existing 🎤 still gets the same callback. */
+{
+  console.log("\n-- a 🎤 take goes to Whisper, and falls back to the browser --");
+  const w = fs.readFileSync(path.join(ROOT, "worker", "src", "index.js"), "utf8");
+  const toml = fs.readFileSync(path.join(ROOT, "worker", "wrangler.toml"), "utf8");
+  const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  yes(/\[ai\]\s*\r?\nbinding = "AI"/.test(toml), "wrangler.toml binds Workers AI as env.AI");
+  yes(/url\.pathname === "\/transcribe" && req\.method === "POST"/.test(w), "the worker has POST /transcribe");
+  yes(w.indexOf('url.pathname === "/transcribe"') > w.indexOf("const email = await requireSession(req, env);"), "…behind the session check — nobody else spends the neurons");
+  yes(/@cf\/openai\/whisper-large-v3-turbo/.test(w) && /@cf\/openai\/whisper"/.test(w), "…tries turbo, then the base model");
+  yes(/AUDIO_MAX/.test(w) && /too-large/.test(w), "…and caps the upload");
+  yes(/function dictateWhisper\(/.test(app) && /function whisperReady\(/.test(app), "app.js has the Whisper take");
+  yes(/if \(whisperReady\(\)\) return dictateWhisper\(btn, idleLabel, cb\);/.test(app), "dictate() prefers it when it can");
+  yes(/typeof getSession === "function" && !!getSession\(\)/.test(app) && /navigator\.onLine/.test(app), "…only with a session and a signal");
+  yes(/_whisperDownUntil = Date\.now\(\) \+ 60000/.test(app), "…and backs off to the browser recogniser for a minute when the worker fails");
+  yes(/if \(L\.whisper\) \{ L\.finish\("superseded"\); return; \}/.test(app), "stopDictation releases a Whisper take instead of touching a recogniser it never had");
+  yes(/cb\(text, url, null, \[text\]\)/.test(app), "the callback contract is unchanged: (heard, url, err, alts)");
+  yes(/wReq\("\/transcribe\?lang=ar"/.test(app), "the take is posted through the same session helper the sync uses");
+  yes(/L\.mediaRec\.start\(250\)/.test(app) && /getByteTimeDomainData/.test(app), "the take ends itself on quiet, so a short word is not cut off and a long one is not waited on");
+  // every caller still passes a 4-slot callback or fewer
+  ["learn.html", "speaking.html"].forEach(f => {
+    const s = fs.readFileSync(path.join(ROOT, f), "utf8");
+    yes(/dictate\(\w+, "[^"]*", \((heard|h)[^)]*\) =>/.test(s), `${f} still calls dictate(btn, label, cb)`);
+  });
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

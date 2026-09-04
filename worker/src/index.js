@@ -6,6 +6,7 @@
 const SESSION_TTL = 180 * 24 * 60 * 60; // 180 days, seconds
 const IMG_TTL = 180 * 24 * 60 * 60;     // photos on ✏️ notes; the nightly run archives keepers
 const IMG_MAX = 2 * 1024 * 1024;        // backstop — the client downscales to ~200KB first
+const AUDIO_MAX = 4 * 1024 * 1024;      // a 🎤 take: ~12 s of opus is well under 200KB
 
 function cors(env, extra = {}) {
   return {
@@ -152,6 +153,46 @@ export default {
           "Cache-Control": "private, max-age=86400",
         },
       });
+    }
+
+    /* 🎤 TRANSCRIBE (2026-09-04) — "can you improve arabic audio recognition?"
+       The browser's own recogniser (ar-SA) heard silence more often than words on
+       his machine (27 takes in two months, most of them "heard silence") and is
+       worse still on a phone. The take is now recorded client-side and sent here,
+       and Whisper on Workers AI transcribes it — trained on far more Arabic than
+       any on-device model, and forgiving of a learner's accent. Session required,
+       so nobody else spends the account's neurons; ~$0.0005 per minute of audio.
+       Turbo takes base64 and a language hint; the base model takes raw bytes and
+       is the fallback if turbo rejects the container. Both answer with .text. */
+    if (url.pathname === "/transcribe" && req.method === "POST") {
+      if (!env.AI) return json(env, 503, { error: "no-ai" });
+      const type = (req.headers.get("Content-Type") || "").split(";")[0].trim();
+      if (!/^(audio|video)\//.test(type) && type !== "application/octet-stream") return json(env, 415, { error: "bad-type" });
+      const buf = await req.arrayBuffer();
+      if (!buf.byteLength) return json(env, 400, { error: "empty" });
+      if (buf.byteLength > AUDIO_MAX) return json(env, 413, { error: "too-large" });
+      const lang = /^[a-z]{2}$/.test(url.searchParams.get("lang") || "") ? url.searchParams.get("lang") : "ar";
+      const started = Date.now();
+      let text = "", model = "", errs = [];
+      try {
+        const bytes = new Uint8Array(buf);
+        let bin = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        const r = await env.AI.run("@cf/openai/whisper-large-v3-turbo", { audio: btoa(bin), language: lang, task: "transcribe", vad_filter: true });
+        text = (r && (r.text || (r.transcription_info && r.transcription_info.text))) || "";
+        model = "turbo";
+      } catch (e) {
+        errs.push("turbo: " + String((e && e.message) || e).slice(0, 160));
+        try {
+          const r = await env.AI.run("@cf/openai/whisper", { audio: [...new Uint8Array(buf)] });
+          text = (r && r.text) || "";
+          model = "whisper";
+        } catch (e2) {
+          errs.push("whisper: " + String((e2 && e2.message) || e2).slice(0, 160));
+          return json(env, 502, { error: "ai-failed", detail: errs });
+        }
+      }
+      return json(env, 200, { text: String(text).trim(), model, ms: Date.now() - started, bytes: buf.byteLength, type });
     }
 
     return json(env, 404, { error: "not-found" });

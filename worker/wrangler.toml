@@ -10,3 +10,7 @@ kv_namespaces = [
 ALLOWED_EMAIL = "rkarim88@gmail.com"
 ALLOWED_EMAILS = "rkarim88@gmail.com,sabatarif.15@gmail.com"
 ALLOWED_ORIGIN = "https://rkarim25.github.io"
+
+# Whisper for 🎤 takes (2026-09-04) — see /transcribe in src/index.js
+[ai]
+binding = "AI"
