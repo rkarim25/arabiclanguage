@@ -532,7 +532,7 @@ const bank = D("sentence-bank.json");
   yes(/@cf\/openai\/whisper-large-v3-turbo/.test(w) && /@cf\/openai\/whisper"/.test(w), "…tries turbo, then the base model");
   yes(/AUDIO_MAX/.test(w) && /too-large/.test(w), "…and caps the upload");
   yes(/function dictateWhisper\(/.test(app) && /function whisperReady\(/.test(app), "app.js has the Whisper take");
-  yes(/if \(whisperReady\(\)\) return dictateWhisper\(btn, idleLabel, cb\);/.test(app), "dictate() prefers it when it can");
+  yes(/if \(whisperReady\(\)\) return dictateWhisper\(btn, idleLabel, cb(, opts)?\);/.test(app), "dictate() prefers it when it can");
   yes(/typeof getSession === "function" && !!getSession\(\)/.test(app) && /navigator\.onLine/.test(app), "…only with a session and a signal");
   yes(/_whisperDownUntil = Date\.now\(\) \+ 60000/.test(app), "…and backs off to the browser recogniser for a minute when the worker fails");
   yes(/if \(L\.whisper\) \{ L\.finish\("superseded"\); return; \}/.test(app), "stopDictation releases a Whisper take instead of touching a recogniser it never had");
@@ -544,6 +544,32 @@ const bank = D("sentence-bank.json");
     const s = fs.readFileSync(path.join(ROOT, f), "utf8");
     yes(/dictate\(\w+, "[^"]*", \((heard|h)[^)]*\) =>/.test(s), `${f} still calls dictate(btn, label, cb)`);
   });
+}
+
+/* ---------- 16. HIS FOUR NOTES OF 2026-09-04 ----------
+   19:59 "it sounds like thallaj … is the sound cutting out?" — the first word of
+   a test could play before the clip manifest arrived, so the browser voice
+   answered and clipped the last syllable; and the primer could pause a clip
+   that started right after it. 20:07 "no sound for this one" — a meaning
+   question had no 🔊. 20:07 "when i retake test, only test me on low scores".
+   20:22 "i want to say it and for you assess as well if i could say it". */
+{
+  console.log("\n-- the four notes of 4 Sep --");
+  const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const learn = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+  yes(/_audioManLoading\.then\(go, go\)/.test(app) && /function _speakNow\(/.test(app), "speak() waits for the clip manifest before falling to the browser voice");
+  yes(/_speakWait\+\+;/.test(app), "…and stopSpeak cancels a waiting speak()");
+  yes(/if \(\/\^data:\/\.test\(a\.src\)\) a\.pause\(\);/.test(app), "the primer only ever pauses its own silence, never a clip that started after it");
+  yes(/q\.form === "mean"[\s\S]{0,900}id="play">🔊 hear it/.test(learn), "a meaning question has a 🔊");
+  yes(/const low = use\.filter\(id => latest\[id\] === undefined \|\| latest\[id\] < Curriculum\.PASS\)/.test(learn), "a retake keeps only the lessons under the pass mark");
+  yes(/e\.reported \|\| e\.lessons/.test(learn), "…judged on REPORTED scores, so a sampled class test counts");
+  yes(/if \(seen && low\.length && low\.length < use\.length\)/.test(learn), "…and a scope nobody has sat, or where everything passed, still runs in full");
+  yes(/retakeNote \? ` <span class="pill">/.test(learn), "…and says so on the test's first screen");
+  yes(/function heardVerdictHtml\(/.test(learn) && (learn.match(/heardVerdictHtml\(heard/g) || []).length >= 2, "both spoken routes show what was heard, word by word");
+  yes(/wordsHtml\(m, false\)/.test(learn) && /words landed/.test(learn), "…as a coloured verdict with a count");
+  yes(/lastTakeModel\(\) === "whisper"/.test(learn) && /function lastTakeModel\(/.test(app), "…only when Whisper heard it; the browser recogniser keeps the honest caveat");
+  yes(/\{ pause: String\(target \|\| ""\)\.trim\(\)\.split\(\/\\s\+\/\)\.length >= 3 \? 2200 : 1300 \}/.test(learn), "a sentence gets a longer quiet before the take ends than a word");
+  yes(/const PAUSE = Math\.max\(800, Math\.min\(4000/.test(app) && /now - lastVoice > PAUSE/.test(app), "…and the take honours it");
 }
 
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------

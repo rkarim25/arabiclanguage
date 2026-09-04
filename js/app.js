@@ -753,14 +753,18 @@ function stopDictation() {
    worker fails, the browser recogniser takes the next minute of takes. */
 const WHISPER_KEY = "ats-whisper";           // "off" opts out; the browser recogniser is then used as before
 let _whisperDownUntil = 0;
+let _lastTake = "";                          // "whisper" | "browser" — which ear produced the last heard text
+function lastTakeModel() { return _lastTake; }
 function whisperOn() { try { return store.get(WHISPER_KEY, "on") !== "off"; } catch (e) { return true; } }
 function whisperReady() {
   return whisperOn() && navigator.onLine && Date.now() >= _whisperDownUntil
     && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder)
     && typeof getSession === "function" && !!getSession() && typeof wReq === "function";
 }
-function dictateWhisper(btn, idleLabel, cb) {
+function dictateWhisper(btn, idleLabel, cb, opts) {
   stopDictation(); stopSpeak();
+  // a word is done after ~1.2 s of quiet; a sentence he is reading needs room to breathe (his 20:22 take came back as one word)
+  const PAUSE = Math.max(800, Math.min(4000, (opts && opts.pause) || 1200));
   const L = { whisper: true, btn, spoke: false, reset: () => { btn.textContent = idleLabel; } };
   _live = L;
   btn.textContent = "… getting the mic";
@@ -798,7 +802,7 @@ function dictateWhisper(btn, idleLabel, cb) {
     }
     L.reset();
     const text = j && j.text ? String(j.text).trim() : "";
-    if (text) { _noHeard = 0; _recFails = 0; logEvent({ e: "whisper", ms: j.ms, bytes: j.bytes, model: j.model, n: text.split(/\s+/).length }); cb(text, url, null, [text]); return; }
+    if (text) { _noHeard = 0; _recFails = 0; _lastTake = "whisper"; logEvent({ e: "whisper", ms: j.ms, bytes: j.bytes, model: j.model, n: text.split(/\s+/).length }); cb(text, url, null, [text]); return; }
     _noHeard++;
     cb(null, url, "heard you but caught no words — tap 🎤 and say it once more", []);
   };
@@ -825,7 +829,7 @@ function dictateWhisper(btn, idleLabel, cb) {
           let peak = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i] - 128) / 128; if (v > peak) peak = v; }
           const now = Date.now();
           if (peak > 0.05) { if (!L.spoke) btn.textContent = "🔴 got it — keep going, or tap to stop"; L.spoke = true; lastVoice = now; }
-          if (L.spoke && now - lastVoice > 1200) L.finish("silence");
+          if (L.spoke && now - lastVoice > PAUSE) L.finish("silence");
           else if (!L.spoke && now - t0 > 6000) L.finish("nothing");
         }, 100);
       } else { L.spoke = true; }   // no meter (old WebKit): the take is whatever he says before tapping or the cap
@@ -833,11 +837,12 @@ function dictateWhisper(btn, idleLabel, cb) {
     L.watchdog = setTimeout(() => L.finish("cap"), 12000);
   }).catch(() => L.finish("denied"));
 }
-function dictate(btn, idleLabel, cb) {
-  // cb(heard|null, playbackUrl|null, errMsg|null) — heard=null means no usable take
+function dictate(btn, idleLabel, cb, opts) {
+  // cb(heard|null, playbackUrl|null, errMsg|null, alts) — heard=null means no usable take
   // a second tap on a live Whisper take ends it and sends it
   if (_live && _live.whisper && _live.btn === btn) { _live.finish(_live.spoke ? "tap" : "nothing"); return; }
-  if (whisperReady()) return dictateWhisper(btn, idleLabel, cb);
+  if (whisperReady()) return dictateWhisper(btn, idleLabel, cb, opts);
+  _lastTake = "browser";
   stopDictation(); stopSpeak();
   const rec = new SR();
   // interimResults ON (his 08-13 note: "i am saying it but doesnt get recorded
@@ -1786,7 +1791,8 @@ function primeSpeak() {
     // a beat of silence: the gesture-initiated play() is what unlocks the element
     a.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
     const p = a.play();
-    if (p && p.then) p.then(() => { a.pause(); a.muted = false; }).catch(() => { a.muted = false; });
+    // only pause the SILENCE — a test's first word can start before this resolves, and pausing that is a clipped word
+    if (p && p.then) p.then(() => { if (/^data:/.test(a.src)) a.pause(); a.muted = false; }).catch(() => { a.muted = false; });
     else a.muted = false;
     _speakPrimed = true;
   } catch (e) { a.muted = false; }
@@ -1828,7 +1834,26 @@ document.addEventListener("click", e => {
   document.querySelectorAll(".speed-sw").forEach(el => { el.innerHTML = _speedBtns(); });
 });
 
+/* THE FIRST WORD OF A TEST (his note 2026-09-04 19:59: "it sounds like thallaj.
+   it should be thallaja. is the sound cutting out?"). If the clip manifest has
+   not arrived yet, _audioFileFor knows no clip and the browser voice answers —
+   and that voice clips the last syllable of Arabic words. So the first speak()
+   waits for the manifest, up to 1.5 s, before deciding. After that it is never
+   a question again. */
+let _speakWait = 0;
 function speak(text, rate, onend) {
+  if (!_audioMan && _audioManLoading) {
+    stopSpeak();
+    const id = ++_speakWait;
+    let fired = false;
+    const go = () => { if (fired || id !== _speakWait) return; fired = true; _speakNow(text, rate, onend); };
+    _audioManLoading.then(go, go);
+    setTimeout(go, 1500);
+    return;
+  }
+  _speakNow(text, rate, onend);
+}
+function _speakNow(text, rate, onend) {
   stopSpeak();
   const file = _audioFileFor(text);
   if (file) {
@@ -1883,6 +1908,7 @@ function _speakTts(text, rate, onend) {
   speechSynthesis.speak(u);
 }
 function stopSpeak() {
+  _speakWait++;   // a speak() still waiting for the manifest is cancelled too
   if (window.speechSynthesis) speechSynthesis.cancel();
   if (_speakEl) { try { _speakEl.onended = null; _speakEl.onerror = null; _speakEl.pause(); } catch (e) {} }
 }
@@ -1967,7 +1993,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtneza1e";
+const DATA_V = "mtnfkau7";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtneza1e">
-  <link rel="stylesheet" href="css/style.css?v=mtneza1e">
+  <link rel="stylesheet" href="css/fonts.css?v=mtnfkau7">
+  <link rel="stylesheet" href="css/style.css?v=mtnfkau7">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtneza1e"></script>
-<script src="js/curriculum.js?v=mtneza1e"></script>
-<script src="js/app.js?v=mtneza1e"></script>
-<script src="js/tracker.js?v=mtneza1e"></script>
-<script src="js/plan.js?v=mtneza1e"></script>
+<script src="js/progress-model.js?v=mtnfkau7"></script>
+<script src="js/curriculum.js?v=mtnfkau7"></script>
+<script src="js/app.js?v=mtnfkau7"></script>
+<script src="js/tracker.js?v=mtnfkau7"></script>
+<script src="js/plan.js?v=mtnfkau7"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -213,6 +213,23 @@ function wireSelfGrade(prefix, key, onPick) {
   });
 }
 
+/* WHAT WHISPER HEARD, WORD BY WORD. His note, 2026-09-04 20:22: "i want to say
+   it and for you assess as well if i could say it". With the browser recogniser
+   the honest line was "recognition is unreliable — was what you said right?",
+   because it was. Whisper is reliable enough to be shown as a verdict: the
+   sentence with each word coloured by whether it landed, and a count. He can
+   still overrule it — a misheard take should not cost a word — but the default
+   is now the site's judgment, not his. */
+function heardVerdictHtml(heard, target) {
+  const whisper = typeof lastTakeModel === "function" && lastTakeModel() === "whisper";
+  if (!whisper) return `<p style="text-align:center;font-size:15px;margin:10px 0 0">It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”, which isn't a match — but Arabic recognition is unreliable. Was what you said right?</p>`;
+  const m = writeMatchAr(heard, target);
+  const tot = (m.hits || []).length, n = (m.hits || []).filter(h => h !== "miss").length;
+  return `<p style="text-align:center;font-size:14px;color:var(--muted);margin:10px 0 4px">Whisper heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”</p>
+    <p class="arabic" style="text-align:center;font-size:22px;direction:rtl;margin:0">${wordsHtml(m, false)}</p>
+    <p style="text-align:center;font-size:13.5px;color:var(--muted);margin:6px 0 0"><strong style="color:var(--text)">${n} of ${tot} words landed</strong> — green is right, amber is right by sound, faded is what it did not hear. If it misheard you, overrule it:</p>`;
+}
+
 function micRow(id) {
   const self = `<button id="${id}Self">🗣 I said it — mark it myself</button>`;
   if (!CAN_MIC) return `<div class="row" style="margin-top:2px">${self}</div>
@@ -236,6 +253,7 @@ function wireMic(id, target, onSaid, onSelf) {
   if (!btn) return;
   btn.onclick = () => {
     msg.textContent = "";
+    // a sentence needs a longer quiet than a word before the take ends itself
     dictate(btn, "🎤 say it instead", (heard, url, err, alts) => {
       if (!heard) {
         msg.textContent = err || "didn't catch that — tap 🎤 to try again";
@@ -255,7 +273,7 @@ function wireMic(id, target, onSaid, onSelf) {
       const tries = [heard].concat(alts || []);
       const ok = tries.some(t => heardMatch(t, target) || speakMatch(t, target) || writeMatchAr(t, target).ok);
       onSaid(ok, heard);
-    });
+    }, { pause: String(target || "").trim().split(/\s+/).length >= 3 ? 2200 : 1300 });
   };
 }
 
@@ -719,8 +737,7 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       wireMic("pmic", s.ar, (ok, heard) => {
         if (ok) { asked++; right++; gradeSentence(s, true); showProduced(s, true, heard); return; }
         app.innerHTML = head() + `<div class="card">${bar()}
-          <p style="text-align:center;font-size:15px">It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”,
-          which isn't a match — but Arabic recognition is unreliable. Was what you said right?</p>
+          ${heardVerdictHtml(heard, s.ar)}
           <div class="q-ar arabic" dir="rtl">${esc(s.ar)}</div>
           ${s.tr ? `<p class="q-tr">${esc(s.tr)}</p>` : ""}
           ${selfGradeRow("pj")}
@@ -910,7 +927,24 @@ async function runTest(lessonIds, ctx, state, label, opts) {
   const all = state.milestones.flatMap(m => m.lessons);
   const open = lessonIds.filter(id => { const l = all.find(x => x.id === id); return l && !l.mastered; });
   // opts.all: cover the whole scope even where it is already proved (the class test)
-  const use = opts.all || !open.length ? lessonIds : open;
+  let use = opts.all || !open.length ? lessonIds : open;
+  /* RETAKE ONLY WHAT WAS LOW. His note, 2026-09-04 20:07, straight after a
+     class test: "when i retake test, only test me on low scores, not the entire
+     test". A lesson that scored 100 five minutes ago is not what he needs to be
+     asked again; the ones at 0 and 50 are. So when any lesson in this scope has
+     a previous score, the retake keeps only the lessons whose LATEST score is
+     under the pass mark (reported scores count, not just clearable ones). If
+     every lesson passed, the full set runs — there is nothing to narrow to. */
+  const latest = {};
+  (ctx.log || []).filter(e => e && e.e === "exam-done").sort((a, b) => a.t - b.t)
+    .forEach(e => { const r = e.reported || e.lessons || {}; for (const id in r) latest[id] = r[id]; });
+  const seen = use.some(id => latest[id] !== undefined);
+  const low = use.filter(id => latest[id] === undefined || latest[id] < Curriculum.PASS);
+  let retakeNote = "";
+  if (seen && low.length && low.length < use.length) {
+    retakeNote = `Retake — only the ${low.length} lesson${low.length > 1 ? "s" : ""} that scored under ${Curriculum.PASS} last time; the ${use.length - low.length} that passed stay passed.`;
+    use = low;
+  }
   const ex = Curriculum.examForLessons(use, ctx, { attempt: attempts + 1, state, seed: use.length + (label ? label.length : 3) });
   if (!ex.items.length) {
     app.innerHTML = `<h1>Nothing left to prove</h1><p>Everything here is already proved and still fresh.</p>
@@ -948,7 +982,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
   const head = `<div class="crumb">Test</div><h1 style="margin-top:0">${esc(title)}</h1>
     <p class="sub">${qs.length} questions, about ${ex.minutes} minute${ex.minutes === 1 ? "" : "s"}. Pass mark ${Curriculum.PASS}.
     ${ex.sampled ? `A sample across ${use.length} lessons${ex.clearable ? "" : " — too few each to clear a lesson, so this one is a check"}.` : "Each lesson is scored on its own."}
-    ${priorLine}</p>`;
+    ${priorLine}${retakeNote ? ` <span class="pill">${retakeNote}</span>` : ""}</p>`;
 
   /* ---------- ONE CARD PER QUESTION ----------
      His report, 2026-08-30: "when i click check it just moves to next word. the
@@ -1024,10 +1058,14 @@ async function runTest(lessonIds, ctx, state, label, opts) {
       wireMeaning("j", q.key, q.v.en, settle);
       wireBack();
     } else if (q.form === "mean") {
+      // his note 2026-09-04 20:07, "no sound for this one": a meaning question had no 🔊 at all.
+      // Hearing the word while reading it gives nothing away — the question is the meaning.
       app.innerHTML = head + `<div class="card">${n}
         <div class="q-ar arabic">${esc(q.v.ar)}</div>
+        <div class="row" style="margin-top:2px"><button type="button" class="small" id="play">🔊 hear it</button></div>
         <p style="text-align:center;font-size:15px;color:var(--muted)">What does it mean?</p>
         ${meaningPanel("j", i > 0)}</div>`;
+      document.getElementById("play").onclick = () => speak(q.v.ar, 0.85);
       wireMeaning("j", q.key, q.v.en, settle);
       wireBack();
     } else {
@@ -1058,9 +1096,7 @@ async function runTest(lessonIds, ctx, state, label, opts) {
           return;
         }
         // the recogniser is the weak link here, so he judges, not it
-        rev.innerHTML = `<p style="text-align:center;font-size:15px;margin:10px 0 0">
-            It heard “<span class="arabic" dir="rtl">${esc(heard)}</span>”, which isn't a match —
-            but Arabic recognition is unreliable. Was what you said right?</p>
+        rev.innerHTML = `${heardVerdictHtml(heard, target)}
           <div class="q-ar arabic" dir="rtl" style="font-size:24px">${esc(target)}</div>
           ${selfGradeRow("tj")}
           <div class="row"><button id="micRetry">🎤 try again</button></div>`;
