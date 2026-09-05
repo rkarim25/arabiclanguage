@@ -575,6 +575,18 @@ const bank = D("sentence-bank.json");
   yes(/\^\[a-z\]\{2\}\$/.test(w), "the worker accepts a two-letter language hint");
 }
 
+/* ---------- 20. REPEAT FROM THE VERDICT ----------
+   2026-09-05, from the Whisper verdict in a lesson: "give me the option to
+   repeat it here". A second take must be one tap away, and must not grade. */
+{
+  console.log("\n-- the spoken verdict offers another take --");
+  const learn = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+  yes(/id="pmicRetry">🎤 say it again/.test(learn), "the lesson verdict has 🎤 say it again");
+  yes(/getElementById\("pmicRetry"\)\.onclick = \(\) => produce\(s\);/.test(learn), "…which re-runs the production step, so nothing is graded until he chooses");
+  yes(/id="pmicHear">🔊 hear it/.test(learn), "…and 🔊 hear it beside it");
+  yes(/id="micRetry">🎤 try again/.test(learn), "the test verdict still has its own try-again");
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still
