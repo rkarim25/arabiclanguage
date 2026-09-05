@@ -572,6 +572,36 @@ const bank = D("sentence-bank.json");
   yes(/const PAUSE = Math\.max\(800, Math\.min\(4000/.test(app) && /now - lastVoice > PAUSE/.test(app), "…and the take honours it");
 }
 
+/* ---------- 17. SYNC IS FIRST, AND BESIDE HOME ----------
+   2026-09-04: "there is lots of circular pages in more. make the sync button
+   prominent at the start and next to Home tab." */
+{
+  console.log("\n-- sync is first on More, and beside Home in the nav --");
+  const more = fs.readFileSync(path.join(ROOT, "more.html"), "utf8");
+  const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  yes(more.indexOf('id="syncCard"') > 0 && more.indexOf('id="syncCard"') < more.indexOf("<h2>The two ways in</h2>"), "the sync card is the FIRST card on More");
+  yes((more.match(/id="syncCard"/g) || []).length === 1, "…and there is exactly one of it");
+  yes(/href="index\.html">Home<\/a>\s*<a class="link" id="navSync" href="more\.html#syncCard"/.test(app), "the ☁ pill sits right after Home in the nav");
+  yes(/wireNavSync\(el\.querySelector\("#navSync"\)\)/.test(app) && /function wireNavSync\(/.test(app), "…and is wired on every page that renders the nav");
+  yes(/a\.textContent = "☁ Sign in"/.test(app) && /a\.textContent = "☁ Sync"/.test(app), "…reading Sign in when signed out and Sync when signed in");
+  yes(/syncNow\(\)\.then\(n =>/.test(app), "…and a tap syncs on the spot when signed in");
+}
+
+/* ---------- 18. THE PLAN BAR STAYS OFF THE READING PAGES ----------
+   2026-09-04: "i see the daily review at the progress page. that is a bit
+   confusing." The bar was the day plan, not the page; it now says so and stays
+   off Progress, More, Lessons and the placement test. */
+{
+  console.log("\n-- the plan bar names itself and keeps off the reading pages --");
+  const plan = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  const css = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
+  const quiet = (plan.match(/const PLAN_BAR_QUIET = \[([^\]]+)\]/) || ["", ""])[1];
+  yes(/"map\.html"/.test(quiet) && /"more\.html"/.test(quiet), `Progress and More get no plan bar (${quiet.trim()})`);
+  yes(/if \(PLAN_BAR_QUIET\.includes\(page\)\) return;/.test(plan), "…enforced in planMountBar");
+  yes(/class="pb-today"/.test(plan) && /\.pb-today \{/.test(css), "…and where it does appear, it is labelled Today");
+  ["learn.html", "vocab.html", "sentences.html"].forEach(f => yes(!quiet.includes(f), `${f} keeps the bar — it is a doing page`));
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

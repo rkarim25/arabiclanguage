@@ -480,12 +480,12 @@ function planBank() {
 function planBarHTML(p) {
   const cur = planCurrent(p);
   const boxes = p.blocks.map(b => `<span class="pb-box ${b.done ? "on" : ""}"></span>`).join("");
-  if (!cur) return `<span class="pb-done">✅ Today complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">see the chart →</a>`;
+  if (!cur) return `<span class="pb-today">Today</span> <span class="pb-done">✅ complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">see the chart →</a>`;
   const here = (location.pathname.split("/").pop() || "index.html").startsWith(cur.page);
   // "start" only when nothing is done yet — his 08-13 note: "shouldnt it say
   // continue rather than start, i already started"
   const go = p.blocks.some(b => b.done) ? "continue →" : "start →";
-  return `${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
+  return `<span class="pb-today" title="today's plan — three short blocks">Today</span> ${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
     ${here ? `<button class="pb-tick" title="mark this block done">✓ done</button>`
            : `<a href="${cur.url}" class="pb-next">${go}</a>`}
     <a href="index.html" class="pb-plan" title="back to today's plan">📋 plan</a>`;
@@ -501,12 +501,19 @@ function planPaintBar() {
   // card view (dashboard) repaints too
   if (document.getElementById("planCard")) planRenderCard(document.getElementById("planCard"));
 }
+const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html"];
 function planMountBar() {
   if (document.getElementById("planBar")) return;
   const p = planGet();
   // the dashboard shows the full card; the bar appears on every OTHER page while the day is unfinished
   const page = location.pathname.split("/").pop() || "index.html";
   if (page === "index.html" || page === "") return;
+  /* READING PAGES GET NO BAR (his note, 2026-09-04: "i see the daily review at
+     the progress page. that is a bit confusing"). Progress promises "only things
+     you can check", and a bar underneath it saying "Review your 222 due" read as
+     part of the page. The bar belongs where he DOES things — lessons, tests,
+     practice — not where he reads about them. */
+  if (PLAN_BAR_QUIET.includes(page)) return;
   if (p.completedAt && !planCurrent(p)) return; // done — no nagging bar
   const bar = document.createElement("div");
   bar.id = "planBar";

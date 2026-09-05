@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>All activities — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtnoydlr">
-  <link rel="stylesheet" href="css/style.css?v=mtnoydlr">
+  <link rel="stylesheet" href="css/fonts.css?v=mtom56um">
+  <link rel="stylesheet" href="css/style.css?v=mtom56um">
   <style>
     .act-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
     .act {
@@ -24,9 +24,39 @@
 <body>
 <main>
   <h1>All activities</h1>
-  <p class="sub">Everything the site can do. You don't need this page day to day — your
-  <a href="index.html">lessons</a> already give you a planned path through it. This page is for
-  practising outside that plan, or browsing the material directly.</p>
+  <p class="sub">Sign in and sync first — that is the one thing here you may actually need. Everything
+  below it is the site's full inventory; your <a href="index.html">lessons</a> already give you a planned path
+  through it, so the rest is for practising outside that plan or browsing the material directly.</p>
+
+  <div class="card" id="syncCard">
+    <h2>☁ Cloud sync &amp; coaching</h2>
+    <p style="font-size:14px;color:var(--muted)" id="syncIntro">
+      Your progress syncs to the cloud so it survives a lost phone, your coach reads it to plan your milestones — and the 🎤 only hears you through Whisper when this browser is signed in.</p>
+    <div id="syncSetup">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <input id="loginEmail" type="email" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+        <button class="primary" id="btnCodeLogin">Sign in</button>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">This box only appears on a device that hasn't signed in yet. Ask your coach in chat to reset the code any time.</p>
+      <details>
+        <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Or connect with a GitHub token</summary>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
+          <button class="primary" id="btnConnect">Connect</button>
+        </div>
+      </details>
+    </div>
+    <div id="syncConnected" style="display:none">
+      <p style="font-size:14px">✅ Connected via <strong id="syncMethodLabel"></strong>. <span id="lastSync" style="color:var(--muted)"></span></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="primary" id="btnSync">Sync now</button>
+        <button id="btnRestore">Restore from cloud</button>
+        <button id="btnDisconnect" class="small">Disconnect</button>
+      </div>
+      <p id="syncMsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
+    </div>
+  </div>
 
   <div class="card">
     <h2>The two ways in</h2>
@@ -77,36 +107,6 @@
     </div>
   </div>
 
-  <div class="card" id="syncCard">
-    <h2>☁ Cloud sync &amp; coaching</h2>
-    <p style="font-size:14px;color:var(--muted)" id="syncIntro">
-      Your progress syncs to the cloud so it survives a lost phone, and your coach reads it to plan your milestones.</p>
-    <div id="syncSetup">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-        <input id="loginEmail" type="email" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-        <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-        <button class="primary" id="btnCodeLogin">Sign in</button>
-      </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">This box only appears on a device that hasn't signed in yet. Ask your coach in chat to reset the code any time.</p>
-      <details>
-        <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Or connect with a GitHub token</summary>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-          <input type="password" id="tokenInput" placeholder="github_pat_..." style="flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
-          <button class="primary" id="btnConnect">Connect</button>
-        </div>
-      </details>
-    </div>
-    <div id="syncConnected" style="display:none">
-      <p style="font-size:14px">✅ Connected via <strong id="syncMethodLabel"></strong>. <span id="lastSync" style="color:var(--muted)"></span></p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="primary" id="btnSync">Sync now</button>
-        <button id="btnRestore">Restore from cloud</button>
-        <button id="btnDisconnect" class="small">Disconnect</button>
-      </div>
-      <p id="syncMsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
-    </div>
-  </div>
-
   <div class="card">
     <h2>Backup (manual)</h2>
     <p style="font-size:14px;color:var(--muted)">A file you keep yourself, independent of the cloud.</p>
@@ -118,12 +118,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mtnoydlr"></script>
-<script src="js/curriculum.js?v=mtnoydlr"></script>
-<script src="js/app.js?v=mtnoydlr"></script>
-<script src="js/tracker.js?v=mtnoydlr"></script>
-<script src="js/account.js?v=mtnoydlr"></script>
-<script src="js/plan.js?v=mtnoydlr"></script>
+<script src="js/progress-model.js?v=mtom56um"></script>
+<script src="js/curriculum.js?v=mtom56um"></script>
+<script src="js/app.js?v=mtom56um"></script>
+<script src="js/tracker.js?v=mtom56um"></script>
+<script src="js/account.js?v=mtom56um"></script>
+<script src="js/plan.js?v=mtom56um"></script>
 <script>
   renderNav("more");
   trackPage("more");

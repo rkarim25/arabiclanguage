@@ -1993,7 +1993,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtnoydlr";
+const DATA_V = "mtom56um";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2285,6 +2285,7 @@ function renderNav(active) {
     <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
     <span class="spacer"></span>
     <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
+    <a class="link" id="navSync" href="more.html#syncCard" title="Cloud sync">☁</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences${due ? `<span class="badge">${due}</span>` : ""}</a>
     <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
     <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">📐 Others</a>
@@ -2292,10 +2293,34 @@ function renderNav(active) {
     <a class="link ${active === "map" || active === "more" ? "active" : ""}" href="map.html">📈 Progress</a>
   `;
   document.body.prepend(el);
+  wireNavSync(el.querySelector("#navSync"));
   mountNotePen();
   initWordTap();
   // the day-plan bar (js/plan.js) — walks him block to block without decisions
   if (typeof planMountBar === "function") { try { planMountBar(); } catch (e) {} }
+}
+
+/* ☁ SYNC, BESIDE HOME (his ask, 2026-09-04: "there is lots of circular pages in
+   more. make the sync button prominent at the start and next to Home tab.").
+   Signed in: the pill reads "☁ Sync" and a tap syncs on the spot, then says so.
+   Not signed in: it reads "☁ Sign in", in the accent colour, and takes him to
+   the sync card — which now sits at the TOP of More. tracker.js (syncMethod,
+   syncNow) loads after app.js, so everything is looked up at tap time. */
+function wireNavSync(a) {
+  if (!a) return;
+  const signedIn = () => typeof syncMethod === "function" && !!syncMethod();
+  const paint = () => {
+    if (signedIn()) { a.textContent = "☁ Sync"; a.style.color = ""; a.style.fontWeight = ""; a.title = "Sync now"; }
+    else { a.textContent = "☁ Sign in"; a.style.color = "var(--accent)"; a.style.fontWeight = "600"; a.title = "Sign in so your progress syncs and the 🎤 hears you"; }
+  };
+  setTimeout(paint, 0);   // after tracker.js has loaded
+  a.onclick = ev => {
+    if (!signedIn() || typeof syncNow !== "function") return;   // not signed in: follow the link to the card
+    ev.preventDefault();
+    a.textContent = "☁ …";
+    syncNow().then(n => { a.textContent = `✓ synced${typeof n === "number" ? " · " + n : ""}`; setTimeout(paint, 2500); })
+      .catch(e => { a.textContent = "☁ retry"; a.title = (e && e.message) || "sync failed"; setTimeout(paint, 4000); });
+  };
 }
 
 /* ---------- mini phonetic keyboard component ----------
