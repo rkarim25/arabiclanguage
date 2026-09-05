@@ -704,7 +704,8 @@
         "ev-lesson-week:2"
       ],
       "source": "class-built",
-      "lesson": "Class — 30 Aug: the flat, the week, the family"
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal"
     },
     {
       "en": "Wednesday is after Tuesday.",
@@ -721,7 +722,8 @@
       "ar": "السَّبْتُ وَالأَحَدُ عُطْلَةٌ",
       "keys": [
         "ev-lesson-week:6",
-        "ev-lesson-week:8"
+        "ev-lesson-week:8",
+        "ev-lesson-week:0"
       ],
       "source": "class-built",
       "lesson": "Class — 30 Aug: the flat, the week, the family"
@@ -1520,6 +1522,30 @@
       "lesson": "Class — 30 Aug: the flat, the week, the family",
       "pattern": "demonstratives",
       "frame": "demonstratives"
+    },
+    {
+      "en": "On Sunday I have a lesson.",
+      "ar": "يَوْمَ الأَحَدِ عِنْدِي دَرْسٌ.",
+      "keys": [
+        "ev-lesson-week:0",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "have",
+      "frame": "have"
+    },
+    {
+      "en": "Sunday is the first day of the week.",
+      "ar": "الأَحَدُ أَوَّلُ أَيَّامِ الأُسْبُوعِ.",
+      "keys": [
+        "ev-lesson-week:0",
+        "ev-lesson-week:7"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "idafa",
+      "frame": "idafa"
     }
   ]
 }
