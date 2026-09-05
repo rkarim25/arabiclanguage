@@ -522,6 +522,14 @@
      words to teach one) and then toward the commoner vocabulary.
      ========================================================================== */
   const SENTENCE_MAX = 5;          // a ~7-minute sitting, four steps per sentence
+  /* A SENTENCE HE REPEATS IS SHORT (his rule, 2026-09-05, from a 13-word passage
+     line in a lesson): "for such long sentences, it doesnt make a lot of sense to
+     repeat it like this. you should take the core vocabulary and create high
+     frequency use sentences which if i keep practising i get an informal sense of
+     how grammar is used." A passage is read on the story page; a lesson practises
+     constructed sentences of at most PRACTICE_MAX words, one frame each. A word
+     that only a long sentence reaches is met as a one-word item, as before. */
+  const PRACTICE_MAX = 7;
   /* A lesson is seven MINUTES, not five sentences. Ayat run from two words to
      twenty-one (median 4, but 73:20 is long), so counting sentences would make one
      lesson a stroll and another a slog. Size by words instead, with at least one
@@ -574,8 +582,10 @@
     let spent = 0;
     while (chosen.length < limit && covered.size < want.size) {
       let best = null, bestScore = null;
+      const maxLen = opts.maxLen || PRACTICE_MAX;
       candidates.forEach(s => {
         if (used.has(s.key) || isRetired(s.key, ctx)) return;
+        if (((s.words || []).length || 0) > maxLen) return;   // passages are read, not repeated
         const gain = (s.teaches || []).filter(k => want.has(k) && !covered.has(k)).length;
         if (!gain) return;
         // unfamiliar extra baggage: words this sentence needs that are neither
@@ -585,6 +595,7 @@
           -gain,                                   // cover the most first
           s.track === track ? 0 : 1,               // then prefer this track
           extra,                                   // then the least baggage
+          s.src === "prompts" && s.pattern ? 0 : 1, // then a constructed, frame-bearing sentence over a harvested one
           -(s.use || 0),                           // then the densest high-frequency vocabulary
           -(s.weight || 0),                        // then the commoner words
         ];
@@ -1187,7 +1198,7 @@
     examResults, examAttempts, examScoreOf, examBand, examVerdict, levelSummary, groupOf, activeMinutesBetween,
     PASS, CLEAR_MIN, CHUNK_MODES, milestoneState, lessonState, lessonScores, lessonChunks, chunkDone,
     nextChunk, nextChunkOfLesson, weekPlan, currentWeek, examForLessons, scopeKey, scopeHistory, reviewsFor, inventory, pace, milestoneExam, milestoneScoreOf,
-    SENTENCE_MAX, sentencesFor, reviewSentencesFor, weakWords, grammarToShow, holdOf, isRetired,
+    SENTENCE_MAX, PRACTICE_MAX, sentencesFor, reviewSentencesFor, weakWords, grammarToShow, holdOf, isRetired,
     BURST_WORDS, wordIndex, vocabBurst, grammarBurst, burstsFor,
   };
 });

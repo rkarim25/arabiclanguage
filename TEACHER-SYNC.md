@@ -112,7 +112,7 @@ that kind of thing:
 | stream | file | tag it needs |
 |---|---|---|
 | **vocabulary** | `data/everyday.json` — a new group, or members added to an existing one | group `lesson: "<class tag>"`, and every member `from: "teacher"` (hers) or `from: "complete"` (added here to make the set usable) |
-| **sentences** | `data/prompts.json` | `lesson: "<class tag>"`, `source: "teacher"` or `"class-built"` |
+| **sentences** | `data/prompts.json` | `lesson: "<class tag>"`, `source: "teacher"` (hers) or `"core"` — **constructed**: ≤7 words, ONE grammar frame each (`pattern`), class words + words he holds, ~3 per new word across the frames (CURRICULUM.md §5 "Core sentences are constructed") |
 | **grammar** | `data/grammar.json` — a new pattern where the rule is real and reusable | named in the class record's `grammar[]` with a `why` |
 | **reading** | `data/story-NN.json` — the whole passage, every word glossed | `source: "teacher"`, `lesson: "<class tag>"`, named in the class record's `reading` |
 

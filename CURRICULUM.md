@@ -213,6 +213,35 @@ His two conditions, both load-bearing:
 - A production question in a **test** asks for the sentence and is scored on
   whether the *target word* landed inside it.
 
+### Core sentences are constructed, not harvested
+
+His rule, 2026-09-05, after a lesson asked him to repeat a 13-word passage line:
+
+> "for such long sentences, it doesnt make a lot of sense to repeat it like this.
+> you should take the core vocabulary and create high frequency use sentences
+> which if i keep practising i get an informal sense of how grammar is used. For
+> all the sentences that is being practised and the master list of sentences
+> should have the same idea, a core vocabulary and grammar use such that if i can
+> say those i should have a good sense of the whole language. these sentences
+> needs to be thoughtfully constructed"
+
+So a sentence he **repeats** is built, not found:
+
+- **At most `PRACTICE_MAX` (7) words.** `sentencesFor()` never hands a lesson a
+  longer one; a word only a passage reaches is met as a one-word item.
+- **One frame each**, named in `data/grammar.json` and declared on the sentence
+  (`pattern`): a nominal sentence, having / not having, there-is, a question
+  word, *I want*, *you can*, *on [day]*, *it was*, a plural, *this / that*. Say
+  the frame ten times with different core words and the grammar arrives by ear.
+- **Core vocabulary only**: the class words plus words he already holds. No new
+  word rides in on a practice sentence.
+- **They live in `data/prompts.json` with `source: "core"`** and are preferred
+  by the picker over harvested sentences of the same reach. Passages and ayat
+  stay in the bank for **reading** (story page, Qur'an page) and for the tests'
+  reading questions — they are not what he drills aloud.
+
+Every class gets this treatment when it is captured (TEACHER-SYNC.md).
+
 ### Coverage is engineered, not accidental
 
 The one real argument for word lists is frequency. Dropping them makes coverage

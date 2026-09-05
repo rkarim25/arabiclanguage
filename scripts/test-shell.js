@@ -587,6 +587,40 @@ const bank = D("sentence-bank.json");
   yes(/id="micRetry">🎤 try again/.test(learn), "the test verdict still has its own try-again");
 }
 
+/* ---------- 21. A SENTENCE HE REPEATS IS SHORT AND CONSTRUCTED ----------
+   2026-09-05: a lesson asked him to repeat a 13-word passage line. Practice
+   sentences are now built (≤7 words, one frame, core words) and the picker never
+   hands a lesson a long one. */
+{
+  console.log("\n-- practice sentences are short, constructed, and cover the class --");
+  const C = require(path.join(ROOT, "js", "curriculum.js"));
+  const D = f => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8"));
+  const bank = D("sentence-bank.json"), prompts = D("prompts.json");
+  const core = prompts.prompts.filter(p => p.source === "core");
+  yes(core.length >= 30, `${core.length} constructed core sentences exist`);
+  yes(core.every(p => p.ar.split(/\s+/).length <= 7), "…every one is 7 words or fewer");
+  yes(core.every(p => p.pattern && p.keys && p.keys.length), "…every one names its frame and the cards it teaches");
+  const frames = new Set(core.map(p => p.pattern));
+  yes(frames.size >= 8, `…across ${frames.size} grammar frames`);
+  const gids = new Set(D("grammar.json").patterns.map(p => p.id));
+  yes([...frames].every(f => gids.has(f)), "…each a real pattern in grammar.json");
+  // the bank carries them with their frame
+  const inBank = bank.sentences.filter(s => s.src === "prompts" && core.some(p => p.ar.replace(/[.؟?!،,]/g, "").trim() === s.ar.replace(/[.؟?!،,]/g, "").trim()));
+  yes(inBank.length >= core.length - 2, `the bank carries them (${inBank.length} of ${core.length})`);
+  yes(inBank.every(s => s.pattern), "…with the declared frame, not a guess");
+  // the picker never hands a lesson a long sentence, and every class word has a short one
+  const ev = D("everyday.json").groups, s7 = D("story-07.json");
+  const keys = [];
+  for (const gid of ["lesson-home", "lesson-week", "lesson-divine"]) ev.find(g => g.id === gid).members.forEach((m, i) => keys.push("ev-" + gid + ":" + i));
+  s7.vocab.forEach((v, i) => keys.push("story-07:" + i));
+  const ctx = { curriculum: D("curriculum.json"), verses: D("verses.json"), bank, log: [], srs: {}, progress: {}, now: Date.now() };
+  const picked = C.sentencesFor(keys, ctx, { limit: 40, maxWords: 999 });
+  yes(picked.length > 0 && picked.every(s => (s.words || []).length <= C.PRACTICE_MAX), `sentencesFor hands out only sentences of ≤${C.PRACTICE_MAX} words (${picked.length} picked, longest ${Math.max(...picked.map(s => (s.words || []).length))})`);
+  const short = new Set(bank.sentences.filter(s => (s.words || []).length <= 7).flatMap(s => s.teaches || []));
+  const missing = keys.filter(k => !short.has(k));
+  yes(missing.length === 0, missing.length ? `${missing.length} class word(s) have NO short sentence: ${missing.join(", ")}` : "every one of the 59 class words has a short sentence to practise in");
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

@@ -1,1032 +1,1525 @@
 {
- "about": "English prompts to say in Arabic. keys = SRS card keys of the vocabulary each prompt uses; the Speaking page sorts prompts by how many of those words the learner already knows.",
- "prompts": [
-  {
-   "en": "Peace be upon you!",
-   "ar": "السَّلَامُ عَلَيْكُمْ",
-   "keys": [
-    "ev-greetings:0"
-   ]
-  },
-  {
-   "en": "Good morning!",
-   "ar": "صَبَاح الخَيْر",
-   "keys": [
-    "ev-greetings:2"
-   ]
-  },
-  {
-   "en": "Thank you.",
-   "ar": "شُكْرًا",
-   "keys": [
-    "ev-greetings:4"
-   ]
-  },
-  {
-   "en": "Yes, of course!",
-   "ar": "نَعَمْ طَبْعًا",
-   "keys": [
-    "ev-glue:0",
-    "ev-glue:1"
-   ]
-  },
-  {
-   "en": "I want water.",
-   "ar": "أُرِيدُ مَاءً",
-   "keys": [
-    "ev-want-need:0",
-    "ev-food:0"
-   ]
-  },
-  {
-   "en": "I am hungry.",
-   "ar": "أَنَا جَائِعٌ",
-   "keys": [
-    "ev-people:0",
-    "ev-food:6"
-   ]
-  },
-  {
-   "en": "I am thirsty.",
-   "ar": "أَنَا عَطْشَانُ",
-   "keys": [
-    "ev-people:0",
-    "ev-food:7"
-   ]
-  },
-  {
-   "en": "Where is the mosque?",
-   "ar": "أَيْنَ المَسْجِدُ؟",
-   "keys": [
-    "ev-questions:2",
-    "story-02:6"
-   ]
-  },
-  {
-   "en": "Where is the house?",
-   "ar": "أَيْنَ البَيْتُ؟",
-   "keys": [
-    "ev-questions:2",
-    "story-02:3"
-   ]
-  },
-  {
-   "en": "How are you? (to a man)",
-   "ar": "كَيْفَ أَنْتَ؟",
-   "keys": [
-    "ev-questions:4",
-    "ev-people:1"
-   ]
-  },
-  {
-   "en": "What do you want?",
-   "ar": "مَاذَا تُرِيدُ؟",
-   "keys": [
-    "ev-questions:0",
-    "ev-want-need:0"
-   ]
-  },
-  {
-   "en": "I don't know.",
-   "ar": "لَا أَعْرِفُ",
-   "keys": [
-    "qc:3",
-    "ev-want-need:4"
-   ]
-  },
-  {
-   "en": "I don't understand.",
-   "ar": "لَا أَفْهَمُ",
-   "keys": [
-    "qc:3",
-    "ev-want-need:5"
-   ]
-  },
-  {
-   "en": "Give me water, please.",
-   "ar": "أَعْطِنِي مَاءً مِنْ فَضْلِكَ",
-   "keys": [
-    "ev-commands:0",
-    "ev-food:0",
-    "ev-greetings:6"
-   ]
-  },
-  {
-   "en": "Wait, please!",
-   "ar": "اِنْتَظِرْ مِنْ فَضْلِكَ",
-   "keys": [
-    "ev-commands:7",
-    "ev-greetings:6"
-   ]
-  },
-  {
-   "en": "Maybe tomorrow.",
-   "ar": "رُبَّمَا غَدًا",
-   "keys": [
-    "ev-glue:3",
-    "ev-time:2"
-   ]
-  },
-  {
-   "en": "Now or tomorrow?",
-   "ar": "الآن أَوْ غَدًا؟",
-   "keys": [
-    "ev-time:0",
-    "ev-time:2"
-   ]
-  },
-  {
-   "en": "But why?",
-   "ar": "لَكِنْ لِمَاذَا؟",
-   "keys": [
-    "ev-glue:4",
-    "ev-questions:5"
-   ]
-  },
-  {
-   "en": "Because I am hungry.",
-   "ar": "لِأَنِّي جَائِعٌ",
-   "keys": [
-    "ev-glue:5",
-    "ev-food:6"
-   ]
-  },
-  {
-   "en": "Come here, my friend!",
-   "ar": "تَعَالَ يَا صَدِيقِي",
-   "keys": [
-    "ev-commands:2",
-    "ev-people:9"
-   ]
-  },
-  {
-   "en": "Listen and look!",
-   "ar": "اِسْمَعْ وَانْظُرْ",
-   "keys": [
-    "ev-commands:5",
-    "ev-commands:4"
-   ]
-  },
-  {
-   "en": "How much is the bill?",
-   "ar": "كَمِ الحِسَابُ؟",
-   "keys": [
-    "ev-questions:6",
-    "ev-food:8"
-   ]
-  },
-  {
-   "en": "One, two, three!",
-   "ar": "وَاحِد اِثْنَان ثَلَاثَة",
-   "keys": [
-    "ev-numbers:0",
-    "ev-numbers:1",
-    "ev-numbers:2"
-   ]
-  },
-  {
-   "en": "I drink coffee in the morning.",
-   "ar": "أَشْرَبُ القَهْوَةَ فِي الصَّبَاحِ",
-   "keys": [
-    "story-01:8",
-    "story-01:9",
-    "story-01:1",
-    "qc:5"
-   ]
-  },
-  {
-   "en": "I go to work by car.",
-   "ar": "أَذْهَبُ إِلَى العَمَلِ بِالسَّيَّارَةِ",
-   "keys": [
-    "story-01:13",
-    "story-01:14",
-    "story-01:15",
-    "qc:11"
-   ]
-  },
-  {
-   "en": "I read a book in the evening.",
-   "ar": "أَقْرَأُ كِتَابًا فِي المَسَاءِ",
-   "keys": [
-    "story-01:24",
-    "qc:22",
-    "story-01:23"
-   ]
-  },
-  {
-   "en": "The house is near the mosque.",
-   "ar": "البَيْتُ قَرِيبٌ مِنَ المَسْجِدِ",
-   "keys": [
-    "story-02:3",
-    "story-02:5",
-    "story-02:6"
-   ]
-  },
-  {
-   "en": "We live in a small house.",
-   "ar": "نَسْكُنُ فِي بَيْتٍ صَغِيرٍ",
-   "keys": [
-    "story-02:2",
-    "story-02:3",
-    "story-02:4"
-   ]
-  },
-  {
-   "en": "My mother is a teacher.",
-   "ar": "أُمِّي مُعَلِّمَةٌ",
-   "keys": [
-    "story-02:13",
-    "story-02:14"
-   ]
-  },
-  {
-   "en": "I love my family very much.",
-   "ar": "أُحِبُّ عَائِلَتِي كَثِيرًا",
-   "keys": [
-    "ev-want-need:6",
-    "story-01:28"
-   ]
-  },
-  {
-   "en": "The fish is delicious.",
-   "ar": "السَّمَكُ لَذِيذٌ",
-   "keys": [
-    "story-03:31",
-    "story-03:25"
-   ]
-  },
-  {
-   "en": "The market is far from here.",
-   "ar": "السُّوقُ بَعِيدٌ",
-   "keys": [
-    "story-03:0",
-    "ev-opposites:4"
-   ]
-  },
-  {
-   "en": "Where is the gate?",
-   "ar": "أَيْنَ البَابُ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-directions:3"
-   ]
-  },
-  {
-   "en": "How do I get to the Haram?",
-   "ar": "كَيْفَ أَصِلُ إِلَى الحَرَمِ؟",
-   "keys": [
-    "ev-directions:9",
-    "ev-haram:0"
-   ]
-  },
-  {
-   "en": "Right or left?",
-   "ar": "يَمِين أَوْ يَسَار؟",
-   "keys": [
-    "ev-directions:0",
-    "ev-directions:1"
-   ]
-  },
-  {
-   "en": "The exit is upstairs.",
-   "ar": "المَخْرَجُ فَوْق",
-   "keys": [
-    "ev-directions:8",
-    "ev-directions:5"
-   ]
-  },
-  {
-   "en": "Where is the tawaf area?",
-   "ar": "أَيْنَ المَطَافُ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-haram:9"
-   ]
-  },
-  {
-   "en": "I want Zamzam water.",
-   "ar": "أُرِيدُ زَمْزَم",
-   "keys": [
-    "ev-want-need:0",
-    "ev-haram:5"
-   ]
-  },
-  {
-   "en": "How much is this?",
-   "ar": "بِكَمْ هَذَا؟",
-   "keys": [
-    "ev-shopping:0"
-   ]
-  },
-  {
-   "en": "Too expensive — lower the price!",
-   "ar": "غَالٍ جِدًّا، نَزِّلِ السِّعْرَ",
-   "keys": [
-    "ev-shopping:1",
-    "ev-shopping:2"
-   ]
-  },
-  {
-   "en": "Do you have dates?",
-   "ar": "هَلْ عِنْدَكَ تَمْرٌ؟",
-   "keys": [
-    "ev-shopping:3",
-    "ev-shopping:6"
-   ]
-  },
-  {
-   "en": "I'll take it, thank you.",
-   "ar": "آخُذُهُ، شُكْرًا",
-   "keys": [
-    "ev-shopping:8",
-    "ev-greetings:4"
-   ]
-  },
-  {
-   "en": "I need a doctor.",
-   "ar": "أَحْتَاجُ طَبِيبًا",
-   "keys": [
-    "ev-medical:0"
-   ]
-  },
-  {
-   "en": "Where is the pharmacy?",
-   "ar": "أَيْنَ الصَّيْدَلِيَّةُ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-medical:1"
-   ]
-  },
-  {
-   "en": "I am sick and I need medicine.",
-   "ar": "أَنَا مَرِيضٌ وَأَحْتَاجُ إِلَى دَوَاءٍ",
-   "keys": [
-    "ev-people:0",
-    "ev-medical:3",
-    "ev-want-need:1",
-    "ev-medical:2"
-   ]
-  },
-  {
-   "en": "Take me to the hotel.",
-   "ar": "خُذْنِي إِلَى الفُنْدُقِ",
-   "keys": [
-    "ev-hotel-taxi:3",
-    "ev-hotel-taxi:0"
-   ]
-  },
-  {
-   "en": "Stop here, please.",
-   "ar": "قِفْ هُنَا مِنْ فَضْلِكَ",
-   "keys": [
-    "ev-hotel-taxi:4",
-    "ev-greetings:6"
-   ]
-  },
-  {
-   "en": "How much is the fare to the airport?",
-   "ar": "كَمِ الأُجْرَةُ إِلَى المَطَارِ؟",
-   "keys": [
-    "ev-hotel-taxi:5",
-    "ev-hotel-taxi:8"
-   ]
-  },
-  {
-   "en": "Help me — I am lost!",
-   "ar": "سَاعِدْنِي، أَنَا تَائِهٌ",
-   "keys": [
-    "ev-help:0",
-    "ev-help:1"
-   ]
-  },
-  {
-   "en": "Speak slowly, please.",
-   "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
-   "keys": [
-    "ev-help:5",
-    "ev-greetings:6"
-   ]
-  },
-  {
-   "en": "Repeat please — I don't speak Arabic well.",
-   "ar": "أَعِدْ مِنْ فَضْلِكَ، لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا",
-   "keys": [
-    "ev-help:6",
-    "ev-help:7"
-   ]
-  },
-  {
-   "en": "Where is the police?",
-   "ar": "أَيْنَ الشُّرْطَةُ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-help:3"
-   ]
-  },
-  {
-   "en": "A table for two, please.",
-   "ar": "طَاوِلَةٌ لِشَخْصَيْنِ مِنْ فَضْلِكَ",
-   "keys": [
-    "story-05:5",
-    "story-05:7"
-   ]
-  },
-  {
-   "en": "What do you have today?",
-   "ar": "مَاذَا عِنْدَكُمُ اليَوْمَ؟",
-   "keys": [
-    "story-05:10"
-   ]
-  },
-  {
-   "en": "I want chicken with rice.",
-   "ar": "أُرِيدُ دَجَاجًا مَعَ الأَرُزِّ",
-   "keys": [
-    "story-05:11",
-    "story-05:13"
-   ]
-  },
-  {
-   "en": "The food is very delicious!",
-   "ar": "الطَّعَامُ لَذِيذٌ جِدًّا",
-   "keys": [
-    "story-05:24",
-    "story-05:25"
-   ]
-  },
-  {
-   "en": "The bill, please.",
-   "ar": "الحِسَابَ مِنْ فَضْلِكَ",
-   "keys": [
-    "story-05:27",
-    "story-05:7"
-   ]
-  },
-  {
-   "en": "Where is the Friday khutbah?",
-   "ar": "أَيْنَ خُطْبَةُ الجُمُعَةِ؟",
-   "keys": [
-    "story-04:20",
-    "story-04:0"
-   ]
-  },
-  {
-   "en": "I am learning Arabic.",
-   "ar": "أَتَعَلَّمُ العَرَبِيَّةَ",
-   "keys": [
-    "story-04:29"
-   ]
-  },
-  {
-   "en": "I go to the masjid on foot.",
-   "ar": "أَذْهَبُ إِلَى المَسْجِدِ مَاشِيًا",
-   "keys": [
-    "story-04:8",
-    "story-04:9"
-   ]
-  },
-  {
-   "en": "I don't have…",
-   "ar": "مَا عِنْدِي",
-   "keys": [],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I don't have… (the other way to say it)",
-   "ar": "لَيْسَ عِنْدِي",
-   "keys": [],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I have two uncles and two aunts.",
-   "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
-   "keys": [],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "What furniture is there in your house?",
-   "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
-   "keys": [
-    "ev-questions:0",
-    "ev-questions:1"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "There is a table, chairs and beds.",
-   "ar": "يُوجَدُ مَائِدَةٌ وَكَرَاسِي وَسُرُرٌ",
-   "keys": [
-    "ev-lesson-home:9"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I live in the airport neighbourhood.",
-   "ar": "أَسْكُنُ فِي حَيِّ المَطَارِ",
-   "keys": [],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Allah is Ever-Living, He does not die.",
-   "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
-   "keys": [],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "What floor is your house on?",
-   "ar": "كَمْ طَابِقٍ بَيْتُكَ؟",
-   "keys": [
-    "ev-questions:6",
-    "ev-lesson-home:20"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I have a curtain for the window.",
-   "ar": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ",
-   "keys": [
-    "ev-lesson-home:16"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Allah is the Concealer of faults.",
-   "ar": "اللهُ هُوَ السَّتَّارُ",
-   "keys": [
-    "ev-people:3",
-    "ev-lesson-divine:3"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "How many times a day do you prostrate?",
-   "ar": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
-   "keys": [
-    "ev-questions:6",
-    "ev-lesson-divine:4"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "This is a beautiful Pakistani carpet.",
-   "ar": "هَذِهِ سَجَّادَةٌ بَاكِسْتَانِيَّةٌ جَمِيلَةٌ",
-   "keys": [
-    "ev-lesson-home:18"
-   ],
-   "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The flat has a bedroom, a living room and a kitchen.",
-   "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
-   "keys": [
-    "ev-home:1",
-    "ev-lesson-home:3",
-    "ev-lesson-home:4"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "What furniture is there in the flat?",
-   "ar": "مَاذَا يُوجَدُ فِي الشَّقَّةِ مِنَ الأَثَاثِ؟",
-   "keys": [
-    "ev-questions:0",
-    "ev-questions:1"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "In the living room there is a sofa and a chair.",
-   "ar": "فِي غُرْفَةِ الجُلُوسِ أَرِيكَةٌ وَكُرْسِيٌّ",
-   "keys": [
-    "ev-home:1",
-    "ev-lesson-home:7"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "We have many sofas and chairs.",
-   "ar": "عِنْدَنَا أَرَائِكُ وَكَرَاسِي كَثِيرَةٌ",
-   "keys": [
-    "ev-lesson-home:8"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "In the kitchen there is a fridge and an oven.",
-   "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ",
-   "keys": [
-    "ev-lesson-home:14"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I have a big cupboard in the bedroom.",
-   "ar": "عِنْدِي خَزَانَةٌ كَبِيرَةٌ فِي غُرْفَةِ النَّوْمِ",
-   "keys": [
-    "ev-lesson-home:12",
-    "ev-home:1"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The cupboards are new.",
-   "ar": "الخَزَائِنُ جَدِيدَةٌ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "I open the window in the morning.",
-   "ar": "أَفْتَحُ الشُّبَّاكَ فِي الصَّبَاحِ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The mirror is in the bedroom.",
-   "ar": "المِرْآةُ فِي غُرْفَةِ النَّوْمِ",
-   "keys": [
-    "ev-home:1"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The lamp is small.",
-   "ar": "المِصْبَاحُ صَغِيرٌ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "My house is on the third floor.",
-   "ar": "بَيْتِي فِي الدَّوْرِ الثَّالِثِ",
-   "keys": [
-    "ev-directions:4"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Do you have a lift?",
-   "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟",
-   "keys": [
-    "ev-questions:7",
-    "ev-shopping:3"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Today is Monday and tomorrow is Tuesday.",
-   "ar": "اليَوْمُ الاثْنَيْنِ وَغَدًا الثُّلَاثَاءُ",
-   "keys": [
-    "ev-time:1",
-    "ev-lesson-week:1",
-    "ev-lesson-week:2"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Wednesday is after Tuesday.",
-   "ar": "الأَرْبِعَاءُ بَعْدَ الثُّلَاثَاءِ",
-   "keys": [
-    "ev-lesson-week:3",
-    "ev-lesson-week:2"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Saturday and Sunday are a holiday.",
-   "ar": "السَّبْتُ وَالأَحَدُ عُطْلَةٌ",
-   "keys": [
-    "ev-lesson-week:6",
-    "ev-lesson-week:8"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The week is seven days.",
-   "ar": "الأُسْبُوعُ سَبْعَةُ أَيَّامٍ",
-   "keys": [
-    "ev-numbers:6"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "On Tuesday I go to the lesson.",
-   "ar": "يَوْمَ الثُّلَاثَاءِ أَذْهَبُ إِلَى الدَّرْسِ",
-   "keys": [
-    "ev-lesson-week:2",
-    "ev-commands:3",
-    "ev-lesson-week:9"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The weather is cold and there is snow.",
-   "ar": "الجَوُّ بَارِدٌ وَفِيهِ ثَلْجٌ",
-   "keys": [
-    "ev-lesson-weather:0"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The rain comes down from the clouds.",
-   "ar": "المَطَرُ يَنْزِلُ مِنَ السَّحَابِ",
-   "keys": [
-    "ev-questions:1"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "The sun is hot and the wind is cold.",
-   "ar": "الشَّمْسُ حَارَّةٌ وَالرِّيحُ بَارِدَةٌ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "My sister is in the house.",
-   "ar": "أُخْتِي فِي البَيْتِ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "My uncle and my aunt are from my mother's side.",
-   "ar": "خَالِي وَخَالَتِي مِنْ أُمِّي",
-   "keys": [
-    "ev-questions:1"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "This is my sister's husband.",
-   "ar": "هَذَا زَوْجُ أُخْتِي",
-   "keys": [
-    "ev-family:14"
-   ],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "His wife is a teacher.",
-   "ar": "زَوْجَتُهُ مُعَلِّمَةٌ",
-   "keys": [],
-   "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
-  },
-  {
-   "en": "Straighten up, and close the gaps!",
-   "ar": "اِسْتَوُوا وَسُدُّوا الخَلَلَ",
-   "keys": [
-    "ev-masjid:0",
-    "ev-masjid:3"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "Straighten your rows — straight rows are part of the prayer.",
-   "ar": "سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ تَمَامِ الصَّلَاةِ",
-   "keys": [
-    "ev-questions:1",
-    "ev-masjid:2"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "Align yourselves and move forward.",
-   "ar": "اِعْتَدِلُوا وَتَقَدَّمُوا",
-   "keys": [
-    "ev-masjid:1"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "Complete the first row, then the one after it.",
-   "ar": "أَتِمُّوا الصَّفَّ الأَوَّلَ ثُمَّ الَّذِي يَلِيهِ",
-   "keys": [
-    "ev-masjid:5"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "The iqama has been given — the prayer has begun.",
-   "ar": "قَدْ قَامَتِ الصَّلَاةُ",
-   "keys": [
-    "ev-masjid:7"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "We are waiting for the iqama.",
-   "ar": "نَنْتَظِرُ الإِقَامَةَ",
-   "keys": [
-    "ev-masjid:6"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Congregational prayer is gathering!",
-   "ar": "الصَّلَاةُ جَامِعَةٌ",
-   "keys": [
-    "ev-masjid:8"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "After the prayer there is a funeral prayer.",
-   "ar": "بَعْدَ الصَّلَاةِ صَلَاةُ الجِنَازَةِ",
-   "keys": [
-    "ev-masjid:9"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram",
-   "heard": true
-  },
-  {
-   "en": "Please move forward, there is a place in the first row.",
-   "ar": "تَقَدَّمْ مِنْ فَضْلِكَ، هُنَاكَ مَكَانٌ فِي الصَّفِّ الأَوَّلِ",
-   "keys": [
-    "ev-questions:1",
-    "ev-greetings:6"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Where is the Kaaba from here?",
-   "ar": "أَيْنَ الكَعْبَةُ مِنْ هُنَا؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-haram:1",
-    "ev-questions:1"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "I want to perform tawaf around the Kaaba.",
-   "ar": "أُرِيدُ أَنْ أَطُوفَ حَوْلَ الكَعْبَةِ",
-   "keys": [
-    "ev-want-need:0",
-    "ev-haram:1"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Where does the tawaf begin?",
-   "ar": "مِنْ أَيْنَ يَبْدَأُ الطَّوَافُ؟",
-   "keys": [
-    "ev-questions:1",
-    "ev-questions:2",
-    "ev-haram:2"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "The tawaf area is crowded now.",
-   "ar": "المَطَافُ مُزْدَحِمٌ الآنَ",
-   "keys": [
-    "ev-haram:9",
-    "ev-time:0"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Where does the sa'i begin?",
-   "ar": "مِنْ أَيْنَ يَبْدَأُ السَّعْيُ؟",
-   "keys": [
-    "ev-questions:1",
-    "ev-questions:2",
-    "ev-haram:3"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "The sa'i is between Safa and Marwa.",
-   "ar": "السَّعْيُ بَيْنَ الصَّفَا وَالمَرْوَةِ",
-   "keys": [
-    "ev-haram:3",
-    "ev-haram:4"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "I am performing Umrah today.",
-   "ar": "أَنَا أُؤَدِّي العُمْرَةَ اليَوْمَ",
-   "keys": [
-    "ev-people:0",
-    "ev-haram:6",
-    "ev-time:1"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "I am in ihram.",
-   "ar": "أَنَا مُحْرِمٌ",
-   "keys": [
-    "ev-people:0"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Where do I put on the ihram?",
-   "ar": "أَيْنَ أَلْبَسُ الإِحْرَامَ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-haram:7"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Where is the Station of Ibrahim?",
-   "ar": "أَيْنَ مَقَامُ إِبْرَاهِيمَ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-haram:8"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Is there Zamzam water here?",
-   "ar": "هَلْ يُوجَدُ مَاءُ زَمْزَمَ هُنَا؟",
-   "keys": [
-    "ev-questions:7",
-    "ev-food:0",
-    "ev-haram:5"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "Excuse me — where is the exit to the Haram?",
-   "ar": "لَوْ سَمَحْتَ، أَيْنَ المَخْرَجُ إِلَى الحَرَمِ؟",
-   "keys": [
-    "ev-questions:2",
-    "ev-haram:0"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  },
-  {
-   "en": "What time is the prayer in the Haram?",
-   "ar": "مَتَى الصَّلَاةُ فِي الحَرَمِ؟",
-   "keys": [
-    "ev-questions:3",
-    "ev-haram:0"
-   ],
-   "source": "built",
-   "lesson": "Masjid and Haram"
-  }
- ]
+  "about": "English prompts to say in Arabic. keys = SRS card keys of the vocabulary each prompt uses; the Speaking page sorts prompts by how many of those words the learner already knows. Entries with source \"core\" are CONSTRUCTED sentences (2026-09-05, his rule): at most 7 words, one grammar frame each, built from the class vocabulary plus words he already holds — the sentences a lesson practises. Passages are read, never repeated.",
+  "prompts": [
+    {
+      "en": "Peace be upon you!",
+      "ar": "السَّلَامُ عَلَيْكُمْ",
+      "keys": [
+        "ev-greetings:0"
+      ]
+    },
+    {
+      "en": "Good morning!",
+      "ar": "صَبَاح الخَيْر",
+      "keys": [
+        "ev-greetings:2"
+      ]
+    },
+    {
+      "en": "Thank you.",
+      "ar": "شُكْرًا",
+      "keys": [
+        "ev-greetings:4"
+      ]
+    },
+    {
+      "en": "Yes, of course!",
+      "ar": "نَعَمْ طَبْعًا",
+      "keys": [
+        "ev-glue:0",
+        "ev-glue:1"
+      ]
+    },
+    {
+      "en": "I want water.",
+      "ar": "أُرِيدُ مَاءً",
+      "keys": [
+        "ev-want-need:0",
+        "ev-food:0"
+      ]
+    },
+    {
+      "en": "I am hungry.",
+      "ar": "أَنَا جَائِعٌ",
+      "keys": [
+        "ev-people:0",
+        "ev-food:6"
+      ]
+    },
+    {
+      "en": "I am thirsty.",
+      "ar": "أَنَا عَطْشَانُ",
+      "keys": [
+        "ev-people:0",
+        "ev-food:7"
+      ]
+    },
+    {
+      "en": "Where is the mosque?",
+      "ar": "أَيْنَ المَسْجِدُ؟",
+      "keys": [
+        "ev-questions:2",
+        "story-02:6"
+      ]
+    },
+    {
+      "en": "Where is the house?",
+      "ar": "أَيْنَ البَيْتُ؟",
+      "keys": [
+        "ev-questions:2",
+        "story-02:3"
+      ]
+    },
+    {
+      "en": "How are you? (to a man)",
+      "ar": "كَيْفَ أَنْتَ؟",
+      "keys": [
+        "ev-questions:4",
+        "ev-people:1"
+      ]
+    },
+    {
+      "en": "What do you want?",
+      "ar": "مَاذَا تُرِيدُ؟",
+      "keys": [
+        "ev-questions:0",
+        "ev-want-need:0"
+      ]
+    },
+    {
+      "en": "I don't know.",
+      "ar": "لَا أَعْرِفُ",
+      "keys": [
+        "qc:3",
+        "ev-want-need:4"
+      ]
+    },
+    {
+      "en": "I don't understand.",
+      "ar": "لَا أَفْهَمُ",
+      "keys": [
+        "qc:3",
+        "ev-want-need:5"
+      ]
+    },
+    {
+      "en": "Give me water, please.",
+      "ar": "أَعْطِنِي مَاءً مِنْ فَضْلِكَ",
+      "keys": [
+        "ev-commands:0",
+        "ev-food:0",
+        "ev-greetings:6"
+      ]
+    },
+    {
+      "en": "Wait, please!",
+      "ar": "اِنْتَظِرْ مِنْ فَضْلِكَ",
+      "keys": [
+        "ev-commands:7",
+        "ev-greetings:6"
+      ]
+    },
+    {
+      "en": "Maybe tomorrow.",
+      "ar": "رُبَّمَا غَدًا",
+      "keys": [
+        "ev-glue:3",
+        "ev-time:2"
+      ]
+    },
+    {
+      "en": "Now or tomorrow?",
+      "ar": "الآن أَوْ غَدًا؟",
+      "keys": [
+        "ev-time:0",
+        "ev-time:2"
+      ]
+    },
+    {
+      "en": "But why?",
+      "ar": "لَكِنْ لِمَاذَا؟",
+      "keys": [
+        "ev-glue:4",
+        "ev-questions:5"
+      ]
+    },
+    {
+      "en": "Because I am hungry.",
+      "ar": "لِأَنِّي جَائِعٌ",
+      "keys": [
+        "ev-glue:5",
+        "ev-food:6"
+      ]
+    },
+    {
+      "en": "Come here, my friend!",
+      "ar": "تَعَالَ يَا صَدِيقِي",
+      "keys": [
+        "ev-commands:2",
+        "ev-people:9"
+      ]
+    },
+    {
+      "en": "Listen and look!",
+      "ar": "اِسْمَعْ وَانْظُرْ",
+      "keys": [
+        "ev-commands:5",
+        "ev-commands:4"
+      ]
+    },
+    {
+      "en": "How much is the bill?",
+      "ar": "كَمِ الحِسَابُ؟",
+      "keys": [
+        "ev-questions:6",
+        "ev-food:8"
+      ]
+    },
+    {
+      "en": "One, two, three!",
+      "ar": "وَاحِد اِثْنَان ثَلَاثَة",
+      "keys": [
+        "ev-numbers:0",
+        "ev-numbers:1",
+        "ev-numbers:2"
+      ]
+    },
+    {
+      "en": "I drink coffee in the morning.",
+      "ar": "أَشْرَبُ القَهْوَةَ فِي الصَّبَاحِ",
+      "keys": [
+        "story-01:8",
+        "story-01:9",
+        "story-01:1",
+        "qc:5"
+      ]
+    },
+    {
+      "en": "I go to work by car.",
+      "ar": "أَذْهَبُ إِلَى العَمَلِ بِالسَّيَّارَةِ",
+      "keys": [
+        "story-01:13",
+        "story-01:14",
+        "story-01:15",
+        "qc:11"
+      ]
+    },
+    {
+      "en": "I read a book in the evening.",
+      "ar": "أَقْرَأُ كِتَابًا فِي المَسَاءِ",
+      "keys": [
+        "story-01:24",
+        "qc:22",
+        "story-01:23"
+      ]
+    },
+    {
+      "en": "The house is near the mosque.",
+      "ar": "البَيْتُ قَرِيبٌ مِنَ المَسْجِدِ",
+      "keys": [
+        "story-02:3",
+        "story-02:5",
+        "story-02:6"
+      ]
+    },
+    {
+      "en": "We live in a small house.",
+      "ar": "نَسْكُنُ فِي بَيْتٍ صَغِيرٍ",
+      "keys": [
+        "story-02:2",
+        "story-02:3",
+        "story-02:4"
+      ]
+    },
+    {
+      "en": "My mother is a teacher.",
+      "ar": "أُمِّي مُعَلِّمَةٌ",
+      "keys": [
+        "story-02:13",
+        "story-02:14"
+      ]
+    },
+    {
+      "en": "I love my family very much.",
+      "ar": "أُحِبُّ عَائِلَتِي كَثِيرًا",
+      "keys": [
+        "ev-want-need:6",
+        "story-01:28"
+      ]
+    },
+    {
+      "en": "The fish is delicious.",
+      "ar": "السَّمَكُ لَذِيذٌ",
+      "keys": [
+        "story-03:31",
+        "story-03:25"
+      ]
+    },
+    {
+      "en": "The market is far from here.",
+      "ar": "السُّوقُ بَعِيدٌ",
+      "keys": [
+        "story-03:0",
+        "ev-opposites:4"
+      ]
+    },
+    {
+      "en": "Where is the gate?",
+      "ar": "أَيْنَ البَابُ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-directions:3"
+      ]
+    },
+    {
+      "en": "How do I get to the Haram?",
+      "ar": "كَيْفَ أَصِلُ إِلَى الحَرَمِ؟",
+      "keys": [
+        "ev-directions:9",
+        "ev-haram:0"
+      ]
+    },
+    {
+      "en": "Right or left?",
+      "ar": "يَمِين أَوْ يَسَار؟",
+      "keys": [
+        "ev-directions:0",
+        "ev-directions:1"
+      ]
+    },
+    {
+      "en": "The exit is upstairs.",
+      "ar": "المَخْرَجُ فَوْق",
+      "keys": [
+        "ev-directions:8",
+        "ev-directions:5"
+      ]
+    },
+    {
+      "en": "Where is the tawaf area?",
+      "ar": "أَيْنَ المَطَافُ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-haram:9"
+      ]
+    },
+    {
+      "en": "I want Zamzam water.",
+      "ar": "أُرِيدُ زَمْزَم",
+      "keys": [
+        "ev-want-need:0",
+        "ev-haram:5"
+      ]
+    },
+    {
+      "en": "How much is this?",
+      "ar": "بِكَمْ هَذَا؟",
+      "keys": [
+        "ev-shopping:0"
+      ]
+    },
+    {
+      "en": "Too expensive — lower the price!",
+      "ar": "غَالٍ جِدًّا، نَزِّلِ السِّعْرَ",
+      "keys": [
+        "ev-shopping:1",
+        "ev-shopping:2"
+      ]
+    },
+    {
+      "en": "Do you have dates?",
+      "ar": "هَلْ عِنْدَكَ تَمْرٌ؟",
+      "keys": [
+        "ev-shopping:3",
+        "ev-shopping:6"
+      ]
+    },
+    {
+      "en": "I'll take it, thank you.",
+      "ar": "آخُذُهُ، شُكْرًا",
+      "keys": [
+        "ev-shopping:8",
+        "ev-greetings:4"
+      ]
+    },
+    {
+      "en": "I need a doctor.",
+      "ar": "أَحْتَاجُ طَبِيبًا",
+      "keys": [
+        "ev-medical:0"
+      ]
+    },
+    {
+      "en": "Where is the pharmacy?",
+      "ar": "أَيْنَ الصَّيْدَلِيَّةُ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-medical:1"
+      ]
+    },
+    {
+      "en": "I am sick and I need medicine.",
+      "ar": "أَنَا مَرِيضٌ وَأَحْتَاجُ إِلَى دَوَاءٍ",
+      "keys": [
+        "ev-people:0",
+        "ev-medical:3",
+        "ev-want-need:1",
+        "ev-medical:2"
+      ]
+    },
+    {
+      "en": "Take me to the hotel.",
+      "ar": "خُذْنِي إِلَى الفُنْدُقِ",
+      "keys": [
+        "ev-hotel-taxi:3",
+        "ev-hotel-taxi:0"
+      ]
+    },
+    {
+      "en": "Stop here, please.",
+      "ar": "قِفْ هُنَا مِنْ فَضْلِكَ",
+      "keys": [
+        "ev-hotel-taxi:4",
+        "ev-greetings:6"
+      ]
+    },
+    {
+      "en": "How much is the fare to the airport?",
+      "ar": "كَمِ الأُجْرَةُ إِلَى المَطَارِ؟",
+      "keys": [
+        "ev-hotel-taxi:5",
+        "ev-hotel-taxi:8"
+      ]
+    },
+    {
+      "en": "Help me — I am lost!",
+      "ar": "سَاعِدْنِي، أَنَا تَائِهٌ",
+      "keys": [
+        "ev-help:0",
+        "ev-help:1"
+      ]
+    },
+    {
+      "en": "Speak slowly, please.",
+      "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
+      "keys": [
+        "ev-help:5",
+        "ev-greetings:6"
+      ]
+    },
+    {
+      "en": "Repeat please — I don't speak Arabic well.",
+      "ar": "أَعِدْ مِنْ فَضْلِكَ، لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا",
+      "keys": [
+        "ev-help:6",
+        "ev-help:7"
+      ]
+    },
+    {
+      "en": "Where is the police?",
+      "ar": "أَيْنَ الشُّرْطَةُ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-help:3"
+      ]
+    },
+    {
+      "en": "A table for two, please.",
+      "ar": "طَاوِلَةٌ لِشَخْصَيْنِ مِنْ فَضْلِكَ",
+      "keys": [
+        "story-05:5",
+        "story-05:7"
+      ]
+    },
+    {
+      "en": "What do you have today?",
+      "ar": "مَاذَا عِنْدَكُمُ اليَوْمَ؟",
+      "keys": [
+        "story-05:10"
+      ]
+    },
+    {
+      "en": "I want chicken with rice.",
+      "ar": "أُرِيدُ دَجَاجًا مَعَ الأَرُزِّ",
+      "keys": [
+        "story-05:11",
+        "story-05:13"
+      ]
+    },
+    {
+      "en": "The food is very delicious!",
+      "ar": "الطَّعَامُ لَذِيذٌ جِدًّا",
+      "keys": [
+        "story-05:24",
+        "story-05:25"
+      ]
+    },
+    {
+      "en": "The bill, please.",
+      "ar": "الحِسَابَ مِنْ فَضْلِكَ",
+      "keys": [
+        "story-05:27",
+        "story-05:7"
+      ]
+    },
+    {
+      "en": "Where is the Friday khutbah?",
+      "ar": "أَيْنَ خُطْبَةُ الجُمُعَةِ؟",
+      "keys": [
+        "story-04:20",
+        "story-04:0"
+      ]
+    },
+    {
+      "en": "I am learning Arabic.",
+      "ar": "أَتَعَلَّمُ العَرَبِيَّةَ",
+      "keys": [
+        "story-04:29"
+      ]
+    },
+    {
+      "en": "I go to the masjid on foot.",
+      "ar": "أَذْهَبُ إِلَى المَسْجِدِ مَاشِيًا",
+      "keys": [
+        "story-04:8",
+        "story-04:9"
+      ]
+    },
+    {
+      "en": "I don't have…",
+      "ar": "مَا عِنْدِي",
+      "keys": [],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I don't have… (the other way to say it)",
+      "ar": "لَيْسَ عِنْدِي",
+      "keys": [],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I have two uncles and two aunts.",
+      "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
+      "keys": [],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "What furniture is there in your house?",
+      "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
+      "keys": [
+        "ev-questions:0",
+        "ev-questions:1"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "There is a table, chairs and beds.",
+      "ar": "يُوجَدُ مَائِدَةٌ وَكَرَاسِي وَسُرُرٌ",
+      "keys": [
+        "ev-lesson-home:9"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I live in the airport neighbourhood.",
+      "ar": "أَسْكُنُ فِي حَيِّ المَطَارِ",
+      "keys": [],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Allah is Ever-Living, He does not die.",
+      "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
+      "keys": [],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "What floor is your house on?",
+      "ar": "كَمْ طَابِقٍ بَيْتُكَ؟",
+      "keys": [
+        "ev-questions:6",
+        "ev-lesson-home:20"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I have a curtain for the window.",
+      "ar": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ",
+      "keys": [
+        "ev-lesson-home:16"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Allah is the Concealer of faults.",
+      "ar": "اللهُ هُوَ السَّتَّارُ",
+      "keys": [
+        "ev-people:3",
+        "ev-lesson-divine:3"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "How many times a day do you prostrate?",
+      "ar": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
+      "keys": [
+        "ev-questions:6",
+        "ev-lesson-divine:4"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "This is a beautiful Pakistani carpet.",
+      "ar": "هَذِهِ سَجَّادَةٌ بَاكِسْتَانِيَّةٌ جَمِيلَةٌ",
+      "keys": [
+        "ev-lesson-home:18"
+      ],
+      "source": "teacher",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The flat has a bedroom, a living room and a kitchen.",
+      "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
+      "keys": [
+        "ev-home:1",
+        "ev-lesson-home:3",
+        "ev-lesson-home:4"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "What furniture is there in the flat?",
+      "ar": "مَاذَا يُوجَدُ فِي الشَّقَّةِ مِنَ الأَثَاثِ؟",
+      "keys": [
+        "ev-questions:0",
+        "ev-questions:1"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "In the living room there is a sofa and a chair.",
+      "ar": "فِي غُرْفَةِ الجُلُوسِ أَرِيكَةٌ وَكُرْسِيٌّ",
+      "keys": [
+        "ev-home:1",
+        "ev-lesson-home:7"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "We have many sofas and chairs.",
+      "ar": "عِنْدَنَا أَرَائِكُ وَكَرَاسِي كَثِيرَةٌ",
+      "keys": [
+        "ev-lesson-home:8"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "In the kitchen there is a fridge and an oven.",
+      "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ",
+      "keys": [
+        "ev-lesson-home:14"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I have a big cupboard in the bedroom.",
+      "ar": "عِنْدِي خَزَانَةٌ كَبِيرَةٌ فِي غُرْفَةِ النَّوْمِ",
+      "keys": [
+        "ev-lesson-home:12",
+        "ev-home:1"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The cupboards are new.",
+      "ar": "الخَزَائِنُ جَدِيدَةٌ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "I open the window in the morning.",
+      "ar": "أَفْتَحُ الشُّبَّاكَ فِي الصَّبَاحِ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The mirror is in the bedroom.",
+      "ar": "المِرْآةُ فِي غُرْفَةِ النَّوْمِ",
+      "keys": [
+        "ev-home:1"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The lamp is small.",
+      "ar": "المِصْبَاحُ صَغِيرٌ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "My house is on the third floor.",
+      "ar": "بَيْتِي فِي الدَّوْرِ الثَّالِثِ",
+      "keys": [
+        "ev-directions:4"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Do you have a lift?",
+      "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟",
+      "keys": [
+        "ev-questions:7",
+        "ev-shopping:3"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Today is Monday and tomorrow is Tuesday.",
+      "ar": "اليَوْمُ الاثْنَيْنِ وَغَدًا الثُّلَاثَاءُ",
+      "keys": [
+        "ev-time:1",
+        "ev-lesson-week:1",
+        "ev-lesson-week:2"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Wednesday is after Tuesday.",
+      "ar": "الأَرْبِعَاءُ بَعْدَ الثُّلَاثَاءِ",
+      "keys": [
+        "ev-lesson-week:3",
+        "ev-lesson-week:2"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Saturday and Sunday are a holiday.",
+      "ar": "السَّبْتُ وَالأَحَدُ عُطْلَةٌ",
+      "keys": [
+        "ev-lesson-week:6",
+        "ev-lesson-week:8"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The week is seven days.",
+      "ar": "الأُسْبُوعُ سَبْعَةُ أَيَّامٍ",
+      "keys": [
+        "ev-numbers:6"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "On Tuesday I go to the lesson.",
+      "ar": "يَوْمَ الثُّلَاثَاءِ أَذْهَبُ إِلَى الدَّرْسِ",
+      "keys": [
+        "ev-lesson-week:2",
+        "ev-commands:3",
+        "ev-lesson-week:9"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The weather is cold and there is snow.",
+      "ar": "الجَوُّ بَارِدٌ وَفِيهِ ثَلْجٌ",
+      "keys": [
+        "ev-lesson-weather:0"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The rain comes down from the clouds.",
+      "ar": "المَطَرُ يَنْزِلُ مِنَ السَّحَابِ",
+      "keys": [
+        "ev-questions:1"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "The sun is hot and the wind is cold.",
+      "ar": "الشَّمْسُ حَارَّةٌ وَالرِّيحُ بَارِدَةٌ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "My sister is in the house.",
+      "ar": "أُخْتِي فِي البَيْتِ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "My uncle and my aunt are from my mother's side.",
+      "ar": "خَالِي وَخَالَتِي مِنْ أُمِّي",
+      "keys": [
+        "ev-questions:1"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "This is my sister's husband.",
+      "ar": "هَذَا زَوْجُ أُخْتِي",
+      "keys": [
+        "ev-family:14"
+      ],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "His wife is a teacher.",
+      "ar": "زَوْجَتُهُ مُعَلِّمَةٌ",
+      "keys": [],
+      "source": "class-built",
+      "lesson": "Class — 30 Aug: the flat, the week, the family"
+    },
+    {
+      "en": "Straighten up, and close the gaps!",
+      "ar": "اِسْتَوُوا وَسُدُّوا الخَلَلَ",
+      "keys": [
+        "ev-masjid:0",
+        "ev-masjid:3"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "Straighten your rows — straight rows are part of the prayer.",
+      "ar": "سَوُّوا صُفُوفَكُمْ، فَإِنَّ تَسْوِيَةَ الصُّفُوفِ مِنْ تَمَامِ الصَّلَاةِ",
+      "keys": [
+        "ev-questions:1",
+        "ev-masjid:2"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "Align yourselves and move forward.",
+      "ar": "اِعْتَدِلُوا وَتَقَدَّمُوا",
+      "keys": [
+        "ev-masjid:1"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "Complete the first row, then the one after it.",
+      "ar": "أَتِمُّوا الصَّفَّ الأَوَّلَ ثُمَّ الَّذِي يَلِيهِ",
+      "keys": [
+        "ev-masjid:5"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "The iqama has been given — the prayer has begun.",
+      "ar": "قَدْ قَامَتِ الصَّلَاةُ",
+      "keys": [
+        "ev-masjid:7"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "We are waiting for the iqama.",
+      "ar": "نَنْتَظِرُ الإِقَامَةَ",
+      "keys": [
+        "ev-masjid:6"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Congregational prayer is gathering!",
+      "ar": "الصَّلَاةُ جَامِعَةٌ",
+      "keys": [
+        "ev-masjid:8"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "After the prayer there is a funeral prayer.",
+      "ar": "بَعْدَ الصَّلَاةِ صَلَاةُ الجِنَازَةِ",
+      "keys": [
+        "ev-masjid:9"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram",
+      "heard": true
+    },
+    {
+      "en": "Please move forward, there is a place in the first row.",
+      "ar": "تَقَدَّمْ مِنْ فَضْلِكَ، هُنَاكَ مَكَانٌ فِي الصَّفِّ الأَوَّلِ",
+      "keys": [
+        "ev-questions:1",
+        "ev-greetings:6"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Where is the Kaaba from here?",
+      "ar": "أَيْنَ الكَعْبَةُ مِنْ هُنَا؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-haram:1",
+        "ev-questions:1"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "I want to perform tawaf around the Kaaba.",
+      "ar": "أُرِيدُ أَنْ أَطُوفَ حَوْلَ الكَعْبَةِ",
+      "keys": [
+        "ev-want-need:0",
+        "ev-haram:1"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Where does the tawaf begin?",
+      "ar": "مِنْ أَيْنَ يَبْدَأُ الطَّوَافُ؟",
+      "keys": [
+        "ev-questions:1",
+        "ev-questions:2",
+        "ev-haram:2"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "The tawaf area is crowded now.",
+      "ar": "المَطَافُ مُزْدَحِمٌ الآنَ",
+      "keys": [
+        "ev-haram:9",
+        "ev-time:0"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Where does the sa'i begin?",
+      "ar": "مِنْ أَيْنَ يَبْدَأُ السَّعْيُ؟",
+      "keys": [
+        "ev-questions:1",
+        "ev-questions:2",
+        "ev-haram:3"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "The sa'i is between Safa and Marwa.",
+      "ar": "السَّعْيُ بَيْنَ الصَّفَا وَالمَرْوَةِ",
+      "keys": [
+        "ev-haram:3",
+        "ev-haram:4"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "I am performing Umrah today.",
+      "ar": "أَنَا أُؤَدِّي العُمْرَةَ اليَوْمَ",
+      "keys": [
+        "ev-people:0",
+        "ev-haram:6",
+        "ev-time:1"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "I am in ihram.",
+      "ar": "أَنَا مُحْرِمٌ",
+      "keys": [
+        "ev-people:0"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Where do I put on the ihram?",
+      "ar": "أَيْنَ أَلْبَسُ الإِحْرَامَ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-haram:7"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Where is the Station of Ibrahim?",
+      "ar": "أَيْنَ مَقَامُ إِبْرَاهِيمَ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-haram:8"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Is there Zamzam water here?",
+      "ar": "هَلْ يُوجَدُ مَاءُ زَمْزَمَ هُنَا؟",
+      "keys": [
+        "ev-questions:7",
+        "ev-food:0",
+        "ev-haram:5"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "Excuse me — where is the exit to the Haram?",
+      "ar": "لَوْ سَمَحْتَ، أَيْنَ المَخْرَجُ إِلَى الحَرَمِ؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-haram:0"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "What time is the prayer in the Haram?",
+      "ar": "مَتَى الصَّلَاةُ فِي الحَرَمِ؟",
+      "keys": [
+        "ev-questions:3",
+        "ev-haram:0"
+      ],
+      "source": "built",
+      "lesson": "Masjid and Haram"
+    },
+    {
+      "en": "The flat is spacious.",
+      "ar": "الشَّقَّةُ وَاسِعَةٌ.",
+      "keys": [
+        "ev-lesson-home:0",
+        "story-07:0",
+        "story-07:10"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The bed is comfortable.",
+      "ar": "السَّرِيرُ مُرِيحٌ.",
+      "keys": [
+        "ev-lesson-home:5",
+        "story-07:6",
+        "story-07:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The neighbourhood is quiet.",
+      "ar": "الحَيُّ هَادِئٌ.",
+      "keys": [
+        "story-07:1",
+        "story-07:12"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The chair is new.",
+      "ar": "الكُرْسِيُّ جَدِيدٌ.",
+      "keys": [
+        "ev-lesson-home:10"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The chairs are in the kitchen.",
+      "ar": "الكَرَاسِي فِي المَطْبَخِ.",
+      "keys": [
+        "ev-lesson-home:11",
+        "ev-lesson-home:2",
+        "story-07:5"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The oven is in the kitchen.",
+      "ar": "الفُرْنُ فِي المَطْبَخِ.",
+      "keys": [
+        "ev-lesson-home:15",
+        "story-07:8",
+        "ev-lesson-home:2",
+        "story-07:5"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The flat is available now.",
+      "ar": "الشَّقَّةُ مُتَاحَةٌ الآنَ.",
+      "keys": [
+        "ev-lesson-home:0",
+        "story-07:0",
+        "story-07:9",
+        "ev-time:0"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The housing is near the mosque.",
+      "ar": "السَّكَنُ قَرِيبٌ مِنَ المَسْجِدِ.",
+      "keys": [
+        "story-07:2"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The bedroom is small and comfortable.",
+      "ar": "غُرْفَةُ النَّوْمِ صَغِيرَةٌ وَمُرِيحَةٌ.",
+      "keys": [
+        "ev-lesson-home:3",
+        "story-07:4",
+        "story-07:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The living room is spacious.",
+      "ar": "غُرْفَةُ الجُلُوسِ وَاسِعَةٌ.",
+      "keys": [
+        "ev-lesson-home:4",
+        "story-07:3",
+        "story-07:10"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The owner of the flat is at home.",
+      "ar": "صَاحِبُ الشَّقَّةِ فِي البَيْتِ.",
+      "keys": [
+        "story-07:13",
+        "ev-lesson-home:0",
+        "story-07:0"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "idafa",
+      "frame": "idafa"
+    },
+    {
+      "en": "I have a chair and a table.",
+      "ar": "عِنْدِي كُرْسِيٌّ وَمَائِدَةٌ.",
+      "keys": [
+        "ev-lesson-home:10",
+        "ev-lesson-home:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "have",
+      "frame": "have"
+    },
+    {
+      "en": "I don't have an oven.",
+      "ar": "لَيْسَ عِنْدِي فُرْنٌ.",
+      "keys": [
+        "ev-lesson-home:15",
+        "story-07:8"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "have",
+      "frame": "have"
+    },
+    {
+      "en": "On Thursday I have a lesson.",
+      "ar": "يَوْمَ الخَمِيسِ عِنْدِي دَرْسٌ.",
+      "keys": [
+        "ev-lesson-week:4",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "have",
+      "frame": "have"
+    },
+    {
+      "en": "Is there an oven in the kitchen?",
+      "ar": "هَلْ يُوجَدُ فُرْنٌ فِي المَطْبَخِ؟",
+      "keys": [
+        "ev-questions:7",
+        "ev-lesson-home:15",
+        "story-07:8",
+        "ev-lesson-home:2",
+        "story-07:5"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "wujud",
+      "frame": "wujud"
+    },
+    {
+      "en": "There is a chair in the bedroom.",
+      "ar": "يُوجَدُ كُرْسِيٌّ فِي غُرْفَةِ النَّوْمِ.",
+      "keys": [
+        "ev-lesson-home:10",
+        "ev-lesson-home:3",
+        "story-07:4"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "wujud",
+      "frame": "wujud"
+    },
+    {
+      "en": "There is no lift here.",
+      "ar": "لَا يُوجَدُ مِصْعَدٌ هُنَا.",
+      "keys": [
+        "ev-lesson-home:25"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "wujud",
+      "frame": "wujud"
+    },
+    {
+      "en": "Where are the chairs?",
+      "ar": "أَيْنَ الكَرَاسِي؟",
+      "keys": [
+        "ev-questions:2",
+        "ev-lesson-home:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "questions",
+      "frame": "questions"
+    },
+    {
+      "en": "Where is the owner of the flat?",
+      "ar": "أَيْنَ صَاحِبُ الشَّقَّةِ؟",
+      "keys": [
+        "ev-questions:2",
+        "story-07:13",
+        "ev-lesson-home:0",
+        "story-07:0"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "questions",
+      "frame": "questions"
+    },
+    {
+      "en": "When can I move in?",
+      "ar": "مَتَى يُمْكِنُنِي الدُّخُولُ؟",
+      "keys": [
+        "ev-questions:3",
+        "story-07:14"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "questions",
+      "frame": "questions"
+    },
+    {
+      "en": "Is the flat available on Saturday?",
+      "ar": "هَلِ الشَّقَّةُ مُتَاحَةٌ يَوْمَ السَّبْتِ؟",
+      "keys": [
+        "ev-questions:7",
+        "ev-lesson-home:0",
+        "story-07:0",
+        "story-07:9",
+        "ev-lesson-week:6",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "questions",
+      "frame": "questions"
+    },
+    {
+      "en": "Can you move tomorrow?",
+      "ar": "هَلْ يُمْكِنُكَ الانْتِقَالُ غَدًا؟",
+      "keys": [
+        "ev-questions:7",
+        "story-07:17",
+        "story-07:15",
+        "ev-time:2"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "questions",
+      "frame": "questions"
+    },
+    {
+      "en": "You can move in on Thursday.",
+      "ar": "يُمْكِنُكَ الدُّخُولُ يَوْمَ الخَمِيسِ.",
+      "keys": [
+        "story-07:17",
+        "story-07:14",
+        "ev-lesson-week:4",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "tenses",
+      "frame": "tenses"
+    },
+    {
+      "en": "You can move this week.",
+      "ar": "يُمْكِنُكَ الانْتِقَالُ فِي هَذَا الأُسْبُوعِ.",
+      "keys": [
+        "story-07:17",
+        "story-07:15",
+        "ev-lesson-week:7"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "demonstratives",
+      "frame": "demonstratives"
+    },
+    {
+      "en": "I want a quiet flat.",
+      "ar": "أُرِيدُ شَقَّةً هَادِئَةً.",
+      "keys": [
+        "ev-want-need:0",
+        "ev-lesson-home:0",
+        "story-07:0",
+        "story-07:12"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "tenses",
+      "frame": "tenses"
+    },
+    {
+      "en": "I want to move on Friday.",
+      "ar": "أُرِيدُ الانْتِقَالَ يَوْمَ الجُمُعَةِ.",
+      "keys": [
+        "ev-want-need:0",
+        "story-07:15",
+        "ev-lesson-week:5",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "tenses",
+      "frame": "tenses"
+    },
+    {
+      "en": "I want a comfortable bed.",
+      "ar": "أُرِيدُ سَرِيرًا مُرِيحًا.",
+      "keys": [
+        "ev-want-need:0",
+        "ev-lesson-home:5",
+        "story-07:6",
+        "story-07:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "tenses",
+      "frame": "tenses"
+    },
+    {
+      "en": "On Friday I go to the mosque.",
+      "ar": "يَوْمَ الجُمُعَةِ أَذْهَبُ إِلَى المَسْجِدِ.",
+      "keys": [
+        "ev-lesson-week:5",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "tenses",
+      "frame": "tenses"
+    },
+    {
+      "en": "Thursday is after Wednesday.",
+      "ar": "الخَمِيسُ بَعْدَ الأَرْبِعَاءِ.",
+      "keys": [
+        "ev-lesson-week:4",
+        "ev-lesson-week:3"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "nominal",
+      "frame": "nominal"
+    },
+    {
+      "en": "The weekly holiday is on Friday.",
+      "ar": "عُطْلَةُ الأُسْبُوعِ يَوْمَ الجُمُعَةِ.",
+      "keys": [
+        "ev-lesson-week:8",
+        "ev-lesson-week:7",
+        "ev-lesson-week:5",
+        "ev-lesson-week:9"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "idafa",
+      "frame": "idafa"
+    },
+    {
+      "en": "The flat was spacious and comfortable.",
+      "ar": "كَانَتِ الشَّقَّةُ وَاسِعَةً وَمُرِيحَةً.",
+      "keys": [
+        "ev-lesson-home:0",
+        "story-07:0",
+        "story-07:10",
+        "story-07:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "kana",
+      "frame": "kana"
+    },
+    {
+      "en": "The neighbourhood was quiet.",
+      "ar": "كَانَ الحَيُّ هَادِئًا.",
+      "keys": [
+        "story-07:1",
+        "story-07:12"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "kana",
+      "frame": "kana"
+    },
+    {
+      "en": "I liked the flat.",
+      "ar": "أَعْجَبَتْنِي الشَّقَّةُ.",
+      "keys": [
+        "story-07:16",
+        "ev-lesson-home:0",
+        "story-07:0"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "pronouns",
+      "frame": "pronouns"
+    },
+    {
+      "en": "I liked the quiet neighbourhood.",
+      "ar": "أَعْجَبَنِي الحَيُّ الهَادِئُ.",
+      "keys": [
+        "story-07:16",
+        "story-07:1",
+        "story-07:12"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "pronouns",
+      "frame": "pronouns"
+    },
+    {
+      "en": "The beds and the chairs are new.",
+      "ar": "السُّرُرُ وَالكَرَاسِي جَدِيدَةٌ.",
+      "keys": [
+        "ev-lesson-home:6",
+        "ev-lesson-home:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "plurals",
+      "frame": "plurals"
+    },
+    {
+      "en": "In the flat there are three rooms.",
+      "ar": "فِي الشَّقَّةِ ثَلَاثُ غُرَفٍ.",
+      "keys": [
+        "ev-lesson-home:0",
+        "story-07:0",
+        "ev-numbers:2",
+        "ev-home:1"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "plurals",
+      "frame": "plurals"
+    },
+    {
+      "en": "This bed is very comfortable.",
+      "ar": "هَذَا السَّرِيرُ مُرِيحٌ جِدًّا.",
+      "keys": [
+        "ev-lesson-home:5",
+        "story-07:6",
+        "story-07:11"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "demonstratives",
+      "frame": "demonstratives"
+    },
+    {
+      "en": "This room is spacious.",
+      "ar": "هَذِهِ الغُرْفَةُ وَاسِعَةٌ.",
+      "keys": [
+        "ev-home:1",
+        "story-07:10"
+      ],
+      "source": "core",
+      "lesson": "Class — 30 Aug: the flat, the week, the family",
+      "pattern": "demonstratives",
+      "frame": "demonstratives"
+    }
+  ]
 }

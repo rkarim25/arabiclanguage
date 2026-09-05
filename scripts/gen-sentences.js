@@ -316,7 +316,7 @@ prompts.prompts.forEach((p, i) => add({
   ar: p.ar, en: p.en, tr: p.tr || "",
   words: words(String(p.ar).split(/\s+/).map(w => [w])),
   declaredKeys: p.keys || [],
-  pattern: patternFor(p.ar),
+  pattern: p.pattern || patternFor(p.ar),   // a constructed sentence names its own frame
   src: "prompts",
   theme: "something to say",
 }));
