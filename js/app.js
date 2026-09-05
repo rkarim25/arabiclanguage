@@ -765,6 +765,7 @@ function dictateWhisper(btn, idleLabel, cb, opts) {
   stopDictation(); stopSpeak();
   // a word is done after ~1.2 s of quiet; a sentence he is reading needs room to breathe (his 20:22 take came back as one word)
   const PAUSE = Math.max(800, Math.min(4000, (opts && opts.pause) || 1200));
+  const LANG = (opts && opts.lang) === "en" ? "en" : "ar";   // an English answer ("what does it mean?") is transcribed as English
   const L = { whisper: true, btn, spoke: false, reset: () => { btn.textContent = idleLabel; } };
   _live = L;
   btn.textContent = "… getting the mic";
@@ -790,7 +791,7 @@ function dictateWhisper(btn, idleLabel, cb, opts) {
     btn.textContent = "… listening back";
     let j = null;
     try {
-      const r = await wReq("/transcribe?lang=ar", { method: "POST", headers: { "Content-Type": blob.type || "application/octet-stream" }, body: blob });
+      const r = await wReq("/transcribe?lang=" + LANG, { method: "POST", headers: { "Content-Type": blob.type || "application/octet-stream" }, body: blob });
       if (r.status === 401 && typeof setSession === "function") setSession(null);
       j = r.ok ? await r.json() : null;
       if (!r.ok) throw new Error("http " + r.status);
@@ -802,7 +803,7 @@ function dictateWhisper(btn, idleLabel, cb, opts) {
     }
     L.reset();
     const text = j && j.text ? String(j.text).trim() : "";
-    if (text) { _noHeard = 0; _recFails = 0; _lastTake = "whisper"; logEvent({ e: "whisper", ms: j.ms, bytes: j.bytes, model: j.model, n: text.split(/\s+/).length }); cb(text, url, null, [text]); return; }
+    if (text) { _noHeard = 0; _recFails = 0; _lastTake = "whisper"; logEvent({ e: "whisper", ms: j.ms, bytes: j.bytes, model: j.model, lang: LANG, n: text.split(/\s+/).length }); cb(text, url, null, [text]); return; }
     _noHeard++;
     cb(null, url, "heard you but caught no words — tap 🎤 and say it once more", []);
   };
@@ -854,7 +855,7 @@ function dictate(btn, idleLabel, cb, opts) {
      top guess is frequently a homophone of the right word while guess three is
      the word itself. Grading against only the first was throwing away correct
      answers. Every alternative is passed back and the grader may accept any. */
-  rec.lang = "ar-SA"; rec.interimResults = true; rec.maxAlternatives = 8;
+  rec.lang = (opts && opts.lang) === "en" ? "en-GB" : "ar-SA"; rec.interimResults = true; rec.maxAlternatives = 8;
   const L = { rec, interim: "", reset: () => { btn.textContent = idleLabel; } };
   _live = L;
   /* The recogniser does not start the instant the button is tapped — there is a
@@ -1993,7 +1994,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mtom56um";
+const DATA_V = "mtomhgvm";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2126,7 +2127,6 @@ const KB_LAYOUT = [
    curriculum.js is kept pure (no localStorage, no fetch) so scripts/test-curriculum.js
    can exercise it in node. Everything that touches the device lives here.
    ============================================================================ */
-const WEEK_KEY = "ats-week";          // the coach-set week, cached from coach:<email>
 let _curCtxP = null;
 function curLoad() {
   if (!_curCtxP) {
@@ -2199,76 +2199,6 @@ async function curCtx() {
     log: store.get("ats-log", []), srs: getSrs(), progress: getProgress(), now: Date.now(),
     nameFor: curNameFor,
   });
-}
-
-/* The current week: the coach's if there is one for this calendar week, otherwise
-   a self-seeded one so he NEVER opens the site to a blank slate. */
-async function weekGet() {
-  const ctx = await curCtx();
-  if (!ctx) return null;
-  const bounds = Curriculum.weekBounds(Date.now());
-  const saved = store.get(WEEK_KEY, null);
-  const usable = saved && Curriculum.weekKeys(saved).length && saved.to >= bounds.from;
-  const week = usable ? saved : Curriculum.weekSelfSeed(ctx);
-  // PERSIST a self-seeded week: without this it is rebuilt on every page load,
-  // and each rebuild would mint the next week number
-  if (!usable) store.set(WEEK_KEY, week);
-  weekAnnounce(week);
-  return { week, ctx };
-}
-
-/* Log week-start once per week number — this IS the history (only the log
-   syncs; see CURRICULUM.md §6).
-
-   ONE EXCEPTION, and it is the difference between the coach's week reaching him
-   and quietly not: weekOf() can self-seed and announce week N before
-   loadCoach() has finished fetching coach:<email>. The coach's week then wins
-   the HERO (it overwrites ats-week) while the HISTORY still holds the
-   self-seeded objectives — so carry-over and the exam scope run off a week he
-   was never shown. A coach-set week is therefore allowed to supersede a
-   self-seeded announcement of the same number exactly once; weekHistory()
-   replays with Object.assign, so the later record simply wins.
-
-   `coachSet` is stamped rather than inferred from `source`, because
-   weekSelfSeed() rebuilds an already-started week with source "coach" — the
-   flag that matters is whether a human coach set it, not what it is labelled. */
-function weekAnnounce(week) {
-  if (!week || !week.n) return;
-  const coachSet = week.source === "coach" && !week.selfSeeded;
-  const prior = store.get("ats-log", []).filter(e => e && e.e === "week-start" && e.n === week.n);
-  if (prior.length && !(coachSet && !prior[prior.length - 1].coachSet)) return;
-  logEvent({
-    e: "week-start", n: week.n, title: week.title, from: week.from, to: week.to,
-    track: week.track, objectives: Curriculum.weekObjectives(week),
-    keys: Curriculum.weekKeys(week), sizedFor: week.sizedFor, coachSet,
-  });
-}
-
-/* Days until the week closes. The TEST itself is always open (retakes are how
-   he sees progress and, by retrieval practice, how he learns) — this is only
-   about which attempt goes on the record. */
-function _dayStart(ymd) { const p = String(ymd).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]).getTime(); }
-function weekDaysLeft(week) {
-  if (!week || !week.to) return null;
-  const n = new Date();
-  return Math.round((_dayStart(week.to) - new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime()) / 86400000);
-}
-/* Days until the Sunday 07:00 class that CLOSES this week — the thing the week
-   is preparing him for. Same day = 0. */
-function weekDaysToClass(week) {
-  const on = week && (week.classOn || week.to);
-  if (!on) return null;
-  const today = new Date();
-  const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-  return Math.round((_dayStart(on) - t0) / 86400000);
-}
-function weekClassLine(week) {
-  const d = weekDaysToClass(week);
-  if (d === null || d < 0) return "";
-  return d === 0 ? "class today" : d === 1 ? "class tomorrow" : `class in ${d} days`;
-}
-function weekAttemptsSoFar(week) {
-  return Curriculum.examAttempts(store.get("ats-log", []), week.n).length;
 }
 
 /* THE NAV IS HIS, 2026-08-30: "sentences, words, others, progress" — plus

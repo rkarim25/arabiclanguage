@@ -196,49 +196,6 @@ const bank = D("sentence-bank.json");
   yes(C.examResults(legacy).length === 2, "old week-stamped exams still count separately");
 }
 
-/* ---------- the coach's week must survive the self-seeder announcing first ----------
-   weekOf() can self-seed and announce week N before loadCoach() has fetched
-   coach:<email>. The coach week then wins the hero but NOT the history, so
-   carry-over and the exam scope would run off a week he was never shown.
-   weekAnnounce() lets a coach-set week supersede a self-seeded record of the
-   same number exactly once. Tested against the real weekHistory() replay. */
-{
-  const CC = require(path.join(ROOT, "js", "curriculum.js"));
-  const appSrc = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
-  const mm = appSrc.match(/function weekAnnounce\(week\) \{[\s\S]*?\n\}/);
-  yes(!!mm, "app.js still defines weekAnnounce");
-
-  let LOG = [], tick = 0;
-  const fakeStore = { get: (k, d) => (k === "ats-log" ? LOG : d) };
-  const fakeLog = e => LOG.push(Object.assign({ t: ++tick }, e));
-  const announce = new Function("store", "logEvent", "Curriculum",
-    mm[0] + "\nreturn weekAnnounce;")(fakeStore, fakeLog, CC);
-
-  const objs = ks => [{ id: "o", title: "o", keys: ks }];
-  const selfWeek = { n: 2, title: "Week 2", from: "2026-08-31", to: "2026-09-06", objectives: objs(["a"]) };
-  const coachWeek = { n: 2, title: "Her flat, her week", from: "2026-08-31", to: "2026-09-06", source: "coach", objectives: objs(["b"]) };
-
-  announce(selfWeek);
-  yes(LOG.length === 1, "the self-seeder announces week 2");
-  announce(selfWeek);
-  yes(LOG.length === 1, "...and does not announce it twice");
-
-  announce(coachWeek);
-  yes(LOG.length === 2, "a coach-set week SUPERSEDES the self-seeded record of the same number");
-  const h2 = CC.weekHistory(LOG).filter(w => w.n === 2);
-  yes(h2.length === 1, "...history still has exactly one week 2, not two");
-  yes(h2[0].title === "Her flat, her week", "...and it is the coach's week that survives the replay");
-
-  announce(coachWeek);
-  yes(LOG.length === 2, "...and the coach week does not re-announce on every page load");
-
-  LOG = [];
-  announce(coachWeek);
-  announce({ n: 2, source: "coach", selfSeeded: true, from: "2026-08-31", to: "2026-09-06", objectives: objs(["c"]) });
-  yes(LOG.length === 1, "a REBUILT self-seeded week labelled source:coach cannot supersede the real one");
-}
-
-
 /* ---------- 9. THE STUMBLE: three levels, and the middle one holds ----------
    His pen note, 2026-08-31: "when i say i said it, i should be able to say how
    accurate i got it. making it binary might not be the best thing."
@@ -537,7 +494,7 @@ const bank = D("sentence-bank.json");
   yes(/_whisperDownUntil = Date\.now\(\) \+ 60000/.test(app), "…and backs off to the browser recogniser for a minute when the worker fails");
   yes(/if \(L\.whisper\) \{ L\.finish\("superseded"\); return; \}/.test(app), "stopDictation releases a Whisper take instead of touching a recogniser it never had");
   yes(/cb\(text, url, null, \[text\]\)/.test(app), "the callback contract is unchanged: (heard, url, err, alts)");
-  yes(/wReq\("\/transcribe\?lang=ar"/.test(app), "the take is posted through the same session helper the sync uses");
+  yes(/wReq\("\/transcribe\?lang=" \+ LANG/.test(app), "the take is posted through the same session helper the sync uses");
   yes(/L\.mediaRec\.start\(250\)/.test(app) && /getByteTimeDomainData/.test(app), "the take ends itself on quiet, so a short word is not cut off and a long one is not waited on");
   // every caller still passes a 4-slot callback or fewer
   ["learn.html", "speaking.html"].forEach(f => {
@@ -600,6 +557,22 @@ const bank = D("sentence-bank.json");
   yes(/if \(PLAN_BAR_QUIET\.includes\(page\)\) return;/.test(plan), "…enforced in planMountBar");
   yes(/class="pb-today"/.test(plan) && /\.pb-today \{/.test(css), "…and where it does appear, it is labelled Today");
   ["learn.html", "vocab.html", "sentences.html"].forEach(f => yes(!quiet.includes(f), `${f} keeps the bar — it is a doing page`));
+}
+
+/* ---------- 19. SAY THE MEANING ----------
+   2026-09-04: "i want to be able to say the english words in what does it mean
+   as well to make it quicker to go through." */
+{
+  console.log("\n-- a meaning question can be answered out loud, in English --");
+  const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const learn = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+  yes(/const LANG = \(opts && opts\.lang\) === "en" \? "en" : "ar";/.test(app) && /"\/transcribe\?lang=" \+ LANG/.test(app), "a take can be transcribed as English");
+  yes(/rec\.lang = \(opts && opts\.lang\) === "en" \? "en-GB" : "ar-SA";/.test(app), "…and the browser-recogniser fallback follows the same language");
+  yes(/id="\$\{id\}Mic" title="say the meaning in English">🎤 say it/.test(learn), "the meaning panel has a 🎤");
+  yes(/\{ lang: "en", pause: 1000 \}/.test(learn), "…which dictates in English");
+  yes(/inp\.value = String\(heard\)\.trim\(\)\.replace\(\/\[\.!\?،,\]\+\$\/g, ""\)\.trim\(\);\s*\n\s*micMsg\.textContent[^\n]*\n\s*chk\.click\(\);/.test(learn), "…drops the words into the box and runs the SAME check as a typed answer");
+  const w = fs.readFileSync(path.join(ROOT, "worker", "src", "index.js"), "utf8");
+  yes(/\^\[a-z\]\{2\}\$/.test(w), "the worker accepts a two-letter language hint");
 }
 
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------

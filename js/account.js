@@ -85,16 +85,6 @@ async function loadCoach() {
       const pc = document.getElementById("planCard");
       if (pc && typeof planRenderCard === "function") planRenderCard(pc);
     } else if (!c.homework) store.set("ats-homework", null);
-    // the WEEK rides in the same payload (CURRICULUM.md §6) — cache it so the
-    // week hero and week.html show the coach's target instead of a self-seed
-    if (c.week && c.week.n) {
-      // only repaint when the coach's week actually CHANGED — an unconditional
-      // reload here would re-fetch, re-store and reload again, forever
-      const prev = store.get(WEEK_KEY, null);
-      const isNew = !prev || prev.n !== c.week.n || JSON.stringify(prev) !== JSON.stringify(c.week);
-      store.set(WEEK_KEY, c.week);
-      if (isNew && typeof paintWeekHero === "function") { try { await paintWeekHero(); } catch (e) {} }
-    }
     const who = whoami();
     if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
     document.getElementById("coachCard").style.display = "block";

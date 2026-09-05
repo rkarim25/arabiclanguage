@@ -193,7 +193,7 @@ yes(!sentenceMatchAr("qultu alHaqqa", "قَالُوا الحَقَّ", "قَال
 {
   const css = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
   yes(/^\.fill-input \{/m.test(css), ".fill-input is styled site-wide, not inside one page's <style>");
-  for (const page of ["sentences.html", "test.html", "vocab.html"]) {
+  for (const page of ["sentences.html", "vocab.html"]) {
     const html = fs.readFileSync(path.join(ROOT, page), "utf8");
     if (!/class="fill-input"/.test(html)) continue;
     yes(/attachInlineTranslit/.test(html), `${page} converts English letters as he types`);

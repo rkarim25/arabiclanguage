@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtom56um">
-  <link rel="stylesheet" href="css/style.css?v=mtom56um">
+  <link rel="stylesheet" href="css/fonts.css?v=mtomhgvm">
+  <link rel="stylesheet" href="css/style.css?v=mtomhgvm">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mtom56um"></script>
-<script src="js/curriculum.js?v=mtom56um"></script>
-<script src="js/app.js?v=mtom56um"></script>
-<script src="js/tracker.js?v=mtom56um"></script>
-<script src="js/plan.js?v=mtom56um"></script>
+<script src="js/progress-model.js?v=mtomhgvm"></script>
+<script src="js/curriculum.js?v=mtomhgvm"></script>
+<script src="js/app.js?v=mtomhgvm"></script>
+<script src="js/tracker.js?v=mtomhgvm"></script>
+<script src="js/plan.js?v=mtomhgvm"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -357,8 +357,10 @@ function meaningPanel(id, canBack) {
     <div class="row" id="${id}Row">
       ${BACK_BTN(canBack)}
       <button class="primary" id="${id}Chk">Check</button>
+      ${CAN_MIC ? `<button id="${id}Mic" title="say the meaning in English">🎤 say it</button>` : ""}
       <button id="${id}Show">show me</button>
     </div>
+    <span id="${id}MicMsg" style="display:block;text-align:center;font-size:12.5px;color:var(--muted)"></span>
     <div class="row" style="gap:6px;align-items:center;justify-content:center;margin-top:2px">
       <span style="font-size:12px;color:var(--muted)" title="Your answer already schedules this card. These only override it.">scheduled from your answer · override:</span>
       <span id="${id}Bkt"></span>
@@ -383,6 +385,23 @@ function wireMeaning(id, key, en, done) {
     say(ok ? "✓ right" : `✗ not quite — you wrote “${esc(inp.value.trim())}”`);
     inp.disabled = true;
     done(ok, false);
+  };
+  /* SAY THE MEANING (his ask, 2026-09-04: "i want to be able to say the english
+     words in what does it mean as well to make it quicker to go through").
+     The take is transcribed as ENGLISH, dropped into the box exactly as heard,
+     and checked by the same enMatch the typed answer uses — so a spoken answer
+     is graded no more leniently than a typed one, only faster. */
+  const mic = document.getElementById(id + "Mic");
+  const micMsg = document.getElementById(id + "MicMsg");
+  if (mic) mic.onclick = () => {
+    if (inp.disabled) return;
+    micMsg.textContent = "";
+    dictate(mic, "🎤 say it", (heard, url, err) => {
+      if (!heard) { micMsg.textContent = err || "didn't catch that — tap 🎤 to try again"; return; }
+      inp.value = String(heard).trim().replace(/[.!?،,]+$/g, "").trim();
+      micMsg.textContent = `heard “${esc(inp.value)}”`;
+      chk.click();
+    }, { lang: "en", pause: 1000 });
   };
   /* "show me" is one tap and reveals in place. Only THEN can he self-grade — that
      order is the whole point: seeing the answer first and then claiming he knew
