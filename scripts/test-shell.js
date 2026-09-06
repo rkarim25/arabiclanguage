@@ -621,6 +621,28 @@ const bank = D("sentence-bank.json");
   yes(missing.length === 0, missing.length ? `${missing.length} class word(s) have NO short sentence: ${missing.join(", ")}` : "every one of the 59 class words has a short sentence to practise in");
 }
 
+/* ---------- 22. A BUCKETED ROW IS AN ANSWERED ROW ON THE FILL SHEET ----------
+   2026-09-05, his note from vocab.html?ev=lesson-home&mode=fill after an 0/18:
+   "when i mark words got it, it means i got it, i dont need to write it on this
+   page. the scoring isnt right as i marked them." ✓ Check must never grade an
+   empty box "again" when he has marked the word by hand. */
+{
+  console.log("\n-- fill sheet: a bucket mark is the answer --");
+  const vocab = fs.readFileSync(path.join(ROOT, "vocab.html"), "utf8");
+  yes(/const marked = new Map\(\); \/\/ row index → bucket id chosen on THIS visit/.test(vocab),
+    "the fill sheet tracks which rows he buckets during the visit");
+  yes(/mountBucketBar\(tr\.querySelector\("\.bucket-slot"\), `\$\{prefix\}\$\{obj\.id\}:\$\{i\}`, b => marked\.set\(i, b\)\)/.test(vocab),
+    "…wired through the bucket bar's onSet");
+  yes(/const claimed = marked\.has\(i\) \|\| \(!typed && \(bucketOf\(key\) === "know" \|\| bucketOf\(key\) === "never"\)\)/.test(vocab),
+    "a row marked tonight, or already held as ✓/⊘ with an empty box, is claimed — not graded");
+  const claimedBlock = vocab.match(/if \(claimed\) \{[\s\S]*?\n      \}/);
+  yes(!!claimedBlock && !/gradeCard/.test(claimedBlock[0]) && !/logEvent\(\{ e: "fill"/.test(claimedBlock[0]),
+    "…and a claimed row is never gradeCard'd or logged as a wrong fill");
+  yes(/Marked by hand — your ✓ and ↻ buckets carry these words\./.test(vocab),
+    "an all-marked sheet says so instead of Score: 0");
+  yes(/marked: selfMarked/.test(vocab), "fill-done reports how many rows were self-marked");
+}
+
 /* ---------- 12. ＋Learn lands on the proper card, not a tw: twin ----------
    2026-09-01 evening: he tap-learned seven of Samer's passage words — exactly
    the homework — and every one became a tw: shadow card, so the contract still

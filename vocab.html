@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mtovjkqu">
-  <link rel="stylesheet" href="css/style.css?v=mtovjkqu">
+  <link rel="stylesheet" href="css/fonts.css?v=mtp4dgkv">
+  <link rel="stylesheet" href="css/style.css?v=mtp4dgkv">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,9 +52,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mtovjkqu"></script>
-<script src="js/tracker.js?v=mtovjkqu"></script>
-<script src="js/plan.js?v=mtovjkqu"></script>
+<script src="js/app.js?v=mtp4dgkv"></script>
+<script src="js/tracker.js?v=mtp4dgkv"></script>
+<script src="js/plan.js?v=mtp4dgkv"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -842,6 +842,11 @@ function renderGroupFill(obj, prefix) {
   const tbody = document.getElementById("fillBody");
   let lastFocused = null;
   const revealed = new Set();
+  /* His 2026-09-05 note, from this exact page: "when i mark words got it, it
+     means i got it, i dont need to write it on this page. the scoring isnt
+     right as i marked them." A row he buckets is answered by the bucket — the
+     typing box stays optional on it and ✓ Check never grades it "again". */
+  const marked = new Map(); // row index → bucket id chosen on THIS visit
 
   function showRow(i, quiet) {
     if (revealed.has(i)) return;
@@ -867,7 +872,7 @@ function renderGroupFill(obj, prefix) {
     `;
     tr.querySelector(".show-btn").onclick = () => showRow(i);
     tbody.appendChild(tr);
-    mountBucketBar(tr.querySelector(".bucket-slot"), `${prefix}${obj.id}:${i}`);
+    mountBucketBar(tr.querySelector(".bucket-slot"), `${prefix}${obj.id}:${i}`, b => marked.set(i, b));
   });
   // seamless: English letters become Arabic in the box itself, same as the sheets
   tbody.querySelectorAll(".fill-input").forEach(attachInlineTranslit);
@@ -891,13 +896,28 @@ function renderGroupFill(obj, prefix) {
   document.getElementById("checkAll").onclick = () => {
     if (checked) return;
     checked = true;
-    let right = 0, graded = 0;
+    let right = 0, graded = 0, selfMarked = 0;
     obj.members.forEach((m, i) => {
       if (revealed.has(i)) return;
-      graded++;
       const input = tbody.querySelector(`input[data-i="${i}"]`);
       const answer = tbody.querySelectorAll(".correct-answer")[i];
       const key = `${prefix}${obj.id}:${i}`;
+      const typed = input.value.trim();
+      // A row he bucketed tonight — or already holds as ✓/⊘ — is answered by
+      // the mark; an empty box there is not a wrong answer. If he typed
+      // anyway, show him whether it landed, but his bucket keeps the say.
+      const claimed = marked.has(i) || (!typed && (bucketOf(key) === "know" || bucketOf(key) === "never"));
+      if (claimed) {
+        selfMarked++;
+        if (typed) {
+          const okTyped = answerMatchAr(typed, m.ar).ok;
+          input.classList.remove("ok", "no");
+          input.classList.add(okTyped ? "ok" : "no");
+          if (!okTyped) { answer.style.display = "block"; answer.textContent = m.ar; }
+        }
+        return;
+      }
+      graded++;
       // graded the same way as the drill: letter-perfect, or right by sound
       const ok = answerMatchAr(input.value, m.ar).ok;
       input.classList.remove("ok", "no");
@@ -906,14 +926,14 @@ function renderGroupFill(obj, prefix) {
       else { answer.style.display = "block"; answer.textContent = m.ar; }
       logEvent({ e: "fill", fam: prefix + obj.id, i, typed: input.value, ok });
       gradeCard(key, ok ? "good" : "again");
-      mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key);
+      mountBucketBar(tbody.querySelectorAll(".bucket-slot")[i], key, b => marked.set(i, b));
     });
     const score = document.getElementById("fillScore");
     score.textContent = graded === 0
-      ? "Self-studied — bucket each word above."
-      : `Score: ${right} / ${graded}` + (right === graded ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
+      ? (selfMarked ? "Marked by hand — your ✓ and ↻ buckets carry these words." : "Self-studied — bucket each word above.")
+      : `Score: ${right} / ${graded}` + (selfMarked ? ` (+${selfMarked} marked by hand)` : "") + (right === graded ? " — ممتاز! 🎉" : " — the ones in red will come back in your Review.");
     setStepDone(prefix + obj.id, "fill");
-    logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: graded });
+    logEvent({ e: "fill-done", fam: prefix + obj.id, score: right, total: graded, marked: selfMarked });
     autoSync();
   };
 }
