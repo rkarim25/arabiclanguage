@@ -1667,6 +1667,107 @@
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "tenses",
    "frame": "tenses"
+  },
+  {
+   "en": "The meat is expensive and the chicken is cheap.",
+   "ar": "اللَّحْمُ غَالٍ وَالدَّجَاجُ رَخِيصٌ.",
+   "tr": "al-laḥmu ghālin wa-d-dajāju rakhīṣun",
+   "keys": [
+    "ev-food:1",
+    "ev-food:2",
+    "ev-opposites:5"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "nominal",
+   "frame": "nominal"
+  },
+  {
+   "en": "I drink milk in the morning.",
+   "ar": "أَشْرَبُ الحَلِيبَ فِي الصَّبَاحِ.",
+   "tr": "ashrabu l-ḥalība fī ṣ-ṣabāḥ",
+   "keys": [
+    "ev-food:4"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "tenses",
+   "frame": "tenses"
+  },
+  {
+   "en": "We have fruit and milk at home.",
+   "ar": "عِنْدَنَا فَاكِهَةٌ وَحَلِيبٌ فِي البَيْتِ.",
+   "tr": "ʿindanā fākihatun wa-ḥalībun fī l-bayt",
+   "keys": [
+    "ev-food:5",
+    "ev-food:4"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "have",
+   "frame": "have"
+  },
+  {
+   "en": "Walk straight ahead to the door.",
+   "ar": "اِمْشِ عَلَى طُول إِلَى البَابِ.",
+   "tr": "imshi ʿalā ṭūl ilā l-bāb",
+   "keys": [
+    "ev-directions:2",
+    "ev-directions:3"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "imperative",
+   "frame": "imperative"
+  },
+  {
+   "en": "Where is the entrance of the market?",
+   "ar": "أَيْنَ مَدْخَلُ السُّوقِ؟",
+   "tr": "ayna madkhalu s-sūq?",
+   "keys": [
+    "ev-directions:7"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "questions",
+   "frame": "questions"
+  },
+  {
+   "en": "The lesson is easy and the exam is difficult.",
+   "ar": "الدَّرْسُ سَهْلٌ وَالاِمْتِحَانُ صَعْبٌ.",
+   "tr": "ad-darsu sahlun wa-l-imtiḥānu ṣaʿbun",
+   "keys": [
+    "ev-opposites:2"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "nominal",
+   "frame": "nominal"
+  },
+  {
+   "en": "The train is fast and the bus is slow.",
+   "ar": "القِطَارُ سَرِيعٌ وَالحَافِلَةُ بَطِيئَةٌ.",
+   "tr": "al-qiṭāru sarīʿun wa-l-ḥāfilatu baṭīʾatun",
+   "keys": [
+    "ev-opposites:3",
+    "ev-hotel-taxi:7"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "nominal",
+   "frame": "nominal"
+  },
+  {
+   "en": "My room is spacious and the kitchen is narrow.",
+   "ar": "غُرْفَتِي وَاسِعَةٌ وَالمَطْبَخُ ضَيِّقٌ.",
+   "tr": "ghurfatī wāsiʿatun wa-l-maṭbakhu ḍayyiqun",
+   "keys": [
+    "ev-opposites:7"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — food, the street, and opposites",
+   "pattern": "nominal",
+   "frame": "nominal"
   }
  ]
 }
