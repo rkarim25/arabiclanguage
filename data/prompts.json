@@ -1768,6 +1768,31 @@
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "nominal",
    "frame": "nominal"
+  },
+  {
+   "en": "I always read the Qur'an after fajr.",
+   "ar": "أَقْرَأُ القُرْآنَ دَائِمًا بَعْدَ الفَجْرِ.",
+   "tr": "aqraʾu l-qurʾāna dāʾiman baʿda l-fajri",
+   "keys": [
+    "ev-time:4"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — time words",
+   "pattern": "tenses",
+   "frame": "tenses"
+  },
+  {
+   "en": "I woke up late today.",
+   "ar": "اسْتَيْقَظْتُ مُتَأَخِّرًا اليَوْمَ.",
+   "tr": "istayqaẓtu mutaʾakhkhiran al-yawma",
+   "keys": [
+    "ev-time:8",
+    "ev-time:1"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — time words",
+   "pattern": "tenses",
+   "frame": "tenses"
   }
  ]
 }
