@@ -1793,6 +1793,82 @@
    "lesson": "Ladder core — time words",
    "pattern": "tenses",
    "frame": "tenses"
+  },
+  {
+   "en": "I have a pain in my head.",
+   "ar": "عِنْدِي أَلَمٌ فِي رَأْسِي.",
+   "tr": "ʿindī alamun fī raʾsī",
+   "keys": [
+    "ev-medical:4"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "have",
+   "frame": "have"
+  },
+  {
+   "en": "I have a fever and I am ill.",
+   "ar": "عِنْدِي حَرَارَةٌ وَأَنَا مَرِيضٌ.",
+   "tr": "ʿindī ḥarāratun wa-anā marīḍun",
+   "keys": [
+    "ev-medical:5",
+    "ev-medical:3"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "have",
+   "frame": "have"
+  },
+  {
+   "en": "My head hurts me a lot.",
+   "ar": "رَأْسِي يُؤْلِمُنِي كَثِيرًا.",
+   "tr": "raʾsī yuʾlimunī kathīran",
+   "keys": [
+    "ev-medical:6"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "pronouns",
+   "frame": "pronouns"
+  },
+  {
+   "en": "I have an allergy to milk.",
+   "ar": "عِنْدِي حَسَّاسِيَّةٌ مِنَ الحَلِيبِ.",
+   "tr": "ʿindī ḥassāsiyyatun mina l-ḥalībi",
+   "keys": [
+    "ev-medical:7",
+    "ev-food:4"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "have",
+   "frame": "have"
+  },
+  {
+   "en": "I need an ambulance.",
+   "ar": "أَحْتَاجُ سَيَّارَةَ إِسْعَافٍ.",
+   "tr": "aḥtāju sayyārata isʿāfin",
+   "keys": [
+    "ev-medical:8",
+    "ev-medical:0"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "idafa",
+   "frame": "idafa"
+  },
+  {
+   "en": "I am ill and I have diabetes.",
+   "ar": "أَنَا مَرِيضٌ وَعِنْدِي سُكَّرِيٌّ.",
+   "tr": "anā marīḍun wa-ʿindī sukkariyyun",
+   "keys": [
+    "ev-medical:9",
+    "ev-medical:3"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — at the pharmacy",
+   "pattern": "nominal",
+   "frame": "nominal"
   }
  ]
 }
