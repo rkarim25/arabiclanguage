@@ -1869,6 +1869,109 @@
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "nominal",
    "frame": "nominal"
+  },
+  {
+   "en": "I have a reservation at the hotel.",
+   "ar": "عِنْدِي حَجْزٌ فِي الفُنْدُقِ.",
+   "tr": "ʿindī ḥajzun fī l-funduqi",
+   "keys": [
+    "ev-hotel-taxi:1",
+    "ev-hotel-taxi:0"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — hotels and taxis",
+   "pattern": "have",
+   "frame": "have"
+  },
+  {
+   "en": "Where is the room key?",
+   "ar": "أَيْنَ مِفْتَاحُ الغُرْفَةِ؟",
+   "tr": "ayna miftāḥu l-ghurfati?",
+   "keys": [
+    "ev-hotel-taxi:2",
+    "ev-lesson-home:13"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — hotels and taxis",
+   "pattern": "questions",
+   "frame": "questions"
+  },
+  {
+   "en": "Where is the train station?",
+   "ar": "أَيْنَ مَحَطَّةُ القِطَارِ؟",
+   "tr": "ayna maḥaṭṭatu l-qiṭāri?",
+   "keys": [
+    "ev-hotel-taxi:6",
+    "ev-hotel-taxi:7"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — hotels and taxis",
+   "pattern": "questions",
+   "frame": "questions"
+  },
+  {
+   "en": "This is my luggage in the car.",
+   "ar": "هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ.",
+   "tr": "hādhihi amtiʿatī fī s-sayyārati",
+   "keys": [
+    "ev-hotel-taxi:9",
+    "ev-medical:0"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — hotels and taxis",
+   "pattern": "demonstratives",
+   "frame": "demonstratives"
+  },
+  {
+   "en": "Do you need any service?",
+   "ar": "هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟",
+   "tr": "hal taḥtāju ilā khidmatin?",
+   "keys": [
+    "ev-hotel-taxi:10"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — hotels and taxis",
+   "pattern": "questions",
+   "frame": "questions"
+  },
+  {
+   "en": "Do you speak English, please?",
+   "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّةَ مِنْ فَضْلِكَ؟",
+   "tr": "hal tatakallamu l-injlīziyyata min faḍlika?",
+   "keys": [
+    "ev-help:4",
+    "ph-help:0"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — getting help",
+   "pattern": "questions",
+   "frame": "questions"
+  },
+  {
+   "en": "My passport is missing.",
+   "ar": "جَوَازُ سَفَرِي مَفْقُودٌ.",
+   "tr": "jawāzu safarī mafqūdun",
+   "keys": [
+    "ev-help:8",
+    "ev-help:1"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — getting help",
+   "pattern": "nominal",
+   "frame": "nominal"
+  },
+  {
+   "en": "This is the emergency door.",
+   "ar": "هَذَا بَابُ الطَّوَارِئِ.",
+   "tr": "hādhā bābu ṭ-ṭawāriʾi",
+   "keys": [
+    "ev-help:9",
+    "ev-home:2"
+   ],
+   "source": "core",
+   "lesson": "Ladder core — getting help",
+   "pattern": "demonstratives",
+   "frame": "demonstratives"
   }
  ]
 }

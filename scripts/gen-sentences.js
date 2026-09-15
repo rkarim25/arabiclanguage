@@ -199,6 +199,10 @@ const SPLITS = {
     [44, 47, "And guarding them both does not weary Him."],
     [47, 50, "And He is the Most High, the Most Great."],
   ],
+  "asr:2": [
+    [0, 6, "Except those who have faith and do righteous deeds."],
+    [6, 9, "And keep urging one another toward truth and urging one another to patience."],
+  ],
 };
 
 const bank = [];
