@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
-  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1j3zd">
+  <link rel="stylesheet" href="css/style.css?v=mug1j3zd">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -131,10 +131,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug1c8s6"></script>
-<script src="js/curriculum.js?v=mug1c8s6"></script>
-<script src="js/app.js?v=mug1c8s6"></script>
-<script src="js/tracker.js?v=mug1c8s6"></script>
+<script src="js/progress-model.js?v=mug1j3zd"></script>
+<script src="js/curriculum.js?v=mug1j3zd"></script>
+<script src="js/app.js?v=mug1j3zd"></script>
+<script src="js/tracker.js?v=mug1j3zd"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -223,7 +223,7 @@ function renderVocabAndSentences() {
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <span class="arabic" style="font-size:21px;color:var(--accent)">${s.ar}</span>
-        <button class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊</button>
+        <button class="small" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊</button>
       </div>
     </div>
   `).join("");
@@ -250,6 +250,12 @@ function renderVocabAndSentences() {
       });
     };
   }
+}
+
+function playClassItem(encodedAr, type) {
+  const text = decodeURIComponent(encodedAr);
+  speak(text, 0.85);
+  logEvent({ e: "audio-play", text, type: type || "class", t: Date.now() });
 }
 
 function buildClassAiPrompt(cls) {
@@ -291,7 +297,7 @@ function scrollToTest() {
 
 function updateMasteryStatus() {
   const log = store.get("ats-log", []);
-  const pass = log.find(x => x.e === "preply-test" && x.classId === "c-2026-08-30" && x.score >= 80);
+  const pass = log.find(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.classId === "c-2026-08-30" && x.score >= 80);
   const badge = document.getElementById("lessonStatusBadge");
   const pill = document.getElementById("testScorePill");
   if (pass) {
@@ -359,8 +365,9 @@ function startMasteryTest() {
     if (curQ >= questions.length) {
       const pct = Math.round((score / questions.length) * 100);
       const passed = pct >= 80;
-      logEvent({ e: "preply-test", classId: "c-2026-08-30", score: pct, pass: passed });
+      logEvent({ e: "preply-test", classId: "c-2026-08-30", score: pct, pass: passed, t: Date.now() });
       updateMasteryStatus();
+      autoSync();
       area.innerHTML = `
         <div style="text-align:center;padding:16px">
           <h3 style="font-size:22px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
@@ -394,7 +401,20 @@ function startMasteryTest() {
   window.pickMasteryAnswer = (picked, correct, btn) => {
     const btns = area.querySelectorAll(".q-choice");
     btns.forEach(b => b.disabled = true);
-    if (picked === correct) {
+    const qItem = questions[curQ];
+    const isOk = picked === correct;
+    logEvent({
+      e: "test-item",
+      test: "preply",
+      classId: "c-2026-08-30",
+      qIdx: curQ,
+      question: qItem.q.replace(/<[^>]*>/g, ""),
+      picked: qItem.opts[picked],
+      target: qItem.opts[correct],
+      ok: isOk,
+      t: Date.now()
+    });
+    if (isOk) {
       btn.classList.add("correct");
       score++;
     } else {

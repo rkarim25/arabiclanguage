@@ -93,6 +93,7 @@ Rules:
 - **Grammar on need-basis only:** Grammar patterns are integrated conditionally inside the reading spread, never as standalone lectures.
 - **Variation-first AI Voice Practice:** AI voice prompts explicitly list the 10 target sentences and instruct ChatGPT/Claude to drill variations (noun/pronoun swaps, question formation) in short 1-2 sentence conversational turns with full tashkeel.
 - **Vocabulary Boundary via Dossier:** Reza attaches or copies the Markdown dossier (`LEARNER_CONTEXT.md`) into ChatGPT/Claude so the AI tutor respects his exact vocabulary envelope without drifting into unknown words or colloquial dialects.
+- **Interaction Telemetry & Adaptive Motivation:** Every word rating, test question response, and audio play is tracked. The site dynamically surfaces test slips in the next 10-word drill and presents real-time momentum wins and next actions in the Coach's Note.
 
 ---
 

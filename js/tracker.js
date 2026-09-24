@@ -292,18 +292,120 @@ function weakSpots(limit) {
   const log = store.get(LOG_KEY, []);
   const scores = {}; // key -> {label, weight}
   const bump = (k, label, w) => {
-    scores[k] = scores[k] || { label, w: 0 };
+    scores[k] = scores[k] || { label: label || k, w: 0 };
     scores[k].w += w;
   };
   log.forEach(x => {
+    if (x.e === "vocab-rate" && (x.bucket === "weak" || x.bucket === "learning")) bump(x.key, x.wordAr || x.wordEn, 3);
+    if (x.e === "test-item" && x.ok === false) bump("test:" + (x.chap || x.classId || "") + ":" + (x.target || x.qIdx), x.target || x.question, 4);
+    if (x.e === "spract" && x.got === false) bump("verb:" + x.verb, x.verb, 3);
     if (x.e === "review" && x.g === "again") bump("card:" + x.card, null, 3);
     if (x.e === "tap") bump("word:" + x.w, x.w, 1);
-    if (x.e === "fill" && x.ok === false) bump("fill:" + x.fam + ":" + x.i, null, 2);
-    if ((x.e === "dict" || x.e === "trans") && x.ok === false) bump("sent:" + x.story + ":" + x.i, null, 2);
-    if (x.e === "quiz" && x.ok === false) bump("quiz:" + x.story + ":" + x.q, null, 2);
-    if (x.e === "speak" && typeof x.score === "number" && x.score < 0.6) bump("speak:" + x.story + ":" + x.s, null, 2);
   });
   return Object.entries(scores)
     .sort((a, b) => b[1].w - a[1].w)
     .slice(0, limit || 6);
+}
+
+/* ---------- On-Device Analytics & Motivation Engine ---------- */
+function analyzeLearnerProgress() {
+  const log = store.get(LOG_KEY, []);
+  const srs = getSrs();
+  const now = Date.now();
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+
+  // 1. Time on task & Streak calculation
+  const dayBuckets = new Set();
+  let secToday = 0;
+  const todayStr = new Date().toDateString();
+
+  const validEvents = log.filter(x => x.t && x.e !== "time").sort((a, b) => a.t - b.t);
+  for (let i = 0; i < validEvents.length; i++) {
+    const d = new Date(validEvents[i].t);
+    dayBuckets.add(d.toDateString());
+    if (d.toDateString() === todayStr) {
+      if (i > 0 && validEvents[i].t - validEvents[i - 1].t <= 180 * 1000) {
+        secToday += (validEvents[i].t - validEvents[i - 1].t) / 1000;
+      } else {
+        secToday += 30;
+      }
+    }
+  }
+
+  // Calculate streak backwards from today or yesterday
+  let streak = 0;
+  let checkDate = new Date();
+  while (dayBuckets.has(checkDate.toDateString())) {
+    streak++;
+    checkDate = new Date(checkDate.getTime() - ONE_DAY);
+  }
+  if (streak === 0) {
+    checkDate = new Date(now - ONE_DAY);
+    while (dayBuckets.has(checkDate.toDateString())) {
+      streak++;
+      checkDate = new Date(checkDate.getTime() - ONE_DAY);
+    }
+  }
+
+  // 2. Vocabulary state
+  let solidCount = 0, mediumCount = 0, weakCount = 0, learningCount = 0, retiredCount = 0;
+  Object.values(srs).forEach(card => {
+    if (card.b === "never") retiredCount++;
+    else if (card.b === "strong" || card.box >= 4) solidCount++;
+    else if (card.b === "medium" || (card.box >= 2 && card.box <= 3)) mediumCount++;
+    else if (card.b === "weak" || card.box === 1) weakCount++;
+    else if (card.b === "learning" || card.b === "repeat" || card.box === 0) learningCount++;
+  });
+  const totalHeld = solidCount + mediumCount;
+
+  // 3. Recent test performance & misses (last 7 days)
+  const recentEvents = log.filter(x => x.t && (now - x.t <= 7 * ONE_DAY));
+  const chapterPasses = log.filter(x => x.e === "chap-test" && x.pass);
+  const preplyPasses = log.filter(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.pass);
+
+  const testMisses = recentEvents.filter(x => x.e === "test-item" && x.ok === false);
+  const recentRatings = recentEvents.filter(x => x.e === "vocab-rate");
+  const wordsStruggling = recentRatings.filter(x => x.bucket === "weak" || x.bucket === "learning");
+
+  // 4. Generate dynamic motivational headline
+  let headline = "";
+  if (chapterPasses.length > 0 || preplyPasses.length > 0) {
+    const lastTest = log.slice().reverse().find(x => (x.e === "chap-test" || x.e === "preply-test") && x.pass);
+    headline = `🔥 Great momentum! You passed ${lastTest.e === "preply-test" ? "your Preply mastery test" : "Chapter " + (lastTest.chap || "").replace("chap-", "")} with ${lastTest.score}%.`;
+  } else if (totalHeld > 0) {
+    headline = `💪 You have ${totalHeld} words held active in memory.`;
+  } else {
+    headline = `👋 Welcome back! 5 focused minutes today builds permanent recall.`;
+  }
+
+  // 5. Generate high-impact next action
+  let nextAction = "";
+  if (testMisses.length > 0) {
+    const miss = testMisses[testMisses.length - 1];
+    nextAction = `Target your last test slip: review "${miss.target || miss.question}" in a quick 2-minute drill.`;
+  } else if (wordsStruggling.length > 0) {
+    const w = wordsStruggling[wordsStruggling.length - 1];
+    nextAction = `Reinforce "${w.wordAr || w.key}" — rated ${w.bucket}. 1 round in 10-Word Drill will lock it in.`;
+  } else if (chapterPasses.length < 10) {
+    const nextChapNum = chapterPasses.length + 1;
+    nextAction = `Listen to Chapter ${nextChapNum}'s 10 sentences and take the 5-min test to master it.`;
+  } else {
+    nextAction = `Take a quick 10-word drill to keep your longest-standing words fresh.`;
+  }
+
+  return {
+    streakDays: streak,
+    minutesToday: Math.round(secToday / 60),
+    totalHeld,
+    solidCount,
+    mediumCount,
+    weakCount,
+    learningCount,
+    retiredCount,
+    chapterPassesCount: chapterPasses.length,
+    preplyPassesCount: preplyPasses.length,
+    recentMissesCount: testMisses.length,
+    headline,
+    nextAction
+  };
 }

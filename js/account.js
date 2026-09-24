@@ -74,20 +74,25 @@ on("btnDisconnect", () => { setToken(null); setSession(null); store.set("ats-ema
 
 /* coach notes */
 async function loadCoach() {
-  if (!syncMethod()) return; // works for BOTH sign-in methods (email+code session or GitHub token)
-  try {
-    const c = await fetchCoach();
-    if (!c || !c.note) return;
-    // the teacher-lesson HOMEWORK CONTRACT rides in the coach payload — store it
-    // locally so the day-plan can schedule backwards from the lesson deadline
+  const card = document.getElementById("coachCard");
+  if (!card) return;
+
+  let c = null;
+  if (syncMethod()) {
+    try { c = await fetchCoach(); } catch (e) {}
+  }
+
+  // 1. If remote coach note exists, display it
+  if (c && c.note) {
     if (c.homework && c.homework.lessonAt) {
       store.set("ats-homework", c.homework);
       const pc = document.getElementById("planCard");
       if (pc && typeof planRenderCard === "function") planRenderCard(pc);
     } else if (!c.homework) store.set("ats-homework", null);
+    
     const who = whoami();
-    if (who) document.getElementById("coachCard").querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
-    document.getElementById("coachCard").style.display = "block";
+    if (who) card.querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
+    card.style.display = "block";
     document.getElementById("coachDate").textContent = c.updated ? "· " + c.updated : "";
     document.getElementById("coachNote").textContent = c.note;
     const ul = document.getElementById("coachFocus");
@@ -97,7 +102,34 @@ async function loadCoach() {
       li.textContent = f;
       ul.appendChild(li);
     });
-  } catch (e) { /* offline or bad token — skip */ }
+    return;
+  }
+
+  // 2. Otherwise, dynamically generate on-device motivation and insights!
+  if (typeof analyzeLearnerProgress === "function") {
+    const a = analyzeLearnerProgress();
+    const who = whoami();
+    if (who) card.querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
+    card.style.display = "block";
+    document.getElementById("coachDate").textContent = "· Today's live analysis";
+    document.getElementById("coachNote").innerHTML = `<b>${a.headline}</b><br><span style="color:var(--muted)">Active streak: <b>${a.streakDays} days</b> · Today: <b>${a.minutesToday}m</b> · Words held: <b>${a.totalHeld}</b></span>`;
+    const ul = document.getElementById("coachFocus");
+    ul.innerHTML = "";
+    
+    const liNext = document.createElement("li");
+    liNext.innerHTML = `<b>⚡ Fastest next win:</b> ${a.nextAction}`;
+    ul.appendChild(liNext);
+
+    if (a.recentMissesCount > 0) {
+      const liMiss = document.createElement("li");
+      liMiss.innerHTML = `<b>🎯 Practice focus:</b> You have ${a.recentMissesCount} recent test items to reinforce in Words Drill.`;
+      ul.appendChild(liMiss);
+    } else if (a.learningCount > 0) {
+      const liLrn = document.createElement("li");
+      liLrn.innerHTML = `<b>📇 Vocabulary:</b> ${a.learningCount} words currently in learning queue.`;
+      ul.appendChild(liLrn);
+    }
+  }
 }
 loadCoach();
 autoSync();

@@ -100,6 +100,10 @@ All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress,
   - **Variation-First Voice Prompts:** 1-click prompts on `index.html` and `class.html` dynamically list the unit's 10 target sentences (or class dialogue lines) and command ChatGPT / Claude Voice Mode to drill natural variations (swapping nouns, pronouns, numbers, question forms) in short turns (max 2 sentences, full vowels/tashkeel, gentle correction).
   - **Learner Context Dossier:** A comprehensive, attachable/exportable Markdown document (`LEARNER_CONTEXT.md`) defining Reza's active vocabulary, master progress, and pedagogical boundaries. The site includes 1-click buttons (`📄 Copy Learner Dossier`) that dynamically read live local storage and serialize up-to-the-minute progress into Markdown so AI tutors never drift into unknown vocabulary or colloquial dialects.
 
+- **Interaction Telemetry & Motivation Engine (`js/tracker.js`, `js/account.js`):**
+  - Tracks every rating (`vocab-rate`), test question miss/hit (`test-item`), sentence drill, and audio play into `ats-log`, with instant auto-sync.
+  - On-device engine analyzes streaks, study minutes, and test slips to fast-track missed items into 10-word drills and display dynamic motivational headlines and high-yield next steps in the Coach's Note.
+
 Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
 ## Infrastructure

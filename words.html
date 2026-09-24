@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>10-Word Vocab Drill — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
-  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1j3zd">
+  <link rel="stylesheet" href="css/style.css?v=mug1j3zd">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -111,10 +111,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug1c8s6"></script>
-<script src="js/curriculum.js?v=mug1c8s6"></script>
-<script src="js/app.js?v=mug1c8s6"></script>
-<script src="js/tracker.js?v=mug1c8s6"></script>
+<script src="js/progress-model.js?v=mug1j3zd"></script>
+<script src="js/curriculum.js?v=mug1j3zd"></script>
+<script src="js/app.js?v=mug1j3zd"></script>
+<script src="js/tracker.js?v=mug1j3zd"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -172,20 +172,31 @@ function load10Words() {
   stopAudio();
   const srs = getSrs();
   const now = Date.now();
+  const log = store.get(LOG_KEY, []);
 
   let pool = MASTER_WORDS;
   if (currentFilter !== "all") {
     pool = MASTER_WORDS.filter(w => w.src === currentFilter);
   }
 
-  // Priority scoring: Due words / weak words first, then unrated
+  // Find recent test slips (last 7 days) to fast-track reinforcement
+  const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+  const missedWords = new Set();
+  log.filter(x => x.e === "test-item" && x.ok === false && (now - (x.t || 0) < ONE_WEEK)).forEach(m => {
+    if (m.target) missedWords.add(normalizeAr(m.target));
+    if (m.question) missedWords.add(normalizeAr(m.question));
+  });
+
+  // Priority scoring: Test slips first, then due / weak words, then unrated
   const scored = pool.map(w => {
     const item = srs[w.key];
+    const norm = normalizeAr(w.ar);
     let prio = 0;
-    if (!item) prio = 50; // unrated
-    else if (item.b === "never") prio = -999; // skip retired
-    else if (item.due && item.due <= now) prio = 100; // due now
-    else if (item.b === "weak" || item.b === "learning" || item.b === "repeat") prio = 80;
+    if (item && item.b === "never") prio = -999; // skip retired
+    else if (missedWords.has(norm)) prio = 120; // fast-track recent test slip!
+    else if (item && item.due && item.due <= now) prio = 100; // due now
+    else if (item && (item.b === "weak" || item.b === "learning" || item.b === "repeat")) prio = 85;
+    else if (!item) prio = 50; // unrated
     else prio = 10;
     return { w, prio };
   });
@@ -234,6 +245,20 @@ function rateWord(key, bucket, cardIdx) {
   setBucket(key, bucket);
   updateOverallStats();
   
+  const w = ACTIVE_WORDS[cardIdx];
+  if (w) {
+    logEvent({
+      e: "vocab-rate",
+      key,
+      bucket,
+      wordAr: w.ar,
+      wordEn: w.en,
+      src: w.src,
+      t: Date.now()
+    });
+    autoSync();
+  }
+
   // Highlight chosen button
   const card = document.getElementById("wcard-" + cardIdx);
   if (card) {
@@ -266,7 +291,9 @@ function updateSessionProgress() {
 /* Audio Toolbar Handling */
 function playSingle(encodedAr) {
   stopAudio();
-  speak(decodeURIComponent(encodedAr), 0.85);
+  const text = decodeURIComponent(encodedAr);
+  speak(text, 0.85);
+  logEvent({ e: "audio-play", text, type: "vocab", t: Date.now() });
 }
 
 function setupAudioSpeed() {

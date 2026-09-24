@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
-  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1j3zd">
+  <link rel="stylesheet" href="css/style.css?v=mug1j3zd">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -176,11 +176,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug1c8s6"></script>
-<script src="js/curriculum.js?v=mug1c8s6"></script>
-<script src="js/app.js?v=mug1c8s6"></script>
-<script src="js/tracker.js?v=mug1c8s6"></script>
-<script src="js/account.js?v=mug1c8s6"></script>
+<script src="js/progress-model.js?v=mug1j3zd"></script>
+<script src="js/curriculum.js?v=mug1j3zd"></script>
+<script src="js/app.js?v=mug1j3zd"></script>
+<script src="js/tracker.js?v=mug1j3zd"></script>
+<script src="js/account.js?v=mug1j3zd"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -553,6 +553,7 @@ function playSingleSentence(encodedAr) {
   stopAllAudio();
   const text = decodeURIComponent(encodedAr);
   speak(text, 0.85);
+  logEvent({ e: "audio-play", text, type: "sentence", t: Date.now() });
 }
 
 function setupAudioSpeedButtons() {
@@ -693,8 +694,10 @@ function runChapterTest() {
     if (curQ >= questions.length) {
       const pct = Math.round((score / questions.length) * 100);
       const passed = pct >= 80;
-      logEvent({ e: "chap-test", chap: curChap.id, score: pct, pass: passed });
+      logEvent({ e: "chap-test", chap: curChap.id, score: pct, pass: passed, t: Date.now() });
       updateTestBadge();
+      autoSync();
+      if (typeof loadCoach === "function") loadCoach();
       area.innerHTML = `
         <div style="text-align:center;padding:16px">
           <h3 style="font-size:20px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
@@ -723,7 +726,20 @@ function runChapterTest() {
   window.checkAnswer = (picked, correct, btn) => {
     const btns = area.querySelectorAll(".q-opt");
     btns.forEach(b => b.disabled = true);
-    if (picked === correct) {
+    const qItem = questions[curQ];
+    const isOk = picked === correct;
+    logEvent({
+      e: "test-item",
+      test: "chapter",
+      chap: curChap.id,
+      qIdx: curQ,
+      question: qItem.q.replace(/<[^>]*>/g, ""),
+      picked: qItem.opts[picked],
+      target: qItem.opts[correct],
+      ok: isOk,
+      t: Date.now()
+    });
+    if (isOk) {
       btn.classList.add("correct");
       score++;
     } else {
