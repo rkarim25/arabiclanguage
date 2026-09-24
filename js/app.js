@@ -2000,7 +2000,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mug15ksr";
+const DATA_V = "mug1c8s6";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3346,7 +3346,73 @@ async function packTextsForKeys(keys, ctx) {
   return out;
 }
 
+/* ---------- AI Tutors & Learner Dossier Export ---------- */
+function generateLearnerDossierMarkdown(currentContext) {
+  const wordsState = store.get("ats-words", {});
+  const log = store.get("ats-log", []);
+
+  let totalTracked = 0, solidCount = 0, learningCount = 0, weakCount = 0, retiredCount = 0;
+  Object.values(wordsState).forEach(item => {
+    totalTracked++;
+    const b = item.box || 0;
+    if (item.retired) retiredCount++;
+    else if (b >= 3) solidCount++;
+    else if (b >= 1) learningCount++;
+    else weakCount++;
+  });
+
+  const masteredChapTests = log.filter(x => x.e === "chap-test" && x.pass).length;
+  const masteredClasses = log.filter(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.pass).length;
+
+  let md = `# Learner Context & Pedagogical Dossier — Reza Karim\n\n`;
+  md += `> **Instruction for AI Tutors (ChatGPT, Claude, Voice Mode & Custom GPTs):**\n`;
+  md += `> You are Reza's personal Arabic conversation tutor. Keep your voice replies strictly to 1–2 short sentences in clear Modern Standard Arabic (MSA) with full vowels (tashkeel). Never monologue or lecture. Prompt him to speak, and drill natural variations of target sentences.\n\n`;
+  md += `## 1. Learner Profile & Real-Time Stats\n`;
+  md += `- **Learner:** Reza Karim (rkarim88@gmail.com) — Time-poor senior investment manager\n`;
+  md += `- **Ranked Goals:** (1) Understand Qur'an by ear (Qari: Mishary Rashid Alafasy), (2) Spoken MSA conversation\n`;
+  md += `- **Active Course:** Live Preply teacher on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
+  md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3), ${learningCount} active learning, ${weakCount} need review\n`;
+  md += `- **Milestones Cleared:** ${masteredChapTests} chapters mastered, ${masteredClasses} teacher lessons mastered\n\n`;
+
+  md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;
+  md += `- **Preply Unit 1 (Housing & Family):** flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
+  md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
+  md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
+
+  md += `## 3. Strict Rules for AI Voice Sessions\n`;
+  md += `1. **Max 2 Sentences:** Never exceed 2 short sentences per turn in voice mode.\n`;
+  md += `2. **Modern Standard Arabic (الفصحى):** Use clear MSA with full vowels (tashkeel). No slang/regional dialects.\n`;
+  md += `3. **Elicit, Don't Lecture:** Ask ONE question or give ONE prompt at a time, then PAUSE and wait for his spoken reply.\n`;
+  md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns, turn statements into questions with hal/ayna/mata/kam).\n`;
+  md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
+
+  if (currentContext && currentContext.sentences) {
+    md += `\n## 4. Current Target Sentences to Practice\n`;
+    currentContext.sentences.forEach((s, i) => {
+      md += `${i + 1}. **${s.ar}** — *${s.en}* (${s.tr || ''})\n`;
+    });
+  }
+
+  return md;
+}
+
+function copyLearnerDossier(currentContext) {
+  const md = generateLearnerDossierMarkdown(currentContext);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(md);
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = md;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    return Promise.resolve();
+  }
+}
+
 /* ---------- offline (PWA) ---------- */
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => { /* http or unsupported — site works without it */ });
 }
+

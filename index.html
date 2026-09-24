@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug15ksr">
-  <link rel="stylesheet" href="css/style.css?v=mug15ksr">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -150,11 +150,14 @@
 
   <!-- SECTION 4: AI CONVERSATION PARTNER -->
   <div class="card ai-box">
-    <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <h2 style="margin:0;font-size:15px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
-      <button type="button" id="btnCopyPrompt" class="small">📋 Copy Prompt</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="btnCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
+        <button type="button" id="btnCopyPrompt" class="small primary">📋 Copy Voice Prompt</button>
+      </div>
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences.</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences and variations.</p>
     <div class="ai-prompt-pre" id="aiPromptText">Loading prompt…</div>
   </div>
 
@@ -173,11 +176,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug15ksr"></script>
-<script src="js/curriculum.js?v=mug15ksr"></script>
-<script src="js/app.js?v=mug15ksr"></script>
-<script src="js/tracker.js?v=mug15ksr"></script>
-<script src="js/account.js?v=mug15ksr"></script>
+<script src="js/progress-model.js?v=mug1c8s6"></script>
+<script src="js/curriculum.js?v=mug1c8s6"></script>
+<script src="js/app.js?v=mug1c8s6"></script>
+<script src="js/tracker.js?v=mug1c8s6"></script>
+<script src="js/account.js?v=mug1c8s6"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -456,19 +459,54 @@ function loadChapter(chap) {
     gSec.style.display = "none";
   }
 
-  // AI Prompt
-  document.getElementById("aiPromptText").textContent = chap.aiScenario;
+  // AI Prompt with Sentences & Variations
+  const fullPrompt = buildChapterAiPrompt(chap);
+  document.getElementById("aiPromptText").textContent = fullPrompt;
   document.getElementById("btnCopyPrompt").onclick = () => {
-    navigator.clipboard.writeText(chap.aiScenario).then(() => {
+    navigator.clipboard.writeText(fullPrompt).then(() => {
       const btn = document.getElementById("btnCopyPrompt");
-      btn.textContent = "✓ Copied!";
-      setTimeout(() => btn.textContent = "📋 Copy Prompt", 2000);
+      btn.textContent = "✓ Copied Voice Prompt!";
+      setTimeout(() => btn.textContent = "📋 Copy Voice Prompt", 2000);
     });
   };
+  const btnDossier = document.getElementById("btnCopyDossier");
+  if (btnDossier) {
+    btnDossier.onclick = () => {
+      copyLearnerDossier(chap).then(() => {
+        btnDossier.textContent = "✓ Copied Dossier (Markdown)!";
+        setTimeout(() => btnDossier.textContent = "📄 Copy Learner Dossier", 2000);
+      });
+    };
+  }
 
   // Test Score status
   updateTestBadge();
   resetTestArea();
+}
+
+function buildChapterAiPrompt(chap) {
+  let p = `Role: You are a warm, supportive Modern Standard Arabic (MSA) speaking partner for Reza (beginner, A1 level).\n\n`;
+  p += `Context: I just finished Chapter ${chap.num}: "${chap.title}". Here are the 10 target sentences I learned:\n`;
+  chap.sentences.forEach((s, idx) => {
+    p += `${idx + 1}. ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
+  });
+  if (chap.grammar) {
+    p += `\nGrammar Focus: ${chap.grammar.title} (${chap.grammar.text.replace(/<[^>]*>/g, '')})\n`;
+  }
+  p += `\nScenario: ${chap.aiScenario}\n\n`;
+  p += `Goal & Voice Mode Instructions:\n`;
+  p += `1. Start by greeting me warmly in Arabic and waiting for my response.\n`;
+  p += `2. Actively prompt me to speak and test me on these 10 sentences and NATURAL VARIATIONS of them:\n`;
+  p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
+  p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
+  p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
+  p += `   - Practice affirmative vs negative answers.\n`;
+  p += `3. Strict Voice Mode Rules:\n`;
+  p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;
+  p += `   - NEVER give long monologues, lectures, or automatic translations.\n`;
+  p += `   - Ask me ONE question or prompt at a time, then PAUSE and wait for me to speak.\n`;
+  p += `   - If I make a mistake, gently model the correct phrase and ask me to repeat it once.\n`;
+  return p;
 }
 
 function renderQuranSection(surahId) {

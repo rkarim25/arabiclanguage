@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>10-Word Vocab Drill — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug15ksr">
-  <link rel="stylesheet" href="css/style.css?v=mug15ksr">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -71,9 +71,12 @@
       </h1>
       <p class="sub" style="margin:2px 0">Strictly 10 words at a time · Spaced repetition without the backlog</p>
     </div>
-    <div class="stat-strip">
-      <div><div class="num" id="statHeld">0</div><div class="lbl">Words Held</div></div>
-      <div><div class="num" id="statTotal">0</div><div class="lbl">Master Vocab</div></div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div class="stat-strip">
+        <div><div class="num" id="statHeld">0</div><div class="lbl">Words Held</div></div>
+        <div><div class="num" id="statTotal">0</div><div class="lbl">Master Vocab</div></div>
+      </div>
+      <button type="button" id="btnVocabCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
     </div>
   </div>
 
@@ -108,10 +111,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug15ksr"></script>
-<script src="js/curriculum.js?v=mug15ksr"></script>
-<script src="js/app.js?v=mug15ksr"></script>
-<script src="js/tracker.js?v=mug15ksr"></script>
+<script src="js/progress-model.js?v=mug1c8s6"></script>
+<script src="js/curriculum.js?v=mug1c8s6"></script>
+<script src="js/app.js?v=mug1c8s6"></script>
+<script src="js/tracker.js?v=mug1c8s6"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -342,6 +345,17 @@ document.getElementById("filterChips").addEventListener("click", e => {
   currentFilter = b.dataset.filter;
   load10Words();
 });
+
+// Copy Learner Dossier
+const btnDossier = document.getElementById("btnVocabCopyDossier");
+if (btnDossier) {
+  btnDossier.onclick = () => {
+    copyLearnerDossier().then(() => {
+      btnDossier.textContent = "✓ Copied Dossier (Markdown)!";
+      setTimeout(() => btnDossier.textContent = "📄 Copy Learner Dossier", 2000);
+    });
+  };
+}
 </script>
 </body>
 </html>

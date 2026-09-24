@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug15ksr">
-  <link rel="stylesheet" href="css/style.css?v=mug15ksr">
+  <link rel="stylesheet" href="css/fonts.css?v=mug1c8s6">
+  <link rel="stylesheet" href="css/style.css?v=mug1c8s6">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -83,6 +83,21 @@
       <summary style="cursor:pointer;font-weight:700;font-size:16px">💬 Sentences Drilled in Class</summary>
       <div id="sentencesContainer">Loading sentences…</div>
     </details>
+
+    <!-- 4. Speak with AI (Preply Lesson Practice) -->
+    <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
+      <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <span>🗣 Speak with AI (Preply Lesson Practice)</span>
+        <div style="display:flex;gap:6px">
+          <button type="button" id="btnClassCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Dossier</button>
+          <button type="button" id="btnClassCopyPrompt" class="small primary">📋 Copy Voice Prompt</button>
+        </div>
+      </summary>
+      <p style="font-size:12.5px;color:var(--muted);margin:8px 0 6px">
+        Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (Samer flat dialogue, housing vocabulary, days of the week, and variations).
+      </p>
+      <div id="classAiPromptText" style="max-height:160px;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:monospace;white-space:pre-wrap;margin-top:6px">Loading prompt…</div>
+    </details>
   </div>
 
   <!-- 4. UNTIMED MASTERY TEST -->
@@ -116,10 +131,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug15ksr"></script>
-<script src="js/curriculum.js?v=mug15ksr"></script>
-<script src="js/app.js?v=mug15ksr"></script>
-<script src="js/tracker.js?v=mug15ksr"></script>
+<script src="js/progress-model.js?v=mug1c8s6"></script>
+<script src="js/curriculum.js?v=mug1c8s6"></script>
+<script src="js/app.js?v=mug1c8s6"></script>
+<script src="js/tracker.js?v=mug1c8s6"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -212,6 +227,62 @@ function renderVocabAndSentences() {
       </div>
     </div>
   `).join("");
+
+  // AI Voice Prompt for Sunday Lesson
+  const classPrompt = buildClassAiPrompt(cls);
+  const promptEl = document.getElementById("classAiPromptText");
+  if (promptEl) promptEl.textContent = classPrompt;
+  const btnPrompt = document.getElementById("btnClassCopyPrompt");
+  if (btnPrompt) {
+    btnPrompt.onclick = () => {
+      navigator.clipboard.writeText(classPrompt).then(() => {
+        btnPrompt.textContent = "✓ Copied Voice Prompt!";
+        setTimeout(() => btnPrompt.textContent = "📋 Copy Voice Prompt", 2000);
+      });
+    };
+  }
+  const btnDossier = document.getElementById("btnClassCopyDossier");
+  if (btnDossier) {
+    btnDossier.onclick = () => {
+      copyLearnerDossier({ sentences: cls.sentences.slice(0, 8) }).then(() => {
+        btnDossier.textContent = "✓ Copied Dossier!";
+        setTimeout(() => btnDossier.textContent = "📄 Copy Dossier", 2000);
+      });
+    };
+  }
+}
+
+function buildClassAiPrompt(cls) {
+  let p = `Role: You are a warm, supportive Modern Standard Arabic (MSA) speaking partner for Reza (beginner, A1 level).\n\n`;
+  p += `Context: I just finished my weekly Preply teacher lesson: "${cls.title || 'Bayna Yadayk Unit 1: The Flat & Family'}".\n`;
+  p += `Here is the reading dialogue we covered (Samer looking for a flat):\n`;
+  if (cls.reading && cls.reading.lines) {
+    cls.reading.lines.forEach((line, idx) => {
+      p += `${idx + 1}. ${line.ar} — "${line.en}"\n`;
+    });
+  }
+  p += `\nClass Sentences Drilled:\n`;
+  cls.sentences.slice(0, 8).forEach((s, idx) => {
+    p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
+  });
+  p += `\nKey Class Vocabulary:\n`;
+  p += `- Housing: flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة)\n`;
+  p += `- Days: Saturday to Friday (السَّبْت، الأَحَد، الاِثْنَيْن، الثُّلَاثَاء، الأَرْبِعَاء، الخَمِيس، الجُمُعَة)\n`;
+  p += `- Relatives & Dual: maternal uncle/aunt (خَال / خَالَة), duals (خَالَانِ / خَالَتَانِ)\n\n`;
+  p += `Goal & Voice Mode Instructions:\n`;
+  p += `1. Roleplay: You are an apartment owner or landlord in an Arab city, and I am looking for a flat (like Samer).\n`;
+  p += `2. Actively prompt me to speak and drill natural variations of our class sentences and dialogue:\n`;
+  p += `   - Ask which floor the flat is on (الطَّابِق الأَوَّل / الثَّانِي / الثَّالِث).\n`;
+  p += `   - Ask how many rooms are in the flat (غُرْفَتَانِ / ثَلَاث غُرَف).\n`;
+  p += `   - Ask what furniture is in the kitchen and bedroom (فُرْن، ثَلَّاجَة، سَرِير).\n`;
+  p += `   - Practice setting a day to visit using the days of the week (e.g. يَوْم السَّبْت / يَوْم الأَحَد).\n`;
+  p += `   - Ask about who will live in the flat (family relatives).\n`;
+  p += `3. Strict Voice Mode Rules:\n`;
+  p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;
+  p += `   - NEVER give long monologues or lectures.\n`;
+  p += `   - Ask me ONE question or prompt at a time, then PAUSE and wait for me to speak.\n`;
+  p += `   - If I make a mistake, gently model the correct phrase and ask me to repeat it once.\n`;
+  return p;
 }
 
 function scrollToTest() {

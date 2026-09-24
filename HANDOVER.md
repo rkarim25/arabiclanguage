@@ -92,3 +92,5 @@ The site was simplified from a click-heavy, multi-page app with 28-lesson shelve
 - **Favourite Qari & Natural Audio:**
   - Qur'an recitation strictly uses **Mishary Rashid Alafasy** (surahs, ayahs, and word-by-word clips).
   - Everyday sentences and vocabulary must use natural pre-generated neural audio (`ar-SA-HamedNeural` and `en-GB-RyanNeural` via `scripts/gen-audio.py`), never robotic browser fallback.
+- **Variation-First AI Voice Practice:** AI voice prompts on `index.html` and `class.html` must always list the exact 10 target sentences and instruct ChatGPT/Claude to drill natural variations (swapping nouns, pronouns, numbers, question forms) in short 1-2 sentence conversational turns with full tashkeel.
+- **Learner Context Dossier (`LEARNER_CONTEXT.md`):** Keep this markdown dossier up to date with his active vocabulary envelope and pedagogical constraints so external LLM tutors never drift into unknown vocabulary or colloquial dialects.

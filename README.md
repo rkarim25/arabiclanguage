@@ -96,6 +96,10 @@ All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress,
   - **Favourite Qari (Mishary Rashid Alafasy):** All Quran recitation uses Reza's favourite Qari, **Mishary Rashid Alafasy** (full surah/ayah streams from `everyayah.com/data/Alafasy_64kbps/`, word-by-word clips from `audio.qurancdn.com/wbw/` mapped in `data/quran-word-audio.json`). Ayat and Quran words are never synthesized with robotic TTS.
   - **Natural Everyday Voices:** All high-frequency sentence frames, chapter lessons, and vocabulary are pre-generated using natural neural TTS (`ar-SA-HamedNeural` for clear Saudi MSA; `en-GB-RyanNeural` for British English) via `scripts/gen-audio.py` into `audio/ar/` and `audio/en/` with hashes mapped in `data/audio-manifest.json`. Browser speech synthesis is strictly an offline fallback and automatically ranks natural Saudi MSA neural voices highest.
 
+- **AI Voice Prompts & Learner Context Dossier (`LEARNER_CONTEXT.md`):**
+  - **Variation-First Voice Prompts:** 1-click prompts on `index.html` and `class.html` dynamically list the unit's 10 target sentences (or class dialogue lines) and command ChatGPT / Claude Voice Mode to drill natural variations (swapping nouns, pronouns, numbers, question forms) in short turns (max 2 sentences, full vowels/tashkeel, gentle correction).
+  - **Learner Context Dossier:** A comprehensive, attachable/exportable Markdown document (`LEARNER_CONTEXT.md`) defining Reza's active vocabulary, master progress, and pedagogical boundaries. The site includes 1-click buttons (`📄 Copy Learner Dossier`) that dynamically read live local storage and serialize up-to-the-minute progress into Markdown so AI tutors never drift into unknown vocabulary or colloquial dialects.
+
 Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
 ## Infrastructure

@@ -78,10 +78,10 @@ Rebuilt into a calm **Book Reader** and focused **10-Word Drill** to remove butt
 
 | Page | What it is |
 |---|---|
-| `index.html` | **Daily Book Reader.** A single clean spread: 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click AI voice prompt + 5-min test. |
-| `class.html` | **Preply Live Lessons.** Your Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test**. |
+| `index.html` | **Daily Book Reader.** A single clean spread: 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click dynamic AI voice prompt (drilling sentence variations) + 1-click Learner Context Dossier export + 5-min test. |
+| `class.html` | **Preply Live Lessons.** Your Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test** and tailored AI voice prompt. |
 | `sentences.html` | **Sentences Library & Drill.** Full view and inventory of all sentence frames, with tense filters (past/present/future) and practice builder. |
-| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses) and 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`). |
+| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses), 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`), and 1-click Vocabulary Dossier export. |
 | `grammar.html` | **Grammar Reference.** The full ordered list of grammar patterns and structural rules taught across the curriculum. |
 | `more.html` | Cloud sync card, backup, and legacy tools. |
 | `archive/` | Documented index and fallback links for superseded pages (stories, old vocab lab, progress audit). |
@@ -91,6 +91,8 @@ Rules:
 - **Untimed on Sunday:** Preply class mastery tests have NO countdown clock. Mastery is proven by $\ge 80\%$ score at your own pace.
 - **No backlog dread:** Vocabulary practice is always strictly 10 words. Never "100 cards due".
 - **Grammar on need-basis only:** Grammar patterns are integrated conditionally inside the reading spread, never as standalone lectures.
+- **Variation-first AI Voice Practice:** AI voice prompts explicitly list the 10 target sentences and instruct ChatGPT/Claude to drill variations (noun/pronoun swaps, question formation) in short 1-2 sentence conversational turns with full tashkeel.
+- **Vocabulary Boundary via Dossier:** Reza attaches or copies the Markdown dossier (`LEARNER_CONTEXT.md`) into ChatGPT/Claude so the AI tutor respects his exact vocabulary envelope without drifting into unknown words or colloquial dialects.
 
 ---
 
