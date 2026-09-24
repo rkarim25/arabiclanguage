@@ -23,11 +23,13 @@ The site was simplified from a click-heavy, multi-page app with 28-lesson shelve
 ```
   📖 HOME (`index.html`)        Daily Book Reader: 10 sentences + Qur'an + AI speak + 5-min test
   🧑‍🏫 LESSONS (`class.html`)   Preply Teacher Lessons (e.g. 30 Aug Samer) + Untimed Mastery Test
+  ✍️ SENTENCES (`sentences.html`) Full inventory of high-frequency sentences & verb frame practice
   📇 WORDS (`words.html`)       10-Word Drill: 10 words at a time + Audio (pauses) + 5 rating pills
+  📐 GRAMMAR (`grammar.html`)   Full reference of grammar patterns and structural rules
   ☁ SYNC (`more.html#syncCard`) Cloudflare KV sync for logs, SRS, and coach notes
 ```
 
-### The 3 Active Destinations:
+### The 5 Active Destinations:
 
 1. **`index.html` (The Daily Chapter Reader):**
    - **10 High-Frequency Sentences:** Situational and verb frames. Features: individual 🔊, "▶ Play All", and "⏸ Play with Pauses" (Arabic $\rightarrow$ 3.5s pause $\rightarrow$ English translation).
