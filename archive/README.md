@@ -21,6 +21,7 @@ The site was streamlined to eliminate clicking fatigue and decision overload, ce
 | `placement.html` | Audio multiple-choice placement exam. | Diagnostic tool used during initial calibration. | Accessible via `placement.html`. |
 | `keyboard.html` | Interactive phonetic and on-screen Arabic keyboard guide. | Typing was de-prioritized as Reza's primary goals are Qur'an by ear and spoken conversation. | Accessible via `keyboard.html`. |
 | `converse.html` | AI scenario selector and oral exam briefing copy-paste tool. | Integrated directly into `index.html` as the 1-click "📋 Copy Prompt for AI Voice" card. | Accessible via `converse.html`. |
+| `map.html` | Long-term CEFR progress ladder, milestone criteria, and corpus completion audit. | Dropped on learner's request (2026-09-24). Seeing "0/21 milestones" and "1997 corpus items" caused demotivation and backlog anxiety. Progress is now tracked simply through direct chapter mastery badges and Sunday class test passes. | Accessible via `map.html` if ever needed. |
 
 ---
 
