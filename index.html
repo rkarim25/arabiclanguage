@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug0buyj">
-  <link rel="stylesheet" href="css/style.css?v=mug0buyj">
+  <link rel="stylesheet" href="css/fonts.css?v=mug0dr26">
+  <link rel="stylesheet" href="css/style.css?v=mug0dr26">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -78,6 +78,13 @@
     </div>
   </div>
 
+  <!-- Coach's notes card (populated when coach replies to pen notes) -->
+  <div class="card" id="coachCard" style="display:none;border-color:var(--accent);background:var(--accent-soft)">
+    <h2 style="font-size:16px;margin:0 0 6px">🧑‍🏫 Coach's Note <span style="font-weight:400;font-size:12.5px;color:var(--muted)" id="coachDate"></span></h2>
+    <p id="coachNote" style="font-size:14.5px;line-height:1.6;margin:0 0 8px"></p>
+    <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:13.5px"></ul>
+  </div>
+
   <!-- Audio Controls -->
   <div class="audio-bar">
     <span style="font-size:13px;font-weight:700;color:var(--ink)">🎧 Audio:</span>
@@ -144,10 +151,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug0buyj"></script>
-<script src="js/curriculum.js?v=mug0buyj"></script>
-<script src="js/app.js?v=mug0buyj"></script>
-<script src="js/tracker.js?v=mug0buyj"></script>
+<script src="js/progress-model.js?v=mug0dr26"></script>
+<script src="js/curriculum.js?v=mug0dr26"></script>
+<script src="js/app.js?v=mug0dr26"></script>
+<script src="js/tracker.js?v=mug0dr26"></script>
+<script src="js/account.js?v=mug0dr26"></script>
 <script>
 renderNav("home");
 trackPage("home");
