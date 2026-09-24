@@ -89,3 +89,6 @@ The site was simplified from a click-heavy, multi-page app with 28-lesson shelve
 - **Keep it short:** Reza's time is scarce. Under 10 lines of explanation, then the question.
 - **Zero backlog dread:** Never show "73 cards due". Keep vocabulary drills to 10 words.
 - **Untimed on mastery:** Preply lesson tests must remain untimed.
+- **Favourite Qari & Natural Audio:**
+  - Qur'an recitation strictly uses **Mishary Rashid Alafasy** (surahs, ayahs, and word-by-word clips).
+  - Everyday sentences and vocabulary must use natural pre-generated neural audio (`ar-SA-HamedNeural` and `en-GB-RyanNeural` via `scripts/gen-audio.py`), never robotic browser fallback.

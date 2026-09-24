@@ -1719,11 +1719,14 @@ function translitAr(word) {
 let _arVoice = null, _enVoice = null;
 function _voiceScore(v) {
   const n = (v.name || "").toLowerCase();
+  const l = (v.lang || "").toLowerCase();
   let s = 0;
-  if (n.includes("natural") || n.includes("neural")) s += 8;
+  if (n.includes("natural") || n.includes("neural")) s += 10;
+  if (n.includes("online")) s += 3;
   if (n.includes("premium") || n.includes("enhanced")) s += 6;
-  if (n.includes("google")) s += 5;
-  if (n.includes("online")) s += 2;
+  if (n.includes("shakir") || n.includes("hamed") || n.includes("zariyah")) s += 5;
+  if (n.includes("google")) s += 4;
+  if (l === "ar-sa" || l === "ar_sa") s += 4;
   if (v.localService === false) s += 1;
   return s;
 }
@@ -1843,6 +1846,9 @@ document.addEventListener("click", e => {
    a question again. */
 let _speakWait = 0;
 function speak(text, rate, onend) {
+  if (typeof text === "string" && text.includes("%")) {
+    try { text = decodeURIComponent(text); } catch (e) {}
+  }
   if (!_audioMan && _audioManLoading) {
     stopSpeak();
     const id = ++_speakWait;
@@ -1994,7 +2000,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mug0yvkr";
+const DATA_V = "mug15ksr";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

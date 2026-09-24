@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug0yvkr">
-  <link rel="stylesheet" href="css/style.css?v=mug0yvkr">
+  <link rel="stylesheet" href="css/fonts.css?v=mug15ksr">
+  <link rel="stylesheet" href="css/style.css?v=mug15ksr">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -173,11 +173,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug0yvkr"></script>
-<script src="js/curriculum.js?v=mug0yvkr"></script>
-<script src="js/app.js?v=mug0yvkr"></script>
-<script src="js/tracker.js?v=mug0yvkr"></script>
-<script src="js/account.js?v=mug0yvkr"></script>
+<script src="js/progress-model.js?v=mug15ksr"></script>
+<script src="js/curriculum.js?v=mug15ksr"></script>
+<script src="js/app.js?v=mug15ksr"></script>
+<script src="js/tracker.js?v=mug15ksr"></script>
+<script src="js/account.js?v=mug15ksr"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -404,6 +404,7 @@ let isAudioRunning = false;
 /* Initialise page */
 (async () => {
   try {
+    loadQuranWordAudio();
     const res = await fetch("data/verses.json");
     VERSES_DATA = await res.json();
   } catch (e) { console.error("Could not load verses", e); }
@@ -476,19 +477,19 @@ function renderQuranSection(surahId) {
   const surah = (VERSES_DATA.surahs || []).find(s => s.id === surahId);
   if (!surah) { qDiv.textContent = "Surah data not found."; return; }
 
-  document.getElementById("quranTitle").textContent = `2. Qur'an: ${surah.nameEn}`;
+  document.getElementById("quranTitle").innerHTML = `2. Qur'an: ${surah.nameEn} <span style="font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;margin-left:6px">🎙 Qari: Mishary Rashid Alafasy</span>`;
   document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
 
-  qDiv.innerHTML = surah.verses.slice(0, 5).map(v => `
+  qDiv.innerHTML = surah.verses.slice(0, 5).map((v, vIdx) => `
     <div class="q-verse">
       <div style="display:flex;justify-content:space-between;align-items:baseline">
         <span class="q-ref">${v.ref}</span>
-        <button class="small" onclick="playSingleSentence('${encodeURIComponent(v.ar)}')">🔊 Recite</button>
+        <button class="small" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})">🔊 Recite</button>
       </div>
       <div class="q-ar">${v.ar}</div>
       <div class="q-wbw-tray">
-        ${v.words.map(w => `
-          <div class="q-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[3] || ''}">
+        ${v.words.map((w, wIdx) => `
+          <div class="q-chip" onclick="speakQuranWord('${surah.id}', ${vIdx}, ${wIdx}, '${(w[0] || '').replace(/'/g, "\\'")}')" title="${w[3] || ''}">
             <span class="ar-w">${w[0]}</span>
             <span class="en-w">${w[2]}</span>
           </div>
@@ -502,6 +503,11 @@ function renderQuranSection(surahId) {
     const items = surah.verses.map((v, i) => ({ n: surah.n, ayah: i + 1 }));
     playRecitation(items);
   };
+}
+
+function playQuranAyah(surahN, ayahN) {
+  stopAllAudio();
+  playRecitation([{ n: surahN, ayah: ayahN }]);
 }
 
 /* AUDIO ENGINE: Single, Play All, and Play with Pauses */

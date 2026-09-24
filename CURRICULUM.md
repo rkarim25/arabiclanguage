@@ -279,6 +279,19 @@ slipping. This is why review never appears as a chore or a "73 due" wall.
 A hands-free pass is honest about what it is: exposure, not proof. It says so on
 the finish screen, and the lesson still needs its test.
 
+### Audio & Reciter Specification
+
+Audio is central to Reza's ranked-first goal (understanding the Qur'an by ear):
+- **Qur'an Recitation (Mishary Rashid Alafasy):**
+  - All Quran audio strictly uses Reza's favourite Qari, **Mishary Rashid Alafasy**.
+  - **Full Ayah & Surah streaming:** Sourced directly from `https://everyayah.com/data/Alafasy_64kbps/`.
+  - **Word-by-word clips:** Sourced from `https://audio.qurancdn.com/wbw/` mapped in `data/quran-word-audio.json`.
+  - *Tajwīd, madd, and waqf* are the exact skills being learned; an ayah is never slot-substituted or played through synthetic TTS.
+- **Natural Everyday MSA & English Audio:**
+  - Every high-frequency sentence and vocabulary item must sound completely natural.
+  - Audio clips are pre-generated using neural TTS (`ar-SA-HamedNeural` for clear, steady Saudi MSA; `en-GB-RyanNeural` for natural British English) via `scripts/gen-audio.py` into `audio/ar/` and `audio/en/` with SHA-1 hash lookup in `data/audio-manifest.json`.
+  - Browser speech synthesis is strictly a graceful fallback and automatically ranks natural Saudi MSA neural voices (`Microsoft Shakir Online`, `Microsoft Hamed Online`) highest.
+
 ## 6. Levels
 
 Two tracks, each with its own CEFR level and can-do line — his goals are ranked

@@ -92,6 +92,10 @@ All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress,
 - **Conversation scenarios**: append to `data/conversations.json` `scenarios[]` — `{id, titleEn, titleAr, clusters[] (existing everyday ids), goal, opener, openerTr, success}`. The briefing pulls the clusters' words as target vocab.
 - **Mnemonics**: add to `data/mnemonics.json`, keyed by normalized/al-stripped Arabic (`mnemFor()` in vocab.html; a first-word fallback covers phrases). The vocab 💡 toggle reveals it. **HARD RULE: only add a mnemonic if it's RIDICULOUS but NOT tenuous** — a strong, obvious sound/meaning hook drawing on Reza's English AND Bengali (Bengali shares many Perso-Arabic loanwords: রসূল, কিতাব, নজর, আজান, রহিম…). **Most words should have NO mnemonic — never force a weak/tenuous one.** Grow the file as his vocabulary grows.
 
+- **Audio & Reciter Engine (`scripts/gen-audio.py`, `js/app.js`):**
+  - **Favourite Qari (Mishary Rashid Alafasy):** All Quran recitation uses Reza's favourite Qari, **Mishary Rashid Alafasy** (full surah/ayah streams from `everyayah.com/data/Alafasy_64kbps/`, word-by-word clips from `audio.qurancdn.com/wbw/` mapped in `data/quran-word-audio.json`). Ayat and Quran words are never synthesized with robotic TTS.
+  - **Natural Everyday Voices:** All high-frequency sentence frames, chapter lessons, and vocabulary are pre-generated using natural neural TTS (`ar-SA-HamedNeural` for clear Saudi MSA; `en-GB-RyanNeural` for British English) via `scripts/gen-audio.py` into `audio/ar/` and `audio/en/` with hashes mapped in `data/audio-manifest.json`. Browser speech synthesis is strictly an offline fallback and automatically ranks natural Saudi MSA neural voices highest.
+
 Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
 
 ## Infrastructure

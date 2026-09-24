@@ -128,6 +128,28 @@ for v in sen["verbs"]:
             en_verb = v["past"] if tk == "past" else ("will " + v["base"] if tk == "fut" else v["base"])
             add("en", f'{PERSON_EN.get(pk, pk)} {en_verb} {v["obj"]["en"]}')
 
+# Chapter sentences from index.html (Daily Reader)
+try:
+    index_txt = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
+    for m in re.finditer(r'{\s*ar:\s*"([^"]+)",\s*en:\s*"([^"]+)"', index_txt):
+        add("ar", m.group(1))
+        add("en", m.group(2))
+except Exception as e:
+    print("Warning: could not parse index.html chapters", e)
+
+# Preply classes and sentences from data/classes.json
+try:
+    classes_data = loadd("classes.json")
+    for cls in classes_data.get("classes", []):
+        for s in cls.get("sentences", []):
+            add("ar", s.get("ar"))
+            add("en", s.get("en"))
+        for v in cls.get("vocabulary", []):
+            add("ar", v.get("ar"))
+            add("en", v.get("en"))
+except Exception as e:
+    print("Warning: could not parse classes.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 
