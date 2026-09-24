@@ -29,17 +29,16 @@ Non-negotiable design rules (learned from Reza's feedback — do not violate):
 - **Zero maintenance for Reza**: he studies; Claude generates content, analyzes, deploys. Data flows automatically.
 - **Mobile-friendly**: he studies on his phone; keep pages responsive (media queries in `css/style.css`).
 
-## Site map
+## Site map (Rebuilt September 2026)
 
 | Page | What it does |
 |---|---|
-| `index.html` | **Home.** Two levels and what you hold, ▶ Lesson / 🚗 Commute, the shelf (four weeks of seven ~7-minute lessons), the 🧑‍🏫 Sunday's class card (class-prep chips, readiness), coach's notes, and the 📥 offline-pack line. |
-| `learn.html` | **The doing.** Runs one lesson on screen or hands-free (`?lesson=`, `?mode=hands`) or a test at any scope (`?test=1&lesson=`, `?lessons=`, `?class=`). Retakes ask only the lessons that scored under 80. |
-| `map.html` | **Progress.** Both tracks with every criterion, the ladder, pace — only things he can check. |
-| `class.html` | **Lessons.** The class repository (`data/classes.json`, generated). |
-| `sentences.html` · `words.html` · `grammar.html` | The nav's Sentences / Words / Others tabs: free sentence practice, the word inventory, grammar and the other engines. |
-| `more.html` | ☁ sign-in & sync **first**, then the full inventory: free practice, stories, Qur'an, audio coach, speaking, conversation partner, placement test, keyboard, manual backup. |
-| `vocab.html` `story.html` `stories.html` `quran.html` `audio.html` `speaking.html` `converse.html` `review.html` `placement.html` `keyboard.html` | **Engines** a lesson runs on. Reachable from More and from lessons; never destinations. |
+| `index.html` | **Daily Book Reader.** 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click AI voice prompt + 5-min test. |
+| `class.html` | **Preply Lessons.** Live Sunday teacher classes (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test**. |
+| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses) and 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`). |
+| `map.html` | **Progress.** CEFR capability ladder and milestone achievements. |
+| `more.html` | Cloud sync card, backup, and legacy tools. |
+| `archive/` | Catalog and fallbacks for superseded engines (`stories.html`, `story.html`, `vocab.html`, `placement.html`). |
 
 Removed 2026-09-05 as leftovers of earlier shapes: `test.html` (milestone tests), `week.html` (the objective week), and the coach-set `week` object with its self-seeder — nothing had read them since the 30 Aug shelf.
 

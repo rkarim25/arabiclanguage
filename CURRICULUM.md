@@ -72,38 +72,24 @@ i.e. whole utterances; everything else counts as a word.
 
 ---
 
-## 3. The shape of the site
+## 3. The shape of the site (Updated 2026-09-24)
 
-Eleven top-level tabs became four, and then **three** (2026-08-30: Vocabulary left
-the nav when the sentence became the unit of study — `vocab.html` and `review.html`
-survive as engines, reachable from Progress). After:
-
-> "the whole website needs to be much more simplified rather than story based …
-> is it possible to simplify it further, where either i just do a standard lesson
-> or a commute version … in addition to that there should be a free vocab learn
-> and review and free sentence building and review."
+Rebuilt into a calm **Book Reader** and focused **10-Word Drill** to remove button-clicking fatigue and choice overload:
 
 | Page | What it is |
 |---|---|
-| `index.html` | **Home.** Two levels, what you hold, the milestone you're on, and **the shelf: four weeks of seven lessons**, each with learn / hands-free / test. |
-| `sentences.html` | **Free sentence practice** — and, since 2026-08-30, the only vocabulary destination in the nav. |
-| `learn.html` | **The doing.** Runs one lesson (normal or hands-free), or runs a test at any scope. Nothing else. |
-| `map.html` | **The long view.** Both goals, each level with its criteria, every milestone under the level it feeds, pace, and the old forecast model behind a disclosure. |
-| `more.html` | Everything else: free practice, the engines, sync and backup. |
+| `index.html` | **Daily Book Reader.** A single clean spread: 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click AI voice prompt + 5-min test. |
+| `class.html` | **Preply Live Lessons.** Your Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test**. |
+| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses) and 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`). |
+| `map.html` | **Progress & Capability.** Clear CEFR capability ladder and milestone status. |
+| `more.html` | Cloud sync card, backup, and legacy tools. |
+| `archive/` | Documented index and fallback links for superseded pages (stories, old vocab lab). |
 
 Rules:
-
-- **Continue is always there**, but the shelf lets him pick any lesson in the week.
-  Hands-free is offered per lesson, never as a rival destination.
-- **Exercise types are never a menu.** Stories, grammar, Qur'an, audio and
-  speaking are *engines* a lesson runs on. He never picks between them.
-- **Free practice sits outside the plan** (vocabulary, sentences) and is always
-  available. It doesn't count toward a milestone, but anything it brings to solid
-  is still examined — learning counts wherever it happened.
-- **No new top-level destination without removing one.** The eleven-tab sprawl
-  happened one reasonable-looking addition at a time.
-- The site is called **Arabic** (العربية). Stories are one exercise type now, not
-  the organising idea.
+- **Zero-decision daily sitting:** Open `index.html` $\rightarrow$ listen/read the 10 sentences + ayats $\rightarrow$ take 5-min test. Done.
+- **Untimed on Sunday:** Preply class mastery tests have NO countdown clock. Mastery is proven by $\ge 80\%$ score at your own pace.
+- **No backlog dread:** Vocabulary practice is always strictly 10 words. Never "100 cards due".
+- **Grammar on need-basis only:** Grammar patterns are integrated conditionally inside the reading spread, never as standalone lectures.
 
 ---
 

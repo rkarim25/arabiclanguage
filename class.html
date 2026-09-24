@@ -7,179 +7,359 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Lessons — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mu353e7f">
-  <link rel="stylesheet" href="css/style.css?v=mu353e7f">
+  <title>Preply Lessons — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mug0buyj">
+  <link rel="stylesheet" href="css/style.css?v=mug0buyj">
   <style>
-    .cnt { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; margin: 10px 0 0; }
-    .cnt .n { font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .cnt .l { font-size: 12.5px; color: var(--muted); }
-    .tbl { width: 100%; border-collapse: collapse; font-size: 15px; }
-    .tbl td { padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    .tbl .ar { font-size: 21px; text-align: right; width: 34%; font-family: var(--font-ar); }
-    .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px;
-           background: var(--accent-soft); color: var(--accent); margin-left: 6px; vertical-align: middle; }
-    .tag.add { background: var(--border); color: var(--muted); }
-    .held { color: var(--accent); font-weight: 700; }
-    .srow { padding: 9px 0; border-bottom: 1px solid var(--border); }
-    .srow .a { font-size: 20px; direction: rtl; text-align: right; font-family: var(--font-ar); }
-    .srow .e { font-size: 13.5px; color: var(--muted); }
-    details.sec { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
-    details.sec > summary { cursor: pointer; font-weight: 700; font-size: 15.5px; list-style: none; display: flex;
-                            justify-content: space-between; gap: 10px; align-items: baseline; }
-    details.sec > summary::-webkit-details-marker { display: none; }
-    .qn { font-size: 14.5px; line-height: 1.7; margin: 0 0 8px; padding-left: 18px; text-indent: -18px; }
+    .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
+    @media (prefers-color-scheme: dark) { .passage-box { background: rgba(255,255,255,0.03); } }
+    .passage-line { padding: 12px 0; border-bottom: 1px dashed var(--border); }
+    .passage-line:last-child { border-bottom: none; }
+    .p-ar { font-family: var(--font-ar); font-size: 24px; line-height: 2.0; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 6px; }
+    .p-wbw { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 6px 0; }
+    .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--card); font-size: 13px; cursor: pointer; }
+    .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--accent); display: block; }
+    .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; }
+    .p-en { font-size: 14px; color: var(--muted); margin-top: 4px; }
+    
+    .tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14.5px; }
+    .tbl td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .tbl .ar { font-family: var(--font-ar); font-size: 21px; width: 35%; text-align: right; direction: rtl; color: var(--accent); }
+    
+    /* Untimed Test Box */
+    .mastery-test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 20px; background: var(--card); margin: 24px 0; }
+    .q-choice { display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 7px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14.5px; }
+    .q-choice:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .q-choice.correct { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+    .q-choice.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+
+    /* Paste Box */
+    .paste-card { background: #faf8f5; border: 1px dashed var(--border); border-radius: 14px; padding: 18px; margin-top: 30px; }
   </style>
 </head>
 <body>
 <main>
-  <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <span>Lessons</span>
-    <span class="arabic" style="color:var(--accent)" dir="rtl">الدُّرُوس</span>
-  </h1>
-  <p class="sub">The record of every lesson your teacher has given — what was covered, and where each
-  part of it went. A class is never stored as a class: it is split into <strong>vocabulary</strong>,
-  <strong>sentences</strong>, <strong>grammar</strong> and a <strong>reading</strong> passage, and each
-  part goes into the file that teaches that kind of thing. Nothing here is a copy — every row is the live
-  card, so what it says about you is what the rest of the site says.</p>
-  <div id="out">Loading…</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+    <div>
+      <span class="class-tag">🧑‍🏫 Live Preply Teacher Lessons</span>
+      <h1 style="margin:4px 0">Sunday Classes &amp; Untimed Mastery</h1>
+      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word hover, and an untimed mastery test.</p>
+    </div>
+    <span id="lessonStatusBadge" class="status-pill" style="font-size:13px;padding:6px 14px">Checking status…</span>
+  </div>
+
+  <!-- LESSON 1: 30 AUG 2026 — SAMER LOOKS FOR A FLAT -->
+  <div class="card" style="border-top: 4px solid var(--accent)">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+      <div>
+        <span style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 1 · 30 AUG 2026</span>
+        <h2 style="margin:2px 0 6px">The Flat, The Week &amp; The Family (سَامِر يَبْحَثُ عَنْ شَقَّةٍ)</h2>
+      </div>
+      <button type="button" class="primary" onclick="scrollToTest()">📝 Take Untimed Test</button>
+    </div>
+    <p style="font-size:14.5px;line-height:1.6;margin:8px 0 16px">
+      From your Preply teacher: <b>Bayna Yadayk Unit 1</b>. Housing vocabulary (flat, room by room, furniture), the seven days of the week, relatives on mother's side with dual forms (خَال / خَالَانِ), and the reading dialogue about Samer searching for a flat.
+    </p>
+
+    <!-- 1. The Reading Passage (Samer) -->
+    <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
+      <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between">
+        <span>📖 Reading Dialogue: Samer Looks for a Flat</span>
+        <span style="color:var(--accent);font-size:13px">Tap any word for English</span>
+      </summary>
+      <div class="passage-box" id="passageContainer">Loading passage…</div>
+    </details>
+
+    <!-- 2. Class Vocabulary -->
+    <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
+      <summary style="cursor:pointer;font-weight:700;font-size:16px">📇 Class Vocabulary (Flat, Week &amp; Relatives)</summary>
+      <div id="vocabContainer" style="overflow-x:auto">Loading vocabulary…</div>
+    </details>
+
+    <!-- 3. Class Sentences -->
+    <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
+      <summary style="cursor:pointer;font-weight:700;font-size:16px">💬 Sentences Drilled in Class</summary>
+      <div id="sentencesContainer">Loading sentences…</div>
+    </details>
+  </div>
+
+  <!-- 4. UNTIMED MASTERY TEST -->
+  <div class="mastery-test-box" id="testBox">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <div>
+        <h2 style="margin:0;color:var(--accent)">🏅 Untimed Mastery Test: 30 Aug Lesson</h2>
+        <p class="sub" style="margin:2px 0">No timer, no pressure. Take your time. Score 80%+ to achieve confirmed mastery.</p>
+      </div>
+      <span id="testScorePill" class="status-pill" style="font-size:13.5px">Untested</span>
+    </div>
+    <div id="testArea">
+      <button type="button" class="primary" style="font-size:15px;padding:10px 22px" onclick="startMasteryTest()">Start Untimed Test →</button>
+    </div>
+  </div>
+
+  <!-- 5. PASTE NEXT SUNDAY'S PREPLY LESSON -->
+  <div class="paste-card">
+    <h3 style="margin:0 0 6px">📥 Paste Your Next Preply Lesson</h3>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
+      After your Sunday 07:00 class, simply paste your notes or upload photos of your teacher's slides here. It will automatically be formatted into the next chapter and untimed test.
+    </p>
+    <textarea id="pasteText" placeholder="Paste class notes, sentences, or word list here..." style="width:100%;min-height:90px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:10px"></textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <label style="font-size:13px;color:var(--muted);cursor:pointer">
+        📷 Upload Slides / Photos: <input type="file" id="pasteImages" multiple accept="image/*" style="font-size:12px">
+      </label>
+      <button type="button" class="primary" onclick="submitPreplyLesson()">Save Class Lesson</button>
+    </div>
+    <div id="pasteFeedback" style="font-size:13px;color:var(--accent);margin-top:8px"></div>
+  </div>
 </main>
 
-<script src="js/progress-model.js?v=mu353e7f"></script>
-<script src="js/curriculum.js?v=mu353e7f"></script>
-<script src="js/app.js?v=mu353e7f"></script>
-<script src="js/tracker.js?v=mu353e7f"></script>
-<script src="js/plan.js?v=mu353e7f"></script>
+<script src="js/progress-model.js?v=mug0buyj"></script>
+<script src="js/curriculum.js?v=mug0buyj"></script>
+<script src="js/app.js?v=mug0buyj"></script>
+<script src="js/tracker.js?v=mug0buyj"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
 
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let STORY_DATA = null;
+let CLASS_DATA = null;
 
 (async () => {
-  const out = document.getElementById("out");
-  let data;
-  try { data = await fetch("data/classes.json").then(r => r.json()); }
-  catch (e) { out.textContent = "Couldn't load your classes."; return; }
-  const srs = getSrs();
-  const held = k => ((srs[k] || {}).box || 0) >= 3;
-
-  out.innerHTML = data.classes.map((c, ci) => {
-    const kHeld = c.keys.filter(held).length;
-    const proved = c.lessons.length;
-    const vHeld = c.vocabulary.filter(v => held(v.key)).length;
-    const sHeld = c.sentences.filter(s => s.key && held(s.key)).length;
-
-    return `
-    <div class="card" style="border-color:var(--accent)">
-      <div class="crumb" style="font-size:12.5px;color:var(--muted)">${esc(c.teacher)} · ${esc(c.date)}</div>
-      <h2 style="margin:2px 0 6px">${esc(c.title)}</h2>
-      <p style="font-size:14.5px;line-height:1.65;margin:0">${esc(c.covered)}</p>
-      <div class="cnt">
-        <div><div class="n">${c.counts.vocabulary}</div><div class="l">words · <b>${vHeld}</b> held</div></div>
-        <div><div class="n">${c.counts.sentences}</div><div class="l">sentences · <b>${sHeld}</b> held</div></div>
-        <div><div class="n">${c.counts.grammar}</div><div class="l">grammar points</div></div>
-        <div><div class="n">${c.reading ? c.reading.sentences : 0}</div><div class="l">reading sentences</div></div>
-      </div>
-      <p style="font-size:13px;color:var(--muted);margin:10px 0 0">
-        On the ladder as <strong>${proved} lessons</strong> · ${kHeld} of ${c.keys.length} cards held.</p>
-      <div class="row" style="justify-content:flex-start;margin-top:12px">
-        <a href="learn.html?class=${encodeURIComponent(c.id)}"><button class="primary">📝 Test this class</button></a>
-        ${c.reading && !c.reading.missing ? `<a href="story.html?id=${encodeURIComponent(c.reading.id)}"><button>📖 Read the passage</button></a>` : ""}
-        ${c.lessons.length ? `<a href="learn.html?lesson=${encodeURIComponent(c.lessons[0].id)}"><button>▶ First lesson</button></a>` : ""}
-      </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">The class test covers everything she gave, proved or not,
-      and each retake asks a different sample — so retaking it is how you get through all of it.</p>
-    </div>
-
-    <details class="sec" data-c="${ci}" data-k="vocab" open>
-      <summary><span>📇 Vocabulary</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${vHeld} / ${c.counts.vocabulary} held</span></summary>
-      <p style="font-size:12.5px;color:var(--muted);margin:8px 0 4px">
-        <span class="tag">hers</span> came out of the lesson · <span class="tag add">added</span> written here to make the set usable.
-        The four buttons are your spaced repetition: ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat.</p>
-      <div class="body"></div>
-    </details>
-
-    <details class="sec" data-c="${ci}" data-k="sent">
-      <summary><span>💬 Sentences</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${sHeld} / ${c.counts.sentences} held</span></summary>
-      <div class="body"></div>
-    </details>
-
-    <details class="sec" data-c="${ci}" data-k="gram">
-      <summary><span>📐 Grammar</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${c.counts.grammar} points</span></summary>
-      <div class="body"></div>
-    </details>
-
-    ${c.reading && !c.reading.missing ? `
-    <details class="sec" data-c="${ci}" data-k="read">
-      <summary><span>📖 Reading — ${esc(c.reading.titleEn)}</span><span style="font-weight:400;font-size:13px;color:var(--muted)">${c.reading.sentences} sentences</span></summary>
-      <div class="body"></div>
-    </details>` : ""}
-
-    ${c.questions.length ? `
-    <div class="card">
-      <h3 style="margin:0 0 6px;font-size:15.5px">❓ What I still need to ask you about this class</h3>
-      <p style="font-size:12.5px;color:var(--muted);margin:0 0 10px">Answer any of these next time and the material
-      gets rebuilt around it — these are the places where the photos left it ambiguous.</p>
-      ${c.questions.map(q => `<p class="qn">· ${esc(q)}</p>`).join("")}
-    </div>` : ""}
-    `;
-  }).join("");
-
-  /* Rows are rendered when a section is opened: a class is ~100 rows and every
-     vocabulary row carries a four-button bucket bar, which is a lot of DOM to
-     build for sections he may not look at. */
-  const R = {
-    vocab: c => `<table class="tbl">${c.vocabulary.map((v, i) => `
-      <tr>
-        <td class="ar">${esc(v.ar)}</td>
-        <td>
-          <span class="${held(v.key) ? "held" : ""}">${esc(v.en)}</span>
-          <span class="tag ${v.from === "teacher" ? "" : "add"}">${v.from === "teacher" ? "hers" : "added"}</span>
-          <div style="font-size:12.5px;color:var(--muted)">${esc(v.tr)}${v.note ? ` · ${esc(v.note)}` : ""}</div>
-          <div class="bucket-slot" data-key="${esc(v.key)}"></div>
-        </td>
-        <td style="width:34px"><button class="small" data-say="${esc(v.ar)}">🔊</button></td>
-      </tr>`).join("")}</table>`,
-    sent: c => c.sentences.map(s => `
-      <div class="srow">
-        <div class="a ${s.key && held(s.key) ? "held" : ""}">${esc(s.ar)}
-          <button class="small" data-say="${esc(s.ar)}">🔊</button></div>
-        <div class="e">${esc(s.en)}<span class="tag ${s.from === "teacher" ? "" : "add"}">${s.from === "teacher" ? "hers" : "written to carry her words"}</span></div>
-      </div>`).join(""),
-    gram: c => c.grammar.map(g => `
-      <div class="srow">
-        <div style="font-size:15px;font-weight:600">${esc(g.name || g.pattern)}
-          ${g.ar ? `<span class="arabic" style="color:var(--accent)"> ${esc(g.ar)}</span>` : ""}</div>
-        <div class="e">${esc(g.why)}</div>
-        <a href="grammar.html?g=${encodeURIComponent(g.pattern)}" style="font-size:13px;color:var(--accent)">the rule and its drill →</a>
-      </div>`).join("") + (c.notes.length ? `
-      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0"><b>Also noted in the material:</b></p>
-      ${c.notes.map(n => `<p class="qn" style="color:var(--muted)">· ${esc(n)}</p>`).join("")}` : ""),
-    read: c => `
-      <p style="font-size:14px;line-height:1.7">${esc(c.reading.titleEn)} — ${c.reading.sentences} sentences,
-      ${c.reading.words} words glossed one by one, ${c.reading.vocab} vocabulary cards and ${c.reading.questions} comprehension questions.
-      Tap any word in the passage to hear it and see what it is doing.</p>
-      <div class="row" style="justify-content:flex-start">
-        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=listen"><button>🎧 Listen</button></a>
-        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=read"><button class="primary">📖 Read word by word</button></a>
-        <a href="story.html?id=${encodeURIComponent(c.reading.id)}&step=quiz"><button>❓ Quiz</button></a>
-      </div>`,
-  };
-  document.querySelectorAll("details.sec").forEach(d => {
-    const fill = () => {
-      if (d.dataset.done) return;
-      d.dataset.done = "1";
-      const c = data.classes[+d.dataset.c];
-      d.querySelector(".body").innerHTML = R[d.dataset.k](c);
-      d.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.preventDefault(); speak(b.dataset.say, 0.85); });
-      d.querySelectorAll(".bucket-slot").forEach(sl => mountBucketBar(sl, sl.dataset.key));
-    };
-    d.addEventListener("toggle", () => { if (d.open) fill(); });
-    if (d.open) fill();
-  });
-  primeSpeak();
+  try {
+    const [sRes, cRes] = await Promise.all([
+      fetch("data/story-07.json").then(r => r.json()),
+      fetch("data/classes.json").then(r => r.json())
+    ]);
+    STORY_DATA = sRes;
+    CLASS_DATA = cRes;
+    renderPassage();
+    renderVocabAndSentences();
+    updateMasteryStatus();
+  } catch (e) {
+    console.error("Failed to load lesson data", e);
+  }
 })();
+
+function renderPassage() {
+  if (!STORY_DATA) return;
+  const container = document.getElementById("passageContainer");
+  container.innerHTML = STORY_DATA.sentences.map((s, idx) => `
+    <div class="passage-line">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:11.5px;color:var(--muted)">Line ${idx + 1}</span>
+        <button class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+      </div>
+      <div class="p-ar">${s.ar}</div>
+      <div class="p-wbw">
+        ${s.words.map(w => `
+          <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+            <span class="w-ar">${w[0]}</span>
+            <span class="w-en">${w[1]}</span>
+          </div>
+        `).join("")}
+      </div>
+      <div class="p-en">${s.en}</div>
+    </div>
+  `).join("");
+}
+
+function renderVocabAndSentences() {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const cls = CLASS_DATA.classes[0];
+
+  // Vocab Table
+  const vDiv = document.getElementById("vocabContainer");
+  vDiv.innerHTML = `
+    <table class="tbl">
+      <thead>
+        <tr style="text-align:left;color:var(--muted);font-size:12.5px">
+          <th>Word</th>
+          <th>English Meaning</th>
+          <th>Audio</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${cls.vocabulary.slice(0, 15).map(v => `
+          <tr>
+            <td class="ar">${v.ar}</td>
+            <td>
+              <b>${v.en}</b>
+              <div style="font-size:12px;color:var(--muted)">${v.note || v.tr || ''}</div>
+            </td>
+            <td><button class="small" onclick="speak('${encodeURIComponent(v.ar)}')">🔊</button></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  // Sentences
+  const sDiv = document.getElementById("sentencesContainer");
+  sDiv.innerHTML = cls.sentences.slice(0, 8).map(s => `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:14.5px;font-weight:600">${s.en}</div>
+        <div style="font-size:12px;color:var(--muted)">${s.from === 'teacher' ? 'Drilled with teacher' : 'Core pattern'}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="arabic" style="font-size:21px;color:var(--accent)">${s.ar}</span>
+        <button class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function scrollToTest() {
+  document.getElementById("testBox").scrollIntoView({ behavior: "smooth" });
+}
+
+function updateMasteryStatus() {
+  const log = store.get("ats-log", []);
+  const pass = log.find(x => x.e === "preply-test" && x.classId === "c-2026-08-30" && x.score >= 80);
+  const badge = document.getElementById("lessonStatusBadge");
+  const pill = document.getElementById("testScorePill");
+  if (pass) {
+    badge.textContent = `🏅 Mastered (${pass.score}%)`;
+    badge.className = "status-pill done";
+    pill.textContent = `Passed (${pass.score}%)`;
+    pill.className = "status-pill done";
+  } else {
+    badge.textContent = "To Be Mastered";
+    badge.className = "status-pill";
+    pill.textContent = "Untested";
+    pill.className = "status-pill";
+  }
+}
+
+/* UNTIMED MASTERY TEST */
+function startMasteryTest() {
+  const questions = [
+    {
+      q: "What does <b class='arabic' style='font-size:22px;color:var(--accent)'>شَقَّة</b> mean?",
+      opts: ["flat, apartment", "kitchen", "mirror"],
+      correct: 0
+    },
+    {
+      q: "How do you say <i>'bedroom'</i> in Arabic?",
+      opts: ["غُرْفَةُ جُلُوسٍ", "غُرْفَةُ نَوْمٍ", "مَطْبَخ"],
+      correct: 1
+    },
+    {
+      q: "What is the meaning of <b class='arabic' style='font-size:22px;color:var(--accent)'>مَطْبَخ</b>?",
+      opts: ["bathroom", "dining table", "kitchen"],
+      correct: 2
+    },
+    {
+      q: "How do you say <i>'Tuesday'</i> in Arabic?",
+      opts: ["يَوْمُ الأَحَدِ", "يَوْمُ الثُّلَاثَاءِ", "يَوْمُ الجُمُعَةِ"],
+      correct: 1
+    },
+    {
+      q: "In Arabic, what is <b class='arabic' style='font-size:22px;color:var(--accent)'>سَرِير</b>?",
+      opts: ["bed", "sofa", "closet"],
+      correct: 0
+    },
+    {
+      q: "Translate the class sentence: <b class='arabic' style='font-size:22px;color:var(--accent)'>لَيْسَ عِنْدِي</b>",
+      opts: ["I have two", "I don't have", "I want to look for"],
+      correct: 1
+    },
+    {
+      q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--accent)'>خَال</b> (uncle on mother's side)?",
+      opts: ["خَالَانِ", "أَخَوَات", "إِخْوَة"],
+      correct: 0
+    },
+    {
+      q: "What was Samer looking for on Sunday in the passage?",
+      opts: ["a car", "a new flat to live in", "a university book"],
+      correct: 1
+    }
+  ];
+
+  let curQ = 0, score = 0;
+  const area = document.getElementById("testArea");
+
+  function renderQ() {
+    if (curQ >= questions.length) {
+      const pct = Math.round((score / questions.length) * 100);
+      const passed = pct >= 80;
+      logEvent({ e: "preply-test", classId: "c-2026-08-30", score: pct, pass: passed });
+      updateMasteryStatus();
+      area.innerHTML = `
+        <div style="text-align:center;padding:16px">
+          <h3 style="font-size:22px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
+            ${passed ? '🏅 Class Lesson Mastered!' : 'Keep Going!'}
+          </h3>
+          <p style="font-size:16px">Your Score: <b>${pct}%</b> (${score} of ${questions.length})</p>
+          <p style="font-size:14px;color:var(--muted)">
+            ${passed ? 'You have demonstrated complete mastery of this Preply teacher lesson without time pressure.' : 'Review the vocabulary and reading passage above, then retake the test.'}
+          </p>
+          <button type="button" class="primary" onclick="startMasteryTest()" style="margin-top:10px">Retake Mastery Test</button>
+        </div>
+      `;
+      return;
+    }
+
+    const qItem = questions[curQ];
+    area.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:8px">
+        <span>Question ${curQ + 1} of ${questions.length}</span>
+        <span>Untimed · No rush</span>
+      </div>
+      <div style="font-size:16px;margin-bottom:14px">${qItem.q}</div>
+      <div>
+        ${qItem.opts.map((opt, i) => `
+          <button type="button" class="q-choice" onclick="pickMasteryAnswer(${i}, ${qItem.correct}, this)">${opt}</button>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  window.pickMasteryAnswer = (picked, correct, btn) => {
+    const btns = area.querySelectorAll(".q-choice");
+    btns.forEach(b => b.disabled = true);
+    if (picked === correct) {
+      btn.classList.add("correct");
+      score++;
+    } else {
+      btn.classList.add("wrong");
+      btns[correct].classList.add("correct");
+    }
+    setTimeout(() => { curQ++; renderQ(); }, 1200);
+  };
+
+  renderQ();
+}
+
+/* Submission of future Preply lessons */
+async function submitPreplyLesson() {
+  const text = document.getElementById("pasteText").value.trim();
+  const fileInput = document.getElementById("pasteImages");
+  const fb = document.getElementById("pasteFeedback");
+  if (!text && (!fileInput.files || !fileInput.files.length)) {
+    fb.textContent = "Please enter some notes or select image files.";
+    fb.style.color = "var(--red)";
+    return;
+  }
+  fb.textContent = "Saving lesson to your coach queue…";
+  fb.style.color = "var(--accent)";
+
+  logEvent({
+    e: "preply-paste",
+    text,
+    imageCount: fileInput.files ? fileInput.files.length : 0,
+    t: Date.now()
+  });
+
+  setTimeout(() => {
+    fb.textContent = "✓ Preply lesson captured! Coach will build your next chapter.";
+    document.getElementById("pasteText").value = "";
+    fileInput.value = "";
+  }, 1200);
+}
 </script>
 </body>
 </html>

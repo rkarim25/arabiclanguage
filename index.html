@@ -7,453 +7,534 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Arabic — العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mu353e7f">
-  <link rel="stylesheet" href="css/style.css?v=mu353e7f">
+  <title>Daily Reader — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mug0buyj">
+  <link rel="stylesheet" href="css/style.css?v=mug0buyj">
   <style>
-    .lvls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-    .lvl { flex: 1 1 240px; cursor: default; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 13px; text-decoration: none; color: inherit; }
-    .lvl b { font-size: 19px; color: var(--accent); }
-    .inv { display: flex; gap: 22px; flex-wrap: wrap; align-items: baseline; }
-    .inv .n { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .inv .l { font-size: 13px; color: var(--muted); }
-    /* THREE STATES, and they have to be readable at a glance (his ask,
-       2026-08-30: "i want the you are here to be in the lesson rather than week.
-       I want it to be clearly displayed what has been done"). Done recedes,
-       the one he is on is marked, everything else waits. */
-    .lesson { display: flex; align-items: center; gap: 10px; padding: 10px 0 10px 30px;
-              border-bottom: 1px solid var(--border); position: relative; }
-    .lesson:last-child { border-bottom: 0; }
-    .lesson .t { flex: 1; font-size: 15px; }
-    .lesson .m { font-size: 12.5px; color: var(--muted); }
-    /* the status mark sits in the gutter so the titles stay aligned */
-    .lesson .mark { position: absolute; left: 0; top: 11px; width: 20px; text-align: center;
-                    font-size: 14px; line-height: 1.4; }
-    .lesson.done .mark { color: var(--accent); font-weight: 700; }
-    .lesson.done .t { color: var(--muted); }
-    .lesson.done .t b { font-weight: 400; }
-    .lesson.todo .mark { color: var(--border); }
-    .lesson.now { background: var(--accent-soft); border-radius: 10px; padding-left: 30px;
-                  padding-right: 12px; border-bottom-color: transparent; }
-    .lesson.now .mark { color: var(--accent); left: 8px; }
-    .lesson.now .t { font-weight: 600; }
-    .here { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em;
-            text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent);
-            border-radius: 999px; padding: 1px 8px; margin-left: 8px; vertical-align: 2px; }
-    /* the last score, next to the button that produced it (his ask, 2026-08-30:
-       "denote the test i took and the score next to the test button neatly") */
-    .acts { display: flex; gap: 10px; align-items: center; white-space: nowrap; }
-    .acts a { font-size: 13px; }
-    .pill { display: inline-flex; align-items: baseline; gap: 4px; font-size: 12.5px; font-weight: 700;
-            border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .pill.pass { background: var(--accent); color: #fff; }
-    .pill.near { background: var(--accent-soft); color: var(--accent); }
-    .pill.miss { background: var(--border); color: var(--muted); }
-    .pill .lbl { font-weight: 500; opacity: .85; font-size: 11px; }
-    .acts .untested { font-size: 12px; color: var(--muted); }
-    .dots { letter-spacing: 2px; font-size: 13px; color: var(--muted); white-space: nowrap; }
-    .ms { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
-    .ms.done { border-color: var(--accent); background: var(--accent-soft); }
-    .ms h3 { margin: 0 0 2px; font-size: 15.5px; }
-    .ms p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
-    .pace { font-size: 13px; color: var(--muted); }
+    .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; background: var(--accent-soft); color: var(--accent); }
+    .status-pill.done { background: var(--accent); color: #fff; }
+    
+    /* Sentences Table */
+    .sentence-list { display: flex; flex-direction: column; gap: 10px; }
+    .s-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); transition: all 0.15s; }
+    .s-row:hover { border-color: var(--accent); }
+    .s-row.active { border-color: var(--accent); background: var(--accent-soft); }
+    .s-ar { font-family: var(--font-ar); font-size: 24px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
+    .s-meta { flex: 1; min-width: 220px; }
+    .s-en { font-size: 14.5px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+    .s-hint { font-size: 12px; color: var(--muted); }
+    .s-actions { display: flex; gap: 6px; align-items: center; }
+
+    /* Audio Toolbar */
+    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0 16px; padding: 10px 14px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; }
+    @media (prefers-color-scheme: dark) { .audio-bar { background: rgba(255,255,255,0.04); } }
+    .audio-bar button { padding: 6px 12px; font-size: 13px; font-weight: 500; }
+    .audio-bar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+    /* Quran Verse Card */
+    .q-verse { padding: 14px 0; border-bottom: 1px dashed var(--border); }
+    .q-verse:last-child { border-bottom: none; }
+    .q-ar { font-family: var(--font-ar); font-size: 26px; line-height: 2.1; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 8px; }
+    .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0; }
+    .q-chip { border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; background: var(--card); text-align: center; cursor: pointer; }
+    .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .q-chip .ar-w { font-family: var(--font-ar); font-size: 20px; color: var(--accent); display: block; }
+    .q-chip .en-w { font-size: 11px; color: var(--muted); display: block; direction: ltr; }
+    .q-trans { font-size: 14px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+    .q-ref { font-size: 12px; font-weight: 700; color: var(--amber); }
+
+    /* Conditional Grammar Box */
+    .grammar-box { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 16px 0; }
+    .grammar-box h3 { margin: 0 0 6px; font-size: 15px; color: var(--amber); }
+    .grammar-box p { margin: 0; font-size: 13.5px; line-height: 1.6; }
+
+    /* AI Conversation Box */
+    .ai-box { background: #fdfaf4; border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
+    .ai-prompt-pre { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; color: var(--ink); margin: 10px 0; }
+
+    /* Chapter Test */
+    .test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 18px; background: var(--card); margin-top: 20px; }
+    .q-opt { display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14px; }
+    .q-opt:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .q-opt.correct { background: var(--accent-soft); border-color: var(--accent); font-weight: 700; color: var(--accent); }
+    .q-opt.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
   </style>
 </head>
 <body>
 <main>
-  <h1>Arabic <span class="arabic" style="color:var(--accent)">العربية</span></h1>
-
-  <div class="lvls" id="lvls"></div>
-
-  <div class="card" id="nowCard" style="border-color:var(--accent)">
-    <div id="now">Loading…</div>
-  </div>
-
-  <div class="card">
-    <h2>Your lessons</h2>
-    <p class="sub" style="margin-bottom:12px">Seven lessons a week, about seven minutes each, always a mix of
-    Qur'an and everyday Arabic. Do them in any order — on screen or 🚗 hands-free. Each has its own 3-minute test,
-    and you can test a whole week in one go. Between them sit the occasional
-    <strong>vocabulary</strong> and <strong>grammar</strong> bursts — short, and picked by how likely you are to
-    actually need them.</p>
-    <div id="tally" style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 16px"></div>
-    <div id="weeks">…</div>
-  </div>
-
-  <div class="card">
-    <h2>What you hold</h2>
-    <div class="inv" id="inv"></div>
-    <p style="font-size:13px;color:var(--muted);margin:10px 0 0" id="invBand"></p>
-  </div>
-
-  <div class="card" id="coachCard" style="display:none">
-    <h2>🧑‍🏫 Coach's notes <span style="font-weight:400;font-size:13px;color:var(--muted)" id="coachDate"></span></h2>
-    <p id="coachNote" style="font-size:15px"></p>
-    <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:14.5px"></ul>
-  </div>
-
-  <div class="card" id="doneCard" style="display:none">
-    <details><summary style="cursor:pointer;font-weight:700;font-size:15px">Achieved <span id="doneN" style="color:var(--accent)"></span></summary>
-      <div id="doneList" style="margin-top:10px"></div>
-    </details>
-  </div>
-
-  <div class="card">
-    <h2>Free practice</h2>
-    <p class="sub" style="margin-bottom:10px">Outside the plan, whenever you feel like it. It still counts.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
-      <a href="sentences.html" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>✍️ Sentences</b><br><span style="font-size:13px;color:var(--muted)">Build &amp; review sentences</span></a>
-      <a href="review.html?only=sentences" style="text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:12px;padding:12px 14px"><b>🔁 What's due</b><br><span style="font-size:13px;color:var(--muted)">Whatever is slipping, in sentences</span></a>
+  <div class="reader-header">
+    <div>
+      <h1 style="display:flex;align-items:center;gap:10px;margin:0">
+        <span>Daily Reader</span>
+        <span class="arabic" style="color:var(--accent);font-size:26px">القِرَاءَةُ اليَوْمِيَّة</span>
+      </h1>
+      <p class="sub" style="margin:4px 0 0">One clean sitting · 10 sentences + Qur'an by ear + AI speak + 5-min test</p>
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">Words are still tracked underneath every sentence — <a href="map.html" style="color:var(--accent)">Progress</a> has the word engines if you ever want them.</p>
+    <div style="display:flex;align-items:center;gap:10px">
+      <select id="chapSelect" class="chap-select" title="Choose Chapter"></select>
+      <span id="chapBadge" class="status-pill">Loading…</span>
+    </div>
+  </div>
+
+  <!-- Audio Controls -->
+  <div class="audio-bar">
+    <span style="font-size:13px;font-weight:700;color:var(--ink)">🎧 Audio:</span>
+    <button type="button" id="btnPlayAll">▶ Play All</button>
+    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3 seconds for you to recall, then says English">⏸ Play with Pauses</button>
+    <button type="button" id="btnStopAudio" style="display:none">⏹ Stop</button>
+    <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
+      <button type="button" class="small" data-sp="normal" id="spNormal">🔊 Normal</button>
+      <button type="button" class="small" data-sp="slow" id="spSlow">🐢 Slow</button>
+    </span>
+  </div>
+
+  <!-- SECTION 1: 10 HIGH-FREQUENCY SENTENCES -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+      <h2 style="margin:0">1. High-Frequency Sentences (10)</h2>
+      <span style="font-size:12px;color:var(--muted)">Tap any word for instant meaning</span>
+    </div>
+    <div class="sentence-list" id="sentenceList">Loading sentences…</div>
+  </div>
+
+  <!-- SECTION 2: QURAN AYATS BY EAR -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <h2 style="margin:0" id="quranTitle">2. Qur'an by Ear</h2>
+        <span class="sub" id="quranSubtitle" style="margin:0">Listen at recitation speed, then verify word-by-word</span>
+      </div>
+      <button type="button" class="primary small" id="btnPlayQuran">▶ Listen Recitation</button>
+    </div>
+    <div id="quranVerses">Loading Qur'an verses…</div>
+  </div>
+
+  <!-- SECTION 3: CONDITIONAL GRAMMAR NOTE -->
+  <div id="grammarSection" style="display:none">
+    <div class="grammar-box">
+      <h3 id="grammarTitle">📐 Pattern Insight</h3>
+      <p id="grammarBody"></p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: AI CONVERSATION PARTNER -->
+  <div class="card ai-box">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 style="margin:0;font-size:16px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+      <button type="button" id="btnCopyPrompt" class="small">📋 Copy Prompt</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:6px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences.</p>
+    <div class="ai-prompt-pre" id="aiPromptText">Loading prompt…</div>
+  </div>
+
+  <!-- SECTION 5: 5-MINUTE CHAPTER TEST -->
+  <div class="test-box" id="testBox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div>
+        <h2 style="margin:0">4. 📝 Chapter Test (5 Mins)</h2>
+        <p class="sub" style="margin:2px 0 0">Test your mastery of today's sentences and ayats. Pass at 80%+ to clear this chapter.</p>
+      </div>
+      <span id="testScorePill" class="status-pill" style="font-size:13px">Untested</span>
+    </div>
+    <div id="testArea">
+      <button type="button" class="primary" id="btnStartTest" style="font-size:15px;padding:10px 20px">Start Today's Test →</button>
+    </div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mu353e7f"></script>
-<script src="js/curriculum.js?v=mu353e7f"></script>
-<script src="js/app.js?v=mu353e7f"></script>
-<script src="js/tracker.js?v=mu353e7f"></script>
-<script src="js/plan.js?v=mu353e7f"></script>
-<script src="js/account.js?v=mu353e7f"></script>
+<script src="js/progress-model.js?v=mug0buyj"></script>
+<script src="js/curriculum.js?v=mug0buyj"></script>
+<script src="js/app.js?v=mug0buyj"></script>
+<script src="js/tracker.js?v=mug0buyj"></script>
 <script>
 renderNav("home");
 trackPage("home");
 
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const dots = (done, total) => "●".repeat(done) + "○".repeat(Math.max(0, total - done));
+/* CHAPTER CORPUS: 8 High-Frequency Chapters linking Sentences, Quran, Grammar, & AI Prompts */
+const CHAPTERS = [
+  {
+    id: "chap-1",
+    num: 1,
+    title: "Greetings & Essentials",
+    surahId: "ikhlas",
+    grammar: {
+      title: "The Nominal Sentence (الجُمْلَة الاسْمِيَّة)",
+      text: "Arabic has no verb for 'is' or 'are' in the present tense. Putting a subject next to a description creates a full sentence: <b>اللَّهُ أَحَدٌ</b> means <i>Allah [is] One</i>. <b>أَنَا جَائِعٌ</b> means <i>I [am] hungry</i>."
+    },
+    sentences: [
+      { ar: "السَّلَامُ عَلَيْكُمْ", en: "Peace be upon you.", hint: "The universal opening greeting" },
+      { ar: "صَبَاحُ الخَيْرِ", en: "Good morning.", hint: "Everyday morning greeting" },
+      { ar: "شُكْرًا جَزِيلًا", en: "Thank you very much.", hint: "Gratitude & courtesy" },
+      { ar: "نَعَمْ، بِكُلِّ سُرُورٍ", en: "Yes, with pleasure!", hint: "Affirmative & polite agreement" },
+      { ar: "أُرِيدُ مَاءً مِنْ فَضْلِكَ", en: "I want water, please.", hint: "Expressing wants with courtesy" },
+      { ar: "أَنَا جَائِعٌ جِدًّا", en: "I am very hungry.", hint: "Nominal sentence state" },
+      { ar: "أَيْنَ المَسْجِدُ القَرِيبُ؟", en: "Where is the near mosque?", hint: "Asking directions" },
+      { ar: "كَمِ السِّعْرُ لِهَذَا؟", en: "How much is the price for this?", hint: "Market and shopping question" },
+      { ar: "هَلْ تَتَكَلَّمُ العَرَبِيَّةَ؟", en: "Do you speak Arabic?", hint: "Everyday inquiry" },
+      { ar: "مَعَ السَّلَامَةِ، إِلَى اللِّقَاءِ", en: "Goodbye, see you soon.", hint: "Polite farewell" }
+    ],
+    aiScenario: "You are an Arabic conversation partner. I am a beginner (A1 level). Greet me politely in Arabic and ask how I am. Let's practice ordering food or water and asking where the mosque is. Keep your responses short (under 2 sentences), in Modern Standard Arabic with full harakat, and gently correct any mistake I make."
+  },
+  {
+    id: "chap-2",
+    num: 2,
+    title: "Needs, Food & The Market",
+    surahId: "falaq",
+    grammar: null, // Conditional: omitted when not strictly needed
+    sentences: [
+      { ar: "أُرِيدُ أَنْ آكُلَ شَيْئًا", en: "I want to eat something.", hint: "أُرِيدُ أَنْ + verb" },
+      { ar: "هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟", en: "Do you have halal food?", hint: "Inquiring at restaurants" },
+      { ar: "الحِسَابَ مِنْ فَضْلِكَ", en: "The bill, please.", hint: "Finishing at restaurant/shop" },
+      { ar: "كَمْ كِيلُو تُرِيدُ؟", en: "How many kilos do you want?", hint: "Market quantity" },
+      { ar: "هَذَا غَالٍ جِدًّا", en: "This is very expensive.", hint: "Market negotiation" },
+      { ar: "هَلْ يُمْكِنُ تَخْفِيضُ السِّعْرِ؟", en: "Is it possible to reduce the price?", hint: "Polite negotiation" },
+      { ar: "أَنَا عَطْشَانُ، أُرِيدُ شَايًا", en: "I am thirsty, I want tea.", hint: "State + want" },
+      { ar: "أَيْنَ الحَمَّامُ؟", en: "Where is the restroom?", hint: "Essential direction" },
+      { ar: "أُرِيدُ فِنْجَانَ قَهْوَةٍ", en: "I want a cup of coffee.", hint: "Ordering drinks" },
+      { ar: "تَفَضَّلْ، هَذَا مَالُكَ", en: "Here you go, this is your money.", hint: "Transaction exchange" }
+    ],
+    aiScenario: "You are a friendly shopkeeper in Cairo or Medina. I come into your market stall to buy fruit and tea. Ask me what I want. Negotiate the price simply with me in A1 Modern Standard Arabic. Keep your sentences short and helpful."
+  },
+  {
+    id: "chap-3",
+    num: 3,
+    title: "Locations, Taxi & Umrah",
+    surahId: "nas",
+    grammar: {
+      title: "Prepositions of Place (حُرُوفُ الجَرّ)",
+      text: "Prepositions like <b>فِي</b> (in), <b>إِلَى</b> (to), and <b>عَلَى</b> (on) put the noun after them into the genitive case with a kasrah: <b>إِلَى المَسْجِدِ</b> (to the mosque), <b>فِي الفُنْدُقِ</b> (in the hotel)."
+    },
+    sentences: [
+      { ar: "إِلَى الحَرَمِ المَكِّيِّ، لَوْ سَمَحْتَ", en: "To the Haram in Makkah, please.", hint: "Taxi instruction" },
+      { ar: "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟", en: "How much is the fare to the hotel?", hint: "Asking taxi price" },
+      { ar: "تَوَقَّفْ هُنَا مِنْ فَضْلِكَ", en: "Stop here, please.", hint: "Direction instruction" },
+      { ar: "أَيْنَ بَابُ المَلِكِ فَهْدٍ؟", en: "Where is King Fahd Gate?", hint: "Haram landmark" },
+      { ar: "أَنَا قَادِمٌ لِلعُمْرَةِ", en: "I have come for Umrah.", hint: "State & purpose" },
+      { ar: "هَلْ هَذَا الفُنْدُقُ قَرِيبٌ؟", en: "Is this hotel nearby?", hint: "Proximity question" },
+      { ar: "ذَهَبْتُ إِلَى الصَّيْدَلِيَّةِ", en: "I went to the pharmacy.", hint: "Past verb + destination" },
+      { ar: "أُرِيدُ دَوَاءً لِلصُّدَاعِ", en: "I want medicine for a headache.", hint: "Pharmacy need" },
+      { ar: "السَّاعَةُ الآنَ الثَّالِثَةُ", en: "The time now is three o'clock.", hint: "Telling time" },
+      { ar: "تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ", en: "May Allah accept from us and from you.", hint: "Du'a and greeting after worship" }
+    ],
+    aiScenario: "Roleplay: You are a taxi driver in Makkah taking me to the Haram and my hotel. Greet me, ask where I want to go, agree on a price, and chat briefly about Umrah in very simple Modern Standard Arabic (A1)."
+  },
+  {
+    id: "chap-4",
+    num: 4,
+    title: "Time, Plans & Actions",
+    surahId: "asr",
+    grammar: null,
+    sentences: [
+      { ar: "مَاذَا تَفْعَلُ اليَوْمَ؟", en: "What are you doing today?", hint: "Daily question" },
+      { ar: "سَأَذْهَبُ إِلَى الدَّرْسِ غَدًا", en: "I will go to the lesson tomorrow.", hint: "Future particle سَـ + verb" },
+      { ar: "قَرَأْتُ القُرْآنَ بَعْدَ الفَجْرِ", en: "I read the Quran after Fajr.", hint: "Past verb + time phrase" },
+      { ar: "مَتَى يَبْدَأُ الدَّرْسُ؟", en: "When does the lesson begin?", hint: "Asking time with مَتَى" },
+      { ar: "عِنْدِي مَوْعِدٌ فِي المَسَاءِ", en: "I have an appointment in the evening.", hint: "Having with عِنْدِي" },
+      { ar: "كَتَبْتُ رِسَالَةً لِأَخِي", en: "I wrote a letter to my brother.", hint: "Past verb + object" },
+      { ar: "هَلْ صَلَّيْتَ العَصْرَ؟", en: "Did you pray Asr?", hint: "Past inquiry" },
+      { ar: "نَحْنُ نَتَعَلَّمُ العَرَبِيَّةَ", en: "We are learning Arabic.", hint: "Plural present verb" },
+      { ar: "لَا أَعْرِفُ مَعْنَى هَذِهِ الكَلِمَةِ", en: "I don't know the meaning of this word.", hint: "Present negation with لَا" },
+      { ar: "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟", en: "How do I say this in Arabic?", hint: "Crucial conversation repair question" }
+    ],
+    aiScenario: "You are my Arabic language tutor having a warm check-in. Ask me what I did today, when I read Quran, and what my plans are for tomorrow. Speak in simple A1 Arabic."
+  }
+];
 
-/* The last score, shown where the test is taken. Never tested reads as never
-   tested rather than as zero — a blank and a 0 are different facts. */
-function scorePill(l) {
-  if (l.score === null || l.score === undefined) return `<span class="untested">not tested</span>`;
-  const cls = l.mastered ? "pass" : l.score >= 60 ? "near" : "miss";
-  return `<span class="pill ${cls}" title="your last test on this lesson"><span class="lbl">last</span>${l.score}</span>`;
+let curChap = CHAPTERS[0];
+let VERSES_DATA = null;
+let audioQueue = [];
+let audioIndex = 0;
+let isAudioRunning = false;
+
+/* Initialise page */
+(async () => {
+  try {
+    const res = await fetch("data/verses.json");
+    VERSES_DATA = await res.json();
+  } catch (e) { console.error("Could not load verses", e); }
+
+  initChapterSelector();
+  loadChapter(CHAPTERS[0]);
+  setupAudioSpeedButtons();
+})();
+
+function initChapterSelector() {
+  const sel = document.getElementById("chapSelect");
+  sel.innerHTML = CHAPTERS.map(c => `<option value="${c.id}">Chapter ${c.num}: ${c.title}</option>`).join("");
+  sel.onchange = e => {
+    const found = CHAPTERS.find(c => c.id === e.target.value);
+    if (found) loadChapter(found);
+  };
 }
 
-(async () => {
-  const ctx = await curCtx();
-  if (!ctx) { document.getElementById("now").textContent = "Couldn't load the curriculum."; return; }
-  let CLASSES = { classes: [] };
-  try { CLASSES = await fetch("data/classes.json").then(r => r.json()); } catch (e) {}
-  const state = Curriculum.milestoneState(ctx);
-  const L = Curriculum.levels(ctx);
-  const inv = Curriculum.inventory(ctx);
-  const pc = Curriculum.pace(ctx, state);
+function loadChapter(chap) {
+  curChap = chap;
+  document.getElementById("chapSelect").value = chap.id;
 
-  /* THE LEVELS — shown only once one has been EARNED.
-     Before that both chips read "— → A1", which is a placeholder taking the top
-     of the page to say he has nothing yet, while the milestone card right below
-     already names what he is working toward. The CEFR labels were his ask and do
-     matter the day he earns one; until then the full ladder lives on Progress. */
-  const earned = Object.values(L).filter(t => t.current);
-  if (earned.length) {
-    document.getElementById("lvls").innerHTML = Object.values(L).map(t => `
-      <div class="lvl">
-        <div style="font-size:12.5px;color:var(--muted)">${esc(t.icon)} ${esc(t.name)}</div>
-        <div><b>${t.current ? esc(t.current.label) : "—"}</b>
-          <span style="font-size:12px;color:var(--muted)">${t.next ? "→ " + esc(t.next.label) : "complete"}</span></div>
-        <div style="font-size:13px;line-height:1.45;margin-top:2px">${esc(t.current ? t.current.can : (t.next ? t.next.can : ""))}</div>
-      </div>`).join("");
+  // Render Sentences
+  const sList = document.getElementById("sentenceList");
+  sList.innerHTML = chap.sentences.map((s, idx) => `
+    <div class="s-row" id="srow-${idx}">
+      <div class="s-meta">
+        <div class="s-en">${s.en}</div>
+        <div class="s-hint">${s.hint || ""}</div>
+      </div>
+      <div class="s-ar">${s.ar}</div>
+      <div class="s-actions">
+        <button type="button" class="small" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')">🔊</button>
+      </div>
+    </div>
+  `).join("");
+
+  // Render Quran Verses
+  renderQuranSection(chap.surahId);
+
+  // Conditional Grammar
+  const gSec = document.getElementById("grammarSection");
+  if (chap.grammar) {
+    gSec.style.display = "block";
+    document.getElementById("grammarTitle").innerHTML = "📐 " + chap.grammar.title;
+    document.getElementById("grammarBody").innerHTML = chap.grammar.text;
   } else {
-    document.getElementById("lvls").remove();
+    gSec.style.display = "none";
   }
 
-  /* words and sentences — the bedrock, stated plainly */
-  document.getElementById("inv").innerHTML = `
-    <div><div class="n">${inv.words}</div><div class="l">words you hold${inv.wordsLong ? ` · ${inv.wordsLong} long-term` : ""}</div></div>
-    <div><div class="n">${inv.sentences}</div><div class="l">sentences you can use${inv.sentencesLong ? ` · ${inv.sentencesLong} long-term` : ""}</div></div>`;
-  document.getElementById("invBand").textContent = inv.nextBand
-    ? `At about ${inv.nextBand.at} words, ${inv.nextBand.say}.`
-    : "You have the vocabulary for ordinary conversation — what's left is fluency, not words.";
-
-  /* THE WHOLE THING, COUNTED (his ask: "X sentences and Y variants, X x Y to be
-     mastered"). Stated per track because they are different in kind — an ayah is
-     never conjugated, so the Qur'an side has no variants and saying otherwise
-     would be padding. */
-  const tm = inv.toMaster;
-  if (tm) {
-    const el = document.createElement("p");
-    el.style.cssText = "font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.7;border-top:1px solid var(--border);padding-top:8px";
-    el.innerHTML = `<b>The whole thing, counted.</b><br>
-      🎧 <b>${tm.quran.sentences}</b> ayat — Al-Fatiha and the whole of juz' 'Amma, which is what "understand the short surahs" means. Fixed text, so no variants. <b>${tm.quran.held}</b> held.<br>
-      🗣 <b>${tm.conv.sentences}</b> sentences, of which <b>${tm.conv.frames}</b> are frames you can bend
-      ${tm.conv.variantsPerFrame ? `× <b>${tm.conv.variantsPerFrame}</b> person/tense variants each` : ""}
-      = <b>${tm.conv.utterances}</b> things you can say. <b>${tm.conv.held}</b> held.<br><a href="sentences.html?view=list" style="color:var(--accent)">See the whole list, and this week's →</a>`;
-    document.getElementById("invBand").after(el);
-  }
-
-  /* the milestone you're on */
-  const nowEl = document.getElementById("now");
-  if (!state.current) {
-    nowEl.innerHTML = `<h2>Everything achieved</h2><p>Nothing left on the ladder — ask your coach for the next stretch.</p>`;
-  } else {
-    const ms = state.current;
-    const src = ctx.curriculum.milestones.find(m => m.id === ms.id);
-    const next = Curriculum.nextChunk(ctx, state);
-    const nextTitle = next && next.lesson ? next.lesson.title : "";
-    const label = next && next.testNext
-      ? (next.skipToTest ? `Prove “${nextTitle}” — you already hold it` : `Test “${nextTitle}”`)
-      : next ? `Continue — ${nextTitle}` : "Continue";
-    const href = next && next.testNext ? `learn.html?test=1&m=${encodeURIComponent(ms.id)}` : "learn.html";
-
-    /* The eyebrow reports where he actually IS, not a static "working on now" —
-       he proved five lessons and the card looked identical, which read as though
-       nothing had happened. */
-    const doneN = ms.lessonsDone, totalN = ms.lessonCount, leftN = totalN - doneN;
-    const stateLine = doneN === 0 ? "starting now"
-      : leftN === 1 ? "one lesson from done"
-      : `${doneN} of ${totalN} lessons proved`;
-    nowEl.innerHTML = `
-      <div style="font-size:12.5px;color:var(--muted)">${ms.track === "quran" ? "🎧 Qur'an" : "🗣 Conversation"} · ${esc(stateLine)}</div>
-      <h2 style="margin:2px 0 4px">${esc(ms.name)}</h2>
-      <p style="font-size:15px;margin:0 0 4px">When this is done, you can <strong>${esc(ms.can)}</strong>.</p>
-      <p style="font-size:13.5px;color:var(--muted);margin:0 0 8px">${esc(ms.why || "")}</p>
-      <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:0 0 6px">
-        <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * doneN / (totalN || 1))}%"></i></div>
-      <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
-        <strong style="color:var(--text)">${doneN} of ${totalN} proved</strong> · ${ms.items} words · about ${ms.plannedMin} minutes in total.
-        ${leftN ? "It's done when you've proved every lesson, not when a week is up." : ""}</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
-        <a href="${href}" style="flex:1 1 220px;text-decoration:none"><button class="primary" style="width:100%;font-size:17px;padding:14px">${esc(label)}</button></a>
-        <a href="learn.html?mode=hands" style="flex:1 1 160px;text-decoration:none"><button style="width:100%;font-size:17px;padding:14px">🚗 Hands-free</button></a>
-      </div>
-      <p class="pace" style="margin:10px 0 0">
-        <a href="learn.html?test=1&m=${encodeURIComponent(ms.id)}">Test everything still open in this milestone</a>
-        ${pc.known && pc.state !== "on track" ? ` · ${Math.abs(pc.weeksAhead)} week${Math.abs(pc.weeksAhead) === 1 ? "" : "s"} ${pc.state}` : ""}
-      </p>`;
-  }
-
-  /* THE SHELF: four weeks of seven 7-minute lessons. Every week mixes Qur'an and
-     everyday language; every lesson can be done on screen or hands-free, has its
-     own 3-minute test, and a week can be tested in one 7-minute go. */
-  const weeks = Curriculum.weekPlan(ctx, state);
-  const cw = Curriculum.currentWeek(weeks);
-  const show = weeks.slice(cw - 1, cw + 3);
-
-  /* INTERLEAVING (his spec, 2026-08-30: "at times I memorise some vocabulary…
-     then at times i learn some grammar… okay schedule that in. also it is based
-     on probability of use"). Computed for the CURRENT week only, because both
-     bursts depend on what he holds today — drawing them onto week 4 would be
-     showing a prediction dressed up as a plan. */
-  const bursts = Curriculum.burstsFor(weeks[cw - 1], ctx);
-  /* "You're here" belongs on the lesson, not the week — a week is seven things
-     and pointing at all seven says nothing. This is the first lesson on the
-     shelf he has not proved: exactly what Continue would open. */
-  const hereId = (weeks.flatMap(w => w.lessons).find(x => !x.lesson.mastered) || { lesson: {} }).lesson.id;
-  /* a week that contains class material offers the class test too — his ask:
-     "add test the week, test the class at the bottom of week 1 as well" */
-  const classOfMs = {};
-  (CLASSES.classes || []).forEach(c => { if (c.milestone) classOfMs[c.milestone] = c.id; });
-  const classInWeek = w => {
-    for (const x of w.lessons) { const id = classOfMs[x.milestone.id]; if (id) return id; }
-    return null;
-  };
-  const allLessons = weeks.flatMap(w => w.lessons);
-  const provedAll = allLessons.filter(x => x.lesson.mastered).length;
-  /* HOW HE DID LAST TIME. His ask, 2026-08-30: "for the vocabulary burst can i
-     get a score based on how i did when i practised?" The burst has scored itself
-     since this morning, but only on its own finish screen — which is the one place
-     he is not standing when he decides whether to run it again. The number belongs
-     on the row that starts it. */
-  const burstRuns = kind => (ctx.log || [])
-    .filter(e => e && e.e === "burst-done" && e.kind === kind && typeof e.score === "number");
-  const lastBurst = kind => burstRuns(kind).slice(-1)[0] || null;
-  const ago = t => {
-    const d = Math.floor((Date.now() - t) / 86400000);
-    return d <= 0 ? "today" : d === 1 ? "yesterday" : `${d} days ago`;
-  };
-  /* THE PASSAGE SHE SET HIM. His question, 2026-08-30, looking at week 1: "where
-     is the lesson paragraph/story i am meant to read and understand".
-
-     It was not there, and that was wrong. The reading's ladder lessons teach its
-     vocabulary and they sit at the END of the class queue, which — now that a
-     class contributes only two lessons a week — put them in week five. But the
-     passage is not a vocabulary lesson: it is the one thing his teacher actually
-     asked him to do, and she asked this week. So while it is unfinished it rides
-     at the top of the current week as its own row, the way the bursts do, and it
-     says how far through it he is. */
-  const readingRow = () => {
-    const c = (CLASSES.classes || [])[0];
-    if (!c || !c.reading || c.reading.missing) return "";
-    const id = c.reading.id;
-    const done = stepsDone(id);
-    const n = STEPS.filter(st => done[st.key]).length;
-    if (n >= STEPS.length) return "";
-    const next = STEPS.find(st => !done[st.key]) || STEPS[0];
-    return `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
-      <span class="mark" style="left:8px;color:var(--accent)">📖</span>
-      <div class="t">Read “${esc(c.reading.titleEn)}”${n === 0 ? `<span class="here">set by your teacher</span>` : ""}
-        <div class="m">${n === 0
-          ? `She gave you this to practise. ${c.reading.sentences} sentences, every word glossed, tap any of them to hear it.`
-          : `${n} of ${STEPS.length} steps done — next is ${next.en.toLowerCase()}.`}</div>
-      </div>
-      <div class="acts">
-        ${n ? `<span class="pill near"><span class="lbl">done</span>${n}/${STEPS.length}</span>` : ""}
-        <a href="story.html?id=${encodeURIComponent(id)}&step=${next.key}">${n ? "continue" : "read it"}</a>
-      </div>
-    </div>`;
-  };
-
-  const burstRow = b => {
-    const runs = burstRuns(b.kind);
-    const last = runs[runs.length - 1] || null;
-    // a run of scores is the thing worth seeing — one number says nothing about
-    // whether it is going in
-    const trend = runs.length > 1 ? runs.slice(-4).map(r => r.score).join(" → ") : "";
-    const cls = !last ? "" : last.score >= 75 ? "pass" : last.score >= 40 ? "near" : "miss";
-    return `<div class="lesson" style="background:var(--accent-soft);border-radius:10px;padding:10px 12px">
-      <div class="t">${b.kind === "vocab" ? "📇 Vocabulary burst" : "📐 Grammar burst"}
-        <div class="m">${b.kind === "vocab"
-          ? `${b.words.length} of the commonest words you don't hold yet — they make the sentences ahead easier`
-          : "one rule, chosen because more of what's coming uses it than any other"} · ~${b.mins} min${
-          last ? ` · ${ago(last.t)} you got <strong style="color:var(--text)">${last.firstTry !== undefined ? `${last.firstTry} of ${last.n}` : `${last.score}%`}</strong> first time${
-            last.rounds > 1 ? `, ${last.rounds} rounds to clear` : ""}` : ""}${
-          trend ? ` · ${trend}` : ""}</div>
-      </div>
-      <div class="acts">
-        ${last ? `<span class="pill ${cls}" title="how many you had cold last time"><span class="lbl">last</span>${last.score}</span>` : ""}
-        ${b.kind === "vocab" && last && (last.missed || []).length
-          ? `<a href="learn.html?burst=vocab&only=missed" title="just the ones you didn't have first time">↻ ${last.missed.length} missed</a>` : ""}
-        <a href="learn.html?burst=${b.kind}">${last ? "run it again" : "start"}</a>
-      </div>
-    </div>`;
-  };
-
-  document.getElementById("tally").innerHTML = `
-    <strong style="font-size:15px">${provedAll} of ${allLessons.length} lessons proved</strong>
-    <span style="flex:1 1 120px;min-width:120px;height:8px;background:var(--border);border-radius:99px;overflow:hidden">
-      <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * provedAll / (allLessons.length || 1))}%"></i></span>
-    <span style="font-size:12.5px;color:var(--muted)">✓ proved · ◐ learnt, not proved · ○ not started</span>`;
-
-  document.getElementById("weeks").innerHTML = show.map(w => {
-    const openIds = w.lessons.filter(x => !x.lesson.mastered).map(x => x.lesson.id);
-    const mine = w.week === cw ? bursts : [];
-    return `
-    <div style="margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-        <strong style="font-size:15px">Week ${w.week}</strong>
-        <span style="font-size:12.5px;color:var(--muted)">${w.provedCount} of ${w.lessons.length} proved · 🎧 ${w.quran} · 🗣 ${w.conv} · ~${w.mins} min</span>
-      </div>
-      ${w.week === cw ? readingRow() : ""}
-      ${w.lessons.map((x, xi) => {
-        const l = x.lesson, done = Curriculum.chunkDone(l.id + ":lesson", ctx.log);
-        const before = mine.filter(b => b.at === xi).map(burstRow).join("");
-        const isNow = l.id === hereId;
-        const state = l.mastered ? "done" : isNow ? "now" : "todo";
-        // ✓ proved · ◐ learnt but not proved · ○ not started
-        const mark = l.mastered ? "✓" : done || l.readyToProve ? "◐" : "○";
-        return before + `<div class="lesson ${state}">
-          <span class="mark">${mark}</span>
-          <div class="t">${esc(l.title)}${isNow ? `<span class="here">you're here</span>` : ""}
-            <div class="m">${x.milestone.track === "quran" ? "🎧" : "🗣"} ${esc(x.milestone.name)} ·
-              ${l.mastered ? `proved`
-                : l.readyToProve ? "you already hold these — just prove it"
-                : `${l.total} words${done ? " · learnt, not yet proved" : " · not started"}${l.score !== null ? ` · last test ${l.score}` : ""}`}</div>
-          </div>
-          <div class="acts">
-            ${scorePill(l)}
-            ${l.mastered ? "" : `
-              <a href="learn.html?lesson=${encodeURIComponent(l.id)}">${done ? "again" : "learn"}</a>
-              <a href="learn.html?lesson=${encodeURIComponent(l.id)}&mode=hands" title="hands-free" style="font-size:14px">🚗</a>`}
-            <a href="learn.html?test=1&lesson=${encodeURIComponent(l.id)}">${l.score === null ? "test" : "retake"}</a>
-          </div>
-        </div>`;
-      }).join("")}
-      ${mine.filter(b => b.at >= w.lessons.length).map(burstRow).join("")}
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0">
-        ${openIds.length > 1 ? `<a href="learn.html?lessons=${encodeURIComponent(openIds.join(","))}&label=${encodeURIComponent("Week " + w.week)}" style="text-decoration:none"><button>📝 Test week ${w.week} · ~7 min</button></a>` : ""}
-        ${classInWeek(w) ? `<a href="learn.html?class=${encodeURIComponent(classInWeek(w))}" style="text-decoration:none"><button>🧑‍🏫 Test the class</button></a>` : ""}
-        ${w.week === cw ? `<a href="converse.html?week=1" style="text-decoration:none"><button>🎙 Say this week out loud</button></a>` : ""}
-      </div>
-    </div>`;
-  }).join("");
-
-  /* ---- SUNDAY'S CLASS, as one thing ----
-     His instruction, 2026-08-30: "when i give a lesson, you can put it into
-     category of vocabulary and sentences as well to unify the learning approach.
-     if she gives a whole lesson, you can put it in reading section." The material
-     is already routed all four ways; this is where he can see it as a class
-     again, take a test over the whole of it, and read the passage. */
-  try {
-    const c = (CLASSES.classes || [])[0];
-    if (c) {
-      const srs = ctx.srs || {};
-      const held = c.keys.filter(k => ((srs[k] || {}).box || 0) >= 3).length;
-      const el = document.createElement("div");
-      el.className = "card";
-      /* THE CLASS IS FOUR THINGS, NOT ONE. 2026-09-01: the bar said "4 of 59 held"
-         and the only buttons under it were the whole-class test and the passage —
-         so the seven days and the divine attributes had no way in from the page he
-         actually opens. The homework contract already knows every part; show them,
-         with each one's own count, and let him tap the one he has not touched. */
-      let partsRow = "";
-      try {
-        const hw = typeof planHomework === "function" ? planHomework() : null;
-        if (hw && !hw.past && hw.parts && hw.parts.length > 1) {
-          /* THE HONEST TRADE (2026-09-03): close to the class with the bar far off,
-             the plan names the ten words that make it feel prepared (hw.prep) —
-             those chips lead, the rest step back, and the sentence says the rest
-             carries over. See planHomework. */
-          const prepLine = hw.prep
-            ? `<p style="font-size:13.5px;margin:0 0 8px"><strong>Class prep: ${hw.prep.solidN} of ${hw.prep.total}</strong> — ${esc(hw.prep.label)}. <span style="color:var(--muted)">All ${hw.keys.length} won't hold by Sunday; these ${hw.prep.total} make the class feel prepared, the rest carry into next week.</span></p>`
-            : "";
-          partsRow = prepLine + `<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px">` + hw.parts.map(p => {
-            const doneP = p.shakyN === 0, dim = hw.prep && !p.prep && !doneP;
-            return `<a href="${p.url}" style="font-size:12px;text-decoration:none;border:${p.prep ? "2px solid var(--accent)" : "1px solid var(--border)"};border-radius:999px;padding:4px 10px;${dim ? "opacity:.55;" : ""}color:${doneP ? "var(--accent)" : "var(--text)"}">${doneP ? "✓ " : p.prep ? "⭐ " : ""}${esc(p.label)} <span style="color:var(--muted)">${p.solidN}/${p.total}</span></a>`;
-          }).join("") + `</div>`;
-        }
-      } catch (e) { /* no contract — the card is just as good without the row */ }
-      el.innerHTML = `
-        <h2 style="margin-top:0">🧑‍🏫 Sunday's class <span style="font-weight:400;font-size:13px;color:var(--muted)">${esc(c.date)}</span></h2>
-        <p style="font-size:15px;margin:0 0 4px"><strong>${esc(c.title)}</strong></p>
-        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 10px">${esc(c.covered)}</p>
-        <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:0 0 6px">
-          <i style="display:block;height:100%;background:var(--accent);width:${Math.round(100 * held / (c.keys.length || 1))}%"></i></div>
-        <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
-          ${c.counts.vocabulary} words · ${c.counts.sentences} sentences · ${c.counts.grammar} grammar points ·
-          a ${c.reading ? c.reading.sentences : 0}-sentence reading · <strong style="color:var(--text)">${held} of ${c.keys.length} held</strong></p>
-        ${partsRow}
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a href="learn.html?class=${encodeURIComponent(c.id)}" style="text-decoration:none"><button class="primary">📝 Test the class</button></a>
-          ${c.reading ? `<a href="story.html?id=${encodeURIComponent(c.reading.id)}" style="text-decoration:none"><button>📖 Read the passage</button></a>` : ""}
-          <a href="class.html" style="text-decoration:none"><button>All of it, sorted →</button></a>
-        </div>`;
-      document.getElementById("nowCard").after(el);
-    }
-  } catch (e) { /* no classes yet — the card simply isn't there */ }
-
-  /* 📥 OFFLINE PACK — a quick open on a good signal loads what this week needs
-     (his ask, 2026-09-03). This week's seven lessons, their sentences, and every
-     word of the homework contract. See offlinePack in app.js. */
-  try {
-    const cwk = weeks[cw - 1];
-    const packKeys = [];
-    ((cwk && cwk.lessons) || []).forEach(l => packKeys.push(...((l.lesson && l.lesson.keys) || [])));
-    const hwc = typeof planHomework === "function" ? planHomework() : null;
-    if (hwc && !hwc.past) packKeys.push(...(hwc.keys || []));
-    const texts = await packTextsForKeys([...new Set(packKeys)], ctx);
-    ((cwk && cwk.lessons) || []).forEach(l => {
-      try { Curriculum.sentencesFor((l.lesson && l.lesson.keys) || [], ctx, { limit: 12, maxWords: 999 }).forEach(s => texts.push(s.ar, s.en)); } catch (e) {}
+  // AI Prompt
+  document.getElementById("aiPromptText").textContent = chap.aiScenario;
+  document.getElementById("btnCopyPrompt").onclick = () => {
+    navigator.clipboard.writeText(chap.aiScenario).then(() => {
+      const btn = document.getElementById("btnCopyPrompt");
+      btn.textContent = "✓ Copied!";
+      setTimeout(() => btn.textContent = "📋 Copy Prompt", 2000);
     });
-    const line = document.createElement("p");
-    line.id = "packLine"; line.style.cssText = "font-size:12.5px;color:var(--muted);margin:10px 0 0";
-    line.textContent = "📥 Loading this week's audio for offline use…";
-    document.getElementById("nowCard").appendChild(line);
-    const r = await offlinePack(texts, (n, t) => { line.textContent = `📥 Offline pack: ${n} of ${t} clips ready…`; });
-    line.textContent = r.skipped
-      ? "📥 Offline pack: needs a signal once — open this page on wifi and it loads itself"
-      : `📥 Offline pack: ${r.n} of ${r.total} clips on this phone — this week's lessons and Sunday's words play with no signal`;
-    if (r.fetched) logEvent({ e: "pack", n: r.n, total: r.total, fetched: r.fetched });
-  } catch (e) { /* the pack is a convenience — the page is complete without it */ }
+  };
 
-  /* achieved */
-  if (state.achieved.length) {
-    document.getElementById("doneCard").style.display = "block";
-    document.getElementById("doneN").textContent = state.achieved.length;
-    document.getElementById("doneList").innerHTML = state.achieved.map(m => `
-      <div class="ms done"><h3>✓ ${esc(m.name)}</h3><p>you can ${esc(m.can)}${m.score !== null ? ` · scored ${m.score}` : ""}</p></div>`).join("");
+  // Test Score status
+  updateTestBadge();
+  resetTestArea();
+}
+
+function renderQuranSection(surahId) {
+  const qDiv = document.getElementById("quranVerses");
+  if (!VERSES_DATA) { qDiv.textContent = "Loading verses…"; return; }
+  const surah = (VERSES_DATA.surahs || []).find(s => s.id === surahId);
+  if (!surah) { qDiv.textContent = "Surah data not found."; return; }
+
+  document.getElementById("quranTitle").textContent = `2. Qur'an: ${surah.nameEn}`;
+  document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
+
+  qDiv.innerHTML = surah.verses.slice(0, 5).map(v => `
+    <div class="q-verse">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="q-ref">${v.ref}</span>
+        <button class="small" onclick="playSingleSentence('${encodeURIComponent(v.ar)}')">🔊 Recite</button>
+      </div>
+      <div class="q-ar">${v.ar}</div>
+      <div class="q-wbw-tray">
+        ${v.words.map(w => `
+          <div class="q-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[3] || ''}">
+            <span class="ar-w">${w[0]}</span>
+            <span class="en-w">${w[2]}</span>
+          </div>
+        `).join("")}
+      </div>
+      <div class="q-trans">${v.en}</div>
+    </div>
+  `).join("");
+
+  document.getElementById("btnPlayQuran").onclick = () => {
+    const items = surah.verses.map((v, i) => ({ n: surah.n, ayah: i + 1 }));
+    playRecitation(items);
+  };
+}
+
+/* AUDIO ENGINE: Single, Play All, and Play with Pauses */
+function playSingleSentence(encodedAr) {
+  stopAllAudio();
+  const text = decodeURIComponent(encodedAr);
+  speak(text, 0.85);
+}
+
+function setupAudioSpeedButtons() {
+  const btnNorm = document.getElementById("spNormal");
+  const btnSlow = document.getElementById("spSlow");
+  const updateBtns = () => {
+    const isSlow = speakSpeed() === "slow";
+    btnNorm.style.fontWeight = isSlow ? "400" : "700";
+    btnSlow.style.fontWeight = isSlow ? "700" : "400";
+  };
+  btnNorm.onclick = () => { setSpeakSpeed("normal"); updateBtns(); };
+  btnSlow.onclick = () => { setSpeakSpeed("slow"); updateBtns(); };
+  updateBtns();
+}
+
+document.getElementById("btnPlayAll").onclick = () => {
+  stopAllAudio();
+  isAudioRunning = true;
+  document.getElementById("btnStopAudio").style.display = "inline-block";
+  document.getElementById("btnPlayAll").classList.add("playing");
+  audioQueue = curChap.sentences.map((s, idx) => ({ ar: s.ar, en: null, idx }));
+  audioIndex = 0;
+  playNextInQueue(false);
+};
+
+document.getElementById("btnPlayPauses").onclick = () => {
+  stopAllAudio();
+  isAudioRunning = true;
+  document.getElementById("btnStopAudio").style.display = "inline-block";
+  document.getElementById("btnPlayPauses").classList.add("playing");
+  audioQueue = curChap.sentences.map((s, idx) => ({ ar: s.ar, en: s.en, idx }));
+  audioIndex = 0;
+  playNextInQueue(true);
+};
+
+document.getElementById("btnStopAudio").onclick = stopAllAudio;
+
+function stopAllAudio() {
+  isAudioRunning = false;
+  stopSpeak();
+  stopRecitation();
+  document.querySelectorAll(".s-row").forEach(r => r.classList.remove("active"));
+  document.getElementById("btnPlayAll").classList.remove("playing");
+  document.getElementById("btnPlayPauses").classList.remove("playing");
+  document.getElementById("btnStopAudio").style.display = "none";
+}
+
+function playNextInQueue(withPause) {
+  if (!isAudioRunning || audioIndex >= audioQueue.length) {
+    stopAllAudio();
+    return;
   }
-})();
+  const item = audioQueue[audioIndex];
+  document.querySelectorAll(".s-row").forEach(r => r.classList.remove("active"));
+  const row = document.getElementById("srow-" + item.idx);
+  if (row) row.classList.add("active");
+
+  speak(item.ar, 0.85, () => {
+    if (!isAudioRunning) return;
+    if (withPause && item.en) {
+      // 3.5-second recall pause, then say English translation
+      setTimeout(() => {
+        if (!isAudioRunning) return;
+        speak(item.en, 1.0, () => {
+          setTimeout(() => {
+            audioIndex++;
+            playNextInQueue(withPause);
+          }, 1000);
+        });
+      }, 3500);
+    } else {
+      setTimeout(() => {
+        audioIndex++;
+        playNextInQueue(withPause);
+      }, 1200);
+    }
+  });
+}
+
+/* CHAPTER 5-MINUTE TEST */
+function updateTestBadge() {
+  const log = store.get("ats-log", []);
+  const pass = log.find(x => x.e === "chap-test" && x.chap === curChap.id && x.score >= 80);
+  const pill = document.getElementById("testScorePill");
+  const badge = document.getElementById("chapBadge");
+  if (pass) {
+    pill.textContent = `Mastered (${pass.score}%)`;
+    pill.className = "status-pill done";
+    badge.textContent = "✓ Mastered";
+    badge.className = "status-pill done";
+  } else {
+    pill.textContent = "Untested";
+    pill.className = "status-pill";
+    badge.textContent = "In progress";
+    badge.className = "status-pill";
+  }
+}
+
+function resetTestArea() {
+  document.getElementById("testArea").innerHTML = `
+    <button type="button" class="primary" id="btnStartTest" style="font-size:15px;padding:10px 20px" onclick="runChapterTest()">Start 5-Minute Test →</button>
+  `;
+}
+
+function runChapterTest() {
+  const questions = [
+    {
+      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[0].ar}</b>?`,
+      opts: [curChap.sentences[0].en, curChap.sentences[1].en, curChap.sentences[2].en],
+      correct: 0
+    },
+    {
+      q: `How do you say in Arabic: <i>"${curChap.sentences[4].en}"</i>?`,
+      opts: [curChap.sentences[3].ar, curChap.sentences[4].ar, curChap.sentences[5].ar],
+      correct: 1
+    },
+    {
+      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[6].ar}</b>?`,
+      opts: [curChap.sentences[6].en, curChap.sentences[7].en, "I want to sleep."],
+      correct: 0
+    },
+    {
+      q: `Choose the correct Arabic for: <i>"${curChap.sentences[8].en}"</i>:`,
+      opts: [curChap.sentences[1].ar, curChap.sentences[7].ar, curChap.sentences[8].ar],
+      correct: 2
+    },
+    {
+      q: `In the phrase <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[2].ar}</b>, the meaning is:`,
+      opts: ["Goodbye", curChap.sentences[2].en, "Where is the mosque?"],
+      correct: 1
+    }
+  ];
+
+  let curQ = 0, score = 0;
+  const area = document.getElementById("testArea");
+
+  function renderQ() {
+    if (curQ >= questions.length) {
+      const pct = Math.round((score / questions.length) * 100);
+      const passed = pct >= 80;
+      logEvent({ e: "chap-test", chap: curChap.id, score: pct, pass: passed });
+      updateTestBadge();
+      area.innerHTML = `
+        <div style="text-align:center;padding:16px">
+          <h3 style="font-size:22px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">${passed ? '🎉 Chapter Cleared!' : 'Almost there!'}</h3>
+          <p style="font-size:16px">Your Score: <b>${pct}%</b> (${score}/${questions.length})</p>
+          <p style="font-size:13.5px;color:var(--muted)">${passed ? 'You have demonstrated mastery of these high-frequency sentences.' : 'Review the sentences and retake the test anytime.'}</p>
+          <button type="button" class="primary" onclick="runChapterTest()" style="margin-top:10px">Retake Test</button>
+        </div>
+      `;
+      return;
+    }
+
+    const qItem = questions[curQ];
+    area.innerHTML = `
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Question ${curQ + 1} of ${questions.length}</div>
+      <div style="font-size:16px;margin-bottom:12px">${qItem.q}</div>
+      <div>
+        ${qItem.opts.map((opt, i) => `
+          <button type="button" class="q-opt" onclick="checkAnswer(${i}, ${qItem.correct}, this)">${opt}</button>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  window.checkAnswer = (picked, correct, btn) => {
+    const btns = area.querySelectorAll(".q-opt");
+    btns.forEach(b => b.disabled = true);
+    if (picked === correct) {
+      btn.classList.add("correct");
+      score++;
+    } else {
+      btn.classList.add("wrong");
+      btns[correct].classList.add("correct");
+    }
+    setTimeout(() => { curQ++; renderQ(); }, 1200);
+  };
+
+  renderQ();
+}
 </script>
 </body>
 </html>

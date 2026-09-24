@@ -174,17 +174,17 @@ function dueCards() {
 }
 function totalCards() { return Object.keys(getSrs()).length; }
 
-/* ---------- explicit buckets: know / repeat / later / never ---------- */
+/* ---------- explicit buckets: strong / medium / weak / learning / never ---------- */
 const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
 const BUCKETS = [
-  /* His words, 2026-08-30: "categories of got it, repeat, dont repeat, repeat
-     much later for me to use spaced repitition." Same four buckets the store has
-     always had; named the way he named them, because a tooltip that says
-     something else is a tooltip he has to translate. */
-  { id: "know", label: "✓", name: "got it — back in 30 days", days: 30, box: 5 },
-  { id: "repeat", label: "↻", name: "repeat — back in ~10 minutes", days: 0, box: 0 },
-  { id: "later", label: "⏳", name: "repeat much later — back in 7 days", days: 7, box: 3 },
-  { id: "never", label: "⊘", name: "don't repeat — never show this again", days: null, box: 5 },
+  { id: "strong", label: "Strong", name: "Strong — known well, back in 30 days", days: 30, box: 5 },
+  { id: "know", label: "Strong", name: "Strong — known well", days: 30, box: 5 },
+  { id: "medium", label: "Medium", name: "Medium — getting there, back in 7 days", days: 7, box: 3 },
+  { id: "later", label: "Medium", name: "Medium — back in 7 days", days: 7, box: 3 },
+  { id: "weak", label: "Weak", name: "Weak — struggling, back in 2 days", days: 2, box: 1 },
+  { id: "learning", label: "Learning", name: "Learning — fresh or missed, back in 10 mins", days: 0, box: 0 },
+  { id: "repeat", label: "Learning", name: "Learning — repeat soon", days: 0, box: 0 },
+  { id: "never", label: "Don't repeat", name: "Don't repeat — already know / skip forever", days: null, box: 5 },
 ];
 function setBucket(key, b) {
   const srs = getSrs();
@@ -1994,7 +1994,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mu353e7f";
+const DATA_V = "mug0buyj";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2209,25 +2209,20 @@ async function curCtx() {
    eleven-tab sprawl, because the sprawl was pages nobody asked for; these five
    are the five things he says he works on. Anything else stays behind ⋯ More. */
 function renderNav(active) {
-  const due = dueCards().length;
   const el = document.createElement("nav");
   el.innerHTML = `
     <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
     <span class="spacer"></span>
-    <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">Home</a>
+    <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">📖 Home</a>
     <a class="link" id="navSync" href="more.html#syncCard" title="Cloud sync">☁</a>
-    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences${due ? `<span class="badge">${due}</span>` : ""}</a>
-    <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
-    <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">📐 Others</a>
     <a class="link ${active === "classes" ? "active" : ""}" href="class.html">🧑‍🏫 Lessons</a>
+    <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
     <a class="link ${active === "map" || active === "more" ? "active" : ""}" href="map.html">📈 Progress</a>
   `;
   document.body.prepend(el);
   wireNavSync(el.querySelector("#navSync"));
   mountNotePen();
   initWordTap();
-  // the day-plan bar (js/plan.js) — walks him block to block without decisions
-  if (typeof planMountBar === "function") { try { planMountBar(); } catch (e) {} }
 }
 
 /* ☁ SYNC, BESIDE HOME (his ask, 2026-09-04: "there is lots of circular pages in

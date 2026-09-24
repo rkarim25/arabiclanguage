@@ -1,208 +1,90 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Written 2026-08-30, end of the redesign session.** Read this first in any new
-session. It tells you where the project stands, what changed, and what to do next.
-
-Reza's way to restart: **"run arabic coach"** (the `run-arabic-coach` skill), or
-just paste his lesson photos. Either way, read this file plus `CURRICULUM.md`
-before touching the site.
+**Updated 2026-09-24, post-redesign to Interactive Reader & 10-Word Drill.** Read this first in any new session. It tells you where the project stands, what changed, and how to continue.
 
 ---
 
-## 1. What this is
+## 1. What This Is & The Learner
 
-A private Arabic-learning site for **Reza Karim** (rkarim88@gmail.com) and his
-wife **Saba Khan** (sabatarif.15@gmail.com, beginner, no data yet).
-Live: https://rkarim25.github.io/arabiclanguage/
+A private Arabic-learning site for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
+Live URL: `https://rkarim25.github.io/arabiclanguage/`
 
-**His two goals, ranked:** (1) understand the Qur'an as it is recited,
-(2) hold a conversation in MSA including Umrah.
-**His constraint:** young family + demanding job. Tiredness is the barrier, not
-motivation. Design for 5–10 minute sessions and minimal decisions.
-
-**Live teacher:** Preply, **every Sunday 07:00 UK**. Confirmed still running as of
-2026-08-29 — three uncaptured lessons were missing *photos*, not a cancelled course.
+- **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (he already has the Qur'an memorised; decoding at speed is the barrier).
+- **Secondary Goal (Rank 2):** Hold a conversation in MSA, including Umrah.
+- **Learner Constraint:** High-pressure investment management career + young family. Low energy at night. Needs zero-friction, decision-free sittings (5–10 mins).
+- **Live Class:** Preply teacher **every Sunday 07:00 UK** (*Al-Arabiyyah Bayna Yadayk*).
 
 ---
 
-## 2. The docs, in reading order
+## 2. The Core Architecture (Rebuilt September 2026)
 
-| File | What it holds |
-|---|---|
-| **`CURRICULUM.md`** | **The design contract.** Milestones, lessons, proof, tests, pacing. Read before changing the home page, nav, `learn.html`, `map.html`, `data/curriculum.json` or `js/curriculum.js`. |
-| `README.md` | What the site is; data model, SRS key registry, content pipelines, infrastructure. |
-| `TEACHER-SYNC.md` | How a pasted/photographed lesson becomes site content. |
-| `coach-journal.md` (private repo) | Dated log of every coaching run. **Read the last few lines first** — they carry the current `next:` items. |
-| `learner-profile.md` (private repo) | Who he is and how he learns. Append dated observations. |
-
-Private repo for both: `rkarim25/arabic-learning-data`.
-
----
-
-## 3. What the site is now (redesigned 2026-08-29/30)
-
-It was renamed from "Arabic Through Stories" to **Arabic** (العربية) and rebuilt
-around a **milestone ladder**. His framing:
-
-> "in language learning itself [weeks] don't have any intrinsic value but the
-> milestones are everything… make the entire website milestone based."
+The site was simplified from a click-heavy, multi-page app with 28-lesson shelves into a **calm, book-like Interactive Reader**:
 
 ```
-LEVEL      CEFR letter + can-do line      🎧 Qur'an A2
-  ↑
-MILESTONE  a capability                   "you can order food and ask the price"
-  ↑
-LESSON     ONE ~7-minute sitting, own test  ~4 sentences
-  ↑
-SENTENCES  what he studies
-  ↑
-WORDS      what gets measured
+  📖 HOME (`index.html`)        Daily Book Reader: 10 sentences + Qur'an + AI speak + 5-min test
+  🧑‍🏫 LESSONS (`class.html`)   Preply Teacher Lessons (e.g. 30 Aug Samer) + Untimed Mastery Test
+  📇 WORDS (`words.html`)       10-Word Drill: 10 words at a time + Audio (pauses) + 5 rating pills
+  📈 PROGRESS (`map.html`)      Milestone capability ladder
+  ☁ SYNC (`more.html#syncCard`) Cloudflare KV sync for logs, SRS, and coach notes
 ```
 
-### THE SENTENCE IS THE UNIT OF STUDY (2026-08-30 — read CURRICULUM.md §5)
+### The 4 Destinations:
 
-He redesigned the lesson again the same night, after reading a summary of how
-adults acquire a language:
+1. **`index.html` (The Daily Chapter Reader):**
+   - **10 High-Frequency Sentences:** Situational and verb frames. Features: individual 🔊, "▶ Play All", and "⏸ Play with Pauses" (Arabic $\rightarrow$ 3.5s pause $\rightarrow$ English translation).
+   - **Qur'an by Ear (3–5 Ayats):** Sourced from `data/verses.json`. Features word-by-word hover/tap chips and real recitation audio (`everyayah.com` Alafasy).
+   - **Conditional Grammar:** Kept strictly *on a need basis* (hidden unless chapter introduces a new structural pattern).
+   - **AI Voice Prompt:** 1-click formatted copy button for ChatGPT/Claude voice chat.
+   - **5-Minute Chapter Test:** Quick 5-question comprehension check. $\ge 80\%$ stamps chapter as Mastered.
 
-> "first it gives a meaning, then i hear it in arabic, then i repeat it myself and
-> then i practise variations of it … i just keep working with sentences only and
-> as primary method."
+2. **`class.html` (Preply Live Lessons):**
+   - Dedicated space for live Sunday Preply lessons.
+   - Initial lesson: **30 Aug 2026** (Bayna Yadayk Unit 1 / Housing / Samer).
+   - Embedded reading passage (*Samer looking for a flat*) with audio and word-by-word hover.
+   - Full tables for class vocabulary and class sentences.
+   - **Untimed Mastery Test:** Untimed quiz (no countdown clock); $\ge 80\%$ confirms mastery.
+   - **Lesson Ingestion:** Text paste + slide photo upload box for future Sunday lessons.
 
-Four steps per sentence, and the two tracks differ in exactly one place:
+3. **`words.html` (10-Word Spaced Repetition Drill):**
+   - Strictly caps the display at **10 words** at a time from the master vocabulary (`classes.json` + `quran-core.json` + `everyday.json`).
+   - Prioritizes words currently due or marked `weak`/`learning`.
+   - Audio toolbar with Normal/Slow and "Play with Pauses" recall mode.
+   - 5 explicit rating pills per word: `Strong` (30 days), `Medium` (7 days), `Weak` (2 days), `Learning` (10 mins), `Don't repeat` (retire/never).
 
-| | 🗣 Conversation | 🎧 Qur'an |
-|---|---|---|
-| 1 | the meaning, in English | the meaning, in English |
-| 2 | **hear** the Arabic | **he recites it from memory** |
-| 3 | **produce** it (typed) | **decode** it by ear, at speed |
-| 4 | vary it | vary the pattern, never the ayah |
-
-**Why the Qur'an track is inverted:** he has it memorised, so playing him the
-audio to teach him the sound teaches nothing. What he cannot do is understand it
-*as it is recited*. So the site takes the recitation from him and gives the audio
-back as the test. His "I don't need to listen, I know it already" is half true —
-he knows the sound, not the meaning at speed, and the site should keep saying so.
-
-**Words did not go away, they went underneath.** Every sentence answer grades
-every word in it; review returns sentences containing what is slipping;
-`weakWords()` is the vocab list and he never sees it. Vocabulary left the nav
-(**three links now**); `vocab.html` and `review.html` survive as engines behind
-Progress.
-
-**`data/sentence-bank.json`** (341 sentences) is generated by
-`scripts/gen-sentences.js` from content already on the site and already checked.
-**Nothing in it is composed** — `scripts/test-sentences.js` traces every sentence
-to its source and fails otherwise. Variations come only from the verified
-conjugation table, and **no ayah is ever slot-substituted.**
-
-**Non-negotiable rules now enforced in code:**
-
-- **Proof only.** Nothing is mastered below **80** on its test. Solid SRS cards
-  earn skipping the *learning*, never the proof (`readyToProve` sends Continue
-  straight to the test).
-- **Tests never repeat what is proved**, except a ~30% spot check when
-  re-verification comes due (45 → 120 → 300 days). A failed re-check reopens the
-  lesson.
-- **7 lessons a week, 7 minutes each**, every week mixing **4 Qur'an + 3 everyday**.
-- **Time budgets:** a lesson's own test ~3 min, a week's ~7 min (21 questions
-  sampled evenly). A test too thin to judge a lesson reports but cannot clear it.
-- **Class material leads:** a milestone flagged `source:"teacher"` heads the very
-  next week. Material pasted Sunday must be live **by Monday** — this is a
-  commitment, not an aspiration.
-- **Never show a completion date.** The horizon is the next milestone.
-- **A level is never revoked.** Lessons and milestones may reopen.
-
-**Pages (three nav links):** `index.html` (home: milestone card + the 4-week
-shelf), `sentences.html` (free sentence practice), `map.html` (Progress: levels,
-criteria, milestones, pace). `learn.html` runs a lesson (normal or hands-free)
-and tests at any scope; `more.html` and `vocab.html` are engines, reached from
-Progress, not from the nav.
-
-**Ladder content:** 20 milestones, 128 lessons, 653 items ≈ 19 weeks, generated by
-`scripts/gen-curriculum.js` — **edit the SPEC there, never `data/curriculum.json`.**
+4. **`archive/` (Archived Legacy Pages):**
+   - Legacy multi-step story players (`story.html`, `stories.html`) and separate word labs (`vocab.html`) are cataloged in `archive/README.md`. All files remain intact in root for backward compatibility.
 
 ---
 
-## 4. Before any deploy
+## 3. Data Schemas & Contracts
 
-```bash
-node scripts/test-curriculum.js <kv-payload.json>   # milestones, weeks, proof, tests
-node scripts/test-typing.js                          # Arabic typing + forgiving grading
-node scripts/test-audio-coverage.js                  # every spoken string has a clip
-node scripts/test-progress-model.js <payload.json>   # the forecast engine
-node scripts/test-drill-grade.js
-node scripts/test-sentence-diag.js
-node scripts/bump-version.js                         # MUST run before commit; fails on stale stamps
-```
-
-Then commit, push, wait for Pages, and **verify in a real browser** — several
-bugs this session were invisible to the unit tests and only appeared when the
-live page was driven.
+- **SRS Bucket Storage (`ats-srs` in `localStorage` & Cloudflare KV):**
+  - `{ [wordKey]: { box: 0..5, due: timestamp, b: "strong"|"medium"|"weak"|"learning"|"never", u: timestamp } }`
+  - `strong`: box 5, 30 days
+  - `medium`: box 3, 7 days
+  - `weak`: box 1, 2 days
+  - `learning`: box 0, 10 minutes
+  - `never`: box 5, year 2100 (`NEVER_DUE`)
+- **Event Log (`ats-log`):**
+  - `chap-test`: `{ e: "chap-test", chap: "chap-1", score: pct, pass: bool, t: Date.now() }`
+  - `preply-test`: `{ e: "preply-test", classId: "c-2026-08-30", score: pct, pass: bool, t: Date.now() }`
+  - `preply-paste`: `{ e: "preply-paste", text: str, imageCount: num, t: Date.now() }`
 
 ---
 
-## 5. Where he actually is
+## 4. How to Ingest a New Preply Lesson on Sunday
 
-- **Words held 119, sentences held 74** (box ≥ 3) as of 2026-08-29.
-- **No milestone achieved yet** — proof-only came in, so everything needs a test.
-- Current milestone: **Al-Fatiha by ear** (6 lessons). Most of its words are
-  already solid, so Continue sends him straight to the tests.
-- Last real study before the redesign: **20 Aug**. He was in the site actively on
-  the 29th/30th giving design feedback.
-
----
-
-## 6. What to do next
-
-1. **Sunday's class → Monday's week.** He confirmed lessons are still on. When he
-   pastes photos or text, run the `TEACHER-SYNC.md` pipeline, add it to
-   `gen-curriculum.js` as a `source:"teacher"` milestone, regenerate, deploy.
-2. **Finish the defined corpus.** The target is named and finite (CURRICULUM.md
-   §8): the short surahs ✅ (592 ayat, imported from his own Qur'an site), the
-   everyday frames ✅ (79 × 9 = 952), and still open — **duas** and **mosque /
-   Haram Arabic**. His words: *"minimum sufficient for me to be considered basic
-   fluent in arabic and in quran (meaning i understand the short suras, duas and
-   what might be said in a mosque in Makkah/Madinah)."*
-   **The system must supply itself** — he corrected me on exactly this: *"my
-   sunday class is complementary and this should be standalone and self
-   sufficient system."* Both existing generators show the pattern: find the
-   verified supply the repo already owns and import it. Do NOT compose Arabic;
-   `test-sentences.js` traces every sentence to a source and will reject it.
-   Ladder coverage is 65%; 7 of 128 lessons are still word-only.
-3. **Watch for the first `exam-done` event.** It is the whole loop proving itself.
-4. **Diagnose the nightly.** `arabic-coach-nightly` missed 21–24 Aug entirely and
-   half-ran on the 28th (coach note updated, no journal line, no commit).
-5. Still pending from before: a `mictest` with peak > 0.1 (speaking is unmeasurable
-   until his Windows mic input is fixed), and the first `gfill` on the who-acts card.
+1. When Reza pastes text or images in `class.html` or in chat:
+2. Update `data/classes.json` with the new class entry (date, title, covered topics, vocabulary, sentences, and reading passage if applicable).
+3. If a new reading dialogue is included, store in `data/story-XX.json` and reference in `class.html`.
+4. The untimed mastery test in `class.html` automatically derives questions from that class's vocabulary and sentences.
+5. Deploy to GitHub Pages: commit and push.
 
 ---
 
-## 7. Hard-won lessons from this session
+## 5. Non-Negotiables for Future Agents
 
-- **When you replace a page, inventory what the old one wired up.** Twice I
-  shipped a new screen that silently dropped behaviour: story sentence audio, and
-  live Arabic transliteration on answer boxes. Both were his reports, not mine.
-- **Never chain `wrangler kv put` behind a generator step.** `&&` does not protect
-  a file the failed step already truncated — this overwrote his live coach note
-  with an empty file once. Validate the file, *then* put, as separate commands.
-- **Don't build emoji-bearing JSON from Python string literals with surrogate
-  escapes** (the Bash heredoc halves backslashes and turns them into lone
-  surrogates). Use the Write tool.
-- **Append to `coach-journal.md` at the byte level** (b64decode → concat →
-  b64encode); never round-trip the whole journal through a `str`.
-- **Ask him design questions.** He answers them better than I guess them, and he
-  reports bugs accurately — treat a pen note as a defect report and verify it in
-  the data before theorising about his motivation.
-
----
-
-## 8. Infrastructure
-
-- Site repo `rkarim25/arabiclanguage` → GitHub Pages. Data repo
-  `rkarim25/arabic-learning-data` (private).
-- Cloudflare KV namespace `9532d5717021486a92f75efb6d7b8a94`, worker `arabic-sync`.
-  Keys per user: `data:<email>`, `coach:<email>`, `coach-state:<email>`,
-  `img:<email>:<id>`.
-- Read his data: `npx wrangler kv key get --namespace-id=9532d5717021486a92f75efb6d7b8a94 "data:rkarim88@gmail.com" --remote`
-- **Only `{progress, srs, tapwords, log, savedAt}` syncs.** Arbitrary `store` keys
-  do not — which is why all mastery history lives in log events.
+- **Honesty over flattery:** Do not praise superficial completion.
+- **Keep it short:** Reza's time is scarce. Under 10 lines of explanation, then the question.
+- **Zero backlog dread:** Never show "73 cards due". Keep vocabulary drills to 10 words.
+- **Untimed on mastery:** Preply lesson tests must remain untimed.

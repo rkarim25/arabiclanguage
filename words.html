@@ -7,194 +7,341 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Words — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mu353e7f">
-  <link rel="stylesheet" href="css/style.css?v=mu353e7f">
+  <title>10-Word Vocab Drill — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mug0buyj">
+  <link rel="stylesheet" href="css/style.css?v=mug0buyj">
   <style>
-    .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 10px; }
-    .sp-chip { font-size: 12.5px; border: 1px solid var(--border); border-radius: 999px;
-               padding: 3px 11px; cursor: pointer; background: var(--card); }
-    .sp-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .sp-meta { font-size: 12.5px; color: var(--muted); }
-    .inv2 { display: flex; gap: 26px; flex-wrap: wrap; }
-    .inv2 .n { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .inv2 .l { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
-    .lrow { padding: 7px 10px; border-radius: 8px; }
-    .lrow:nth-child(odd) { background: rgba(0,0,0,.025); }
-    .lrow.on { border-left: 3px solid var(--accent); }
-    .lhead { display: flex; align-items: center; gap: 8px; }
-    .lnum { font-size: 11.5px; color: var(--muted); min-width: 30px; font-variant-numeric: tabular-nums; }
-    .lplay { border: 1px solid var(--border); background: var(--card); border-radius: 8px;
-             font-size: 13px; padding: 2px 8px; cursor: pointer; line-height: 1.5; }
-    .lrow .lar { font-family: var(--font-ar); font-size: 21px; line-height: 1.9; text-align: right; flex: 1; direction: rtl; }
-    .lrow .len { font-size: 13.5px; }
-    .ltr, .lnote { font-size: 11.5px; color: var(--muted); }
-    @media (prefers-color-scheme: dark) { .lrow:nth-child(odd) { background: rgba(255,255,255,.04); } }
+    .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .stat-strip { display: flex; gap: 20px; align-items: baseline; }
+    .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-strip .lbl { font-size: 12.5px; color: var(--muted); }
+    
+    /* Topic Selector Chips */
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 16px; }
+    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; color: var(--muted); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+    /* 10-Word Cards */
+    .word-table { display: flex; flex-direction: column; gap: 10px; }
+    .w-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s; }
+    .w-card:hover { border-color: var(--accent); }
+    .w-card.active { border-color: var(--accent); background: var(--accent-soft); }
+    .w-top { display: flex; justify-content: space-between; align-items: baseline; }
+    .w-ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; }
+    .w-en { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .w-meta { font-size: 12.5px; color: var(--muted); }
+
+    /* 5 Rating Pills */
+    .rate-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--border); }
+    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.1s; }
+    .rate-btn:hover { transform: translateY(-1px); }
+    
+    .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
+    .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
+
+    .rate-btn[data-b="medium"] { color: #0284c7; border-color: #bae6fd; }
+    .rate-btn[data-b="medium"].selected { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+    .rate-btn[data-b="weak"] { color: #d97706; border-color: #fde68a; }
+    .rate-btn[data-b="weak"].selected { background: #d97706; color: #fff; border-color: #d97706; }
+
+    .rate-btn[data-b="learning"] { color: #dc2626; border-color: #fecaca; }
+    .rate-btn[data-b="learning"].selected { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+    .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
+    .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
+
+    /* Audio Bar */
+    .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 10px 14px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+    @media (prefers-color-scheme: dark) { .audio-toolbar { background: rgba(255,255,255,0.04); } }
+    .audio-toolbar button { padding: 5px 12px; font-size: 13px; }
+    .audio-toolbar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+    /* Completion Banner */
+    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 20px; }
   </style>
 </head>
 <body>
-<main><div id="content">Loading…</div></main>
+<main>
+  <div class="v-header">
+    <div>
+      <h1 style="display:flex;align-items:center;gap:10px;margin:0">
+        <span>10-Word Drill</span>
+        <span class="arabic" style="color:var(--accent);font-size:26px">المُفْرَدَات</span>
+      </h1>
+      <p class="sub" style="margin:2px 0">Strictly 10 words at a time · Spaced repetition without the backlog</p>
+    </div>
+    <div class="stat-strip">
+      <div><div class="num" id="statHeld">0</div><div class="lbl">Words Held</div></div>
+      <div><div class="num" id="statTotal">0</div><div class="lbl">Master Vocab</div></div>
+    </div>
+  </div>
 
-<script src="js/progress-model.js?v=mu353e7f"></script>
-<script src="js/curriculum.js?v=mu353e7f"></script>
-<script src="js/app.js?v=mu353e7f"></script>
-<script src="js/tracker.js?v=mu353e7f"></script>
-<script src="js/plan.js?v=mu353e7f"></script>
+  <!-- Audio Controls -->
+  <div class="audio-toolbar">
+    <span style="font-size:13px;font-weight:700">🎧 Audio:</span>
+    <button type="button" id="btnPlayAll">▶ Play All 10</button>
+    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3s for you to recall, then says English">⏸ Play with Pauses</button>
+    <button type="button" id="btnStop" style="display:none">⏹ Stop</button>
+    <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
+      <button type="button" class="small" id="spNorm">🔊 Normal</button>
+      <button type="button" class="small" id="spSlow">🐢 Slow</button>
+    </span>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="filter-chips" id="filterChips">
+    <button type="button" class="chip active" data-filter="all">All Priority (Due &amp; Fresh)</button>
+    <button type="button" class="chip" data-filter="teacher">🧑‍🏫 Preply Teacher Words</button>
+    <button type="button" class="chip" data-filter="quran">📖 Qur'an High Frequency</button>
+    <button type="button" class="chip" data-filter="everyday">🗣 Everyday Survival</button>
+  </div>
+
+  <!-- Session Progress & List -->
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0;font-size:16px" id="sessionTitle">Today's 10 Words</h2>
+      <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+    </div>
+    <div class="word-table" id="wordList">Loading words…</div>
+    <div id="doneArea"></div>
+  </div>
+</main>
+
+<script src="js/progress-model.js?v=mug0buyj"></script>
+<script src="js/curriculum.js?v=mug0buyj"></script>
+<script src="js/app.js?v=mug0buyj"></script>
+<script src="js/tracker.js?v=mug0buyj"></script>
 <script>
 renderNav("words");
 trackPage("words");
 
-/* ---------- WORDS — the same queue idea as Sentences ----------
-   His instruction, 2026-08-30: "similarly for vocabulary as well, create tags of
-   themes/topics for me to go through stuff if needed but it should be frequency
-   based", and then plainly: "the most commonly used words and sentences is what
-   i want to master."
-
-   So this is one list, ordered by measured share of real Arabic
-   (data/frequency.json), with topics as a FILTER rather than a structure —
-   ordering by topic would put him back in the folders he asked to get out of.
-   Every row plays and every row carries the four spaced-repetition buckets, so
-   he can clear what he already knows without sitting through a lesson for it.
-
-   The old Vocab Lab (vocab.html) still exists behind ⋯ More with its flashcards,
-   sheets and drills. This page is the LIST. */
-const content = document.getElementById("content");
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
-/* ?held=1 shows only what he actually holds. His question about the progress
-   page, 2026-08-30: "are the sentences i know actually real? would i be able to
-   see those sentences?" A count nobody can click into is a claim, not a fact. */
-let TAG = "", SHOWN = 0, ROWS = [];
-let HELD_ONLY = new URLSearchParams(location.search).get("held") === "1";
-const PAGE = 60;
+let MASTER_WORDS = [];
+let ACTIVE_WORDS = [];
+let currentFilter = "all";
+let audioIdx = 0;
+let isPlaying = false;
 
 (async () => {
-  const short = t => String(t || "").split(/\s+[—–-]\s+/)[0].replace(/\s*\([^)]*\)\s*$/, "").trim();
-  let ev = { groups: [] }, core = { words: [] }, fam = { families: [] }, freq = { words: {} };
   try {
-    [ev, core, fam, freq] = await Promise.all([
-      fetch("data/everyday.json").then(r => r.json()),
-      fetch("data/quran-core.json").then(r => r.json()),
-      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
-      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
+    const [cRes, qRes, evRes] = await Promise.all([
+      fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
+      fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] }))
     ]);
-  } catch (e) { content.textContent = "Couldn't load the words."; return; }
 
-  const F = freq.words || {};
-  const per10k = ar => {
-    const w = normalizeAr(ar), bare = w.replace(/^ال/, "");
-    return Math.max(F[w] || 0, bare.length >= 3 ? (F[bare] || 0) : 0);
-  };
-  const seen = new Set();
-  const push = (key, m, tag) => {
-    if (!m || !m.ar || !m.en) return;
-    const n = normalizeAr(m.ar);
-    if (!n || seen.has(n)) return;          // one row per word, first source wins
-    seen.add(n);
-    ROWS.push({ key, ar: m.ar, en: m.en, tr: m.tr || "", note: m.note || "", tag, use: per10k(m.ar) });
-  };
-  /* The Qur'an core list is already a frequency list, so it goes in first and
-     owns any word both sources have. */
-  (core.words || []).forEach((w, i) => push(`qc:${i}`, w, "Qur'an — the commonest words"));
-  (ev.groups || []).forEach(g => (g.members || []).forEach((m, i) =>
-    push(`ev-${g.id}:${i}`, m, short(g.theme) || g.id)));
-  (fam.families || []).forEach(f => (f.members || []).forEach((m, i) =>
-    push(`fam-${f.id}:${i}`, m, "Root families")));
-  ROWS.sort((a, b) => b.use - a.use);
+    const seen = new Set();
+    const add = (k, ar, en, tr, note, src) => {
+      if (!ar || !en) return;
+      const n = normalizeAr(ar);
+      if (seen.has(n)) return;
+      seen.add(n);
+      MASTER_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src });
+    };
 
-  render();
-  primeSpeak();
+    // 1. Teacher words (from classes)
+    (cRes.classes || []).forEach(c => {
+      (c.vocabulary || []).forEach(v => add(v.key, v.ar, v.en, v.tr, v.note, "teacher"));
+    });
+    // 2. Quran core
+    (qRes.words || []).forEach((w, i) => add(`qc:${i}`, w.ar, w.en, w.tr, "", "quran"));
+    // 3. Everyday clusters
+    (evRes.groups || []).forEach(g => {
+      (g.members || []).forEach((m, i) => add(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday"));
+    });
+
+    updateOverallStats();
+    load10Words();
+    setupAudioSpeed();
+  } catch (e) {
+    console.error("Failed to load master vocabulary", e);
+  }
 })();
 
-function render() {
-  const held = k => (getSrs()[k] || {}).box >= 3;
-  const heldAll = ROWS.filter(r => held(r.key)).length;
-  const measured = ROWS.filter(r => r.use > 0).length;
+function updateOverallStats() {
+  const srs = getSrs();
+  const held = MASTER_WORDS.filter(w => (srs[w.key] || {}).box >= 3).length;
+  document.getElementById("statHeld").textContent = held;
+  document.getElementById("statTotal").textContent = MASTER_WORDS.length;
+}
 
-  // topics in the order their FIRST word appears, so the chips are themselves
-  // frequency-ordered rather than alphabetical
-  const tags = [], t0 = new Set();
-  ROWS.forEach(r => { if (r.tag && !t0.has(r.tag)) { t0.add(r.tag); tags.push(r.tag); } });
+function load10Words() {
+  stopAudio();
+  const srs = getSrs();
+  const now = Date.now();
 
-  content.innerHTML = `
-    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span>Words</span>
-      <span class="arabic" style="color:var(--accent)" dir="rtl">المُفْرَدَات</span>
-    </h1>
-    <div class="card" style="border-color:var(--accent)">
-      <p style="margin:0 0 8px;font-size:15px"><b>Commonest first — work down it.</b>
-      Ordered by how often each word actually occurs in the Qur'an and in everyday Arabic, not by topic.</p>
-      <div class="inv2">
-        <div><div class="n">${ROWS.length}</div><div class="l">words on the list<br><b>${heldAll}</b> held</div></div>
-        <div><div class="n">${measured}</div><div class="l">of them measured against<br>a real corpus</div></div>
-      </div>
-      <p class="sp-meta" style="margin:10px 0 0">🔊 hears it. The four buttons are yours:
-      ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat — mark what you already know and it stops coming back.
-      Words are still taught inside <a href="sentences.html" style="color:var(--accent)">sentences</a>; this is the list, not the lesson.</p>
-    </div>
-    <div class="sp-chips" style="margin-bottom:2px">
-      <span class="sp-chip ${HELD_ONLY ? "" : "on"}" id="allW">All ${ROWS.length}</span>
-      <span class="sp-chip ${HELD_ONLY ? "on" : ""}" id="heldW">✓ Only the ${heldAll} I hold</span>
-    </div>
-    <div class="sp-chips" id="tags">
-      <span class="sp-chip ${TAG ? "" : "on"}" data-t="">All</span>
-      ${tags.map(t => `<span class="sp-chip ${TAG === t ? "on" : ""}" data-t="${esc(t)}">${esc(t)}</span>`).join("")}
-    </div>
-    <p class="sp-meta" id="head" style="margin:0 0 10px"></p>
-    <div id="body"></div>
-    <div class="ex-row" style="margin-top:14px"><button id="more">Show more</button></div>`;
+  let pool = MASTER_WORDS;
+  if (currentFilter !== "all") {
+    pool = MASTER_WORDS.filter(w => w.src === currentFilter);
+  }
 
-  document.querySelectorAll("#tags .sp-chip").forEach(c => c.onclick = () => {
-    TAG = c.dataset.t; SHOWN = 0;
-    document.querySelectorAll("#tags .sp-chip").forEach(x => x.classList.toggle("on", x.dataset.t === TAG));
-    document.getElementById("body").innerHTML = "";
-    page();
+  // Priority scoring: Due words / weak words first, then unrated
+  const scored = pool.map(w => {
+    const item = srs[w.key];
+    let prio = 0;
+    if (!item) prio = 50; // unrated
+    else if (item.b === "never") prio = -999; // skip retired
+    else if (item.due && item.due <= now) prio = 100; // due now
+    else if (item.b === "weak" || item.b === "learning" || item.b === "repeat") prio = 80;
+    else prio = 10;
+    return { w, prio };
   });
-  document.getElementById("more").onclick = () => page();
-  document.getElementById("allW").onclick = () => { HELD_ONLY = false; render(); };
-  document.getElementById("heldW").onclick = () => { HELD_ONLY = true; render(); };
-  SHOWN = 0;
-  page();
 
-  function page() {
-    let rows = HELD_ONLY ? ROWS.filter(r => held(r.key)) : ROWS;
-    if (TAG) rows = rows.filter(r => r.tag === TAG);
-    const slice = rows.slice(SHOWN, SHOWN + PAGE);
-    const html = slice.map((r, i) => `
-      <div class="lrow${held(r.key) ? " on" : ""}" data-k="${esc(r.key)}">
-        <div class="lhead">
-          <span class="lnum">${SHOWN + i + 1}</span>
-          <button class="lplay" data-ar="${esc(r.ar)}" title="hear it">🔊</button>
-          <div class="lar arabic" dir="rtl">${esc(r.ar)}</div>
+  scored.sort((a, b) => b.prio - a.prio);
+  ACTIVE_WORDS = scored.slice(0, 10).map(s => s.w);
+
+  render10Cards();
+}
+
+function render10Cards() {
+  const srs = getSrs();
+  const container = document.getElementById("wordList");
+  container.innerHTML = ACTIVE_WORDS.map((w, idx) => {
+    const item = srs[w.key] || {};
+    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
+
+    return `
+      <div class="w-card" id="wcard-${idx}">
+        <div class="w-top">
+          <div>
+            <div class="w-en">${w.en}</div>
+            <div class="w-meta">${w.tr ? w.tr + ' · ' : ''}${w.note || (w.src === 'teacher' ? 'Preply Class' : w.src === 'quran' ? "Qur'an" : 'Everyday')}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="w-ar">${w.ar}</span>
+            <button class="small" onclick="playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
+          </div>
         </div>
-        <div class="len">${esc(r.en)}${r.tr ? ` <span class="ltr">${esc(r.tr)}</span>` : ""}</div>
-        ${r.note ? `<div class="lnote">${esc(r.note)}</div>` : ""}
-        <div class="bucket-slot"></div>
-      </div>`).join("");
-    const body = document.getElementById("body");
-    body.insertAdjacentHTML("beforeend", html);
-    SHOWN += slice.length;
+        <div class="rate-bar">
+          <span style="font-size:11.5px;color:var(--muted);margin-right:4px">Your rating:</span>
+          <button class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" onclick="rateWord('${w.key}', 'strong', ${idx})">Strong</button>
+          <button class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" onclick="rateWord('${w.key}', 'medium', ${idx})">Medium</button>
+          <button class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" onclick="rateWord('${w.key}', 'weak', ${idx})">Weak</button>
+          <button class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" onclick="rateWord('${w.key}', 'learning', ${idx})">Learning</button>
+          <button class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" onclick="rateWord('${w.key}', 'never', ${idx})">Don't repeat</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 
-    body.querySelectorAll(".lplay").forEach(b => {
-      if (b.dataset.wired) return;
-      b.dataset.wired = "1";
-      b.onclick = () => speak(b.dataset.ar, 0.85);
-    });
-    body.querySelectorAll(".lrow").forEach(row => {
-      const slot = row.querySelector(".bucket-slot");
-      if (!slot || slot.dataset.wired) return;
-      slot.dataset.wired = "1";
-      mountBucketBar(slot, row.dataset.k, b => row.classList.toggle("on", b !== "repeat"));
-    });
+  updateSessionProgress();
+}
 
-    const h = rows.filter(r => held(r.key)).length;
-    document.getElementById("head").innerHTML =
-      `${rows.length} ${HELD_ONLY ? "words you hold" : "words"}${TAG ? ` in <b>${esc(TAG)}</b>` : ""}, commonest first${HELD_ONLY ? "" : ` · <b>${h}</b> held`} · showing ${SHOWN}.`;
-    const more = document.getElementById("more");
-    more.style.display = SHOWN >= rows.length ? "none" : "";
-    more.textContent = `Show ${Math.min(PAGE, rows.length - SHOWN)} more`;
+function rateWord(key, bucket, cardIdx) {
+  setBucket(key, bucket);
+  updateOverallStats();
+  
+  // Highlight chosen button
+  const card = document.getElementById("wcard-" + cardIdx);
+  if (card) {
+    card.querySelectorAll(".rate-btn").forEach(b => {
+      b.classList.toggle("selected", b.dataset.b === bucket);
+    });
+  }
+  updateSessionProgress();
+}
+
+function updateSessionProgress() {
+  const srs = getSrs();
+  const ratedCount = ACTIVE_WORDS.filter(w => !!srs[w.key]).length;
+  document.getElementById("sessionCount").textContent = `${ratedCount} of ${ACTIVE_WORDS.length} rated`;
+
+  const doneArea = document.getElementById("doneArea");
+  if (ratedCount === ACTIVE_WORDS.length && ACTIVE_WORDS.length > 0) {
+    doneArea.innerHTML = `
+      <div class="done-banner">
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Words Complete!</h3>
+        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have been saved.</p>
+        <button type="button" class="primary" onclick="load10Words()" style="font-size:15px;padding:9px 20px">Drill Next 10 Words →</button>
+      </div>
+    `;
+  } else {
+    doneArea.innerHTML = "";
   }
 }
+
+/* Audio Toolbar Handling */
+function playSingle(encodedAr) {
+  stopAudio();
+  speak(decodeURIComponent(encodedAr), 0.85);
+}
+
+function setupAudioSpeed() {
+  const n = document.getElementById("spNorm");
+  const s = document.getElementById("spSlow");
+  const update = () => {
+    const slow = speakSpeed() === "slow";
+    n.style.fontWeight = slow ? "400" : "700";
+    s.style.fontWeight = slow ? "700" : "400";
+  };
+  n.onclick = () => { setSpeakSpeed("normal"); update(); };
+  s.onclick = () => { setSpeakSpeed("slow"); update(); };
+  update();
+}
+
+document.getElementById("btnPlayAll").onclick = () => {
+  stopAudio();
+  isPlaying = true;
+  document.getElementById("btnStop").style.display = "inline-block";
+  document.getElementById("btnPlayAll").classList.add("playing");
+  audioIdx = 0;
+  playStep(false);
+};
+
+document.getElementById("btnPlayPauses").onclick = () => {
+  stopAudio();
+  isPlaying = true;
+  document.getElementById("btnStop").style.display = "inline-block";
+  document.getElementById("btnPlayPauses").classList.add("playing");
+  audioIdx = 0;
+  playStep(true);
+};
+
+document.getElementById("btnStop").onclick = stopAudio;
+
+function stopAudio() {
+  isPlaying = false;
+  stopSpeak();
+  document.querySelectorAll(".w-card").forEach(c => c.classList.remove("active"));
+  document.getElementById("btnPlayAll").classList.remove("playing");
+  document.getElementById("btnPlayPauses").classList.remove("playing");
+  document.getElementById("btnStop").style.display = "none";
+}
+
+function playStep(withPause) {
+  if (!isPlaying || audioIdx >= ACTIVE_WORDS.length) {
+    stopAudio();
+    return;
+  }
+  const w = ACTIVE_WORDS[audioIdx];
+  document.querySelectorAll(".w-card").forEach(c => c.classList.remove("active"));
+  const card = document.getElementById("wcard-" + audioIdx);
+  if (card) card.classList.add("active");
+
+  speak(w.ar, 0.85, () => {
+    if (!isPlaying) return;
+    if (withPause) {
+      setTimeout(() => {
+        if (!isPlaying) return;
+        speak(w.en, 1.0, () => {
+          setTimeout(() => { audioIdx++; playStep(withPause); }, 1000);
+        });
+      }, 3000);
+    } else {
+      setTimeout(() => { audioIdx++; playStep(withPause); }, 1200);
+    }
+  });
+}
+
+// Topic filter chips
+document.getElementById("filterChips").addEventListener("click", e => {
+  const b = e.target.closest("[data-filter]");
+  if (!b) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  b.classList.add("active");
+  currentFilter = b.dataset.filter;
+  load10Words();
+});
 </script>
 </body>
 </html>
