@@ -8,55 +8,62 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug0dr26">
-  <link rel="stylesheet" href="css/style.css?v=mug0dr26">
+  <link rel="stylesheet" href="css/fonts.css?v=mug0kpsj">
+  <link rel="stylesheet" href="css/style.css?v=mug0kpsj">
   <style>
-    .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
     .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; background: var(--accent-soft); color: var(--accent); }
     .status-pill.done { background: var(--accent); color: #fff; }
-    
+
+    /* Collapsible Coach Card */
+    details.coach-details { border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 12px; padding: 9px 14px; margin-bottom: 14px; cursor: pointer; }
+    details.coach-details > summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; color: var(--accent); }
+    details.coach-details > summary::-webkit-details-marker { display: none; }
+    details.coach-details[open] { background: var(--card); border-color: var(--border); }
+    details.coach-details .coach-body { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); cursor: default; }
+
     /* Sentences Table */
-    .sentence-list { display: flex; flex-direction: column; gap: 10px; }
-    .s-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); transition: all 0.15s; }
+    .sentence-list { display: flex; flex-direction: column; gap: 9px; }
+    .s-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); transition: all 0.15s; }
     .s-row:hover { border-color: var(--accent); }
     .s-row.active { border-color: var(--accent); background: var(--accent-soft); }
-    .s-ar { font-family: var(--font-ar); font-size: 24px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
+    .s-ar { font-family: var(--font-ar); font-size: 23px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
     .s-meta { flex: 1; min-width: 220px; }
-    .s-en { font-size: 14.5px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+    .s-en { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
     .s-hint { font-size: 12px; color: var(--muted); }
     .s-actions { display: flex; gap: 6px; align-items: center; }
 
     /* Audio Toolbar */
-    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0 16px; padding: 10px 14px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; }
+    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 14px; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; }
     @media (prefers-color-scheme: dark) { .audio-bar { background: rgba(255,255,255,0.04); } }
-    .audio-bar button { padding: 6px 12px; font-size: 13px; font-weight: 500; }
+    .audio-bar button { padding: 5px 12px; font-size: 13px; font-weight: 500; }
     .audio-bar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
     /* Quran Verse Card */
-    .q-verse { padding: 14px 0; border-bottom: 1px dashed var(--border); }
+    .q-verse { padding: 12px 0; border-bottom: 1px dashed var(--border); }
     .q-verse:last-child { border-bottom: none; }
-    .q-ar { font-family: var(--font-ar); font-size: 26px; line-height: 2.1; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 8px; }
-    .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0; }
-    .q-chip { border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; background: var(--card); text-align: center; cursor: pointer; }
+    .q-ar { font-family: var(--font-ar); font-size: 25px; line-height: 2.1; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 6px; }
+    .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 6px 0; }
+    .q-chip { border: 1px solid var(--border); border-radius: 8px; padding: 3px 8px; background: var(--card); text-align: center; cursor: pointer; }
     .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .q-chip .ar-w { font-family: var(--font-ar); font-size: 20px; color: var(--accent); display: block; }
+    .q-chip .ar-w { font-family: var(--font-ar); font-size: 19px; color: var(--accent); display: block; }
     .q-chip .en-w { font-size: 11px; color: var(--muted); display: block; direction: ltr; }
-    .q-trans { font-size: 14px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+    .q-trans { font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
     .q-ref { font-size: 12px; font-weight: 700; color: var(--amber); }
 
     /* Conditional Grammar Box */
-    .grammar-box { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 16px 0; }
-    .grammar-box h3 { margin: 0 0 6px; font-size: 15px; color: var(--amber); }
+    .grammar-box { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 14px 0; }
+    .grammar-box h3 { margin: 0 0 4px; font-size: 15px; color: var(--amber); }
     .grammar-box p { margin: 0; font-size: 13.5px; line-height: 1.6; }
 
     /* AI Conversation Box */
-    .ai-box { background: #fdfaf4; border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
-    .ai-prompt-pre { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; color: var(--ink); margin: 10px 0; }
+    .ai-box { background: #fdfaf4; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+    .ai-prompt-pre { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; color: var(--ink); margin: 8px 0; }
 
     /* Chapter Test */
-    .test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 18px; background: var(--card); margin-top: 20px; }
-    .q-opt { display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14px; }
+    .test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 16px 18px; background: var(--card); margin-top: 18px; }
+    .q-opt { display: block; width: 100%; text-align: left; padding: 9px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14px; }
     .q-opt:hover { border-color: var(--accent); background: var(--accent-soft); }
     .q-opt.correct { background: var(--accent-soft); border-color: var(--accent); font-weight: 700; color: var(--accent); }
     .q-opt.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
@@ -68,9 +75,9 @@
     <div>
       <h1 style="display:flex;align-items:center;gap:10px;margin:0">
         <span>Daily Reader</span>
-        <span class="arabic" style="color:var(--accent);font-size:26px">القِرَاءَةُ اليَوْمِيَّة</span>
+        <span class="arabic" style="color:var(--accent);font-size:24px">القِرَاءَةُ اليَوْمِيَّة</span>
       </h1>
-      <p class="sub" style="margin:4px 0 0">One clean sitting · 10 sentences + Qur'an by ear + AI speak + 5-min test</p>
+      <p class="sub" style="margin:2px 0 0">10 high-frequency sentences + Qur'an by ear + AI speak + 5-min test</p>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
       <select id="chapSelect" class="chap-select" title="Choose Chapter"></select>
@@ -78,29 +85,37 @@
     </div>
   </div>
 
-  <!-- Coach's notes card (populated when coach replies to pen notes) -->
-  <div class="card" id="coachCard" style="display:none;border-color:var(--accent);background:var(--accent-soft)">
-    <h2 style="font-size:16px;margin:0 0 6px">🧑‍🏫 Coach's Note <span style="font-weight:400;font-size:12.5px;color:var(--muted)" id="coachDate"></span></h2>
-    <p id="coachNote" style="font-size:14.5px;line-height:1.6;margin:0 0 8px"></p>
-    <ul id="coachFocus" style="margin:0;padding-left:20px;font-size:13.5px"></ul>
-  </div>
+  <!-- COLLAPSIBLE COACH'S NOTE -->
+  <details class="coach-details" id="coachCard" style="display:none">
+    <summary>
+      <span>
+        <h2 style="display:inline;font-size:14.5px;margin:0;font-weight:700">🧑‍🏫 Coach's Note</h2>
+        <span style="font-weight:400;font-size:12px;color:var(--muted)" id="coachDate"></span>
+      </span>
+      <span style="font-size:12px;font-weight:600">Tap to expand ▾</span>
+    </summary>
+    <div class="coach-body">
+      <p id="coachNote" style="font-size:14px;line-height:1.6;margin:0 0 8px"></p>
+      <ul id="coachFocus" style="margin:0;padding-left:18px;font-size:13px;line-height:1.5"></ul>
+    </div>
+  </details>
 
   <!-- Audio Controls -->
   <div class="audio-bar">
-    <span style="font-size:13px;font-weight:700;color:var(--ink)">🎧 Audio:</span>
-    <button type="button" id="btnPlayAll">▶ Play All</button>
-    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3 seconds for you to recall, then says English">⏸ Play with Pauses</button>
+    <span style="font-size:13px;font-weight:700">🎧 Audio:</span>
+    <button type="button" id="btnPlayAll">▶ Play All 10</button>
+    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3.5s for you to recall, then says English">⏸ Play with Pauses</button>
     <button type="button" id="btnStopAudio" style="display:none">⏹ Stop</button>
     <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
-      <button type="button" class="small" data-sp="normal" id="spNormal">🔊 Normal</button>
-      <button type="button" class="small" data-sp="slow" id="spSlow">🐢 Slow</button>
+      <button type="button" class="small" id="spNormal">🔊 Normal</button>
+      <button type="button" class="small" id="spSlow">🐢 Slow</button>
     </span>
   </div>
 
   <!-- SECTION 1: 10 HIGH-FREQUENCY SENTENCES -->
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
-      <h2 style="margin:0">1. High-Frequency Sentences (10)</h2>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+      <h2 style="margin:0;font-size:17px">1. High-Frequency Sentences (10)</h2>
       <span style="font-size:12px;color:var(--muted)">Tap any word for instant meaning</span>
     </div>
     <div class="sentence-list" id="sentenceList">Loading sentences…</div>
@@ -108,9 +123,9 @@
 
   <!-- SECTION 2: QURAN AYATS BY EAR -->
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div>
-        <h2 style="margin:0" id="quranTitle">2. Qur'an by Ear</h2>
+        <h2 style="margin:0;font-size:17px" id="quranTitle">2. Qur'an by Ear</h2>
         <span class="sub" id="quranSubtitle" style="margin:0">Listen at recitation speed, then verify word-by-word</span>
       </div>
       <button type="button" class="primary small" id="btnPlayQuran">▶ Listen Recitation</button>
@@ -129,124 +144,247 @@
   <!-- SECTION 4: AI CONVERSATION PARTNER -->
   <div class="card ai-box">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2 style="margin:0;font-size:16px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+      <h2 style="margin:0;font-size:15px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
       <button type="button" id="btnCopyPrompt" class="small">📋 Copy Prompt</button>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin:6px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences.</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences.</p>
     <div class="ai-prompt-pre" id="aiPromptText">Loading prompt…</div>
   </div>
 
   <!-- SECTION 5: 5-MINUTE CHAPTER TEST -->
   <div class="test-box" id="testBox">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div>
-        <h2 style="margin:0">4. 📝 Chapter Test (5 Mins)</h2>
-        <p class="sub" style="margin:2px 0 0">Test your mastery of today's sentences and ayats. Pass at 80%+ to clear this chapter.</p>
+        <h2 style="margin:0;font-size:17px">4. 📝 Chapter Test (5 Mins)</h2>
+        <p class="sub" style="margin:2px 0 0">Test your comprehension of today's sentences and ayats. Pass at 80%+ to clear this chapter.</p>
       </div>
       <span id="testScorePill" class="status-pill" style="font-size:13px">Untested</span>
     </div>
     <div id="testArea">
-      <button type="button" class="primary" id="btnStartTest" style="font-size:15px;padding:10px 20px">Start Today's Test →</button>
+      <button type="button" class="primary" id="btnStartTest" style="font-size:14.5px;padding:9px 18px" onclick="runChapterTest()">Start Chapter Test →</button>
     </div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mug0dr26"></script>
-<script src="js/curriculum.js?v=mug0dr26"></script>
-<script src="js/app.js?v=mug0dr26"></script>
-<script src="js/tracker.js?v=mug0dr26"></script>
-<script src="js/account.js?v=mug0dr26"></script>
+<script src="js/progress-model.js?v=mug0kpsj"></script>
+<script src="js/curriculum.js?v=mug0kpsj"></script>
+<script src="js/app.js?v=mug0kpsj"></script>
+<script src="js/tracker.js?v=mug0kpsj"></script>
+<script src="js/account.js?v=mug0kpsj"></script>
 <script>
 renderNav("home");
 trackPage("home");
 
-/* CHAPTER CORPUS: 8 High-Frequency Chapters linking Sentences, Quran, Grammar, & AI Prompts */
+/* THE 10-CHAPTER CORPUS: Built around pure high-frequency sentences + Quran by ear */
 const CHAPTERS = [
   {
     id: "chap-1",
     num: 1,
-    title: "Greetings & Essentials",
+    title: "Chapter 1: Everyday Foundations",
     surahId: "ikhlas",
     grammar: {
       title: "The Nominal Sentence (الجُمْلَة الاسْمِيَّة)",
-      text: "Arabic has no verb for 'is' or 'are' in the present tense. Putting a subject next to a description creates a full sentence: <b>اللَّهُ أَحَدٌ</b> means <i>Allah [is] One</i>. <b>أَنَا جَائِعٌ</b> means <i>I [am] hungry</i>."
+      text: "Arabic has no verb for 'is' or 'are' in the present tense. Placing a subject next to an attribute completes the sentence: <b>اللَّهُ أَحَدٌ</b> means <i>Allah [is] One</i>; <b>أَنَا جَائِعٌ</b> means <i>I [am] hungry</i>."
     },
     sentences: [
       { ar: "السَّلَامُ عَلَيْكُمْ", en: "Peace be upon you.", hint: "The universal opening greeting" },
       { ar: "صَبَاحُ الخَيْرِ", en: "Good morning.", hint: "Everyday morning greeting" },
       { ar: "شُكْرًا جَزِيلًا", en: "Thank you very much.", hint: "Gratitude & courtesy" },
-      { ar: "نَعَمْ، بِكُلِّ سُرُورٍ", en: "Yes, with pleasure!", hint: "Affirmative & polite agreement" },
-      { ar: "أُرِيدُ مَاءً مِنْ فَضْلِكَ", en: "I want water, please.", hint: "Expressing wants with courtesy" },
+      { ar: "نَعَمْ، بِكُلِّ سُرُورٍ", en: "Yes, with pleasure!", hint: "Affirmative agreement" },
+      { ar: "أُرِيدُ مَاءً مِنْ فَضْلِكَ", en: "I want water, please.", hint: "Expressing wants politely" },
       { ar: "أَنَا جَائِعٌ جِدًّا", en: "I am very hungry.", hint: "Nominal sentence state" },
       { ar: "أَيْنَ المَسْجِدُ القَرِيبُ؟", en: "Where is the near mosque?", hint: "Asking directions" },
-      { ar: "كَمِ السِّعْرُ لِهَذَا؟", en: "How much is the price for this?", hint: "Market and shopping question" },
-      { ar: "هَلْ تَتَكَلَّمُ العَرَبِيَّةَ؟", en: "Do you speak Arabic?", hint: "Everyday inquiry" },
+      { ar: "كَمِ السِّعْرُ لِهَذَا؟", en: "How much is the price for this?", hint: "Everyday inquiry" },
+      { ar: "هَلْ تَتَكَلَّمُ العَرَبِيَّةَ؟", en: "Do you speak Arabic?", hint: "Language inquiry" },
       { ar: "مَعَ السَّلَامَةِ، إِلَى اللِّقَاءِ", en: "Goodbye, see you soon.", hint: "Polite farewell" }
     ],
-    aiScenario: "You are an Arabic conversation partner. I am a beginner (A1 level). Greet me politely in Arabic and ask how I am. Let's practice ordering food or water and asking where the mosque is. Keep your responses short (under 2 sentences), in Modern Standard Arabic with full harakat, and gently correct any mistake I make."
+    aiScenario: "You are a warm Arabic conversation partner. I am a beginner (A1 level). Greet me politely in Arabic and ask how I am. Let's practice ordering food or water and asking where the mosque is. Keep your replies short (under 2 sentences), in Modern Standard Arabic with full vowels, and gently correct mistakes."
   },
   {
     id: "chap-2",
     num: 2,
-    title: "Needs, Food & The Market",
+    title: "Chapter 2: Wants, Needs & Requests",
     surahId: "falaq",
-    grammar: null, // Conditional: omitted when not strictly needed
+    grammar: null,
     sentences: [
       { ar: "أُرِيدُ أَنْ آكُلَ شَيْئًا", en: "I want to eat something.", hint: "أُرِيدُ أَنْ + verb" },
-      { ar: "هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟", en: "Do you have halal food?", hint: "Inquiring at restaurants" },
-      { ar: "الحِسَابَ مِنْ فَضْلِكَ", en: "The bill, please.", hint: "Finishing at restaurant/shop" },
-      { ar: "كَمْ كِيلُو تُرِيدُ؟", en: "How many kilos do you want?", hint: "Market quantity" },
-      { ar: "هَذَا غَالٍ جِدًّا", en: "This is very expensive.", hint: "Market negotiation" },
-      { ar: "هَلْ يُمْكِنُ تَخْفِيضُ السِّعْرِ؟", en: "Is it possible to reduce the price?", hint: "Polite negotiation" },
-      { ar: "أَنَا عَطْشَانُ، أُرِيدُ شَايًا", en: "I am thirsty, I want tea.", hint: "State + want" },
-      { ar: "أَيْنَ الحَمَّامُ؟", en: "Where is the restroom?", hint: "Essential direction" },
+      { ar: "هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟", en: "Do you have halal food?", hint: "Inquiring at food places" },
+      { ar: "الحِسَابَ مِنْ فَضْلِكَ", en: "The bill, please.", hint: "Paying at cafe/restaurant" },
+      { ar: "أَنَا عَطْشَانُ، أُرِيدُ شَايًا", en: "I am thirsty, I want tea.", hint: "Daily request" },
+      { ar: "أَيْنَ الحَمَّامُ؟", en: "Where is the restroom?", hint: "Essential survival question" },
       { ar: "أُرِيدُ فِنْجَانَ قَهْوَةٍ", en: "I want a cup of coffee.", hint: "Ordering drinks" },
-      { ar: "تَفَضَّلْ، هَذَا مَالُكَ", en: "Here you go, this is your money.", hint: "Transaction exchange" }
+      { ar: "تَفَضَّلْ، هَذَا مَالُكَ", en: "Here you go, this is your money.", hint: "Payment exchange" },
+      { ar: "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟", en: "Can you help me?", hint: "Polite assistance request" },
+      { ar: "أَحْتَاجُ إِلَى هَذَا الكِتَابِ", en: "I need this book.", hint: "Expressing need" },
+      { ar: "شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ", en: "Thank you, I don't want anything else.", hint: "Concluding requests" }
     ],
-    aiScenario: "You are a friendly shopkeeper in Cairo or Medina. I come into your market stall to buy fruit and tea. Ask me what I want. Negotiate the price simply with me in A1 Modern Standard Arabic. Keep your sentences short and helpful."
+    aiScenario: "You are a friendly waiter at an Arab restaurant. Greet me, take my order for food and drinks, ask if I need anything else, and bring me the bill. Keep it strictly A1 Arabic."
   },
   {
     id: "chap-3",
     num: 3,
-    title: "Locations, Taxi & Umrah",
+    title: "Chapter 3: Hotel, Taxis & Travel",
     surahId: "nas",
     grammar: {
-      title: "Prepositions of Place (حُرُوفُ الجَرّ)",
-      text: "Prepositions like <b>فِي</b> (in), <b>إِلَى</b> (to), and <b>عَلَى</b> (on) put the noun after them into the genitive case with a kasrah: <b>إِلَى المَسْجِدِ</b> (to the mosque), <b>فِي الفُنْدُقِ</b> (in the hotel)."
+      title: "Having with 'Indi (عِنْدِي)",
+      text: "Arabic expresses possession with the prepositional phrase <b>عِنْدِي</b> (literally 'at me / with me'). <b>عِنْدِي حَجْزٌ</b> = <i>I have a reservation</i>. To negate: <b>لَيْسَ عِنْدِي</b> or <b>مَا عِنْدِي</b> = <i>I do not have</i>."
     },
     sentences: [
-      { ar: "إِلَى الحَرَمِ المَكِّيِّ، لَوْ سَمَحْتَ", en: "To the Haram in Makkah, please.", hint: "Taxi instruction" },
-      { ar: "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟", en: "How much is the fare to the hotel?", hint: "Asking taxi price" },
-      { ar: "تَوَقَّفْ هُنَا مِنْ فَضْلِكَ", en: "Stop here, please.", hint: "Direction instruction" },
-      { ar: "أَيْنَ بَابُ المَلِكِ فَهْدٍ؟", en: "Where is King Fahd Gate?", hint: "Haram landmark" },
-      { ar: "أَنَا قَادِمٌ لِلعُمْرَةِ", en: "I have come for Umrah.", hint: "State & purpose" },
-      { ar: "هَلْ هَذَا الفُنْدُقُ قَرِيبٌ؟", en: "Is this hotel nearby?", hint: "Proximity question" },
-      { ar: "ذَهَبْتُ إِلَى الصَّيْدَلِيَّةِ", en: "I went to the pharmacy.", hint: "Past verb + destination" },
-      { ar: "أُرِيدُ دَوَاءً لِلصُّدَاعِ", en: "I want medicine for a headache.", hint: "Pharmacy need" },
-      { ar: "السَّاعَةُ الآنَ الثَّالِثَةُ", en: "The time now is three o'clock.", hint: "Telling time" },
-      { ar: "تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ", en: "May Allah accept from us and from you.", hint: "Du'a and greeting after worship" }
+      { ar: "عِنْدِي حَجْزٌ فِي الفُنْدُقِ.", en: "I have a reservation at the hotel.", hint: "Hotel check-in" },
+      { ar: "أَيْنَ مِفْتَاحُ الغُرْفَةِ؟", en: "Where is the room key?", hint: "Hotel front desk" },
+      { ar: "خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ.", en: "Take me to the hotel, please.", hint: "Taxi direction" },
+      { ar: "أَيْنَ مَحَطَّةُ القِطَارِ؟", en: "Where is the train station?", hint: "Transport landmark" },
+      { ar: "هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ.", en: "This is my luggage in the car.", hint: "Luggage handling" },
+      { ar: "كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟", en: "How much is the fare to there?", hint: "Taxi pricing" },
+      { ar: "تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ.", en: "Stop here, please.", hint: "Taxi arrival" },
+      { ar: "جَوَازُ سَفَرِي مَفْقُودٌ.", en: "My passport is missing.", hint: "Emergency/travel notice" },
+      { ar: "هَذَا بَابُ الطَّوَارِئِ.", en: "This is the emergency door.", hint: "Safety landmark" },
+      { ar: "هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟", en: "Do you need any service?", hint: "Staff courtesy" }
     ],
-    aiScenario: "Roleplay: You are a taxi driver in Makkah taking me to the Haram and my hotel. Greet me, ask where I want to go, agree on a price, and chat briefly about Umrah in very simple Modern Standard Arabic (A1)."
+    aiScenario: "Roleplay: You are a hotel receptionist in Medina. I arrive to check in. Greet me, ask for my reservation and passport, hand me the room key, and answer where the elevator is in simple A1 Arabic."
   },
   {
     id: "chap-4",
     num: 4,
-    title: "Time, Plans & Actions",
+    title: "Chapter 4: Time, Routine & Actions",
     surahId: "asr",
     grammar: null,
     sentences: [
-      { ar: "مَاذَا تَفْعَلُ اليَوْمَ؟", en: "What are you doing today?", hint: "Daily question" },
+      { ar: "مَاذَا تَفْعَلُ اليَوْمَ؟", en: "What are you doing today?", hint: "Daily routine question" },
       { ar: "سَأَذْهَبُ إِلَى الدَّرْسِ غَدًا", en: "I will go to the lesson tomorrow.", hint: "Future particle سَـ + verb" },
       { ar: "قَرَأْتُ القُرْآنَ بَعْدَ الفَجْرِ", en: "I read the Quran after Fajr.", hint: "Past verb + time phrase" },
       { ar: "مَتَى يَبْدَأُ الدَّرْسُ؟", en: "When does the lesson begin?", hint: "Asking time with مَتَى" },
-      { ar: "عِنْدِي مَوْعِدٌ فِي المَسَاءِ", en: "I have an appointment in the evening.", hint: "Having with عِنْدِي" },
-      { ar: "كَتَبْتُ رِسَالَةً لِأَخِي", en: "I wrote a letter to my brother.", hint: "Past verb + object" },
-      { ar: "هَلْ صَلَّيْتَ العَصْرَ؟", en: "Did you pray Asr?", hint: "Past inquiry" },
+      { ar: "عِنْدِي مَوْعِدٌ فِي المَسَاءِ", en: "I have an appointment in the evening.", hint: "Evening plans" },
+      { ar: "كَتَبْتُ رِسَالَةً لِأَخِي", en: "I wrote a letter to my brother.", hint: "Past verb production" },
+      { ar: "هَلْ صَلَّيْتَ العَصْرَ؟", en: "Did you pray Asr?", hint: "Worship timing" },
       { ar: "نَحْنُ نَتَعَلَّمُ العَرَبِيَّةَ", en: "We are learning Arabic.", hint: "Plural present verb" },
       { ar: "لَا أَعْرِفُ مَعْنَى هَذِهِ الكَلِمَةِ", en: "I don't know the meaning of this word.", hint: "Present negation with لَا" },
-      { ar: "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟", en: "How do I say this in Arabic?", hint: "Crucial conversation repair question" }
+      { ar: "السَّاعَةُ الآنَ الثَّالِثَةُ تَمَامًا", en: "The time now is exactly three o'clock.", hint: "Telling time" }
     ],
     aiScenario: "You are my Arabic language tutor having a warm check-in. Ask me what I did today, when I read Quran, and what my plans are for tomorrow. Speak in simple A1 Arabic."
+  },
+  {
+    id: "chap-5",
+    num: 5,
+    title: "Chapter 5: Questions & Meeting People",
+    surahId: "kawthar",
+    grammar: null,
+    sentences: [
+      { ar: "مَا اسْمُكَ الكَرِيمُ؟", en: "What is your honorable name?", hint: "Polite personal question" },
+      { ar: "مِنْ أَيْنَ أَنْتَ؟", en: "Where are you from?", hint: "Origin question" },
+      { ar: "أَنَا مِنْ بَرِيطَانِيَا.", en: "I am from Britain.", hint: "Origin answer" },
+      { ar: "تَشَرَّفْنَا بِمَعْرِفَتِكَ.", en: "Honored to meet you.", hint: "Courtesy expression" },
+      { ar: "كَيْفَ الحَالُ اليَوْمَ؟", en: "How are things today?", hint: "Common greeting inquiry" },
+      { ar: "الحَمْدُ لِلَّهِ، بِخَيْرٍ وَعَافِيَةٍ.", en: "Praise be to Allah, fine and well.", hint: "Standard response" },
+      { ar: "هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟", en: "Is it possible you help me?", hint: "Asking for help" },
+      { ar: "أَنَا آسِفٌ جِدًّا عَلَى التَّأْخِيرِ.", en: "I am very sorry for being late.", hint: "Polite apology" },
+      { ar: "عَفْوًا، لَا شُكْرَ عَلَى وَاجِبٍ.", en: "You're welcome, no thanks needed.", hint: "Response to shukran" },
+      { ar: "فِي أَمَانِ اللَّهِ وَحِفْظِهِ.", en: "In Allah's safety and protection.", hint: "Warm farewell" }
+    ],
+    aiScenario: "You are meeting me for the first time at a cafe in Amman. Greet me, ask my name, where I am from, what I do, and how long I have been learning Arabic. Keep sentences under 15 words."
+  },
+  {
+    id: "chap-6",
+    num: 6,
+    title: "Chapter 6: Home & Furniture",
+    surahId: "qadr",
+    grammar: {
+      title: "Describing Rooms (Adjective Agreement)",
+      text: "Non-human plurals and feminine nouns take feminine singular adjectives: <b>غُرْفَةٌ جَمِيلَةٌ</b> (a beautiful room); <b>شُقَقٌ وَاسِعَةٌ</b> (spacious flats)."
+    },
+    sentences: [
+      { ar: "أَسْكُنُ فِي شَقَّةٍ جَمِيلَةٍ.", en: "I live in a beautiful flat.", hint: "Residence statement" },
+      { ar: "فِي الشَّقَّةِ غُرْفَةُ نَوْمٍ وَمَطْبَخٌ.", en: "In the flat is a bedroom and kitchen.", hint: "Flat layout" },
+      { ar: "هَذِهِ غُرْفَةُ الجُلُوسِ الوَاسِعَةُ.", en: "This is the spacious living room.", hint: "Living room" },
+      { ar: "عِنْدِي سَرِيرٌ فِي غُرْفَةِ النَّوْمِ.", en: "I have a bed in the bedroom.", hint: "Bedroom furniture" },
+      { ar: "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ جَدِيدٌ.", en: "In the kitchen is a fridge and a new oven.", hint: "Kitchen appliances" },
+      { ar: "عَلَى المَائِدَةِ كَرَاسِي كَثِيرَةٌ.", en: "Around the dining table are many chairs.", hint: "Dining area" },
+      { ar: "أَيْنَ سِتَارَةُ الشُّبَّاكِ؟", en: "Where is the window curtain?", hint: "Household fixtures" },
+      { ar: "السَّجَّادَةُ عَلَى الأَرْضِ نَظِيفَةٌ.", en: "The carpet on the floor is clean.", hint: "Carpet/rugs" },
+      { ar: "فِي أَيِّ طَابِقٍ تَسْكُنُ؟", en: "On which floor do you live?", hint: "Floor inquiry" },
+      { ar: "أَسْكُنُ فِي الطَّابِقِ الثَّالِثِ.", en: "I live on the third floor.", hint: "Floor response" }
+    ],
+    aiScenario: "Roleplay: You are an apartment owner showing me around a flat in Cairo. Describe the rooms, what furniture is included (bed, oven, fridge), and tell me which floor it is on. Speak simply."
+  },
+  {
+    id: "chap-7",
+    num: 7,
+    title: "Chapter 7: Shopping & The Market",
+    surahId: "quraysh",
+    grammar: null,
+    sentences: [
+      { ar: "كَمْ سِعْرُ هَذَا القَمِيصِ؟", en: "How much is the price of this shirt?", hint: "Clothing inquiry" },
+      { ar: "هَذَا رَخِيصٌ وَذَاكَ غَالٍ.", en: "This is cheap and that is expensive.", hint: "Comparing prices" },
+      { ar: "أُرِيدُ ثَلَاثَةَ كِيلُو مِنْ هَذَا.", en: "I want three kilos of this.", hint: "Quantity request" },
+      { ar: "هَلْ تَقْبَلُونَ البِطَاقَةَ؟", en: "Do you accept cards?", hint: "Card payment inquiry" },
+      { ar: "أَدْفَعُ نَقْدًا مِنْ فَضْلِكَ.", en: "I pay cash, please.", hint: "Cash payment" },
+      { ar: "هَلْ عِنْدَكُمْ حَجْمٌ أَكْبَرُ؟", en: "Do you have a bigger size?", hint: "Size inquiry" },
+      { ar: "أَعْطِنِي هَذَا الكِتَابَ.", en: "Give me this book.", hint: "Direct request" },
+      { ar: "تَفَضَّلْ هَذِهِ النُّقُودُ.", en: "Here is the money.", hint: "Giving payment" },
+      { ar: "هَذَا شَيْءٌ مُمْتَازٌ جِدًّا.", en: "This is a very excellent thing.", hint: "Praise/approval" },
+      { ar: "بَارَكَ اللَّهُ لَكَ فِي تِجَارَتِكَ.", en: "May Allah bless you in your business.", hint: "Trader blessing" }
+    ],
+    aiScenario: "You are a merchant at the Souq in Jeddah. I want to buy a thobe or dates. Negotiate courteously with me, tell me the price, and accept cash or card."
+  },
+  {
+    id: "chap-8",
+    num: 8,
+    title: "Chapter 8: The Conversation Repair Kit",
+    surahId: "kafirun",
+    grammar: null,
+    sentences: [
+      { ar: "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟", en: "How do I say this in Arabic?", hint: "Essential learning question" },
+      { ar: "مَا مَعْنَى هَذِهِ الكَلِمَةِ؟", en: "What is the meaning of this word?", hint: "Vocabulary inquiry" },
+      { ar: "لَمْ أَفْهَمْ، كَرِّرْ مِنْ فَضْلِكَ.", en: "I did not understand, repeat please.", hint: "Repair phrase" },
+      { ar: "تَكَلَّمْ بِبُطْءٍ، لَوْ سَمَحْتَ.", en: "Speak slowly, please.", hint: "Speed adjustment" },
+      { ar: "أَنَا أَتَعَلَّمُ اللُّغَةَ العَرَبِيَّةَ.", en: "I am learning the Arabic language.", hint: "Setting expectations" },
+      { ar: "هَلْ كَلَامِي وَاضِحٌ؟", en: "Is my speech clear?", hint: "Checking comprehension" },
+      { ar: "اكْتُبْهَا لِي، مِنْ فَضْلِكَ.", en: "Write it for me, please.", hint: "Spelling request" },
+      { ar: "انْتَظِرْ لَحْظَةً وَاحِدَةً.", en: "Wait one moment.", hint: "Pausing the exchange" },
+      { ar: "نَسِيتُ الكَلِمَةَ الآنَ.", en: "I forgot the word now.", hint: "Recall delay" },
+      { ar: "فَهِمْتُكَ الآنَ تَمَامًا.", en: "I understood you now completely.", hint: "Confirmation" }
+    ],
+    aiScenario: "You are my Arabic practice partner. Test my repair phrases by deliberately speaking slightly fast or using a new word, and encourage me to ask you to repeat, speak slowly, or explain the word in Arabic."
+  },
+  {
+    id: "chap-9",
+    num: 9,
+    title: "Chapter 9: The Mosque & Worship",
+    surahId: "fatiha",
+    grammar: null,
+    sentences: [
+      { ar: "أَيْنَ مَكَانُ الوُضُوءِ؟", en: "Where is the place of wudu?", hint: "Mosque essentials" },
+      { ar: "مَتَى يُنَادَى لِلأَذَانِ؟", en: "When is the adhan called?", hint: "Prayer timing" },
+      { ar: "أَقَامَ المُؤَذِّنُ الصَّلَاةَ.", en: "The mu'adhin called the iqamah.", hint: "Prayer commencement" },
+      { ar: "اسْتَوُوا وَاعْتَدِلُوا فِي الصُّفُوفِ.", en: "Straighten and align the rows.", hint: "Imam instruction" },
+      { ar: "صَلَّيْنَا جَمَاعَةً فِي المَسْجِدِ.", en: "We prayed in congregation in the mosque.", hint: "Prayer statement" },
+      { ar: "مَا اسْمُ إِمَامِ الحَرَمِ؟", en: "What is the name of the Imam of the Haram?", hint: "Haram inquiry" },
+      { ar: "أُرِيدُ مُصْحَفًا لِلْقِرَاءَةِ.", en: "I want a mushaf to read.", hint: "Mushaf request" },
+      { ar: "جَزَاكَ اللَّهُ خَيْرَ الجَزَاءِ.", en: "May Allah reward you with the best reward.", hint: "Islamic courtesy" },
+      { ar: "أَدْعُو اللَّهَ لَكَ بِالتَّوْفِيقِ.", en: "I pray to Allah for your success.", hint: "Brotherly du'a" },
+      { ar: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ.", en: "Peace and Allah's mercy be upon you.", hint: "Prayer conclusion & farewell" }
+    ],
+    aiScenario: "We are at the Prophet's Mosque in Madinah. Ask me if I have made wudu, where we should sit to read Quran, and remind me of the time for Asr prayer in simple Arabic."
+  },
+  {
+    id: "chap-10",
+    num: 10,
+    title: "Chapter 10: Days, Weeks & Plans",
+    surahId: "nasr",
+    grammar: null,
+    sentences: [
+      { ar: "اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ.", en: "Today is Friday.", hint: "Day of the week" },
+      { ar: "أَمْسِ كَانَ يَوْمَ الخَمِيسِ.", en: "Yesterday was Thursday.", hint: "Past day" },
+      { ar: "غَدًا عِنْدِي دَرْسٌ مَعَ الأُسْتَاذِ.", en: "Tomorrow I have a lesson with the teacher.", hint: "Future plan" },
+      { ar: "كَمْ سَاعَةً تَدْرُسُ فِي اليَوْمِ؟", en: "How many hours do you study a day?", hint: "Study routine" },
+      { ar: "أَقْضِي عُطْلَةَ نِهَايَةِ الأُسْبُوعِ مَعَ عَائِلَتِي.", en: "I spend the weekend with my family.", hint: "Weekend life" },
+      { ar: "فِي الصَّبَاحِ أَشْرَبُ الشَّايَ.", en: "In the morning I drink tea.", hint: "Morning routine" },
+      { ar: "فِي المَسَاءِ أَقْرَأُ كِتَابًا.", en: "In the evening I read a book.", hint: "Evening routine" },
+      { ar: "مَتَى تَصِلُ الطَّائِرَةُ؟", en: "When does the plane arrive?", hint: "Flight arrival" },
+      { ar: "عِنْدِي وَقْتٌ كَافٍ الآنَ.", en: "I have enough time now.", hint: "Availability" },
+      { ar: "إِلَى اللِّقَاءِ فِي الأُسْبُوعِ القَادِمِ.", en: "See you next week.", hint: "Weekly farewell" }
+    ],
+    aiScenario: "You are an Arabic conversation partner talking about our week. Ask me what day today is, what I did yesterday, and when my next Arabic class is."
   }
 ];
 
@@ -270,7 +408,7 @@ let isAudioRunning = false;
 
 function initChapterSelector() {
   const sel = document.getElementById("chapSelect");
-  sel.innerHTML = CHAPTERS.map(c => `<option value="${c.id}">Chapter ${c.num}: ${c.title}</option>`).join("");
+  sel.innerHTML = CHAPTERS.map(c => `<option value="${c.id}">${c.title}</option>`).join("");
   sel.onchange = e => {
     const found = CHAPTERS.find(c => c.id === e.target.value);
     if (found) loadChapter(found);
@@ -423,7 +561,6 @@ function playNextInQueue(withPause) {
   speak(item.ar, 0.85, () => {
     if (!isAudioRunning) return;
     if (withPause && item.en) {
-      // 3.5-second recall pause, then say English translation
       setTimeout(() => {
         if (!isAudioRunning) return;
         speak(item.en, 1.0, () => {
@@ -442,7 +579,7 @@ function playNextInQueue(withPause) {
   });
 }
 
-/* CHAPTER 5-MINUTE TEST */
+/* DYNAMIC 5-MINUTE CHAPTER TEST */
 function updateTestBadge() {
   const log = store.get("ats-log", []);
   const pass = log.find(x => x.e === "chap-test" && x.chap === curChap.id && x.score >= 80);
@@ -463,35 +600,36 @@ function updateTestBadge() {
 
 function resetTestArea() {
   document.getElementById("testArea").innerHTML = `
-    <button type="button" class="primary" id="btnStartTest" style="font-size:15px;padding:10px 20px" onclick="runChapterTest()">Start 5-Minute Test →</button>
+    <button type="button" class="primary" id="btnStartTest" style="font-size:14.5px;padding:9px 18px" onclick="runChapterTest()">Start Chapter Test →</button>
   `;
 }
 
 function runChapterTest() {
+  const s = curChap.sentences;
   const questions = [
     {
-      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[0].ar}</b>?`,
-      opts: [curChap.sentences[0].en, curChap.sentences[1].en, curChap.sentences[2].en],
+      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${s[0].ar}</b>?`,
+      opts: [s[0].en, s[1].en, s[2].en],
       correct: 0
     },
     {
-      q: `How do you say in Arabic: <i>"${curChap.sentences[4].en}"</i>?`,
-      opts: [curChap.sentences[3].ar, curChap.sentences[4].ar, curChap.sentences[5].ar],
+      q: `How do you say in Arabic: <i>"${s[4].en}"</i>?`,
+      opts: [s[3].ar, s[4].ar, s[5].ar],
       correct: 1
     },
     {
-      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[6].ar}</b>?`,
-      opts: [curChap.sentences[6].en, curChap.sentences[7].en, "I want to sleep."],
+      q: `What does <b class="arabic" style="font-size:22px;color:var(--accent)">${s[6].ar}</b> mean?`,
+      opts: [s[6].en, s[7].en, s[1].en],
       correct: 0
     },
     {
-      q: `Choose the correct Arabic for: <i>"${curChap.sentences[8].en}"</i>:`,
-      opts: [curChap.sentences[1].ar, curChap.sentences[7].ar, curChap.sentences[8].ar],
+      q: `Choose the correct Arabic for: <i>"${s[8].en}"</i>:`,
+      opts: [s[2].ar, s[7].ar, s[8].ar],
       correct: 2
     },
     {
-      q: `In the phrase <b class="arabic" style="font-size:22px;color:var(--accent)">${curChap.sentences[2].ar}</b>, the meaning is:`,
-      opts: ["Goodbye", curChap.sentences[2].en, "Where is the mosque?"],
+      q: `In this chapter, what does <b class="arabic" style="font-size:22px;color:var(--accent)">${s[2].ar}</b> mean?`,
+      opts: [s[9].en, s[2].en, s[5].en],
       correct: 1
     }
   ];
@@ -507,9 +645,11 @@ function runChapterTest() {
       updateTestBadge();
       area.innerHTML = `
         <div style="text-align:center;padding:16px">
-          <h3 style="font-size:22px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">${passed ? '🎉 Chapter Cleared!' : 'Almost there!'}</h3>
-          <p style="font-size:16px">Your Score: <b>${pct}%</b> (${score}/${questions.length})</p>
-          <p style="font-size:13.5px;color:var(--muted)">${passed ? 'You have demonstrated mastery of these high-frequency sentences.' : 'Review the sentences and retake the test anytime.'}</p>
+          <h3 style="font-size:20px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
+            ${passed ? '🎉 Chapter Cleared!' : 'Good Effort!'}
+          </h3>
+          <p style="font-size:15px">Your Score: <b>${pct}%</b> (${score}/${questions.length})</p>
+          <p style="font-size:13px;color:var(--muted)">${passed ? 'You have demonstrated mastery of these high-frequency sentences.' : 'Review the sentences and retake the test anytime.'}</p>
           <button type="button" class="primary" onclick="runChapterTest()" style="margin-top:10px">Retake Test</button>
         </div>
       `;
@@ -518,8 +658,8 @@ function runChapterTest() {
 
     const qItem = questions[curQ];
     area.innerHTML = `
-      <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Question ${curQ + 1} of ${questions.length}</div>
-      <div style="font-size:16px;margin-bottom:12px">${qItem.q}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Question ${curQ + 1} of ${questions.length}</div>
+      <div style="font-size:15.5px;margin-bottom:12px">${qItem.q}</div>
       <div>
         ${qItem.opts.map((opt, i) => `
           <button type="button" class="q-opt" onclick="checkAnswer(${i}, ${qItem.correct}, this)">${opt}</button>
