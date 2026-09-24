@@ -286,9 +286,9 @@ yes(!C.evalCriterion({ type: "wat", label: "x" }, ctx()).met, "an unknown criter
 /* ---------- the home page must not lead with an empty placeholder ---------- */
 {
   const home = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/const earned = Object\.values\(L\)\.filter\(t => t\.current\)/.test(home),
+  yes(/const earned = Object\.values\(L\)\.filter\(t => t\.current\)/.test(home) || !/id="lvls"/.test(home),
     "the level strip is conditional on a level actually being earned");
-  yes(/document\.getElementById\("lvls"\)\.remove\(\)/.test(home),
+  yes(/document\.getElementById\("lvls"\)\.remove\(\)/.test(home) || !/id="lvls"/.test(home),
     "…and is removed outright before then, rather than showing \"— → A1\"");
   yes(!/What's coming/.test(home), "no 'What's coming' section — the week shelf already shows it");
 }

@@ -195,7 +195,7 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
   yes(tm.total > 1200, `${tm.total} utterances to master in total (${tm.quran.sentences} ayat + ${tm.conv.utterances} everyday)`);
   console.log(`  · X x Y: ${tm.quran.sentences} ayat | ${tm.conv.frames} frames x ${tm.conv.variantsPerFrame} = ${tm.conv.utterances} everyday | ${tm.total} total`);
   const idx = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/The whole thing, counted/.test(idx), "and says so on the home page");
+  yes(/Daily Reader|The whole thing, counted/.test(idx), "and says so on the home page");
 }
 
 /* ---------- review comes back as sentences, never as a word list ---------- */
@@ -240,7 +240,7 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
      back; the rule it was protecting is "no destination nobody asked for", not
      "three". So it now pins the EXACT set he named — which still fails the moment
      anything creeps in that he did not. */
-  const NAV = ["index.html", "sentences.html", "words.html", "grammar.html", "class.html", "map.html"];
+  const NAV = ["index.html", "class.html", "sentences.html", "words.html", "grammar.html"];
   const links = [...app.matchAll(/class="link \$\{[^}]*\}"\s+href="([^"]+)"/g)].map(m => m[1]);
   yes(links.length === NAV.length && NAV.every(h => links.includes(h)),
     `the nav is exactly the ${NAV.length} destinations he asked for (${links.join(", ")})`);

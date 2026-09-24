@@ -664,7 +664,7 @@
     {
      "ar": "مَا عِنْدِي",
      "en": "I don't have…",
-     "tr": "",
+     "tr": "mā ʿindī",
      "from": "teacher",
      "key": "s:pr:60",
      "keys": []
@@ -672,7 +672,7 @@
     {
      "ar": "لَيْسَ عِنْدِي",
      "en": "I don't have… (the other way to say it)",
-     "tr": "",
+     "tr": "laysa ʿindī",
      "from": "teacher",
      "key": "s:pr:61",
      "keys": []
@@ -680,7 +680,7 @@
     {
      "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
      "en": "I have two uncles and two aunts.",
-     "tr": "",
+     "tr": "ʿindī khālān wa-khālatān",
      "from": "teacher",
      "key": "s:pr:62",
      "keys": []
@@ -688,7 +688,7 @@
     {
      "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
      "en": "What furniture is there in your house?",
-     "tr": "",
+     "tr": "mādhā yūjadu fī baytika mina l-athāth?",
      "from": "teacher",
      "key": "s:pr:63",
      "keys": [
@@ -699,7 +699,7 @@
     {
      "ar": "يُوجَدُ مَائِدَةٌ وَكَرَاسِي وَسُرُرٌ",
      "en": "There is a table, chairs and beds.",
-     "tr": "",
+     "tr": "yūjadu māʾidatun wa-karāsiyyu wa-surur",
      "from": "teacher",
      "key": "s:pr:64",
      "keys": [
@@ -709,7 +709,7 @@
     {
      "ar": "أَسْكُنُ فِي حَيِّ المَطَارِ",
      "en": "I live in the airport neighbourhood.",
-     "tr": "",
+     "tr": "askunu fī ḥayyi l-maṭār",
      "from": "teacher",
      "key": "s:pr:65",
      "keys": []
@@ -717,7 +717,7 @@
     {
      "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
      "en": "Allah is Ever-Living, He does not die.",
-     "tr": "",
+     "tr": "Allāhu ḥayyun lā yamūt",
      "from": "teacher",
      "key": "s:pr:66",
      "keys": []
@@ -725,7 +725,7 @@
     {
      "ar": "كَمْ طَابِقٍ بَيْتُكَ؟",
      "en": "What floor is your house on?",
-     "tr": "",
+     "tr": "kam ṭābiqin baytuk?",
      "from": "teacher",
      "key": "s:pr:67",
      "keys": [
@@ -736,7 +736,7 @@
     {
      "ar": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ",
      "en": "I have a curtain for the window.",
-     "tr": "",
+     "tr": "ʿindī sitāratun li-sh-shubbāk",
      "from": "teacher",
      "key": "s:pr:68",
      "keys": [
@@ -746,7 +746,7 @@
     {
      "ar": "اللهُ هُوَ السَّتَّارُ",
      "en": "Allah is the Concealer of faults.",
-     "tr": "",
+     "tr": "Allāhu huwa s-sattār",
      "from": "teacher",
      "key": "s:pr:69",
      "keys": [
@@ -757,7 +757,7 @@
     {
      "ar": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
      "en": "How many times a day do you prostrate?",
-     "tr": "",
+     "tr": "kam marratan tasjudu fī l-yawm?",
      "from": "teacher",
      "key": "s:pr:70",
      "keys": [
@@ -768,7 +768,7 @@
     {
      "ar": "هَذِهِ سَجَّادَةٌ بَاكِسْتَانِيَّةٌ جَمِيلَةٌ",
      "en": "This is a beautiful Pakistani carpet.",
-     "tr": "",
+     "tr": "hādhihi sajjādatun bākistāniyyatun jamīlah",
      "from": "teacher",
      "key": "s:pr:71",
      "keys": [
