@@ -50,6 +50,9 @@
     <span id="lessonStatusBadge" class="status-pill" style="font-size:13px;padding:6px 14px">Checking status…</span>
   </div>
 
+  <!-- UPCOMING SUNDAY PREPARATION / HOMEWORK CARD -->
+  <div id="hwPrepCard"></div>
+
   <!-- LESSON 1: 30 AUG 2026 — SAMER LOOKS FOR A FLAT -->
   <div class="card" style="border-top: 4px solid var(--accent)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
@@ -135,6 +138,7 @@
 <script src="js/curriculum.js?v=mug1j3zd"></script>
 <script src="js/app.js?v=mug1j3zd"></script>
 <script src="js/tracker.js?v=mug1j3zd"></script>
+<script src="js/plan.js?v=mug1j3zd"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -153,10 +157,37 @@ let CLASS_DATA = null;
     renderPassage();
     renderVocabAndSentences();
     updateMasteryStatus();
+    renderHomeworkCard();
   } catch (e) {
     console.error("Failed to load lesson data", e);
   }
 })();
+
+function renderHomeworkCard() {
+  if (typeof planHomework !== "function") return;
+  try {
+    const hw = planHomework();
+    if (!hw || hw.past) return;
+    const container = document.getElementById("hwPrepCard");
+    if (!container) return;
+    const prepLine = hw.prep
+      ? `<p style="font-size:13.5px;margin:0 0 8px"><strong>Class prep: ${hw.prep.solidN} of ${hw.prep.total}</strong> — ${esc(hw.prep.label)}. <span style="color:var(--muted)">All ${hw.keys.length} won't hold by Sunday; these ${hw.prep.total} make the class feel prepared, the rest carry into next week.</span></p>`
+      : `<p style="font-size:13.5px;margin:0 0 8px"><strong>Readiness: ${hw.solidN} of ${hw.keys.length} (${hw.readiness}%)</strong> — ${esc(hw.label)}</p>`;
+    const chips = hw.parts.map(p => {
+      const star = p.prep ? "⭐ " : "";
+      return `<span class="status-pill" style="font-size:12px;margin:2px 4px 2px 0">${star}${esc(p.label)} (${p.solidN}/${p.total})</span>`;
+    }).join("");
+    container.innerHTML = `
+      <div class="card" style="margin-bottom:16px;border-left:4px solid var(--accent)">
+        <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px">🎯 SUNDAY CLASS PREPARATION &amp; HOMEWORK</div>
+        ${prepLine}
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">${chips}</div>
+      </div>
+    `;
+  } catch (e) {
+    console.error("Failed to render homework card", e);
+  }
+}
 
 function renderPassage() {
   if (!STORY_DATA) return;

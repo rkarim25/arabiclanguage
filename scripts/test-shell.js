@@ -438,9 +438,9 @@ const bank = D("sentence-bank.json");
   // the surfaces say it
   yes(/Class prep — \$\{part\.label\}/.test(planSrc), "the 📚 block is titled as class prep in prep mode");
   yes(/carry into next week/.test(planSrc), "…and says the rest carries into next week");
-  const home = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/hw\.prep/.test(home) && /carry into next week/.test(home), "the Sunday's class card — the surface he opens — shows the prep line");
-  yes(/p\.prep \? "⭐ "/.test(home), "…and stars the prep chips");
+  const cls = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  yes(/hw\.prep/.test(cls) && /carry into next week/.test(cls), "the Sunday's class card — the surface he opens — shows the prep line");
+  yes(/p\.prep \? "⭐ "/.test(cls), "…and stars the prep chips");
 }
 
 /* ---------- 14. THE OFFLINE PACK ----------
@@ -538,7 +538,7 @@ const bank = D("sentence-bank.json");
   const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
   yes(more.indexOf('id="syncCard"') > 0 && more.indexOf('id="syncCard"') < more.indexOf("<h2>The two ways in</h2>"), "the sync card is the FIRST card on More");
   yes((more.match(/id="syncCard"/g) || []).length === 1, "…and there is exactly one of it");
-  yes(/href="index\.html">Home<\/a>\s*<a class="link" id="navSync" href="more\.html#syncCard"/.test(app), "the ☁ pill sits right after Home in the nav");
+  yes(/href="index\.html">(?:📖\s*)?Home<\/a>\s*<a class="link" id="navSync" href="more\.html#syncCard"/.test(app), "the ☁ pill sits right after Home in the nav");
   yes(/wireNavSync\(el\.querySelector\("#navSync"\)\)/.test(app) && /function wireNavSync\(/.test(app), "…and is wired on every page that renders the nav");
   yes(/a\.textContent = "☁ Sign in"/.test(app) && /a\.textContent = "☁ Sync"/.test(app), "…reading Sign in when signed out and Sync when signed in");
   yes(/syncNow\(\)\.then\(n =>/.test(app), "…and a tap syncs on the spot when signed in");

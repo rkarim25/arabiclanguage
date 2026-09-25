@@ -174,12 +174,14 @@
       <button type="button" class="primary" id="btnStartTest" style="font-size:14.5px;padding:9px 18px" onclick="runChapterTest()">Start Chapter Test →</button>
     </div>
   </div>
+  <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
 <script src="js/progress-model.js?v=mug1j3zd"></script>
 <script src="js/curriculum.js?v=mug1j3zd"></script>
 <script src="js/app.js?v=mug1j3zd"></script>
 <script src="js/tracker.js?v=mug1j3zd"></script>
+<script src="js/plan.js?v=mug1j3zd"></script>
 <script src="js/account.js?v=mug1j3zd"></script>
 <script>
 renderNav("home");
@@ -751,6 +753,35 @@ function runChapterTest() {
 
   renderQ();
 }
+
+/* 📥 OFFLINE PACK — a quick open on a good signal loads what this week needs */
+(async () => {
+  try {
+    if (typeof packTextsForKeys !== "function" || typeof offlinePack !== "function") return;
+    const ctx = typeof curCtx === "function" ? await curCtx() : null;
+    const hwc = typeof planHomework === "function" ? planHomework() : null;
+    const packKeys = [];
+    if (hwc && !hwc.past) packKeys.push(...(hwc.keys || []));
+    const texts = await packTextsForKeys([...new Set(packKeys)], ctx);
+    if (typeof Curriculum !== "undefined") {
+      const weeks = Curriculum.weekPlan(ctx, Curriculum.milestoneState(ctx));
+      const cw = Curriculum.currentWeek(weeks);
+      const cwk = weeks[cw - 1];
+      ((cwk && cwk.lessons) || []).forEach(l => {
+        try { Curriculum.sentencesFor((l.lesson && l.lesson.keys) || [], ctx, { limit: 12, maxWords: 999 }).forEach(s => texts.push(s.ar, s.en)); } catch (e) {}
+      });
+    }
+    const line = document.getElementById("packLine");
+    if (line) line.id = "packLine";
+    const r = await offlinePack(texts, (n, t) => { if (line) line.textContent = `📥 Offline pack: ${n} of ${t} clips ready…`; });
+    if (line) {
+      line.textContent = r.skipped
+        ? "📥 Offline pack: needs a signal once — open this page on wifi and it loads itself"
+        : `📥 Offline pack: ${r.n} of ${r.total} clips on this phone — this week's lessons and Sunday's words play with no signal`;
+    }
+    if (r.fetched) logEvent({ e: "pack", n: r.n, total: r.total, fetched: r.fetched });
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>

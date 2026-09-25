@@ -3376,6 +3376,7 @@ function generateLearnerDossierMarkdown(currentContext) {
 
   md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;
   md += `- **Preply Unit 1 (Housing & Family):** flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
+  md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes)\n`;
   md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
   md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
 
@@ -3391,6 +3392,10 @@ function generateLearnerDossierMarkdown(currentContext) {
     currentContext.sentences.forEach((s, i) => {
       md += `${i + 1}. **${s.ar}** — *${s.en}* (${s.tr || ''})\n`;
     });
+  }
+
+  if (currentContext && currentContext.aiScenario) {
+    md += `\n## 5. Suggested Roleplay Scenario\n${currentContext.aiScenario}\n`;
   }
 
   return md;
