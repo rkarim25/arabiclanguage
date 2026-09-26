@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixc98p">
-  <link rel="stylesheet" href="css/style.css?v=muixc98p">
+  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -154,7 +154,7 @@
         <span>Vocabulary Practice</span>
         <span class="arabic" style="color:var(--accent);font-size:26px">المُفْرَدَات</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Active recall · 20-word dynamic batches · 70/30 review ratio</p>
+      <p class="sub" style="margin:2px 0">Active recall · 10-word dynamic batches · 70/30 review ratio</p>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div class="stat-strip">
@@ -168,7 +168,7 @@
 
   <!-- Top View Switcher -->
   <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice (20)</button>
+    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice (10)</button>
     <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master List</button>
   </div>
 
@@ -191,14 +191,14 @@
         </div>
       </div>
       <div class="pt-group">
-        <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 20 continuously">▶ Play</button>
+        <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
         <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
         <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
         <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
           <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
           <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
         </span>
-        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 20">👁️ Reveal All</button>
+        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal All</button>
       </div>
     </div>
 
@@ -206,7 +206,7 @@
     <div class="card" style="padding:16px 18px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <div>
-          <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 20 Words</h2>
+          <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Words</h2>
           <div class="srs-legend-bar">
             <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
             <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
@@ -215,7 +215,7 @@
             <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
           </div>
         </div>
-        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 20 rated</span>
+        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
       </div>
       <div class="sheet-wrap">
         <table class="sheet-table">
@@ -277,10 +277,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixc98p"></script>
-<script src="js/curriculum.js?v=muixc98p"></script>
-<script src="js/app.js?v=muixc98p"></script>
-<script src="js/tracker.js?v=muixc98p"></script>
+<script src="js/progress-model.js?v=muixjdl4"></script>
+<script src="js/curriculum.js?v=muixjdl4"></script>
+<script src="js/app.js?v=muixjdl4"></script>
+<script src="js/tracker.js?v=muixjdl4"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -294,7 +294,7 @@ let masterFilter = "all";
 let promptDirection = "en-first"; // "en-first" or "ar-first"
 let audioIdx = 0;
 let isPlaying = false;
-const BATCH_SIZE = 20;
+const BATCH_SIZE = 10;
 
 (async () => {
   try {
@@ -330,7 +330,7 @@ const BATCH_SIZE = 20;
     });
 
     updateOverallStats();
-    load20Words();
+    load10Words();
     setupAudioSpeed();
   } catch (e) {
     console.error("Failed to load master vocabulary", e);
@@ -371,7 +371,7 @@ function updateOverallStats() {
 }
 
 /* THE 70/30 DYNAMIC BATCH ENGINE WITH SESSION COOLDOWN & LEECH PROTECTION */
-function load20Words() {
+function load10Words() {
   stopAudio();
   REVEALED.clear();
   const srs = getSrs();
@@ -431,14 +431,14 @@ function load20Words() {
   } else if (currentFilter === "new") {
     chosen = newList.slice(0, BATCH_SIZE);
   } else {
-    // Golden 70/30 Ratio: 14 Due + 6 New
-    const targetDue = Math.min(14, dueList.length);
+    // Golden 70/30 Ratio: 7 Due + 3 New
+    const targetDue = Math.min(7, dueList.length);
     const targetNew = Math.min(BATCH_SIZE - targetDue, newList.length);
     
     chosen = dueList.slice(0, targetDue).map(x => x.w);
     chosen = chosen.concat(newList.slice(0, targetNew));
 
-    // Fill remaining up to 20 if needed
+    // Fill remaining up to 10 if needed
     if (chosen.length < BATCH_SIZE) {
       const remainingDue = dueList.slice(targetDue).map(x => x.w);
       chosen = chosen.concat(remainingDue.slice(0, BATCH_SIZE - chosen.length));
@@ -450,10 +450,11 @@ function load20Words() {
   }
 
   ACTIVE_WORDS = chosen.slice(0, BATCH_SIZE);
-  render20Cards();
+  render10Cards();
 }
+const load20Words = load10Words; // Backward compatibility
 
-function render20Cards() {
+function render10Cards() {
   const srs = getSrs();
   const container = document.getElementById("wordList");
   const isEnFirst = promptDirection === "en-first";
@@ -513,6 +514,7 @@ function render20Cards() {
 
   updateSessionProgress();
 }
+const render20Cards = render10Cards; // Backward compatibility
 
 function handleCardClick(idx, e) {
   if (e.target.closest("button") || e.target.closest(".sheet-rate-bar") || e.target.closest(".rate-bar")) return;
@@ -524,21 +526,21 @@ function handleCardClick(idx, e) {
 function revealCard(idx) {
   REVEALED.add(idx);
   const w = ACTIVE_WORDS[idx];
-  render20Cards();
+  render10Cards();
   // Auto-play audio upon reveal to cement ear memory
   if (w) playSingle(encodeURIComponent(w.ar));
 }
 
 function revealAllCards() {
   ACTIVE_WORDS.forEach((_, idx) => REVEALED.add(idx));
-  render20Cards();
+  render10Cards();
 }
 
 function setDirection(dir) {
   promptDirection = dir;
   document.getElementById("dirEnFirst").classList.toggle("active", dir === "en-first");
   document.getElementById("dirArFirst").classList.toggle("active", dir === "ar-first");
-  render20Cards();
+  render10Cards();
 }
 
 function rateWord(key, bucket, cardIdx) {
@@ -589,9 +591,9 @@ function updateSessionProgress() {
   if (ratedCount === ACTIVE_WORDS.length && ACTIVE_WORDS.length > 0) {
     doneArea.innerHTML = `
       <div class="done-banner">
-        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 20 Words Complete!</h3>
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Words Complete!</h3>
         <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have moved forward. Cooldown is active.</p>
-        <button type="button" class="primary" onclick="load20Words()" style="font-size:15px;padding:9px 22px">Load Next Batch (20) →</button>
+        <button type="button" class="primary" onclick="load10Words()" style="font-size:15px;padding:9px 22px">Load Next Batch (10) →</button>
       </div>
     `;
   } else {
@@ -795,7 +797,7 @@ document.getElementById("filterChips").addEventListener("click", e => {
   document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
   b.classList.add("active");
   currentFilter = b.dataset.filter;
-  load20Words();
+  load10Words();
 });
 
 // Copy Learner Dossier

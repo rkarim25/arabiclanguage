@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixc98p">
-  <link rel="stylesheet" href="css/style.css?v=muixc98p">
+  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -36,34 +36,51 @@
       .tbl td { padding: 10px 6px; }
     }
 
-    /* 5 SRS Rating Pills & Feedback */
-    .rate-bar { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; margin-top: 6px; padding-top: 4px; }
-    .rate-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px; }
-    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.12s ease; line-height: 1.25; }
-    .rate-btn:hover { transform: translateY(-1px); }
-    
-    .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
-    .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
-
-    .rate-btn[data-b="medium"] { color: #0284c7; border-color: #bae6fd; }
-    .rate-btn[data-b="medium"].selected { background: #0284c7; color: #fff; border-color: #0284c7; }
-
-    .rate-btn[data-b="weak"] { color: #d97706; border-color: #fde68a; }
-    .rate-btn[data-b="weak"].selected { background: #d97706; color: #fff; border-color: #d97706; }
-
-    .rate-btn[data-b="learning"] { color: #dc2626; border-color: #fecaca; }
-    .rate-btn[data-b="learning"].selected { background: #dc2626; color: #fff; border-color: #dc2626; }
-
-    .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
-    .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
-
-    @media (prefers-color-scheme: dark) {
-      .rate-btn[data-b="strong"] { color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
-      .rate-btn[data-b="medium"] { color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
-      .rate-btn[data-b="weak"] { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); }
-      .rate-btn[data-b="learning"] { color: #f87171; border-color: rgba(248, 113, 113, 0.3); }
-      .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
+    /* Colored SRS Rating Dots (Replaces wordy pills) */
+    .rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
+    .rate-btn {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      padding: 0;
+      border: 2px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      transition: all 0.12s ease-in-out;
+      user-select: none;
     }
+    .rate-btn:hover { transform: scale(1.2); }
+    
+    .rate-btn[data-b="strong"] { border-color: #10b981; background: #ecfdf5; color: transparent; }
+    .rate-btn[data-b="strong"].selected { background: #059669; border-color: #059669; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
+
+    .rate-btn[data-b="medium"] { border-color: #0284c7; background: #f0f9ff; color: transparent; }
+    .rate-btn[data-b="medium"].selected { background: #0284c7; border-color: #0284c7; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(2,132,199,0.25); }
+
+    .rate-btn[data-b="weak"] { border-color: #d97706; background: #fffbeb; color: transparent; }
+    .rate-btn[data-b="weak"].selected { background: #d97706; border-color: #d97706; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(217,119,6,0.25); }
+
+    .rate-btn[data-b="learning"] { border-color: #ef4444; background: #fef2f2; color: transparent; }
+    .rate-btn[data-b="learning"].selected { background: #dc2626; border-color: #dc2626; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(220,38,38,0.25); }
+
+    .rate-btn[data-b="never"] { border-color: #94a3b8; background: #f8fafc; color: transparent; }
+    .rate-btn[data-b="never"].selected { background: #64748b; border-color: #64748b; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(100,116,139,0.25); }
+
+    .srs-legend-bar { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin: 6px 0 10px; }
+    .leg-item { display: inline-flex; align-items: center; gap: 4px; }
+    .leg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .leg-dot.strong { background: #059669; }
+    .leg-dot.medium { background: #0284c7; }
+    .leg-dot.weak { background: #d97706; }
+    .leg-dot.learning { background: #dc2626; }
+    .leg-dot.never { background: #64748b; }
 
     .rate-feedback { font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 5px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
 
@@ -157,7 +174,10 @@
         </p>
         <span style="font-size:11.5px;color:var(--muted)">💡 1. Copy Prompt → 2. Open App → 3. Tap 🎧 Voice Mode</span>
       </div>
-      <div id="classAiPromptText" style="max-height:160px;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:monospace;white-space:pre-wrap;margin-top:6px">Loading prompt…</div>
+      <details style="margin-top:8px">
+        <summary style="font-size:12px;color:var(--muted);cursor:pointer">Preview Voice Prompt text ▾</summary>
+        <div id="classAiPromptText" style="max-height:160px;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:monospace;white-space:pre-wrap;margin-top:6px">Loading prompt…</div>
+      </details>
 
       <!-- Paste AI Voice Report Section -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)">
@@ -209,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixc98p"></script>
-<script src="js/curriculum.js?v=muixc98p"></script>
-<script src="js/app.js?v=muixc98p"></script>
-<script src="js/tracker.js?v=muixc98p"></script>
-<script src="js/plan.js?v=muixc98p"></script>
+<script src="js/progress-model.js?v=muixjdl4"></script>
+<script src="js/curriculum.js?v=muixjdl4"></script>
+<script src="js/app.js?v=muixjdl4"></script>
+<script src="js/tracker.js?v=muixjdl4"></script>
+<script src="js/plan.js?v=muixjdl4"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -466,12 +486,22 @@ function renderVocabTable() {
   }
 
   vDiv.innerHTML = `
-    <table class="tbl">
+    <div class="srs-legend-bar" style="margin:6px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
+        <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
+        <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
+        <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+        <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
+      </div>
+      <span style="font-size:11.5px;color:var(--muted)">Rate recall: 🟢 30d · 🔵 7d · 🟠 2d · 🔴 1d · ⚪ Retire</span>
+    </div>
+    <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
       <thead>
-        <tr style="text-align:left;color:var(--muted);font-size:12.5px">
-          <th style="width:25%">Word</th>
-          <th style="width:65%">English Meaning &amp; Spaced Repetition (SRS)</th>
-          <th style="width:10%;text-align:right">Audio</th>
+        <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
+          <th style="width:34%">Arabic</th>
+          <th style="width:40%">English Meaning</th>
+          <th style="width:26%;text-align:right">SRS Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -480,24 +510,27 @@ function renderVocabTable() {
           const curBucket = getWordBucket(item);
           return `
             <tr>
-              <td class="ar" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer" title="Click to listen">
-                ${v.ar}
-              </td>
               <td>
-                <div style="font-weight:700;font-size:15px;color:var(--ink)">${v.en}</div>
-                ${v.note || v.tr ? `<div style="font-size:12px;color:var(--muted);margin:2px 0 6px">${v.note || v.tr}</div>` : ''}
-                <div class="rate-bar" data-key="${v.key}">
-                  <span class="rate-lbl">SRS:</span>
-                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong — known well, back in 30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">Strong</button>
-                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium — getting there, back in 7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">Medium</button>
-                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak — struggling, back in 2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">Weak</button>
-                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning — fresh or missed, repeat soon" onclick="gradeClassWord('${v.key}', 'learning', this)">Learning</button>
-                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat — already know / skip forever" onclick="gradeClassWord('${v.key}', 'never', this)">Don't repeat</button>
-                  <span class="rate-feedback"></span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
+                    ${v.ar}
+                  </span>
+                  <button type="button" class="small icon-btn" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Play pronunciation">🔊</button>
                 </div>
               </td>
-              <td style="text-align:right;vertical-align:middle">
-                <button class="small" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Play pronunciation">🔊</button>
+              <td>
+                <div style="font-weight:600;font-size:14px;color:var(--ink)">${v.en}</div>
+                ${v.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${v.note}</div>` : ''}
+              </td>
+              <td style="text-align:right">
+                <div class="rate-bar" data-key="${v.key}">
+                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
+                  <span class="rate-feedback"></span>
+                </div>
               </td>
             </tr>
           `;
@@ -546,15 +579,15 @@ function gradeClassWord(key, bucket, btn) {
     const msg = bar.querySelector(".rate-feedback");
     if (msg) {
       const labels = {
-        strong: "Strong · 30d",
-        medium: "Medium · 7d",
-        weak: "Weak · 2d",
-        learning: "Learning · repeat soon",
-        never: "Don't repeat"
+        strong: "30d",
+        medium: "7d",
+        weak: "2d",
+        learning: "1d",
+        never: "Ret."
       };
       msg.textContent = `✓ ${labels[bucket] || bucket}`;
       msg.style.opacity = "1";
-      setTimeout(() => { msg.style.opacity = "0"; }, 2500);
+      setTimeout(() => { msg.style.opacity = "0"; }, 2000);
     }
   }
 
@@ -576,17 +609,19 @@ function renderVocabAndSentences() {
       <button type="button" class="line-toggle-btn" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()">🔤 All Transliteration</button>
     </div>
     ${cls.sentences.slice(0, 8).map((s, idx) => `
-      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
-        <div>
-          <div style="font-size:14.5px;font-weight:600">${s.en}</div>
-          ${s.tr ? `<div id="cls-tr-${idx}" class="p-tr" style="display:none">${s.tr}</div>` : ''}
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.from === 'teacher' ? 'Drilled with teacher' : 'Core pattern'}</div>
+      <div class="s-row" id="cls-srow-${idx}" style="padding:10px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1} · ${s.from === 'teacher' ? '🧑‍🏫 Drilled with teacher' : 'Core pattern'}</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="small icon-btn" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊 Read</button>
+            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="arabic" style="font-size:21px;color:var(--accent)">${s.ar}</span>
-          ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
-          <button class="small" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊</button>
+        <div style="margin-bottom:4px">
+          <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
         </div>
+        ${s.tr ? `<div id="cls-tr-${idx}" class="p-tr" style="display:none;margin-bottom:4px;font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
+        <div style="font-size:14px;font-weight:600;color:var(--ink)">${s.en}</div>
       </div>
     `).join("")}
   `;

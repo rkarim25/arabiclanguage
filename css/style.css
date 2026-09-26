@@ -122,6 +122,24 @@ button:disabled { opacity: .45; cursor: default; }
 button:disabled:hover { background: var(--card); }
 button.primary:disabled:hover { background: var(--accent); }
 
+.line-toggle-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  padding: 2px 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  user-select: none;
+}
+.line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
+.line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
 /* ---------- Dashboard story cards ---------- */
 .story-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
 .story-card {
