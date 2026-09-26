@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muix7rvr">
-  <link rel="stylesheet" href="css/style.css?v=muix7rvr">
+  <link rel="stylesheet" href="css/fonts.css?v=muixc98p">
+  <link rel="stylesheet" href="css/style.css?v=muixc98p">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -222,14 +222,13 @@
           <thead>
             <tr>
               <th style="width:28px;text-align:center">#</th>
-              <th style="width:28%">Prompt</th>
-              <th style="width:38%">Check / Recall</th>
-              <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
+              <th style="width:32%">Prompt</th>
+              <th style="width:44%">Check / Recall</th>
               <th style="text-align:right">SRS Rating</th>
             </tr>
           </thead>
           <tbody id="wordList">
-            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading words…</td></tr>
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Loading words…</td></tr>
           </tbody>
         </table>
       </div>
@@ -245,9 +244,9 @@
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button type="button" class="chip active m-filter" data-mfilter="all" onclick="setMasterFilter('all', this)">All</button>
           <button type="button" class="chip m-filter" data-mfilter="due" onclick="setMasterFilter('due', this)">Due Now</button>
-          <button type="button" class="chip m-filter" data-mfilter="learning" onclick="setMasterFilter('learning', this)">Learning (Box 0-1)</button>
-          <button type="button" class="chip m-filter" data-mfilter="mastered" onclick="setMasterFilter('mastered', this)">Mastered (Box 4-5)</button>
-          <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">Retired (Don't Repeat)</button>
+          <button type="button" class="chip m-filter" data-mfilter="learning" onclick="setMasterFilter('learning', this)">Learning</button>
+          <button type="button" class="chip m-filter" data-mfilter="mastered" onclick="setMasterFilter('mastered', this)">Mastered</button>
+          <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">Retired</button>
         </div>
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px">
@@ -262,16 +261,15 @@
           <thead>
             <tr>
               <th style="width:30px">#</th>
-              <th>Arabic</th>
-              <th>English Meaning</th>
-              <th>Category</th>
-              <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
-              <th>SRS Status</th>
-              <th>Action</th>
+              <th style="width:26%">Arabic</th>
+              <th style="width:32%">English Meaning</th>
+              <th style="width:14%">Category</th>
+              <th style="width:75px;text-align:center">Status</th>
+              <th style="text-align:right">SRS Rating</th>
             </tr>
           </thead>
           <tbody id="masterTableBody">
-            <tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
           </tbody>
         </table>
       </div>
@@ -279,10 +277,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muix7rvr"></script>
-<script src="js/curriculum.js?v=muix7rvr"></script>
-<script src="js/app.js?v=muix7rvr"></script>
-<script src="js/tracker.js?v=muix7rvr"></script>
+<script src="js/progress-model.js?v=muixc98p"></script>
+<script src="js/curriculum.js?v=muixc98p"></script>
+<script src="js/app.js?v=muixc98p"></script>
+<script src="js/tracker.js?v=muixc98p"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -500,9 +498,6 @@ function render20Cards() {
             `}
           `}
         </td>
-        <td style="text-align:center">
-          <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New word' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
-        </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
             <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateWord('${w.key}', 'strong', ${idx})">✓</button>
@@ -681,15 +676,14 @@ function renderMasterTable() {
           </span>
         </td>
         <td style="text-align:center">
-          <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New word' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
+          ${exp.isRetired ? `<span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10.5px;padding:2px 6px">Retired</span>` :
+            (item.due && item.due <= now) ? `<span class="exp-badge" style="background:#fef3c7;color:#b45309;font-size:10.5px;padding:2px 6px;font-weight:700">Due</span>` :
+            exp.isNew ? `<span class="exp-badge" style="background:rgba(0,0,0,0.04);color:var(--muted);font-size:10.5px;padding:2px 6px">New</span>` :
+            exp.box >= 4 ? `<span class="exp-badge" style="background:#ecfdf5;color:#059669;font-size:10.5px;padding:2px 6px">Mastered</span>` :
+            `<span class="exp-badge" style="background:#f0f9ff;color:#0284c7;font-size:10.5px;padding:2px 6px">Learning</span>`}
         </td>
-        <td>
-          <span style="font-size:12px;font-weight:600;color:${exp.isRetired ? 'var(--muted)' : exp.box >= 4 ? '#059669' : exp.box >= 2 ? '#0284c7' : '#d97706'}">
-            ${exp.isRetired ? 'Retired' : `Box ${exp.box} ${item.due && item.due <= now ? '(Due)' : ''}`}
-          </span>
-        </td>
-        <td>
-          <div style="display:flex;gap:6px;align-items:center">
+        <td style="text-align:right">
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
             <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateMasterWord('${w.key}', 'strong', '${encodeURIComponent(w.ar)}')">✓</button>
             <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateMasterWord('${w.key}', 'medium', '${encodeURIComponent(w.ar)}')">✓</button>
             <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateMasterWord('${w.key}', 'weak', '${encodeURIComponent(w.ar)}')">✓</button>
@@ -702,7 +696,7 @@ function renderMasterTable() {
   }).join("");
 
   if (filtered.length > 100) {
-    tbody.innerHTML += `<tr><td colspan="7" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
+    tbody.innerHTML += `<tr><td colspan="6" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
   }
 }
 
