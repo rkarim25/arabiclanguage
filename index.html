@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwygld">
-  <link rel="stylesheet" href="css/style.css?v=muiwygld">
+  <link rel="stylesheet" href="css/fonts.css?v=muix7rvr">
+  <link rel="stylesheet" href="css/style.css?v=muix7rvr">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -41,6 +41,10 @@
     .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
     .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 17px; color: var(--accent); display: block; line-height: 1.35; }
     .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; margin-top: 2px; }
+
+    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
+    .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
     /* Audio Toolbar */
     .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 14px; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; }
@@ -207,12 +211,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muiwygld"></script>
-<script src="js/curriculum.js?v=muiwygld"></script>
-<script src="js/app.js?v=muiwygld"></script>
-<script src="js/tracker.js?v=muiwygld"></script>
-<script src="js/plan.js?v=muiwygld"></script>
-<script src="js/account.js?v=muiwygld"></script>
+<script src="js/progress-model.js?v=muix7rvr"></script>
+<script src="js/curriculum.js?v=muix7rvr"></script>
+<script src="js/app.js?v=muix7rvr"></script>
+<script src="js/tracker.js?v=muix7rvr"></script>
+<script src="js/plan.js?v=muix7rvr"></script>
+<script src="js/account.js?v=muix7rvr"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2648,33 +2652,44 @@ function loadChapter(chap) {
 
   // Render Sentences
   const sList = document.getElementById("sentenceList");
-  sList.innerHTML = chap.sentences.map((s, idx) => `
-    <div class="s-row" id="srow-${idx}">
-      <div class="s-main">
-        <div class="s-meta">
-          <div class="s-en">${s.en}</div>
-          ${s.tr ? `<div class="s-tr">${s.tr}</div>` : ''}
-          <div class="s-hint">${s.hint || ""}</div>
-        </div>
-        <div class="s-ar-wrap">
-          <div class="s-ar">${s.ar}</div>
-          <div class="s-actions">
-            <button type="button" class="small" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+  sList.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal breakdown or phonetics on any line:</span>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="line-toggle-btn" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()">🧩 All Words</button>
+        <button type="button" class="line-toggle-btn" id="btnToggleAllDayTr" onclick="toggleAllDayTr()">🔤 All Transliteration</button>
+      </div>
+    </div>
+    ${chap.sentences.map((s, idx) => `
+      <div class="s-row" id="srow-${idx}">
+        <div class="s-main">
+          <div class="s-meta">
+            <div class="s-en">${s.en}</div>
+            ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
+            <div class="s-hint">${s.hint || ""}</div>
+          </div>
+          <div class="s-ar-wrap">
+            <div class="s-ar">${s.ar}</div>
+            <div class="s-actions">
+              <button type="button" class="small" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-dwbw-${idx}" onclick="toggleDayWbw(${idx})" title="Toggle word-by-word">🧩 Words</button>` : ''}
+              ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration">🔤 Translit</button>` : ''}
+            </div>
           </div>
         </div>
+        ${s.words && s.words.length ? `
+          <div class="s-wbw" id="day-wbw-${idx}" style="display:none">
+            ${s.words.map(w => `
+              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                <span class="w-ar">${w[0]}</span>
+                <span class="w-en">${w[1]}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : ''}
       </div>
-      ${s.words && s.words.length ? `
-        <div class="s-wbw">
-          ${s.words.map(w => `
-            <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-              <span class="w-ar">${w[0]}</span>
-              <span class="w-en">${w[1]}</span>
-            </div>
-          `).join("")}
-        </div>
-      ` : ''}
-    </div>
-  `).join("");
+    `).join("")}
+  `;
 
   // Render Quran Verses
   renderQuranSection(chap.surahId);
@@ -2841,29 +2856,103 @@ function renderQuranSection(surahId) {
   document.getElementById("quranTitle").innerHTML = `2. Qur'an: ${surah.nameEn} <span style="font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;margin-left:6px">🎙 Qari: Mishary Rashid Alafasy</span>`;
   document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
 
-  qDiv.innerHTML = surah.verses.slice(0, 5).map((v, vIdx) => `
-    <div class="q-verse">
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span class="q-ref">${v.ref}</span>
-        <button class="small" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})">🔊 Recite</button>
-      </div>
-      <div class="q-ar">${v.ar}</div>
-      <div class="q-wbw-tray">
-        ${v.words.map((w, wIdx) => `
-          <div class="q-chip" onclick="speakQuranWord('${surah.id}', ${vIdx}, ${wIdx}, '${(w[0] || '').replace(/'/g, "\\'")}')" title="${w[3] || ''}">
-            <span class="ar-w">${w[0]}</span>
-            <span class="en-w">${w[2]}</span>
-          </div>
-        `).join("")}
-      </div>
-      <div class="q-trans">${v.en}</div>
+  qDiv.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
+      <button type="button" class="line-toggle-btn" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()">🧩 All Word-by-Word</button>
     </div>
-  `).join("");
+    ${surah.verses.slice(0, 5).map((v, vIdx) => `
+      <div class="q-verse">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+          <span class="q-ref">${v.ref}</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="small" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})">🔊 Recite</button>
+            <button type="button" class="line-toggle-btn" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word">🧩 Word-by-Word</button>
+          </div>
+        </div>
+        <div class="q-ar">${v.ar}</div>
+        <div class="q-wbw-tray" id="qwbw-${vIdx}" style="display:none">
+          ${v.words.map((w, wIdx) => `
+            <div class="q-chip" onclick="speakQuranWord('${surah.id}', ${vIdx}, ${wIdx}, '${(w[0] || '').replace(/'/g, "\\'")}')" title="${w[3] || ''}">
+              <span class="ar-w">${w[0]}</span>
+              <span class="en-w">${w[2]}</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="q-trans">${v.en}</div>
+      </div>
+    `).join("")}
+  `;
 
   document.getElementById("btnPlayQuran").onclick = () => {
     const items = surah.verses.map((v, i) => ({ n: surah.n, ayah: i + 1 }));
     playRecitation(items);
   };
+}
+
+function toggleDayWbw(idx) {
+  const el = document.getElementById("day-wbw-" + idx);
+  const btn = document.getElementById("btn-dwbw-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleDayTr(idx) {
+  const el = document.getElementById("day-tr-" + idx);
+  const btn = document.getElementById("btn-dtr-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allDayWbwVisible = false;
+function toggleAllDayWbw() {
+  allDayWbwVisible = !allDayWbwVisible;
+  document.querySelectorAll("[id^='day-wbw-']").forEach(el => {
+    el.style.display = allDayWbwVisible ? "flex" : "none";
+  });
+  document.querySelectorAll("[id^='btn-dwbw-']").forEach(btn => {
+    btn.classList.toggle("active", allDayWbwVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllDayWbw");
+  if (btnAll) btnAll.classList.toggle("active", allDayWbwVisible);
+}
+
+let allDayTrVisible = false;
+function toggleAllDayTr() {
+  allDayTrVisible = !allDayTrVisible;
+  document.querySelectorAll("[id^='day-tr-']").forEach(el => {
+    el.style.display = allDayTrVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btn-dtr-']").forEach(btn => {
+    btn.classList.toggle("active", allDayTrVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllDayTr");
+  if (btnAll) btnAll.classList.toggle("active", allDayTrVisible);
+}
+
+function toggleQuranWbw(vIdx) {
+  const el = document.getElementById("qwbw-" + vIdx);
+  const btn = document.getElementById("btn-qwbw-" + vIdx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allQuranWbwVisible = false;
+function toggleAllQuranWbw() {
+  allQuranWbwVisible = !allQuranWbwVisible;
+  document.querySelectorAll("[id^='qwbw-']").forEach(el => {
+    el.style.display = allQuranWbwVisible ? "flex" : "none";
+  });
+  document.querySelectorAll("[id^='btn-qwbw-']").forEach(btn => {
+    btn.classList.toggle("active", allQuranWbwVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllQuranWbw");
+  if (btnAll) btnAll.classList.toggle("active", allQuranWbwVisible);
 }
 
 function playQuranAyah(surahN, ayahN) {

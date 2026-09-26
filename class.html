@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwygld">
-  <link rel="stylesheet" href="css/style.css?v=muiwygld">
+  <link rel="stylesheet" href="css/fonts.css?v=muix7rvr">
+  <link rel="stylesheet" href="css/style.css?v=muix7rvr">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -21,8 +21,12 @@
     .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--card); font-size: 13px; cursor: pointer; }
     .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
     .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--accent); display: block; }
-    .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; }
     .p-en { font-size: 14px; color: var(--muted); margin-top: 4px; }
+    .p-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 3px; }
+    
+    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
+    .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
     
     .tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14.5px; }
     .tbl td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -205,11 +209,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwygld"></script>
-<script src="js/curriculum.js?v=muiwygld"></script>
-<script src="js/app.js?v=muiwygld"></script>
-<script src="js/tracker.js?v=muiwygld"></script>
-<script src="js/plan.js?v=muiwygld"></script>
+<script src="js/progress-model.js?v=muix7rvr"></script>
+<script src="js/curriculum.js?v=muix7rvr"></script>
+<script src="js/app.js?v=muix7rvr"></script>
+<script src="js/tracker.js?v=muix7rvr"></script>
+<script src="js/plan.js?v=muix7rvr"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -263,25 +267,104 @@ function renderHomeworkCard() {
 function renderPassage() {
   if (!STORY_DATA) return;
   const container = document.getElementById("passageContainer");
-  container.innerHTML = STORY_DATA.sentences.map((s, idx) => `
-    <div class="passage-line">
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span style="font-size:11.5px;color:var(--muted)">Line ${idx + 1}</span>
-        <button class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+  container.innerHTML = `
+    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal breakdown or phonetics on any line:</span>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="line-toggle-btn" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()">🧩 All Word-by-Word</button>
+        <button type="button" class="line-toggle-btn" id="btnToggleAllTr" onclick="toggleAllPassageTr()">🔤 All Transliteration</button>
       </div>
-      <div class="p-ar">${s.ar}</div>
-      <div class="p-wbw">
-        ${s.words.map(w => `
-          <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-            <span class="w-ar">${w[0]}</span>
-            <span class="w-en">${w[1]}</span>
-          </div>
-        `).join("")}
-      </div>
-      <div class="p-en">${s.en}</div>
-      ${s.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
     </div>
-  `).join("");
+    ${STORY_DATA.sentences.map((s, idx) => `
+      <div class="passage-line" id="pline-${idx}">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
+          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Line ${idx + 1}</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button type="button" class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+            <button type="button" class="line-toggle-btn" id="btnWbw-${idx}" onclick="togglePassageWbw(${idx})">🧩 Word-by-Word</button>
+            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnTr-${idx}" onclick="togglePassageTr(${idx})">🔤 Transliteration</button>` : ''}
+          </div>
+        </div>
+        <div class="p-ar">${s.ar}</div>
+        <div class="p-wbw" id="wbw-${idx}" style="display:none">
+          ${s.words.map(w => `
+            <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+              <span class="w-ar">${w[0]}</span>
+              <span class="w-en">${w[1]}</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="p-en">${s.en}</div>
+        ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none">${s.tr}</div>` : ''}
+      </div>
+    `).join("")}
+  `;
+}
+
+function togglePassageWbw(idx) {
+  const el = document.getElementById("wbw-" + idx);
+  const btn = document.getElementById("btnWbw-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function togglePassageTr(idx) {
+  const el = document.getElementById("tr-" + idx);
+  const btn = document.getElementById("btnTr-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allWbwVisible = false;
+function toggleAllPassageWbw() {
+  allWbwVisible = !allWbwVisible;
+  document.querySelectorAll(".p-wbw").forEach(el => {
+    el.style.display = allWbwVisible ? "flex" : "none";
+  });
+  document.querySelectorAll("[id^='btnWbw-']").forEach(btn => {
+    btn.classList.toggle("active", allWbwVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllWbw");
+  if (btnAll) btnAll.classList.toggle("active", allWbwVisible);
+}
+
+let allTrVisible = false;
+function toggleAllPassageTr() {
+  allTrVisible = !allTrVisible;
+  document.querySelectorAll(".p-tr").forEach(el => {
+    el.style.display = allTrVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btnTr-']").forEach(btn => {
+    btn.classList.toggle("active", allTrVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllTr");
+  if (btnAll) btnAll.classList.toggle("active", allTrVisible);
+}
+
+function toggleClsSentenceTr(idx) {
+  const el = document.getElementById("cls-tr-" + idx);
+  const btn = document.getElementById("btnClsTr-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allClsTrVisible = false;
+function toggleAllClsSentenceTr() {
+  allClsTrVisible = !allClsTrVisible;
+  document.querySelectorAll("[id^='cls-tr-']").forEach(el => {
+    el.style.display = allClsTrVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btnClsTr-']").forEach(btn => {
+    btn.classList.toggle("active", allClsTrVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllClsTr");
+  if (btnAll) btnAll.classList.toggle("active", allClsTrVisible);
 }
 
 let currentVocabFilter = "all";
@@ -488,19 +571,25 @@ function renderVocabAndSentences() {
 
   // Sentences
   const sDiv = document.getElementById("sentencesContainer");
-  sDiv.innerHTML = cls.sentences.slice(0, 8).map(s => `
-    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div>
-        <div style="font-size:14.5px;font-weight:600">${s.en}</div>
-        ${s.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic;margin-bottom:2px">${s.tr}</div>` : ''}
-        <div style="font-size:12px;color:var(--muted)">${s.from === 'teacher' ? 'Drilled with teacher' : 'Core pattern'}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="arabic" style="font-size:21px;color:var(--accent)">${s.ar}</span>
-        <button class="small" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊</button>
-      </div>
+  sDiv.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
+      <button type="button" class="line-toggle-btn" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()">🔤 All Transliteration</button>
     </div>
-  `).join("");
+    ${cls.sentences.slice(0, 8).map((s, idx) => `
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:14.5px;font-weight:600">${s.en}</div>
+          ${s.tr ? `<div id="cls-tr-${idx}" class="p-tr" style="display:none">${s.tr}</div>` : ''}
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${s.from === 'teacher' ? 'Drilled with teacher' : 'Core pattern'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="arabic" style="font-size:21px;color:var(--accent)">${s.ar}</span>
+          ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
+          <button class="small" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊</button>
+        </div>
+      </div>
+    `).join("")}
+  `;
 
   // AI Voice Prompt for Sunday Lesson
   const classPrompt = buildClassAiPrompt(cls);

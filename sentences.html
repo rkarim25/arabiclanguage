@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwygld">
-  <link rel="stylesheet" href="css/style.css?v=muiwygld">
+  <link rel="stylesheet" href="css/fonts.css?v=muix7rvr">
+  <link rel="stylesheet" href="css/style.css?v=muix7rvr">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -124,6 +124,10 @@
     .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
 
     .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
+
+    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
+    .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
     /* Master Bank Table & Controls */
     .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
@@ -244,21 +248,27 @@
           <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">Due Now</button>
         </div>
       </div>
-      <div class="srs-legend-bar" style="margin-bottom:12px">
-        <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-        <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-        <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-        <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
-        <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
+      <div class="srs-legend-bar" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
+          <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
+          <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
+          <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+          <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="line-toggle-btn" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()">🧩 All Word-by-Word</button>
+          <button type="button" class="line-toggle-btn" id="btnToggleAllTblTr" onclick="toggleAllTblTr()">🔤 All Transliteration</button>
+        </div>
       </div>
       <div class="sheet-wrap">
         <table class="m-table">
           <thead>
             <tr>
               <th style="width:28px">#</th>
-              <th style="width:26%">Arabic Sentence</th>
-              <th style="width:34%">English Meaning & Breakdown</th>
-              <th style="width:12%">Source</th>
+              <th style="width:36%">Arabic Sentence</th>
+              <th style="width:26%">English Meaning</th>
+              <th style="width:10%">Source</th>
               <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
               <th style="width:18%;text-align:right">SRS Rating</th>
             </tr>
@@ -273,10 +283,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwygld"></script>
-<script src="js/curriculum.js?v=muiwygld"></script>
-<script src="js/app.js?v=muiwygld"></script>
-<script src="js/tracker.js?v=muiwygld"></script>
+<script src="js/progress-model.js?v=muix7rvr"></script>
+<script src="js/curriculum.js?v=muix7rvr"></script>
+<script src="js/app.js?v=muix7rvr"></script>
+<script src="js/tracker.js?v=muix7rvr"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -514,18 +524,28 @@ function render10Cards() {
         ` : `
           <div class="s-revealed-body">
             ${isEnFirst ? `
-              <div class="s-ar-line">
+              <div class="s-ar-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
-                <button type="button" class="small icon-btn s-audio-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button type="button" class="small icon-btn s-audio-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+                  ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})">🧩 Words</button>` : ''}
+                  ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})">🔤 Translit</button>` : ''}
+                </div>
               </div>
-              ${s.tr ? `<div class="s-tr-line">${s.tr}</div>` : ''}
+              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
             ` : `
-              <div class="s-en-line">${s.en}</div>
-              ${s.tr ? `<div class="s-tr-line">${s.tr}</div>` : ''}
+              <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <span>${s.en}</span>
+                <div style="display:flex;gap:6px;align-items:center">
+                  ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})">🧩 Words</button>` : ''}
+                  ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})">🔤 Translit</button>` : ''}
+                </div>
+              </div>
+              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
             `}
 
             ${s.words && s.words.length ? `
-              <div class="s-wbw-wrap" onclick="event.stopPropagation()">
+              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:none" onclick="event.stopPropagation()">
                 ${s.words.map(w => `
                   <div class="wbw-chip-sm" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
                     <span class="w-ar">${w[0]}</span>
@@ -559,7 +579,7 @@ function render10Cards() {
 }
 
 function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip")) return;
+  if (e.target.closest("button") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }
@@ -713,16 +733,17 @@ function renderMasterBank() {
       <tr>
         <td style="color:var(--muted);font-size:11.5px">${idx + 1}</td>
         <td>
-          <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.4">${s.ar}</span>
-            <button type="button" class="small icon-btn" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
+            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+              <button type="button" class="small icon-btn" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
+              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
+              ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
+            </div>
           </div>
-        </td>
-        <td>
-          <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
-          ${s.tr ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
+          ${s.tr ? `<div id="tbl-tr-${idx}" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
           ${s.words && s.words.length ? `
-            <div class="s-wbw-compact" style="margin-top:3px">
+            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:none;margin-top:3px">
               ${s.words.map(w => {
                 const wNorm = normalizeAr(w[0]).replace(/^ال/, "");
                 const wKey = _wordKeyFor ? _wordKeyFor(wNorm) : null;
@@ -738,6 +759,9 @@ function renderMasterBank() {
               }).join("")}
             </div>
           ` : ''}
+        </td>
+        <td>
+          <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
           ${s.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
         </td>
         <td>
@@ -766,6 +790,68 @@ function renderMasterBank() {
   if (footer) {
     footer.textContent = filtered.length > 50 ? `Showing first 50 of ${filtered.length} matching sentences. Search to narrow down.` : "";
   }
+}
+
+function toggleDrillWbw(idx) {
+  const el = document.getElementById("drill-wbw-" + idx);
+  const btn = document.getElementById("btn-drill-wbw-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleDrillTr(idx) {
+  const el = document.getElementById("drill-tr-" + idx);
+  const btn = document.getElementById("btn-drill-tr-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleTblWbw(idx) {
+  const el = document.getElementById("tbl-wbw-" + idx);
+  const btn = document.getElementById("btn-tbl-wbw-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleTblTr(idx) {
+  const el = document.getElementById("tbl-tr-" + idx);
+  const btn = document.getElementById("btn-tbl-tr-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allTblWbwVisible = false;
+function toggleAllTblWbw() {
+  allTblWbwVisible = !allTblWbwVisible;
+  document.querySelectorAll("[id^='tbl-wbw-']").forEach(el => {
+    el.style.display = allTblWbwVisible ? "flex" : "none";
+  });
+  document.querySelectorAll("[id^='btn-tbl-wbw-']").forEach(btn => {
+    btn.classList.toggle("active", allTblWbwVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllTblWbw");
+  if (btnAll) btnAll.classList.toggle("active", allTblWbwVisible);
+}
+
+let allTblTrVisible = false;
+function toggleAllTblTr() {
+  allTblTrVisible = !allTblTrVisible;
+  document.querySelectorAll("[id^='tbl-tr-']").forEach(el => {
+    el.style.display = allTblTrVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btn-tbl-tr-']").forEach(btn => {
+    btn.classList.toggle("active", allTblTrVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllTblTr");
+  if (btnAll) btnAll.classList.toggle("active", allTblTrVisible);
 }
 
 function rateMasterSentence(key, bucket) {
