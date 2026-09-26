@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwsp79">
-  <link rel="stylesheet" href="css/style.css?v=muiwsp79">
+  <link rel="stylesheet" href="css/fonts.css?v=muiwygld">
+  <link rel="stylesheet" href="css/style.css?v=muiwygld">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -17,21 +17,29 @@
     .stat-strip .lbl { font-size: 12px; color: var(--muted); }
 
     /* Top View Switcher */
-    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 16px; }
-    .tab-btn { border: none; background: transparent; padding: 7px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 12px; }
+    .tab-btn { border: none; background: transparent; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
     .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(13,122,95,0.25); }
 
-    /* Direction / Mode Selector */
-    .control-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
-    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 2px; }
-    .dir-btn { border: none; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--muted); }
-    .dir-btn.active { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    /* Unified Sleek Practice Toolbar */
+    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 7px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+    .pt-group { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    
+    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); padding: 2px; }
+    .dir-btn { border: none; background: transparent; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.12s; }
+    .dir-btn.active { background: var(--accent); color: #fff; }
 
-    /* Topic Selector Chips */
-    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; cursor: pointer; color: var(--muted); transition: all 0.12s; }
-    .chip:hover { border-color: var(--accent); }
-    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+    .filter-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin: 0; }
+    .chip { border: 1px solid var(--border); background: var(--bg); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--muted); transition: all 0.1s; }
+    .chip:hover { border-color: var(--accent); color: var(--ink); }
+    .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+    .pt-btn { border: 1px solid var(--border); background: var(--bg); border-radius: 6px; padding: 4px 9px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
+    .pt-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .pt-btn.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+    .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+    .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     /* Excel-like Sheet Table for Vocabulary */
     .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
@@ -115,12 +123,6 @@
     .leg-dot.learning { background: #dc2626; }
     .leg-dot.never { background: #64748b; }
 
-    /* Audio Bar */
-    .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
-    @media (prefers-color-scheme: dark) { .audio-toolbar { background: rgba(255,255,255,0.04); } }
-    .audio-toolbar button { padding: 4px 10px; font-size: 12.5px; }
-    .audio-toolbar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
-
     /* Master Table */
     .m-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
     .m-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 12px; }
@@ -135,11 +137,11 @@
     @media (max-width: 768px) {
       .v-header { flex-direction: column; align-items: flex-start; gap: 10px; }
       .stat-strip { width: 100%; justify-content: space-between; }
-      .control-row { flex-direction: column; align-items: stretch; gap: 8px; }
-      .dir-toggle { display: flex; width: 100%; }
+      .practice-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      .pt-group { width: 100%; justify-content: space-between; }
+      .dir-toggle { display: flex; flex: 1; }
       .dir-btn { flex: 1; text-align: center; }
-      .filter-chips { gap: 5px; }
-      .chip { font-size: 11.5px; padding: 3px 9px; }
+      .filter-chips { width: 100%; justify-content: flex-start; }
       .sheet-table, .m-table { min-width: 580px; }
     }
   </style>
@@ -166,40 +168,38 @@
 
   <!-- Top View Switcher -->
   <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice Batch (20)</button>
-    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master Vocabulary List</button>
+    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice (20)</button>
+    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master List</button>
   </div>
 
   <!-- PRACTICE VIEW -->
   <div id="viewPractice">
-    <div class="control-row">
-      <div class="dir-toggle">
-        <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 English Prompt → Reveal Arabic</button>
-        <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 Arabic Prompt → Reveal English</button>
+    <!-- Streamlined Unified Toolbar -->
+    <div class="practice-toolbar">
+      <div class="pt-group">
+        <div class="dir-toggle">
+          <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
+          <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
+        </div>
+        <div class="filter-chips" id="filterChips">
+          <button type="button" class="chip active" data-filter="balanced">Balanced</button>
+          <button type="button" class="chip" data-filter="due">Due</button>
+          <button type="button" class="chip" data-filter="new">New</button>
+          <button type="button" class="chip" data-filter="teacher">Preply</button>
+          <button type="button" class="chip" data-filter="quran">Qur'an</button>
+          <button type="button" class="chip" data-filter="everyday">Everyday</button>
+        </div>
       </div>
-      <button type="button" class="small" onclick="revealAllCards()" style="font-size:12px">👁️ Reveal All 20</button>
-    </div>
-
-    <!-- Filter chips -->
-    <div class="filter-chips" id="filterChips">
-      <button type="button" class="chip active" data-filter="balanced">Balanced 70/30 (14 Due · 6 New)</button>
-      <button type="button" class="chip" data-filter="due">Due for Review</button>
-      <button type="button" class="chip" data-filter="new">New Words Only</button>
-      <button type="button" class="chip" data-filter="teacher">🧑‍🏫 Preply Teacher Words</button>
-      <button type="button" class="chip" data-filter="quran">📖 Qur'an High Frequency</button>
-      <button type="button" class="chip" data-filter="everyday">🗣 Everyday Survival</button>
-    </div>
-
-    <!-- Audio Controls -->
-    <div class="audio-toolbar">
-      <span style="font-size:12.5px;font-weight:700">🎧 Audio:</span>
-      <button type="button" id="btnPlayAll">▶ Play All 20</button>
-      <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3s for you to recall, then says English">⏸ Play with Recall Gap</button>
-      <button type="button" id="btnStop" style="display:none">⏹ Stop</button>
-      <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
-        <button type="button" class="small" id="spNorm">🔊 Normal</button>
-        <button type="button" class="small" id="spSlow">🐢 Slow</button>
-      </span>
+      <div class="pt-group">
+        <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 20 continuously">▶ Play</button>
+        <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
+        <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
+        <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
+          <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
+          <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
+        </span>
+        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 20">👁️ Reveal All</button>
+      </div>
     </div>
 
     <!-- Session Progress & List -->
@@ -279,10 +279,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwsp79"></script>
-<script src="js/curriculum.js?v=muiwsp79"></script>
-<script src="js/app.js?v=muiwsp79"></script>
-<script src="js/tracker.js?v=muiwsp79"></script>
+<script src="js/progress-model.js?v=muiwygld"></script>
+<script src="js/curriculum.js?v=muiwygld"></script>
+<script src="js/app.js?v=muiwygld"></script>
+<script src="js/tracker.js?v=muiwygld"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -473,13 +473,11 @@ function render20Cards() {
         <td>
           ${isEnFirst ? `
             <div class="prompt-text">${w.en}</div>
-            <div class="prompt-sub"><span class="src-tag">${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : '🗣 Everyday'}</span></div>
           ` : `
             <div class="prompt-text ar">
               <span class="arabic" dir="rtl">${w.ar}</span>
               <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
             </div>
-            <div class="prompt-sub"><span class="src-tag">${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : '🗣 Everyday'}</span></div>
           `}
         </td>
         <td>
