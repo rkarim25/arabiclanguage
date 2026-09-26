@@ -25,8 +25,49 @@
     .p-en { font-size: 14px; color: var(--muted); margin-top: 4px; }
     
     .tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14.5px; }
-    .tbl td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    .tbl .ar { font-family: var(--font-ar); font-size: 21px; width: 35%; text-align: right; direction: rtl; color: var(--accent); }
+    .tbl td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .tbl .ar { font-family: var(--font-ar); font-size: 22px; width: 25%; text-align: right; direction: rtl; color: var(--accent); }
+    @media (max-width: 600px) {
+      .tbl .ar { width: 28%; font-size: 20px; }
+      .tbl td { padding: 10px 6px; }
+    }
+
+    /* 5 SRS Rating Pills & Feedback */
+    .rate-bar { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; margin-top: 6px; padding-top: 4px; }
+    .rate-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px; }
+    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.12s ease; line-height: 1.25; }
+    .rate-btn:hover { transform: translateY(-1px); }
+    
+    .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
+    .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
+
+    .rate-btn[data-b="medium"] { color: #0284c7; border-color: #bae6fd; }
+    .rate-btn[data-b="medium"].selected { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+    .rate-btn[data-b="weak"] { color: #d97706; border-color: #fde68a; }
+    .rate-btn[data-b="weak"].selected { background: #d97706; color: #fff; border-color: #d97706; }
+
+    .rate-btn[data-b="learning"] { color: #dc2626; border-color: #fecaca; }
+    .rate-btn[data-b="learning"].selected { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+    .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
+    .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
+
+    @media (prefers-color-scheme: dark) {
+      .rate-btn[data-b="strong"] { color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+      .rate-btn[data-b="medium"] { color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
+      .rate-btn[data-b="weak"] { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); }
+      .rate-btn[data-b="learning"] { color: #f87171; border-color: rgba(248, 113, 113, 0.3); }
+      .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
+    }
+
+    .rate-feedback { font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 5px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
+
+    /* Topic & Status Filter Chips */
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 14px; }
+    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .chip:hover { border-color: var(--accent); color: var(--ink); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
     
     /* Untimed Test Box */
     .mastery-test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 20px; background: var(--card); margin: 24px 0; }
@@ -77,7 +118,14 @@
 
     <!-- 2. Class Vocabulary -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
-      <summary style="cursor:pointer;font-weight:700;font-size:16px">📇 Class Vocabulary (Flat, Week &amp; Relatives)</summary>
+      <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <span>📇 Class Vocabulary (Flat, Week &amp; Relatives)</span>
+        <span id="classVocabStats" class="status-pill" style="font-size:12px;padding:3px 10px">Loading stats…</span>
+      </summary>
+      <p style="font-size:13px;color:var(--muted);margin:8px 0 10px">
+        Grade each word directly into your <b>Spaced Repetition (SRS)</b> master database. Graded words automatically sync across your 10-word drills, reviews, and learner profile.
+      </p>
+      <div id="vocabFilterChips" class="filter-chips"></div>
       <div id="vocabContainer" style="overflow-x:auto">Loading vocabulary…</div>
     </details>
 
@@ -219,35 +267,207 @@ function renderPassage() {
   `).join("");
 }
 
-function renderVocabAndSentences() {
+let currentVocabFilter = "all";
+
+function getWordBucket(item) {
+  if (!item) return null;
+  if (item.b === "never") return "never";
+  if (item.b === "strong" || item.b === "know") return "strong";
+  if (item.b === "medium" || item.b === "later") return "medium";
+  if (item.b === "weak") return "weak";
+  if (item.b === "learning" || item.b === "repeat") return "learning";
+  if (item.box >= 4) return "strong";
+  if (item.box >= 2) return "medium";
+  if (item.box === 1) return "weak";
+  if (item.box === 0) return "learning";
+  return null;
+}
+
+function updateClassVocabStats() {
   if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
   const cls = CLASS_DATA.classes[0];
+  const vocab = cls.vocabulary || [];
+  const srs = getSrs();
+  const graded = vocab.filter(v => !!getWordBucket(srs[v.key]));
+  const held = vocab.filter(v => {
+    const b = getWordBucket(srs[v.key]);
+    return b === "strong" || b === "medium" || b === "never";
+  });
+  const badge = document.getElementById("classVocabStats");
+  if (badge) {
+    badge.textContent = `${graded.length} of ${vocab.length} graded (${held.length} held in SRS)`;
+    if (graded.length === vocab.length && vocab.length > 0) {
+      badge.className = "status-pill done";
+    } else {
+      badge.className = "status-pill";
+    }
+  }
+  renderVocabFilterChips();
+}
 
-  // Vocab Table
+function renderVocabFilterChips() {
+  const container = document.getElementById("vocabFilterChips");
+  if (!container || !CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const cls = CLASS_DATA.classes[0];
+  const vocab = cls.vocabulary || [];
+  const srs = getSrs();
+  const gradedCount = vocab.filter(v => !!getWordBucket(srs[v.key])).length;
+  const ungradedCount = vocab.length - gradedCount;
+
+  const filters = [
+    { id: "all", label: `All (${vocab.length})` },
+    { id: "ungraded", label: `To Grade (${ungradedCount})` },
+    { id: "graded", label: `Graded (${gradedCount})` },
+    { id: "home", label: "Flat & Home (26)" },
+    { id: "family", label: "Family (6)" },
+    { id: "week", label: "Days (10)" },
+    { id: "other", label: "Weather & Attributes (11)" }
+  ];
+
+  container.innerHTML = filters.map(f => `
+    <button type="button" class="chip ${currentVocabFilter === f.id ? 'active' : ''}" data-filter="${f.id}" onclick="setVocabFilter('${f.id}')">${f.label}</button>
+  `).join("");
+}
+
+function setVocabFilter(filterId) {
+  currentVocabFilter = filterId;
+  renderVocabFilterChips();
+  renderVocabTable();
+}
+
+function renderVocabTable() {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const cls = CLASS_DATA.classes[0];
+  const vocab = cls.vocabulary || [];
+  const srs = getSrs();
   const vDiv = document.getElementById("vocabContainer");
+  if (!vDiv) return;
+
+  const filtered = vocab.filter(v => {
+    const cur = getWordBucket(srs[v.key]);
+    if (currentVocabFilter === "all") return true;
+    if (currentVocabFilter === "ungraded") return !cur;
+    if (currentVocabFilter === "graded") return !!cur;
+    if (currentVocabFilter === "home") return v.group === "lesson-home";
+    if (currentVocabFilter === "family") return v.group === "family";
+    if (currentVocabFilter === "week") return v.group === "lesson-week";
+    if (currentVocabFilter === "other") return v.group === "lesson-divine" || v.group === "lesson-weather";
+    return true;
+  });
+
+  if (!filtered.length) {
+    vDiv.innerHTML = `
+      <div style="text-align:center;padding:24px 16px;color:var(--muted)">
+        <p style="margin:0 0 8px;font-size:15px">No words in this filter view.</p>
+        <button type="button" class="small" onclick="setVocabFilter('all')">Show All ${vocab.length} Words</button>
+      </div>
+    `;
+    return;
+  }
+
   vDiv.innerHTML = `
     <table class="tbl">
       <thead>
         <tr style="text-align:left;color:var(--muted);font-size:12.5px">
-          <th>Word</th>
-          <th>English Meaning</th>
-          <th>Audio</th>
+          <th style="width:25%">Word</th>
+          <th style="width:65%">English Meaning &amp; Spaced Repetition (SRS)</th>
+          <th style="width:10%;text-align:right">Audio</th>
         </tr>
       </thead>
       <tbody>
-        ${cls.vocabulary.slice(0, 15).map(v => `
-          <tr>
-            <td class="ar">${v.ar}</td>
-            <td>
-              <b>${v.en}</b>
-              <div style="font-size:12px;color:var(--muted)">${v.note || v.tr || ''}</div>
-            </td>
-            <td><button class="small" onclick="speak('${encodeURIComponent(v.ar)}')">🔊</button></td>
-          </tr>
-        `).join("")}
+        ${filtered.map(v => {
+          const item = srs[v.key];
+          const curBucket = getWordBucket(item);
+          return `
+            <tr>
+              <td class="ar" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer" title="Click to listen">
+                ${v.ar}
+              </td>
+              <td>
+                <div style="font-weight:700;font-size:15px;color:var(--ink)">${v.en}</div>
+                ${v.note || v.tr ? `<div style="font-size:12px;color:var(--muted);margin:2px 0 6px">${v.note || v.tr}</div>` : ''}
+                <div class="rate-bar" data-key="${v.key}">
+                  <span class="rate-lbl">SRS:</span>
+                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong — known well, back in 30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">Strong</button>
+                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium — getting there, back in 7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">Medium</button>
+                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak — struggling, back in 2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">Weak</button>
+                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning — fresh or missed, repeat soon" onclick="gradeClassWord('${v.key}', 'learning', this)">Learning</button>
+                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat — already know / skip forever" onclick="gradeClassWord('${v.key}', 'never', this)">Don't repeat</button>
+                  <span class="rate-feedback"></span>
+                </div>
+              </td>
+              <td style="text-align:right;vertical-align:middle">
+                <button class="small" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Play pronunciation">🔊</button>
+              </td>
+            </tr>
+          `;
+        }).join("")}
       </tbody>
     </table>
   `;
+}
+
+function gradeClassWord(key, bucket, btn) {
+  setBucket(key, bucket);
+
+  let wordAr = "", wordEn = "";
+  if (CLASS_DATA && CLASS_DATA.classes) {
+    for (const c of CLASS_DATA.classes) {
+      const found = (c.vocabulary || []).find(x => x.key === key);
+      if (found) { wordAr = found.ar; wordEn = found.en; break; }
+    }
+  }
+
+  logEvent({
+    e: "vocab-rate",
+    key,
+    bucket,
+    wordAr,
+    wordEn,
+    src: "class",
+    t: Date.now()
+  });
+
+  logEvent({
+    e: "bucket",
+    key,
+    b: bucket,
+    src: "class",
+    t: Date.now()
+  });
+
+  if (typeof autoSync === "function") autoSync();
+
+  const bar = btn.closest(".rate-bar");
+  if (bar) {
+    bar.querySelectorAll(".rate-btn").forEach(b => {
+      b.classList.toggle("selected", b.dataset.b === bucket);
+    });
+    const msg = bar.querySelector(".rate-feedback");
+    if (msg) {
+      const labels = {
+        strong: "Strong · 30d",
+        medium: "Medium · 7d",
+        weak: "Weak · 2d",
+        learning: "Learning · repeat soon",
+        never: "Don't repeat"
+      };
+      msg.textContent = `✓ ${labels[bucket] || bucket}`;
+      msg.style.opacity = "1";
+      setTimeout(() => { msg.style.opacity = "0"; }, 2500);
+    }
+  }
+
+  updateClassVocabStats();
+}
+
+function renderVocabAndSentences() {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const cls = CLASS_DATA.classes[0];
+
+  // Render Vocab Section with SRS grading and filter chips
+  updateClassVocabStats();
+  renderVocabTable();
 
   // Sentences
   const sDiv = document.getElementById("sentencesContainer");
