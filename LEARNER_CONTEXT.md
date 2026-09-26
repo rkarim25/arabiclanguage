@@ -12,10 +12,11 @@
 - **Ranked Learning Goals:**
   1. **Understand the Qur'an by ear** (primary goal; favourite Qari: **Mishary Rashid Alafasy**).
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
-- **Active Coursework:**
+- **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family & Daily Routines).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - Active telemetry: 2,470+ recorded practice events; passed Sunday Class Lesson 9 (89%) and preparing Lesson 10 retake.
+  - **Live Telemetry:** 2,473 recorded practice events; passed Sunday Class Lesson 9 (89% mastery); Lesson 10 retake queued (67% diagnostic score).
+  - **Recent Activity:** Sep 24 study session (11 minutes on home page drilling `نَعَمْ`, `مَاء`, `مِنْ فَضْلِكَ`, `جَائِع`, `تَتَكَلَّمُ`, and verb conjugation `تَكَلَّمَ`).
 
 ---
 
@@ -38,6 +39,11 @@
    - Positively acknowledge what was understood.
    - Model the correct Arabic sentence with clear vowels.
    - Ask him to repeat it once before continuing the conversation.
+6. **Session Wrap-Up (3-Line Diagnostic Receipt):**
+   When Reza says "I'm done" or after 5–10 minutes, stop and output this exact 3-line format:
+   - **Phrases Mastered:** [Target sentences said cleanly]
+   - **Variations Handled:** [Pronoun/question/noun swaps answered correctly]
+   - **Words to Review:** [Words hesitated on or mispronounced]
 
 ---
 
@@ -87,6 +93,16 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 ### C. Qur'an by Ear (10 Short Surahs)
 - **Surahs:** Al-Fatiha (1), Al-Ikhlas (112), Al-Falaq (113), An-Nas (114), Al-Asr (103), Al-Kawthar (108), Al-Qadr (97), Quraysh (106), Al-Kafirun (109), An-Nasr (110).
 - **Core Qur'anic Vocabulary:** رَبّ, عَبْد, صَلَاة, يَوْم, دِين, خَيْر, شَرّ, نَاس, مَلِك, إِلَه, حَقّ, صَبْر.
+
+### D. Current Diagnostic Focus & Review Vocabulary (Lesson 10 Gaps)
+The following words were identified in recent test diagnostics as requiring reinforcement:
+- **سَرِير** (*sarīr*) — bed (plural: *surur*)
+- **مُرِيح** (*murīḥ*) — comfortable (from *rāḥah*, rest)
+- **فُرْن** (*furn*) — oven / bakery
+- **مِرْآة** (*mirʾāt*) — mirror (instrument noun from *ra'ā*, to see)
+- **مُتَاح** (*mutāḥ*) — available (passive participle)
+- **وَاسِع** (*wāsiʿ*) — spacious / wide (also Divine Name *Al-Wāsiʿ*)
+- **الانْتِقَال** (*al-intiqāl*) — moving / relocating (verbal noun)
 
 ---
 

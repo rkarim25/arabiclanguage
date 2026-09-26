@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mug1j3zd">
-  <link rel="stylesheet" href="css/style.css?v=mug1j3zd">
+  <link rel="stylesheet" href="css/fonts.css?v=muinhqw5">
+  <link rel="stylesheet" href="css/style.css?v=muinhqw5">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -151,13 +151,19 @@
   <!-- SECTION 4: AI CONVERSATION PARTNER -->
   <div class="card ai-box">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <h2 style="margin:0;font-size:15px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+      <div style="display:flex;align-items:center;gap:8px">
+        <h2 style="margin:0;font-size:15px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+        <a href="SPEAK_WITH_AI.md" target="_blank" class="small" style="font-size:11.5px;color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:2px 8px">📘 Guide</a>
+      </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" id="btnCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
         <button type="button" id="btnCopyPrompt" class="small primary">📋 Copy Voice Prompt</button>
       </div>
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences and variations.</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 0;flex-wrap:wrap;gap:6px">
+      <p style="font-size:12.5px;color:var(--muted);margin:0">Paste into ChatGPT/Claude voice mode on your phone for a quick 3-minute casual chat using today's sentences and variations.</p>
+      <span style="font-size:11.5px;color:var(--muted)">💡 1. Copy Prompt → 2. Open App → 3. Tap 🎧 Voice Mode</span>
+    </div>
     <div class="ai-prompt-pre" id="aiPromptText">Loading prompt…</div>
   </div>
 
@@ -177,12 +183,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mug1j3zd"></script>
-<script src="js/curriculum.js?v=mug1j3zd"></script>
-<script src="js/app.js?v=mug1j3zd"></script>
-<script src="js/tracker.js?v=mug1j3zd"></script>
-<script src="js/plan.js?v=mug1j3zd"></script>
-<script src="js/account.js?v=mug1j3zd"></script>
+<script src="js/progress-model.js?v=muinhqw5"></script>
+<script src="js/curriculum.js?v=muinhqw5"></script>
+<script src="js/app.js?v=muinhqw5"></script>
+<script src="js/tracker.js?v=muinhqw5"></script>
+<script src="js/plan.js?v=muinhqw5"></script>
+<script src="js/account.js?v=muinhqw5"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -508,6 +514,8 @@ function buildChapterAiPrompt(chap) {
   p += `   - NEVER give long monologues, lectures, or automatic translations.\n`;
   p += `   - Ask me ONE question or prompt at a time, then PAUSE and wait for me to speak.\n`;
   p += `   - If I make a mistake, gently model the correct phrase and ask me to repeat it once.\n`;
+  p += `4. Session Wrap-Up:\n`;
+  p += `   - When I say "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n`;
   return p;
 }
 

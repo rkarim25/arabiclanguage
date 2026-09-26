@@ -2000,7 +2000,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mug1j3zd";
+const DATA_V = "muinhqw5";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3386,16 +3386,20 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `3. **Elicit, Don't Lecture:** Ask ONE question or give ONE prompt at a time, then PAUSE and wait for his spoken reply.\n`;
   md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns, turn statements into questions with hal/ayna/mata/kam).\n`;
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
+  md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
+
+  md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
+  md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;
 
   if (currentContext && currentContext.sentences) {
-    md += `\n## 4. Current Target Sentences to Practice\n`;
+    md += `\n## 5. Current Target Sentences to Practice\n`;
     currentContext.sentences.forEach((s, i) => {
       md += `${i + 1}. **${s.ar}** — *${s.en}* (${s.tr || ''})\n`;
     });
   }
 
   if (currentContext && currentContext.aiScenario) {
-    md += `\n## 5. Suggested Roleplay Scenario\n${currentContext.aiScenario}\n`;
+    md += `\n## 6. Suggested Roleplay Scenario\n${currentContext.aiScenario}\n`;
   }
 
   return md;

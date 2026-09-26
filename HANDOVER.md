@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-09-24, post-redesign to Interactive Reader & 10-Word Drill.** Read this first in any new session. It tells you where the project stands, what changed, and how to continue.
+**Updated 2026-09-26, post-redesign to Interactive Reader & 10-Word Drill, with Speak with AI enhancements & session wrap-up receipts.** Read this first in any new session. It tells you where the project stands, what changed, and how to continue.
 
 ---
 
