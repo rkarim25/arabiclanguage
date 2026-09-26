@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
-  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
+  <link rel="stylesheet" href="css/style.css?v=muixql21">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -229,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixjdl4"></script>
-<script src="js/curriculum.js?v=muixjdl4"></script>
-<script src="js/app.js?v=muixjdl4"></script>
-<script src="js/tracker.js?v=muixjdl4"></script>
-<script src="js/plan.js?v=muixjdl4"></script>
+<script src="js/progress-model.js?v=muixql21"></script>
+<script src="js/curriculum.js?v=muixql21"></script>
+<script src="js/app.js?v=muixql21"></script>
+<script src="js/tracker.js?v=muixql21"></script>
+<script src="js/plan.js?v=muixql21"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -289,8 +289,9 @@ function renderPassage() {
   const container = document.getElementById("passageContainer");
   container.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal breakdown or phonetics on any line:</span>
-      <div style="display:flex;gap:6px">
+      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal translation, breakdown, or phonetics:</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="line-toggle-btn" id="btnToggleAllEn" onclick="toggleAllPassageEn()">🌐 All Translation</button>
         <button type="button" class="line-toggle-btn" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()">🧩 All Word-by-Word</button>
         <button type="button" class="line-toggle-btn" id="btnToggleAllTr" onclick="toggleAllPassageTr()">🔤 All Transliteration</button>
       </div>
@@ -299,8 +300,9 @@ function renderPassage() {
       <div class="passage-line" id="pline-${idx}">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
           <span style="font-size:11.5px;color:var(--muted);font-weight:600">Line ${idx + 1}</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <button type="button" class="small" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <button type="button" class="small icon-btn" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+            <button type="button" class="line-toggle-btn" id="btnEn-${idx}" onclick="togglePassageEn(${idx})">🌐 Translation</button>
             <button type="button" class="line-toggle-btn" id="btnWbw-${idx}" onclick="togglePassageWbw(${idx})">🧩 Word-by-Word</button>
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnTr-${idx}" onclick="togglePassageTr(${idx})">🔤 Transliteration</button>` : ''}
           </div>
@@ -314,11 +316,33 @@ function renderPassage() {
             </div>
           `).join("")}
         </div>
-        <div class="p-en">${s.en}</div>
+        <div class="p-en" id="en-${idx}" style="display:none">${s.en}</div>
         ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none">${s.tr}</div>` : ''}
       </div>
     `).join("")}
   `;
+}
+
+function togglePassageEn(idx) {
+  const el = document.getElementById("en-" + idx);
+  const btn = document.getElementById("btnEn-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allEnVisible = false;
+function toggleAllPassageEn() {
+  allEnVisible = !allEnVisible;
+  document.querySelectorAll("[id^='en-']").forEach(el => {
+    el.style.display = allEnVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btnEn-']").forEach(btn => {
+    btn.classList.toggle("active", allEnVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllEn");
+  if (btnAll) btnAll.classList.toggle("active", allEnVisible);
 }
 
 function togglePassageWbw(idx) {
@@ -363,6 +387,28 @@ function toggleAllPassageTr() {
   });
   const btnAll = document.getElementById("btnToggleAllTr");
   if (btnAll) btnAll.classList.toggle("active", allTrVisible);
+}
+
+function toggleClsSentenceEn(idx) {
+  const el = document.getElementById("cls-en-" + idx);
+  const btn = document.getElementById("btnClsEn-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allClsEnVisible = false;
+function toggleAllClsSentenceEn() {
+  allClsEnVisible = !allClsEnVisible;
+  document.querySelectorAll("[id^='cls-en-']").forEach(el => {
+    el.style.display = allClsEnVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btnClsEn-']").forEach(btn => {
+    btn.classList.toggle("active", allClsEnVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllClsEn");
+  if (btnAll) btnAll.classList.toggle("active", allClsEnVisible);
 }
 
 function toggleClsSentenceTr(idx) {
@@ -488,10 +534,10 @@ function renderVocabTable() {
   vDiv.innerHTML = `
     <div class="srs-legend-bar" style="margin:6px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-        <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-        <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-        <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+        <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
+        <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
+        <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
+        <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
       <span style="font-size:11.5px;color:var(--muted)">Rate recall: 🟢 30d · 🔵 7d · 🟠 2d · 🔴 1d · ⚪ Retire</span>
@@ -501,7 +547,7 @@ function renderVocabTable() {
         <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
           <th style="width:34%">Arabic</th>
           <th style="width:40%">English Meaning</th>
-          <th style="width:26%;text-align:right">SRS Rating</th>
+          <th style="width:26%;text-align:right">Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -524,11 +570,11 @@ function renderVocabTable() {
               </td>
               <td style="text-align:right">
                 <div class="rate-bar" data-key="${v.key}">
-                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
+                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
                   <span class="rate-feedback"></span>
                 </div>
               </td>
@@ -605,15 +651,17 @@ function renderVocabAndSentences() {
   // Sentences
   const sDiv = document.getElementById("sentencesContainer");
   sDiv.innerHTML = `
-    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
+    <div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <button type="button" class="line-toggle-btn" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()">🌐 All Translation</button>
       <button type="button" class="line-toggle-btn" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()">🔤 All Transliteration</button>
     </div>
     ${cls.sentences.slice(0, 8).map((s, idx) => `
       <div class="s-row" id="cls-srow-${idx}" style="padding:10px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1} · ${s.from === 'teacher' ? '🧑‍🏫 Drilled with teacher' : 'Core pattern'}</span>
-          <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1}</span>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
             <button class="small icon-btn" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊 Read</button>
+            <button type="button" class="line-toggle-btn" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle Translation">🌐 Translation</button>
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
           </div>
         </div>
@@ -621,7 +669,7 @@ function renderVocabAndSentences() {
           <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
         </div>
         ${s.tr ? `<div id="cls-tr-${idx}" class="p-tr" style="display:none;margin-bottom:4px;font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
-        <div style="font-size:14px;font-weight:600;color:var(--ink)">${s.en}</div>
+        <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:14px;font-weight:600;color:var(--ink)">${s.en}</div>
       </div>
     `).join("")}
   `;

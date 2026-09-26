@@ -174,19 +174,19 @@ function dueCards() {
 }
 function totalCards() { return Object.keys(getSrs()).length; }
 
-/* ---------- explicit buckets: strong / medium / weak / learning / never ---------- */
+/* ---------- explicit buckets: 30d / 7d / 2d / 1d / never ---------- */
 const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
 const BUCKETS = [
-  { id: "strong", label: "Strong", name: "Strong — known well, back in 30 days", days: 30, box: 5 },
-  { id: "medium", label: "Medium", name: "Medium — getting there, back in 7 days", days: 7, box: 3 },
-  { id: "weak", label: "Weak", name: "Weak — struggling, back in 2 days", days: 2, box: 1 },
-  { id: "learning", label: "Learning", name: "Learning — fresh or missed, back in 10 mins", days: 0, box: 0 },
-  { id: "never", label: "Don't repeat", name: "Don't repeat — already know / skip forever", days: null, box: 5 },
+  { id: "strong", label: "30d", name: "30 days", days: 30, box: 5 },
+  { id: "medium", label: "7d", name: "7 days", days: 7, box: 3 },
+  { id: "weak", label: "2d", name: "2 days", days: 2, box: 1 },
+  { id: "learning", label: "1d", name: "1 day", days: 0, box: 0 },
+  { id: "never", label: "Retire", name: "Retire", days: null, box: 5 },
 ];
 const LEGACY_BUCKETS = {
-  know: { id: "strong", label: "Strong", name: "Strong — known well", days: 30, box: 5 },
-  later: { id: "medium", label: "Medium", name: "Medium — back in 7 days", days: 7, box: 3 },
-  repeat: { id: "learning", label: "Learning", name: "Learning — repeat soon", days: 0, box: 0 },
+  know: { id: "strong", label: "30d", name: "30 days", days: 30, box: 5 },
+  later: { id: "medium", label: "7d", name: "7 days", days: 7, box: 3 },
+  repeat: { id: "learning", label: "1d", name: "1 day", days: 0, box: 0 },
 };
 function setBucket(key, b) {
   const srs = getSrs();
@@ -2004,7 +2004,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muixjdl4";
+const DATA_V = "muixql21";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2718,10 +2718,14 @@ function mountMnem(tr, btnHost, ar, key) {
    a wrong-answer ✗ tap here would silently retire the word forever. */
 function bucketSaidText(id) {
   return ({
-    know: "got it — back in 30 days",
-    repeat: "repeat — back in ~10 min",
-    later: "much later — back in 7 days",
-    never: "won't show again",
+    know: "30 days",
+    strong: "30 days",
+    repeat: "1 day",
+    learning: "1 day",
+    later: "7 days",
+    medium: "7 days",
+    weak: "2 days",
+    never: "retired",
   })[id] || "saved";
 }
 function mountBucketBar(slot, key, onSet) {
@@ -2735,7 +2739,9 @@ function mountBucketBar(slot, key, onSet) {
   BUCKETS.forEach(b => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.textContent = b.label;
+    btn.dataset.b = b.id;
+    btn.title = b.name;
+    btn.textContent = "✓";
     const isMatch = (b.id === current) || (b.id === "strong" && current === "know") || (b.id === "medium" && current === "later") || (b.id === "learning" && current === "repeat");
     if (isMatch && marked) btn.classList.add("sel", b.id === "never" ? "never" : "x");
     btn.onclick = () => {
@@ -2744,7 +2750,6 @@ function mountBucketBar(slot, key, onSet) {
       [...bar.children].forEach(c => c.classList.remove("sel", "never"));
       btn.classList.add("sel");
       if (b.id === "never") btn.classList.add("never");
-      // say what just happened — a silent save reads as a broken button
       said.textContent = bucketSaidText(b.id);
       said.classList.toggle("never", b.id === "never");
       if (onSet) onSet(b.id);

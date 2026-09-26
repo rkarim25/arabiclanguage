@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
-  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
+  <link rel="stylesheet" href="css/style.css?v=muixql21">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -221,10 +221,10 @@
         <div>
           <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
           <div class="srs-legend-bar">
-            <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-            <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-            <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-            <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+            <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
+            <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
+            <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
+            <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
             <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
           </div>
         </div>
@@ -250,10 +250,10 @@
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-          <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-          <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-          <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+          <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
+          <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
+          <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
+          <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
           <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
         </div>
         <div style="display:flex;gap:6px">
@@ -283,10 +283,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixjdl4"></script>
-<script src="js/curriculum.js?v=muixjdl4"></script>
-<script src="js/app.js?v=muixjdl4"></script>
-<script src="js/tracker.js?v=muixjdl4"></script>
+<script src="js/progress-model.js?v=muixql21"></script>
+<script src="js/curriculum.js?v=muixql21"></script>
+<script src="js/app.js?v=muixql21"></script>
+<script src="js/tracker.js?v=muixql21"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -511,11 +511,11 @@ function render10Cards() {
               👁️ Check ${isEnFirst ? 'Arabic sentence & vocabulary' : 'English translation & vocabulary'} ▾
             </div>
             <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
             </div>
           </div>
         ` : `
@@ -552,19 +552,19 @@ function render10Cards() {
               </div>
             ` : ''}
 
-            ${(s.note || s.hint) ? `
-              <div class="s-hint-line">💡 ${s.note || s.hint}</div>
+            ${s.note ? `
+              <div class="s-hint-line">💡 ${s.note}</div>
             ` : ''}
           </div>
 
           <div class="s-action-bar" style="margin-top:4px">
             <span style="font-size:11.5px;color:var(--muted)">Rate recall:</span>
             <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
             </div>
           </div>
         `}
@@ -767,11 +767,11 @@ function renderMasterBank() {
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateMasterSentence('${s.key}', 'strong')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateMasterSentence('${s.key}', 'medium')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateMasterSentence('${s.key}', 'weak')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateMasterSentence('${s.key}', 'learning')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateMasterSentence('${s.key}', 'never')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateMasterSentence('${s.key}', 'strong')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateMasterSentence('${s.key}', 'medium')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateMasterSentence('${s.key}', 'weak')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateMasterSentence('${s.key}', 'learning')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateMasterSentence('${s.key}', 'never')">✓</button>
           </div>
         </td>
       </tr>

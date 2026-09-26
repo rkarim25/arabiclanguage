@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
-  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
+  <link rel="stylesheet" href="css/style.css?v=muixql21">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -208,10 +208,10 @@
         <div>
           <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Words</h2>
           <div class="srs-legend-bar">
-            <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-            <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-            <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-            <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+            <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
+            <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
+            <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
+            <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
             <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
           </div>
         </div>
@@ -224,7 +224,7 @@
               <th style="width:28px;text-align:center">#</th>
               <th style="width:32%">Prompt</th>
               <th style="width:44%">Check / Recall</th>
-              <th style="text-align:right">SRS Rating</th>
+              <th style="text-align:right">Rating</th>
             </tr>
           </thead>
           <tbody id="wordList">
@@ -250,10 +250,10 @@
         </div>
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px">
-        <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
-        <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
-        <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
-        <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+        <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
+        <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
+        <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
+        <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
       <div style="overflow-x:auto">
@@ -277,10 +277,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixjdl4"></script>
-<script src="js/curriculum.js?v=muixjdl4"></script>
-<script src="js/app.js?v=muixjdl4"></script>
-<script src="js/tracker.js?v=muixjdl4"></script>
+<script src="js/progress-model.js?v=muixql21"></script>
+<script src="js/curriculum.js?v=muixql21"></script>
+<script src="js/app.js?v=muixql21"></script>
+<script src="js/tracker.js?v=muixql21"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -501,11 +501,11 @@ function render10Cards() {
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateWord('${w.key}', 'strong', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateWord('${w.key}', 'medium', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateWord('${w.key}', 'weak', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateWord('${w.key}', 'learning', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateWord('${w.key}', 'never', ${idx})">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateWord('${w.key}', 'strong', ${idx})">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateWord('${w.key}', 'medium', ${idx})">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateWord('${w.key}', 'weak', ${idx})">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateWord('${w.key}', 'learning', ${idx})">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateWord('${w.key}', 'never', ${idx})">✓</button>
           </div>
         </td>
       </tr>
@@ -686,11 +686,11 @@ function renderMasterTable() {
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateMasterWord('${w.key}', 'strong', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateMasterWord('${w.key}', 'medium', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateMasterWord('${w.key}', 'weak', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateMasterWord('${w.key}', 'learning', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateMasterWord('${w.key}', 'never', '${encodeURIComponent(w.ar)}')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateMasterWord('${w.key}', 'strong', '${encodeURIComponent(w.ar)}')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateMasterWord('${w.key}', 'medium', '${encodeURIComponent(w.ar)}')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateMasterWord('${w.key}', 'weak', '${encodeURIComponent(w.ar)}')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateMasterWord('${w.key}', 'learning', '${encodeURIComponent(w.ar)}')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateMasterWord('${w.key}', 'never', '${encodeURIComponent(w.ar)}')">✓</button>
           </div>
         </td>
       </tr>

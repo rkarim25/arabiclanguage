@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
-  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
+  <link rel="stylesheet" href="css/style.css?v=muixql21">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muixjdl4"></script>
-<script src="js/curriculum.js?v=muixjdl4"></script>
-<script src="js/app.js?v=muixjdl4"></script>
-<script src="js/tracker.js?v=muixjdl4"></script>
-<script src="js/plan.js?v=muixjdl4"></script>
-<script src="js/account.js?v=muixjdl4"></script>
+<script src="js/progress-model.js?v=muixql21"></script>
+<script src="js/curriculum.js?v=muixql21"></script>
+<script src="js/app.js?v=muixql21"></script>
+<script src="js/tracker.js?v=muixql21"></script>
+<script src="js/plan.js?v=muixql21"></script>
+<script src="js/account.js?v=muixql21"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2657,8 +2657,9 @@ function loadChapter(chap) {
   const sList = document.getElementById("sentenceList");
   sList.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal breakdown or phonetics on any line:</span>
-      <div style="display:flex;gap:6px">
+      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal translation, breakdown, or phonetics:</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="line-toggle-btn" id="btnToggleAllDayEn" onclick="toggleAllDayEn()">🌐 All Translation</button>
         <button type="button" class="line-toggle-btn" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()">🧩 All Words</button>
         <button type="button" class="line-toggle-btn" id="btnToggleAllDayTr" onclick="toggleAllDayTr()">🔤 All Transliteration</button>
       </div>
@@ -2667,8 +2668,9 @@ function loadChapter(chap) {
       <div class="s-row" id="srow-${idx}">
         <div class="s-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1}</span>
-          <div class="s-actions" style="display:flex;gap:6px;align-items:center">
+          <div class="s-actions" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
             <button type="button" class="small icon-btn" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+            <button type="button" class="line-toggle-btn" id="btn-den-${idx}" onclick="toggleDayEn(${idx})" title="Toggle translation">🌐 Translation</button>
             ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-dwbw-${idx}" onclick="toggleDayWbw(${idx})" title="Toggle word-by-word">🧩 Words</button>` : ''}
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration">🔤 Translit</button>` : ''}
           </div>
@@ -2687,9 +2689,8 @@ function loadChapter(chap) {
             `).join("")}
           </div>
         ` : ''}
-        <div class="s-en-line" style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+        <div class="s-en-line" id="day-en-${idx}" style="display:none;margin-top:4px">
           <div class="s-en" style="font-size:14.5px;font-weight:600;color:var(--ink)">${s.en}</div>
-          ${s.hint ? `<div class="s-hint" style="font-size:11.5px;color:var(--muted)">💡 ${s.hint}</div>` : ''}
         </div>
       </div>
     `).join("")}
@@ -2891,6 +2892,28 @@ function renderQuranSection(surahId) {
     const items = surah.verses.map((v, i) => ({ n: surah.n, ayah: i + 1 }));
     playRecitation(items);
   };
+}
+
+function toggleDayEn(idx) {
+  const el = document.getElementById("day-en-" + idx);
+  const btn = document.getElementById("btn-den-" + idx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+let allDayEnVisible = false;
+function toggleAllDayEn() {
+  allDayEnVisible = !allDayEnVisible;
+  document.querySelectorAll("[id^='day-en-']").forEach(el => {
+    el.style.display = allDayEnVisible ? "block" : "none";
+  });
+  document.querySelectorAll("[id^='btn-den-']").forEach(btn => {
+    btn.classList.toggle("active", allDayEnVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllDayEn");
+  if (btnAll) btnAll.classList.toggle("active", allDayEnVisible);
 }
 
 function toggleDayWbw(idx) {

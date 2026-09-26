@@ -484,13 +484,25 @@ footer a { color: var(--accent); }
    Review page tapping ✓ saved the word but the button never changed: "i am
    clicking the tick but dont think it is taking it". Shared here so every page
    that mounts a bucket bar shows the selected state. */
-.bucket-bar { display: inline-flex; gap: 3px; margin-top: 4px; direction: ltr; flex-wrap: wrap; vertical-align: middle; }
-.bucket-bar button { font-size: 12px; padding: 1px 8px; border-radius: 999px; color: var(--muted); }
-.bucket-bar button.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
-.bucket-bar button.sel.never { background: var(--red); border-color: var(--red); }
+.bucket-bar { display: inline-flex; gap: 4px; align-items: center; direction: ltr; flex-wrap: wrap; vertical-align: middle; }
+.bucket-bar button {
+  width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border);
+  padding: 0; cursor: pointer; transition: all 0.12s; font-size: 11px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; color: transparent;
+}
+.bucket-bar button[data-b="strong"], .bucket-bar button:nth-child(1) { border-color: #10b981; background: #ecfdf5; }
+.bucket-bar button[data-b="strong"].sel, .bucket-bar button:nth-child(1).sel { background: #059669; border-color: #059669; color: #fff; transform: scale(1.1); }
+.bucket-bar button[data-b="medium"], .bucket-bar button:nth-child(2) { border-color: #0284c7; background: #f0f9ff; }
+.bucket-bar button[data-b="medium"].sel, .bucket-bar button:nth-child(2).sel { background: #0284c7; border-color: #0284c7; color: #fff; transform: scale(1.1); }
+.bucket-bar button[data-b="weak"], .bucket-bar button:nth-child(3) { border-color: #d97706; background: #fffbeb; }
+.bucket-bar button[data-b="weak"].sel, .bucket-bar button:nth-child(3).sel { background: #d97706; border-color: #d97706; color: #fff; transform: scale(1.1); }
+.bucket-bar button[data-b="learning"], .bucket-bar button:nth-child(4) { border-color: #ef4444; background: #fef2f2; }
+.bucket-bar button[data-b="learning"].sel, .bucket-bar button:nth-child(4).sel { background: #dc2626; border-color: #dc2626; color: #fff; transform: scale(1.1); }
+.bucket-bar button[data-b="never"], .bucket-bar button:nth-child(5) { border-color: #94a3b8; background: #f1f5f9; }
+.bucket-bar button[data-b="never"].sel, .bucket-bar button:nth-child(5).sel { background: #64748b; border-color: #64748b; color: #fff; transform: scale(1.1); }
 /* …and say out loud what the tap did, so it never has to be guessed at */
-.bucket-said { font-size: 11.5px; color: var(--accent); margin-left: 7px; white-space: nowrap; }
-.bucket-said.never { color: var(--red); }
+.bucket-said { font-size: 11.5px; color: var(--accent); margin-left: 7px; white-space: nowrap; font-weight: 600; }
+.bucket-said.never { color: var(--muted); }
 
 /* ---------- day plan: dashboard card + travelling bar (js/plan.js) ---------- */
 .plan-row { display: flex; gap: 12px; align-items: center; padding: 10px 12px; margin-top: 8px;

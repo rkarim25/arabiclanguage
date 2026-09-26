@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixjdl4">
-  <link rel="stylesheet" href="css/style.css?v=muixjdl4">
+  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
+  <link rel="stylesheet" href="css/style.css?v=muixql21">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,9 +52,9 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=muixjdl4"></script>
-<script src="js/tracker.js?v=muixjdl4"></script>
-<script src="js/plan.js?v=muixjdl4"></script>
+<script src="js/app.js?v=muixql21"></script>
+<script src="js/tracker.js?v=muixql21"></script>
+<script src="js/plan.js?v=muixql21"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -602,7 +602,7 @@ const FILTERS = [
   ["repeat", "Repeat"],
   ["later", "Later"],
   ["know", "Know"],
-  ["never", "Don't repeat"],
+  ["never", "Retire"],
 ];
 
 function catCatalog() {
@@ -630,7 +630,7 @@ async function renderBrowseView(body) {
       <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
         <table class="vocab-table"><tbody id="browseBody"></tbody></table>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ know · ↻ repeat soon · ⏳ much later · 🚫 retire (never show again)</p>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ 30d · ↻ 1d · ⏳ 7d · 🚫 Retire</p>
     </div>`;
   if (!catalog) catalog = await buildCatalog();
   const chips = document.getElementById("bucketChips");
@@ -678,8 +678,9 @@ async function renderBrowseView(body) {
       BUCKETS.forEach(b => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.textContent = b.label;
+        btn.dataset.b = b.id;
         btn.title = b.name;
+        btn.textContent = "✓";
         const cur = bucketOf(key);
         const isMatch = (b.id === cur) || (b.id === "strong" && cur === "know") || (b.id === "medium" && cur === "later") || (b.id === "learning" && cur === "repeat");
         if (isMatch && cur !== "unmarked") btn.classList.add("sel", b.id === "never" ? "never" : "x");
