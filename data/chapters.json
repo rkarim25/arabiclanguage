@@ -1,0 +1,2397 @@
+{
+  "chapters": [
+    {
+      "id": "chap-1",
+      "num": 1,
+      "title": "Chapter 1: Everyday Foundations",
+      "surahId": "ikhlas",
+      "grammar": {
+        "title": "The Nominal Sentence (الجُمْلَة الاسْمِيَّة)",
+        "text": "Arabic has no verb for 'is' or 'are' in the present tense. Placing a subject next to an attribute completes the sentence: <b>اللَّهُ أَحَدٌ</b> means <i>Allah [is] One</i>; <b>أَنَا جَائِعٌ</b> means <i>I [am] hungry</i>."
+      },
+      "sentences": [
+        {
+          "ar": "السَّلَامُ عَلَيْكُمْ",
+          "en": "Peace be upon you.",
+          "tr": "as-salāmu ʿalaykum",
+          "hint": "The universal opening greeting",
+          "words": [
+            [
+              "السَّلَامُ",
+              "peace"
+            ],
+            [
+              "عَلَيْكُمْ",
+              "upon you"
+            ]
+          ]
+        },
+        {
+          "ar": "صَبَاحُ الخَيْرِ",
+          "en": "Good morning.",
+          "tr": "ṣabāḥu l-khayr",
+          "hint": "Everyday morning greeting",
+          "words": [
+            [
+              "صَبَاحُ",
+              "morning of"
+            ],
+            [
+              "الخَيْرِ",
+              "the goodness / good"
+            ]
+          ]
+        },
+        {
+          "ar": "شُكْرًا جَزِيلًا",
+          "en": "Thank you very much.",
+          "tr": "shukran jazīlan",
+          "hint": "Gratitude & courtesy",
+          "words": [
+            [
+              "شُكْرًا",
+              "thank you / thanks"
+            ],
+            [
+              "جَزِيلًا",
+              "abundantly / very much"
+            ]
+          ]
+        },
+        {
+          "ar": "نَعَمْ، بِكُلِّ سُرُورٍ",
+          "en": "Yes, with pleasure!",
+          "tr": "naʿam, bi-kulli surūr",
+          "hint": "Affirmative agreement",
+          "words": [
+            [
+              "نَعَمْ",
+              "yes"
+            ],
+            [
+              "بِكُلِّ",
+              "with all / every"
+            ],
+            [
+              "سُرُورٍ",
+              "pleasure / joy"
+            ]
+          ]
+        },
+        {
+          "ar": "أُرِيدُ مَاءً مِنْ فَضْلِكَ",
+          "en": "I want water, please.",
+          "tr": "urīdu māʾan min faḍlik",
+          "hint": "Expressing wants politely",
+          "words": [
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "مَاءً",
+              "water"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "أَنَا جَائِعٌ جِدًّا",
+          "en": "I am very hungry.",
+          "tr": "anā jāʾiʿun jiddan",
+          "hint": "Nominal sentence state",
+          "words": [
+            [
+              "أَنَا",
+              "I am"
+            ],
+            [
+              "جَائِعٌ",
+              "hungry"
+            ],
+            [
+              "جِدًّا",
+              "very"
+            ]
+          ]
+        },
+        {
+          "ar": "أَيْنَ المَسْجِدُ القَرِيبُ؟",
+          "en": "Where is the near mosque?",
+          "tr": "ayna l-masjidu l-qarīb?",
+          "hint": "Asking directions",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "المَسْجِدُ",
+              "the mosque"
+            ],
+            [
+              "القَرِيبُ",
+              "the nearby / close"
+            ]
+          ]
+        },
+        {
+          "ar": "كَمِ السِّعْرُ لِهَذَا؟",
+          "en": "How much is the price for this?",
+          "tr": "kami s-siʿru li-hādhā?",
+          "hint": "Everyday inquiry",
+          "words": [
+            [
+              "كَمِ",
+              "how much is"
+            ],
+            [
+              "السِّعْرُ",
+              "the price"
+            ],
+            [
+              "لِهَذَا",
+              "for this"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ تَتَكَلَّمُ العَرَبِيَّةَ؟",
+          "en": "Do you speak Arabic?",
+          "tr": "hal tatakallamu l-ʿarabiyyah?",
+          "hint": "Language inquiry",
+          "words": [
+            [
+              "هَلْ",
+              "do"
+            ],
+            [
+              "تَتَكَلَّمُ",
+              "you speak"
+            ],
+            [
+              "العَرَبِيَّةَ",
+              "Arabic"
+            ]
+          ]
+        },
+        {
+          "ar": "مَعَ السَّلَامَةِ، إِلَى اللِّقَاءِ",
+          "en": "Goodbye, see you soon.",
+          "tr": "maʿa s-salāmah, ilā l-liqāʾ",
+          "hint": "Polite farewell",
+          "words": [
+            [
+              "مَعَ",
+              "with"
+            ],
+            [
+              "السَّلَامَةِ",
+              "safety / peace"
+            ],
+            [
+              "إِلَى",
+              "to / until"
+            ],
+            [
+              "اللِّقَاءِ",
+              "the meeting / see you"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are a warm Arabic conversation partner. I am a beginner (A1 level). Greet me politely in Arabic and ask how I am. Let's practice ordering food or water and asking where the mosque is. Keep your replies short (under 2 sentences), in Modern Standard Arabic with full vowels, and gently correct mistakes."
+    },
+    {
+      "id": "chap-2",
+      "num": 2,
+      "title": "Chapter 2: Wants, Needs & Requests",
+      "surahId": "falaq",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "أُرِيدُ أَنْ آكُلَ شَيْئًا",
+          "en": "I want to eat something.",
+          "tr": "urīdu an ākula shayʾan",
+          "hint": "أُرِيدُ أَنْ + verb",
+          "words": [
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "أَنْ",
+              "to"
+            ],
+            [
+              "آكُلَ",
+              "I eat"
+            ],
+            [
+              "شَيْئًا",
+              "something"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟",
+          "en": "Do you have halal food?",
+          "tr": "hal ʿindakum ṭaʿāmun ḥalāl?",
+          "hint": "Inquiring at food places",
+          "words": [
+            [
+              "هَلْ",
+              "do"
+            ],
+            [
+              "عِنْدَكُمْ",
+              "you have"
+            ],
+            [
+              "طَعَامٌ",
+              "food"
+            ],
+            [
+              "حَلَالٌ",
+              "halal / permissible"
+            ]
+          ]
+        },
+        {
+          "ar": "الحِسَابَ مِنْ فَضْلِكَ",
+          "en": "The bill, please.",
+          "tr": "al-ḥisāba min faḍlik",
+          "hint": "Paying at cafe/restaurant",
+          "words": [
+            [
+              "الحِسَابَ",
+              "the bill / check"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "أَنَا عَطْشَانُ، أُرِيدُ شَايًا",
+          "en": "I am thirsty, I want tea.",
+          "tr": "anā ʿaṭshān, urīdu shāyan",
+          "hint": "Daily request",
+          "words": [
+            [
+              "أَنَا",
+              "I am"
+            ],
+            [
+              "عَطْشَانُ",
+              "thirsty"
+            ],
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "شَايًا",
+              "tea"
+            ]
+          ]
+        },
+        {
+          "ar": "أَيْنَ الحَمَّامُ؟",
+          "en": "Where is the restroom?",
+          "tr": "ayna l-ḥammām?",
+          "hint": "Essential survival question",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "الحَمَّامُ",
+              "the restroom / bathroom"
+            ]
+          ]
+        },
+        {
+          "ar": "أُرِيدُ فِنْجَانَ قَهْوَةٍ",
+          "en": "I want a cup of coffee.",
+          "tr": "urīdu finjāna qahwah",
+          "hint": "Ordering drinks",
+          "words": [
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "فِنْجَانَ",
+              "a cup of"
+            ],
+            [
+              "قَهْوَةٍ",
+              "coffee"
+            ]
+          ]
+        },
+        {
+          "ar": "تَفَضَّلْ، هَذَا مَالُكَ",
+          "en": "Here you go, this is your money.",
+          "tr": "tafaḍḍal, hādhā māluka",
+          "hint": "Payment exchange",
+          "words": [
+            [
+              "تَفَضَّلْ",
+              "here you go / please"
+            ],
+            [
+              "هَذَا",
+              "this is"
+            ],
+            [
+              "مَالُكَ",
+              "your money"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟",
+          "en": "Can you help me?",
+          "tr": "hal yumkinuka musāʿadatī?",
+          "hint": "Polite assistance request",
+          "words": [
+            [
+              "هَلْ",
+              "is it"
+            ],
+            [
+              "يُمْكِنُكَ",
+              "possible for you / can you"
+            ],
+            [
+              "مُسَاعَدَتِي",
+              "to help me"
+            ]
+          ]
+        },
+        {
+          "ar": "أَحْتَاجُ إِلَى هَذَا الكِتَابِ",
+          "en": "I need this book.",
+          "tr": "aḥtāju ilā hādhā l-kitāb",
+          "hint": "Expressing need",
+          "words": [
+            [
+              "أَحْتَاجُ",
+              "I need"
+            ],
+            [
+              "إِلَى",
+              "to / [prep]"
+            ],
+            [
+              "هَذَا",
+              "this"
+            ],
+            [
+              "الكِتَابِ",
+              "the book"
+            ]
+          ]
+        },
+        {
+          "ar": "شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ",
+          "en": "Thank you, I don't want anything else.",
+          "tr": "shukran, lā urīdu shayʾan ākhar",
+          "hint": "Concluding requests",
+          "words": [
+            [
+              "شُكْرًا",
+              "thank you"
+            ],
+            [
+              "لَا",
+              "not / don't"
+            ],
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "شَيْئًا",
+              "anything / a thing"
+            ],
+            [
+              "آخَرَ",
+              "else / other"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are a friendly waiter at an Arab restaurant. Greet me, take my order for food and drinks, ask if I need anything else, and bring me the bill. Keep it strictly A1 Arabic."
+    },
+    {
+      "id": "chap-3",
+      "num": 3,
+      "title": "Chapter 3: Hotel, Taxis & Travel",
+      "surahId": "nas",
+      "grammar": {
+        "title": "Having with 'Indi (عِنْدِي)",
+        "text": "Arabic expresses possession with the prepositional phrase <b>عِنْدِي</b> (literally 'at me / with me'). <b>عِنْدِي حَجْزٌ</b> = <i>I have a reservation</i>. To negate: <b>لَيْسَ عِنْدِي</b> or <b>مَا عِنْدِي</b> = <i>I do not have</i>."
+      },
+      "sentences": [
+        {
+          "ar": "عِنْدِي حَجْزٌ فِي الفُنْدُقِ.",
+          "en": "I have a reservation at the hotel.",
+          "tr": "ʿindī ḥajzun fī l-funduq.",
+          "hint": "Hotel check-in",
+          "words": [
+            [
+              "عِنْدِي",
+              "I have"
+            ],
+            [
+              "حَجْزٌ",
+              "a reservation"
+            ],
+            [
+              "فِي",
+              "in / at"
+            ],
+            [
+              "الفُنْدُقِ",
+              "the hotel"
+            ]
+          ]
+        },
+        {
+          "ar": "أَيْنَ مِفْتَاحُ الغُرْفَةِ؟",
+          "en": "Where is the room key?",
+          "tr": "ayna miftāḥu l-ghurfah?",
+          "hint": "Hotel front desk",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "مِفْتَاحُ",
+              "the key of"
+            ],
+            [
+              "الغُرْفَةِ",
+              "the room"
+            ]
+          ]
+        },
+        {
+          "ar": "خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ.",
+          "en": "Take me to the hotel, please.",
+          "tr": "khudhnī ilā l-funduqi min faḍlik.",
+          "hint": "Taxi direction",
+          "words": [
+            [
+              "خُذْنِي",
+              "take me"
+            ],
+            [
+              "إِلَى",
+              "to"
+            ],
+            [
+              "الفُنْدُقِ",
+              "the hotel"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "أَيْنَ مَحَطَّةُ القِطَارِ؟",
+          "en": "Where is the train station?",
+          "tr": "ayna maḥaṭṭatu l-qiṭār?",
+          "hint": "Transport landmark",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "مَحَطَّةُ",
+              "the station of"
+            ],
+            [
+              "القِطَارِ",
+              "the train"
+            ]
+          ]
+        },
+        {
+          "ar": "هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ.",
+          "en": "This is my luggage in the car.",
+          "tr": "hādhihi amtīʿatī fī s-sayyārah.",
+          "hint": "Luggage handling",
+          "words": [
+            [
+              "هَذِهِ",
+              "this is"
+            ],
+            [
+              "أَمْتِعَتِي",
+              "my luggage"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "السَّيَّارَةِ",
+              "the car"
+            ]
+          ]
+        },
+        {
+          "ar": "كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟",
+          "en": "How much is the fare to there?",
+          "tr": "kami l-ujratu ilā hunāk?",
+          "hint": "Taxi pricing",
+          "words": [
+            [
+              "كَمِ",
+              "how much is"
+            ],
+            [
+              "الأُجْرَةُ",
+              "the fare"
+            ],
+            [
+              "إِلَى",
+              "to"
+            ],
+            [
+              "هُنَاكَ",
+              "there"
+            ]
+          ]
+        },
+        {
+          "ar": "تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ.",
+          "en": "Stop here, please.",
+          "tr": "tawaqqaf hunā, law samaḥt.",
+          "hint": "Taxi arrival",
+          "words": [
+            [
+              "تَوَقَّفْ",
+              "stop"
+            ],
+            [
+              "هُنَا",
+              "here"
+            ],
+            [
+              "لَوْ",
+              "if"
+            ],
+            [
+              "سَمَحْتَ",
+              "you permit / please"
+            ]
+          ]
+        },
+        {
+          "ar": "جَوَازُ سَفَرِي مَفْقُودٌ.",
+          "en": "My passport is missing.",
+          "tr": "jawāzu safarī mafqūd.",
+          "hint": "Emergency/travel notice",
+          "words": [
+            [
+              "جَوَازُ",
+              "the passport of"
+            ],
+            [
+              "سَفَرِي",
+              "my travel"
+            ],
+            [
+              "مَفْقُودٌ",
+              "is missing / lost"
+            ]
+          ]
+        },
+        {
+          "ar": "هَذَا بَابُ الطَّوَارِئِ.",
+          "en": "This is the emergency door.",
+          "tr": "hādhā bābu ṭ-ṭawāriʾ.",
+          "hint": "Safety landmark",
+          "words": [
+            [
+              "هَذَا",
+              "this is"
+            ],
+            [
+              "بَابُ",
+              "the door of"
+            ],
+            [
+              "الطَّوَارِئِ",
+              "the emergencies"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟",
+          "en": "Do you need any service?",
+          "tr": "hal taḥtāju ilā khidmah?",
+          "hint": "Staff courtesy",
+          "words": [
+            [
+              "هَلْ",
+              "do"
+            ],
+            [
+              "تَحْتَاجُ",
+              "you need"
+            ],
+            [
+              "إِلَى",
+              "to / [prep]"
+            ],
+            [
+              "خِدْمَةٍ",
+              "a service"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "Roleplay: You are a hotel receptionist in Medina. I arrive to check in. Greet me, ask for my reservation and passport, hand me the room key, and answer where the elevator is in simple A1 Arabic."
+    },
+    {
+      "id": "chap-4",
+      "num": 4,
+      "title": "Chapter 4: Time, Routine & Actions",
+      "surahId": "asr",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "مَاذَا تَفْعَلُ اليَوْمَ؟",
+          "en": "What are you doing today?",
+          "tr": "mādhā tafʿalu l-yawm?",
+          "hint": "Daily routine question",
+          "words": [
+            [
+              "مَاذَا",
+              "what"
+            ],
+            [
+              "تَفْعَلُ",
+              "are you doing"
+            ],
+            [
+              "اليَوْمَ",
+              "today"
+            ]
+          ]
+        },
+        {
+          "ar": "سَأَذْهَبُ إِلَى الدَّرْسِ غَدًا",
+          "en": "I will go to the lesson tomorrow.",
+          "tr": "sa-adhhabu ilā d-darsi ghadan",
+          "hint": "Future particle سَـ + verb",
+          "words": [
+            [
+              "سَأَذْهَبُ",
+              "I will go"
+            ],
+            [
+              "إِلَى",
+              "to"
+            ],
+            [
+              "الدَّرْسِ",
+              "the lesson"
+            ],
+            [
+              "غَدًا",
+              "tomorrow"
+            ]
+          ]
+        },
+        {
+          "ar": "قَرَأْتُ القُرْآنَ بَعْدَ الفَجْرِ",
+          "en": "I read the Quran after Fajr.",
+          "tr": "qaraʾtu l-qurʾāna baʿda l-fajr",
+          "hint": "Past verb + time phrase",
+          "words": [
+            [
+              "قَرَأْتُ",
+              "I read"
+            ],
+            [
+              "القُرْآنَ",
+              "the Quran"
+            ],
+            [
+              "بَعْدَ",
+              "after"
+            ],
+            [
+              "الفَجْرِ",
+              "the Fajr / dawn"
+            ]
+          ]
+        },
+        {
+          "ar": "مَتَى يَبْدَأُ الدَّرْسُ؟",
+          "en": "When does the lesson begin?",
+          "tr": "matā yabdaʾu d-dars?",
+          "hint": "Asking time with مَتَى",
+          "words": [
+            [
+              "مَتَى",
+              "when"
+            ],
+            [
+              "يَبْدَأُ",
+              "does begin"
+            ],
+            [
+              "الدَّرْسُ",
+              "the lesson"
+            ]
+          ]
+        },
+        {
+          "ar": "عِنْدِي مَوْعِدٌ فِي المَسَاءِ",
+          "en": "I have an appointment in the evening.",
+          "tr": "ʿindī mawʿidun fī l-masāʾ",
+          "hint": "Evening plans",
+          "words": [
+            [
+              "عِنْدِي",
+              "I have"
+            ],
+            [
+              "مَوْعِدٌ",
+              "an appointment"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "المَسَاءِ",
+              "the evening"
+            ]
+          ]
+        },
+        {
+          "ar": "كَتَبْتُ رِسَالَةً لِأَخِي",
+          "en": "I wrote a letter to my brother.",
+          "tr": "katabtu risālatan li-akhī",
+          "hint": "Past verb production",
+          "words": [
+            [
+              "كَتَبْتُ",
+              "I wrote"
+            ],
+            [
+              "رِسَالَةً",
+              "a letter"
+            ],
+            [
+              "لِأَخِي",
+              "to my brother"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ صَلَّيْتَ العَصْرَ؟",
+          "en": "Did you pray Asr?",
+          "tr": "hal ṣallayta l-ʿaṣr?",
+          "hint": "Worship timing",
+          "words": [
+            [
+              "هَلْ",
+              "did"
+            ],
+            [
+              "صَلَّيْتَ",
+              "you pray"
+            ],
+            [
+              "العَصْرَ",
+              "Asr (afternoon prayer)"
+            ]
+          ]
+        },
+        {
+          "ar": "نَحْنُ نَتَعَلَّمُ العَرَبِيَّةَ",
+          "en": "We are learning Arabic.",
+          "tr": "naḥnu nataʿallamu l-ʿarabiyyah",
+          "hint": "Plural present verb",
+          "words": [
+            [
+              "نَحْنُ",
+              "we"
+            ],
+            [
+              "نَتَعَلَّمُ",
+              "are learning"
+            ],
+            [
+              "العَرَبِيَّةَ",
+              "Arabic"
+            ]
+          ]
+        },
+        {
+          "ar": "لَا أَعْرِفُ مَعْنَى هَذِهِ الكَلِمَةِ",
+          "en": "I don't know the meaning of this word.",
+          "tr": "lā aʿrifu maʿnā hādhihi l-kalimah",
+          "hint": "Present negation with لَا",
+          "words": [
+            [
+              "لَا",
+              "not / don't"
+            ],
+            [
+              "أَعْرِفُ",
+              "I know"
+            ],
+            [
+              "مَعْنَى",
+              "the meaning of"
+            ],
+            [
+              "هَذِهِ",
+              "this"
+            ],
+            [
+              "الكَلِمَةِ",
+              "the word"
+            ]
+          ]
+        },
+        {
+          "ar": "السَّاعَةُ الآنَ الثَّالِثَةُ تَمَامًا",
+          "en": "The time now is exactly three o'clock.",
+          "tr": "as-sāʿatu l-āna th-thālithatu tamāman",
+          "hint": "Telling time",
+          "words": [
+            [
+              "السَّاعَةُ",
+              "the hour / time"
+            ],
+            [
+              "الآنَ",
+              "now"
+            ],
+            [
+              "الثَّالِثَةُ",
+              "is three o'clock"
+            ],
+            [
+              "تَمَامًا",
+              "exactly / precisely"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are my Arabic language tutor having a warm check-in. Ask me what I did today, when I read Quran, and what my plans are for tomorrow. Speak in simple A1 Arabic."
+    },
+    {
+      "id": "chap-5",
+      "num": 5,
+      "title": "Chapter 5: Questions & Meeting People",
+      "surahId": "kawthar",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "مَا اسْمُكَ الكَرِيمُ؟",
+          "en": "What is your honorable name?",
+          "tr": "mā ismuka l-karīm?",
+          "hint": "Polite personal question",
+          "words": [
+            [
+              "مَا",
+              "what is"
+            ],
+            [
+              "اسْمُكَ",
+              "your name"
+            ],
+            [
+              "الكَرِيمُ",
+              "the noble / honorable"
+            ]
+          ]
+        },
+        {
+          "ar": "مِنْ أَيْنَ أَنْتَ؟",
+          "en": "Where are you from?",
+          "tr": "min ayna anta?",
+          "hint": "Origin question",
+          "words": [
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "أَيْنَ",
+              "where"
+            ],
+            [
+              "أَنْتَ",
+              "are you"
+            ]
+          ]
+        },
+        {
+          "ar": "أَنَا مِنْ بَرِيطَانِيَا.",
+          "en": "I am from Britain.",
+          "tr": "anā min barīṭāniyā.",
+          "hint": "Origin answer",
+          "words": [
+            [
+              "أَنَا",
+              "I am"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "بَرِيطَانِيَا",
+              "Britain"
+            ]
+          ]
+        },
+        {
+          "ar": "تَشَرَّفْنَا بِمَعْرِفَتِكَ.",
+          "en": "Honored to meet you.",
+          "tr": "tasharrafnā bi-maʿrifatik.",
+          "hint": "Courtesy expression",
+          "words": [
+            [
+              "تَشَرَّفْنَا",
+              "we are honored"
+            ],
+            [
+              "بِمَعْرِفَتِكَ",
+              "to know you / with your acquaintance"
+            ]
+          ]
+        },
+        {
+          "ar": "كَيْفَ الحَالُ اليَوْمَ؟",
+          "en": "How are things today?",
+          "tr": "kayfa l-ḥālu l-yawm?",
+          "hint": "Common greeting inquiry",
+          "words": [
+            [
+              "كَيْفَ",
+              "how is"
+            ],
+            [
+              "الحَالُ",
+              "the condition / things"
+            ],
+            [
+              "اليَوْمَ",
+              "today"
+            ]
+          ]
+        },
+        {
+          "ar": "الحَمْدُ لِلَّهِ، بِخَيْرٍ وَعَافِيَةٍ.",
+          "en": "Praise be to Allah, fine and well.",
+          "tr": "al-ḥamdu lillāh, bi-khayrin wa-ʿāfiyah.",
+          "hint": "Standard response",
+          "words": [
+            [
+              "الحَمْدُ",
+              "praise"
+            ],
+            [
+              "لِلَّهِ",
+              "belongs to Allah"
+            ],
+            [
+              "بِخَيْرٍ",
+              "in good state / fine"
+            ],
+            [
+              "وَعَافِيَةٍ",
+              "and good health"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟",
+          "en": "Is it possible you help me?",
+          "tr": "hal yumkinu an tusāʿidanī?",
+          "hint": "Asking for help",
+          "words": [
+            [
+              "هَلْ",
+              "is it"
+            ],
+            [
+              "يُمْكِنُ",
+              "possible"
+            ],
+            [
+              "أَنْ",
+              "that"
+            ],
+            [
+              "تُسَاعِدَنِي",
+              "you help me"
+            ]
+          ]
+        },
+        {
+          "ar": "أَنَا آسِفٌ جِدًّا عَلَى التَّأْخِيرِ.",
+          "en": "I am very sorry for being late.",
+          "tr": "anā āsifun jiddan ʿalā t-taʾkhīr.",
+          "hint": "Polite apology",
+          "words": [
+            [
+              "أَنَا",
+              "I am"
+            ],
+            [
+              "آسِفٌ",
+              "sorry"
+            ],
+            [
+              "جِدًّا",
+              "very"
+            ],
+            [
+              "عَلَى",
+              "for / upon"
+            ],
+            [
+              "التَّأْخِيرِ",
+              "the delay / being late"
+            ]
+          ]
+        },
+        {
+          "ar": "عَفْوًا، لَا شُكْرَ عَلَى وَاجِبٍ.",
+          "en": "You're welcome, no thanks needed.",
+          "tr": "ʿafwan, lā shukra ʿalā wājib.",
+          "hint": "Response to shukran",
+          "words": [
+            [
+              "عَفْوًا",
+              "you're welcome / pardon"
+            ],
+            [
+              "لَا",
+              "no"
+            ],
+            [
+              "شُكْرَ",
+              "thanks"
+            ],
+            [
+              "عَلَى",
+              "upon / for"
+            ],
+            [
+              "وَاجِبٍ",
+              "a duty"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي أَمَانِ اللَّهِ وَحِفْظِهِ.",
+          "en": "In Allah's safety and protection.",
+          "tr": "fī amāni llāhi wa-ḥifẓih.",
+          "hint": "Warm farewell",
+          "words": [
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "أَمَانِ",
+              "the safety of"
+            ],
+            [
+              "اللَّهِ",
+              "Allah"
+            ],
+            [
+              "وَحِفْظِهِ",
+              "and His protection"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are meeting me for the first time at a cafe in Amman. Greet me, ask my name, where I am from, what I do, and how long I have been learning Arabic. Keep sentences under 15 words."
+    },
+    {
+      "id": "chap-6",
+      "num": 6,
+      "title": "Chapter 6: Home & Furniture",
+      "surahId": "qadr",
+      "grammar": {
+        "title": "Describing Rooms (Adjective Agreement)",
+        "text": "Non-human plurals and feminine nouns take feminine singular adjectives: <b>غُرْفَةٌ جَمِيلَةٌ</b> (a beautiful room); <b>شُقَقٌ وَاسِعَةٌ</b> (spacious flats)."
+      },
+      "sentences": [
+        {
+          "ar": "أَسْكُنُ فِي شَقَّةٍ جَمِيلَةٍ.",
+          "en": "I live in a beautiful flat.",
+          "tr": "askunu fī shaqqatin jamīlah.",
+          "hint": "Residence statement",
+          "words": [
+            [
+              "أَسْكُنُ",
+              "I live"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "شَقَّةٍ",
+              "a flat / apartment"
+            ],
+            [
+              "جَمِيلَةٍ",
+              "beautiful"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي الشَّقَّةِ غُرْفَةُ نَوْمٍ وَمَطْبَخٌ.",
+          "en": "In the flat is a bedroom and kitchen.",
+          "tr": "fī sh-shaqqati ghurfatu nawmin wa-maṭbakh.",
+          "hint": "Flat layout",
+          "words": [
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "الشَّقَّةِ",
+              "the flat"
+            ],
+            [
+              "غُرْفَةُ",
+              "a room of"
+            ],
+            [
+              "نَوْمٍ",
+              "sleep (bedroom)"
+            ],
+            [
+              "وَمَطْبَخٌ",
+              "and a kitchen"
+            ]
+          ]
+        },
+        {
+          "ar": "هَذِهِ غُرْفَةُ الجُلُوسِ الوَاسِعَةُ.",
+          "en": "This is the spacious living room.",
+          "tr": "hādhihi ghurfatu l-julūsi l-wāsiʿah.",
+          "hint": "Living room",
+          "words": [
+            [
+              "هَذِهِ",
+              "this is"
+            ],
+            [
+              "غُرْفَةُ",
+              "the room of"
+            ],
+            [
+              "الجُلُوسِ",
+              "sitting (living room)"
+            ],
+            [
+              "الوَاسِعَةُ",
+              "the spacious"
+            ]
+          ]
+        },
+        {
+          "ar": "عِنْدِي سَرِيرٌ فِي غُرْفَةِ النَّوْمِ.",
+          "en": "I have a bed in the bedroom.",
+          "tr": "ʿindī sarīrun fī ghurfati n-nawm.",
+          "hint": "Bedroom furniture",
+          "words": [
+            [
+              "عِنْدِي",
+              "I have"
+            ],
+            [
+              "سَرِيرٌ",
+              "a bed"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "غُرْفَةِ",
+              "the room of"
+            ],
+            [
+              "النَّوْمِ",
+              "sleep (the bedroom)"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي المَطْبَخِ ثَلَّاجَةٌ وَفُرْنٌ جَدِيدٌ.",
+          "en": "In the kitchen is a fridge and a new oven.",
+          "tr": "fī l-maṭbakhi thallājatun wa-furnun jadīd.",
+          "hint": "Kitchen appliances",
+          "words": [
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "المَطْبَخِ",
+              "the kitchen"
+            ],
+            [
+              "ثَلَّاجَةٌ",
+              "a fridge"
+            ],
+            [
+              "وَفُرْنٌ",
+              "and an oven"
+            ],
+            [
+              "جَدِيدٌ",
+              "new"
+            ]
+          ]
+        },
+        {
+          "ar": "عَلَى المَائِدَةِ كَرَاسِي كَثِيرَةٌ.",
+          "en": "Around the dining table are many chairs.",
+          "tr": "ʿalā l-māʾidati karāsiyyu kathīrah.",
+          "hint": "Dining area",
+          "words": [
+            [
+              "عَلَى",
+              "around / upon"
+            ],
+            [
+              "المَائِدَةِ",
+              "the dining table"
+            ],
+            [
+              "كَرَاسِي",
+              "chairs"
+            ],
+            [
+              "كَثِيرَةٌ",
+              "many"
+            ]
+          ]
+        },
+        {
+          "ar": "أَيْنَ سِتَارَةُ الشُّبَّاكِ؟",
+          "en": "Where is the window curtain?",
+          "tr": "ayna sitāratu sh-shubbāk?",
+          "hint": "Household fixtures",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "سِتَارَةُ",
+              "the curtain of"
+            ],
+            [
+              "الشُّبَّاكِ",
+              "the window"
+            ]
+          ]
+        },
+        {
+          "ar": "السَّجَّادَةُ عَلَى الأَرْضِ نَظِيفَةٌ.",
+          "en": "The carpet on the floor is clean.",
+          "tr": "as-sajjādatu ʿalā l-arḍi naẓīfah.",
+          "hint": "Carpet/rugs",
+          "words": [
+            [
+              "السَّجَّادَةُ",
+              "the carpet / rug"
+            ],
+            [
+              "عَلَى",
+              "on"
+            ],
+            [
+              "الأَرْضِ",
+              "the floor"
+            ],
+            [
+              "نَظِيفَةٌ",
+              "is clean"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي أَيِّ طَابِقٍ تَسْكُنُ؟",
+          "en": "On which floor do you live?",
+          "tr": "fī ayyi ṭābiqin taskun?",
+          "hint": "Floor inquiry",
+          "words": [
+            [
+              "فِي",
+              "on / in"
+            ],
+            [
+              "أَيِّ",
+              "which"
+            ],
+            [
+              "طَابِقٍ",
+              "floor"
+            ],
+            [
+              "تَسْكُنُ",
+              "do you live"
+            ]
+          ]
+        },
+        {
+          "ar": "أَسْكُنُ فِي الطَّابِقِ الثَّالِثِ.",
+          "en": "I live on the third floor.",
+          "tr": "askunu fī ṭ-ṭābiqi th-thālith.",
+          "hint": "Floor response",
+          "words": [
+            [
+              "أَسْكُنُ",
+              "I live"
+            ],
+            [
+              "فِي",
+              "on"
+            ],
+            [
+              "الطَّابِقِ",
+              "the floor"
+            ],
+            [
+              "الثَّالِثِ",
+              "the third"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "Roleplay: You are an apartment owner showing me around a flat in Cairo. Describe the rooms, what furniture is included (bed, oven, fridge), and tell me which floor it is on. Speak simply."
+    },
+    {
+      "id": "chap-7",
+      "num": 7,
+      "title": "Chapter 7: Shopping & The Market",
+      "surahId": "quraysh",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "كَمْ سِعْرُ هَذَا القَمِيصِ؟",
+          "en": "How much is the price of this shirt?",
+          "tr": "kam siʿru hādhā l-qamīṣ?",
+          "hint": "Clothing inquiry",
+          "words": [
+            [
+              "كَمْ",
+              "how much is"
+            ],
+            [
+              "سِعْرُ",
+              "the price of"
+            ],
+            [
+              "هَذَا",
+              "this"
+            ],
+            [
+              "القَمِيصِ",
+              "the shirt"
+            ]
+          ]
+        },
+        {
+          "ar": "هَذَا رَخِيصٌ وَذَاكَ غَالٍ.",
+          "en": "This is cheap and that is expensive.",
+          "tr": "hādhā rakhīṣun wa-dhāka ghāl.",
+          "hint": "Comparing prices",
+          "words": [
+            [
+              "هَذَا",
+              "this is"
+            ],
+            [
+              "رَخِيصٌ",
+              "cheap"
+            ],
+            [
+              "وَذَاكَ",
+              "and that is"
+            ],
+            [
+              "غَالٍ",
+              "expensive"
+            ]
+          ]
+        },
+        {
+          "ar": "أُرِيدُ ثَلَاثَةَ كِيلُو مِنْ هَذَا.",
+          "en": "I want three kilos of this.",
+          "tr": "urīdu thalāthata kīlū min hādhā.",
+          "hint": "Quantity request",
+          "words": [
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "ثَلَاثَةَ",
+              "three"
+            ],
+            [
+              "كِيلُو",
+              "kilos"
+            ],
+            [
+              "مِنْ",
+              "of / from"
+            ],
+            [
+              "هَذَا",
+              "this"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ تَقْبَلُونَ البِطَاقَةَ؟",
+          "en": "Do you accept cards?",
+          "tr": "hal taqbalūna l-biṭāqah?",
+          "hint": "Card payment inquiry",
+          "words": [
+            [
+              "هَلْ",
+              "do"
+            ],
+            [
+              "تَقْبَلُونَ",
+              "you accept (pl.)"
+            ],
+            [
+              "البِطَاقَةَ",
+              "the card"
+            ]
+          ]
+        },
+        {
+          "ar": "أَدْفَعُ نَقْدًا مِنْ فَضْلِكَ.",
+          "en": "I pay cash, please.",
+          "tr": "adfaʿu naqdan min faḍlik.",
+          "hint": "Cash payment",
+          "words": [
+            [
+              "أَدْفَعُ",
+              "I pay"
+            ],
+            [
+              "نَقْدًا",
+              "cash"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ عِنْدَكُمْ حَجْمٌ أَكْبَرُ؟",
+          "en": "Do you have a bigger size?",
+          "tr": "hal ʿindakum ḥajmun akbar?",
+          "hint": "Size inquiry",
+          "words": [
+            [
+              "هَلْ",
+              "do"
+            ],
+            [
+              "عِنْدَكُمْ",
+              "you have"
+            ],
+            [
+              "حَجْمٌ",
+              "a size"
+            ],
+            [
+              "أَكْبَرُ",
+              "bigger / larger"
+            ]
+          ]
+        },
+        {
+          "ar": "أَعْطِنِي هَذَا الكِتَابَ.",
+          "en": "Give me this book.",
+          "tr": "aʿṭinī hādhā l-kitāb.",
+          "hint": "Direct request",
+          "words": [
+            [
+              "أَعْطِنِي",
+              "give me"
+            ],
+            [
+              "هَذَا",
+              "this"
+            ],
+            [
+              "الكِتَابَ",
+              "the book"
+            ]
+          ]
+        },
+        {
+          "ar": "تَفَضَّلْ هَذِهِ النُّقُودُ.",
+          "en": "Here is the money.",
+          "tr": "tafaḍḍal hādhihi n-nuqūd.",
+          "hint": "Giving payment",
+          "words": [
+            [
+              "تَفَضَّلْ",
+              "here is / please"
+            ],
+            [
+              "هَذِهِ",
+              "this is"
+            ],
+            [
+              "النُّقُودُ",
+              "the money"
+            ]
+          ]
+        },
+        {
+          "ar": "هَذَا شَيْءٌ مُمْتَازٌ جِدًّا.",
+          "en": "This is a very excellent thing.",
+          "tr": "hādhā shayʾun mumtāzun jiddan.",
+          "hint": "Praise/approval",
+          "words": [
+            [
+              "هَذَا",
+              "this is"
+            ],
+            [
+              "شَيْءٌ",
+              "a thing"
+            ],
+            [
+              "مُمْتَازٌ",
+              "excellent"
+            ],
+            [
+              "جِدًّا",
+              "very"
+            ]
+          ]
+        },
+        {
+          "ar": "بَارَكَ اللَّهُ لَكَ فِي تِجَارَتِكَ.",
+          "en": "May Allah bless you in your business.",
+          "tr": "bāraka llāhu laka fī tijāratik.",
+          "hint": "Trader blessing",
+          "words": [
+            [
+              "بَارَكَ",
+              "may bless"
+            ],
+            [
+              "اللَّهُ",
+              "Allah"
+            ],
+            [
+              "لَكَ",
+              "for you"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "تِجَارَتِكَ",
+              "your business / trade"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are a merchant at the Souq in Jeddah. I want to buy a thobe or dates. Negotiate courteously with me, tell me the price, and accept cash or card."
+    },
+    {
+      "id": "chap-8",
+      "num": 8,
+      "title": "Chapter 8: The Conversation Repair Kit",
+      "surahId": "kafirun",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟",
+          "en": "How do I say this in Arabic?",
+          "tr": "kayfa aqūlu hādhā bi-l-ʿarabiyyah?",
+          "hint": "Essential learning question",
+          "words": [
+            [
+              "كَيْفَ",
+              "how"
+            ],
+            [
+              "أَقُولُ",
+              "do I say"
+            ],
+            [
+              "هَذَا",
+              "this"
+            ],
+            [
+              "بِالعَرَبِيَّةِ",
+              "in Arabic"
+            ]
+          ]
+        },
+        {
+          "ar": "مَا مَعْنَى هَذِهِ الكَلِمَةِ؟",
+          "en": "What is the meaning of this word?",
+          "tr": "mā maʿnā hādhihi l-kalimah?",
+          "hint": "Vocabulary inquiry",
+          "words": [
+            [
+              "مَا",
+              "what is"
+            ],
+            [
+              "مَعْنَى",
+              "the meaning of"
+            ],
+            [
+              "هَذِهِ",
+              "this"
+            ],
+            [
+              "الكَلِمَةِ",
+              "the word"
+            ]
+          ]
+        },
+        {
+          "ar": "لَمْ أَفْهَمْ، كَرِّرْ مِنْ فَضْلِكَ.",
+          "en": "I did not understand, repeat please.",
+          "tr": "lam afham, karrir min faḍlik.",
+          "hint": "Repair phrase",
+          "words": [
+            [
+              "لَمْ",
+              "not / did not"
+            ],
+            [
+              "أَفْهَمْ",
+              "I understand"
+            ],
+            [
+              "كَرِّرْ",
+              "repeat"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "تَكَلَّمْ بِبُطْءٍ، لَوْ سَمَحْتَ.",
+          "en": "Speak slowly, please.",
+          "tr": "takallam bi-buṭʾin, law samaḥt.",
+          "hint": "Speed adjustment",
+          "words": [
+            [
+              "تَكَلَّمْ",
+              "speak"
+            ],
+            [
+              "بِبُطْءٍ",
+              "slowly / with slowness"
+            ],
+            [
+              "لَوْ",
+              "if"
+            ],
+            [
+              "سَمَحْتَ",
+              "you permit / please"
+            ]
+          ]
+        },
+        {
+          "ar": "أَنَا أَتَعَلَّمُ اللُّغَةَ العَرَبِيَّةَ.",
+          "en": "I am learning the Arabic language.",
+          "tr": "anā ataʿallamu l-lughata l-ʿarabiyyah.",
+          "hint": "Setting expectations",
+          "words": [
+            [
+              "أَنَا",
+              "I am"
+            ],
+            [
+              "أَتَعَلَّمُ",
+              "learning"
+            ],
+            [
+              "اللُّغَةَ",
+              "the language"
+            ],
+            [
+              "العَرَبِيَّةَ",
+              "Arabic"
+            ]
+          ]
+        },
+        {
+          "ar": "هَلْ كَلَامِي وَاضِحٌ؟",
+          "en": "Is my speech clear?",
+          "tr": "hal kalāmī wāḍiḥ?",
+          "hint": "Checking comprehension",
+          "words": [
+            [
+              "هَلْ",
+              "is"
+            ],
+            [
+              "كَلَامِي",
+              "my speech"
+            ],
+            [
+              "وَاضِحٌ",
+              "clear"
+            ]
+          ]
+        },
+        {
+          "ar": "اكْتُبْهَا لِي، مِنْ فَضْلِكَ.",
+          "en": "Write it for me, please.",
+          "tr": "uktubhā lī, min faḍlik.",
+          "hint": "Spelling request",
+          "words": [
+            [
+              "اكْتُبْهَا",
+              "write it"
+            ],
+            [
+              "لِي",
+              "for me"
+            ],
+            [
+              "مِنْ",
+              "from"
+            ],
+            [
+              "فَضْلِكَ",
+              "your favor / please"
+            ]
+          ]
+        },
+        {
+          "ar": "انْتَظِرْ لَحْظَةً وَاحِدَةً.",
+          "en": "Wait one moment.",
+          "tr": "intaẓir laḥẓatan wāḥidah.",
+          "hint": "Pausing the exchange",
+          "words": [
+            [
+              "انْتَظِرْ",
+              "wait"
+            ],
+            [
+              "لَحْظَةً",
+              "a moment"
+            ],
+            [
+              "وَاحِدَةً",
+              "one"
+            ]
+          ]
+        },
+        {
+          "ar": "نَسِيتُ الكَلِمَةَ الآنَ.",
+          "en": "I forgot the word now.",
+          "tr": "nasītu l-kalimata l-ān.",
+          "hint": "Recall delay",
+          "words": [
+            [
+              "نَسِيتُ",
+              "I forgot"
+            ],
+            [
+              "الكَلِمَةَ",
+              "the word"
+            ],
+            [
+              "الآنَ",
+              "now"
+            ]
+          ]
+        },
+        {
+          "ar": "فَهِمْتُكَ الآنَ تَمَامًا.",
+          "en": "I understood you now completely.",
+          "tr": "fahimtuka l-āna tamāman.",
+          "hint": "Confirmation",
+          "words": [
+            [
+              "فَهِمْتُكَ",
+              "I understood you"
+            ],
+            [
+              "الآنَ",
+              "now"
+            ],
+            [
+              "تَمَامًا",
+              "completely / perfectly"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are my Arabic practice partner. Test my repair phrases by deliberately speaking slightly fast or using a new word, and encourage me to ask you to repeat, speak slowly, or explain the word in Arabic."
+    },
+    {
+      "id": "chap-9",
+      "num": 9,
+      "title": "Chapter 9: The Mosque & Worship",
+      "surahId": "fatiha",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "أَيْنَ مَكَانُ الوُضُوءِ؟",
+          "en": "Where is the place of wudu?",
+          "tr": "ayna makānu l-wuḍūʾ?",
+          "hint": "Mosque essentials",
+          "words": [
+            [
+              "أَيْنَ",
+              "where is"
+            ],
+            [
+              "مَكَانُ",
+              "the place of"
+            ],
+            [
+              "الوُضُوءِ",
+              "the wudu / ablution"
+            ]
+          ]
+        },
+        {
+          "ar": "مَتَى يُنَادَى لِلأَذَانِ؟",
+          "en": "When is the adhan called?",
+          "tr": "matā yunādā li-l-adhān?",
+          "hint": "Prayer timing",
+          "words": [
+            [
+              "مَتَى",
+              "when"
+            ],
+            [
+              "يُنَادَى",
+              "is called"
+            ],
+            [
+              "لِلأَذَانِ",
+              "for the adhan"
+            ]
+          ]
+        },
+        {
+          "ar": "أَقَامَ المُؤَذِّنُ الصَّلَاةَ.",
+          "en": "The mu'adhin called the iqamah.",
+          "tr": "aqāma l-muʾadhdhinu ṣ-ṣalāh.",
+          "hint": "Prayer commencement",
+          "words": [
+            [
+              "أَقَامَ",
+              "called / began"
+            ],
+            [
+              "المُؤَذِّنُ",
+              "the caller to prayer"
+            ],
+            [
+              "الصَّلَاةَ",
+              "the prayer"
+            ]
+          ]
+        },
+        {
+          "ar": "اسْتَوُوا وَاعْتَدِلُوا فِي الصُّفُوفِ.",
+          "en": "Straighten and align the rows.",
+          "tr": "istawū wa-ʿtadilū fī ṣ-ṣufūf.",
+          "hint": "Imam instruction",
+          "words": [
+            [
+              "اسْتَوُوا",
+              "straighten (pl.)"
+            ],
+            [
+              "وَاعْتَدِلُوا",
+              "and align (pl.)"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "الصُّفُوفِ",
+              "the prayer rows"
+            ]
+          ]
+        },
+        {
+          "ar": "صَلَّيْنَا جَمَاعَةً فِي المَسْجِدِ.",
+          "en": "We prayed in congregation in the mosque.",
+          "tr": "ṣallaynā jamāʿatan fī l-masjid.",
+          "hint": "Prayer statement",
+          "words": [
+            [
+              "صَلَّيْنَا",
+              "we prayed"
+            ],
+            [
+              "جَمَاعَةً",
+              "in congregation"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "المَسْجِدِ",
+              "the mosque"
+            ]
+          ]
+        },
+        {
+          "ar": "مَا اسْمُ إِمَامِ الحَرَمِ؟",
+          "en": "What is the name of the Imam of the Haram?",
+          "tr": "mā ismu imāmi l-ḥaram?",
+          "hint": "Haram inquiry",
+          "words": [
+            [
+              "مَا",
+              "what is"
+            ],
+            [
+              "اسْمُ",
+              "the name of"
+            ],
+            [
+              "إِمَامِ",
+              "the Imam of"
+            ],
+            [
+              "الحَرَمِ",
+              "the Haram / Sanctuary"
+            ]
+          ]
+        },
+        {
+          "ar": "أُرِيدُ مُصْحَفًا لِلْقِرَاءَةِ.",
+          "en": "I want a mushaf to read.",
+          "tr": "urīdu muṣḥafan li-l-qirāʾah.",
+          "hint": "Mushaf request",
+          "words": [
+            [
+              "أُرِيدُ",
+              "I want"
+            ],
+            [
+              "مُصْحَفًا",
+              "a mushaf (Quran)"
+            ],
+            [
+              "لِلْقِرَاءَةِ",
+              "for reading"
+            ]
+          ]
+        },
+        {
+          "ar": "جَزَاكَ اللَّهُ خَيْرَ الجَزَاءِ.",
+          "en": "May Allah reward you with the best reward.",
+          "tr": "jazāka llāhu khayra l-jazāʾ.",
+          "hint": "Islamic courtesy",
+          "words": [
+            [
+              "جَزَاكَ",
+              "may reward you"
+            ],
+            [
+              "اللَّهُ",
+              "Allah"
+            ],
+            [
+              "خَيْرَ",
+              "the best of"
+            ],
+            [
+              "الجَزَاءِ",
+              "the reward"
+            ]
+          ]
+        },
+        {
+          "ar": "أَدْعُو اللَّهَ لَكَ بِالتَّوْفِيقِ.",
+          "en": "I pray to Allah for your success.",
+          "tr": "adʿū llāha laka bi-t-tawfīq.",
+          "hint": "Brotherly du'a",
+          "words": [
+            [
+              "أَدْعُو",
+              "I pray / supplicate to"
+            ],
+            [
+              "اللَّهَ",
+              "Allah"
+            ],
+            [
+              "لَكَ",
+              "for you"
+            ],
+            [
+              "بِالتَّوْفِيقِ",
+              "with success"
+            ]
+          ]
+        },
+        {
+          "ar": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ.",
+          "en": "Peace and Allah's mercy be upon you.",
+          "tr": "as-salāmu ʿalaykum wa-raḥmatu llāh.",
+          "hint": "Prayer conclusion & farewell",
+          "words": [
+            [
+              "السَّلَامُ",
+              "peace be"
+            ],
+            [
+              "عَلَيْكُمْ",
+              "upon you"
+            ],
+            [
+              "وَرَحْمَةُ",
+              "and mercy of"
+            ],
+            [
+              "اللَّهِ",
+              "Allah"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "We are at the Prophet's Mosque in Madinah. Ask me if I have made wudu, where we should sit to read Quran, and remind me of the time for Asr prayer in simple Arabic."
+    },
+    {
+      "id": "chap-10",
+      "num": 10,
+      "title": "Chapter 10: Days, Weeks & Plans",
+      "surahId": "nasr",
+      "grammar": null,
+      "sentences": [
+        {
+          "ar": "اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ.",
+          "en": "Today is Friday.",
+          "tr": "al-yawma huwa yawmu l-jumuʿah.",
+          "hint": "Day of the week",
+          "words": [
+            [
+              "اليَوْمَ",
+              "today"
+            ],
+            [
+              "هُوَ",
+              "is"
+            ],
+            [
+              "يَوْمُ",
+              "the day of"
+            ],
+            [
+              "الجُمُعَةِ",
+              "Friday"
+            ]
+          ]
+        },
+        {
+          "ar": "أَمْسِ كَانَ يَوْمَ الخَمِيسِ.",
+          "en": "Yesterday was Thursday.",
+          "tr": "amsi kāna yawma l-khamīs.",
+          "hint": "Past day",
+          "words": [
+            [
+              "أَمْسِ",
+              "yesterday"
+            ],
+            [
+              "كَانَ",
+              "was"
+            ],
+            [
+              "يَوْمَ",
+              "the day of"
+            ],
+            [
+              "الخَمِيسِ",
+              "Thursday"
+            ]
+          ]
+        },
+        {
+          "ar": "غَدًا عِنْدِي دَرْسٌ مَعَ الأُسْتَاذِ.",
+          "en": "Tomorrow I have a lesson with the teacher.",
+          "tr": "ghadan ʿindī darsun maʿa l-ustādh.",
+          "hint": "Future plan",
+          "words": [
+            [
+              "غَدًا",
+              "tomorrow"
+            ],
+            [
+              "عِنْدِي",
+              "I have"
+            ],
+            [
+              "دَرْسٌ",
+              "a lesson"
+            ],
+            [
+              "مَعَ",
+              "with"
+            ],
+            [
+              "الأُسْتَاذِ",
+              "the teacher / professor"
+            ]
+          ]
+        },
+        {
+          "ar": "كَمْ سَاعَةً تَدْرُسُ فِي اليَوْمِ؟",
+          "en": "How many hours do you study a day?",
+          "tr": "kam sāʿatan tadrusu fī l-yawm?",
+          "hint": "Study routine",
+          "words": [
+            [
+              "كَمْ",
+              "how many"
+            ],
+            [
+              "سَاعَةً",
+              "hours"
+            ],
+            [
+              "تَدْرُسُ",
+              "do you study"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "اليَوْمِ",
+              "the day"
+            ]
+          ]
+        },
+        {
+          "ar": "أَقْضِي عُطْلَةَ نِهَايَةِ الأُسْبُوعِ مَعَ عَائِلَتِي.",
+          "en": "I spend the weekend with my family.",
+          "tr": "aqḍī ʿuṭlata nihāyati l-usbūʿi maʿa ʿāʾilatī.",
+          "hint": "Weekend life",
+          "words": [
+            [
+              "أَقْضِي",
+              "I spend"
+            ],
+            [
+              "عُطْلَةَ",
+              "holiday of"
+            ],
+            [
+              "نِهَايَةِ",
+              "end of"
+            ],
+            [
+              "الأُسْبُوعِ",
+              "the week (weekend)"
+            ],
+            [
+              "مَعَ",
+              "with"
+            ],
+            [
+              "عَائِلَتِي",
+              "my family"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي الصَّبَاحِ أَشْرَبُ الشَّايَ.",
+          "en": "In the morning I drink tea.",
+          "tr": "fī ṣ-ṣabāḥi ashrabu sh-shāy.",
+          "hint": "Morning routine",
+          "words": [
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "الصَّبَاحِ",
+              "the morning"
+            ],
+            [
+              "أَشْرَبُ",
+              "I drink"
+            ],
+            [
+              "الشَّايَ",
+              "tea"
+            ]
+          ]
+        },
+        {
+          "ar": "فِي المَسَاءِ أَقْرَأُ كِتَابًا.",
+          "en": "In the evening I read a book.",
+          "tr": "fī l-masāʾi aqraʾu kitābā.",
+          "hint": "Evening routine",
+          "words": [
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "المَسَاءِ",
+              "the evening"
+            ],
+            [
+              "أَقْرَأُ",
+              "I read"
+            ],
+            [
+              "كِتَابًا",
+              "a book"
+            ]
+          ]
+        },
+        {
+          "ar": "مَتَى تَصِلُ الطَّائِرَةُ؟",
+          "en": "When does the plane arrive?",
+          "tr": "matā taṣilu ṭ-ṭāʾirah?",
+          "hint": "Flight arrival",
+          "words": [
+            [
+              "مَتَى",
+              "when"
+            ],
+            [
+              "تَصِلُ",
+              "does arrive"
+            ],
+            [
+              "الطَّائِرَةُ",
+              "the plane"
+            ]
+          ]
+        },
+        {
+          "ar": "عِنْدِي وَقْتٌ كَافٍ الآنَ.",
+          "en": "I have enough time now.",
+          "tr": "ʿindī waqtun kāfin al-ān.",
+          "hint": "Availability",
+          "words": [
+            [
+              "عِنْدِي",
+              "I have"
+            ],
+            [
+              "وَقْتٌ",
+              "time"
+            ],
+            [
+              "كَافٍ",
+              "enough / sufficient"
+            ],
+            [
+              "الآنَ",
+              "now"
+            ]
+          ]
+        },
+        {
+          "ar": "إِلَى اللِّقَاءِ فِي الأُسْبُوعِ القَادِمِ.",
+          "en": "See you next week.",
+          "tr": "ilā l-liqāʾi fī l-usbūʿi l-qādim.",
+          "hint": "Weekly farewell",
+          "words": [
+            [
+              "إِلَى",
+              "until"
+            ],
+            [
+              "اللِّقَاءِ",
+              "the meeting"
+            ],
+            [
+              "فِي",
+              "in"
+            ],
+            [
+              "الأُسْبُوعِ",
+              "the week"
+            ],
+            [
+              "القَادِمِ",
+              "the coming / next"
+            ]
+          ]
+        }
+      ],
+      "aiScenario": "You are an Arabic conversation partner talking about our week. Ask me what day today is, what I did yesterday, and when my next Arabic class is."
+    }
+  ]
+}

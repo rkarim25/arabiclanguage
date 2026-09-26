@@ -41,6 +41,18 @@ function put(ar, tr, en, src) {
   // alias can never shadow a real word (الله must not file under له)
   const bare = full.replace(/^ال/, "");
   if (bare.length >= 2 && bare !== full) aliases.push([bare, entry]);
+  const bareArNoAl = bareAr.replace(/^ال/, "");
+  if (bareArNoAl.length >= 2 && bareArNoAl !== bareAr) aliases.push([bareArNoAl, entry]);
+
+  // Tanween aliasing (e.g. جزيلًا -> جزيل, تمامًا -> تمام, نقدًا -> نقد)
+  if (bareAr.endsWith("ا") && bareAr.length > 2) {
+    const noTan = bareAr.slice(0, -1);
+    if (!lex[noTan]) aliases.push([noTan, entry]);
+  }
+  if (!bareAr.endsWith("ا") && bareAr.length >= 2) {
+    const withTan = bareAr + "ا";
+    if (!lex[withTan]) aliases.push([withTan, entry]);
+  }
 }
 const read = f => JSON.parse(fs.readFileSync(path.join(DATA, f), "utf8"));
 
@@ -48,6 +60,22 @@ const read = f => JSON.parse(fs.readFileSync(path.join(DATA, f), "utf8"));
 read("quran-core.json").words.forEach(w => put(w.ar, w.tr, w.en, "core"));
 // 2. everyday clusters
 read("everyday.json").groups.forEach(g => g.members.forEach(m => put(m.ar, m.tr, m.en, "everyday")));
+// 2b. daily chapter sentences & word glosses (Reza's 10-chapter curriculum)
+if (fs.existsSync(path.join(DATA, "chapters.json"))) {
+  const chaps = read("chapters.json");
+  (chaps.chapters || []).forEach(c => {
+    (c.sentences || []).forEach(s => {
+      (s.words || []).forEach(w => put(w[0], "", w[1], "chap-" + c.num));
+    });
+  });
+}
+// 2c. sentence bank (1100+ high frequency and Quranic sentences)
+if (fs.existsSync(path.join(DATA, "sentence-bank.json"))) {
+  const bank = read("sentence-bank.json");
+  (bank.sentences || []).forEach(s => {
+    (s.words || []).forEach(w => put(w.ar, w.tr || "", w.en, "bank"));
+  });
+}
 // 3. root families
 read("families.json").families.forEach(f => f.members.forEach(m => put(m.ar, m.tr, m.en, "root " + normalizeAr(f.root))));
 // 4. story vocab
@@ -116,6 +144,80 @@ read("phrases.json").groups.forEach(g => g.members.forEach(m => put(m.ar, m.tr, 
   ["فَاعِل", "fāʿil", "doer; subject (the one doing the verb)"],
   ["مُحَادَثَة", "muḥādatha", "conversation"],
   ["سُورَة", "sūra", "sura — a chapter of the Qurʾan"],
+  ["جَزِيل", "jazīl", "abundant; plentiful; very much"],
+  ["جَزِيلًا", "jazīlan", "abundantly; very much"],
+  ["تَمَام", "tamām", "complete; fine; exact"],
+  ["تَمَامًا", "tamāman", "completely; exactly; precisely"],
+  ["سُرُور", "surūr", "pleasure; joy; delight"],
+  ["بَرِيطَانِيَا", "barīṭāniyā", "Britain"],
+  ["تَشَرَّفْنَا", "tasharrafnā", "we are honored; pleased to meet you"],
+  ["مَعْرِفَة", "maʿrifah", "knowing; acquaintance; knowledge"],
+  ["عَافِيَة", "ʿāfiyah", "good health; well-being"],
+  ["يُمْكِنُ", "yumkinu", "it is possible; can"],
+  ["مُسَاعَدَة", "musāʿadah", "help; assistance"],
+  ["آسِف", "āsif", "sorry; apologetic"],
+  ["تَأْخِير", "taʾkhīr", "delay; lateness; being late"],
+  ["عَفْوًا", "ʿafwan", "you're welcome; excuse me; pardon"],
+  ["وَاجِب", "wājib", "duty; obligation; required"],
+  ["أَمَان", "amān", "safety; security; peace"],
+  ["حِفْظ", "ḥifẓ", "protection; guardianship; keeping"],
+  ["فُنْدُق", "funduq", "hotel"],
+  ["حَجْز", "ḥajz", "reservation; booking"],
+  ["مِفْتَاح", "miftāḥ", "key"],
+  ["قِطَار", "qiṭār", "train"],
+  ["أَمْتِعَة", "amtiʿah", "luggage; baggage; belongings"],
+  ["أُجْرَة", "ujrah", "fare; fee; rent"],
+  ["هُنَاكَ", "hunāk", "there"],
+  ["تَوَقَّفْ", "tawaqqaf", "stop! (imperative)"],
+  ["سَمَحَ", "samaḥa", "to permit; allow"],
+  ["سَمَحْتَ", "samaḥta", "you permitted (law samaḥt: please)"],
+  ["جَوَاز", "jawāz", "passport; permit"],
+  ["سَفَر", "safar", "travel; journey"],
+  ["مَفْقُود", "mafqūd", "missing; lost"],
+  ["طَوَارِئ", "ṭawāriʾ", "emergencies"],
+  ["خِدْمَة", "khidmah", "service; assistance"],
+  ["مَوْعِد", "mawʿid", "appointment; scheduled time"],
+  ["رِسَالَة", "risālah", "letter; message"],
+  ["مَعْنَى", "maʿnā", "meaning; sense"],
+  ["ثَالِث", "thālith", "third"],
+  ["ثَالِثَة", "thālithah", "third (f.); three o'clock"],
+  ["قَمِيص", "qamīṣ", "shirt"],
+  ["رَخِيص", "rakhīṣ", "cheap; inexpensive"],
+  ["غَالٍ", "ghālin", "expensive; valuable"],
+  ["غَالِي", "ghālī", "expensive; precious"],
+  ["كِيلُو", "kīlū", "kilo; kilogram"],
+  ["بِطَاقَة", "biṭāqah", "card (payment/ID)"],
+  ["نَقْد", "naqd", "cash; currency"],
+  ["نَقْدًا", "naqdan", "in cash; cash"],
+  ["نُقُود", "nuqūd", "money; cash"],
+  ["مُمْتَاز", "mumtāz", "excellent; outstanding"],
+  ["تِجَارَة", "tijārah", "trade; business; commerce"],
+  ["كَرِّرْ", "karrir", "repeat! (imperative)"],
+  ["بُطْء", "buṭʾ", "slowness (bi-buṭʾ: slowly)"],
+  ["وَاضِح", "wāḍiḥ", "clear; obvious; distinct"],
+  ["اكْتُبْ", "uktub", "write! (imperative)"],
+  ["لَحْظَة", "laḥẓah", "moment; instant"],
+  ["نَسِيَ", "nasiya", "to forget"],
+  ["نَسِيتُ", "nasītu", "I forgot"],
+  ["فَهِمْتُ", "fahimtu", "I understood"],
+  ["مَكَان", "makān", "place; location"],
+  ["وُضُوء", "wuḍūʾ", "wudu; ritual ablution"],
+  ["أَذَان", "adhān", "call to prayer; adhan"],
+  ["مُؤَذِّن", "muʾadhdhin", "caller to prayer; mu'adhin"],
+  ["اسْتَوُوا", "istawū", "straighten up! stand straight! (pl.)"],
+  ["اعْتَدِلُوا", "iʿtadilū", "align yourselves! be balanced! (pl.)"],
+  ["صُفُوف", "ṣufūf", "rows; lines (plural of ṣaff)"],
+  ["جَمَاعَة", "jamāʿah", "congregation; group"],
+  ["مُصْحَف", "muṣḥaf", "mushaf; bound copy of the Qur'an"],
+  ["قِرَاءَة", "qirāʾah", "reading; recitation"],
+  ["تَوْفِيق", "tawfīq", "success; divine guidance"],
+  ["أُسْتَاذ", "ustādh", "teacher; professor"],
+  ["عُطْلَة", "ʿuṭlah", "holiday; vacation; day off"],
+  ["نِهَايَة", "nihāyah", "end; conclusion"],
+  ["طَائِرَة", "ṭāʾirah", "airplane; plane"],
+  ["كَافٍ", "kāfin", "enough; sufficient"],
+  ["كَافِي", "kāfī", "enough; sufficient"],
+  ["قَادِم", "qādim", "coming; next"],
 ].forEach(([ar, tr, en]) => put(ar, tr, en, "site"));
 
 aliases.forEach(([bare, entry]) => { if (!lex[bare]) lex[bare] = entry; });

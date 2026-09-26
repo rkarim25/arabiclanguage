@@ -2000,7 +2000,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muinhqw5";
+const DATA_V = "muiuztps";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2831,12 +2831,77 @@ function loadLexicon() {
   return _lexLoading;
 }
 function lexLookup(word) {
-  if (!_lex) return null;
+  if (!_lex || !word) return null;
   const bare = stripTashkeel(word).replace(/[^؀-ۿ\s]/g, "").trim();
-  if (_lex[bare]) return _lex[bare];
-  if (_lex[bare.replace(/^ال/, "")]) return _lex[bare.replace(/^ال/, "")];
   const n = normalizeAr(word);
-  return _lex[n] || _lex[n.replace(/^ال/, "")] || null;
+  
+  function check(str) {
+    if (!str || str.length < 2) return null;
+    return _lex[str] || _lex[str.replace(/^ال/, "")] || null;
+  }
+
+  // 1. Direct match
+  let hit = check(bare) || check(n);
+  if (hit) return hit;
+
+  // 2. Tanween / accusative alif stripping (e.g. جزيلاً -> جزيل, تماماً -> تمام)
+  const noTanBare = bare.replace(/ا$/, "");
+  const noTanN = n.replace(/ا$/, "");
+  hit = check(noTanBare) || check(noTanN);
+  if (hit) return hit;
+
+  // 3. Proclitic prefixes: و (and), ف (so), ب (in/with), ل (for), ك (as/like)
+  const prefixRegex = /^[وفبلك]/;
+  if (bare.length >= 3 && prefixRegex.test(bare)) {
+    const pBare = bare.replace(prefixRegex, "");
+    const pN = n.replace(prefixRegex, "");
+    hit = check(pBare) || check(pN) || check(pBare.replace(/ا$/, "")) || check(pN.replace(/ا$/, ""));
+    if (hit) return hit;
+    if (/^ل/.test(bare) && /^[ل]/.test(pBare)) {
+      const lilBare = "ال" + pBare.replace(/^ل/, "");
+      hit = check(lilBare);
+      if (hit) return hit;
+    }
+  }
+
+  // 4. Attached pronominal suffixes: -ك, -ي, -ه, -ها, -نا, -كم, -هم
+  const suffixes = ["كم", "هم", "هن", "كن", "نا", "ها", "ك", "ي", "ه"];
+  for (const suf of suffixes) {
+    if (bare.endsWith(suf) && bare.length - suf.length >= 2) {
+      const stemBare = bare.slice(0, -suf.length);
+      const stemN = n.slice(0, -suf.length);
+      hit = check(stemBare) || check(stemN);
+      if (hit) return hit;
+      if (stemBare.endsWith("ت")) {
+        const femBare = stemBare.slice(0, -1) + "ة";
+        const femN = stemN.slice(0, -1) + "ة";
+        hit = check(femBare) || check(femN);
+        if (hit) return hit;
+      }
+    }
+  }
+
+  // 5. Compound prefix + suffix stripping (e.g. بِمَعْرِفَتِكَ -> prefix ب + suffix ك -> معرفة)
+  if (bare.length >= 4 && prefixRegex.test(bare)) {
+    const pBare = bare.replace(prefixRegex, "");
+    const pN = n.replace(prefixRegex, "");
+    for (const suf of suffixes) {
+      if (pBare.endsWith(suf) && pBare.length - suf.length >= 2) {
+        const stemBare = pBare.slice(0, -suf.length);
+        const stemN = pN.slice(0, -suf.length);
+        hit = check(stemBare) || check(stemN);
+        if (hit) return hit;
+        if (stemBare.endsWith("ت")) {
+          const femBare = stemBare.slice(0, -1) + "ة";
+          const femN = stemN.slice(0, -1) + "ة";
+          hit = check(femBare) || check(femN);
+          if (hit) return hit;
+        }
+      }
+    }
+  }
+
+  return null;
 }
 /* Root families travel WITH words (his call, 2026-07-19 — no separate Roots
    destination): every family member is indexed by its normalized form, and
