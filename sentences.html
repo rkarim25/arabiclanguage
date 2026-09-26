@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwnmmy">
-  <link rel="stylesheet" href="css/style.css?v=muiwnmmy">
+  <link rel="stylesheet" href="css/fonts.css?v=muiwsp79">
+  <link rel="stylesheet" href="css/style.css?v=muiwsp79">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -55,9 +55,52 @@
     .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: 1px dashed var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; user-select: none; }
     .s-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
-    .s-rate-bar { display: inline-flex; gap: 4px; flex-wrap: wrap; align-items: center; margin-left: auto; }
-    .s-rate-bar .rate-btn { padding: 3px 8px; font-size: 11px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-weight: 600; transition: all 0.1s; }
-    .rate-btn:hover { transform: translateY(-1px); }
+    /* Colored SRS Rating Dots (Replaces wordy pills) */
+    .s-rate-bar, .sheet-rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
+    .rate-btn {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      padding: 0;
+      border: 2px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      transition: all 0.12s ease-in-out;
+      user-select: none;
+    }
+    .rate-btn:hover { transform: scale(1.2); }
+    
+    .rate-btn[data-b="strong"] { border-color: #10b981; background: #ecfdf5; color: transparent; }
+    .rate-btn[data-b="strong"].selected { background: #059669; border-color: #059669; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
+
+    .rate-btn[data-b="medium"] { border-color: #0284c7; background: #f0f9ff; color: transparent; }
+    .rate-btn[data-b="medium"].selected { background: #0284c7; border-color: #0284c7; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(2,132,199,0.25); }
+
+    .rate-btn[data-b="weak"] { border-color: #d97706; background: #fffbeb; color: transparent; }
+    .rate-btn[data-b="weak"].selected { background: #d97706; border-color: #d97706; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(217,119,6,0.25); }
+
+    .rate-btn[data-b="learning"] { border-color: #ef4444; background: #fef2f2; color: transparent; }
+    .rate-btn[data-b="learning"].selected { background: #dc2626; border-color: #dc2626; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(220,38,38,0.25); }
+
+    .rate-btn[data-b="never"] { border-color: #94a3b8; background: #f8fafc; color: transparent; }
+    .rate-btn[data-b="never"].selected { background: #64748b; border-color: #64748b; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(100,116,139,0.25); }
+
+    /* SRS Legend Bar */
+    .srs-legend-bar { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+    .leg-item { display: inline-flex; align-items: center; gap: 4px; }
+    .leg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .leg-dot.strong { background: #059669; }
+    .leg-dot.medium { background: #0284c7; }
+    .leg-dot.weak { background: #d97706; }
+    .leg-dot.learning { background: #dc2626; }
+    .leg-dot.never { background: #64748b; }
 
     .s-revealed-body { display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px; border-top: 1px dashed var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
@@ -73,22 +116,6 @@
     .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
 
     .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
-
-    /* Rating Pills Colors */
-    .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
-    .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
-
-    .rate-btn[data-b="medium"] { color: #0284c7; border-color: #bae6fd; }
-    .rate-btn[data-b="medium"].selected { background: #0284c7; color: #fff; border-color: #0284c7; }
-
-    .rate-btn[data-b="weak"] { color: #d97706; border-color: #fde68a; }
-    .rate-btn[data-b="weak"].selected { background: #d97706; color: #fff; border-color: #d97706; }
-
-    .rate-btn[data-b="learning"] { color: #dc2626; border-color: #fecaca; }
-    .rate-btn[data-b="learning"].selected { background: #dc2626; color: #fff; border-color: #dc2626; }
-
-    .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
-    .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
 
     /* Audio Bar */
     .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
@@ -119,10 +146,9 @@
       
       .s-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .s-meta-wrap { align-self: flex-end; }
-      .s-action-bar { flex-direction: column; align-items: stretch; gap: 8px; }
-      .s-reveal-btn { width: 100%; justify-content: center; }
-      .s-rate-bar { width: 100%; justify-content: space-between; margin-left: 0; }
-      .s-rate-bar .rate-btn { flex: 1; text-align: center; padding: 6px 3px; font-size: 11px; }
+      .s-action-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .s-reveal-btn { flex: 1; min-width: 140px; justify-content: center; }
+      .s-rate-bar { width: auto; justify-content: flex-end; margin-left: auto; }
       .m-table { min-width: 600px; }
     }
   </style>
@@ -187,8 +213,17 @@
 
     <!-- Session Progress & List -->
     <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div>
+          <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
+          <div class="srs-legend-bar">
+            <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
+            <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
+            <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
+            <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+            <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
+          </div>
+        </div>
         <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
       </div>
       <div class="sentence-list" id="sentenceList">Loading sentences…</div>
@@ -199,7 +234,7 @@
   <!-- MASTER SENTENCE BANK VIEW -->
   <div id="viewMaster" style="display:none">
     <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px">
         <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, or Surah…" oninput="renderMasterBank()">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All (1,200+)</button>
@@ -208,6 +243,13 @@
           <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">Qur'an (597)</button>
           <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">Due Now</button>
         </div>
+      </div>
+      <div class="srs-legend-bar" style="margin-bottom:12px">
+        <span class="leg-item"><span class="leg-dot strong"></span> Strong (30d)</span>
+        <span class="leg-item"><span class="leg-dot medium"></span> Medium (7d)</span>
+        <span class="leg-item"><span class="leg-dot weak"></span> Weak (2d)</span>
+        <span class="leg-item"><span class="leg-dot learning"></span> Learning (1d)</span>
+        <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
       <div class="sheet-wrap">
         <table class="m-table">
@@ -231,10 +273,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwnmmy"></script>
-<script src="js/curriculum.js?v=muiwnmmy"></script>
-<script src="js/app.js?v=muiwnmmy"></script>
-<script src="js/tracker.js?v=muiwnmmy"></script>
+<script src="js/progress-model.js?v=muiwsp79"></script>
+<script src="js/curriculum.js?v=muiwsp79"></script>
+<script src="js/app.js?v=muiwsp79"></script>
+<script src="js/tracker.js?v=muiwsp79"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -463,11 +505,11 @@ function render10Cards() {
               👁️ Check ${isEnFirst ? 'Arabic sentence & vocabulary' : 'English translation & vocabulary'} ▾
             </div>
             <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateSentence('${s.key}', 'never', ${idx})">Retire</button>
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
             </div>
           </div>
         ` : `
@@ -502,11 +544,11 @@ function render10Cards() {
           <div class="s-action-bar" style="margin-top:4px">
             <span style="font-size:11.5px;color:var(--muted)">Rate recall:</span>
             <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateSentence('${s.key}', 'never', ${idx})">Retire</button>
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
             </div>
           </div>
         `}
@@ -711,11 +753,11 @@ function renderMasterBank() {
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateMasterSentence('${s.key}', 'strong')">Strong</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateMasterSentence('${s.key}', 'medium')">Medium</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateMasterSentence('${s.key}', 'weak')">Weak</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateMasterSentence('${s.key}', 'learning')">Learning</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateMasterSentence('${s.key}', 'never')">Retire</button>
+            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30 days)" onclick="rateMasterSentence('${s.key}', 'strong')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7 days)" onclick="rateMasterSentence('${s.key}', 'medium')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2 days)" onclick="rateMasterSentence('${s.key}', 'weak')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning (1 day)" onclick="rateMasterSentence('${s.key}', 'learning')">✓</button>
+            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire (Don't repeat)" onclick="rateMasterSentence('${s.key}', 'never')">✓</button>
           </div>
         </td>
       </tr>
