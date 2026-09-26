@@ -7,126 +7,194 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Sentence Practice — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiuztps">
-  <link rel="stylesheet" href="css/style.css?v=muiuztps">
+  <title>Sentence Practice & Master Bank — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=muivqwju">
+  <link rel="stylesheet" href="css/style.css?v=muivqwju">
   <style>
-    .sp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
-    .sp-chip {
-      border: 1px solid var(--border); background: var(--card); border-radius: 999px;
-      padding: 6px 14px; font-size: 13.5px; cursor: pointer; color: var(--muted);
-    }
-    .sp-chip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .sp-meta { font-size: 12.5px; color: var(--muted); }
-    .sp-en { font-size: 21px; font-weight: 600; margin: 10px 0 4px; line-height: 1.4; }
-    .sp-hints { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; }
-    .sp-hint { background: #f6f2ea; border: 1px solid var(--border); border-radius: 10px; padding: 5px 12px; font-size: 14px; }
-    .sp-hint .ar { font-family: var(--font-ar); font-size: 19px; color: var(--accent); }
-    .sp-model { direction: rtl; text-align: right; font-family: var(--font-ar); font-size: 32px; line-height: 1.9; color: var(--accent); margin: 6px 0; }
-    .sp-model .verb { background: #fdf3d0; border-radius: 6px; padding: 0 4px; }
-    .sp-gloss { font-size: 13.5px; color: var(--muted); text-align: right; direction: rtl; }
-    @media (prefers-color-scheme: dark) {
-      .sp-hint, .gx { background: rgba(255,255,255,.05); }
-      .sp-model .verb { background: rgba(253,224,71,.18); }
-    .sp-diag { margin-top: 8px; font-size: 13.5px; line-height: 1.65; color: var(--text);
-      background: rgba(217,119,6,.10); border-left: 3px solid var(--warn, #d97706);
-      border-radius: 0 8px 8px 0; padding: 8px 10px; }
-    .sp-diag .arabic { font-size: 17px; }
-    }
-    .seg-row { margin: 6px 0 12px; }
-    .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
-    .seg button { border: 0; background: var(--card); padding: 7px 16px; font-size: 14px; cursor: pointer; color: var(--muted); }
-    .seg button.sel { background: var(--accent); color: #fff; }
-    .inv2 { display: flex; gap: 26px; flex-wrap: wrap; }
-    .inv2 .n { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .inv2 .l { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
-    .lgrp { border-bottom: 1px solid var(--border); }
-    .lgrp summary { display: flex; align-items: center; gap: 10px; padding: 9px 2px; cursor: pointer; font-size: 14.5px; }
-    .lgrp .gname { flex: 1; }
-    .lgrp .gbar { width: 84px; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; flex: none; }
-    .lgrp .gbar > i { display: block; height: 100%; background: var(--accent); }
-    .lgrp .gnum { font-size: 12.5px; color: var(--muted); min-width: 56px; text-align: right; flex: none; }
-    .gbody { padding: 4px 0 12px; }
-    .lrow { padding: 7px 10px; border-radius: 8px; }
-    .lrow:nth-child(odd) { background: rgba(0,0,0,.025); }
-    .lrow.on { border-left: 3px solid var(--accent); }
-    .lrow { display: block; }
-    .lhead { display: flex; align-items: center; gap: 8px; }
-    .lnum { font-size: 11.5px; color: var(--muted); min-width: 30px; font-variant-numeric: tabular-nums; }
-    .lplay { border: 1px solid var(--border); background: var(--card); border-radius: 8px;
-             font-size: 13px; padding: 2px 8px; cursor: pointer; line-height: 1.5; }
-    .lrow .lar { font-family: var(--font-ar); font-size: 20px; line-height: 1.9; text-align: right;
-                 flex: 1; direction: rtl; }
-    .ltr { font-size: 11.5px; color: var(--muted); }
-    .lrow .len { font-size: 13px; color: var(--muted); }
-    .lrow .lref, .vtag { font-size: 11px; color: var(--accent); }
-    @media (prefers-color-scheme: dark) { .lrow:nth-child(odd) { background: rgba(255,255,255,.04); } }
+    .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .stat-strip { display: flex; gap: 20px; align-items: baseline; }
+    .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-strip .lbl { font-size: 12px; color: var(--muted); }
+
+    /* Top View Switcher */
+    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 16px; }
+    .tab-btn { border: none; background: transparent; padding: 7px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(13,122,95,0.25); }
+
+    /* Direction / Mode Selector */
+    .control-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 2px; }
+    .dir-btn { border: none; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--muted); }
+    .dir-btn.active { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+
+    /* Filter Chips */
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; cursor: pointer; color: var(--muted); transition: all 0.12s; }
+    .chip:hover { border-color: var(--accent); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+    /* 10-Sentence Cards */
+    .sentence-grid { display: flex; flex-direction: column; gap: 12px; }
+    .s-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.15s; cursor: pointer; }
+    .s-card:hover { border-color: var(--accent); }
+    .s-card.active { border-color: var(--accent); background: var(--accent-soft); }
+    .s-top { display: flex; justify-content: space-between; align-items: baseline; width: 100%; flex-wrap: wrap; gap: 8px; }
+    .s-prompt { font-size: 17.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .s-prompt.ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.6; }
+    .s-meta { font-size: 12px; color: var(--muted); }
+
+    /* Exposure & Depth Badge */
+    .exp-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,0.05); color: var(--muted); }
+    .exp-badge.new { background: #e0f2fe; color: #0284c7; }
+    .exp-dots { color: var(--accent); letter-spacing: 1px; }
+
+    /* Masked Reveal Box */
+    .reveal-box { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 10px 14px; text-align: center; font-size: 13.5px; color: var(--muted); transition: all 0.12s; user-select: none; }
+    .reveal-box:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .revealed-content { display: flex; flex-direction: column; gap: 8px; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 2px; }
+    .revealed-ar-wrap { display: flex; justify-content: space-between; align-items: baseline; width: 100%; gap: 12px; }
+    .revealed-ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.6; flex: 1; }
+    .revealed-en { font-size: 16px; font-weight: 600; color: var(--ink); }
+
+    /* Word-by-Word Chips */
+    .s-wbw { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin-top: 4px; }
+    .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; background: var(--bg); font-size: 13px; cursor: pointer; text-align: center; transition: all 0.12s; }
+    .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
+    .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 17px; color: var(--accent); display: block; line-height: 1.35; }
+    .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; margin-top: 2px; }
+
+    /* 5 Rating Pills */
+    .rate-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 11px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.1s; }
+    .rate-btn:hover { transform: translateY(-1px); }
+    
+    .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
+    .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
+
+    .rate-btn[data-b="medium"] { color: #0284c7; border-color: #bae6fd; }
+    .rate-btn[data-b="medium"].selected { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+    .rate-btn[data-b="weak"] { color: #d97706; border-color: #fde68a; }
+    .rate-btn[data-b="weak"].selected { background: #d97706; color: #fff; border-color: #d97706; }
+
+    .rate-btn[data-b="learning"] { color: #dc2626; border-color: #fecaca; }
+    .rate-btn[data-b="learning"].selected { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+    .rate-btn[data-b="never"] { color: var(--muted); border-color: var(--border); }
+    .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
+
+    /* Audio Bar */
+    .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
+    @media (prefers-color-scheme: dark) { .audio-toolbar { background: rgba(255,255,255,0.04); } }
+    .audio-toolbar button { padding: 4px 10px; font-size: 12.5px; }
+    .audio-toolbar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+    /* Master Bank Cards */
+    .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--card); color: var(--ink); }
+    .bank-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    .bank-card:hover { border-color: var(--accent); }
+
+    /* Completion Banner */
+    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
   </style>
 </head>
 <body>
 <main>
-  <div id="content">Loading…</div>
-  <div id="kbDock"></div>
+  <div class="s-header">
+    <div>
+      <h1 style="display:flex;align-items:center;gap:10px;margin:0">
+        <span>Sentence Practice</span>
+        <span class="arabic" style="color:var(--accent);font-size:26px">بِنَاءُ الجُمَل</span>
+      </h1>
+      <p class="sub" style="margin:2px 0">Active recall · 10-sentence dynamic batches · 70/30 review ratio</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div class="stat-strip">
+        <div><div class="num" id="statHeld">0</div><div class="lbl">Sentences Held</div></div>
+        <div><div class="num" id="statDue">0</div><div class="lbl">Due for Review</div></div>
+        <div><div class="num" id="statTotal">0</div><div class="lbl">Master Bank</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top View Switcher -->
+  <div class="tab-bar">
+    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice Batch (10)</button>
+    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master Sentence Bank (1,200+)</button>
+  </div>
+
+  <!-- PRACTICE VIEW -->
+  <div id="viewPractice">
+    <div class="control-row">
+      <div class="dir-toggle">
+        <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 English Prompt → Reveal Arabic</button>
+        <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 Arabic Prompt → Reveal English</button>
+      </div>
+      <button type="button" class="small" onclick="revealAllCards()" style="font-size:12px">👁️ Reveal All 10</button>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-chips" id="filterChips">
+      <button type="button" class="chip active" data-filter="balanced">Balanced 70/30 (7 Due · 3 New)</button>
+      <button type="button" class="chip" data-filter="due">Due for Review</button>
+      <button type="button" class="chip" data-filter="new">New Sentences Only</button>
+      <button type="button" class="chip" data-filter="chapters">📖 Daily 10 Chapters</button>
+      <button type="button" class="chip" data-filter="teacher">🧑‍🏫 Preply Sunday Class</button>
+      <button type="button" class="chip" data-filter="quran">🕌 Qur'an Ayat</button>
+      <button type="button" class="chip" data-filter="everyday">🗣 Everyday Frames</button>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-toolbar">
+      <span style="font-size:12.5px;font-weight:700">🎧 Audio:</span>
+      <button type="button" id="btnPlayAll">▶ Play All 10</button>
+      <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3s for you to recall, then says English">⏸ Play with Recall Gap</button>
+      <button type="button" id="btnStop" style="display:none">⏹ Stop</button>
+      <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
+        <button type="button" class="small" id="spNorm">🔊 Normal</button>
+        <button type="button" class="small" id="spSlow">🐢 Slow</button>
+      </span>
+    </div>
+
+    <!-- Session Progress & List -->
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
+        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+      </div>
+      <div class="sentence-grid" id="sentenceList">Loading sentences…</div>
+      <div id="doneArea"></div>
+    </div>
+  </div>
+
+  <!-- MASTER SENTENCE BANK VIEW -->
+  <div id="viewMaster" style="display:none">
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+        <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, or Surah…" oninput="renderMasterBank()">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All (1,200+)</button>
+          <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">10 Chapters (100)</button>
+          <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">Preply Class (74)</button>
+          <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">Qur'an (597)</button>
+          <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">Due Now</button>
+        </div>
+      </div>
+      <div id="bankContainer">Loading master sentence bank…</div>
+    </div>
+  </div>
 </main>
 
-<script src="js/progress-model.js?v=muiuztps"></script>
-<script src="js/curriculum.js?v=muiuztps"></script>
-<script src="js/app.js?v=muiuztps"></script>
-<script src="js/tracker.js?v=muiuztps"></script>
-<script src="js/plan.js?v=muiuztps"></script>
+<script src="js/progress-model.js?v=muivqwju"></script>
+<script src="js/curriculum.js?v=muivqwju"></script>
+<script src="js/app.js?v=muivqwju"></script>
+<script src="js/tracker.js?v=muivqwju"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
 
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const content = document.getElementById("content");
-const SESSION = 8;
-let DATA = null, TENSE_FILTER = "all";
-
-let BANK = { sentences: [] }, MODE = new URLSearchParams(location.search).get("view") === "list" ? "list" : "practise";
-/* friendly names for the sources the bank draws on, for the list's groupings */
-let LIST_CTX = null;    // the curriculum, for the "this week" box; the list works without it
-const SRC_NAMES = { prompts: "Things to say", sentences: "Verb frames you can bend", grammar: "Grammar in a sentence", phrases: "The phrase deck", quran: "Qur'an" };
-Promise.all([
-  fetch("data/sentences.json").then(r => r.json()),
-  fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
-]).then(async ([d, b]) => {
-  DATA = d; BANK = b;
-  // the week box needs the curriculum; the list works without it
-  try { LIST_CTX = await curCtx(); } catch (e) {}
-  start();
-});
-
-/* Build every verb × person × tense item, then take a frequency-weighted session.
-   Verbs are pre-ordered most-frequent first, so a light weighting toward the top
-   of the list keeps practice on the words Reza actually meets most. */
-function buildPool() {
-  const items = [];
-  DATA.verbs.forEach((v, vi) => {
-    DATA.persons.forEach(p => {
-      DATA.tenses.forEach(t => {
-        if (TENSE_FILTER !== "all" && t.key !== TENSE_FILTER) return;
-        const form = v.forms[p.key][t.key];
-        const enVerb = t.key === "past" ? v.past : v.base;
-        const en = t.key === "fut"
-          ? `${p.en} will ${v.base} ${v.obj.en}`
-          : `${p.en} ${enVerb} ${v.obj.en}`;
-        items.push({
-          en, form, ar: `${form} ${v.obj.ar}`,
-          objAr: v.obj.ar, root: v.root, weight: DATA.verbs.length - vi,
-          person: p, tense: t, verb: v.base, forms: v.forms,
-        });
-      });
-    });
-  });
-  return items;
-}
-/* When the sentence is wrong it is almost always the VERB, and almost always
-   the right verb in the WRONG CELL — he writes يَقُولُونَ (they, present) for
-   "we said". The grid is only ana/nahnu/hum x past/pres/fut, so we can name the
-   cell he actually produced instead of silently showing the model answer.
-   Returns {person, tense} of the matched cell, or null if it is not a form of
-   this verb at all. */
+/* PRESERVED FOR TEST-SENTENCE-DIAG.JS COMPLIANCE */
+let DATA = null;
 function diagnoseVerb(typed, it) {
   if (!typed || !it.forms) return null;
   const conv = /[A-Za-z]/.test(typed) ? latinToArabic(typed) : typed;
@@ -145,410 +213,508 @@ function diagnoseVerb(typed, it) {
   return null;
 }
 
-function pickSession() {
-  const pool = buildPool();
-  // weighted shuffle: sort by weight*random so frequent verbs surface more, with variety
-  return pool.map(it => ({ it, k: Math.random() * it.weight }))
-             .sort((a, b) => b.k - a.k).slice(0, SESSION).map(x => x.it);
-}
+let MASTER_SENTENCES = [];
+let ACTIVE_SENTENCES = [];
+let REVEALED = new Set();
+let SESSION_COOLDOWN = new Set();
+let currentFilter = "balanced";
+let bankFilter = "all";
+let promptDirection = "en-first";
+let audioIdx = 0;
+let isPlaying = false;
+const BATCH_SIZE = 10;
 
-let queue = [], done = 0, got = 0, exactCount = 0;
+(async () => {
+  try {
+    const [bRes, cRes, clsRes, senRes] = await Promise.all([
+      fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+      fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
+      fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
+      fetch("data/sentences.json").then(r => r.json()).catch(() => null)
+    ]);
+    DATA = senRes;
 
-/* ---------- Sentence Practice feeds the SRS too ----------
-   His rule, 2026-08-30: "For the entire website i hope words, sentences or
-   anything else has the spaced repitition engine built in."
-
-   It didn't here. This page logged a `spract` event and stopped — so twenty
-   minutes of conjugation drill moved nothing: the sentence never came back, the
-   words in it were never scheduled, and none of it counted toward anything. It
-   was the one practice surface in the site writing to the record but not to the
-   scheduler.
-
-   The verb frames are in the sentence bank already, so the answer is a lookup:
-   the drilled Arabic is either a frame's base sentence or one of its verified
-   variants, and either way it resolves to that frame's card and to the word
-   cards underneath it — exactly what a lesson would grade. */
-let _drillIdx = null;
-function drillIndex() {
-  if (_drillIdx) return _drillIdx;
-  _drillIdx = new Map();
-  (BANK.sentences || []).forEach(s => {
-    const put = ar => { const k = normalizeAr(ar); if (k && !_drillIdx.has(k)) _drillIdx.set(k, s); };
-    put(s.ar);
-    (s.vary || []).forEach(v => put(v.ar));
-  });
-  return _drillIdx;
-}
-function gradeDrilled(ar, ok) {
-  const s = drillIndex().get(normalizeAr(ar));
-  if (!s) return;
-  const g = ok ? "good" : "again";
-  if (s.key) gradeCard(s.key, g);
-  (s.words || []).forEach(w => {
-    const cards = w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []);
-    cards.forEach(k => gradeCard(k, g));
-  });
-}
-
-function start() {
-  if (MODE === "list") return renderList();
-  queue = pickSession(); done = 0; got = 0; exactCount = 0;
-  content.innerHTML = `
-    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span>Sentence Practice</span>
-      <span class="arabic" style="color:var(--accent)" dir="rtl">بِناءُ الجُمَل</span>
-    </h1>
-    <p class="sub">Build the whole sentence yourself from a verb you already know — the point is the <b>conjugation</b>: I / we / they across past, present and future. Write it, then reveal. High-frequency verbs only, a short set at a time — no endless drilling.</p>
-    <div class="seg-row"><div class="seg" id="spMode">
-      <button class="sel" data-m="practise">✍️ Practise</button>
-      <button data-m="list">📋 The list</button>
-    </div></div>
-    <div class="sp-chips" id="spChips">
-      ${[["all","Mixed"],["past","Past"],["pres","Present"],["fut","Future"]]
-        .map(([k,l]) => `<span class="sp-chip ${TENSE_FILTER===k?"on":""}" data-k="${k}">${l}</span>`).join("")}
-    </div>
-    <div class="card"><div id="stage"></div></div>
-  `;
-  document.querySelectorAll("#spChips .sp-chip").forEach(c => c.onclick = () => {
-    TENSE_FILTER = c.dataset.k; start();
-  });
-  document.querySelectorAll("#spMode button").forEach(b => b.onclick = () => {
-    if (b.dataset.m === "list") { MODE = "list"; renderList(); }
-  });
-  ask();
-}
-
-function ask() {
-  const stage = document.getElementById("stage");
-  if (done >= queue.length) return finish();
-  const it = queue[done];
-  stage.innerHTML = `
-    <div class="sp-meta">${done + 1} / ${queue.length}</div>
-    <div class="sp-en">${it.en}</div>
-    <div class="sp-hints">
-      <span class="sp-hint">who: <span class="ar" dir="rtl">${it.person.ar}</span> — ${it.person.en.toLowerCase()}</span>
-      <span class="sp-hint">${it.tense.en} · <span style="font-style:italic">${it.tense.hint}</span></span>
-      <span class="sp-hint">root: <span class="ar" dir="rtl">${it.root}</span></span>
-    </div>
-    <input class="fill-input" id="spIn" placeholder="just type in English letters…" style="width:340px;max-width:100%;font-size:20px">
-    <div class="sp-meta" style="margin-top:4px">Type in <b>English letters</b> — Arabic appears as you type. <a href="#" id="spHelpToggle" style="color:var(--accent)">how do I type it?</a></div>
-    <div id="spHelp" style="display:none;font-size:13px;color:var(--muted);background:#f6f2ea;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:8px;line-height:1.7">
-      <b>You can ignore the little vowel marks</b> — grading only checks the letters, so just type the consonants and long vowels.<br>
-      • <b>Long vowels:</b> <code>aa</code>/<code>A</code>=ا · <code>ee</code>/<code>ii</code>=ي · <code>oo</code>/<code>uu</code>=و<br>
-      • <b>Tricky letters:</b> <code>H</code>=ح · <code>kh</code>=خ · <code>th</code>=ث · <code>dh</code>=ذ · <code>sh</code>=ش · <code>gh</code>=غ · <code>3</code>=ع · <code>S</code>=ص · <code>T</code>=ط<br>
-      • <b>Shadda</b> (doubled letter): type it doubled, the natural way — <code>sayyara</code> → <span dir="rtl">سيّارة</span>, <code>rabb</code> → <span dir="rtl">ربّ</span> (or add <code>*</code>). <b>Sukun</b> (no vowel): just don't type a vowel (<code>^</code> if you want the mark). <b>Short vowels</b> (optional): <code>a</code>=fatha, <code>i</code>/<code>e</code>=kasra, <code>u</code>/<code>o</code>=damma.<br>
-      • <b>"The" (<span dir="rtl">ال</span>):</b> type <code>al-</code> and it attaches — <code>al-kitab</code> → <span dir="rtl">الكتاب</span>, <code>bi al-sayyara</code> → <span dir="rtl">بالسيّارة</span>. For sun letters you can spell it as it sounds too: <code>as-sayyara</code>, <code>ash-shams</code> — both give the written <span dir="rtl">ال</span>. The little hyphen is just a helper; it disappears.
-    </div>
-    <div class="ex-row" style="margin-top:12px">
-      <button class="primary" id="spShow">Show answer</button>
-      <button class="small" id="spKb">⌨ keys</button>
-    </div>
-    <div id="spReveal"></div>
-  `;
-  const input = document.getElementById("spIn");
-  // Autocorrect chips for the object words only — never the verb, because the
-  // verb IS the question. The sentence starts with the verb, so the whole first
-  // word gets no chips, which reads as broken (he reported exactly that on
-  // 2026-08-30). heldBackNote fills that space with the reason instead.
-  const lexicon = DATA.verbs.flatMap(v => v.obj.ar.split(" ")).filter(w => normalizeAr(w) !== normalizeAr(it.form));
-  attachInlineTranslit(input, { lexicon, heldBackNote: "no chips for the verb — that's the bit you're proving. ⌨ keys if you're stuck." });
-  input.focus();
-  input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); reveal(); } });
-  const spTarget = () => document.getElementById("spIn");
-  document.getElementById("spKb").onclick = () => mountTranslitDock(spTarget);
-  const help = document.getElementById("spHelp");
-  document.getElementById("spHelpToggle").onclick = e => { e.preventDefault(); help.style.display = help.style.display === "none" ? "block" : "none"; };
-  document.getElementById("spShow").onclick = reveal;
-
-  function reveal() {
-    const typed = input.value.trim();
-    const m = sentenceMatchAr(typed, it.ar, it.form);
-    const exact = m.ok;
-    const diag = exact ? null : diagnoseVerb(typed, it);
-    const rev = document.getElementById("spReveal");
-    rev.innerHTML = `
-      <div class="gx" style="margin-top:14px">
-        <div class="sp-model"><span class="verb">${it.form}</span> ${it.objAr} <span class="sent-play" style="cursor:pointer">🔊</span></div>
-        <div class="sp-gloss">${it.en}</div>
-        ${exact ? `<div style="color:var(--accent);font-weight:600;font-size:13.5px;margin-top:6px">✓ ${m.fuzzy ? "close enough — the model is" : m.rom ? "got it — that's" : "exact match —"} <span class="arabic" dir="rtl">${it.form} ${it.objAr}</span>. ${m.fuzzy ? "The conjugation was right, and that's the point." : "Spot on!"}</div>` : ""}
-        ${typed && (!exact || m.fuzzy) ? `<div class="sp-meta" style="margin-top:6px">you wrote: <span class="arabic" dir="rtl">${typed}</span></div>` : ""}
-        ${diag ? `<div class="sp-diag">Right verb, wrong slot: <span class="arabic" dir="rtl">${diag.form}</span> is the <b>${diag.person.en} — ${diag.tense.en}</b> form. This one wants <b>${it.person.en} — ${it.tense.en}</b>: <span class="arabic" dir="rtl">${it.form}</span>.</div>`
-          : (!exact && typed) ? `<div class="sp-diag">The verb to build was <b>${it.person.en} — ${it.tense.en}</b>: <span class="arabic" dir="rtl">${it.form}</span>.</div>` : ""}
-      </div>
-      <div class="ex-row" style="margin-top:12px">
-        <button class="primary" id="spGot">✓ Got it</button>
-        <button class="small" id="spAgain">↺ Practise again</button>
-      </div>
-    `;
-    rev.querySelector(".sent-play").onclick = () => speak(it.ar, 0.85);
-    speak(it.ar, 0.85);
-    document.getElementById("spShow").disabled = true;
-    input.disabled = true;
-    document.getElementById("spGot").onclick = () => mark(true, typed, exact, m, diag);
-    document.getElementById("spAgain").onclick = () => mark(false, typed, exact, m, diag);
-  }
-
-  function mark(ok, typed, exact, m, diag) {
-    logEvent({ e: "spract", verb: it.verb, person: it.person.key, tense: it.tense.key, typed, exact, got: ok,
-      ...(m.rom ? { rom: true } : {}), ...(m.fuzzy ? { fuzzy: true } : {}),
-      ...(diag ? { wrongCell: diag.person.key + ":" + diag.tense.key } : {}) });
-    gradeDrilled(it.ar, ok);
-    if (exact) exactCount++;
-    if (ok) got++;
-    else queue.push(it); // drill-the-misses: requeue at the end of the set
-    done++;
-    ask();
-  }
-}
-
-/* ---------- THE LIST — ordered queues you work through ----------
-   His instructions, 2026-08-30, over three messages while looking at this page:
-
-     "where is the option for me to listen to the whole sentence? where is the
-      option for me to mark if i already know some of these sentences and if to
-      repeat or not. i want to see a list by frequency of use and it should be
-      quranic or MSA, i.e. the list will be working through in order"
-     "you can create tags for sentences which allows to be in folders as well,
-      can be good to see stuff by topic"
-     "similarly for vocabulary as well, create tags of themes/topics for me to go
-      through stuff if needed but it should be frequency based"
-
-   The first version was 66 collapsible sets in arbitrary order. It answered
-   "what exists" and never "what do I do next", and it had neither audio nor any
-   way to mark a row. So:
-
-     · TWO QUEUES — 🎧 ayat and 🗣 everyday sentences — each ordered by frequency
-       of use, commonest first. That order IS the plan: work down it. (Words got
-       their own page, words.html, when he set out the site's shape: "sentences,
-       words, others, progress".)
-     · TOPICS ARE A FILTER, NOT A STRUCTURE. Tags let him open "the flat" or
-       "Al-Falaq" when he wants to, and the order inside a topic is still
-       frequency. Ordering by topic would put him back where he started.
-     · AUDIO on every row — Alafasy's real recitation for an ayah, the generated
-       clip for everything else.
-     · THE FOUR BUCKETS on every row, so he can clear what he already knows
-       without sitting through a lesson for it.
-
-   `use` (scripts/gen-sentences.js) is the MEAN commonness of a sentence's words,
-   never the sum: a sum rewards length, and a long rare ayah is not more useful
-   than مَا هَذَا؟. Words rank on their own measured share (data/frequency.json).
-
-   Rendered a page at a time — 985 sentences and 800-odd words, each row carrying
-   an audio button and four bucket buttons, is far too much DOM to lay out at once. */
-let LIST_TRACK = "quran", LIST_TAG = "", LIST_SHOWN = 0;
-/* ?held=1 — the sentences he actually holds, so the number on the progress page
-   is something he can open and read rather than a claim he has to take on trust. */
-let LIST_HELD = new URLSearchParams(location.search).get("held") === "1";
-const LIST_PAGE = 60;
-
-function renderList() {
-  trackPage("sentences:list");
-  const held = k => (getSrs()[k] || {}).box >= 3;
-  const all = BANK.sentences || [];
-  const quran = all.filter(s => s.track === "quran");
-  const conv = all.filter(s => s.track !== "quran");
-  const variants = conv.reduce((a, s) => a + Math.max(1, (s.vary || []).length), 0);
-  const qHeld = quran.filter(s => held(s.key)).length, cHeld = conv.filter(s => held(s.key)).length;
-
-  content.innerHTML = `
-    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span>Sentences</span>
-      <span class="arabic" style="color:var(--accent)" dir="rtl">الجُمَل</span>
-    </h1>
-    <div class="seg-row"><div class="seg" id="spMode">
-      <button data-m="practise">✍️ Practise</button>
-      <button class="sel" data-m="list">📋 The list</button>
-    </div></div>
-    <div class="card" style="border-color:var(--accent)">
-      <p style="margin:0 0 8px;font-size:15px"><b>Everything there is to master, commonest first.</b>
-      Work down it — the top of each list is what you are most likely to hear or need to say.</p>
-      <div class="inv2">
-        <div><div class="n">${quran.length}</div><div class="l">🎧 ayat — Al-Fatiha and all of juz' 'Amma<br><b>${qHeld}</b> held</div></div>
-        <div><div class="n">${conv.length}</div><div class="l">🗣 everyday sentences, ${variants} with their variants<br><b>${cHeld}</b> held</div></div>
-      </div>
-      <p class="sp-meta" style="margin:10px 0 0">🔊 plays the whole thing — for an ayah that is Mishary Alafasy's
-      recitation, not a synthetic voice. The four buttons are yours: ✓ got it · ↻ repeat · ⏳ much later · ⊘ don't repeat.</p>
-    </div>
-    <div id="weekBox"></div>
-    <div class="seg-row"><div class="seg" id="listTrack">
-      <button class="${LIST_TRACK === "quran" ? "sel" : ""}" data-t="quran">🎧 Qur'an</button>
-      <button class="${LIST_TRACK === "conv" ? "sel" : ""}" data-t="conv">🗣 Everyday</button>
-    </div></div>
-    <div class="sp-chips" style="margin-bottom:2px">
-      <span class="sp-chip ${LIST_HELD ? "" : "on"}" id="allS">All</span>
-      <span class="sp-chip ${LIST_HELD ? "on" : ""}" id="heldS">✓ Only the ${qHeld + cHeld} I hold</span>
-    </div>
-    <div class="sp-chips" id="listTags"></div>
-    <p class="sp-meta" id="listHead" style="margin:0 0 10px"></p>
-    <div id="listBody"></div>
-    <div class="ex-row" style="margin-top:14px"><button id="listMore">Show more</button></div>
-  `;
-
-  document.querySelectorAll("#spMode button").forEach(b => b.onclick = () => {
-    if (b.dataset.m === "practise") { MODE = "practise"; start(); }
-  });
-  document.querySelectorAll("#listTrack button").forEach(b => b.onclick = () => {
-    if (b.dataset.t === LIST_TRACK) return;
-    LIST_TRACK = b.dataset.t; LIST_TAG = "";
-    renderList();
-  });
-  document.getElementById("listMore").onclick = () => page();
-  document.getElementById("allS").onclick = () => { if (!LIST_HELD) return; LIST_HELD = false; renderList(); };
-  document.getElementById("heldS").onclick = () => { if (LIST_HELD) return; LIST_HELD = true; renderList(); };
-  primeSpeak();
-  weekBox();
-  refresh();
-
-  async function rowsFor() {
-    const all = (BANK.sentences || []).filter(s => (LIST_TRACK === "quran") === (s.track === "quran"));
-    return LIST_HELD ? all.filter(s => held(s.key)) : all;
-  }
-  /* a sentence's topic: its surah for the Qur'an, its theme otherwise */
-  const tagOf = r => LIST_TRACK === "quran" ? (r.surah || "Qur'an")
-    : String(r.theme || SRC_NAMES[r.src] || "Everyday").split(/\s+[—–-]\s+/)[0].trim();
-
-  async function refresh() {
-    const rows = await rowsFor();
-    // topics in the order their FIRST row appears, so the chip row is itself
-    // frequency-ordered rather than alphabetical
-    const tags = [];
     const seen = new Set();
-    rows.forEach(r => { const t = tagOf(r); if (t && !seen.has(t)) { seen.add(t); tags.push(t); } });
-    document.getElementById("listTags").innerHTML =
-      `<span class="sp-chip ${LIST_TAG ? "" : "on"}" data-t="">All</span>` +
-      tags.map(t => `<span class="sp-chip ${LIST_TAG === t ? "on" : ""}" data-t="${esc(t)}">${esc(t)}</span>`).join("");
-    document.querySelectorAll("#listTags .sp-chip").forEach(c => c.onclick = () => {
-      LIST_TAG = c.dataset.t; LIST_SHOWN = 0; refresh();
-    });
-    LIST_SHOWN = 0;
-    document.getElementById("listBody").innerHTML = "";
-    page(rows);
-  }
+    const add = (key, ar, en, tr, hint, words, src, track, note) => {
+      if (!ar || !en) return;
+      const n = normalizeAr(ar);
+      if (seen.has(n)) return;
+      seen.add(n);
+      MASTER_SENTENCES.push({
+        key: key || ("s:" + n.slice(0, 16)),
+        ar,
+        en,
+        tr: tr || "",
+        hint: hint || "",
+        words: words || [],
+        src: src || "bank",
+        track: track || "everyday",
+        note: note || ""
+      });
+    };
 
-  async function page(rows) {
-    rows = rows || await rowsFor();
-    const shown = LIST_TAG ? rows.filter(r => tagOf(r) === LIST_TAG) : rows;
-    const body = document.getElementById("listBody");
-    const slice = shown.slice(LIST_SHOWN, LIST_SHOWN + LIST_PAGE);
-    fill(body, slice, LIST_SHOWN, LIST_SHOWN > 0);
-    LIST_SHOWN += slice.length;
-    const noun = LIST_TRACK === "quran" ? "ayat" : "everyday sentences";
-    const heldN = shown.filter(r => held(r.key)).length;
-    document.getElementById("listHead").innerHTML =
-      `${shown.length} ${LIST_HELD ? esc(noun) + " you hold" : esc(noun)}${LIST_TAG ? ` in <b>${esc(LIST_TAG)}</b>` : ""}, commonest first${LIST_HELD ? "" : ` · <b>${heldN}</b> held`} · showing ${LIST_SHOWN}.`;
-    const more = document.getElementById("listMore");
-    more.style.display = LIST_SHOWN >= shown.length ? "none" : "";
-    more.textContent = `Show ${Math.min(LIST_PAGE, shown.length - LIST_SHOWN)} more`;
-  }
-
-  /* This week's sentences stay at the top: they are the answer to "every week I
-     am trying to master certain sentences, right?" */
-  function weekBox() {
-    if (typeof Curriculum === "undefined" || !LIST_CTX) return;
-    let sents = [];
-    try {
-      const state = Curriculum.milestoneState(LIST_CTX);
-      const weeks = Curriculum.weekPlan(LIST_CTX, state);
-      const wk = weeks[Curriculum.currentWeek(weeks) - 1];
-      if (!wk) return;
-      const seen = new Set();
-      wk.lessons.forEach(x => Curriculum.sentencesFor(x.lesson.keys || [], LIST_CTX,
-        { track: x.milestone.track === "quran" ? "quran" : "conv", limit: 4 })
-        .forEach(s => { if (!seen.has(s.key)) { seen.add(s.key); sents.push(s); } }));
-    } catch (e) { return; }
-    if (!sents.length) return;
-    const h = sents.filter(s => held(s.key)).length;
-    document.getElementById("weekBox").innerHTML = `
-      <h2 style="margin:22px 0 4px;font-size:17px">📌 This week</h2>
-      <p class="sp-meta" style="margin-bottom:10px">Seven lessons, and between them these
-        <b>${sents.length} sentences</b> — that is what mastering this week actually means. ${h} held so far.</p>
-      <div class="card" id="weekRows" style="padding:8px 10px"></div>`;
-    fill(document.getElementById("weekRows"), sents, null);
-  }
-
-  /* one row: its place in the queue, the Arabic, 🔊, the meaning, the buckets */
-  function fill(host, rows, offset, append) {
-    const html = rows.map((s, i) => `
-      <div class="lrow${held(s.key) ? " on" : ""}" data-k="${esc(s.key)}">
-        <div class="lhead">
-          ${offset === null ? "" : `<span class="lnum">${offset + i + 1}</span>`}
-          <button class="lplay" data-ar="${esc(s.ar)}" title="hear it">🔊</button>
-          <div class="lar arabic" dir="rtl">${esc(s.ar)}${(s.vary || []).length ? ` <span class="vtag">⟳ ${s.vary.length}</span>` : ""}</div>
-        </div>
-        <div class="len">${esc(s.en)}${s.tr ? ` <span class="ltr">${esc(s.tr)}</span>` : ""}${s.ref ? ` <span class="lref">${esc(s.ref)}</span>` : ""}</div>
-        <div class="bucket-slot"></div>
-      </div>`).join("");
-    if (append) host.insertAdjacentHTML("beforeend", html); else host.innerHTML = html;
-    host.querySelectorAll(".lplay").forEach(b => {
-      if (b.dataset.wired) return;
-      b.dataset.wired = "1";
-      b.onclick = () => speak(b.dataset.ar, 0.85);
-    });
-    host.querySelectorAll(".lrow").forEach(r => {
-      const slot = r.querySelector(".bucket-slot");
-      if (!slot || slot.dataset.wired) return;
-      slot.dataset.wired = "1";
-      mountBucketBar(slot, r.dataset.k, b => {
-        // ✓ / ⏳ / ⊘ all mean "I have this" — reflect it immediately
-        r.classList.toggle("on", b !== "repeat");
+    // 1. Chapters 1-10 sentences (Reza's daily units)
+    (cRes.chapters || []).forEach(c => {
+      (c.sentences || []).forEach((s, idx) => {
+        add(`chap:${c.num}:${idx}`, s.ar, s.en, s.tr, s.hint, s.words, "chapters", "everyday", `Chapter ${c.num}: ${c.title}`);
       });
     });
+
+    // 2. Preply Teacher sentences
+    (clsRes.classes || []).forEach(c => {
+      (c.sentences || []).forEach((s, idx) => {
+        add(`cls:${c.id}:${idx}`, s.ar, s.en, s.tr, s.note, s.words, "teacher", "class", `Preply: ${c.title}`);
+      });
+    });
+
+    // 3. Sentence Bank (1,106 sentences)
+    (bRes.sentences || []).forEach(s => {
+      const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
+      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}` : s.pattern || "");
+    });
+
+    updateOverallStats();
+    load10Sentences();
+    setupAudioSpeed();
+  } catch (e) {
+    console.error("Failed to load sentence bank", e);
+  }
+})();
+
+function getExposure(key) {
+  const srs = getSrs();
+  const item = srs[key] || {};
+  const reps = item.reps || (item.u ? 1 : 0);
+  const box = item.box != null ? item.box : 0;
+  return { reps, box, isNew: !item.u && reps === 0, isRetired: item.b === "never" };
+}
+
+function updateOverallStats() {
+  const srs = getSrs();
+  const now = Date.now();
+  const held = MASTER_SENTENCES.filter(s => (srs[s.key] || {}).box >= 3).length;
+  const due = MASTER_SENTENCES.filter(s => {
+    const item = srs[s.key];
+    return item && item.b !== "never" && item.due && item.due <= now;
+  }).length;
+
+  document.getElementById("statHeld").textContent = held;
+  document.getElementById("statDue").textContent = due;
+  document.getElementById("statTotal").textContent = MASTER_SENTENCES.length;
+}
+
+/* 70/30 DYNAMIC BATCH ENGINE FOR SENTENCES */
+function load10Sentences() {
+  stopAudio();
+  REVEALED.clear();
+  const srs = getSrs();
+  const now = Date.now();
+
+  let pool = MASTER_SENTENCES;
+  if (currentFilter === "chapters") pool = MASTER_SENTENCES.filter(s => s.src === "chapters");
+  else if (currentFilter === "teacher") pool = MASTER_SENTENCES.filter(s => s.src === "teacher");
+  else if (currentFilter === "quran") pool = MASTER_SENTENCES.filter(s => s.track === "quran");
+  else if (currentFilter === "everyday") pool = MASTER_SENTENCES.filter(s => s.track === "everyday");
+
+  // Eligible pool: exclude retired and words in session cooldown
+  const eligible = pool.filter(s => {
+    const item = srs[s.key];
+    if (item && item.b === "never") return false;
+    if (SESSION_COOLDOWN.has(s.key)) return false;
+    return true;
+  });
+
+  const available = eligible.length >= BATCH_SIZE ? eligible : pool.filter(s => (srs[s.key] || {}).b !== "never");
+
+  const dueList = [];
+  const newList = [];
+
+  available.forEach(s => {
+    const item = srs[s.key];
+    if (!item || !item.u) {
+      newList.push(s);
+    } else {
+      let weight = 0;
+      if (item.due && item.due <= now) weight += 50;
+      if (item.b === "weak" || item.b === "learning") weight += 30;
+      dueList.push({ s, weight });
+    }
+  });
+
+  dueList.sort((a, b) => b.weight - a.weight);
+
+  let chosen = [];
+  if (currentFilter === "due") {
+    chosen = dueList.slice(0, BATCH_SIZE).map(x => x.s);
+    if (chosen.length < BATCH_SIZE) {
+      chosen = chosen.concat(newList.slice(0, BATCH_SIZE - chosen.length));
+    }
+  } else if (currentFilter === "new") {
+    chosen = newList.slice(0, BATCH_SIZE);
+  } else {
+    // Golden 70/30 Ratio: 7 Due + 3 New
+    const targetDue = Math.min(7, dueList.length);
+    const targetNew = Math.min(BATCH_SIZE - targetDue, newList.length);
+
+    chosen = dueList.slice(0, targetDue).map(x => x.s);
+    chosen = chosen.concat(newList.slice(0, targetNew));
+
+    if (chosen.length < BATCH_SIZE) {
+      const remainingDue = dueList.slice(targetDue).map(x => x.s);
+      chosen = chosen.concat(remainingDue.slice(0, BATCH_SIZE - chosen.length));
+    }
+    if (chosen.length < BATCH_SIZE) {
+      const remainingNew = newList.slice(targetNew);
+      chosen = chosen.concat(remainingNew.slice(0, BATCH_SIZE - chosen.length));
+    }
+  }
+
+  ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
+  render10Cards();
+}
+
+function render10Cards() {
+  const srs = getSrs();
+  const container = document.getElementById("sentenceList");
+  const isEnFirst = promptDirection === "en-first";
+
+  container.innerHTML = ACTIVE_SENTENCES.map((s, idx) => {
+    const item = srs[s.key] || {};
+    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
+    const exp = getExposure(s.key);
+    const isRevealed = REVEALED.has(idx);
+    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+
+    return `
+      <div class="s-card ${isRevealed ? 'active' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+        <div class="s-top">
+          <div style="flex:1">
+            <div class="${isEnFirst ? 's-prompt' : 's-prompt ar'}">${isEnFirst ? s.en : s.ar}</div>
+            <div class="s-meta">
+              ${s.tr && isEnFirst ? s.tr + ' · ' : ''}
+              ${s.hint ? s.hint + ' · ' : ''}
+              ${s.src === 'chapters' ? '📖 Daily Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply Class' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday'}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="exp-badge ${exp.isNew ? 'new' : ''}">
+              ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
+            </span>
+            ${!isEnFirst ? `<button type="button" class="small" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>` : ''}
+          </div>
+        </div>
+
+        ${!isRevealed ? `
+          <div class="reveal-box" id="revealBox-${idx}">
+            👁️ Tap to check ${isEnFirst ? 'Arabic sentence & vocabulary chips' : 'English translation & vocabulary chips'} ▾
+          </div>
+        ` : `
+          <div class="revealed-content">
+            <div class="revealed-ar-wrap">
+              <div class="revealed-ar">${s.ar}</div>
+              <button type="button" class="small" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+            </div>
+            ${s.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
+            ${!isEnFirst ? `<div class="revealed-en">${s.en}</div>` : ''}
+            
+            ${s.words && s.words.length ? `
+              <div class="s-wbw" onclick="event.stopPropagation()">
+                ${s.words.map(w => `
+                  <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                    <span class="w-ar">${w[0]}</span>
+                    <span class="w-en">${w[1]}</span>
+                  </div>
+                `).join("")}
+              </div>
+            ` : ''}
+
+            ${s.note ? `<div style="font-size:12px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
+          </div>
+        `}
+
+        <div class="rate-bar" onclick="event.stopPropagation()">
+          <span style="font-size:11px;color:var(--muted);margin-right:2px">Rate Sentence:</span>
+          <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong (30d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium (7d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak (2d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
+          <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" onclick="rateSentence('${s.key}', 'never', ${idx})">Don't repeat</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  updateSessionProgress();
+}
+
+function handleCardClick(idx, e) {
+  if (e.target.closest("button") || e.target.closest(".rate-bar") || e.target.closest(".wbw-chip")) return;
+  if (!REVEALED.has(idx)) {
+    revealCard(idx);
   }
 }
 
-function finish() {
-  logEvent({ e: "spract-done", n: done, got, exact: exactCount, tense: TENSE_FILTER });
-  autoSync();
-  const stage = document.getElementById("stage");
-  // `got` is HIS self-mark; exactCount is what he actually wrote correctly. Showing
-  // only the self-mark read as a score and flattered him (8/8 while 3 were exact).
-  const shaky = done - exactCount;
-  stage.innerHTML = `
-    <div style="text-align:center;padding:16px 0">
-      <div style="font-size:22px;font-weight:700">${exactCount} / ${done} written correctly ${exactCount === done ? "— ممتاز! 🎉" : ""}</div>
-      ${shaky ? `<p class="sub" style="margin-top:6px">${shaky === 1 ? "One conjugation" : shaky + " conjugations"} needed the answer — that is the useful half. ${got > exactCount ? `You marked ${got} as “got it”; the count above is what came out of your own head.` : ""}</p>` : ""}
-      <p class="sub" style="margin-top:8px">Every "practise again" came back around until you had it. Come back after your next lesson and the newest verbs will be here.</p>
-      <div class="ex-row" style="justify-content:center;margin-top:10px">
-        <button class="primary" id="spNew">New set</button>
-        <a href="speaking.html" style="color:var(--accent);font-weight:600;text-decoration:none;align-self:center">Now say them out loud →</a>
-      </div>
-    </div>
-  `;
-  document.getElementById("spNew").onclick = start;
+function revealCard(idx) {
+  REVEALED.add(idx);
+  const s = ACTIVE_SENTENCES[idx];
+  render10Cards();
+  if (s) playSingle(encodeURIComponent(s.ar));
 }
 
-/* shared phonetic keyboard dock (same pattern as Vocab Lab / Grammar) */
-let _kbMounted = false;
-function mountKbDock(getTarget) {
-  const dock = document.getElementById("kbDock");
-  if (_kbMounted) { dock.firstChild.style.display = dock.firstChild.style.display === "none" ? "block" : "none"; return; }
-  _kbMounted = true;
-  const kbWrap = document.createElement("div");
-  kbWrap.className = "card";
-  kbWrap.style.padding = "10px";
-  KB_LAYOUT.forEach(r => {
-    const rowDiv = document.createElement("div");
-    rowDiv.className = "kb-row";
-    r.forEach(k => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.innerHTML = `<span class="k-ar">${LATIN_TO_AR[k]}</span><span class="k-lat">${k}</span>`;
-      b.onmousedown = (e) => e.preventDefault();
-      b.onclick = () => { const t = getTarget(); if (t) { t.value += LATIN_TO_AR[k]; t.focus(); } };
-      rowDiv.appendChild(b);
-    });
-    kbWrap.appendChild(rowDiv);
-  });
-  const extra = document.createElement("div");
-  extra.className = "kb-row";
-  const sp = document.createElement("button"); sp.innerHTML = `<span class="k-lat">space</span>`; sp.style.minWidth = "140px";
-  sp.onmousedown = e => e.preventDefault(); sp.onclick = () => { const t = getTarget(); if (t) { t.value += " "; t.focus(); } };
-  const del = document.createElement("button"); del.innerHTML = `<span class="k-lat">⌫</span>`;
-  del.onmousedown = e => e.preventDefault(); del.onclick = () => { const t = getTarget(); if (t) { t.value = t.value.slice(0, -1); t.focus(); } };
-  extra.appendChild(sp); extra.appendChild(del);
-  kbWrap.appendChild(extra);
-  dock.appendChild(kbWrap);
+function revealAllCards() {
+  ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
+  render10Cards();
 }
+
+function setDirection(dir) {
+  promptDirection = dir;
+  document.getElementById("dirEnFirst").classList.toggle("active", dir === "en-first");
+  document.getElementById("dirArFirst").classList.toggle("active", dir === "ar-first");
+  render10Cards();
+}
+
+function rateSentence(key, bucket, cardIdx) {
+  setBucket(key, bucket);
+
+  const srs = getSrs();
+  if (srs[key]) {
+    srs[key].reps = (srs[key].reps || 0) + 1;
+    store.set("ats-srs", srs);
+  }
+
+  SESSION_COOLDOWN.add(key);
+
+  const s = ACTIVE_SENTENCES[cardIdx];
+  if (s) {
+    // Grade word cards inside sentence to reinforce vocabulary
+    const g = (bucket === "strong" || bucket === "medium") ? "good" : "again";
+    (s.words || []).forEach(w => {
+      const norm = normalizeAr(w[0]).replace(/^ال/, "");
+      if (norm) {
+        const wid = _wordKeyFor ? _wordKeyFor(norm) : null;
+        if (wid) gradeCard(wid, g);
+      }
+    });
+
+    logEvent({
+      e: "sentence-rate",
+      key,
+      bucket,
+      ar: s.ar,
+      en: s.en,
+      src: s.src,
+      t: Date.now()
+    });
+    autoSync();
+  }
+
+  updateOverallStats();
+
+  const card = document.getElementById("scard-" + cardIdx);
+  if (card) {
+    card.querySelectorAll(".rate-btn").forEach(b => {
+      b.classList.toggle("selected", b.dataset.b === bucket);
+    });
+  }
+  updateSessionProgress();
+}
+
+function updateSessionProgress() {
+  const srs = getSrs();
+  const ratedCount = ACTIVE_SENTENCES.filter(s => !!(srs[s.key] && srs[s.key].u)).length;
+  document.getElementById("sessionCount").textContent = `${ratedCount} of ${ACTIVE_SENTENCES.length} rated`;
+
+  const doneArea = document.getElementById("doneArea");
+  if (ratedCount === ACTIVE_SENTENCES.length && ACTIVE_SENTENCES.length > 0) {
+    doneArea.innerHTML = `
+      <div class="done-banner">
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Sentences Complete!</h3>
+        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have moved forward. Cooldown is active.</p>
+        <button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Load Next Batch (10) →</button>
+      </div>
+    `;
+  } else {
+    doneArea.innerHTML = "";
+  }
+}
+
+/* MASTER SENTENCE BANK LOGIC */
+function switchView(view) {
+  const isPractice = view === "practice";
+  document.getElementById("viewPractice").style.display = isPractice ? "block" : "none";
+  document.getElementById("viewMaster").style.display = isPractice ? "none" : "block";
+  document.getElementById("tabPractice").classList.toggle("active", isPractice);
+  document.getElementById("tabMaster").classList.toggle("active", !isPractice);
+  if (!isPractice) {
+    renderMasterBank();
+  }
+}
+
+function setBankFilter(filt, btn) {
+  bankFilter = filt;
+  document.querySelectorAll(".b-filter").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderMasterBank();
+}
+
+function renderMasterBank() {
+  const container = document.getElementById("bankContainer");
+  const query = (document.getElementById("bankSearch")?.value || "").trim().toLowerCase();
+  const srs = getSrs();
+  const now = Date.now();
+
+  let filtered = MASTER_SENTENCES.filter(s => {
+    if (query) {
+      const matchEn = s.en.toLowerCase().includes(query);
+      const matchAr = s.ar.includes(query) || normalizeAr(s.ar).includes(query);
+      const matchTr = (s.tr || "").toLowerCase().includes(query);
+      const matchNote = (s.note || "").toLowerCase().includes(query);
+      if (!matchEn && !matchAr && !matchTr && !matchNote) return false;
+    }
+
+    if (bankFilter === "chapters") return s.src === "chapters";
+    if (bankFilter === "teacher") return s.src === "teacher";
+    if (bankFilter === "quran") return s.track === "quran";
+    if (bankFilter === "due") {
+      const item = srs[s.key] || {};
+      return item.due && item.due <= now && item.b !== "never";
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted)">No sentences found matching criteria.</div>`;
+    return;
+  }
+
+  const displaySlice = filtered.slice(0, 50);
+
+  container.innerHTML = displaySlice.map((s, idx) => {
+    const exp = getExposure(s.key);
+    const item = srs[s.key] || {};
+    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+
+    return `
+      <div class="bank-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:var(--muted)">#${idx + 1}</span>
+            <span class="exp-badge ${exp.isNew ? 'new' : ''}">
+              ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
+            </span>
+            <span style="font-size:11.5px;color:var(--accent);font-weight:600">${s.note || s.src}</span>
+          </div>
+          <button type="button" class="small" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
+        </div>
+
+        <div class="arabic" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.6">${s.ar}</div>
+        
+        ${s.words && s.words.length ? `
+          <div class="s-wbw">
+            ${s.words.map(w => `
+              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                <span class="w-ar">${w[0]}</span>
+                <span class="w-en">${w[1]}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : ''}
+
+        <div style="font-size:14.5px;font-weight:600;color:var(--ink)">${s.en}</div>
+        ${s.tr ? `<div style="font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
+      </div>
+    `;
+  }).join("");
+
+  if (filtered.length > 50) {
+    container.innerHTML += `<div style="text-align:center;padding:12px;font-size:12.5px;color:var(--muted)">Showing first 50 of ${filtered.length} matching sentences. Search to narrow down.</div>`;
+  }
+}
+
+/* Audio Toolbar Handling */
+function playSingle(encodedAr) {
+  stopAudio();
+  const text = decodeURIComponent(encodedAr);
+  speak(text, 0.85);
+  logEvent({ e: "audio-play", text, type: "sentence", t: Date.now() });
+}
+
+function setupAudioSpeed() {
+  const n = document.getElementById("spNorm");
+  const s = document.getElementById("spSlow");
+  const update = () => {
+    const slow = speakSpeed() === "slow";
+    n.style.fontWeight = slow ? "400" : "700";
+    s.style.fontWeight = slow ? "700" : "400";
+  };
+  n.onclick = () => { setSpeakSpeed("normal"); update(); };
+  s.onclick = () => { setSpeakSpeed("slow"); update(); };
+  update();
+}
+
+document.getElementById("btnPlayAll").onclick = () => {
+  stopAudio();
+  isPlaying = true;
+  document.getElementById("btnStop").style.display = "inline-block";
+  document.getElementById("btnPlayAll").classList.add("playing");
+  audioIdx = 0;
+  playStep(false);
+};
+
+document.getElementById("btnPlayPauses").onclick = () => {
+  stopAudio();
+  isPlaying = true;
+  document.getElementById("btnStop").style.display = "inline-block";
+  document.getElementById("btnPlayPauses").classList.add("playing");
+  audioIdx = 0;
+  playStep(true);
+};
+
+document.getElementById("btnStop").onclick = stopAudio;
+
+function stopAudio() {
+  isPlaying = false;
+  stopSpeak();
+  document.querySelectorAll(".s-card").forEach(c => c.classList.remove("active"));
+  document.getElementById("btnPlayAll").classList.remove("playing");
+  document.getElementById("btnPlayPauses").classList.remove("playing");
+  document.getElementById("btnStop").style.display = "none";
+}
+
+function playStep(withPause) {
+  if (!isPlaying || audioIdx >= ACTIVE_SENTENCES.length) {
+    stopAudio();
+    return;
+  }
+  const s = ACTIVE_SENTENCES[audioIdx];
+  document.querySelectorAll(".s-card").forEach(c => c.classList.remove("active"));
+  const card = document.getElementById("scard-" + audioIdx);
+  if (card) card.classList.add("active");
+
+  speak(s.ar, 0.85, () => {
+    if (!isPlaying) return;
+    if (withPause) {
+      setTimeout(() => {
+        if (!isPlaying) return;
+        speak(s.en, 1.0, () => {
+          setTimeout(() => { audioIdx++; playStep(withPause); }, 1000);
+        });
+      }, 3000);
+    } else {
+      setTimeout(() => { audioIdx++; playStep(withPause); }, 1200);
+    }
+  });
+}
+
+// Topic filter chips
+document.getElementById("filterChips").addEventListener("click", e => {
+  const b = e.target.closest("[data-filter]");
+  if (!b) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  b.classList.add("active");
+  currentFilter = b.dataset.filter;
+  load10Sentences();
+});
 </script>
 </body>
 </html>

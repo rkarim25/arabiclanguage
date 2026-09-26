@@ -7,33 +7,58 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>10-Word Vocab Drill — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiuztps">
-  <link rel="stylesheet" href="css/style.css?v=muiuztps">
+  <title>Vocabulary Practice & Master Library — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=muivqwju">
+  <link rel="stylesheet" href="css/style.css?v=muivqwju">
   <style>
-    .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
     .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .stat-strip .lbl { font-size: 12.5px; color: var(--muted); }
-    
+    .stat-strip .lbl { font-size: 12px; color: var(--muted); }
+
+    /* Top View Switcher */
+    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 16px; }
+    .tab-btn { border: none; background: transparent; padding: 7px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(13,122,95,0.25); }
+
+    /* Direction / Mode Selector */
+    .control-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 2px; }
+    .dir-btn { border: none; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--muted); }
+    .dir-btn.active { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+
     /* Topic Selector Chips */
-    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 16px; }
-    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; color: var(--muted); }
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; cursor: pointer; color: var(--muted); transition: all 0.12s; }
+    .chip:hover { border-color: var(--accent); }
     .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
 
-    /* 10-Word Cards */
-    .word-table { display: flex; flex-direction: column; gap: 10px; }
-    .w-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s; }
+    /* 20-Word Drill Cards */
+    .word-grid { display: flex; flex-direction: column; gap: 10px; }
+    .w-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s; cursor: pointer; }
     .w-card:hover { border-color: var(--accent); }
     .w-card.active { border-color: var(--accent); background: var(--accent-soft); }
-    .w-top { display: flex; justify-content: space-between; align-items: baseline; }
-    .w-ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; }
-    .w-en { font-size: 15px; font-weight: 600; color: var(--ink); }
-    .w-meta { font-size: 12.5px; color: var(--muted); }
+    .w-top { display: flex; justify-content: space-between; align-items: baseline; width: 100%; flex-wrap: wrap; gap: 8px; }
+    .w-prompt { font-size: 17px; font-weight: 600; color: var(--ink); }
+    .w-prompt.ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; }
+    .w-meta { font-size: 12px; color: var(--muted); }
+
+    /* Exposure & Depth Badge */
+    .exp-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,0.05); color: var(--muted); }
+    .exp-badge.new { background: #e0f2fe; color: #0284c7; }
+    .exp-badge.leech { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .exp-dots { color: var(--accent); letter-spacing: 1px; }
+
+    /* Masked Reveal Box */
+    .reveal-box { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 8px 12px; text-align: center; font-size: 13px; color: var(--muted); transition: all 0.12s; user-select: none; }
+    .reveal-box:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .revealed-content { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 4px; }
+    .revealed-ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.4; }
+    .revealed-en { font-size: 16px; font-weight: 600; color: var(--ink); }
 
     /* 5 Rating Pills */
-    .rate-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--border); }
-    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.1s; }
+    .rate-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 4px; padding-top: 6px; }
+    .rate-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.1s; }
     .rate-btn:hover { transform: translateY(-1px); }
     
     .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
@@ -52,13 +77,20 @@
     .rate-btn[data-b="never"].selected { background: var(--muted); color: #fff; border-color: var(--muted); }
 
     /* Audio Bar */
-    .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 10px 14px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+    .audio-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
     @media (prefers-color-scheme: dark) { .audio-toolbar { background: rgba(255,255,255,0.04); } }
-    .audio-toolbar button { padding: 5px 12px; font-size: 13px; }
+    .audio-toolbar button { padding: 4px 10px; font-size: 12.5px; }
     .audio-toolbar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
+    /* Master Table */
+    .m-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 12px; }
+    .m-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table tr:hover { background: var(--accent-soft); }
+    .m-search { width: 100%; max-width: 360px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--card); color: var(--ink); }
+
     /* Completion Banner */
-    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 20px; }
+    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
   </style>
 </head>
 <body>
@@ -66,120 +98,202 @@
   <div class="v-header">
     <div>
       <h1 style="display:flex;align-items:center;gap:10px;margin:0">
-        <span>10-Word Drill</span>
+        <span>Vocabulary Practice</span>
         <span class="arabic" style="color:var(--accent);font-size:26px">المُفْرَدَات</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Strictly 10 words at a time · Spaced repetition without the backlog</p>
+      <p class="sub" style="margin:2px 0">Active recall · 20-word dynamic batches · 70/30 review ratio</p>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div class="stat-strip">
         <div><div class="num" id="statHeld">0</div><div class="lbl">Words Held</div></div>
+        <div><div class="num" id="statDue">0</div><div class="lbl">Due for Review</div></div>
         <div><div class="num" id="statTotal">0</div><div class="lbl">Master Vocab</div></div>
       </div>
-      <button type="button" id="btnVocabCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
+      <button type="button" id="btnVocabCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Dossier</button>
     </div>
   </div>
 
-  <!-- Audio Controls -->
-  <div class="audio-toolbar">
-    <span style="font-size:13px;font-weight:700">🎧 Audio:</span>
-    <button type="button" id="btnPlayAll">▶ Play All 10</button>
-    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3s for you to recall, then says English">⏸ Play with Pauses</button>
-    <button type="button" id="btnStop" style="display:none">⏹ Stop</button>
-    <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
-      <button type="button" class="small" id="spNorm">🔊 Normal</button>
-      <button type="button" class="small" id="spSlow">🐢 Slow</button>
-    </span>
+  <!-- Top View Switcher -->
+  <div class="tab-bar">
+    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice Batch (20)</button>
+    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master Vocabulary List</button>
   </div>
 
-  <!-- Filter chips -->
-  <div class="filter-chips" id="filterChips">
-    <button type="button" class="chip active" data-filter="all">All Priority (Due &amp; Fresh)</button>
-    <button type="button" class="chip" data-filter="teacher">🧑‍🏫 Preply Teacher Words</button>
-    <button type="button" class="chip" data-filter="quran">📖 Qur'an High Frequency</button>
-    <button type="button" class="chip" data-filter="everyday">🗣 Everyday Survival</button>
-  </div>
-
-  <!-- Session Progress & List -->
-  <div class="card" style="padding:16px 18px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h2 style="margin:0;font-size:16px" id="sessionTitle">Today's 10 Words</h2>
-      <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+  <!-- PRACTICE VIEW -->
+  <div id="viewPractice">
+    <div class="control-row">
+      <div class="dir-toggle">
+        <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 English Prompt → Reveal Arabic</button>
+        <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 Arabic Prompt → Reveal English</button>
+      </div>
+      <button type="button" class="small" onclick="revealAllCards()" style="font-size:12px">👁️ Reveal All 20</button>
     </div>
-    <div class="word-table" id="wordList">Loading words…</div>
-    <div id="doneArea"></div>
+
+    <!-- Filter chips -->
+    <div class="filter-chips" id="filterChips">
+      <button type="button" class="chip active" data-filter="balanced">Balanced 70/30 (14 Due · 6 New)</button>
+      <button type="button" class="chip" data-filter="due">Due for Review</button>
+      <button type="button" class="chip" data-filter="new">New Words Only</button>
+      <button type="button" class="chip" data-filter="teacher">🧑‍🏫 Preply Teacher Words</button>
+      <button type="button" class="chip" data-filter="quran">📖 Qur'an High Frequency</button>
+      <button type="button" class="chip" data-filter="everyday">🗣 Everyday Survival</button>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-toolbar">
+      <span style="font-size:12.5px;font-weight:700">🎧 Audio:</span>
+      <button type="button" id="btnPlayAll">▶ Play All 20</button>
+      <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3s for you to recall, then says English">⏸ Play with Recall Gap</button>
+      <button type="button" id="btnStop" style="display:none">⏹ Stop</button>
+      <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
+        <button type="button" class="small" id="spNorm">🔊 Normal</button>
+        <button type="button" class="small" id="spSlow">🐢 Slow</button>
+      </span>
+    </div>
+
+    <!-- Session Progress & List -->
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 20 Words</h2>
+        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 20 rated</span>
+      </div>
+      <div class="word-grid" id="wordList">Loading words…</div>
+      <div id="doneArea"></div>
+    </div>
+  </div>
+
+  <!-- MASTER VOCABULARY LIST VIEW -->
+  <div id="viewMaster" style="display:none">
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+        <input type="text" id="masterSearch" class="m-search" placeholder="🔍 Search English, Arabic, or Transliteration…" oninput="renderMasterTable()">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="chip active m-filter" data-mfilter="all" onclick="setMasterFilter('all', this)">All</button>
+          <button type="button" class="chip m-filter" data-mfilter="due" onclick="setMasterFilter('due', this)">Due Now</button>
+          <button type="button" class="chip m-filter" data-mfilter="learning" onclick="setMasterFilter('learning', this)">Learning (Box 0-1)</button>
+          <button type="button" class="chip m-filter" data-mfilter="mastered" onclick="setMasterFilter('mastered', this)">Mastered (Box 4-5)</button>
+          <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">Retired (Don't Repeat)</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="m-table">
+          <thead>
+            <tr>
+              <th style="width:30px">#</th>
+              <th>Arabic</th>
+              <th>English Meaning</th>
+              <th>Category</th>
+              <th>Exposure Depth</th>
+              <th>SRS Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="masterTableBody">
+            <tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiuztps"></script>
-<script src="js/curriculum.js?v=muiuztps"></script>
-<script src="js/app.js?v=muiuztps"></script>
-<script src="js/tracker.js?v=muiuztps"></script>
+<script src="js/progress-model.js?v=muivqwju"></script>
+<script src="js/curriculum.js?v=muivqwju"></script>
+<script src="js/app.js?v=muivqwju"></script>
+<script src="js/tracker.js?v=muivqwju"></script>
 <script>
 renderNav("words");
 trackPage("words");
 
 let MASTER_WORDS = [];
 let ACTIVE_WORDS = [];
-let currentFilter = "all";
+let REVEALED = new Set();
+let SESSION_COOLDOWN = new Set(); // words rated in this sitting are blocked from immediate repeats
+let currentFilter = "balanced";
+let masterFilter = "all";
+let promptDirection = "en-first"; // "en-first" or "ar-first"
 let audioIdx = 0;
 let isPlaying = false;
+const BATCH_SIZE = 20;
 
 (async () => {
   try {
-    const [cRes, qRes, evRes] = await Promise.all([
+    const [cRes, qRes, evRes, famRes] = await Promise.all([
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
       fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
-      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] }))
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] }))
     ]);
 
     const seen = new Set();
-    const add = (k, ar, en, tr, note, src) => {
+    const add = (k, ar, en, tr, note, src, root) => {
       if (!ar || !en) return;
       const n = normalizeAr(ar);
       if (seen.has(n)) return;
       seen.add(n);
-      MASTER_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src });
+      MASTER_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: root || "" });
     };
 
-    // 1. Teacher words (from classes)
+    // 1. Teacher words (from Sunday Preply classes)
     (cRes.classes || []).forEach(c => {
       (c.vocabulary || []).forEach(v => add(v.key, v.ar, v.en, v.tr, v.note, "teacher"));
     });
-    // 2. Quran core
+    // 2. Quran core frequency words
     (qRes.words || []).forEach((w, i) => add(`qc:${i}`, w.ar, w.en, w.tr, "", "quran"));
     // 3. Everyday clusters
     (evRes.groups || []).forEach(g => {
       (g.members || []).forEach((m, i) => add(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday"));
     });
+    // 4. Root family vocabulary
+    (famRes.families || []).forEach(f => {
+      (f.members || []).forEach((m, i) => add(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root));
+    });
 
     updateOverallStats();
-    load10Words();
+    load20Words();
     setupAudioSpeed();
   } catch (e) {
     console.error("Failed to load master vocabulary", e);
   }
 })();
 
+function getExposure(key) {
+  const srs = getSrs();
+  const item = srs[key] || {};
+  const reps = item.reps || (item.u ? 1 : 0);
+  const box = item.box != null ? item.box : 0;
+  return { reps, box, isNew: !item.u && reps === 0, isRetired: item.b === "never" };
+}
+
 function updateOverallStats() {
   const srs = getSrs();
+  const now = Date.now();
   const held = MASTER_WORDS.filter(w => (srs[w.key] || {}).box >= 3).length;
+  const due = MASTER_WORDS.filter(w => {
+    const item = srs[w.key];
+    return item && item.b !== "never" && item.due && item.due <= now;
+  }).length;
+
   document.getElementById("statHeld").textContent = held;
+  document.getElementById("statDue").textContent = due;
   document.getElementById("statTotal").textContent = MASTER_WORDS.length;
 }
 
-function load10Words() {
+/* THE 70/30 DYNAMIC BATCH ENGINE WITH SESSION COOLDOWN & LEECH PROTECTION */
+function load20Words() {
   stopAudio();
+  REVEALED.clear();
   const srs = getSrs();
   const now = Date.now();
   const log = store.get(LOG_KEY, []);
 
+  // Filter pool by topic if specific source selected
   let pool = MASTER_WORDS;
-  if (currentFilter !== "all") {
-    pool = MASTER_WORDS.filter(w => w.src === currentFilter);
-  }
+  if (currentFilter === "teacher") pool = MASTER_WORDS.filter(w => w.src === "teacher");
+  else if (currentFilter === "quran") pool = MASTER_WORDS.filter(w => w.src === "quran");
+  else if (currentFilter === "everyday") pool = MASTER_WORDS.filter(w => w.src === "everyday");
 
-  // Find recent test slips (last 7 days) to fast-track reinforcement
+  // Track recent test misses (last 7 days)
   const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
   const missedWords = new Set();
   log.filter(x => x.e === "test-item" && x.ok === false && (now - (x.t || 0) < ONE_WEEK)).forEach(m => {
@@ -187,52 +301,128 @@ function load10Words() {
     if (m.question) missedWords.add(normalizeAr(m.question));
   });
 
-  // Priority scoring: Test slips first, then due / weak words, then unrated
-  const scored = pool.map(w => {
+  // Eligible pool: exclude retired words and words rated during current sitting (session cooldown)
+  const eligible = pool.filter(w => {
     const item = srs[w.key];
-    const norm = normalizeAr(w.ar);
-    let prio = 0;
-    if (item && item.b === "never") prio = -999; // skip retired
-    else if (missedWords.has(norm)) prio = 120; // fast-track recent test slip!
-    else if (item && item.due && item.due <= now) prio = 100; // due now
-    else if (item && (item.b === "weak" || item.b === "learning" || item.b === "repeat")) prio = 85;
-    else if (!item) prio = 50; // unrated
-    else prio = 10;
-    return { w, prio };
+    if (item && item.b === "never") return false;
+    if (SESSION_COOLDOWN.has(w.key)) return false; // Cooldown prevents immediate looping
+    return true;
   });
 
-  scored.sort((a, b) => b.prio - a.prio);
-  ACTIVE_WORDS = scored.slice(0, 10).map(s => s.w);
+  const available = eligible.length >= BATCH_SIZE ? eligible : pool.filter(w => (srs[w.key] || {}).b !== "never");
 
-  render10Cards();
+  // Categorize: Due items vs New items
+  const dueList = [];
+  const newList = [];
+
+  available.forEach(w => {
+    const item = srs[w.key];
+    const norm = normalizeAr(w.ar);
+    if (!item || !item.u) {
+      newList.push(w);
+    } else {
+      let weight = 0;
+      if (missedWords.has(norm)) weight += 100; // Prioritize test stumbles
+      if (item.due && item.due <= now) weight += 50; // Due for review
+      if (item.b === "weak" || item.b === "learning") weight += 30; // Weak stumbles
+      dueList.push({ w, weight });
+    }
+  });
+
+  dueList.sort((a, b) => b.weight - a.weight);
+
+  let chosen = [];
+  if (currentFilter === "due") {
+    chosen = dueList.slice(0, BATCH_SIZE).map(x => x.w);
+    if (chosen.length < BATCH_SIZE) {
+      chosen = chosen.concat(newList.slice(0, BATCH_SIZE - chosen.length));
+    }
+  } else if (currentFilter === "new") {
+    chosen = newList.slice(0, BATCH_SIZE);
+  } else {
+    // Golden 70/30 Ratio: 14 Due + 6 New
+    const targetDue = Math.min(14, dueList.length);
+    const targetNew = Math.min(BATCH_SIZE - targetDue, newList.length);
+    
+    chosen = dueList.slice(0, targetDue).map(x => x.w);
+    chosen = chosen.concat(newList.slice(0, targetNew));
+
+    // Fill remaining up to 20 if needed
+    if (chosen.length < BATCH_SIZE) {
+      const remainingDue = dueList.slice(targetDue).map(x => x.w);
+      chosen = chosen.concat(remainingDue.slice(0, BATCH_SIZE - chosen.length));
+    }
+    if (chosen.length < BATCH_SIZE) {
+      const remainingNew = newList.slice(targetNew);
+      chosen = chosen.concat(remainingNew.slice(0, BATCH_SIZE - chosen.length));
+    }
+  }
+
+  ACTIVE_WORDS = chosen.slice(0, BATCH_SIZE);
+  render20Cards();
 }
 
-function render10Cards() {
+function render20Cards() {
   const srs = getSrs();
   const container = document.getElementById("wordList");
+  const isEnFirst = promptDirection === "en-first";
+
   container.innerHTML = ACTIVE_WORDS.map((w, idx) => {
     const item = srs[w.key] || {};
     const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
+    const exp = getExposure(w.key);
+    const isRevealed = REVEALED.has(idx);
+
+    // Box dots (●●●○○)
+    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
 
     return `
-      <div class="w-card" id="wcard-${idx}">
+      <div class="w-card ${isRevealed ? 'active' : ''}" id="wcard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="w-top">
           <div>
-            <div class="w-en">${w.en}</div>
-            <div class="w-meta">${w.tr ? w.tr + ' · ' : ''}${w.note || (w.src === 'teacher' ? 'Preply Class' : w.src === 'quran' ? "Qur'an" : 'Everyday')}</div>
+            <div class="${isEnFirst ? 'w-prompt' : 'w-prompt ar'}">${isEnFirst ? w.en : w.ar}</div>
+            <div class="w-meta">
+              ${w.tr && isEnFirst ? w.tr + ' · ' : ''}
+              ${w.note ? w.note + ' · ' : ''}
+              ${w.src === 'teacher' ? '🧑‍🏫 Preply Class' : w.src === 'quran' ? "📖 Qur'an" : '🗣 Everyday'}
+            </div>
           </div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span class="w-ar">${w.ar}</span>
-            <button class="small" onclick="playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="exp-badge ${exp.isNew ? 'new' : ''}">
+              ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
+            </span>
+            ${!isEnFirst ? `<button type="button" class="small" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>` : ''}
           </div>
         </div>
-        <div class="rate-bar">
-          <span style="font-size:11.5px;color:var(--muted);margin-right:4px">Your rating:</span>
-          <button class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" onclick="rateWord('${w.key}', 'strong', ${idx})">Strong</button>
-          <button class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" onclick="rateWord('${w.key}', 'medium', ${idx})">Medium</button>
-          <button class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" onclick="rateWord('${w.key}', 'weak', ${idx})">Weak</button>
-          <button class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" onclick="rateWord('${w.key}', 'learning', ${idx})">Learning</button>
-          <button class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" onclick="rateWord('${w.key}', 'never', ${idx})">Don't repeat</button>
+
+        ${!isRevealed ? `
+          <div class="reveal-box" id="revealBox-${idx}">
+            👁️ Tap to check ${isEnFirst ? 'Arabic & Audio' : 'English meaning'} ▾
+          </div>
+        ` : `
+          <div class="revealed-content">
+            <div style="flex:1">
+              ${isEnFirst ? `
+                <div class="revealed-ar">${w.ar}</div>
+                ${w.tr ? `<div style="font-size:12px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
+              ` : `
+                <div class="revealed-en">${w.en}</div>
+              `}
+              ${w.root ? `<div style="font-size:11.5px;color:var(--accent);margin-top:2px">🌿 Root: ${w.root}</div>` : ''}
+            </div>
+            ${isEnFirst ? `
+              <button type="button" class="small" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
+            ` : ''}
+          </div>
+        `}
+
+        <div class="rate-bar" onclick="event.stopPropagation()">
+          <span style="font-size:11px;color:var(--muted);margin-right:2px">Rate:</span>
+          <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" onclick="rateWord('${w.key}', 'strong', ${idx})">Strong (30d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" onclick="rateWord('${w.key}', 'medium', ${idx})">Medium (7d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" onclick="rateWord('${w.key}', 'weak', ${idx})">Weak (2d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" onclick="rateWord('${w.key}', 'learning', ${idx})">Learning</button>
+          <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" onclick="rateWord('${w.key}', 'never', ${idx})">Don't repeat</button>
         </div>
       </div>
     `;
@@ -241,8 +431,46 @@ function render10Cards() {
   updateSessionProgress();
 }
 
+function handleCardClick(idx, e) {
+  if (e.target.closest("button") || e.target.closest(".rate-bar")) return;
+  if (!REVEALED.has(idx)) {
+    revealCard(idx);
+  }
+}
+
+function revealCard(idx) {
+  REVEALED.add(idx);
+  const w = ACTIVE_WORDS[idx];
+  render20Cards();
+  // Auto-play audio upon reveal to cement ear memory
+  if (w) playSingle(encodeURIComponent(w.ar));
+}
+
+function revealAllCards() {
+  ACTIVE_WORDS.forEach((_, idx) => REVEALED.add(idx));
+  render20Cards();
+}
+
+function setDirection(dir) {
+  promptDirection = dir;
+  document.getElementById("dirEnFirst").classList.toggle("active", dir === "en-first");
+  document.getElementById("dirArFirst").classList.toggle("active", dir === "ar-first");
+  render20Cards();
+}
+
 function rateWord(key, bucket, cardIdx) {
   setBucket(key, bucket);
+  
+  // Update repetition count in SRS record
+  const srs = getSrs();
+  if (srs[key]) {
+    srs[key].reps = (srs[key].reps || 0) + 1;
+    store.set("ats-srs", srs);
+  }
+
+  // Session cooldown: block this word from reappearing in the very next batch today
+  SESSION_COOLDOWN.add(key);
+
   updateOverallStats();
   
   const w = ACTIVE_WORDS[cardIdx];
@@ -271,20 +499,116 @@ function rateWord(key, bucket, cardIdx) {
 
 function updateSessionProgress() {
   const srs = getSrs();
-  const ratedCount = ACTIVE_WORDS.filter(w => !!srs[w.key]).length;
+  const ratedCount = ACTIVE_WORDS.filter(w => !!(srs[w.key] && srs[w.key].u)).length;
   document.getElementById("sessionCount").textContent = `${ratedCount} of ${ACTIVE_WORDS.length} rated`;
 
   const doneArea = document.getElementById("doneArea");
   if (ratedCount === ACTIVE_WORDS.length && ACTIVE_WORDS.length > 0) {
     doneArea.innerHTML = `
       <div class="done-banner">
-        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Words Complete!</h3>
-        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have been saved.</p>
-        <button type="button" class="primary" onclick="load10Words()" style="font-size:15px;padding:9px 20px">Drill Next 10 Words →</button>
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 20 Words Complete!</h3>
+        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have moved forward. Cooldown is active.</p>
+        <button type="button" class="primary" onclick="load20Words()" style="font-size:15px;padding:9px 22px">Load Next Batch (20) →</button>
       </div>
     `;
   } else {
     doneArea.innerHTML = "";
+  }
+}
+
+/* MASTER VOCABULARY LIST LOGIC */
+function switchView(view) {
+  const isPractice = view === "practice";
+  document.getElementById("viewPractice").style.display = isPractice ? "block" : "none";
+  document.getElementById("viewMaster").style.display = isPractice ? "none" : "block";
+  document.getElementById("tabPractice").classList.toggle("active", isPractice);
+  document.getElementById("tabMaster").classList.toggle("active", !isPractice);
+  if (!isPractice) {
+    renderMasterTable();
+  }
+}
+
+function setMasterFilter(filt, btn) {
+  masterFilter = filt;
+  document.querySelectorAll(".m-filter").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderMasterTable();
+}
+
+function renderMasterTable() {
+  const tbody = document.getElementById("masterTableBody");
+  const query = (document.getElementById("masterSearch")?.value || "").trim().toLowerCase();
+  const srs = getSrs();
+  const now = Date.now();
+
+  let filtered = MASTER_WORDS.filter(w => {
+    // Text search
+    if (query) {
+      const matchEn = w.en.toLowerCase().includes(query);
+      const matchAr = w.ar.includes(query) || normalizeAr(w.ar).includes(query);
+      const matchTr = (w.tr || "").toLowerCase().includes(query);
+      if (!matchEn && !matchAr && !matchTr) return false;
+    }
+
+    // Status filter
+    const item = srs[w.key] || {};
+    if (masterFilter === "due") return item.due && item.due <= now && item.b !== "never";
+    if (masterFilter === "learning") return (item.box === 0 || item.box === 1) && item.b !== "never";
+    if (masterFilter === "mastered") return item.box >= 4 && item.b !== "never";
+    if (masterFilter === "never") return item.b === "never";
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;
+    return;
+  }
+
+  // Cap render at 100 for snappy performance
+  const displaySlice = filtered.slice(0, 100);
+
+  tbody.innerHTML = displaySlice.map((w, idx) => {
+    const exp = getExposure(w.key);
+    const item = srs[w.key] || {};
+    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+
+    return `
+      <tr>
+        <td style="color:var(--muted);font-size:11.5px">${idx + 1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent)">${w.ar}</span>
+            <button type="button" class="small" onclick="playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
+          </div>
+        </td>
+        <td>
+          <div style="font-weight:600">${w.en}</div>
+          ${w.tr ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
+        </td>
+        <td>
+          <span style="font-size:12px;color:var(--muted)">
+            ${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : w.src === 'root' ? '🌿 Root' : '🗣 Everyday'}
+          </span>
+        </td>
+        <td>
+          <span class="exp-badge ${exp.isNew ? 'new' : ''}">
+            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}×`}
+          </span>
+        </td>
+        <td>
+          <span style="font-size:12px;font-weight:600;color:${exp.isRetired ? 'var(--muted)' : exp.box >= 4 ? '#059669' : exp.box >= 2 ? '#0284c7' : '#d97706'}">
+            ${exp.isRetired ? 'Retired' : `Box ${exp.box} ${item.due && item.due <= now ? '(Due)' : ''}`}
+          </span>
+        </td>
+        <td>
+          <button type="button" class="small" onclick="rateWord('${w.key}', 'strong', 0); renderMasterTable();">✓ Strong</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  if (filtered.length > 100) {
+    tbody.innerHTML += `<tr><td colspan="7" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
   }
 }
 
@@ -370,7 +694,7 @@ document.getElementById("filterChips").addEventListener("click", e => {
   document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
   b.classList.add("active");
   currentFilter = b.dataset.filter;
-  load10Words();
+  load20Words();
 });
 
 // Copy Learner Dossier
@@ -379,7 +703,7 @@ if (btnDossier) {
   btnDossier.onclick = () => {
     copyLearnerDossier().then(() => {
       btnDossier.textContent = "✓ Copied Dossier (Markdown)!";
-      setTimeout(() => btnDossier.textContent = "📄 Copy Learner Dossier", 2000);
+      setTimeout(() => btnDossier.textContent = "📄 Copy Dossier", 2000);
     });
   };
 }
