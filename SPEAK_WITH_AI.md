@@ -32,12 +32,14 @@ This guide explains how to get the most out of the **Speak with AI** features ac
    - It speaks in **Modern Standard Arabic (الفصحى)** with clear short vowels (tashkeel).
    - Turns are kept short (under 2 sentences) — it prompts you, waits for you to speak, and drills variations.
 
-4. **Session Wrap-Up & Diagnostic Receipt:**
-   - When you are ready to wrap up (or after 5–10 minutes), simply say **"I'm done"** or **"Summary please"**.
-   - The AI provides a concise 3-line progress summary:
+4. **Session Wrap-Up & Pasting Report Back:**
+   - When you are ready to wrap up (or after 5–10 minutes), say **"I'm done"**.
+   - The AI outputs the structured `=== AI VOICE SESSION REPORT ===` receipt detailing:
      1. **Phrases Mastered:** Exact target sentences produced confidently.
-     2. **Variations Handled:** Successful pronoun/tense/question swaps.
-     3. **Words to Review:** Any hesitations, slips, or mispronounced words.
+     2. **Hesitations & Errors:** Phrases, sounds, or grammar where you stumbled.
+     3. **Words to Review:** Specific vocabulary items to reinforce in upcoming drills.
+     4. **Next Recommended Focus:** 1 actionable recommendation for your coach.
+   - **Paste it back:** Copy the report and paste it into the **"📥 Paste AI Voice Session Report"** section on `index.html` or `class.html`. Your coach automatically tailors future lessons, drills, and reviews around your results!
 
 ---
 

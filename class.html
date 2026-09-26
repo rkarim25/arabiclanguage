@@ -154,6 +154,23 @@
         <span style="font-size:11.5px;color:var(--muted)">💡 1. Copy Prompt → 2. Open App → 3. Tap 🎧 Voice Mode</span>
       </div>
       <div id="classAiPromptText" style="max-height:160px;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:monospace;white-space:pre-wrap;margin-top:6px">Loading prompt…</div>
+
+      <!-- Paste AI Voice Report Section -->
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+          <span style="font-weight:700;font-size:13.5px">📥 Paste AI Voice Session Report</span>
+          <span style="font-size:11.5px;color:var(--muted)">Tailors future Preply lessons &amp; drills</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 8px">
+          After your voice conversation, copy the summary report from ChatGPT/Claude and paste it below. Your coach reads this to target weak spots and tailor future lessons.
+        </p>
+        <textarea id="aiClassReportPaste" placeholder="Paste the AI's Session Report here... (e.g. === AI VOICE SESSION REPORT ===&#10;Phrases Mastered: ...&#10;Hesitations & Errors: ...&#10;Words to Review: ...)" style="width:100%;min-height:85px;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:12.5px;font-family:monospace;background:var(--card);color:var(--ink);box-sizing:border-box;margin-bottom:8px"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <button type="button" id="btnSaveClassAiReport" class="primary" style="font-size:13px;padding:6px 16px" onclick="saveClassAiVoiceReport()">💾 Save Session Report</button>
+          <span id="aiClassReportFeedback" style="font-size:12.5px;font-weight:600;color:var(--accent)"></span>
+        </div>
+        <div id="aiClassReportHistory" style="margin-top:10px"></div>
+      </div>
     </details>
   </div>
 
@@ -507,6 +524,7 @@ function renderVocabAndSentences() {
       });
     };
   }
+  renderClassAiReportHistory();
 }
 
 function playClassItem(encodedAr, type) {
@@ -546,9 +564,100 @@ function buildClassAiPrompt(cls) {
   p += `   - NEVER give long monologues or lectures.\n`;
   p += `   - Ask me ONE question or prompt at a time, then PAUSE and wait for me to speak.\n`;
   p += `   - If I make a mistake, gently model the correct phrase and ask me to repeat it once.\n`;
-  p += `4. Session Wrap-Up:\n`;
-  p += `   - When I say "I'm done" or after 5–10 minutes, output a 3-line progress summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n`;
+  p += `4. Session Wrap-Up & Coach Report:\n`;
+  p += `   - When I say "I'm done" or after 5–10 minutes, conclude warmly in spoken Arabic, then output a structured English report for my AI Coach in this EXACT format (so I can paste it back into my site to tailor future lessons):\n\n`;
+  p += `=== AI VOICE SESSION REPORT ===\n`;
+  p += `Lesson: ${cls.title || 'Preply Sunday Lesson'}\n`;
+  p += `Phrases Mastered: [Target sentences or variations Reza spoke accurately]\n`;
+  p += `Hesitations & Errors: [Phrases, sounds, or grammar where Reza stumbled or needed correction]\n`;
+  p += `Words to Review: [Specific Arabic words to reinforce in upcoming drills, e.g. شَقَّة، فُرْن]\n`;
+  p += `Next Recommended Focus: [1 actionable recommendation for the coach to tailor future lessons]\n`;
+  p += `===============================\n`;
   return p;
+}
+
+function saveClassAiVoiceReport() {
+  const box = document.getElementById("aiClassReportPaste");
+  const fb = document.getElementById("aiClassReportFeedback");
+  if (!box) return;
+  const text = box.value.trim();
+  if (text.length < 15) {
+    if (fb) {
+      fb.style.color = "var(--red)";
+      fb.textContent = "Please paste the AI's report first.";
+    }
+    return;
+  }
+
+  const cls = (CLASS_DATA && CLASS_DATA.classes && CLASS_DATA.classes[0]) || {};
+  const scope = cls.title || "Preply Sunday Lesson";
+  const wordsMatch = text.match(/Words to Review:\s*([^\n]+)/i);
+  const wordsToReview = wordsMatch ? wordsMatch[1].trim() : "";
+  const focusMatch = text.match(/Next Recommended Focus:\s*([^\n]+)/i);
+  const nextFocus = focusMatch ? focusMatch[1].trim() : "";
+
+  logEvent({
+    e: "ai-session-report",
+    scope: "Preply: " + scope,
+    classId: cls.id || "class",
+    report: text,
+    wordsToReview,
+    nextFocus,
+    t: Date.now()
+  });
+
+  logEvent({
+    e: "note",
+    text: `[AI Voice Report - Preply: ${scope}]\n${text}`,
+    ctx: { type: "ai-voice-report", scope: "Preply: " + scope, classId: cls.id || "class" },
+    t: Date.now()
+  });
+
+  logEvent({
+    e: "convo",
+    scenario: "ai-voice-class-" + (cls.id || "sunday"),
+    report: text,
+    t: Date.now()
+  });
+
+  if (typeof autoSync === "function") autoSync();
+
+  if (fb) {
+    fb.style.color = "var(--accent)";
+    fb.textContent = "✓ Report saved! Coach will tailor your upcoming lessons.";
+    setTimeout(() => { fb.textContent = ""; }, 3500);
+  }
+  box.value = "";
+  renderClassAiReportHistory();
+}
+
+function renderClassAiReportHistory() {
+  const container = document.getElementById("aiClassReportHistory");
+  if (!container) return;
+  const log = store.get("ats-log", []);
+  const reports = log.filter(x => x.e === "ai-session-report" || (x.e === "convo" && (x.scenario || "").startsWith("ai-voice-"))).slice().reverse();
+  if (!reports.length) {
+    container.innerHTML = "";
+    return;
+  }
+  const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  container.innerHTML = `
+    <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">Previous Voice Reports (${reports.length}):</div>
+    ${reports.slice(0, 3).map(r => {
+      const rep = r.report || "";
+      const dateStr = new Date(r.t || Date.now()).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+      const focus = (rep.match(/Next Recommended Focus:\s*([^\n]+)/i) || rep.match(/Words to Review:\s*([^\n]+)/i) || [])[1] || "";
+      return `
+        <details style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:12px">
+          <summary style="cursor:pointer;font-weight:600">
+            <span>📅 ${dateStr} · ${esc(r.scope || "Session")}</span>
+            ${focus ? `<span style="color:var(--muted);font-weight:normal"> — ${esc(focus.slice(0, 45))}…</span>` : ""}
+          </summary>
+          <pre style="white-space:pre-wrap;margin:6px 0 0;font-size:11.5px;color:var(--muted);font-family:monospace">${esc(rep)}</pre>
+        </details>
+      `;
+    }).join("")}
+  `;
 }
 
 function scrollToTest() {
