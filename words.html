@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muivqwju">
-  <link rel="stylesheet" href="css/style.css?v=muivqwju">
+  <link rel="stylesheet" href="css/fonts.css?v=muiw38oc">
+  <link rel="stylesheet" href="css/style.css?v=muiw38oc">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -197,10 +197,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muivqwju"></script>
-<script src="js/curriculum.js?v=muivqwju"></script>
-<script src="js/app.js?v=muivqwju"></script>
-<script src="js/tracker.js?v=muivqwju"></script>
+<script src="js/progress-model.js?v=muiw38oc"></script>
+<script src="js/curriculum.js?v=muiw38oc"></script>
+<script src="js/app.js?v=muiw38oc"></script>
+<script src="js/tracker.js?v=muiw38oc"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -257,12 +257,23 @@ const BATCH_SIZE = 20;
   }
 })();
 
-function getExposure(key) {
+function getExposure(key, ar) {
   const srs = getSrs();
-  const item = srs[key] || {};
+  let item = srs[key];
+  if (!item && ar) {
+    const norm = normalizeAr(ar).replace(/^ال/, "");
+    item = srs["tw:" + norm] || srs[norm];
+  }
+  item = item || {};
   const reps = item.reps || (item.u ? 1 : 0);
   const box = item.box != null ? item.box : 0;
-  return { reps, box, isNew: !item.u && reps === 0, isRetired: item.b === "never" };
+  return {
+    reps,
+    box,
+    isNew: !item.u && reps === 0,
+    isLeech: (box === 0 || box === 1) && reps >= 4,
+    isRetired: item.b === "never"
+  };
 }
 
 function updateOverallStats() {
@@ -568,8 +579,9 @@ function renderMasterTable() {
   const displaySlice = filtered.slice(0, 100);
 
   tbody.innerHTML = displaySlice.map((w, idx) => {
-    const exp = getExposure(w.key);
+    const exp = getExposure(w.key, w.ar);
     const item = srs[w.key] || {};
+    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
     const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
 
     return `
@@ -584,6 +596,7 @@ function renderMasterTable() {
         <td>
           <div style="font-weight:600">${w.en}</div>
           ${w.tr ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
+          ${w.note ? `<div style="font-size:11px;color:var(--muted)">${w.note}</div>` : ''}
         </td>
         <td>
           <span style="font-size:12px;color:var(--muted)">
@@ -591,8 +604,8 @@ function renderMasterTable() {
           </span>
         </td>
         <td>
-          <span class="exp-badge ${exp.isNew ? 'new' : ''}">
-            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}×`}
+          <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
+            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
           </span>
         </td>
         <td>
@@ -601,7 +614,13 @@ function renderMasterTable() {
           </span>
         </td>
         <td>
-          <button type="button" class="small" onclick="rateWord('${w.key}', 'strong', 0); renderMasterTable();">✓ Strong</button>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">
+            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateMasterWord('${w.key}', 'strong', '${encodeURIComponent(w.ar)}')">Strong</button>
+            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateMasterWord('${w.key}', 'medium', '${encodeURIComponent(w.ar)}')">Medium</button>
+            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateMasterWord('${w.key}', 'weak', '${encodeURIComponent(w.ar)}')">Weak</button>
+            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateMasterWord('${w.key}', 'learning', '${encodeURIComponent(w.ar)}')">Learning</button>
+            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateMasterWord('${w.key}', 'never', '${encodeURIComponent(w.ar)}')">Retire</button>
+          </div>
         </td>
       </tr>
     `;
@@ -610,6 +629,19 @@ function renderMasterTable() {
   if (filtered.length > 100) {
     tbody.innerHTML += `<tr><td colspan="7" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
   }
+}
+
+function rateMasterWord(key, bucket, encodedAr) {
+  setBucket(key, bucket);
+  if (encodedAr) {
+    const ar = decodeURIComponent(encodedAr);
+    const norm = normalizeAr(ar).replace(/^ال/, "");
+    if (norm) setBucket("tw:" + norm, bucket);
+  }
+  logEvent({ e: "vocab-rate", key, bucket, t: Date.now() });
+  autoSync();
+  updateOverallStats();
+  renderMasterTable();
 }
 
 /* Audio Toolbar Handling */

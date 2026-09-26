@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muivqwju">
-  <link rel="stylesheet" href="css/style.css?v=muivqwju">
+  <link rel="stylesheet" href="css/fonts.css?v=muiw38oc">
+  <link rel="stylesheet" href="css/style.css?v=muiw38oc">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -185,10 +185,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muivqwju"></script>
-<script src="js/curriculum.js?v=muivqwju"></script>
-<script src="js/app.js?v=muivqwju"></script>
-<script src="js/tracker.js?v=muivqwju"></script>
+<script src="js/progress-model.js?v=muiw38oc"></script>
+<script src="js/curriculum.js?v=muiw38oc"></script>
+<script src="js/app.js?v=muiw38oc"></script>
+<script src="js/tracker.js?v=muiw38oc"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -283,10 +283,19 @@ const BATCH_SIZE = 10;
 
 function getExposure(key) {
   const srs = getSrs();
-  const item = srs[key] || {};
+  let item = srs[key];
+  if (!item && key.startsWith("s:")) item = srs[key.slice(2)];
+  if (!item && !key.startsWith("s:")) item = srs["s:" + key];
+  item = item || {};
   const reps = item.reps || (item.u ? 1 : 0);
   const box = item.box != null ? item.box : 0;
-  return { reps, box, isNew: !item.u && reps === 0, isRetired: item.b === "never" };
+  return {
+    reps,
+    box,
+    isNew: !item.u && reps === 0,
+    isLeech: (box === 0 || box === 1) && reps >= 4,
+    isRetired: item.b === "never"
+  };
 }
 
 function updateOverallStats() {
@@ -592,16 +601,19 @@ function renderMasterBank() {
   container.innerHTML = displaySlice.map((s, idx) => {
     const exp = getExposure(s.key);
     const item = srs[s.key] || {};
+    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
     const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
 
     return `
-      <div class="bank-card">
+      <div class="bank-card" id="mcard-${idx}">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="font-size:12px;font-weight:700;color:var(--muted)">#${idx + 1}</span>
-            <span class="exp-badge ${exp.isNew ? 'new' : ''}">
+            <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
               ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
             </span>
+            ${item.due && item.due <= now && item.b !== 'never' ? `<span class="exp-badge" style="background:#fef3c7;color:#b45309">Due for Review</span>` : ''}
+            ${exp.isRetired ? `<span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted)">🚫 Retired</span>` : ''}
             <span style="font-size:11.5px;color:var(--accent);font-weight:600">${s.note || s.src}</span>
           </div>
           <button type="button" class="small" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
@@ -611,17 +623,33 @@ function renderMasterBank() {
         
         ${s.words && s.words.length ? `
           <div class="s-wbw">
-            ${s.words.map(w => `
-              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                <span class="w-ar">${w[0]}</span>
-                <span class="w-en">${w[1]}</span>
-              </div>
-            `).join("")}
+            ${s.words.map(w => {
+              const wNorm = normalizeAr(w[0]).replace(/^ال/, "");
+              const wKey = _wordKeyFor ? _wordKeyFor(wNorm) : null;
+              const wExp = wKey ? getExposure(wKey) : null;
+              const wDots = wExp && !wExp.isNew ? [1,2,3,4,5].map(b => b <= wExp.box ? "●" : "○").join("") : "";
+              return `
+                <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}${wExp && !wExp.isNew ? ` · Box ${wExp.box} (${wExp.reps}×)` : ''}">
+                  <span class="w-ar">${w[0]}</span>
+                  <span class="w-en">${w[1]}</span>
+                  ${wDots ? `<span style="font-size:9px;color:var(--accent);display:block;letter-spacing:0.5px">${wDots}</span>` : ''}
+                </div>
+              `;
+            }).join("")}
           </div>
         ` : ''}
 
         <div style="font-size:14.5px;font-weight:600;color:var(--ink)">${s.en}</div>
         ${s.tr ? `<div style="font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
+
+        <div class="rate-bar" style="margin-top:6px" onclick="event.stopPropagation()">
+          <span style="font-size:11px;color:var(--muted);margin-right:2px">Set SRS:</span>
+          <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" onclick="rateMasterSentence('${s.key}', 'strong')">Strong (30d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" onclick="rateMasterSentence('${s.key}', 'medium')">Medium (7d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" onclick="rateMasterSentence('${s.key}', 'weak')">Weak (2d)</button>
+          <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" onclick="rateMasterSentence('${s.key}', 'learning')">Learning</button>
+          <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" onclick="rateMasterSentence('${s.key}', 'never')">Don't repeat</button>
+        </div>
       </div>
     `;
   }).join("");
@@ -629,6 +657,25 @@ function renderMasterBank() {
   if (filtered.length > 50) {
     container.innerHTML += `<div style="text-align:center;padding:12px;font-size:12.5px;color:var(--muted)">Showing first 50 of ${filtered.length} matching sentences. Search to narrow down.</div>`;
   }
+}
+
+function rateMasterSentence(key, bucket) {
+  setBucket(key, bucket);
+  const s = MASTER_SENTENCES.find(x => x.key === key);
+  if (s) {
+    const g = (bucket === "strong" || bucket === "medium") ? "good" : "again";
+    (s.words || []).forEach(w => {
+      const norm = normalizeAr(w[0]).replace(/^ال/, "");
+      if (norm) {
+        const wid = _wordKeyFor ? _wordKeyFor(norm) : null;
+        if (wid) gradeCard(wid, g);
+      }
+    });
+    logEvent({ e: "sentence-rate", key, bucket, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
+  }
+  autoSync();
+  updateOverallStats();
+  renderMasterBank();
 }
 
 /* Audio Toolbar Handling */

@@ -178,20 +178,24 @@ function totalCards() { return Object.keys(getSrs()).length; }
 const NEVER_DUE = 4102444800000; // year 2100 — "don't repeat"
 const BUCKETS = [
   { id: "strong", label: "Strong", name: "Strong — known well, back in 30 days", days: 30, box: 5 },
-  { id: "know", label: "Strong", name: "Strong — known well", days: 30, box: 5 },
   { id: "medium", label: "Medium", name: "Medium — getting there, back in 7 days", days: 7, box: 3 },
-  { id: "later", label: "Medium", name: "Medium — back in 7 days", days: 7, box: 3 },
   { id: "weak", label: "Weak", name: "Weak — struggling, back in 2 days", days: 2, box: 1 },
   { id: "learning", label: "Learning", name: "Learning — fresh or missed, back in 10 mins", days: 0, box: 0 },
-  { id: "repeat", label: "Learning", name: "Learning — repeat soon", days: 0, box: 0 },
   { id: "never", label: "Don't repeat", name: "Don't repeat — already know / skip forever", days: null, box: 5 },
 ];
+const LEGACY_BUCKETS = {
+  know: { id: "strong", label: "Strong", name: "Strong — known well", days: 30, box: 5 },
+  later: { id: "medium", label: "Medium", name: "Medium — back in 7 days", days: 7, box: 3 },
+  repeat: { id: "learning", label: "Learning", name: "Learning — repeat soon", days: 0, box: 0 },
+};
 function setBucket(key, b) {
   const srs = getSrs();
-  const def = BUCKETS.find(x => x.id === b);
+  const def = BUCKETS.find(x => x.id === b) || LEGACY_BUCKETS[b];
   if (!def) return;
-  const due = b === "never" ? NEVER_DUE : (b === "repeat" ? Date.now() + 10 * 60 * 1000 : Date.now() + def.days * DAY);
-  srs[key] = { box: def.box, due, b, u: Date.now() };
+  const canonicalId = def.id;
+  const due = canonicalId === "never" ? NEVER_DUE : (b === "repeat" ? Date.now() + 10 * 60 * 1000 : Date.now() + def.days * DAY);
+  const curItem = srs[key] || {};
+  srs[key] = { box: def.box, due, b: canonicalId, reps: (curItem.reps || 0) + 1, u: Date.now() };
   store.set("ats-srs", srs);
 }
 /* ---------- ⊘ don't repeat ----------
@@ -2000,7 +2004,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muivqwju";
+const DATA_V = "muiw38oc";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2732,8 +2736,8 @@ function mountBucketBar(slot, key, onSet) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = b.label;
-    btn.title = b.name;
-    if (b.id === current && marked) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    const isMatch = (b.id === current) || (b.id === "strong" && current === "know") || (b.id === "medium" && current === "later") || (b.id === "learning" && current === "repeat");
+    if (isMatch && marked) btn.classList.add("sel", b.id === "never" ? "never" : "x");
     btn.onclick = () => {
       setBucket(key, b.id);
       logEvent({ e: "bucket", key, b: b.id });

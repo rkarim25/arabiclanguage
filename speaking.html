@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muivqwju">
-  <link rel="stylesheet" href="css/style.css?v=muivqwju">
+  <link rel="stylesheet" href="css/fonts.css?v=muiw38oc">
+  <link rel="stylesheet" href="css/style.css?v=muiw38oc">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -67,9 +67,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=muivqwju"></script>
-<script src="js/tracker.js?v=muivqwju"></script>
-<script src="js/plan.js?v=muivqwju"></script>
+<script src="js/app.js?v=muiw38oc"></script>
+<script src="js/tracker.js?v=muiw38oc"></script>
+<script src="js/plan.js?v=muiw38oc"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -302,8 +302,8 @@ function mountBucketBar(slot, key) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = b.label;
-    btn.title = b.name;
-    if (b.id === current && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
+    const isMatch = (b.id === current) || (b.id === "strong" && current === "know") || (b.id === "medium" && current === "later") || (b.id === "learning" && current === "repeat");
+    if (isMatch && getSrs()[key] && getSrs()[key].b) btn.classList.add("sel", b.id === "never" ? "never" : "x");
     btn.onclick = () => {
       setBucket(key, b.id);
       logEvent({ e: "bucket", key, b: b.id, src: "speaking" });
