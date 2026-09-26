@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwau80">
-  <link rel="stylesheet" href="css/style.css?v=muiwau80">
+  <link rel="stylesheet" href="css/fonts.css?v=muiwlf7f">
+  <link rel="stylesheet" href="css/style.css?v=muiwlf7f">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -49,7 +49,9 @@
     .tr-text { font-style: italic; color: var(--muted); }
     .src-tag { color: var(--accent); font-weight: 600; font-size: 11px; }
 
-    /* Exposure & Depth Badge */
+    /* Exposure Dots (Minimalist circles) */
+    .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
+    .exp-dots-only.new { color: #94a3b8; }
     .exp-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: rgba(0,0,0,0.05); color: var(--muted); white-space: nowrap; }
     .exp-badge.new { background: #e0f2fe; color: #0284c7; }
     .exp-badge.leech { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
@@ -62,6 +64,7 @@
     .revealed-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .revealed-ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); line-height: 1.3; }
     .revealed-en { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+    .revealed-note { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.35; }
     .root-tag { font-size: 11px; color: var(--accent); background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
     .icon-btn { padding: 2px 7px; font-size: 12px; }
 
@@ -171,10 +174,10 @@
           <thead>
             <tr>
               <th style="width:28px;text-align:center">#</th>
-              <th style="width:26%">Prompt</th>
-              <th style="width:30%">Check / Recall</th>
-              <th style="width:14%">Exposure</th>
-              <th style="width:30%;text-align:right">SRS Rating</th>
+              <th style="width:28%">Prompt</th>
+              <th style="width:38%">Check / Recall</th>
+              <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
+              <th style="text-align:right">SRS Rating</th>
             </tr>
           </thead>
           <tbody id="wordList">
@@ -207,7 +210,7 @@
               <th>Arabic</th>
               <th>English Meaning</th>
               <th>Category</th>
-              <th>Exposure Depth</th>
+              <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
               <th>SRS Status</th>
               <th>Action</th>
             </tr>
@@ -221,10 +224,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwau80"></script>
-<script src="js/curriculum.js?v=muiwau80"></script>
-<script src="js/app.js?v=muiwau80"></script>
-<script src="js/tracker.js?v=muiwau80"></script>
+<script src="js/progress-model.js?v=muiwlf7f"></script>
+<script src="js/curriculum.js?v=muiwlf7f"></script>
+<script src="js/app.js?v=muiwlf7f"></script>
+<script src="js/tracker.js?v=muiwlf7f"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -415,11 +418,7 @@ function render20Cards() {
         <td>
           ${isEnFirst ? `
             <div class="prompt-text">${w.en}</div>
-            <div class="prompt-sub">
-              ${w.tr ? `<span class="tr-text">${w.tr}</span> · ` : ''}
-              ${w.note ? w.note + ' · ' : ''}
-              <span class="src-tag">${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : '🗣 Everyday'}</span>
-            </div>
+            <div class="prompt-sub"><span class="src-tag">${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : '🗣 Everyday'}</span></div>
           ` : `
             <div class="prompt-text ar">
               <span class="arabic" dir="rtl">${w.ar}</span>
@@ -438,17 +437,18 @@ function render20Cards() {
               <div class="revealed-wrap">
                 <span class="arabic revealed-ar" dir="rtl">${w.ar}</span>
                 <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
+                ${w.tr ? `<span class="tr-text">${w.tr}</span>` : ''}
                 ${w.root ? `<span class="root-tag">🌿 ${w.root}</span>` : ''}
               </div>
+              ${w.note ? `<div class="revealed-note" dir="rtl">${w.note}</div>` : ''}
             ` : `
               <div class="revealed-en">${w.en} ${w.tr ? `<span class="tr-text">(${w.tr})</span>` : ''}</div>
+              ${w.note ? `<div class="revealed-note">${w.note}</div>` : ''}
             `}
           `}
         </td>
-        <td>
-          <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
-            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> ${exp.reps}× · B${exp.box}`}
-          </span>
+        <td style="text-align:center">
+          <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New word' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
@@ -627,10 +627,8 @@ function renderMasterTable() {
             ${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : w.src === 'root' ? '🌿 Root' : '🗣 Everyday'}
           </span>
         </td>
-        <td>
-          <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
-            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> Seen ${exp.reps}× · Box ${exp.box}`}
-          </span>
+        <td style="text-align:center">
+          <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New word' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
         </td>
         <td>
           <span style="font-size:12px;font-weight:600;color:${exp.isRetired ? 'var(--muted)' : exp.box >= 4 ? '#059669' : exp.box >= 2 ? '#0284c7' : '#d97706'}">

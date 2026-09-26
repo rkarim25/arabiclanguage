@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwau80">
-  <link rel="stylesheet" href="css/style.css?v=muiwau80">
+  <link rel="stylesheet" href="css/fonts.css?v=muiwlf7f">
+  <link rel="stylesheet" href="css/style.css?v=muiwlf7f">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -33,49 +33,48 @@
     .chip:hover { border-color: var(--accent); }
     .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
 
-    /* Excel-like Sheet Table for Sentences */
-    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
-    .sheet-table { width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left; }
-    .sheet-table th { background: rgba(0,0,0,0.02); padding: 8px 10px; border-bottom: 2px solid var(--border); font-size: 11.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .sheet-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .sheet-row { transition: background 0.1s; cursor: pointer; }
-    .sheet-row:hover { background: rgba(13, 122, 95, 0.04); }
-    .sheet-row.playing { background: rgba(13, 122, 95, 0.09); border-left: 3px solid var(--accent); }
-    .col-num { color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; }
+    /* Compact Sentence Cards (One Below Another, Sleek & Neat) */
+    .sentence-list { display: flex; flex-direction: column; gap: 9px; margin-top: 6px; }
+    .s-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.15s; }
+    .s-card:hover { border-color: var(--accent); }
+    .s-card.revealed { background: rgba(13, 122, 95, 0.02); }
+    .s-card.playing { border-color: var(--accent); background: rgba(13, 122, 95, 0.08); border-left: 4px solid var(--accent); }
 
-    .prompt-text { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
-    .prompt-text.ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.4; }
-    .prompt-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-    .tr-text { font-style: italic; color: var(--muted); }
+    .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; }
+    .s-num { color: var(--muted); font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .s-prompt-text { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); direction: rtl; text-align: right; }
+    
+    .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
+    .exp-dots-only.new { color: #94a3b8; }
     .src-tag { color: var(--accent); font-weight: 600; font-size: 11px; }
 
-    /* Exposure & Depth Badge */
-    .exp-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: rgba(0,0,0,0.05); color: var(--muted); white-space: nowrap; }
-    .exp-badge.new { background: #e0f2fe; color: #0284c7; }
-    .exp-badge.leech { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-    .exp-dots { color: var(--accent); letter-spacing: 1px; }
+    .s-action-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: 1px dashed var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; user-select: none; }
+    .s-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
-    /* Reveal Button & Revealed Content */
-    .sheet-reveal-btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: 1px dashed var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; user-select: none; white-space: nowrap; }
-    .sheet-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-    
-    .revealed-sent-wrap { display: flex; flex-direction: column; gap: 4px; }
-    .revealed-ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); line-height: 1.4; }
-    .revealed-en { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.35; }
-    .icon-btn { padding: 2px 7px; font-size: 12px; }
+    .s-rate-bar { display: inline-flex; gap: 4px; flex-wrap: wrap; align-items: center; margin-left: auto; }
+    .s-rate-bar .rate-btn { padding: 3px 8px; font-size: 11px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-weight: 600; transition: all 0.1s; }
+    .rate-btn:hover { transform: translateY(-1px); }
+
+    .s-revealed-body { display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px; border-top: 1px dashed var(--border); }
+    .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 24px; color: var(--accent); line-height: 1.5; flex: 1; text-align: right; }
+    .s-en-line { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+    .s-tr-line { font-size: 12px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
-    .s-wbw-compact { display: flex; flex-wrap: wrap; gap: 4px; direction: rtl; margin-top: 3px; }
-    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; background: var(--bg); font-size: 11.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
+    .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 5px; direction: rtl; margin-top: 4px; }
+    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--bg); font-size: 11.5px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 1px; transition: all 0.1s; }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 14.5px; color: var(--accent); }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 15px; color: var(--accent); line-height: 1.25; }
     .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
 
-    /* Compact Rating Pills in Excel row */
-    .sheet-rate-bar { display: inline-flex; gap: 4px; flex-wrap: nowrap; align-items: center; justify-content: flex-end; }
-    .sheet-rate-bar .rate-btn { padding: 3px 8px; font-size: 11px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--border); background: var(--card); cursor: pointer; font-weight: 600; transition: all 0.1s; }
-    .rate-btn:hover { transform: translateY(-1px); }
-    
+    .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
+
+    /* Rating Pills Colors */
     .rate-btn[data-b="strong"] { color: #047857; border-color: #a7f3d0; }
     .rate-btn[data-b="strong"].selected { background: #059669; color: #fff; border-color: #059669; }
 
@@ -98,13 +97,12 @@
     .audio-toolbar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
     /* Master Bank Table & Controls */
+    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
     .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--card); color: var(--ink); }
     .m-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
     .m-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(0,0,0,0.02); }
     .m-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     .m-table tr:hover { background: rgba(13, 122, 95, 0.04); }
-    .bank-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-    .bank-card:hover { border-color: var(--accent); }
 
     /* Completion Banner */
     .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
@@ -174,22 +172,7 @@
         <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
         <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
       </div>
-      <div class="sheet-wrap">
-        <table class="sheet-table">
-          <thead>
-            <tr>
-              <th style="width:28px;text-align:center">#</th>
-              <th style="width:28%">Prompt</th>
-              <th style="width:34%">Check / Response & Words</th>
-              <th style="width:12%">Exposure</th>
-              <th style="width:26%;text-align:right">SRS Rating</th>
-            </tr>
-          </thead>
-          <tbody id="sentenceList">
-            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading sentences…</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="sentence-list" id="sentenceList">Loading sentences…</div>
       <div id="doneArea"></div>
     </div>
   </div>
@@ -213,9 +196,9 @@
             <tr>
               <th style="width:28px">#</th>
               <th style="width:26%">Arabic Sentence</th>
-              <th style="width:32%">English Meaning & Breakdown</th>
+              <th style="width:34%">English Meaning & Breakdown</th>
               <th style="width:12%">Source</th>
-              <th style="width:12%">Exposure</th>
+              <th style="width:55px;text-align:center" title="SRS Box Depth (1-5)">Box</th>
               <th style="width:18%;text-align:right">SRS Rating</th>
             </tr>
           </thead>
@@ -229,10 +212,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwau80"></script>
-<script src="js/curriculum.js?v=muiwau80"></script>
-<script src="js/app.js?v=muiwau80"></script>
-<script src="js/tracker.js?v=muiwau80"></script>
+<script src="js/progress-model.js?v=muiwlf7f"></script>
+<script src="js/curriculum.js?v=muiwlf7f"></script>
+<script src="js/app.js?v=muiwlf7f"></script>
+<script src="js/tracker.js?v=muiwlf7f"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -437,74 +420,78 @@ function render10Cards() {
     const exp = getExposure(s.key);
     const isRevealed = REVEALED.has(idx);
     const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+    const srcLabel = s.src === 'chapters' ? '📖 Daily Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday';
 
     return `
-      <tr class="sheet-row ${isRevealed ? 'revealed' : ''}" id="srow-${idx}" onclick="handleCardClick(${idx}, event)">
-        <td class="col-num">${idx + 1}</td>
-        <td>
-          ${isEnFirst ? `
-            <div class="prompt-text">${s.en}</div>
-            <div class="prompt-sub">
-              ${s.tr ? `<span class="tr-text">${s.tr}</span> · ` : ''}
-              ${s.hint ? s.hint + ' · ' : ''}
-              <span class="src-tag">${s.src === 'chapters' ? '📖 Daily Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply Class' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday'}</span>
-            </div>
-          ` : `
-            <div class="prompt-text ar">
-              <span class="arabic" dir="rtl">${s.ar}</span>
-              <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
-            </div>
-            <div class="prompt-sub">
-              ${s.hint ? s.hint + ' · ' : ''}
-              <span class="src-tag">${s.src === 'chapters' ? '📖 Daily Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday'}</span>
-            </div>
-          `}
-        </td>
-        <td>
-          ${!isRevealed ? `
-            <div class="sheet-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Check ${isEnFirst ? 'Arabic & Words' : 'Meaning & Breakdown'}
-            </div>
-          ` : `
-            <div class="revealed-sent-wrap">
-              ${isEnFirst ? `
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span class="arabic revealed-ar" dir="rtl">${s.ar}</span>
-                  <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
-                </div>
-                ${s.tr ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
-              ` : `
-                <div class="revealed-en">${s.en} ${s.tr ? `<span class="tr-text">(${s.tr})</span>` : ''}</div>
-              `}
-              ${s.words && s.words.length ? `
-                <div class="s-wbw-compact" onclick="event.stopPropagation()">
-                  ${s.words.map(w => `
-                    <div class="wbw-chip-sm" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                      <span class="w-ar">${w[0]}</span>
-                      <span class="w-en">${w[1]}</span>
-                    </div>
-                  `).join("")}
-                </div>
-              ` : ''}
-              ${s.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
-            </div>
-          `}
-        </td>
-        <td>
-          <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
-            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> ${exp.reps}× · B${exp.box}`}
-          </span>
-        </td>
-        <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateSentence('${s.key}', 'never', ${idx})">Retire</button>
+      <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+        <div class="s-head">
+          <div class="s-prompt-wrap">
+            <span class="s-num">#${idx + 1}</span>
+            <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
+              ${isEnFirst ? s.en : s.ar}
+            </span>
+            ${!isEnFirst ? `<button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊</button>` : ''}
           </div>
-        </td>
-      </tr>
+          <div class="s-meta-wrap">
+            <span class="src-tag">${srcLabel}</span>
+            <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New sentence' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
+          </div>
+        </div>
+
+        ${!isRevealed ? `
+          <div class="s-action-bar">
+            <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
+              👁️ Check ${isEnFirst ? 'Arabic sentence & vocabulary' : 'English translation & vocabulary'} ▾
+            </div>
+            <div class="s-rate-bar" onclick="event.stopPropagation()">
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateSentence('${s.key}', 'never', ${idx})">Retire</button>
+            </div>
+          </div>
+        ` : `
+          <div class="s-revealed-body">
+            ${isEnFirst ? `
+              <div class="s-ar-line">
+                <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
+                <button type="button" class="small icon-btn s-audio-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>
+              </div>
+              ${s.tr ? `<div class="s-tr-line">${s.tr}</div>` : ''}
+            ` : `
+              <div class="s-en-line">${s.en}</div>
+              ${s.tr ? `<div class="s-tr-line">${s.tr}</div>` : ''}
+            `}
+
+            ${s.words && s.words.length ? `
+              <div class="s-wbw-wrap" onclick="event.stopPropagation()">
+                ${s.words.map(w => `
+                  <div class="wbw-chip-sm" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                    <span class="w-ar">${w[0]}</span>
+                    <span class="w-en">${w[1]}</span>
+                  </div>
+                `).join("")}
+              </div>
+            ` : ''}
+
+            ${(s.note || s.hint) ? `
+              <div class="s-hint-line">💡 ${s.note || s.hint}</div>
+            ` : ''}
+          </div>
+
+          <div class="s-action-bar" style="margin-top:4px">
+            <span style="font-size:11.5px;color:var(--muted)">Rate recall:</span>
+            <div class="s-rate-bar" onclick="event.stopPropagation()">
+              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="Strong (30d)" onclick="rateSentence('${s.key}', 'strong', ${idx})">Strong</button>
+              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="Medium (7d)" onclick="rateSentence('${s.key}', 'medium', ${idx})">Medium</button>
+              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="Weak (2d)" onclick="rateSentence('${s.key}', 'weak', ${idx})">Weak</button>
+              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="Learning" onclick="rateSentence('${s.key}', 'learning', ${idx})">Learning</button>
+              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Don't repeat" onclick="rateSentence('${s.key}', 'never', ${idx})">Retire</button>
+            </div>
+          </div>
+        `}
+      </div>
     `;
   }).join("");
 
@@ -512,7 +499,7 @@ function render10Cards() {
 }
 
 function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest(".sheet-rate-bar") || e.target.closest(".rate-bar") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip")) return;
+  if (e.target.closest("button") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip")) return;
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }
@@ -698,12 +685,10 @@ function renderMasterBank() {
             ${s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday'}
           </span>
         </td>
-        <td>
-          <span class="exp-badge ${exp.isNew ? 'new' : exp.isLeech ? 'leech' : ''}">
-            ${exp.isNew ? '✨ New' : `<span class="exp-dots">${dots}</span> ${exp.reps}× · B${exp.box}`}
-          </span>
-          ${item.due && item.due <= now && item.b !== 'never' ? `<div style="margin-top:2px"><span class="exp-badge" style="background:#fef3c7;color:#b45309;font-size:10px">Due</span></div>` : ''}
-          ${exp.isRetired ? `<div style="margin-top:2px"><span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10px">Retired</span></div>` : ''}
+        <td style="text-align:center">
+          <span class="exp-dots-only ${exp.isNew ? 'new' : ''}" title="${exp.isNew ? 'New' : `Box ${exp.box} · Seen ${exp.reps}×`}">${dots}</span>
+          ${item.due && item.due <= now && item.b !== 'never' ? `<div style="margin-top:2px"><span class="exp-badge" style="background:#fef3c7;color:#b45309;font-size:10px;padding:1px 5px">Due</span></div>` : ''}
+          ${exp.isRetired ? `<div style="margin-top:2px"><span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10px;padding:1px 5px">Ret.</span></div>` : ''}
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">
