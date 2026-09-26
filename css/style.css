@@ -71,9 +71,18 @@ nav .spacer { flex: 1; }
 }
 
 main {
-  max-width: 860px;
+  width: 100%;
+  max-width: 1380px;
   margin: 0 auto;
-  padding: 28px 18px 80px;
+  padding: 24px 28px 80px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1600px) {
+  main {
+    max-width: 1560px;
+    padding: 28px 36px 80px;
+  }
 }
 
 /* ---------- Cards & general ---------- */
@@ -366,6 +375,7 @@ footer a { color: var(--accent); }
   nav .brand { font-size: 0; gap: 0; }           /* keep only the Arabic wordmark */
   nav .brand .ar { font-size: 19px; }
   nav a.link { padding: 6px 8px; font-size: 13px; }
+  .card { padding: 16px 14px; border-radius: 12px; }
   .story-text { font-size: 24px; line-height: 2.2; }
   .flashcard .front { font-size: 34px; }
   .steps { gap: 4px; }

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muiwlf7f">
-  <link rel="stylesheet" href="css/style.css?v=muiwlf7f">
+  <link rel="stylesheet" href="css/fonts.css?v=muiwnmmy">
+  <link rel="stylesheet" href="css/style.css?v=muiwnmmy">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -103,6 +103,18 @@
 
     /* Completion Banner */
     .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
+
+    /* Mobile & Flexible Responsive Layout */
+    @media (max-width: 768px) {
+      .v-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .stat-strip { width: 100%; justify-content: space-between; }
+      .control-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .dir-toggle { display: flex; width: 100%; }
+      .dir-btn { flex: 1; text-align: center; }
+      .filter-chips { gap: 5px; }
+      .chip { font-size: 11.5px; padding: 3px 9px; }
+      .sheet-table, .m-table { min-width: 580px; }
+    }
   </style>
 </head>
 <body>
@@ -224,10 +236,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muiwlf7f"></script>
-<script src="js/curriculum.js?v=muiwlf7f"></script>
-<script src="js/app.js?v=muiwlf7f"></script>
-<script src="js/tracker.js?v=muiwlf7f"></script>
+<script src="js/progress-model.js?v=muiwnmmy"></script>
+<script src="js/curriculum.js?v=muiwnmmy"></script>
+<script src="js/app.js?v=muiwnmmy"></script>
+<script src="js/tracker.js?v=muiwnmmy"></script>
 <script>
 renderNav("words");
 trackPage("words");
