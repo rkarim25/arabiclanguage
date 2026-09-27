@@ -140,6 +140,38 @@ button.primary:disabled:hover { background: var(--accent); }
 .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
 .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
+/* ---------- Side-by-side Sentence Layout (Responsive) ---------- */
+.s-content-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+.s-meta-side {
+  flex: 1 1 auto;
+  min-width: 220px;
+}
+.s-ar-side {
+  flex: 1 1 auto;
+  min-width: 220px;
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .s-content-wrap {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .s-ar-side {
+    text-align: right;
+    min-width: 0;
+  }
+  .s-meta-side {
+    min-width: 0;
+  }
+}
+
 /* ---------- Dashboard story cards ---------- */
 .story-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
 .story-card {

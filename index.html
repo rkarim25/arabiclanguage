@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
-  <link rel="stylesheet" href="css/style.css?v=muixql21">
+  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muixql21"></script>
-<script src="js/curriculum.js?v=muixql21"></script>
-<script src="js/app.js?v=muixql21"></script>
-<script src="js/tracker.js?v=muixql21"></script>
-<script src="js/plan.js?v=muixql21"></script>
-<script src="js/account.js?v=muixql21"></script>
+<script src="js/progress-model.js?v=mujdxv05"></script>
+<script src="js/curriculum.js?v=mujdxv05"></script>
+<script src="js/app.js?v=mujdxv05"></script>
+<script src="js/tracker.js?v=mujdxv05"></script>
+<script src="js/plan.js?v=mujdxv05"></script>
+<script src="js/account.js?v=mujdxv05"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2675,12 +2675,17 @@ function loadChapter(chap) {
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration">🔤 Translit</button>` : ''}
           </div>
         </div>
-        <div class="s-ar-line" style="margin-bottom:6px">
-          <span class="arabic s-ar" dir="rtl" style="font-size:23px;color:var(--accent);display:block;line-height:1.5">${s.ar}</span>
+        <div class="s-content-wrap">
+          <div class="s-meta-side">
+            <div class="s-en" id="day-en-${idx}" style="display:none;font-size:15px;font-weight:600;color:var(--ink);line-height:1.4">${s.en}</div>
+            ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:3px">${s.tr}</div>` : ''}
+          </div>
+          <div class="s-ar-side">
+            <span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+          </div>
         </div>
-        ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none;margin-bottom:6px;font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
         ${s.words && s.words.length ? `
-          <div class="s-wbw" id="day-wbw-${idx}" style="display:none;margin-bottom:6px">
+          <div class="s-wbw" id="day-wbw-${idx}" style="display:none;margin-top:8px">
             ${s.words.map(w => `
               <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
                 <span class="w-ar">${w[0]}</span>
@@ -2689,9 +2694,6 @@ function loadChapter(chap) {
             `).join("")}
           </div>
         ` : ''}
-        <div class="s-en-line" id="day-en-${idx}" style="display:none;margin-top:4px">
-          <div class="s-en" style="font-size:14.5px;font-weight:600;color:var(--ink)">${s.en}</div>
-        </div>
       </div>
     `).join("")}
   `;

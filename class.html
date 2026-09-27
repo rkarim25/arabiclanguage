@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muixql21">
-  <link rel="stylesheet" href="css/style.css?v=muixql21">
+  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -229,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muixql21"></script>
-<script src="js/curriculum.js?v=muixql21"></script>
-<script src="js/app.js?v=muixql21"></script>
-<script src="js/tracker.js?v=muixql21"></script>
-<script src="js/plan.js?v=muixql21"></script>
+<script src="js/progress-model.js?v=mujdxv05"></script>
+<script src="js/curriculum.js?v=mujdxv05"></script>
+<script src="js/app.js?v=mujdxv05"></script>
+<script src="js/tracker.js?v=mujdxv05"></script>
+<script src="js/plan.js?v=mujdxv05"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -307,17 +307,25 @@ function renderPassage() {
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnTr-${idx}" onclick="togglePassageTr(${idx})">🔤 Transliteration</button>` : ''}
           </div>
         </div>
-        <div class="p-ar">${s.ar}</div>
-        <div class="p-wbw" id="wbw-${idx}" style="display:none">
-          ${s.words.map(w => `
-            <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-              <span class="w-ar">${w[0]}</span>
-              <span class="w-en">${w[1]}</span>
-            </div>
-          `).join("")}
+        <div class="s-content-wrap">
+          <div class="s-meta-side">
+            <div class="p-en" id="en-${idx}" style="display:none;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45">${s.en}</div>
+            ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+          </div>
+          <div class="s-ar-side">
+            <div class="p-ar" style="margin:0">${s.ar}</div>
+          </div>
         </div>
-        <div class="p-en" id="en-${idx}" style="display:none">${s.en}</div>
-        ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none">${s.tr}</div>` : ''}
+        ${s.words && s.words.length ? `
+          <div class="p-wbw" id="wbw-${idx}" style="display:none;margin-top:8px">
+            ${s.words.map(w => `
+              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                <span class="w-ar">${w[0]}</span>
+                <span class="w-en">${w[1]}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : ''}
       </div>
     `).join("")}
   `;
@@ -665,11 +673,15 @@ function renderVocabAndSentences() {
             ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
           </div>
         </div>
-        <div style="margin-bottom:4px">
-          <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+        <div class="s-content-wrap">
+          <div class="s-meta-side">
+            <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45">${s.en}</div>
+            ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+          </div>
+          <div class="s-ar-side">
+            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+          </div>
         </div>
-        ${s.tr ? `<div id="cls-tr-${idx}" class="p-tr" style="display:none;margin-bottom:4px;font-size:12px;color:var(--muted);font-style:italic">${s.tr}</div>` : ''}
-        <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:14px;font-weight:600;color:var(--ink)">${s.en}</div>
       </div>
     `).join("")}
   `;
