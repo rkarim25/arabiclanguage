@@ -105,6 +105,16 @@ const SPEC = [
      unstructured. i need you to give it as much structure as possible." So her
      scattered words were sorted into the sets they belong to and each set was
      completed — every item carries from:"teacher" or from:"complete". */
+  { id: "ms-class-0927", track: "conv", level: "conv-a1", source: "teacher",
+    name: "A Working Day & The Protection Surahs (class, 27 Sep)",
+    can: "describe your daily routine, hours and chores, and understand the protective concepts of Surah Al-Falaq and Surah An-Nas",
+    why: "From your Sunday Preply class: your daily schedule and verbs from morning to night, paired with the protective concepts of the Mu'awwidhatayn.",
+    lessons: [
+      { title: "Class words — daily routine and chores", src: { ev: "lesson-routine" } },
+      { title: "Class words — protection & Qur'an concepts", src: { ev: "lesson-muawwidhatayn" } },
+      { title: "A Working Day & The Day Off — the reading", src: { story: "story-08" } },
+    ] },
+
   { id: "ms-class-0830", track: "conv", level: "conv-a1", source: "teacher",
     name: "Your flat, the week, and the family (class, 30 Aug)",
     can: "describe a flat room by room, name any day of the week, and ask whether a place is available",

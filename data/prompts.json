@@ -1972,6 +1972,121 @@
    "lesson": "Ladder core — getting help",
    "pattern": "demonstratives",
    "frame": "demonstratives"
+  },
+  {
+   "en": "On a work day, I wake up early at seven in the morning.",
+   "ar": "فِي يَوْمِ العَمَلِ أَسْتَيْقِظُ مُبَكِّرًا فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا.",
+   "tr": "fī yawmi l-ʿamal, astayqiẓu mubakkiran fī s-sāʿati s-sābiʿati ṣabāḥan",
+   "keys": [
+    "ev-lesson-routine:1",
+    "ev-lesson-routine:3",
+    "ev-lesson-routine:5",
+    "ev-lesson-routine:8",
+    "ev-lesson-routine:9"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "I wash my face and put on my clothes, then I go to the mosque.",
+   "ar": "أَغْسِلُ وَجْهِي وَأَلْبَسُ مَلَابِسِي ثُمَّ أَذْهَبُ إِلَى المَسْجِدِ.",
+   "tr": "aghsilu wajhī wa-albasu malābisī thumma adhhabu ilā l-masjid",
+   "keys": [
+    "ev-lesson-routine:10",
+    "ev-lesson-routine:11",
+    "ev-lesson-routine:12"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "After the prayer I return home and eat breakfast.",
+   "ar": "بَعْدَ الصَّلَاةِ أَعُودُ إِلَى البَيْتِ وَأَتَنَاوَلُ الفَطُورَ.",
+   "tr": "baʿda ṣ-ṣalāti aʿūdu ilā l-bayti wa-atanāwalu l-faṭūr",
+   "keys": [
+    "ev-lesson-routine:13",
+    "ev-lesson-routine:14",
+    "ev-lesson-routine:15"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "At eight o'clock I go to school in my car.",
+   "ar": "فِي السَّاعَةِ الثَّامِنَةِ أَذْهَبُ إِلَى المَدْرَسَةِ فِي سَيَّارَتِي.",
+   "tr": "fī s-sāʿati th-thāminati adhhabu ilā l-madrasati fī sayyāratī",
+   "keys": [
+    "ev-lesson-routine:6"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "At twelve o'clock I return home.",
+   "ar": "فِي السَّاعَةِ الثَّانِيَةَ عَشْرَةَ أَعُودُ إِلَى البَيْتِ.",
+   "tr": "fī s-sāʿati th-thāniyata ʿashrata aʿūdu ilā l-bayt",
+   "keys": [
+    "ev-lesson-routine:7",
+    "ev-lesson-routine:13"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "I help my mother sweep the house and wash the dishes.",
+   "ar": "أُسَاعِدُ أُمِّي فِي كَنَسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ.",
+   "tr": "usāʿidu ummī fī kanasi l-bayti wa-ghasli l-aṭbāq",
+   "keys": [
+    "ev-lesson-routine:18",
+    "ev-lesson-routine:19",
+    "ev-lesson-routine:20"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "As for on the day off, I wake up late.",
+   "ar": "أَمَّا فِي يَوْمِ العُطْلَةِ فَأَسْتَيْقِظُ مُتَأَخِّرًا.",
+   "tr": "ammā fī yawmi l-ʿuṭlati fa-astayqiẓu mutaʾakhkhiran",
+   "keys": [
+    "ev-lesson-routine:2",
+    "ev-lesson-routine:4",
+    "ev-lesson-routine:9"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "I read a book before I sleep.",
+   "ar": "أَقْرَأُ كِتَابًا قَبْلَ أَنْ أَنَامَ.",
+   "tr": "aqraʾu kitāban qabla an anām",
+   "keys": [
+    "ev-lesson-routine:24"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "When do you return home on a work day?",
+   "ar": "مَتَى تَعُودُ إِلَى البَيْتِ فِي يَوْمِ العَمَلِ؟",
+   "tr": "matā taʿūdu ilā l-bayti fī yawmi l-ʿamal?",
+   "keys": [
+    "ev-questions:4",
+    "ev-lesson-routine:1",
+    "ev-lesson-routine:13"
+   ],
+   "source": "class-built",
+   "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "I love the work day because I learn new things.",
+   "ar": "أُحِبُّ يَوْمَ العَمَلِ لِأَنَّنِي أَتَعَلَّمُ أَشْيَاءَ جَدِيدَةً.",
+   "tr": "uḥibbu yawma l-ʿamali li-annanī ataʿallamu ashyāʾa jadīdah",
+   "keys": [
+    "ev-lesson-routine:1"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 27 Sep: a working day"
   }
  ]
 }

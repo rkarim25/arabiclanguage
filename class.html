@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujffoya">
-  <link rel="stylesheet" href="css/style.css?v=mujffoya">
+  <link rel="stylesheet" href="css/fonts.css?v=muk2v7lt">
+  <link rel="stylesheet" href="css/style.css?v=muk2v7lt">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -18,9 +18,10 @@
     .passage-line:last-child { border-bottom: none; }
     .p-ar { font-family: var(--font-ar); font-size: 24px; line-height: 2.0; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 6px; }
     .p-wbw { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 6px 0; }
-    .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--card); font-size: 13px; cursor: pointer; }
+    .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--card); font-size: 13px; cursor: pointer; transition: all 0.12s; }
     .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
     .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--accent); display: block; }
+    .wbw-chip .w-en { font-size: 11.5px; color: var(--muted); display: block; }
     .p-en { font-size: 14px; color: var(--muted); margin-top: 4px; }
     .p-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 3px; }
     
@@ -36,7 +37,7 @@
       .tbl td { padding: 10px 6px; }
     }
 
-    /* Colored SRS Rating Dots (Replaces wordy pills) */
+    /* Colored SRS Rating Dots */
     .rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
     .rate-btn {
       width: 22px;
@@ -88,12 +89,29 @@
     .vocab-reveal-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-soft); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px dashed var(--accent); user-select: none; transition: all 0.12s; }
     .vocab-reveal-btn:hover { background: var(--accent); color: #fff; }
 
-    /* Vocab Meaning & Inline Note (Side-by-side on desktop, wraps on smaller screens) */
+    /* Vocab Meaning & Inline Note */
     .vocab-en-wrap { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; line-height: 1.5; }
     .vocab-en-main { font-weight: 600; font-size: 15.5px; color: var(--ink); }
-    .vocab-en-note { font-size: 14.5px; color: var(--muted); font-weight: 400; }
+    .vocab-en-note { font-size: 14px; color: var(--muted); font-weight: 400; }
     .vocab-tr-line { font-size: 13.5px; color: var(--muted); font-style: italic; margin-top: 3px; }
     
+    /* Concept Cards Grid & Card */
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-top: 14px; }
+    .concept-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); transition: border-color 0.15s, box-shadow 0.15s; }
+    .concept-card:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .concept-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 10px; }
+    .concept-ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); font-weight: 700; direction: rtl; }
+    .concept-root { font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .concept-teacher-note { font-size: 13px; background: #fdfaf2; border-left: 3px solid #d97706; padding: 6px 10px; border-radius: 4px; margin: 8px 0; color: #92400e; font-weight: 500; }
+    @media (prefers-color-scheme: dark) {
+      .concept-teacher-note { background: rgba(217, 119, 6, 0.12); color: #fcd34d; }
+    }
+    .concept-body { font-size: 14px; line-height: 1.6; color: var(--ink); }
+    .concept-contrast-card { grid-column: 1 / -1; background: #f7faf9; border: 1.5px solid var(--accent); border-radius: 12px; padding: 18px; }
+    @media (prefers-color-scheme: dark) {
+      .concept-contrast-card { background: rgba(13, 122, 95, 0.08); }
+    }
+
     /* Mastery Test Box */
     .mastery-test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 20px; background: var(--card); margin: 24px 0; }
     .q-choice { display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 7px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14.5px; }
@@ -103,45 +121,280 @@
 
     /* Paste Box */
     .paste-card { background: #faf8f5; border: 1px dashed var(--border); border-radius: 14px; padding: 18px; margin-top: 30px; }
+    @media (prefers-color-scheme: dark) { .paste-card { background: rgba(255,255,255,0.02); } }
   </style>
 </head>
 <body>
 <main>
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px">
     <div>
       <span class="class-tag">🧑‍🏫 Live Preply Teacher Lessons</span>
       <h1 style="margin:4px 0">Sunday Classes &amp; Mastery Tests</h1>
-      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word breakdown, and a comprehensive mastery test.</p>
+      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word breakdown, deep concept notes, and a comprehensive mastery test.</p>
     </div>
     <span id="lessonStatusBadge" class="status-pill" style="font-size:13px;padding:6px 14px">Checking status…</span>
+  </div>
+
+  <!-- LESSON SELECTOR SWITCHER -->
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
+    <span style="font-size:12.5px;color:var(--muted);font-weight:600">Select Lesson:</span>
+    <button type="button" class="book-toggle-pill active" id="btnLesson2" onclick="switchClassLesson('c-2026-09-27')" style="font-size:13px;padding:6px 14px;font-weight:700">⭐ Lesson 2 · 27 Sep 2026 (Work Day &amp; Protection Surahs)</button>
+    <button type="button" class="book-toggle-pill" id="btnLesson1" onclick="switchClassLesson('c-2026-08-30')" style="font-size:13px;padding:6px 14px">Lesson 1 · 30 Aug 2026 (The Flat &amp; Samer)</button>
   </div>
 
   <!-- UPCOMING SUNDAY PREPARATION / HOMEWORK CARD -->
   <div id="hwPrepCard"></div>
 
-  <!-- LESSON 1: 30 AUG 2026 — SAMER LOOKS FOR A FLAT -->
-  <div class="card" style="border-top: 4px solid var(--accent)">
+  <!-- ACTIVE LESSON CONTAINER -->
+  <div class="card" id="lessonCard" style="border-top: 4px solid var(--accent)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
       <div>
-        <span style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 1 · 30 AUG 2026</span>
-        <h2 style="margin:2px 0 6px">The Flat, The Week &amp; The Family (سَامِر يَبْحَثُ عَنْ شَقَّةٍ)</h2>
+        <span id="lessonMetaDate" style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 2 · 27 SEP 2026</span>
+        <h2 id="lessonTitle" style="margin:2px 0 6px">A Working Day &amp; The Protection Surahs (يَوْمُ العَمَل والمعوذتان)</h2>
       </div>
       <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
     </div>
-    <p style="font-size:14.5px;line-height:1.6;margin:8px 0 16px">
-      From your Preply teacher: <b>Bayna Yadayk Unit 1</b>. Housing vocabulary (flat, room by room, furniture), the seven days of the week, relatives on mother's side with dual forms (خَال / خَالَانِ), and the reading dialogue about Samer searching for a flat.
+    <p id="lessonCoveredDesc" style="font-size:14.5px;line-height:1.6;margin:8px 0 16px">
+      From your Preply teacher: Daily work routines and days off (waking early vs late, hours of the day, chores, helping parents, eating breakfast, travel); and <b>Surah Al-Falaq &amp; Surah An-Nas</b> focusing on <b>deep protection concepts</b> rather than flat English words.
     </p>
 
-    <!-- 1. The Reading Passage (Samer) -->
+    <!-- 1. The Reading Passage -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between">
-        <span>📖 Reading Dialogue: Samer Looks for a Flat</span>
+        <span id="passageTitleHeader">📖 Reading Dialogue: A Working Day &amp; The Day Off</span>
         <span style="color:var(--accent);font-size:13px">Tap any word for English</span>
       </summary>
       <div class="passage-box" id="passageContainer">Loading passage…</div>
     </details>
 
-    <!-- 2. Class Vocabulary -->
+    <!-- 2. DEDICATED QUR'AN SECTION (Lesson 2: Falaq & Nas with Deep Concepts) -->
+    <div id="quranClassSection" style="margin-bottom:14px">
+      <details class="sec" open style="border:1.5px solid var(--accent);border-radius:12px;padding:12px 16px">
+        <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--accent)">🛡️ Qur'an Section: The Two Surahs of Protection (المُعَوِّذَتَانِ)</span>
+            <span style="font-size:12px;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:999px;font-weight:600">Surah 113 &amp; 114</span>
+          </div>
+          <span style="color:var(--muted);font-size:12.5px">Mishary Rashid Alafasy · Real Qari Recitation</span>
+        </summary>
+
+        <!-- Quran Recitation & Verses -->
+        <div style="margin-top:14px">
+          <!-- Surah Al-Falaq -->
+          <div style="background:#fcfaf5;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <div>
+                <h3 style="margin:0;font-size:18px;color:var(--accent)">113. سُورَةُ الْفَلَقِ (Al-Falaq — The Daybreak)</h3>
+                <span style="font-size:12.5px;color:var(--muted)">Seeking refuge in the Lord of the Cleaving Dawn from 4 external harms</span>
+              </div>
+              <button type="button" class="primary" style="font-size:12.5px;padding:5px 12px" onclick="playSurahRecitation(113, 5)">▶️ Recite Surah 113</button>
+            </div>
+            <div id="versesFalaqContainer">Loading verses…</div>
+          </div>
+
+          <!-- Surah An-Nas -->
+          <div style="background:#fcfaf5;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <div>
+                <h3 style="margin:0;font-size:18px;color:var(--accent)">114. سُورَةُ النَّاسِ (An-Nas — Humankind)</h3>
+                <span style="font-size:12.5px;color:var(--muted)">Invoking 3 Divine attributes against 1 internal spiritual harm</span>
+              </div>
+              <button type="button" class="primary" style="font-size:12.5px;padding:5px 12px" onclick="playSurahRecitation(114, 6)">▶️ Recite Surah 114</button>
+            </div>
+            <div id="versesNasContainer">Loading verses…</div>
+          </div>
+
+          <!-- Deep Conceptual Cards -->
+          <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+              <h3 style="margin:0;color:var(--accent)">💡 Deep Conceptual Exploration (مَفَاهِيمُ قُرْآنِيَّةٌ)</h3>
+              <span style="font-size:12.5px;color:var(--muted)">Words that are living concepts, not flat English translations</span>
+            </div>
+            <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
+              These words carry multi-layered psychological, cosmic, and spiritual realities taught by your Preply teacher. Click 🔊 to hear the exact classical pronunciation.
+            </p>
+
+            <div class="concept-grid">
+              <!-- 1. أَعُوذُ -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">أَعُوذُ</span>
+                  <span class="concept-root">Root: ع و ذ (ʿ-w-dh)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: Circled with arrow pointing to مِنْ ("from").
+                </div>
+                <div class="concept-body">
+                  <b>Concept: Isti'ādhah — Fleeing to the Ultimate Sanctuary.</b><br>
+                  Not merely "I ask for shelter" or "I hide". <i>ʿAudh</i> is the act of a terrified, vulnerable creature fleeing from an overpowering predator straight into an impenetrable fortress. It always couples <b>مِنْ</b> (fleeing FROM the terror) with <b>بِـ</b> (clinging TO the Lord). It acknowledges complete personal helplessness and absolute surrender to Divine protection.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('أَعُوذُ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 2. الْفَلَق -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">الْفَلَقِ</span>
+                  <span class="concept-root">Root: ف ل ق (f-l-q)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: Underlined in Surah Al-Falaq.
+                </div>
+                <div class="concept-body">
+                  <b>Concept: The Violent Cleaving / Rupturing of Darkness.</b><br>
+                  Arabic has many words for morning (<i>ṣabāḥ</i>, <i>fajr</i>). <i>Al-Falaq</i> is specifically the violent, unstoppable <b>splitting open</b> of pitch darkness by radiant morning light. Just as Allah ruptures the tight shell of a seed to burst forth green life (6:95) and splits the sky at dawn (6:96), He can violently cleave apart whatever dark problem, knot of grief, or oppression has trapped you.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('الْفَلَقِ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 3. غَاسِقٍ -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">غَاسِقٍ</span>
+                  <span class="concept-root">Root: غ س ق (gh-s-q)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher handwriting: <span dir="rtl">دَخَلَ الليل وأظلم</span> (the night entered and darkened).
+                </div>
+                <div class="concept-body">
+                  <b>Concept: Intense, Pooling Nightfall.</b><br>
+                  <i>Ghasaq</i> is the hour when the last trace of twilight vanishes, the sky turns pitch black, and cold darkness pools like still water. In human reality, this is the hour when physical vulnerabilities peak: predatory beasts hunt, robbers operate, loneliness magnifies anxiety, and harmful spirits move under cover of darkness.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('غَاسِقٍ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 4. وَقَبَ -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">وَقَبَ</span>
+                  <span class="concept-root">Root: و ق ب (w-q-b)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher handwriting: <span dir="rtl">دَخَلَ ظَلَامٌ في كُلِّ شَيْءٍ</span> (darkness entered into everything).
+                </div>
+                <div class="concept-body">
+                  <b>Concept: Infiltration into Every Crevice.</b><br>
+                  A <i>waqbah</i> in classical Arabic is a hollow pit, ditch, or eye-socket. <i>Waqaba</i> means the darkness has not just fallen overhead—it has penetrated into every room, alley, hollow cavity, and cranny, completely enveloping all things so there is nowhere left to flee except to Allah.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('وَقَبَ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 5. النَّفَّاثَاتِ فِي الْعُقَدِ -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">النَّفَّاثَاتِ فِي الْعُقَدِ</span>
+                  <span class="concept-root">Roots: ن ف ث &amp; ع ق د</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: <span dir="rtl">نَفَثَ يَنْفُثُ : to blow</span> &amp; <span dir="rtl">النساء السواحر يَنفُثْنَ في عُقَدِ الخيط عندما يَسحرون</span> (sorceresses blowing into knots of thread).
+                </div>
+                <div class="concept-body">
+                  <b>Concept: Malicious Binding &amp; Knot-Tying.</b><br>
+                  <i>Nafath</i> is forceful exhaling accompanied by a fine spray of saliva (midway between dry breath and spitting). Occult practitioners whisper dark curses while blowing saliva onto tightly tied knots of thread to bind a person's marriage, mind, or health. Conceptually, <i>al-ʿuqad</i> also represents the entangled, intractable knots of human life that cannot be untied except by the Lord of the Cleaving Dawn.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('النَّفَّاثَاتِ فِي الْعُقَدِ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 6. حَاسِدٍ إِذَا حَسَدَ -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">حَاسِدٍ إِذَا حَسَدَ</span>
+                  <span class="concept-root">Root: ح س د (ḥ-s-d)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: "envier who wish evil on other".
+                </div>
+                <div class="concept-body">
+                  <b>Concept: Destructive Resentment at Others' Blessings.</b><br>
+                  <i>Hasad</i> is not healthy aspiration (<i>ghibṭah</i>). It is the toxic malice that burns when seeing someone else's blessing and secretly desires that blessing to be stripped away from them. Refuge is sought specifically <b>إِذَا حَسَدَ</b> ("when he envies"), because envy begins as an internal sickness, but becomes lethal when manifested into the evil eye (<i>al-ʿayn</i>), spiteful speech, or active sabotage.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('حَاسِدٍ إِذَا حَسَدَ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 7. الْوَسْوَاس -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">الْوَسْوَاسِ</span>
+                  <span class="concept-root">Root: و س و س (w-s-w-s)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: "the whisperer" (intensive pattern faʿlāl).
+                </div>
+                <div class="concept-body">
+                  <b>Concept: The Repetitive, Subtle Insinuator.</b><br>
+                  An onomatopoeic root mirroring the rustle of fine jewelry or continuous quiet muttering. The pattern <i>faʿlāl</i> denotes an intensive, compulsive actor. The whisperer does not attack with physical violence; he plants repetitive, rationalized suggestions disguised as your own inner voice, steadily eroding resolve.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('الْوَسْوَاسِ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 8. الْخَنَّاس -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">الْخَنَّاسِ</span>
+                  <span class="concept-root">Root: خ ن س (kh-n-s)</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher note: "the sneaky" (retreats and slinks).
+                </div>
+                <div class="concept-body">
+                  <b>Concept: The Cowardly Slinker.</b><br>
+                  From <i>khanasa</i> (to cower, shrink back into a burrow). When a servant remembers Allah (<i>dhikr</i>), the whisperer shrinks away and retreats in cowardly defeat. But the instant the heart drifts into heedlessness (<i>ghaflah</i>), he immediately slinks back to plant his doubts.
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('الْخَنَّاسِ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 9. صُدُور vs قَلْب -->
+              <div class="concept-card">
+                <div class="concept-header">
+                  <span class="concept-ar">صُدُور vs قَلْب</span>
+                  <span class="concept-root">Teacher distinction</span>
+                </div>
+                <div class="concept-teacher-note">
+                  Teacher handwriting: <span dir="rtl">heart : قَلْب / فُؤَاد</span> vs <span dir="rtl">chests : صَدْر / صُدُور</span>.
+                </div>
+                <div class="concept-body">
+                  <b>Concept: The Outer Fortress vs Innermost Heart.</b><br>
+                  Why does the ayah say <i>fī ṣudūri n-nās</i> ("in the chests of mankind") and not <i>qulūb</i> ("hearts")? In Qur'anic spiritual anatomy, the <b>صَدْر</b> (chest) is the outer perimeter, entrance hall, or courtyard. The whisperer can only bombard the courtyard; he has <b>no power</b> to enter the sacred fortress of the <b>قَلْب</b> (heart) unless the person themselves opens the gate and entertains the whisper!
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" class="sym-badge" onclick="playClassItem('صُدُورِ النَّاسِ', 'quran-concept')" title="Listen">🔊 Listen</button>
+                </div>
+              </div>
+
+              <!-- 10. THE GRAND CONTRAST -->
+              <div class="concept-contrast-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                  <h4 style="margin:0;font-size:16px;color:var(--accent)">⚖️ The Architectural Contrast: Al-Falaq vs. An-Nas</h4>
+                  <span style="font-size:12px;font-weight:700;color:var(--accent)">Teacher Key Insight</span>
+                </div>
+                <div style="font-size:14px;line-height:1.65;color:var(--ink)">
+                  • <b>Surah Al-Falaq:</b> You call upon Allah with <b>ONE</b> Divine Name (<i>رَبِّ الْفَلَقِ</i> — Lord of the Daybreak) to seek protection against <b>FOUR</b> external evils (creation, dark night, witchcraft knots, envy). External harms threaten only your body, wealth, or worldly ease.<br>
+                  • <b>Surah An-Nas:</b> You call upon Allah with <b>THREE</b> majestic Names (<i>رَبِّ النَّاسِ</i>, <i>مَلِكِ النَّاسِ</i>, <i>إِلَهِ النَّاسِ</i> — Lord, King, God) to seek protection against <b>ONE</b> internal evil (the whisperer). Why? Because an internal whisper attacks your <b>faith (īmān) and eternal soul</b>. An external harm can at most make you a martyr; but an internal corruption can lose you eternity.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 3. Class Vocabulary -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <span>📇 Class Vocabulary</span>
@@ -156,7 +409,7 @@
       <div id="vocabContainer" style="overflow-x:auto;margin-top:8px">Loading vocabulary…</div>
     </details>
 
-    <!-- 3. Class Sentences -->
+    <!-- 4. Class Sentences -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <span>💬 Sentences Drilled in Class</span>
@@ -171,7 +424,7 @@
       <div id="sentencesContainer">Loading sentences…</div>
     </details>
 
-    <!-- 4. Speak with AI (Preply Lesson Practice) -->
+    <!-- 5. Speak with AI (Preply Lesson Practice) -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <div style="display:flex;align-items:center;gap:8px">
@@ -185,7 +438,7 @@
       </summary>
       <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;flex-wrap:wrap;gap:6px">
         <p style="font-size:12.5px;color:var(--muted);margin:0">
-          Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (Samer flat dialogue, housing vocabulary, days of the week, and variations).
+          Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (daily routine, times, chores, and Mu'awwidhatayn concepts).
         </p>
         <span style="font-size:11.5px;color:var(--muted)">💡 1. Copy Prompt → 2. Open App → 3. Tap 🎧 Voice Mode</span>
       </div>
@@ -213,12 +466,12 @@
     </details>
   </div>
 
-  <!-- 4. COMPREHENSIVE MASTERY TEST -->
+  <!-- 6. COMPREHENSIVE MASTERY TEST -->
   <div class="mastery-test-box" id="testBox">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
       <div>
-        <h2 style="margin:0;color:var(--accent)">🏅 Comprehensive Mastery Test: 30 Aug Lesson</h2>
-        <p class="sub" style="margin:2px 0">Comprehensively tests this Sunday's vocabulary, sentences, and reading passage. Score 80%+ to confirm mastery.</p>
+        <h2 id="testBoxTitle" style="margin:0;color:var(--accent)">🏅 Comprehensive Mastery Test: 27 Sep Lesson</h2>
+        <p id="testBoxSub" class="sub" style="margin:2px 0">Comprehensively tests this Sunday's vocabulary, sentences, reading dialogue, and deep protection concepts. Score 80%+ to confirm mastery.</p>
       </div>
       <span id="testScorePill" class="status-pill" style="font-size:13.5px">Untested</span>
     </div>
@@ -227,7 +480,7 @@
     </div>
   </div>
 
-  <!-- 5. PASTE NEXT SUNDAY'S PREPLY LESSON -->
+  <!-- 7. PASTE NEXT SUNDAY'S PREPLY LESSON -->
   <div class="paste-card">
     <h3 style="margin:0 0 6px">📥 Paste Your Next Preply Lesson</h3>
     <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
@@ -244,35 +497,163 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujffoya"></script>
-<script src="js/curriculum.js?v=mujffoya"></script>
-<script src="js/app.js?v=mujffoya"></script>
-<script src="js/tracker.js?v=mujffoya"></script>
-<script src="js/plan.js?v=mujffoya"></script>
+<script src="js/progress-model.js?v=muk2v7lt"></script>
+<script src="js/curriculum.js?v=muk2v7lt"></script>
+<script src="js/app.js?v=muk2v7lt"></script>
+<script src="js/tracker.js?v=muk2v7lt"></script>
+<script src="js/plan.js?v=muk2v7lt"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
 
+let CURRENT_CLASS_ID = "c-2026-09-27"; // Default to today's Sunday lesson
 let STORY_DATA = null;
 let CLASS_DATA = null;
+let VERSES_DATA = null;
 
 (async () => {
   try {
-    const [sRes, cRes] = await Promise.all([
-      fetch("data/story-07.json").then(r => r.json()),
+    const [cRes, vRes] = await Promise.all([
       fetch("data/classes.json").then(r => r.json()),
-      loadFamIdx()
+      fetch("data/verses.json").then(r => r.json()),
+      loadFamIdx(),
+      loadQuranWordAudio()
     ]);
-    STORY_DATA = sRes;
     CLASS_DATA = cRes;
-    renderPassage();
-    renderVocabAndSentences();
-    updateMasteryStatus();
+    VERSES_DATA = vRes;
+    await loadClassLesson(CURRENT_CLASS_ID);
     renderHomeworkCard();
   } catch (e) {
     console.error("Failed to load lesson data", e);
   }
 })();
+
+async function loadClassLesson(classId) {
+  CURRENT_CLASS_ID = classId;
+  const cls = (CLASS_DATA && CLASS_DATA.classes ? CLASS_DATA.classes.find(c => c.id === classId) : null) || (CLASS_DATA && CLASS_DATA.classes ? CLASS_DATA.classes[0] : null);
+  if (!cls) return;
+
+  // Switch pill styles
+  const btn2 = document.getElementById("btnLesson2");
+  const btn1 = document.getElementById("btnLesson1");
+  if (btn2) btn2.classList.toggle("active", classId === "c-2026-09-27");
+  if (btn1) btn1.classList.toggle("active", classId === "c-2026-08-30");
+
+  // Update header titles
+  const metaDateEl = document.getElementById("lessonMetaDate");
+  const titleEl = document.getElementById("lessonTitle");
+  const descEl = document.getElementById("lessonCoveredDesc");
+  const pTitleEl = document.getElementById("passageTitleHeader");
+  const testTitleEl = document.getElementById("testBoxTitle");
+
+  if (metaDateEl) metaDateEl.textContent = classId === "c-2026-09-27" ? "LESSON 2 · 27 SEP 2026" : "LESSON 1 · 30 AUG 2026";
+  if (titleEl) titleEl.textContent = cls.title || "Preply Sunday Lesson";
+  if (descEl) descEl.innerHTML = cls.covered ? `From your Preply teacher: ${cls.covered}` : "";
+  if (testTitleEl) testTitleEl.textContent = `🏅 Comprehensive Mastery Test: ${cls.date ? new Date(cls.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : ''} Lesson`;
+
+  // Fetch story data
+  const storyFile = (cls.reading && cls.reading.id) ? `data/${cls.reading.id}.json` : (classId === "c-2026-09-27" ? "data/story-08.json" : "data/story-07.json");
+  try {
+    STORY_DATA = await fetch(storyFile).then(r => r.json());
+    if (pTitleEl && STORY_DATA) pTitleEl.textContent = `📖 Reading Dialogue: ${STORY_DATA.titleEn || 'Class Dialogue'}`;
+  } catch (err) {
+    console.warn("Could not load story file", storyFile, err);
+  }
+
+  // Render components
+  renderPassage();
+  renderQuranSection();
+  renderVocabAndSentences();
+  updateMasteryStatus();
+}
+
+function switchClassLesson(classId) {
+  loadClassLesson(classId);
+}
+
+function renderQuranSection() {
+  const sec = document.getElementById("quranClassSection");
+  if (!sec) return;
+  if (CURRENT_CLASS_ID !== "c-2026-09-27") {
+    sec.style.display = "none";
+    return;
+  }
+  sec.style.display = "block";
+
+  if (!VERSES_DATA || !VERSES_DATA.surahs) return;
+  const falaq = VERSES_DATA.surahs.find(s => s.id === "falaq");
+  const nas = VERSES_DATA.surahs.find(s => s.id === "nas");
+
+  const renderSurahVerses = (surahObj, containerId) => {
+    const container = document.getElementById(containerId);
+    if (!container || !surahObj) return;
+
+    container.innerHTML = surahObj.verses.map((v, vi) => {
+      const ayahNum = vi + 1;
+      return `
+        <div class="book-line passage-line" style="padding:10px 0;border-bottom:1px dashed var(--border)">
+          <div class="book-line-row">
+            <div class="line-badge-dock" aria-label="Ayah tools">
+              <span class="line-num-badge" title="Ayah ${ayahNum}">${ayahNum}</span>
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="reciteVerse(${surahObj.n}, ${ayahNum}, '${encodeURIComponent(v.ar)}')" title="Recite Ayah (Alafasy)" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge" onclick="toggleAyahEn('${surahObj.id}', ${vi})" title="Toggle English" aria-label="Translation">🌐</button>
+                <button type="button" class="sym-badge" onclick="toggleAyahWbw('${surahObj.id}', ${vi})" title="Toggle word breakdown" aria-label="Words">🧩</button>
+              </div>
+            </div>
+            <div class="s-content-wrap">
+              <div class="s-meta-side">
+                <div id="qen-${surahObj.id}-${vi}" class="p-en" style="display:none;font-size:14.5px;color:var(--ink);line-height:1.5">${v.en}</div>
+              </div>
+              <div class="s-ar-side">
+                <div class="p-ar" style="margin:0;font-size:26px;color:var(--accent)">${v.ar}</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-wbw" id="qwbw-${surahObj.id}-${vi}" style="display:none;margin-top:8px">
+            <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
+              ${(v.words || []).map((w, wi) => {
+                const fam = famLookup(w[0]);
+                const gloss = w[2] || (w.length > 1 ? w[1] : "");
+                return `
+                  <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speakQuranWord('${surahObj.id}', ${vi}, ${wi}, '${encodeURIComponent(w[0])}')" title="${gloss}">
+                    <span class="w-ar">${w[0]}</span>
+                    <span class="w-en">${gloss}</span>
+                    ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('cls-q-${surahObj.id}-${vi}', ${wi}, '${encodeURIComponent(w[0])}')" title="Root: ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+            <div class="wbw-drawer-slot" id="wbw-drawer-slot-cls-q-${surahObj.id}-${vi}"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  renderSurahVerses(falaq, "versesFalaqContainer");
+  renderSurahVerses(nas, "versesNasContainer");
+}
+
+function toggleAyahEn(surahId, vi) {
+  const el = document.getElementById(`qen-${surahId}-${vi}`);
+  if (!el) return;
+  el.style.display = (el.style.display === "none" || !el.style.display) ? "block" : "none";
+}
+
+function toggleAyahWbw(surahId, vi) {
+  const el = document.getElementById(`qwbw-${surahId}-${vi}`);
+  if (!el) return;
+  el.style.display = (el.style.display === "none" || !el.style.display) ? "flex" : "none";
+}
+
+function playSurahRecitation(surahNum, totalAyahs) {
+  const items = [];
+  for (let a = 1; a <= totalAyahs; a++) {
+    items.push({ n: surahNum, ayah: a });
+  }
+  playRecitation(items);
+}
 
 function renderHomeworkCard() {
   if (typeof planHomework !== "function") return;
@@ -305,12 +686,12 @@ function renderPassage() {
   const container = document.getElementById("passageContainer");
   container.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Passage View</span>
+      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Passage View (${STORY_DATA.sentences.length} sentences)</span>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllEn" onclick="toggleAllPassageEn()" title="Show/hide English translation across all lines">🌐 Translation</button>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()" title="Show/hide word-by-word breakdown across all lines">🧩 Words</button>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllTr" onclick="toggleAllPassageTr()" title="Show/hide transliteration across all lines">🔤 Translit</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllEn" onclick="toggleAllPassageEn()" title="Show/hide English translation">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()" title="Show/hide word-by-word breakdown">🧩 Words</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllTr" onclick="toggleAllPassageTr()" title="Show/hide transliteration">🔤 Translit</button>
       </div>
     </div>
     ${STORY_DATA.sentences.map((s, idx) => `
@@ -423,7 +804,7 @@ function toggleAllPassageTr() {
   if (btnAll) btnAll.classList.toggle("active", allTrVisible);
 }
 
-let clsSentPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let clsSentPracticeMode = "all";
 let clsSentSortWeakest = false;
 let clsSentRevealed = {};
 let clsSentEnVisible = {};
@@ -457,8 +838,9 @@ function revealClsSentence(idx) {
 }
 
 function toggleAllClsSentReveal(reveal) {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const sents = CLASS_DATA.classes[0].sentences || [];
+  const cls = getCurrentClass();
+  if (!cls) return;
+  const sents = cls.sentences || [];
   sents.forEach((_, idx) => { clsSentRevealed[idx] = reveal; });
   renderClassSentences();
 }
@@ -479,7 +861,8 @@ function toggleClsSentenceEn(idx) {
 
 function toggleAllClsSentenceEn() {
   if (clsSentPracticeMode === "ar-only") {
-    const sents = CLASS_DATA && CLASS_DATA.classes && CLASS_DATA.classes[0] ? (CLASS_DATA.classes[0].sentences || []) : [];
+    const cls = getCurrentClass();
+    const sents = cls ? (cls.sentences || []) : [];
     const allRevealed = sents.length > 0 && sents.every((_, i) => clsSentRevealed[i]);
     toggleAllClsSentReveal(!allRevealed);
     return;
@@ -517,6 +900,11 @@ function toggleAllClsSentenceTr() {
   if (btnAll) btnAll.classList.toggle("active", allClsTrVisible);
 }
 
+function getCurrentClass() {
+  if (!CLASS_DATA || !CLASS_DATA.classes) return null;
+  return CLASS_DATA.classes.find(c => c.id === CURRENT_CLASS_ID) || CLASS_DATA.classes[0];
+}
+
 function getSentenceWeaknessRank(s, srs, vocabMap) {
   if (s.key && srs[s.key]) {
     const b = getWordBucket(srs[s.key]);
@@ -526,7 +914,7 @@ function getSentenceWeaknessRank(s, srs, vocabMap) {
     if (b === "strong") return 4;
   }
   const words = (s.ar || "").split(/\s+/).map(w => w.replace(/[.,!؟،]/g, "").trim());
-  let minRank = 2; // unrated default
+  let minRank = 2;
   for (const w of words) {
     if (vocabMap && vocabMap[w]) {
       const vItem = srs[vocabMap[w].key];
@@ -541,8 +929,8 @@ function getSentenceWeaknessRank(s, srs, vocabMap) {
 }
 
 function renderClassSentences() {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const cls = CLASS_DATA.classes[0];
+  const cls = getCurrentClass();
+  if (!cls) return;
   const sDiv = document.getElementById("sentencesContainer");
   if (!sDiv) return;
 
@@ -554,7 +942,7 @@ function renderClassSentences() {
     if (bare) vocabMap[bare] = v;
   });
 
-  let sentences = (cls.sentences || []).slice(0, 8);
+  let sentences = (cls.sentences || []).slice(0, 10);
   if (clsSentSortWeakest) {
     sentences = sentences.slice().sort((a, b) => {
       const ra = getSentenceWeaknessRank(a, srs, vocabMap);
@@ -575,8 +963,8 @@ function renderClassSentences() {
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <button type="button" class="book-toggle-pill ${clsSentSortWeakest ? 'active' : ''}" id="btnClsSentSortWeakestInner" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
         <span style="font-size:11.5px;color:var(--muted);margin-left:4px;margin-right:2px">Toggle all:</span>
-        <button type="button" class="book-toggle-pill ${allClsSentEnVisible ? 'active' : ''}" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation across all class sentences">🌐 Translation</button>
-        <button type="button" class="book-toggle-pill ${allClsTrVisible ? 'active' : ''}" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration across all class sentences">🔤 Translit</button>
+        <button type="button" class="book-toggle-pill ${allClsSentEnVisible ? 'active' : ''}" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill ${allClsTrVisible ? 'active' : ''}" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration">🔤 Translit</button>
         ${clsSentPracticeMode !== 'all' ? `
           <button type="button" class="book-toggle-pill" onclick="toggleAllClsSentReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
           <button type="button" class="book-toggle-pill" onclick="toggleAllClsSentReveal(false)" style="font-size:11.5px;padding:2px 8px">🙈 Hide All</button>
@@ -630,8 +1018,6 @@ function renderClassSentences() {
   `;
 }
 
-let currentVocabFilter = "all";
-
 function getWordBucket(item) {
   if (!item) return null;
   if (item.b === "never") return "never";
@@ -646,7 +1032,7 @@ function getWordBucket(item) {
   return null;
 }
 
-let vocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let vocabPracticeMode = "all";
 let vocabSortWeakest = false;
 let vocabRevealed = {};
 let vocabTrVisible = {};
@@ -675,7 +1061,7 @@ function toggleVocabSortWeakest() {
 
 function getWordWeaknessRank(item) {
   const b = getWordBucket(item);
-  let rank = 2; // unrated / new
+  let rank = 2;
   if (b === "learning") rank = 0;
   else if (b === "weak") rank = 1;
   else if (b === "medium") rank = 3;
@@ -693,8 +1079,9 @@ function revealVocabWord(key) {
 }
 
 function toggleAllVocabReveal(reveal) {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const vocab = CLASS_DATA.classes[0].vocabulary || [];
+  const cls = getCurrentClass();
+  if (!cls) return;
+  const vocab = cls.vocabulary || [];
   vocab.forEach(v => { vocabRevealed[v.key] = reveal; });
   renderVocabTable();
 }
@@ -709,8 +1096,9 @@ function toggleWordTr(key) {
 
 function toggleAllWordTr() {
   allVocabTrVisible = !allVocabTrVisible;
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const vocab = CLASS_DATA.classes[0].vocabulary || [];
+  const cls = getCurrentClass();
+  if (!cls) return;
+  const vocab = cls.vocabulary || [];
   vocab.forEach(v => {
     vocabTrVisible[v.key] = allVocabTrVisible;
     const el = document.getElementById("vtr-" + v.key);
@@ -722,13 +1110,9 @@ function toggleAllWordTr() {
   if (btnAll) btnAll.classList.toggle("active", allVocabTrVisible);
 }
 
-function updateClassVocabStats() {
-  // Lightweight hook
-}
-
 function renderVocabTable() {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const cls = CLASS_DATA.classes[0];
+  const cls = getCurrentClass();
+  if (!cls) return;
   let vocab = (cls.vocabulary || []).slice();
   const srs = getSrs();
   const vDiv = document.getElementById("vocabContainer");
@@ -886,12 +1270,12 @@ function gradeClassWord(key, bucket, btn) {
     }
   }
 
-  // Smoothly unmask cell in place if in practice mode
   const row = btn.closest("tr");
+  const cls = getCurrentClass();
   if (row && vocabPracticeMode === "ar-only") {
     const enCell = row.children[1];
     if (enCell && enCell.querySelector(".vocab-reveal-btn")) {
-      const found = CLASS_DATA.classes[0].vocabulary.find(x => x.key === key);
+      const found = cls ? cls.vocabulary.find(x => x.key === key) : null;
       enCell.innerHTML = `
         <div class="vocab-en-wrap">
           <span class="vocab-en-main">${wordEn}</span>
@@ -902,7 +1286,7 @@ function gradeClassWord(key, bucket, btn) {
   } else if (row && vocabPracticeMode === "en-only") {
     const arCell = row.children[0];
     if (arCell && arCell.querySelector(".vocab-reveal-btn")) {
-      const found = CLASS_DATA.classes[0].vocabulary.find(x => x.key === key);
+      const found = cls ? cls.vocabulary.find(x => x.key === key) : null;
       const isTrActive = vocabTrVisible[key] || allVocabTrVisible;
       arCell.innerHTML = `
         <div>
@@ -923,11 +1307,9 @@ function gradeClassWord(key, bucket, btn) {
 }
 
 function renderVocabAndSentences() {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const cls = CLASS_DATA.classes[0];
+  const cls = getCurrentClass();
+  if (!cls) return;
 
-  // Render Vocab Section with SRS grading and filter chips
-  updateClassVocabStats();
   renderVocabTable();
   renderClassSentences();
 
@@ -947,7 +1329,7 @@ function renderVocabAndSentences() {
   const btnDossier = document.getElementById("btnClassCopyDossier");
   if (btnDossier) {
     btnDossier.onclick = () => {
-      copyLearnerDossier({ sentences: cls.sentences.slice(0, 8) }).then(() => {
+      copyLearnerDossier({ sentences: (cls.sentences || []).slice(0, 8) }).then(() => {
         btnDossier.textContent = "✓ Copied Dossier!";
         setTimeout(() => btnDossier.textContent = "📄 Copy Dossier", 2000);
       });
@@ -964,43 +1346,61 @@ function playClassItem(encodedAr, type) {
 
 function buildClassAiPrompt(cls) {
   let p = `Role: You are a warm, supportive Modern Standard Arabic (MSA) speaking partner for Reza (beginner, A1 level).\n\n`;
-  p += `Context: I just finished my weekly Preply teacher lesson: "${cls.title || 'Bayna Yadayk Unit 1: The Flat & Family'}".\n`;
-  p += `Here is the reading dialogue we covered (Samer looking for a flat):\n`;
-  const readingSentences = (typeof STORY_DATA !== 'undefined' && STORY_DATA && STORY_DATA.sentences) ? STORY_DATA.sentences : (cls.reading && cls.reading.lines ? cls.reading.lines : []);
-  if (readingSentences.length) {
-    readingSentences.forEach((line, idx) => {
-      p += `${idx + 1}. ${line.ar} — "${line.en}"\n`;
+  p += `Context: I just finished my weekly Preply teacher lesson: "${cls.title || 'Preply Sunday Lesson'}".\n`;
+
+  if (cls.id === "c-2026-09-27") {
+    p += `Here is the reading dialogue we covered (A Working Day & The Day Off — يوم العمل والعطلة):\n`;
+    if (STORY_DATA && STORY_DATA.sentences) {
+      STORY_DATA.sentences.forEach((line, idx) => {
+        p += `${idx + 1}. ${line.ar} — "${line.en}"\n`;
+      });
+    }
+    p += `\nClass Sentences Drilled:\n`;
+    (cls.sentences || []).slice(0, 8).forEach((s, idx) => {
+      p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
     });
+    p += `\nKey Routine & Qur'an Vocabulary:\n`;
+    p += `- Routine: work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), party (حَفْلَة), trip (رِحْلَة).\n`;
+    p += `- Protection Concepts: refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), whisperer (الْوَسْوَاس), slinker (الْخَنَّاس), chests (صُدُور).\n\n`;
+    p += `Goal & Voice Mode Instructions:\n`;
+    p += `1. Conversational Roleplay: Ask me about my work routine (What time do you wake up? How do you travel? What do you do on your day off?).\n`;
+    p += `2. Actively prompt me to speak in Arabic using our class sentences and variations:\n`;
+    p += `   - Ask what time I wake up on work days vs weekends.\n`;
+    p += `   - Ask what chores I do at home (sweeping, washing dishes).\n`;
+    p += `   - Ask what I do before I sleep (أَقْرَأُ كِتَابًا قَبْلَ أَنْ أَنَامَ).\n`;
+    p += `   - Discuss the protection surahs: ask why we say 'ṣudūr' (chests) instead of 'qulūb' (hearts).\n`;
+  } else {
+    p += `Here is the reading dialogue we covered (Samer looking for a flat):\n`;
+    if (STORY_DATA && STORY_DATA.sentences) {
+      STORY_DATA.sentences.forEach((line, idx) => {
+        p += `${idx + 1}. ${line.ar} — "${line.en}"\n`;
+      });
+    }
+    p += `\nClass Sentences Drilled:\n`;
+    (cls.sentences || []).slice(0, 8).forEach((s, idx) => {
+      p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
+    });
+    p += `\nKey Class Vocabulary:\n`;
+    p += `- Housing: flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة).\n`;
+    p += `- Days: Saturday to Friday (السَّبْت، الأَحَد، الاِثْنَيْن، الثُّلَاثَاء، الخَمِيس، الجُمُعَة).\n\n`;
+    p += `Goal & Voice Mode Instructions:\n`;
+    p += `1. Roleplay: You are an apartment owner or landlord, and I am looking for a flat.\n`;
+    p += `2. Drill variations: ask which floor the flat is on, how many rooms, and which day I can move in.\n`;
   }
-  p += `\nClass Sentences Drilled:\n`;
-  cls.sentences.slice(0, 8).forEach((s, idx) => {
-    p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
-  });
-  p += `\nKey Class Vocabulary:\n`;
-  p += `- Housing: flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة)\n`;
-  p += `- Days: Saturday to Friday (السَّبْت، الأَحَد، الاِثْنَيْن، الثُّلَاثَاء، الأَرْبِعَاء، الخَمِيس، الجُمُعَة)\n`;
-  p += `- Relatives & Dual: maternal uncle/aunt (خَال / خَالَة), duals (خَالَانِ / خَالَتَانِ)\n\n`;
-  p += `Goal & Voice Mode Instructions:\n`;
-  p += `1. Roleplay: You are an apartment owner or landlord in an Arab city, and I am looking for a flat (like Samer).\n`;
-  p += `2. Actively prompt me to speak and drill natural variations of our class sentences and dialogue:\n`;
-  p += `   - Ask which floor the flat is on (الطَّابِق الأَوَّل / الثَّانِي / الثَّالِث).\n`;
-  p += `   - Ask how many rooms are in the flat (غُرْفَتَانِ / ثَلَاث غُرَف).\n`;
-  p += `   - Ask what furniture is in the kitchen and bedroom (فُرْن، ثَلَّاجَة، سَرِير).\n`;
-  p += `   - Practice setting a day to visit using the days of the week (e.g. يَوْم السَّبْت / يَوْم الأَحَد).\n`;
-  p += `   - Ask about who will live in the flat (family relatives).\n`;
+
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;
   p += `   - NEVER give long monologues or lectures.\n`;
   p += `   - Ask me ONE question or prompt at a time, then PAUSE and wait for me to speak.\n`;
   p += `   - If I make a mistake, gently model the correct phrase and ask me to repeat it once.\n`;
   p += `4. Session Wrap-Up & Coach Report:\n`;
-  p += `   - When I say "I'm done" or after 5–10 minutes, conclude warmly in spoken Arabic, then output a structured English report for my AI Coach in this EXACT format (so I can paste it back into my site to tailor future lessons):\n\n`;
+  p += `   - When I say "I'm done" or after 5–10 minutes, conclude warmly in spoken Arabic, then output a structured English report for my AI Coach in this EXACT format:\n\n`;
   p += `=== AI VOICE SESSION REPORT ===\n`;
   p += `Lesson: ${cls.title || 'Preply Sunday Lesson'}\n`;
   p += `Phrases Mastered: [Target sentences or variations Reza spoke accurately]\n`;
   p += `Hesitations & Errors: [Phrases, sounds, or grammar where Reza stumbled or needed correction]\n`;
-  p += `Words to Review: [Specific Arabic words to reinforce in upcoming drills, e.g. شَقَّة، فُرْن]\n`;
-  p += `Next Recommended Focus: [1 actionable recommendation for the coach to tailor future lessons]\n`;
+  p += `Words to Review: [Specific Arabic words to reinforce in upcoming drills]\n`;
+  p += `Next Recommended Focus: [1 actionable recommendation for the coach]\n`;
   p += `===============================\n`;
   return p;
 }
@@ -1018,7 +1418,7 @@ function saveClassAiVoiceReport() {
     return;
   }
 
-  const cls = (CLASS_DATA && CLASS_DATA.classes && CLASS_DATA.classes[0]) || {};
+  const cls = getCurrentClass() || {};
   const scope = cls.title || "Preply Sunday Lesson";
   const wordsMatch = text.match(/Words to Review:\s*([^\n]+)/i);
   const wordsToReview = wordsMatch ? wordsMatch[1].trim() : "";
@@ -1028,7 +1428,7 @@ function saveClassAiVoiceReport() {
   logEvent({
     e: "ai-session-report",
     scope: "Preply: " + scope,
-    classId: cls.id || "class",
+    classId: cls.id || CURRENT_CLASS_ID,
     report: text,
     wordsToReview,
     nextFocus,
@@ -1038,13 +1438,13 @@ function saveClassAiVoiceReport() {
   logEvent({
     e: "note",
     text: `[AI Voice Report - Preply: ${scope}]\n${text}`,
-    ctx: { type: "ai-voice-report", scope: "Preply: " + scope, classId: cls.id || "class" },
+    ctx: { type: "ai-voice-report", scope: "Preply: " + scope, classId: cls.id || CURRENT_CLASS_ID },
     t: Date.now()
   });
 
   logEvent({
     e: "convo",
-    scenario: "ai-voice-class-" + (cls.id || "sunday"),
+    scenario: "ai-voice-class-" + (cls.id || CURRENT_CLASS_ID),
     report: text,
     t: Date.now()
   });
@@ -1095,7 +1495,7 @@ function scrollToTest() {
 
 function updateMasteryStatus() {
   const log = store.get("ats-log", []);
-  const pass = log.find(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.classId === "c-2026-08-30" && x.score >= 80);
+  const pass = log.find(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.classId === CURRENT_CLASS_ID && x.score >= 80);
   const badge = document.getElementById("lessonStatusBadge");
   const pill = document.getElementById("testScorePill");
   if (pass) {
@@ -1111,154 +1511,219 @@ function updateMasteryStatus() {
   }
 }
 
-/* COMPREHENSIVE CLASS MASTERY TEST */
+/* COMPREHENSIVE CLASS MASTERY TEST (Dynamic per Lesson) */
 function buildClassMasteryQuestions() {
   const qList = [];
 
-  // 1. Reading Passage Comprehension (from STORY_DATA)
-  if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {
-    STORY_DATA.questions.forEach(sq => {
+  if (CURRENT_CLASS_ID === "c-2026-09-27") {
+    // LESSON 2 (27 Sep 2026): A Working Day & The Protection Surahs
+    // 1. Reading Comprehension (from story-08)
+    if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {
+      STORY_DATA.questions.forEach(sq => {
+        qList.push({
+          section: "📖 Reading Comprehension",
+          q: sq.q,
+          opts: sq.options,
+          correct: sq.answer
+        });
+      });
+    }
+
+    // 2. Daily Routine Vocabulary
+    const routineVocab = [
+      { ar: "أَسْتَيْقِظُ", en: "I wake up", opts: ["I wake up", "I sleep", "I return", "I go"] },
+      { ar: "مُبَكِّرًا", en: "early", opts: ["late", "early", "at night", "quickly"] },
+      { ar: "مُتَأَخِّرًا", en: "late", opts: ["early", "late", "every day", "together"] },
+      { ar: "مَلَابِس", en: "clothes", opts: ["dishes", "clothes", "furniture", "books"] },
+      { ar: "أَعُودُ", en: "I return, I come back", opts: ["I return, I come back", "I clean", "I help", "I sleep"] },
+      { ar: "الفَطُور", en: "breakfast", opts: ["lunch", "dinner", "breakfast", "supper"] },
+      { ar: "كَنَس", en: "sweeping", opts: ["washing", "cooking", "sweeping", "tidying"] },
+      { ar: "أَطْبَاق", en: "dishes, plates", opts: ["clothes", "dishes, plates", "carpets", "windows"] },
+      { ar: "حَفْلَة", en: "party, gathering", opts: ["school", "party, gathering", "journey", "mosque"] },
+      { ar: "رِحْلَة", en: "trip, journey", opts: ["trip, journey", "exam", "reading", "dinner"] }
+    ];
+
+    routineVocab.forEach(v => {
+      const cIdx = v.opts.indexOf(v.en);
       qList.push({
-        section: "📖 Reading Comprehension",
-        q: sq.q,
-        opts: sq.options,
-        correct: sq.answer
+        section: "🏷️ Routine Vocabulary",
+        q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
+        opts: v.opts,
+        correct: cIdx
       });
     });
+
+    // 3. Deep Qur'an Concepts (from teacher's lesson)
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "What is the profound meaning of <b>Isti'ādhah</b> (<span class='arabic' style='font-size:22px;color:var(--accent)'>أَعُوذُ</span>)?",
+      opts: [
+        "Fleeing from danger to the ultimate impenetrable Sanctuary with total surrender",
+        "Merely asking for a temporary wooden shelter",
+        "Politely saying hello before reading",
+        "Hoping for worldly good luck"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "Why is the daybreak called <b class='arabic' style='font-size:22px;color:var(--accent)'>الْفَلَقِ</b> rather than simply morning (<i>ṣabāḥ</i>)?",
+      opts: [
+        "Because it means the violent, unstoppable splitting open of pitch darkness by radiant light",
+        "Because morning is always cold",
+        "Because it refers only to twilight after sunset",
+        "Because it means clouds forming in the sky"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "According to your teacher's handwriting, what is the meaning of <b class='arabic' style='font-size:22px;color:var(--accent)'>غَاسِقٍ إِذَا وَقَبَ</b>?",
+      opts: [
+        "The night entering and growing dark, with darkness penetrating into everything",
+        "The sun rising above the horizon",
+        "The stars falling into the sea",
+        "Heavy rain falling on the mountains"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "What does <b class='arabic' style='font-size:22px;color:var(--accent)'>النَّفَّاثَاتِ فِي الْعُقَدِ</b> conceptually describe?",
+      opts: [
+        "Blowing with saliva while tying knots to cast spells, and the entangled knots of life",
+        "Tailors sewing buttons onto clothing",
+        "Fishermen tying knots on fishing nets",
+        "Sailors anchoring boats to the dock"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "What is the toxic spiritual reality of <b class='arabic' style='font-size:22px;color:var(--accent)'>حَاسِدٍ إِذَا حَسَدَ</b>?",
+      opts: [
+        "Maliciously wishing another person's blessings to be stripped away, especially when manifested",
+        "Wanting to work hard to achieve success",
+        "Feeling happy when a neighbor buys a car",
+        "Forgetting someone's invitation to a party"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "Why does Surah An-Nas say whispers occur in the <b class='arabic' style='font-size:22px;color:var(--accent)'>صُدُور</b> (chests) rather than the <b class='arabic' style='font-size:22px;color:var(--accent)'>قُلُوب</b> (hearts)?",
+      opts: [
+        "The chest is the outer perimeter/courtyard; waswas cannot enter the heart unless invited",
+        "Because the heart cannot feel thoughts",
+        "Because hearts are physical organs only",
+        "Because the chest is closer to the tongue"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "How does <b class='arabic' style='font-size:22px;color:var(--accent)'>الْخَنَّاسِ</b> (the slinker) behave when Allah is remembered?",
+      opts: [
+        "It cowers, shrinks back and retreats into hiding, returning only when heedlessness occurs",
+        "It gets angry and argues aloud",
+        "It goes to sleep permanently",
+        "It converts into a helpful companion"
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "🛡️ Qur'an Deep Concepts",
+      q: "What is the profound <b>architectural contrast</b> between Surah Al-Falaq and Surah An-Nas?",
+      opts: [
+        "Falaq invokes 1 Name of Allah against 4 external evils; Nas invokes 3 Names against 1 internal evil to faith",
+        "Falaq is about the daytime while Nas is about the night",
+        "Falaq was revealed for animals while Nas was revealed for humans",
+        "Falaq is twice as long as Nas"
+      ],
+      correct: 0
+    });
+
+    // 4. Class Sentences
+    qList.push({
+      section: "💬 Class Sentences",
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أُسَاعِدُ أُمِّي فِي كَنَسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ.</b>",
+      opts: [
+        "I help my mother sweep the house and wash the dishes.",
+        "I go with my mother to buy new furniture.",
+        "My mother sweeps the bedroom and makes breakfast.",
+        "I help my father wash the car."
+      ],
+      correct: 0
+    });
+
+    qList.push({
+      section: "💬 Class Sentences",
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أَمَّا فِي يَوْمِ العُطْلَةِ، فَأَسْتَيْقِظُ مُتَأَخِّرًا.</b>",
+      opts: [
+        "As for on the day off, I wake up late.",
+        "On the work day, I wake up early.",
+        "During holidays I do not sleep.",
+        "I return early on Friday."
+      ],
+      correct: 0
+    });
+
   } else {
-    qList.push({
-      section: "📖 Reading Comprehension",
-      q: "What was Samer looking for on Sunday in the passage?",
-      opts: ["a car", "a new flat to live in", "a university book", "a workplace"],
-      correct: 1
-    });
-    qList.push({
-      section: "📖 Reading Comprehension",
-      q: "Who went with Samer to view the flat?",
-      opts: ["his brother", "his father", "his teacher", "he went alone"],
-      correct: 0
-    });
-    qList.push({
-      section: "📖 Reading Comprehension",
-      q: "What furniture was in the bedroom?",
-      opts: ["a bed and mirror", "a new oven", "a dining table", "just a rug"],
-      correct: 0
-    });
-    qList.push({
-      section: "📖 Reading Comprehension",
-      q: "When can Samer move into the flat?",
-      opts: ["on Thursday or Tuesday", "on Friday only", "next month", "on Sunday only"],
-      correct: 0
-    });
-    qList.push({
-      section: "📖 Reading Comprehension",
-      q: "Why did the flat appeal to Samer?",
-      opts: ["the building is beautiful and the neighbourhood is quiet", "because it was cheap", "it was close to university", "it had an elevator"],
-      correct: 0
-    });
-  }
+    // LESSON 1 (30 Aug 2026): The Flat, Week & Family
+    if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {
+      STORY_DATA.questions.forEach(sq => {
+        qList.push({
+          section: "📖 Reading Comprehension",
+          q: sq.q,
+          opts: sq.options,
+          correct: sq.answer
+        });
+      });
+    }
 
-  // 2. Class Vocabulary (The Flat, Rooms, Furniture, Days of Week, Adjectives)
-  const vocabQuestions = [
-    { ar: "شَقَّة", en: "flat, apartment", opts: ["flat, apartment", "kitchen", "mirror", "balcony"] },
-    { ar: "غُرْفَةُ نَوْمٍ", en: "bedroom", opts: ["living room", "bedroom", "kitchen", "bathroom"] },
-    { ar: "غُرْفَةُ جُلُوسٍ", en: "living room", opts: ["living room", "dining room", "bedroom", "balcony"] },
-    { ar: "مَطْبَخ", en: "kitchen", opts: ["bathroom", "dining table", "kitchen", "bedroom"] },
-    { ar: "سَرِير", en: "bed", opts: ["bed", "sofa", "closet", "curtain"] },
-    { ar: "مِرْآة", en: "mirror", opts: ["carpet", "mirror", "table", "chair"] },
-    { ar: "فُرْن", en: "oven", opts: ["refrigerator", "oven", "washing machine", "sink"] },
-    { ar: "يَوْمُ الثُّلَاثَاءِ", en: "Tuesday", opts: ["Sunday", "Tuesday", "Friday", "Thursday"] },
-    { ar: "يَوْمُ الخَمِيسِ", en: "Thursday", opts: ["Monday", "Wednesday", "Thursday", "Saturday"] },
-    { ar: "الجُمُعَة", en: "Friday", opts: ["Friday", "Saturday", "Sunday", "Monday"] },
-    { ar: "السَّبْت", en: "Saturday", opts: ["Sunday", "Thursday", "Friday", "Saturday"] },
-    { ar: "وَاسِع", en: "spacious, wide", opts: ["narrow", "spacious, wide", "expensive", "small"] },
-    { ar: "مُرِيح", en: "comfortable", opts: ["noisy", "comfortable", "far", "old"] },
-    { ar: "مُتَاح", en: "available", opts: ["forbidden", "available", "occupied", "expensive"] },
-    { ar: "الدُّخُول", en: "entering, moving in", opts: ["departing", "entering, moving in", "selling", "inspecting"] }
-  ];
+    const vocabQuestions = [
+      { ar: "شَقَّة", en: "flat, apartment", opts: ["flat, apartment", "kitchen", "mirror", "balcony"] },
+      { ar: "غُرْفَةُ نَوْمٍ", en: "bedroom", opts: ["living room", "bedroom", "kitchen", "bathroom"] },
+      { ar: "غُرْفَةُ جُلُوسٍ", en: "living room", opts: ["living room", "dining room", "bedroom", "balcony"] },
+      { ar: "مَطْبَخ", en: "kitchen", opts: ["bathroom", "dining table", "kitchen", "bedroom"] },
+      { ar: "سَرِير", en: "bed", opts: ["bed", "sofa", "closet", "curtain"] },
+      { ar: "مِرْآة", en: "mirror", opts: ["carpet", "mirror", "table", "chair"] },
+      { ar: "فُرْن", en: "oven", opts: ["refrigerator", "oven", "washing machine", "sink"] },
+      { ar: "يَوْمُ الثُّلَاثَاءِ", en: "Tuesday", opts: ["Sunday", "Tuesday", "Friday", "Thursday"] },
+      { ar: "يَوْمُ الخَمِيسِ", en: "Thursday", opts: ["Monday", "Wednesday", "Thursday", "Saturday"] }
+    ];
 
-  vocabQuestions.forEach(v => {
-    const correctIdx = v.opts.indexOf(v.en);
-    qList.push({
-      section: "🏷️ Vocabulary Meaning",
-      q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
-      opts: v.opts,
-      correct: correctIdx
+    vocabQuestions.forEach(v => {
+      const correctIdx = v.opts.indexOf(v.en);
+      qList.push({
+        section: "🏷️ Vocabulary Meaning",
+        q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
+        opts: v.opts,
+        correct: correctIdx
+      });
     });
-  });
 
-  // Reverse English -> Arabic recall
-  const reverseRecall = [
-    { en: "bedroom", ar: "غُرْفَةُ نَوْمٍ", opts: ["غُرْفَةُ جُلُوسٍ", "غُرْفَةُ نَوْمٍ", "مَطْبَخ", "حَمَّام"] },
-    { en: "Tuesday", ar: "يَوْمُ الثُّلَاثَاءِ", opts: ["يَوْمُ الأَحَدِ", "يَوْمُ الثُّلَاثَاءِ", "يَوْمُ الجُمُعَةِ", "يَوْمُ الخَمِيسِ"] },
-    { en: "living room", ar: "غُرْفَةُ جُلُوسٍ", opts: ["غُرْفَةُ نَوْمٍ", "غُرْفَةُ جُلُوسٍ", "شَقَّة", "مَطْبَخ"] }
-  ];
-
-  reverseRecall.forEach(v => {
-    const correctIdx = v.opts.indexOf(v.ar);
     qList.push({
-      section: "🏷️ Active Recall",
-      q: `How do you say <i>'${v.en}'</i> in Arabic?`,
-      opts: v.opts,
-      correct: correctIdx
-    });
-  });
-
-  // 3. Class Sentences & Expressions
-  const sentenceQuestions = [
-    {
+      section: "💬 Class Sentences",
       q: "Translate the class sentence: <b class='arabic' style='font-size:22px;color:var(--accent)'>لَيْسَ عِنْدِي</b>",
       opts: ["I have two", "I don't have", "I want to look for", "I live here"],
       correct: 1
-    },
-    {
-      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أُرِيدُ أَنْ أَسْكُنَ هُنَا.</b>",
-      opts: ["I want to study here.", "I want to live here.", "I am moving away.", "I will buy this flat."],
-      correct: 1
-    },
-    {
-      q: "What does the polite request <b class='arabic' style='font-size:22px;color:var(--accent)'>مِنْ فَضْلِكَ</b> mean?",
-      opts: ["thank you", "if you please / excuse me", "good morning", "welcome"],
-      correct: 1
-    },
-    {
-      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>فِي المَطْبَخِ فُرْنٌ جَدِيدٌ.</b>",
-      opts: ["In the bedroom is a new bed.", "In the kitchen there is a new oven.", "The kitchen is clean.", "The flat has a new balcony."],
-      correct: 1
-    }
-  ];
-
-  sentenceQuestions.forEach(s => {
-    qList.push({
-      section: "💬 Class Sentences",
-      q: s.q,
-      opts: s.opts,
-      correct: s.correct
     });
-  });
 
-  // 4. Grammar & Relatives Dual Forms
-  const grammarQuestions = [
-    {
+    qList.push({
+      section: "📐 Grammar & Patterns",
       q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--accent)'>خَال</b> (maternal uncle)?",
       opts: ["خَالَانِ", "أَخَوَات", "إِخْوَة", "خَالَات"],
       correct: 0
-    },
-    {
-      q: "How does Arabic express <i>'on Tuesday'</i>?",
-      opts: ["فِي ثُلَاثَاء", "يَوْمَ الثُّلَاثَاءِ", "إِلَى الثُّلَاثَاءِ", "عَلَى الثُّلَاثَاءِ"],
-      correct: 1
-    }
-  ];
-
-  grammarQuestions.forEach(g => {
-    qList.push({
-      section: "📐 Grammar & Patterns",
-      q: g.q,
-      opts: g.opts,
-      correct: g.correct
     });
-  });
+  }
 
   return qList;
 }
@@ -1272,9 +1737,9 @@ function startMasteryTest() {
     if (curQ >= questions.length) {
       const pct = Math.round((score / questions.length) * 100);
       const passed = pct >= 80;
-      logEvent({ e: "preply-test", classId: "c-2026-08-30", score: pct, pass: passed, t: Date.now() });
+      logEvent({ e: "preply-test", classId: CURRENT_CLASS_ID, score: pct, pass: passed, t: Date.now() });
       updateMasteryStatus();
-      autoSync();
+      if (typeof autoSync === "function") autoSync();
       area.innerHTML = `
         <div style="text-align:center;padding:16px">
           <h3 style="font-size:22px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
@@ -1282,7 +1747,7 @@ function startMasteryTest() {
           </h3>
           <p style="font-size:16px">Your Score: <b>${pct}%</b> (${score} of ${questions.length})</p>
           <p style="font-size:14px;color:var(--muted)">
-            ${passed ? 'You have demonstrated comprehensive mastery of this Preply teacher lesson.' : 'Review the vocabulary and reading passage above, then retake the test.'}
+            ${passed ? 'You have demonstrated comprehensive mastery of this Preply teacher lesson.' : 'Review the vocabulary and conceptual cards above, then retake the test.'}
           </p>
           <button type="button" class="primary" onclick="startMasteryTest()" style="margin-top:10px">Retake Mastery Test</button>
         </div>
@@ -1313,7 +1778,7 @@ function startMasteryTest() {
     logEvent({
       e: "test-item",
       test: "preply",
-      classId: "c-2026-08-30",
+      classId: CURRENT_CLASS_ID,
       qIdx: curQ,
       question: qItem.q.replace(/<[^>]*>/g, ""),
       picked: qItem.opts[picked],

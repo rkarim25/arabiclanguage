@@ -1568,6 +1568,281 @@
           "from": "complete"
         }
       ]
+    },
+    {
+      "id": "lesson-routine",
+      "title": "يَوْمُ العَمَلِ وَالعُطْلَةِ",
+      "theme": "Daily routine, work day & weekend (class, 27 Sep)",
+      "lesson": "Class — 27 Sep: a working day",
+      "members": [
+        {
+          "ar": "عَمَل",
+          "en": "work, labour",
+          "tr": "ʿamal",
+          "note": "from عَمِلَ — to do, work; root ع-م-ل",
+          "from": "teacher"
+        },
+        {
+          "ar": "يَوْمُ العَمَلِ",
+          "en": "work day, working day",
+          "tr": "yawmu l-ʿamal",
+          "note": "iḍāfa: literally 'day of work'",
+          "from": "teacher"
+        },
+        {
+          "ar": "عُطْلَة",
+          "en": "day off, holiday, weekend",
+          "tr": "ʿuṭla",
+          "note": "يَوْمُ العُطْلَةِ — day of rest from work",
+          "from": "teacher"
+        },
+        {
+          "ar": "مُبَكِّرًا",
+          "en": "early",
+          "tr": "mubakkiran",
+          "note": "أَسْتَيْقِظُ مُبَكِّرًا — I wake up early",
+          "from": "teacher"
+        },
+        {
+          "ar": "مُتَأَخِّرًا",
+          "en": "late",
+          "tr": "mutaʾakhkhiran",
+          "note": "أَعُودُ مُتَأَخِّرًا — I return late",
+          "from": "teacher"
+        },
+        {
+          "ar": "السَّاعَةُ السَّابِعَةُ",
+          "en": "seven o'clock",
+          "tr": "as-sāʿatu s-sābiʿah",
+          "note": "hours use ordinal numbers",
+          "from": "teacher"
+        },
+        {
+          "ar": "السَّاعَةُ الثَّامِنَةُ",
+          "en": "eight o'clock",
+          "tr": "as-sāʿatu th-thāminah",
+          "note": "ordinal from ثَمَانِيَة",
+          "from": "teacher"
+        },
+        {
+          "ar": "السَّاعَةُ الثَّانِيَةَ عَشْرَةَ",
+          "en": "twelve o'clock",
+          "tr": "as-sāʿatu th-thāniyata ʿashrah",
+          "note": "twelve noon / midnight",
+          "from": "teacher"
+        },
+        {
+          "ar": "صَبَاحًا",
+          "en": "in the morning, AM",
+          "tr": "ṣabāḥan",
+          "note": "opposite of مَسَاءً in the evening",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَسْتَيْقِظُ",
+          "en": "I wake up",
+          "tr": "astayqiẓu",
+          "note": "present tense: أَسْتَيْقِظُ فِي السَّاعَةِ السَّابِعَةِ",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَغْسِلُ",
+          "en": "I wash",
+          "tr": "aghsilu",
+          "note": "past: غَسَلَ; verbal noun: غَسْل",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَلْبَسُ",
+          "en": "I wear, I put on clothes",
+          "tr": "albasu",
+          "note": "past: لَبِسَ; related to مَلَابِس clothes",
+          "from": "teacher"
+        },
+        {
+          "ar": "مَلَابِس",
+          "en": "clothes, clothing",
+          "tr": "malābis",
+          "note": "plural of مَلْبَس",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَعُودُ",
+          "en": "I return, I go back",
+          "tr": "aʿūdu",
+          "note": "past: عَادَ; root ع-و-د",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَتَنَاوَلُ",
+          "en": "I eat / have (a meal)",
+          "tr": "atanāwalu",
+          "note": "used for eating meals: أَتَنَاوَلُ الفَطُورَ",
+          "from": "teacher"
+        },
+        {
+          "ar": "الفَطُور",
+          "en": "breakfast",
+          "tr": "al-faṭūr",
+          "note": "the morning meal that breaks the fast (root ف-ط-ر)",
+          "from": "teacher"
+        },
+        {
+          "ar": "صَحِيفَة",
+          "en": "newspaper",
+          "tr": "ṣaḥīfa",
+          "note": "plural: صُحُف ṣuḥuf (as in صُحُفِ إِبْرَاهِيمَ وَمُوسَى)",
+          "from": "teacher"
+        },
+        {
+          "ar": "التِّلْفَاز",
+          "en": "television",
+          "tr": "at-tilfāz",
+          "note": "وَأُشَاهِدُ التِّلْفَازَ قَلِيلًا — and I watch TV a little",
+          "from": "teacher"
+        },
+        {
+          "ar": "أُسَاعِدُ",
+          "en": "I help, I assist",
+          "tr": "usāʿidu",
+          "note": "أُسَاعِدُ أُمِّي — I help my mother",
+          "from": "teacher"
+        },
+        {
+          "ar": "كَنَس",
+          "en": "sweeping",
+          "tr": "kanas",
+          "note": "verbal noun; كَنَسُ البَيْتِ — sweeping the house",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَطْبَاق",
+          "en": "dishes, plates",
+          "tr": "aṭbāq",
+          "note": "plural of طَبَق ṭabaq; غَسْلُ الأَطْبَاقِ — washing dishes",
+          "from": "teacher"
+        },
+        {
+          "ar": "حَفْلَة",
+          "en": "party, gathering",
+          "tr": "ḥafla",
+          "note": "plural: حَفَلَات",
+          "from": "teacher"
+        },
+        {
+          "ar": "رِحْلَة",
+          "en": "trip, journey, excursion",
+          "tr": "riḥla",
+          "note": "Surah Quraysh: رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
+          "from": "teacher"
+        },
+        {
+          "ar": "أُرَتِّبُ",
+          "en": "I arrange, I tidy up",
+          "tr": "urattibu",
+          "note": "أُرَتِّبُ مَلَابِسِي — I tidy my clothes",
+          "from": "teacher"
+        },
+        {
+          "ar": "أَنَامُ",
+          "en": "I sleep",
+          "tr": "anāmu",
+          "note": "قَبْلَ أَنْ أَنَامَ — before I sleep",
+          "from": "teacher"
+        }
+      ]
+    },
+    {
+      "id": "lesson-muawwidhatayn",
+      "title": "المُعَوِّذَتَانِ — مَفَاهِيمُ قُرْآنِيَّةٌ",
+      "theme": "Deep protection concepts: Surah Al-Falaq & An-Nas (class, 27 Sep)",
+      "lesson": "Class — 27 Sep: surah falaq and nas",
+      "members": [
+        {
+          "ar": "أَعُوذُ",
+          "en": "I seek refuge (Isti'ādhah — fleeing to ultimate Sanctuary)",
+          "tr": "aʿūdhu",
+          "note": "Takes مِنْ (from evil/fear) into بِـ (Allah's fortress); total surrender to the Protector",
+          "from": "teacher"
+        },
+        {
+          "ar": "الْفَلَق",
+          "en": "The Daybreak (the violent cleaving of pitch darkness by light)",
+          "tr": "al-falaq",
+          "note": "Root ف-ل-ق: Allah violently splits the darkest night with dawn, and can split any entanglement",
+          "from": "teacher"
+        },
+        {
+          "ar": "غَاسِق",
+          "en": "Intense nightfall (night when it completely darkens and settles)",
+          "tr": "ghāsiq",
+          "note": "Teacher: دَخَلَ الليل وأظلم — when light vanishes and vulnerabilities peak",
+          "from": "teacher"
+        },
+        {
+          "ar": "وَقَبَ",
+          "en": "Penetrating completely (darkness entering and filling all things)",
+          "tr": "waqab",
+          "note": "Teacher: دَخَلَ ظَلَامٌ في كُلِّ شَيْءٍ — darkness falling into every crevice and room",
+          "from": "teacher"
+        },
+        {
+          "ar": "النَّفَّاثَات",
+          "en": "Those blowing with spittle upon knots (sorcery & occult binding)",
+          "tr": "an-naffāthāt",
+          "note": "Teacher: النساء السواحر ينفثن في عقد الخيط عندما يسحرون — blowing moisture while knotting cords",
+          "from": "teacher"
+        },
+        {
+          "ar": "عُقَد",
+          "en": "Knots (knots in thread & tangled knots of life)",
+          "tr": "ʿuqad",
+          "note": "Plural of عُقْدَة — physical knotted cords and emotional/life entanglements",
+          "from": "teacher"
+        },
+        {
+          "ar": "حَاسِد",
+          "en": "Envier (one who maliciously wishes blessings stripped from others)",
+          "tr": "ḥāsid",
+          "note": "Teacher: 'envier who wish evil on other' — refuge sought specifically إِذَا حَسَدَ (when enacted)",
+          "from": "teacher"
+        },
+        {
+          "ar": "الْوَسْوَاس",
+          "en": "The repetitive whisperer (subtle, continuous evil promptings)",
+          "tr": "al-waswās",
+          "note": "Onomatopoeic intensive fa'lāl pattern: recurring whispers disguised as one's own thoughts",
+          "from": "teacher"
+        },
+        {
+          "ar": "الْخَنَّاس",
+          "en": "The slinker (retreating upon dhikr, slinking back upon heedlessness)",
+          "tr": "al-khannās",
+          "note": "Teacher: 'the sneaky' — cowers and withdraws when Allah is remembered, ambushes when forgetful",
+          "from": "teacher"
+        },
+        {
+          "ar": "صُدُور",
+          "en": "Chests (the outer courtyard surrounding the heart / قَلْب)",
+          "tr": "ṣudūr",
+          "note": "Plural of صَدْر — the outer perimeter where waswas strikes; it cannot enter the qalb without invitation",
+          "from": "teacher"
+        },
+        {
+          "ar": "مَلِك",
+          "en": "Sovereign King (supreme ruler, distinct from مَالِك owner)",
+          "tr": "malik",
+          "note": "Teacher: distinguished مَلِك (King who commands subjects) from مَالِك (owner of possessions)",
+          "from": "teacher"
+        },
+        {
+          "ar": "النَّاس",
+          "en": "Humankind, people (in their shared vulnerability & forgetfulness)",
+          "tr": "an-nās",
+          "note": "Teacher: 'people / humankind' — repeated 5 times in Surah An-Nas to emphasize universal need",
+          "from": "teacher"
+        }
+      ]
     }
   ]
 }

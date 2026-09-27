@@ -1581,6 +1581,207 @@
           "en": "Then do they not look at the camels — how they are created?"
         }
       ]
+    },
+    {
+      "id": "awdh",
+      "root": "ع و ذ",
+      "rootTr": "ʿ-w-dh",
+      "theme": "to seek refuge, sanctuary, protection — Isti'ādhah (أَعُوذُ)",
+      "storyRef": {
+        "story": "story-08",
+        "ar": "أَعُوذُ"
+      },
+      "members": [
+        {
+          "ar": "أَعُوذُ",
+          "tr": "aʿūdhu",
+          "en": "I seek refuge / take shelter"
+        },
+        {
+          "ar": "عَاذَ",
+          "tr": "ʿādha",
+          "en": "he sought refuge"
+        },
+        {
+          "ar": "مَعَاذَ اللَّهِ",
+          "tr": "maʿādha Llāh",
+          "en": "Allah forbid! / I take refuge in Allah"
+        },
+        {
+          "ar": "مَلَاذ",
+          "tr": "malādh",
+          "en": "haven, sanctuary"
+        },
+        {
+          "ar": "تَعَوُّذ",
+          "tr": "taʿawwudh",
+          "en": "seeking protection (the act)"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "113:1",
+          "ar": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+          "en": "Say: I seek refuge in the Lord of the daybreak."
+        },
+        {
+          "ref": "114:1",
+          "ar": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+          "en": "Say: I seek refuge in the Lord of mankind."
+        },
+        {
+          "ref": "12:23",
+          "ar": "قَالَ مَعَاذَ اللَّهِ",
+          "en": "He said: Allah forbid! I take refuge in Allah."
+        }
+      ]
+    },
+    {
+      "id": "flq",
+      "root": "ف ل ق",
+      "rootTr": "f-l-q",
+      "theme": "to split, cleave open, rupture — the daybreak cleaving the pitch dark",
+      "storyRef": {
+        "story": "story-08",
+        "ar": "الْفَلَق"
+      },
+      "members": [
+        {
+          "ar": "الْفَلَق",
+          "tr": "al-falaq",
+          "en": "the daybreak, the cleaving of dawn"
+        },
+        {
+          "ar": "فَلَقَ",
+          "tr": "falaqa",
+          "en": "he split / cleaved"
+        },
+        {
+          "ar": "فَالِق",
+          "tr": "fāliq",
+          "en": "cleaver, splitter"
+        },
+        {
+          "ar": "فِلْقَة",
+          "tr": "filqa",
+          "en": "a split piece / slice"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "113:1",
+          "ar": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+          "en": "Say: I seek refuge in the Lord of the daybreak."
+        },
+        {
+          "ref": "6:95",
+          "ar": "إِنَّ اللَّهَ فَالِقُ الْحَبِّ وَالنَّوَىٰ",
+          "en": "Indeed, Allah is the cleaver of grain and date seeds."
+        },
+        {
+          "ref": "6:96",
+          "ar": "فَالِقُ الْإِصْبَاحِ",
+          "en": "Cleaver of the dawn."
+        }
+      ]
+    },
+    {
+      "id": "hsd",
+      "root": "ح س د",
+      "rootTr": "ḥ-s-d",
+      "theme": "to envy, wish blessings stripped from others — spiritual malice",
+      "storyRef": {
+        "story": "story-08",
+        "ar": "حَاسِد"
+      },
+      "members": [
+        {
+          "ar": "حَاسِد",
+          "tr": "ḥāsid",
+          "en": "envier (active wishing of evil)"
+        },
+        {
+          "ar": "حَسَدَ",
+          "tr": "ḥasada",
+          "en": "he envied"
+        },
+        {
+          "ar": "يَحْسُدُ",
+          "tr": "yaḥsudu",
+          "en": "he envies"
+        },
+        {
+          "ar": "حَسَد",
+          "tr": "ḥasad",
+          "en": "destructive envy / resentment"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "113:5",
+          "ar": "وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+          "en": "And from the evil of an envier when he envies."
+        },
+        {
+          "ref": "4:54",
+          "ar": "أَمْ يَحْسُدُونَ النَّاسَ عَلَىٰ مَا آتَاهُمُ اللَّهُ مِن فَضْلِهِ",
+          "en": "Or do they envy people for what Allah has given them of His bounty?"
+        }
+      ]
+    },
+    {
+      "id": "aqd",
+      "root": "ع ق د",
+      "rootTr": "ʿ-q-d",
+      "theme": "to tie, knot, bind, contract — physical knots & sacred covenants",
+      "storyRef": {
+        "story": "story-08",
+        "ar": "عُقَد"
+      },
+      "members": [
+        {
+          "ar": "عُقْدَة",
+          "tr": "ʿuqda",
+          "en": "a knot, bond, tangled issue"
+        },
+        {
+          "ar": "عُقَد",
+          "tr": "ʿuqad",
+          "en": "knots (plural)"
+        },
+        {
+          "ar": "عَقْد",
+          "tr": "ʿaqd",
+          "en": "contract, covenant, bond"
+        },
+        {
+          "ar": "عَقَدَ",
+          "tr": "ʿaqada",
+          "en": "he tied / concluded a pact"
+        },
+        {
+          "ar": "عَقِيدَة",
+          "tr": "ʿaqīda",
+          "en": "creed (firmly knotted conviction in heart)"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "113:4",
+          "ar": "وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ",
+          "en": "And from the evil of the blowers in knots."
+        },
+        {
+          "ref": "5:1",
+          "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ",
+          "en": "O you who have believed, fulfill all contracts."
+        },
+        {
+          "ref": "20:27",
+          "ar": "وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي",
+          "en": "And untie the knot from my tongue."
+        }
+      ]
     }
   ]
 }
