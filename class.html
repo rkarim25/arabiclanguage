@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujebdaa">
-  <link rel="stylesheet" href="css/style.css?v=mujebdaa">
+  <link rel="stylesheet" href="css/fonts.css?v=mujehd1h">
+  <link rel="stylesheet" href="css/style.css?v=mujehd1h">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -229,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujebdaa"></script>
-<script src="js/curriculum.js?v=mujebdaa"></script>
-<script src="js/app.js?v=mujebdaa"></script>
-<script src="js/tracker.js?v=mujebdaa"></script>
-<script src="js/plan.js?v=mujebdaa"></script>
+<script src="js/progress-model.js?v=mujehd1h"></script>
+<script src="js/curriculum.js?v=mujehd1h"></script>
+<script src="js/app.js?v=mujehd1h"></script>
+<script src="js/tracker.js?v=mujehd1h"></script>
+<script src="js/plan.js?v=mujehd1h"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -290,31 +290,34 @@ function renderPassage() {
   const container = document.getElementById("passageContainer");
   container.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal translation, breakdown, or phonetics:</span>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="line-toggle-btn" id="btnToggleAllEn" onclick="toggleAllPassageEn()">🌐 All Translation</button>
-        <button type="button" class="line-toggle-btn" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()">🧩 All Word-by-Word</button>
-        <button type="button" class="line-toggle-btn" id="btnToggleAllTr" onclick="toggleAllPassageTr()">🔤 All Transliteration</button>
+      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Passage View</span>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllEn" onclick="toggleAllPassageEn()" title="Show/hide English translation across all lines">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()" title="Show/hide word-by-word breakdown across all lines">🧩 Words</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllTr" onclick="toggleAllPassageTr()" title="Show/hide transliteration across all lines">🔤 Translit</button>
       </div>
     </div>
     ${STORY_DATA.sentences.map((s, idx) => `
-      <div class="passage-line" id="pline-${idx}">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
-          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Line ${idx + 1}</span>
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-            <button type="button" class="small icon-btn" onclick="speak('${encodeURIComponent(s.ar)}')">🔊 Read Line</button>
-            <button type="button" class="line-toggle-btn" id="btnEn-${idx}" onclick="togglePassageEn(${idx})">🌐 Translation</button>
-            <button type="button" class="line-toggle-btn" id="btnWbw-${idx}" onclick="togglePassageWbw(${idx})">🧩 Word-by-Word</button>
-            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnTr-${idx}" onclick="togglePassageTr(${idx})">🔤 Transliteration</button>` : ''}
+      <div class="book-line passage-line" id="pline-${idx}">
+        <div class="book-line-row">
+          <div class="line-badge-dock" aria-label="Line tools">
+            <span class="line-num-badge" title="Line ${idx + 1}">${idx + 1}</span>
+            <div class="sym-group">
+              <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              <button type="button" class="sym-badge" id="btnEn-${idx}" onclick="togglePassageEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+              <button type="button" class="sym-badge" id="btnWbw-${idx}" onclick="togglePassageWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
+              ${s.tr ? `<button type="button" class="sym-badge" id="btnTr-${idx}" onclick="togglePassageTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+            </div>
           </div>
-        </div>
-        <div class="s-content-wrap">
-          <div class="s-meta-side">
-            <div class="p-en" id="en-${idx}" style="display:none;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45">${s.en}</div>
-            ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
-          </div>
-          <div class="s-ar-side">
-            <div class="p-ar" style="margin:0">${s.ar}</div>
+          <div class="s-content-wrap">
+            <div class="s-meta-side">
+              <div class="p-en" id="en-${idx}" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+              ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+            </div>
+            <div class="s-ar-side">
+              <div class="p-ar" style="margin:0">${s.ar}</div>
+            </div>
           </div>
         </div>
         ${s.words && s.words.length ? `
@@ -667,27 +670,33 @@ function renderVocabAndSentences() {
   // Sentences
   const sDiv = document.getElementById("sentencesContainer");
   sDiv.innerHTML = `
-    <div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      <button type="button" class="line-toggle-btn" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()">🌐 All Translation</button>
-      <button type="button" class="line-toggle-btn" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()">🔤 All Transliteration</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">💬 Class Dialogue Sentences</span>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation across all class sentences">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration across all class sentences">🔤 Translit</button>
+      </div>
     </div>
     ${cls.sentences.slice(0, 8).map((s, idx) => `
-      <div class="s-row" id="cls-srow-${idx}" style="padding:10px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1}</span>
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-            <button class="small icon-btn" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')">🔊 Read</button>
-            <button type="button" class="line-toggle-btn" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle Translation">🌐 Translation</button>
-            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle Transliteration">🔤 Translit</button>` : ''}
+      <div class="book-line s-row" id="cls-srow-${idx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
+        <div class="book-line-row">
+          <div class="line-badge-dock" aria-label="Sentence tools">
+            <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
+            <div class="sym-group">
+              <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              <button type="button" class="sym-badge" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+              ${s.tr ? `<button type="button" class="sym-badge" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+            </div>
           </div>
-        </div>
-        <div class="s-content-wrap">
-          <div class="s-meta-side">
-            <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45">${s.en}</div>
-            ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
-          </div>
-          <div class="s-ar-side">
-            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+          <div class="s-content-wrap">
+            <div class="s-meta-side">
+              <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+              ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+            </div>
+            <div class="s-ar-side">
+              <span class="arabic" dir="rtl" style="font-size:23px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+            </div>
           </div>
         </div>
       </div>

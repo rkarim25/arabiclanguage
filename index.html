@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujebdaa">
-  <link rel="stylesheet" href="css/style.css?v=mujebdaa">
+  <link rel="stylesheet" href="css/fonts.css?v=mujehd1h">
+  <link rel="stylesheet" href="css/style.css?v=mujehd1h">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mujebdaa"></script>
-<script src="js/curriculum.js?v=mujebdaa"></script>
-<script src="js/app.js?v=mujebdaa"></script>
-<script src="js/tracker.js?v=mujebdaa"></script>
-<script src="js/plan.js?v=mujebdaa"></script>
-<script src="js/account.js?v=mujebdaa"></script>
+<script src="js/progress-model.js?v=mujehd1h"></script>
+<script src="js/curriculum.js?v=mujehd1h"></script>
+<script src="js/app.js?v=mujehd1h"></script>
+<script src="js/tracker.js?v=mujehd1h"></script>
+<script src="js/plan.js?v=mujehd1h"></script>
+<script src="js/account.js?v=mujehd1h"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2658,32 +2658,35 @@ function loadChapter(chap) {
   // Render Sentences
   const sList = document.getElementById("sentenceList");
   sList.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12px;color:var(--muted)">Clean reading mode. One-click buttons to reveal translation, breakdown, or phonetics:</span>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="line-toggle-btn" id="btnToggleAllDayEn" onclick="toggleAllDayEn()">🌐 All Translation</button>
-        <button type="button" class="line-toggle-btn" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()">🧩 All Words</button>
-        <button type="button" class="line-toggle-btn" id="btnToggleAllDayTr" onclick="toggleAllDayTr()">🔤 All Transliteration</button>
+    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Daily Reading Spread</span>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllDayEn" onclick="toggleAllDayEn()" title="Show/hide English translation across all sentences">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()" title="Show/hide word-by-word breakdown across all sentences">🧩 Words</button>
+        <button type="button" class="book-toggle-pill" id="btnToggleAllDayTr" onclick="toggleAllDayTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
       </div>
     </div>
     ${chap.sentences.map((s, idx) => `
-      <div class="s-row" id="srow-${idx}">
-        <div class="s-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <span style="font-size:11.5px;color:var(--muted);font-weight:600">Sentence ${idx + 1}</span>
-          <div class="s-actions" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-            <button type="button" class="small icon-btn" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')">🔊 Read</button>
-            <button type="button" class="line-toggle-btn" id="btn-den-${idx}" onclick="toggleDayEn(${idx})" title="Toggle translation">🌐 Translation</button>
-            ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-dwbw-${idx}" onclick="toggleDayWbw(${idx})" title="Toggle word-by-word">🧩 Words</button>` : ''}
-            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration">🔤 Translit</button>` : ''}
+      <div class="book-line s-row" id="srow-${idx}">
+        <div class="book-line-row">
+          <div class="line-badge-dock" aria-label="Sentence tools">
+            <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
+            <div class="sym-group">
+              <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              <button type="button" class="sym-badge" id="btn-den-${idx}" onclick="toggleDayEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+              ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-dwbw-${idx}" onclick="toggleDayWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+              ${s.tr ? `<button type="button" class="sym-badge" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+            </div>
           </div>
-        </div>
-        <div class="s-content-wrap">
-          <div class="s-meta-side">
-            <div class="s-en" id="day-en-${idx}" style="display:none;font-size:15px;font-weight:600;color:var(--ink);line-height:1.4">${s.en}</div>
-            ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:3px">${s.tr}</div>` : ''}
-          </div>
-          <div class="s-ar-side">
-            <span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+          <div class="s-content-wrap">
+            <div class="s-meta-side">
+              <div class="s-en" id="day-en-${idx}" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+              ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+            </div>
+            <div class="s-ar-side">
+              <span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
+            </div>
           </div>
         </div>
         ${s.words && s.words.length ? `
@@ -2874,15 +2877,15 @@ function renderQuranSection(surahId) {
 
   qDiv.innerHTML = `
     <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
-      <button type="button" class="line-toggle-btn" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()">🧩 All Word-by-Word</button>
+      <button type="button" class="book-toggle-pill" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()" title="Show/hide word breakdown across all verses">🧩 All Words</button>
     </div>
     ${surah.verses.slice(0, 5).map((v, vIdx) => `
       <div class="q-verse">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px">
           <span class="q-ref">${v.ref}</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <button class="small" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})">🔊 Recite</button>
-            <button type="button" class="line-toggle-btn" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word">🧩 Word-by-Word</button>
+          <div class="sym-group">
+            <button type="button" class="sym-badge" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" title="Recitation by Mishary Rashid Alafasy" aria-label="Recite">🔊</button>
+            <button type="button" class="sym-badge" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
           </div>
         </div>
         <div class="q-ar">${v.ar}</div>

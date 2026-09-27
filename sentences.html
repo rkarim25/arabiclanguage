@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujebdaa">
-  <link rel="stylesheet" href="css/style.css?v=mujebdaa">
+  <link rel="stylesheet" href="css/fonts.css?v=mujehd1h">
+  <link rel="stylesheet" href="css/style.css?v=mujehd1h">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -257,8 +257,8 @@
           <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
         </div>
         <div style="display:flex;gap:6px">
-          <button type="button" class="line-toggle-btn" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()">🧩 All Word-by-Word</button>
-          <button type="button" class="line-toggle-btn" id="btnToggleAllTblTr" onclick="toggleAllTblTr()">🔤 All Transliteration</button>
+          <button type="button" class="book-toggle-pill" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()" title="Show/hide word breakdown across all sentences">🧩 Words</button>
+          <button type="button" class="book-toggle-pill" id="btnToggleAllTblTr" onclick="toggleAllTblTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
         </div>
       </div>
       <div class="sheet-wrap">
@@ -283,10 +283,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujebdaa"></script>
-<script src="js/curriculum.js?v=mujebdaa"></script>
-<script src="js/app.js?v=mujebdaa"></script>
-<script src="js/tracker.js?v=mujebdaa"></script>
+<script src="js/progress-model.js?v=mujehd1h"></script>
+<script src="js/curriculum.js?v=mujehd1h"></script>
+<script src="js/app.js?v=mujehd1h"></script>
+<script src="js/tracker.js?v=mujehd1h"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -524,19 +524,19 @@ function render10Cards() {
             ${isEnFirst ? `
               <div class="s-ar-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
-                <div style="display:flex;gap:6px;align-items:center">
-                  <button type="button" class="small icon-btn s-audio-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊 Read</button>
-                  ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})">🧩 Words</button>` : ''}
-                  ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})">🔤 Translit</button>` : ''}
+                <div class="sym-group">
+                  <button type="button" class="sym-badge" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                  ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
               ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
             ` : `
               <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span>${s.en}</span>
-                <div style="display:flex;gap:6px;align-items:center">
-                  ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})">🧩 Words</button>` : ''}
-                  ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})">🔤 Translit</button>` : ''}
+                <div class="sym-group">
+                  ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
               ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
