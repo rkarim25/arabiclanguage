@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
-  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/fonts.css?v=muje7ykq">
+  <link rel="stylesheet" href="css/style.css?v=muje7ykq">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -283,10 +283,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujdxv05"></script>
-<script src="js/curriculum.js?v=mujdxv05"></script>
-<script src="js/app.js?v=mujdxv05"></script>
-<script src="js/tracker.js?v=mujdxv05"></script>
+<script src="js/progress-model.js?v=muje7ykq"></script>
+<script src="js/curriculum.js?v=muje7ykq"></script>
+<script src="js/app.js?v=muje7ykq"></script>
+<script src="js/tracker.js?v=muje7ykq"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -328,7 +328,8 @@ const BATCH_SIZE = 10;
       fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
       fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
-      fetch("data/sentences.json").then(r => r.json()).catch(() => null)
+      fetch("data/sentences.json").then(r => r.json()).catch(() => null),
+      loadFamIdx()
     ]);
     DATA = senRes;
 
@@ -543,12 +544,19 @@ function render10Cards() {
 
             ${s.words && s.words.length ? `
               <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:none" onclick="event.stopPropagation()">
-                ${s.words.map(w => `
-                  <div class="wbw-chip-sm" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                    <span class="w-ar">${w[0]}</span>
-                    <span class="w-en">${w[1]}</span>
-                  </div>
-                `).join("")}
+                <div class="wbw-chips-wrap" style="display:flex;gap:5px;flex-wrap:wrap">
+                  ${s.words.map((w, wIdx) => {
+                    const fam = famLookup(w[0]);
+                    return `
+                      <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                        <span class="w-ar">${w[0]}</span>
+                        <span class="w-en">${w[1]}</span>
+                        ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('drill-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                      </div>
+                    `;
+                  }).join("")}
+                </div>
+                <div class="wbw-drawer-slot" id="wbw-drawer-slot-drill-${idx}"></div>
               </div>
             ` : ''}
 
@@ -741,12 +749,19 @@ function renderMasterBank() {
           ${s.tr ? `<div id="tbl-tr-${idx}" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
           ${s.words && s.words.length ? `
             <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:none;margin-top:3px">
-              ${s.words.map(w => `
-                <div class="wbw-chip-sm" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                  <span class="w-ar">${w[0]}</span>
-                  <span class="w-en">${w[1]}</span>
-                </div>
-              `).join("")}
+              <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
+                ${s.words.map((w, wIdx) => {
+                  const fam = famLookup(w[0]);
+                  return `
+                    <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                      <span class="w-ar">${w[0]}</span>
+                      <span class="w-en">${w[1]}</span>
+                      ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('tbl-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+              <div class="wbw-drawer-slot" id="wbw-drawer-slot-tbl-${idx}"></div>
             </div>
           ` : ''}
         </td>

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
-  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/fonts.css?v=muje7ykq">
+  <link rel="stylesheet" href="css/style.css?v=muje7ykq">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -277,10 +277,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujdxv05"></script>
-<script src="js/curriculum.js?v=mujdxv05"></script>
-<script src="js/app.js?v=mujdxv05"></script>
-<script src="js/tracker.js?v=mujdxv05"></script>
+<script src="js/progress-model.js?v=muje7ykq"></script>
+<script src="js/curriculum.js?v=muje7ykq"></script>
+<script src="js/app.js?v=muje7ykq"></script>
+<script src="js/tracker.js?v=muje7ykq"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -302,7 +302,8 @@ const BATCH_SIZE = 10;
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
       fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
       fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
-      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] }))
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
+      loadFamIdx()
     ]);
 
     const seen = new Set();
@@ -311,7 +312,9 @@ const BATCH_SIZE = 10;
       const n = normalizeAr(ar);
       if (seen.has(n)) return;
       seen.add(n);
-      MASTER_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: root || "" });
+      const fam = famLookup(ar);
+      const r = root || (fam ? fam.root : "");
+      MASTER_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: r, fam });
     };
 
     // 1. Teacher words (from Sunday Preply classes)
@@ -490,13 +493,37 @@ function render10Cards() {
                 <span class="arabic revealed-ar" dir="rtl">${w.ar}</span>
                 <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
                 ${w.tr ? `<span class="tr-text">${w.tr}</span>` : ''}
-                ${w.root ? `<span class="root-tag">🌿 ${w.root}</span>` : ''}
               </div>
               ${w.note ? `<div class="revealed-note" dir="rtl">${w.note}</div>` : ''}
             ` : `
               <div class="revealed-en">${w.en} ${w.tr ? `<span class="tr-text">(${w.tr})</span>` : ''}</div>
               ${w.note ? `<div class="revealed-note">${w.note}</div>` : ''}
             `}
+            ${(() => {
+              const fam = w.fam || famLookup(w.ar);
+              if (!fam) return '';
+              return `
+                <div class="word-rf-container">
+                  <button type="button" class="rf-pill-btn" onclick="event.stopPropagation(); toggleVocabRootFam(${idx})">
+                    🌿 Root: ${fam.root} (${fam.members.length} words) ▾
+                  </button>
+                  <div id="w-rf-${idx}" class="word-rf-expand" style="display:none" onclick="event.stopPropagation()">
+                    <div class="rf-info-line">
+                      <b>🌿 Root ${fam.root}</b> <i>(${fam.rootTr || ''})</i> — <span style="color:var(--muted)">${fam.theme}</span>
+                    </div>
+                    <div class="rf-sister-grid">
+                      ${fam.members.map(m => `
+                        <div class="rf-sister-card" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(m.ar)}')">
+                          <span class="arabic rf-sister-ar" dir="rtl">${m.ar}</span>
+                          <span class="rf-sister-en">${m.en}</span>
+                          <span class="rf-sister-play">🔊</span>
+                        </div>
+                      `).join("")}
+                    </div>
+                  </div>
+                </div>
+              `;
+            })()}
           `}
         </td>
         <td style="text-align:right">
@@ -654,6 +681,7 @@ function renderMasterTable() {
 
   tbody.innerHTML = displaySlice.map((w, idx) => {
     const exp = getExposure(w.key, w.ar);
+    const fam = w.fam || famLookup(w.ar);
     const item = srs[w.key] || {};
     const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
     const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
@@ -676,6 +704,7 @@ function renderMasterTable() {
           <span style="font-size:12px;color:var(--muted)">
             ${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : w.src === 'root' ? '🌿 Root' : '🗣 Everyday'}
           </span>
+          ${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none;margin-top:4px" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}
         </td>
         <td style="text-align:center">
           ${exp.isRetired ? `<span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10.5px;padding:2px 6px">Retired</span>` :
@@ -694,12 +723,36 @@ function renderMasterTable() {
           </div>
         </td>
       </tr>
+      ${fam ? `
+        <tr id="m-rf-${idx}" style="display:none;background:rgba(13,122,95,0.03)">
+          <td colspan="6" style="padding:10px 16px">
+            <div class="rf-info-line">
+              <b>🌿 Root ${fam.root}</b> <i>(${fam.rootTr || ''})</i> — <span style="color:var(--muted)">${fam.theme}</span>
+            </div>
+            <div class="rf-sister-grid">
+              ${fam.members.map(m => `
+                <div class="rf-sister-card" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(m.ar)}')">
+                  <span class="arabic rf-sister-ar" dir="rtl">${m.ar}</span>
+                  <span class="rf-sister-en">${m.en}</span>
+                  <span class="rf-sister-play">🔊</span>
+                </div>
+              `).join("")}
+            </div>
+          </td>
+        </tr>
+      ` : ''}
     `;
   }).join("");
 
   if (filtered.length > 100) {
     tbody.innerHTML += `<tr><td colspan="6" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
-  }
+}
+
+function toggleMasterRootDrawer(idx) {
+  const row = document.getElementById("m-rf-" + idx);
+  if (!row) return;
+  const isHidden = row.style.display === "none" || !row.style.display;
+  row.style.display = isHidden ? "table-row" : "none";
 }
 
 function rateMasterWord(key, bucket, encodedAr) {

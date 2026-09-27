@@ -572,3 +572,181 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 .rv-ctrl .miss { border-color: var(--red); color: var(--red); margin-right: 10px; }
 .rv-ctrl .miss.on { background: var(--red-soft); }
 .rv-ctrl .bucket-slot { display: inline-block; vertical-align: middle; }
+
+/* ---------- Root Family Background System (Expandable) ---------- */
+.wbw-chip {
+  position: relative;
+}
+.wbw-chip.has-fam {
+  border-color: rgba(13, 122, 95, 0.4);
+}
+.wbw-rf-badge {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-top: 3px;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.wbw-rf-badge:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.wbw-rf-drawer {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  animation: rfFadeIn 0.15s ease-in-out;
+  text-align: left;
+}
+@keyframes rfFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wbw-rf-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+  font-size: 13px;
+  color: var(--ink);
+}
+.wbw-rf-title b {
+  color: var(--accent);
+  font-family: var(--font-ar);
+  font-size: 16px;
+  margin-inline: 4px;
+}
+.wbw-rf-close {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.wbw-rf-close:hover {
+  color: var(--ink);
+  background: rgba(0,0,0,0.06);
+}
+.wbw-rf-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.wbw-rf-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.wbw-rf-item:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.wbw-rf-ar {
+  font-size: 17px;
+  color: var(--accent);
+  line-height: 1.3;
+}
+.wbw-rf-en {
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.wbw-rf-play {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Vocabulary Root Explorer (words.html) */
+.word-rf-container {
+  margin-top: 6px;
+}
+.rf-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.rf-pill-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.word-rf-expand {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: left;
+}
+.rf-info-line {
+  font-size: 12.5px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 5px;
+}
+.rf-info-line b {
+  font-family: var(--font-ar);
+  font-size: 15px;
+  color: var(--accent);
+}
+.rf-sister-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rf-sister-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.rf-sister-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.rf-sister-ar {
+  font-size: 16px;
+  color: var(--accent);
+}
+.rf-sister-en {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.rf-sister-play {
+  font-size: 11px;
+}

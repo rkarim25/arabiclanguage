@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
-  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/fonts.css?v=muje7ykq">
+  <link rel="stylesheet" href="css/style.css?v=muje7ykq">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -229,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujdxv05"></script>
-<script src="js/curriculum.js?v=mujdxv05"></script>
-<script src="js/app.js?v=mujdxv05"></script>
-<script src="js/tracker.js?v=mujdxv05"></script>
-<script src="js/plan.js?v=mujdxv05"></script>
+<script src="js/progress-model.js?v=muje7ykq"></script>
+<script src="js/curriculum.js?v=muje7ykq"></script>
+<script src="js/app.js?v=muje7ykq"></script>
+<script src="js/tracker.js?v=muje7ykq"></script>
+<script src="js/plan.js?v=muje7ykq"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -245,7 +245,8 @@ let CLASS_DATA = null;
   try {
     const [sRes, cRes] = await Promise.all([
       fetch("data/story-07.json").then(r => r.json()),
-      fetch("data/classes.json").then(r => r.json())
+      fetch("data/classes.json").then(r => r.json()),
+      loadFamIdx()
     ]);
     STORY_DATA = sRes;
     CLASS_DATA = cRes;
@@ -318,12 +319,19 @@ function renderPassage() {
         </div>
         ${s.words && s.words.length ? `
           <div class="p-wbw" id="wbw-${idx}" style="display:none;margin-top:8px">
-            ${s.words.map(w => `
-              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                <span class="w-ar">${w[0]}</span>
-                <span class="w-en">${w[1]}</span>
-              </div>
-            `).join("")}
+            <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
+              ${s.words.map((w, wIdx) => {
+                const fam = famLookup(w[0]);
+                return `
+                  <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                    <span class="w-ar">${w[0]}</span>
+                    <span class="w-en">${w[1]}</span>
+                    ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('cls-p-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+            <div class="wbw-drawer-slot" id="wbw-drawer-slot-cls-p-${idx}"></div>
           </div>
         ` : ''}
       </div>

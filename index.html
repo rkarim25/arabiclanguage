@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujdxv05">
-  <link rel="stylesheet" href="css/style.css?v=mujdxv05">
+  <link rel="stylesheet" href="css/fonts.css?v=muje7ykq">
+  <link rel="stylesheet" href="css/style.css?v=muje7ykq">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mujdxv05"></script>
-<script src="js/curriculum.js?v=mujdxv05"></script>
-<script src="js/app.js?v=mujdxv05"></script>
-<script src="js/tracker.js?v=mujdxv05"></script>
-<script src="js/plan.js?v=mujdxv05"></script>
-<script src="js/account.js?v=mujdxv05"></script>
+<script src="js/progress-model.js?v=muje7ykq"></script>
+<script src="js/curriculum.js?v=muje7ykq"></script>
+<script src="js/app.js?v=muje7ykq"></script>
+<script src="js/tracker.js?v=muje7ykq"></script>
+<script src="js/plan.js?v=muje7ykq"></script>
+<script src="js/account.js?v=muje7ykq"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2631,9 +2631,11 @@ let isAudioRunning = false;
 (async () => {
   try {
     loadQuranWordAudio();
-    const res = await fetch("data/verses.json");
-    VERSES_DATA = await res.json();
-  } catch (e) { console.error("Could not load verses", e); }
+    await Promise.all([
+      fetch("data/verses.json").then(r => r.json()).then(d => { VERSES_DATA = d; }).catch(() => {}),
+      loadFamIdx()
+    ]);
+  } catch (e) { console.error("Could not load initial data", e); }
 
   initChapterSelector();
   loadChapter(CHAPTERS[0]);
@@ -2686,12 +2688,19 @@ function loadChapter(chap) {
         </div>
         ${s.words && s.words.length ? `
           <div class="s-wbw" id="day-wbw-${idx}" style="display:none;margin-top:8px">
-            ${s.words.map(w => `
-              <div class="wbw-chip" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                <span class="w-ar">${w[0]}</span>
-                <span class="w-en">${w[1]}</span>
-              </div>
-            `).join("")}
+            <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
+              ${s.words.map((w, wIdx) => {
+                const fam = famLookup(w[0]);
+                return `
+                  <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                    <span class="w-ar">${w[0]}</span>
+                    <span class="w-en">${w[1]}</span>
+                    ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('day-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+            <div class="wbw-drawer-slot" id="wbw-drawer-slot-day-${idx}"></div>
           </div>
         ` : ''}
       </div>

@@ -2004,7 +2004,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mujdxv05";
+const DATA_V = "muje7ykq";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2914,24 +2914,134 @@ function lexLookup(word) {
 }
 /* Root families travel WITH words (his call, 2026-07-19 — no separate Roots
    destination): every family member is indexed by its normalized form, and
-   the tap popover shows the whole family under any of its words. */
-let _famIdx = null, _famIdxLoading = null;
+   the tap popover shows the whole family under any of its words.
+   Expanded 2026-09-27: Background root system with Arabic morphology
+   matcher, word-by-word expandable drawers, and vocabulary sister-word cards. */
+let _famIdx = null, _famIdxLoading = null, _famList = [];
 function loadFamIdx() {
-  if (_famIdx || _famIdxLoading) return _famIdxLoading || Promise.resolve();
+  if (_famIdx || _famIdxLoading) return _famIdxLoading || Promise.resolve(_famList);
   _famIdxLoading = fetch("data/families.json").then(r => r.json()).then(d => {
     _famIdx = {};
-    d.families.forEach(f => f.members.forEach(m => {
-      const n = normalizeAr(m.ar).replace(/^ال/, "");
-      if (n && !_famIdx[n]) _famIdx[n] = f;
-    }));
-  }).catch(() => (_famIdx = {}));
+    _famList = d.families || [];
+    _famList.forEach(f => {
+      // 1. Index by root forms (e.g., "كتب", "ك-ت-ب", "ك ت ب")
+      const rBare = normalizeAr(f.root).replace(/\s+/g, "");
+      if (rBare) _famIdx[rBare] = f;
+      const rSpace = normalizeAr(f.root);
+      if (rSpace) _famIdx[rSpace] = f;
+      if (f.id) _famIdx[f.id] = f;
+
+      // 2. Index every member word and its normalized forms
+      (f.members || []).forEach(m => {
+        const norm = normalizeAr(m.ar);
+        if (!norm) return;
+        if (!_famIdx[norm]) _famIdx[norm] = f;
+        const noAl = norm.replace(/^ال/, "");
+        if (noAl && !_famIdx[noAl]) _famIdx[noAl] = f;
+      });
+    });
+    return _famList;
+  }).catch(() => { _famIdx = {}; _famList = []; return []; });
   return _famIdxLoading;
 }
+
 function famLookup(word) {
-  if (!_famIdx) return null;
+  if (!_famIdx || !word) return null;
   const n = normalizeAr(word);
-  return _famIdx[n] || _famIdx[n.replace(/^ال/, "")] || null;
+  if (!n) return null;
+
+  // 1. Direct hit
+  if (_famIdx[n]) return _famIdx[n];
+
+  // 2. Without definite article (الـ)
+  const noAl = n.replace(/^ال/, "");
+  if (_famIdx[noAl]) return _famIdx[noAl];
+
+  // 3. Strip leading conjunctions/prepositions (و، ف، ب، ل، ك)
+  const noPref = n.replace(/^[وفبلك](?:ال)?/, "");
+  if (noPref && noPref.length >= 2 && _famIdx[noPref]) return _famIdx[noPref];
+
+  // 4. Try suffix stripping with taa marbuta restoration (e.g., مدرستي -> مدرسة)
+  const stripSuffix = base => {
+    const m = base.match(/^(.*?)(?:هم|هن|كم|كن|نا|ني|ها|هما|كما|[هيك]|[ويا]ن|ات)$/);
+    if (!m) return null;
+    let stem = m[1];
+    if (stem.endsWith("ت")) stem = stem.slice(0, -1) + "ه";
+    return stem;
+  };
+
+  const s1 = stripSuffix(noAl);
+  if (s1 && _famIdx[s1]) return _famIdx[s1];
+  const s2 = stripSuffix(noPref);
+  if (s2 && _famIdx[s2]) return _famIdx[s2];
+
+  // 5. 3-letter consonant root matching
+  if (n.length === 3 && _famIdx[n]) return _famIdx[n];
+
+  return null;
 }
+
+/* Global Root Drawer Controller for Word-by-Word (WBW) */
+let _activeWbwDrawer = null;
+function toggleWbwRootFamily(scopeId, wIdx, wordEncoded) {
+  const wordAr = decodeURIComponent(wordEncoded);
+  const fam = famLookup(wordAr);
+  if (!fam) return;
+
+  const slot = document.getElementById("wbw-drawer-slot-" + scopeId);
+  if (!slot) return;
+
+  const drawerId = "wbw-rfd-" + scopeId + "-" + wIdx;
+  const existing = document.getElementById(drawerId);
+
+  // If already open, close it
+  if (existing) {
+    existing.remove();
+    _activeWbwDrawer = null;
+    return;
+  }
+
+  // Close any other open drawer in this slot
+  slot.innerHTML = "";
+
+  const drawer = document.createElement("div");
+  drawer.className = "wbw-rf-drawer";
+  drawer.id = drawerId;
+  drawer.innerHTML = `
+    <div class="wbw-rf-head">
+      <div class="wbw-rf-title">
+        🌿 <b>Root ${fam.root}</b> <span class="wbw-rf-tr">(${fam.rootTr || ""})</span> — <span style="color:var(--muted)">${fam.theme}</span>
+      </div>
+      <button type="button" class="wbw-rf-close" onclick="closeWbwDrawer('${scopeId}', ${wIdx})" title="Close">✕</button>
+    </div>
+    <div class="wbw-rf-list">
+      ${fam.members.map(m => `
+        <div class="wbw-rf-item" onclick="speak('${encodeURIComponent(m.ar)}')" title="Listen to ${m.ar}">
+          <span class="arabic wbw-rf-ar" dir="rtl">${m.ar}</span>
+          <span class="wbw-rf-en">${m.en}</span>
+          <span class="wbw-rf-play">🔊</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+  slot.appendChild(drawer);
+  _activeWbwDrawer = drawerId;
+}
+
+function closeWbwDrawer(scopeId, wIdx) {
+  const el = document.getElementById("wbw-rfd-" + scopeId + "-" + wIdx);
+  if (el) el.remove();
+  _activeWbwDrawer = null;
+}
+
+/* Global Root Toggler for Vocabulary (words.html) */
+function toggleVocabRootFam(cardIdx) {
+  const el = document.getElementById("w-rf-" + cardIdx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+}
+
 /* Conjugation tables travel with words too (his 2026-07-21 note: every word
    should show "conjugation and present and past form"): conjugations.json
    indexes EVERY past/present form — plus the سـ future and و/ف-prefixed
