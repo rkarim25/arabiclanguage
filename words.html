@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujf15xi">
-  <link rel="stylesheet" href="css/style.css?v=mujf15xi">
+  <link rel="stylesheet" href="css/fonts.css?v=mujffoya">
+  <link rel="stylesheet" href="css/style.css?v=mujffoya">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -185,6 +185,7 @@
           <button type="button" class="chip active" data-filter="balanced">Balanced</button>
           <button type="button" class="chip" data-filter="due">Due</button>
           <button type="button" class="chip" data-filter="new">New</button>
+          <button type="button" class="chip" data-filter="weakest" title="Prioritize weakest & struggle words">📉 Weakest</button>
           <button type="button" class="chip" data-filter="teacher">Preply</button>
           <button type="button" class="chip" data-filter="quran">Qur'an</button>
           <button type="button" class="chip" data-filter="everyday">Everyday</button>
@@ -277,10 +278,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujf15xi"></script>
-<script src="js/curriculum.js?v=mujf15xi"></script>
-<script src="js/app.js?v=mujf15xi"></script>
-<script src="js/tracker.js?v=mujf15xi"></script>
+<script src="js/progress-model.js?v=mujffoya"></script>
+<script src="js/curriculum.js?v=mujffoya"></script>
+<script src="js/app.js?v=mujffoya"></script>
+<script src="js/tracker.js?v=mujffoya"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -426,7 +427,21 @@ function load10Words() {
   dueList.sort((a, b) => b.weight - a.weight);
 
   let chosen = [];
-  if (currentFilter === "due") {
+  if (currentFilter === "weakest") {
+    const weakList = available.slice().sort((a, b) => {
+      const ia = srs[a.key];
+      const ib = srs[b.key];
+      const ba = (ia && ia.b) || (ia && ia.box >= 4 ? "strong" : ia && ia.box >= 2 ? "medium" : ia && ia.box === 1 ? "weak" : ia && ia.box === 0 ? "learning" : null);
+      const bb = (ib && ib.b) || (ib && ib.box >= 4 ? "strong" : ib && ib.box >= 2 ? "medium" : ib && ib.box === 1 ? "weak" : ib && ib.box === 0 ? "learning" : null);
+      const rank = bkt => (bkt === "learning" ? 0 : bkt === "weak" ? 1 : !bkt ? 2 : bkt === "medium" ? 3 : 4);
+      const diff = rank(ba) - rank(bb);
+      if (diff !== 0) return diff;
+      const failsA = (ia ? (ia.f || ia.slips || 0) : 0) + (missedWords.has(normalizeAr(a.ar)) ? 10 : 0);
+      const failsB = (ib ? (ib.f || ib.slips || 0) : 0) + (missedWords.has(normalizeAr(b.ar)) ? 10 : 0);
+      return failsB - failsA;
+    });
+    chosen = weakList.slice(0, BATCH_SIZE);
+  } else if (currentFilter === "due") {
     chosen = dueList.slice(0, BATCH_SIZE).map(x => x.w);
     if (chosen.length < BATCH_SIZE) {
       chosen = chosen.concat(newList.slice(0, BATCH_SIZE - chosen.length));
@@ -451,6 +466,9 @@ function load10Words() {
       chosen = chosen.concat(remainingNew.slice(0, BATCH_SIZE - chosen.length));
     }
   }
+
+  const titleEl = document.getElementById("sessionTitle");
+  if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Batch of 10 Weakest Words" : "Batch of 10 Words";
 
   ACTIVE_WORDS = chosen.slice(0, BATCH_SIZE);
   render10Cards();
@@ -746,6 +764,7 @@ function renderMasterTable() {
 
   if (filtered.length > 100) {
     tbody.innerHTML += `<tr><td colspan="6" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
+  }
 }
 
 function toggleMasterRootDrawer(idx) {

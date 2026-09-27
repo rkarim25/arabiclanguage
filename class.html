@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujf15xi">
-  <link rel="stylesheet" href="css/style.css?v=mujf15xi">
+  <link rel="stylesheet" href="css/fonts.css?v=mujffoya">
+  <link rel="stylesheet" href="css/style.css?v=mujffoya">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -145,11 +145,12 @@
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <span>📇 Class Vocabulary</span>
-        <div style="display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" onclick="event.stopPropagation()">
           <span style="font-size:12px;color:var(--muted);margin-right:2px">Practice Mode:</span>
           <button type="button" class="book-toggle-pill active" id="btnVocabModeAll" onclick="setVocabPracticeMode('all')" title="Show both Arabic and English">All</button>
           <button type="button" class="book-toggle-pill" id="btnVocabModeAr" onclick="setVocabPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnVocabModeEn" onclick="setVocabPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
+          <button type="button" class="book-toggle-pill" id="btnVocabSortWeakest" onclick="toggleVocabSortWeakest()" title="Sort vocabulary by weakest rating first">📉 Weakest First</button>
         </div>
       </summary>
       <div id="vocabContainer" style="overflow-x:auto;margin-top:8px">Loading vocabulary…</div>
@@ -157,7 +158,16 @@
 
     <!-- 3. Class Sentences -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
-      <summary style="cursor:pointer;font-weight:700;font-size:16px">💬 Sentences Drilled in Class</summary>
+      <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <span>💬 Sentences Drilled in Class</span>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" onclick="event.stopPropagation()">
+          <span style="font-size:12px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+          <button type="button" class="book-toggle-pill active" id="btnClsSentModeAll" onclick="setClsSentPracticeMode('all')" title="Show both Arabic and English">All</button>
+          <button type="button" class="book-toggle-pill" id="btnClsSentModeAr" onclick="setClsSentPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
+          <button type="button" class="book-toggle-pill" id="btnClsSentModeEn" onclick="setClsSentPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
+          <button type="button" class="book-toggle-pill" id="btnClsSentSortWeakest" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+        </div>
+      </summary>
       <div id="sentencesContainer">Loading sentences…</div>
     </details>
 
@@ -234,11 +244,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujf15xi"></script>
-<script src="js/curriculum.js?v=mujf15xi"></script>
-<script src="js/app.js?v=mujf15xi"></script>
-<script src="js/tracker.js?v=mujf15xi"></script>
-<script src="js/plan.js?v=mujf15xi"></script>
+<script src="js/progress-model.js?v=mujffoya"></script>
+<script src="js/curriculum.js?v=mujffoya"></script>
+<script src="js/app.js?v=mujffoya"></script>
+<script src="js/tracker.js?v=mujffoya"></script>
+<script src="js/plan.js?v=mujffoya"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -413,26 +423,77 @@ function toggleAllPassageTr() {
   if (btnAll) btnAll.classList.toggle("active", allTrVisible);
 }
 
+let clsSentPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let clsSentSortWeakest = false;
+let clsSentRevealed = {};
+let clsSentEnVisible = {};
+let allClsSentEnVisible = false;
+let allClsTrVisible = false;
+
+function setClsSentPracticeMode(mode) {
+  clsSentPracticeMode = mode;
+  clsSentRevealed = {};
+  const btnAll = document.getElementById("btnClsSentModeAll");
+  const btnAr = document.getElementById("btnClsSentModeAr");
+  const btnEn = document.getElementById("btnClsSentModeEn");
+  if (btnAll) btnAll.classList.toggle("active", mode === "all");
+  if (btnAr) btnAr.classList.toggle("active", mode === "ar-only");
+  if (btnEn) btnEn.classList.toggle("active", mode === "en-only");
+  renderClassSentences();
+}
+
+function toggleClsSentSortWeakest() {
+  clsSentSortWeakest = !clsSentSortWeakest;
+  const btn = document.getElementById("btnClsSentSortWeakest");
+  if (btn) btn.classList.toggle("active", clsSentSortWeakest);
+  const btnInner = document.getElementById("btnClsSentSortWeakestInner");
+  if (btnInner) btnInner.classList.toggle("active", clsSentSortWeakest);
+  renderClassSentences();
+}
+
+function revealClsSentence(idx) {
+  clsSentRevealed[idx] = true;
+  renderClassSentences();
+}
+
+function toggleAllClsSentReveal(reveal) {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const sents = CLASS_DATA.classes[0].sentences || [];
+  sents.forEach((_, idx) => { clsSentRevealed[idx] = reveal; });
+  renderClassSentences();
+}
+
 function toggleClsSentenceEn(idx) {
+  if (clsSentPracticeMode === "ar-only" && !clsSentRevealed[idx]) {
+    revealClsSentence(idx);
+    return;
+  }
   const el = document.getElementById("cls-en-" + idx);
   const btn = document.getElementById("btnClsEn-" + idx);
   if (!el) return;
   const isHidden = el.style.display === "none" || !el.style.display;
   el.style.display = isHidden ? "block" : "none";
+  clsSentEnVisible[idx] = isHidden;
   if (btn) btn.classList.toggle("active", isHidden);
 }
 
-let allClsEnVisible = false;
 function toggleAllClsSentenceEn() {
-  allClsEnVisible = !allClsEnVisible;
-  document.querySelectorAll("[id^='cls-en-']").forEach(el => {
-    el.style.display = allClsEnVisible ? "block" : "none";
+  if (clsSentPracticeMode === "ar-only") {
+    const sents = CLASS_DATA && CLASS_DATA.classes && CLASS_DATA.classes[0] ? (CLASS_DATA.classes[0].sentences || []) : [];
+    const allRevealed = sents.length > 0 && sents.every((_, i) => clsSentRevealed[i]);
+    toggleAllClsSentReveal(!allRevealed);
+    return;
+  }
+  allClsSentEnVisible = !allClsSentEnVisible;
+  document.querySelectorAll("[id^='cls-en-']").forEach((el, idx) => {
+    el.style.display = allClsSentEnVisible ? "block" : "none";
+    clsSentEnVisible[idx] = allClsSentEnVisible;
   });
   document.querySelectorAll("[id^='btnClsEn-']").forEach(btn => {
-    btn.classList.toggle("active", allClsEnVisible);
+    btn.classList.toggle("active", allClsSentEnVisible);
   });
   const btnAll = document.getElementById("btnToggleAllClsEn");
-  if (btnAll) btnAll.classList.toggle("active", allClsEnVisible);
+  if (btnAll) btnAll.classList.toggle("active", allClsSentEnVisible);
 }
 
 function toggleClsSentenceTr(idx) {
@@ -444,7 +505,6 @@ function toggleClsSentenceTr(idx) {
   if (btn) btn.classList.toggle("active", isHidden);
 }
 
-let allClsTrVisible = false;
 function toggleAllClsSentenceTr() {
   allClsTrVisible = !allClsTrVisible;
   document.querySelectorAll("[id^='cls-tr-']").forEach(el => {
@@ -455,6 +515,119 @@ function toggleAllClsSentenceTr() {
   });
   const btnAll = document.getElementById("btnToggleAllClsTr");
   if (btnAll) btnAll.classList.toggle("active", allClsTrVisible);
+}
+
+function getSentenceWeaknessRank(s, srs, vocabMap) {
+  if (s.key && srs[s.key]) {
+    const b = getWordBucket(srs[s.key]);
+    if (b === "learning") return 0;
+    if (b === "weak") return 1;
+    if (b === "medium") return 3;
+    if (b === "strong") return 4;
+  }
+  const words = (s.ar || "").split(/\s+/).map(w => w.replace(/[.,!؟،]/g, "").trim());
+  let minRank = 2; // unrated default
+  for (const w of words) {
+    if (vocabMap && vocabMap[w]) {
+      const vItem = srs[vocabMap[w].key];
+      const b = getWordBucket(vItem);
+      if (b === "learning") return 0;
+      if (b === "weak") minRank = Math.min(minRank, 1);
+      else if (b === "medium") minRank = Math.min(minRank, 3);
+      else if (b === "strong") minRank = Math.min(minRank, 4);
+    }
+  }
+  return minRank;
+}
+
+function renderClassSentences() {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const cls = CLASS_DATA.classes[0];
+  const sDiv = document.getElementById("sentencesContainer");
+  if (!sDiv) return;
+
+  const srs = getSrs();
+  const vocabMap = {};
+  (cls.vocabulary || []).forEach(v => {
+    vocabMap[v.ar] = v;
+    const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
+    if (bare) vocabMap[bare] = v;
+  });
+
+  let sentences = (cls.sentences || []).slice(0, 8);
+  if (clsSentSortWeakest) {
+    sentences = sentences.slice().sort((a, b) => {
+      const ra = getSentenceWeaknessRank(a, srs, vocabMap);
+      const rb = getSentenceWeaknessRank(b, srs, vocabMap);
+      return ra - rb;
+    });
+  }
+
+  const btnOuter = document.getElementById("btnClsSentSortWeakest");
+  if (btnOuter) btnOuter.classList.toggle("active", clsSentSortWeakest);
+
+  sDiv.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12.5px;font-weight:600;color:var(--muted)">💬 Class Dialogue Sentences</span>
+        ${clsSentSortWeakest ? `<span style="font-size:11px;font-weight:600;color:var(--amber);background:var(--amber-soft);padding:1px 7px;border-radius:999px">📉 Weakest First</span>` : ''}
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button type="button" class="book-toggle-pill ${clsSentSortWeakest ? 'active' : ''}" id="btnClsSentSortWeakestInner" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+        <span style="font-size:11.5px;color:var(--muted);margin-left:4px;margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill ${allClsSentEnVisible ? 'active' : ''}" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation across all class sentences">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill ${allClsTrVisible ? 'active' : ''}" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration across all class sentences">🔤 Translit</button>
+        ${clsSentPracticeMode !== 'all' ? `
+          <button type="button" class="book-toggle-pill" onclick="toggleAllClsSentReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllClsSentReveal(false)" style="font-size:11.5px;padding:2px 8px">🙈 Hide All</button>
+        ` : ''}
+      </div>
+    </div>
+    ${sentences.map((s, idx) => {
+      const isRevealed = clsSentPracticeMode === "all" || clsSentRevealed[idx];
+      const isEnShown = clsSentPracticeMode === "en-only" || (clsSentPracticeMode === "ar-only" && isRevealed) || (clsSentPracticeMode === "all" && (allClsSentEnVisible || clsSentEnVisible[idx]));
+
+      let arContent;
+      if (clsSentPracticeMode === "en-only" && !isRevealed) {
+        arContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${idx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
+      } else {
+        arContent = `<span class="arabic" dir="rtl" style="font-size:23px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>`;
+      }
+
+      let enContent;
+      if (clsSentPracticeMode === "ar-only" && !isRevealed) {
+        enContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${idx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+      } else {
+        enContent = `
+          <div id="cls-en-${idx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+          ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+        `;
+      }
+
+      return `
+        <div class="book-line s-row" id="cls-srow-${idx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
+          <div class="book-line-row">
+            <div class="line-badge-dock" aria-label="Sentence tools">
+              <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+              </div>
+            </div>
+            <div class="s-content-wrap">
+              <div class="s-meta-side">
+                ${enContent}
+              </div>
+              <div class="s-ar-side">
+                ${arContent}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("")}
+  `;
 }
 
 let currentVocabFilter = "all";
@@ -474,6 +647,7 @@ function getWordBucket(item) {
 }
 
 let vocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let vocabSortWeakest = false;
 let vocabRevealed = {};
 let vocabTrVisible = {};
 let allVocabTrVisible = false;
@@ -488,6 +662,29 @@ function setVocabPracticeMode(mode) {
   if (btnAr) btnAr.classList.toggle("active", mode === "ar-only");
   if (btnEn) btnEn.classList.toggle("active", mode === "en-only");
   renderVocabTable();
+}
+
+function toggleVocabSortWeakest() {
+  vocabSortWeakest = !vocabSortWeakest;
+  const btn = document.getElementById("btnVocabSortWeakest");
+  if (btn) btn.classList.toggle("active", vocabSortWeakest);
+  const btnInner = document.getElementById("btnVocabSortWeakestInner");
+  if (btnInner) btnInner.classList.toggle("active", vocabSortWeakest);
+  renderVocabTable();
+}
+
+function getWordWeaknessRank(item) {
+  const b = getWordBucket(item);
+  let rank = 2; // unrated / new
+  if (b === "learning") rank = 0;
+  else if (b === "weak") rank = 1;
+  else if (b === "medium") rank = 3;
+  else if (b === "strong") rank = 4;
+  else if (b === "never") rank = 5;
+
+  const fails = item ? (item.f || item.slips || 0) : 0;
+  const box = item && typeof item.box === "number" ? item.box : 0;
+  return { rank, fails, box };
 }
 
 function revealVocabWord(key) {
@@ -532,10 +729,23 @@ function updateClassVocabStats() {
 function renderVocabTable() {
   if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
   const cls = CLASS_DATA.classes[0];
-  const vocab = cls.vocabulary || [];
+  let vocab = (cls.vocabulary || []).slice();
   const srs = getSrs();
   const vDiv = document.getElementById("vocabContainer");
   if (!vDiv) return;
+
+  if (vocabSortWeakest) {
+    vocab.sort((a, b) => {
+      const wa = getWordWeaknessRank(srs[a.key]);
+      const wb = getWordWeaknessRank(srs[b.key]);
+      if (wa.rank !== wb.rank) return wa.rank - wb.rank;
+      if (wb.fails !== wa.fails) return wb.fails - wa.fails;
+      return wa.box - wb.box;
+    });
+  }
+
+  const btnOuter = document.getElementById("btnVocabSortWeakest");
+  if (btnOuter) btnOuter.classList.toggle("active", vocabSortWeakest);
 
   vDiv.innerHTML = `
     <div class="srs-legend-bar" style="margin:4px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -546,7 +756,8 @@ function renderVocabTable() {
         <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
-      <div style="display:flex;gap:6px;align-items:center">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button type="button" class="book-toggle-pill ${vocabSortWeakest ? 'active' : ''}" id="btnVocabSortWeakestInner" onclick="toggleVocabSortWeakest()" title="Sort vocabulary by weakest rating first">📉 Weakest First</button>
         <button type="button" class="book-toggle-pill ${allVocabTrVisible ? 'active' : ''}" id="btnToggleAllVocabTr" onclick="toggleAllWordTr()" title="Show/hide transliteration across all words">🔤 Translit</button>
         ${vocabPracticeMode !== 'all' ? `
           <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
@@ -718,42 +929,7 @@ function renderVocabAndSentences() {
   // Render Vocab Section with SRS grading and filter chips
   updateClassVocabStats();
   renderVocabTable();
-
-  // Sentences
-  const sDiv = document.getElementById("sentencesContainer");
-  sDiv.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">💬 Class Dialogue Sentences</span>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation across all class sentences">🌐 Translation</button>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration across all class sentences">🔤 Translit</button>
-      </div>
-    </div>
-    ${cls.sentences.slice(0, 8).map((s, idx) => `
-      <div class="book-line s-row" id="cls-srow-${idx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
-        <div class="book-line-row">
-          <div class="line-badge-dock" aria-label="Sentence tools">
-            <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
-            <div class="sym-group">
-              <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-              <button type="button" class="sym-badge" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-              ${s.tr ? `<button type="button" class="sym-badge" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-            </div>
-          </div>
-          <div class="s-content-wrap">
-            <div class="s-meta-side">
-              <div id="cls-en-${idx}" class="cls-en" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-              ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
-            </div>
-            <div class="s-ar-side">
-              <span class="arabic" dir="rtl" style="font-size:23px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `).join("")}
-  `;
+  renderClassSentences();
 
   // AI Voice Prompt for Sunday Lesson
   const classPrompt = buildClassAiPrompt(cls);

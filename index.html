@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujf15xi">
-  <link rel="stylesheet" href="css/style.css?v=mujf15xi">
+  <link rel="stylesheet" href="css/fonts.css?v=mujffoya">
+  <link rel="stylesheet" href="css/style.css?v=mujffoya">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mujf15xi"></script>
-<script src="js/curriculum.js?v=mujf15xi"></script>
-<script src="js/app.js?v=mujf15xi"></script>
-<script src="js/tracker.js?v=mujf15xi"></script>
-<script src="js/plan.js?v=mujf15xi"></script>
-<script src="js/account.js?v=mujf15xi"></script>
+<script src="js/progress-model.js?v=mujffoya"></script>
+<script src="js/curriculum.js?v=mujffoya"></script>
+<script src="js/app.js?v=mujffoya"></script>
+<script src="js/tracker.js?v=mujffoya"></script>
+<script src="js/plan.js?v=mujffoya"></script>
+<script src="js/account.js?v=mujffoya"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2655,62 +2655,12 @@ function loadChapter(chap) {
   curChap = chap;
   quranRevealed = {};
   quranEnVisible = {};
+  dayRevealed = {};
+  dayEnVisible = {};
   document.getElementById("chapSelect").value = chap.id;
 
   // Render Sentences
-  const sList = document.getElementById("sentenceList");
-  sList.innerHTML = `
-    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Daily Reading Spread</span>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllDayEn" onclick="toggleAllDayEn()" title="Show/hide English translation across all sentences">🌐 Translation</button>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()" title="Show/hide word-by-word breakdown across all sentences">🧩 Words</button>
-        <button type="button" class="book-toggle-pill" id="btnToggleAllDayTr" onclick="toggleAllDayTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
-      </div>
-    </div>
-    ${chap.sentences.map((s, idx) => `
-      <div class="book-line s-row" id="srow-${idx}">
-        <div class="book-line-row">
-          <div class="line-badge-dock" aria-label="Sentence tools">
-            <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
-            <div class="sym-group">
-              <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-              <button type="button" class="sym-badge" id="btn-den-${idx}" onclick="toggleDayEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-              ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-dwbw-${idx}" onclick="toggleDayWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-              ${s.tr ? `<button type="button" class="sym-badge" id="btn-dtr-${idx}" onclick="toggleDayTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-            </div>
-          </div>
-          <div class="s-content-wrap">
-            <div class="s-meta-side">
-              <div class="s-en" id="day-en-${idx}" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-              ${s.tr ? `<div class="s-tr" id="day-tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
-            </div>
-            <div class="s-ar-side">
-              <span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>
-            </div>
-          </div>
-        </div>
-        ${s.words && s.words.length ? `
-          <div class="s-wbw" id="day-wbw-${idx}" style="display:none;margin-top:8px">
-            <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
-              ${s.words.map((w, wIdx) => {
-                const fam = famLookup(w[0]);
-                return `
-                  <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                    <span class="w-ar">${w[0]}</span>
-                    <span class="w-en">${w[1]}</span>
-                    ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('day-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
-                  </div>
-                `;
-              }).join("")}
-            </div>
-            <div class="wbw-drawer-slot" id="wbw-drawer-slot-day-${idx}"></div>
-          </div>
-        ` : ''}
-      </div>
-    `).join("")}
-  `;
+  renderDailySentences();
 
   // Render Quran Verses
   renderQuranSection(chap.surahId);
@@ -3041,7 +2991,194 @@ function renderQuranSection(surahId) {
   };
 }
 
+let dayPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let daySortWeakest = false;
+let dayRevealed = {};
+let dayEnVisible = {};
+let allDayEnVisible = false;
+let allDayWbwVisible = false;
+let allDayTrVisible = false;
+
+function setDayPracticeMode(mode) {
+  dayPracticeMode = mode;
+  dayRevealed = {};
+  renderDailySentences();
+}
+
+function toggleDaySortWeakest() {
+  daySortWeakest = !daySortWeakest;
+  renderDailySentences();
+}
+
+function revealDaySentence(idx) {
+  dayRevealed[idx] = true;
+  renderDailySentences();
+}
+
+function toggleAllDayReveal(reveal) {
+  if (!curChap || !curChap.sentences) return;
+  curChap.sentences.forEach((_, idx) => { dayRevealed[idx] = reveal; });
+  renderDailySentences();
+}
+
+function getDaySentenceWeaknessRank(s, srs) {
+  if (!s) return 2;
+  const getB = item => {
+    if (!item) return null;
+    if (item.b === "never") return "never";
+    if (item.b === "strong" || item.b === "know") return "strong";
+    if (item.b === "medium" || item.b === "later") return "medium";
+    if (item.b === "weak") return "weak";
+    if (item.b === "learning" || item.b === "repeat") return "learning";
+    if (item.box >= 4) return "strong";
+    if (item.box >= 2) return "medium";
+    if (item.box === 1) return "weak";
+    if (item.box === 0) return "learning";
+    return null;
+  };
+
+  if (s.key && srs && srs[s.key]) {
+    const b = getB(srs[s.key]);
+    if (b === "learning") return 0;
+    if (b === "weak") return 1;
+    if (b === "medium") return 3;
+    if (b === "strong") return 4;
+  }
+
+  const words = (s.words && s.words.length)
+    ? s.words.map(w => w[0])
+    : (s.ar || "").split(/\s+/).map(w => w.replace(/[.,!؟،]/g, "").trim());
+
+  let minRank = 2; // unrated default
+  if (!srs) return minRank;
+
+  for (const w of words) {
+    if (!w) continue;
+    let vItem = srs[w];
+    if (!vItem) {
+      const bare = w.replace(/[\u064B-\u065F\u0670]/g, "");
+      if (bare && srs[bare]) vItem = srs[bare];
+    }
+    if (vItem) {
+      const b = getB(vItem);
+      if (b === "learning") return 0;
+      if (b === "weak") minRank = Math.min(minRank, 1);
+      else if (b === "medium") minRank = Math.min(minRank, 3);
+      else if (b === "strong") minRank = Math.min(minRank, 4);
+    }
+  }
+  return minRank;
+}
+
+function renderDailySentences() {
+  if (!curChap || !curChap.sentences) return;
+  const sList = document.getElementById("sentenceList");
+  if (!sList) return;
+
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
+
+  if (daySortWeakest) {
+    items.sort((a, b) => {
+      const ra = getDaySentenceWeaknessRank(a.s, srs);
+      const rb = getDaySentenceWeaknessRank(b.s, srs);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  }
+
+  sList.innerHTML = `
+    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'all' ? 'active' : ''}" id="btnDayModeAll" onclick="setDayPracticeMode('all')" title="Show both Arabic and English">All</button>
+        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
+        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
+        <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill ${allDayEnVisible ? 'active' : ''}" id="btnToggleAllDayEn" onclick="toggleAllDayEn()" title="Show/hide English translation across all sentences">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill ${allDayWbwVisible ? 'active' : ''}" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()" title="Show/hide word-by-word breakdown across all sentences">🧩 Words</button>
+        <button type="button" class="book-toggle-pill ${allDayTrVisible ? 'active' : ''}" id="btnToggleAllDayTr" onclick="toggleAllDayTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
+        ${dayPracticeMode !== 'all' ? `
+          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(true)" style="font-size:11.5px;padding:2px 8px" title="Reveal all hidden prompts">👁️ Reveal All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(false)" style="font-size:11.5px;padding:2px 8px" title="Hide all revealed prompts">🙈 Hide All</button>
+        ` : ''}
+      </div>
+    </div>
+    ${items.map(({ s, origIdx }) => {
+      const isRevealed = dayPracticeMode === "all" || dayRevealed[origIdx];
+      const isEnShown = dayPracticeMode === "en-only" || (dayPracticeMode === "ar-only" && isRevealed) || (dayPracticeMode === "all" && (allDayEnVisible || dayEnVisible[origIdx]));
+
+      let arContent;
+      if (dayPracticeMode === "en-only" && !isRevealed) {
+        arContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
+      } else {
+        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>`;
+      }
+
+      let enContent;
+      if (dayPracticeMode === "ar-only" && !isRevealed) {
+        enContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+      } else {
+        enContent = `
+          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+          ${s.tr ? `<div class="s-tr" id="day-tr-${origIdx}" style="display:${allDayTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+        `;
+      }
+
+      return `
+        <div class="book-line s-row" id="srow-${origIdx}">
+          <div class="book-line-row">
+            <div class="line-badge-dock" aria-label="Sentence tools">
+              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+              </div>
+            </div>
+            <div class="s-content-wrap">
+              <div class="s-meta-side">
+                ${enContent}
+              </div>
+              <div class="s-ar-side">
+                ${arContent}
+              </div>
+            </div>
+          </div>
+          ${s.words && s.words.length ? `
+            <div class="s-wbw" id="day-wbw-${origIdx}" style="display:${allDayWbwVisible ? 'flex' : 'none'};margin-top:8px">
+              <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
+                ${s.words.map((w, wIdx) => {
+                  const fam = famLookup(w[0]);
+                  return `
+                    <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                      <span class="w-ar">${w[0]}</span>
+                      <span class="w-en">${w[1]}</span>
+                      ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('day-${origIdx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+              <div class="wbw-drawer-slot" id="wbw-drawer-slot-day-${origIdx}"></div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join("")}
+  `;
+}
+
 function toggleDayEn(idx) {
+  if (dayPracticeMode === "ar-only" && !dayRevealed[idx]) {
+    dayRevealed[idx] = true;
+    renderDailySentences();
+    return;
+  }
+  dayEnVisible[idx] = !dayEnVisible[idx];
   const el = document.getElementById("day-en-" + idx);
   const btn = document.getElementById("btn-den-" + idx);
   if (!el) return;
@@ -3050,9 +3187,15 @@ function toggleDayEn(idx) {
   if (btn) btn.classList.toggle("active", isHidden);
 }
 
-let allDayEnVisible = false;
 function toggleAllDayEn() {
   allDayEnVisible = !allDayEnVisible;
+  if (dayPracticeMode === "ar-only" && allDayEnVisible) {
+    if (curChap && curChap.sentences) {
+      curChap.sentences.forEach((_, idx) => { dayRevealed[idx] = true; });
+    }
+    renderDailySentences();
+    return;
+  }
   document.querySelectorAll("[id^='day-en-']").forEach(el => {
     el.style.display = allDayEnVisible ? "block" : "none";
   });
@@ -3081,7 +3224,6 @@ function toggleDayTr(idx) {
   if (btn) btn.classList.toggle("active", isHidden);
 }
 
-let allDayWbwVisible = false;
 function toggleAllDayWbw() {
   allDayWbwVisible = !allDayWbwVisible;
   document.querySelectorAll("[id^='day-wbw-']").forEach(el => {
@@ -3094,7 +3236,6 @@ function toggleAllDayWbw() {
   if (btnAll) btnAll.classList.toggle("active", allDayWbwVisible);
 }
 
-let allDayTrVisible = false;
 function toggleAllDayTr() {
   allDayTrVisible = !allDayTrVisible;
   document.querySelectorAll("[id^='day-tr-']").forEach(el => {
