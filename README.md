@@ -23,24 +23,24 @@ Reza's dual goal, in the shortest possible time:
 
 Non-negotiable design rules (learned from Reza's feedback — do not violate):
 - **Frequency-first**: never teach words he'll rarely meet. Every new vocab item must be high-frequency (Quranic corpus or daily speech).
-- **Linked words together**: teach a root's conjugations/derivations in one go (word families), not isolated forms.
-- **Minimal clicking**: tables and fill-a-column checking, not flashcards. Reveal-all + mark-only-misses patterns. Flashcards exist only as opt-in modes.
-- **Practical grammar only**: patterns taught through known verses with a 1-minute test — no paradigm tables to memorize.
+- **Curated root word system**: teach common words from roots carefully, linked in vocabulary and word-by-word via clean popover/drawer (`🌿 root`), avoiding visual clutter.
+- **Book-like reading spread**: minimal symbol badges (`🔊`, `🌐`, `🧩`, `🔤`) with hover tooltips docked on the margin. English and transliteration sit in the same row as Arabic on desktop, wrapping cleanly below on narrow/mobile viewports.
+- **Practice modes with weakest sort**: vocabulary and sentence tables feature Practice Mode (`[All]`, `[Arabic Prompt]`, `[English Prompt]`) and a `[📉 Weakest First]` pill to prioritize struggle items (`1d` / `2d` / recent slips).
+- **Minimal clicking**: tables and fill-a-column checking, not flashcards. Interval rating buttons (`30d`, `7d`, `2d`, `1d`, `Retire`). The words "Strong" and "Medium" are never displayed on the UI.
+- **Practical grammar only**: patterns taught through known verses and known sentence frames with a 1-minute test — no paradigm tables to memorize.
 - **Zero maintenance for Reza**: he studies; Claude generates content, analyzes, deploys. Data flows automatically.
 - **Mobile-friendly**: he studies on his phone; keep pages responsive (media queries in `css/style.css`).
 
-## Site map (Rebuilt September 2026)
+## Site map
 
 | Page | What it does |
 |---|---|
-| `index.html` | **Daily Book Reader.** 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click AI voice prompt + 5-min test. |
-| `class.html` | **Preply Lessons.** Live Sunday teacher classes (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test**. |
-| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses) and 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`). |
-| `map.html` | **Progress.** CEFR capability ladder and milestone achievements. |
-| `more.html` | Cloud sync card, backup, and legacy tools. |
-| `archive/` | Catalog and fallbacks for superseded engines (`stories.html`, `story.html`, `vocab.html`, `placement.html`). |
-
-Removed 2026-09-05 as leftovers of earlier shapes: `test.html` (milestone tests), `week.html` (the objective week), and the coach-set `week` object with its self-seeder — nothing had read them since the 30 Aug shelf.
+| `index.html` | **Daily Book Reader.** Single clean spread: 10 high-frequency sentences (with audio, Practice Mode, and `📉 Weakest First`) + 3–5 Qur'an ayats by ear (word-by-word hover, Alafasy recitation) + conditional grammar + 1-click dynamic AI voice prompt + 5-min test. |
+| `class.html` | **Preply Lessons.** Live Sunday teacher classes (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, Class Vocabulary with interval buttons & `📉 Weakest First`, Class Sentences with Practice Mode & `📉 Weakest First`) + **comprehensive untimed mastery test** ($\ge 80\%$). |
+| `words.html` | **10-Word Vocab Drill.** Strict 10-word batch from master vocabulary with audio (continuous/pauses), interval pills (`30d`, `7d`, `2d`, `1d`, `Retire`), `📉 Weakest` filter chip, and 1-click Vocabulary Dossier export. |
+| `sentences.html` | **Sentences Library & Drill.** Full inventory of sentence frames, tense filters (past/present/future), and `📉 Weakest` filter chip prioritizing struggle words. |
+| `grammar.html` | **Grammar Reference.** Ordered list of grammar patterns and structural rules. |
+| `more.html` | Cloud sync card, backup, and legacy utilities. |
 
 **Typing (all writing surfaces):** `mountTranslitDock(getTarget)` in app.js gives every answer box a live Latin→Arabic typing box — type transliteration, Arabic appears in real time (mobile-safe `input` event + `latinToArabic`). Auto-opens on Sentences/Grammar/Milestone tests; Story Write & Vocab Produce use it too. `LATIN_TO_AR` is forgiving: `aa`=ا, Arabizi numerals (2/5/6/7/9), long vowels (ee/ii/oo/uu). **Answer matching is lenient:** `arMatch` forgives tashkeel, ة/ه & hamza-seat slips, spacing, and one typo in words ≥5 letters; `fuzzyEn` accepts English typos and stems. Only Arabic fields (`fill-input`/`dir=rtl`) transliterate — English-meaning fields are untouched.
 
@@ -61,7 +61,7 @@ Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, 
 All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress, srs, tapwords, log, savedAt}`:
 - `ats-progress` — `{ "<unitId>": { steps: { <step>: true } } }`. Unit ids: `story-NN`, `fam-<id>` (step `fill`), `q-<surahId>` (steps `study`/`test`), `gr-<patternId>` (step `test`).
 - `ats-tapwords` / `ats-tapcounts` — tap-to-review: content for `tw:` cards (synced) and local tap counters. `ats-email` — who is signed in (drives `whoami()` personalization).
-- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 0/1/3/7/14/30 days; "again" → box 0, due +10 min. `b` is an explicit user bucket — `know` (30d) / `repeat` (10min) / `later` (7d) / `never` (due=year 2100, excluded from rotation); auto-grading deletes `b`. `bucketOf(key)` maps state→bucket; the Vocab Lab browse view filters by bucket (incl. Unmarked and Don't-repeat) and can feed any bucket into the practice sheet. **A checked answer calls `gradeCard()`, so the box/interval advance automatically — buckets are optional manual overrides, never required.**
+- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 1d / 2d / 7d / 14d / 30d; `b` is an explicit user bucket mark — `strong` (30d) / `medium` (7d) / `weak` (2d) / `learning` (1d) / `never` (due=year 2100, excluded from rotation). UI buttons display exact intervals (`30d`, `7d`, `2d`, `1d`, `Ret.`) without qualitative label text. Auto-grading advances boxes automatically.
 - `ats-log` — append-only event log (schema in `ANALYSIS.md` in the `rkarim25/arabic-learning-data` repo).
 - `ats-session` / `ats-token` / `ats-gclient` — Google session, GitHub PAT fallback, pasted Google client ID.
 
@@ -83,7 +83,7 @@ All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress,
 - **Lesson capture (the main loop):** Reza dumps images of *any* lesson — any book, notes, worksheet; vocab or grammar or dialogue. Claude reads them, routes each part to the right structure below, tags it `source:"teacher"` + `lesson:"<label>"`, deploys. Full spec: **`TEACHER-SYNC.md`**. This is not tied to any one book.
 - **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, **and add it to `QURAN_SURAHS` in `js/app.js` — this step was once forgotten (commit 3a5afe4 added 3 surahs to verses.json only), which silently hides them from What-now, milestones, and the listen queue. Treat gen-surah + QURAN_SURAHS as one atomic change.** Done: 1, 97, 103, 105, 106, 108-114 + Ayat al-Kursi (verse ranges like `2:255` work via RANGE_META — id `kursi`). Recommended next: 93, 94, 99-104 (rest of the common short surahs). Memorized-first: Reza knows Fatiha + a few short ones by heart, so surahs already in his memory are the highest-value lessons. The "salah fully understood" long-view bar is PINNED to `SALAH_SURAH_IDS` (7 surahs) — new lessons must never move that goalpost.
 - **Quran core words**: append to `data/quran-core.json` toward the top ~300 lemmas, keeping frequency order among *new* entries (existing indices frozen).
-- **Root families**: add to `data/families.json` + `FAMILY_LIST` in `js/app.js`. Pick roots from Reza's weak words. Include 4-7 Quranic forms + 2 real verses each.
+- **Curated Root Families**: add roots to `data/roots.json` with root letters, English core meaning, and common derivations. Run `node scripts/gen-lexicon.js` to compile into `data/lexicon.json` and `js/lexicon.js` (`famLookup`). Tapping `🌿 root` expands related derivations in-place across word-by-word and vocabulary without cluttering the main reading view.
 - **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words. Members may carry a `hear` field (`"وين؟ — wēn"`) = the Hijazi street form rendered as a 🗣 line in study tables — use sparingly, Umrah-critical phrases only.
 - **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js` + add the file to `CORE` in `sw.js`. Live: 6 L1 stories (01-03 narratives, 04 Friday/masjid, 05 restaurant DIALOGUE, 06 The Teacher Session — weaves lesson vocab). Curriculum decision (2026-07-04): from Level 2 on, roughly half the slots are scenario DIALOGUES (bargaining, pharmacy, directions) and khutbah-style monologues rather than narratives; keep recycling weak vocab and Quranic structures.
 - **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
@@ -157,11 +157,7 @@ Retention is still the engine underneath.
   replay-vs-KV validation, fan monotonicity, **conservatism invariants (skills
   must understate; overshooting is a test failure)**, placement-calibration
   direction tests. **Must pass before any deploy that touches the model.**
-- Dashboard: the "🎧🗣 Your two skills" card (index.html) is the consolidated
-  home of progress: both skill panels with day-snapped crosshair, test CTAs, the
-  conservative estimates block, and the full milestones/achievements ladder as a
-  collapsed details section. Honesty rules: reality never smoothed, sags shown,
-  targets stated per stage, numbers floored not flattered.
+- **Progress & Capability Ladder (`map.html`):** The consolidated home of progress: CEFR milestone achievements, both skill channels, test CTAs, and conservative estimates. Honesty rules: reality never smoothed, sags shown, targets stated per stage, numbers floored not flattered.
 
 ## The coaching loop
 

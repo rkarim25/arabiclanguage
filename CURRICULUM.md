@@ -72,24 +72,25 @@ i.e. whole utterances; everything else counts as a word.
 
 ---
 
-## 3. The shape of the site (Updated 2026-09-24)
+## 3. The shape of the site
 
-Rebuilt into a calm **Book Reader** and focused **10-Word Drill** to remove button-clicking fatigue and choice overload:
+Built as a calm **Book Reader** and focused **10-Word Drill** with zero button-clicking fatigue:
 
 | Page | What it is |
 |---|---|
-| `index.html` | **Daily Book Reader.** A single clean spread: 10 high-frequency sentences (with audio and pause-recall mode) + 3–5 Qur'an ayats by ear (word-by-word hover) + conditional grammar + 1-click dynamic AI voice prompt (drilling sentence variations) + 1-click Learner Context Dossier export + 5-min test. |
-| `class.html` | **Preply Live Lessons.** Your Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, class vocab and sentences) with an **untimed mastery test** and tailored AI voice prompt. |
-| `sentences.html` | **Sentences Library & Drill.** Full view and inventory of all sentence frames, with tense filters (past/present/future) and practice builder. |
-| `words.html` | **10-Word Vocab Drill.** Strict 10-word table from master vocabulary with audio (continuous/pauses), 5 rating pills (`Strong`, `Medium`, `Weak`, `Learning`, `Don't repeat`), and 1-click Vocabulary Dossier export. |
-| `grammar.html` | **Grammar Reference.** The full ordered list of grammar patterns and structural rules taught across the curriculum. |
+| `index.html` | **Daily Book Reader.** Single clean spread: 10 high-frequency sentences (with audio, Practice Mode, and `📉 Weakest First`) + 3–5 Qur'an ayats by ear (word-by-word hover, Alafasy recitation, root families) + conditional grammar + 1-click dynamic AI voice prompt + 5-min test. |
+| `class.html` | **Preply Live Lessons.** Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, Class Vocabulary with interval buttons & `📉 Weakest First`, Class Sentences with Practice Mode & `📉 Weakest First`) + **comprehensive untimed mastery test** ($\ge 80\%$) and tailored AI voice prompt. |
+| `sentences.html` | **Sentences Library & Drill.** Full inventory of sentence frames, tense filters (past/present/future), and `📉 Weakest` filter chip prioritizing struggle words. |
+| `words.html` | **10-Word Vocab Drill.** Strict 10-word batch from master vocabulary with audio (continuous/pauses), interval pills (`30d`, `7d`, `2d`, `1d`, `Retire`), `📉 Weakest` filter chip, and 1-click Vocabulary Dossier export. |
+| `grammar.html` | **Grammar Reference.** Ordered list of grammar patterns and structural rules taught across the curriculum. |
 | `more.html` | Cloud sync card, backup, and legacy tools. |
-| `archive/` | Documented index and fallback links for superseded pages (stories, old vocab lab, progress audit). |
 
 Rules:
-- **Zero-decision daily sitting:** Open `index.html` $\rightarrow$ listen/read the 10 sentences + ayats $\rightarrow$ take 5-min test. Done.
-- **Untimed on Sunday:** Preply class mastery tests have NO countdown clock. Mastery is proven by $\ge 80\%$ score at your own pace.
-- **No backlog dread:** Vocabulary practice is always strictly 10 words. Never "100 cards due".
+- **Book-like layout & badge docks:** Minimal symbol badges (`🔊`, `🌐`, `🧩`, `🔤`) with hover tooltips docked on the left margin. Desktop displays Arabic, English, and transliteration on the same horizontal row; narrow/mobile screens wrap gracefully below.
+- **Practice modes with weakest sort:** Vocabulary tables, class sentences, and daily reader spreads feature Practice Mode (`[All]`, `[Arabic Prompt]`, `[English Prompt]` with tap-to-reveal) and a `[📉 Weakest First]` pill prioritizing struggle items (`1d` / `2d` / recent slips).
+- **Curated root word system:** Common words derived from shared roots connect through `data/roots.json` and `js/lexicon.js`. Root family badges (`🌿 root`) expand related forms in-place across word-by-word chips and vocabulary tables without cluttering the main reading view.
+- **Untimed comprehensive tests:** Preply lesson tests test reading comprehension, vocabulary, dialogue sentences, and grammar comprehensively without an artificial countdown clock ($\ge 80\%$ confirms mastery).
+- **Zero backlog dread:** Vocabulary practice is always strictly 10 words with interval buttons (`30d`, `7d`, `2d`, `1d`, `Retire`). The terms "Strong" or "Medium" never appear on the UI.
 - **Grammar on need-basis only:** Grammar patterns are integrated conditionally inside the reading spread, never as standalone lectures.
 - **Variation-first AI Voice Practice:** AI voice prompts explicitly list the 10 target sentences and instruct ChatGPT/Claude to drill variations (noun/pronoun swaps, question formation) in short 1-2 sentence conversational turns with full tashkeel.
 - **Vocabulary Boundary via Dossier:** Reza attaches or copies the Markdown dossier (`LEARNER_CONTEXT.md`) into ChatGPT/Claude so the AI tutor respects his exact vocabulary envelope without drifting into unknown words or colloquial dialects.
@@ -435,10 +436,7 @@ enforced by `scripts/test-sentences.js`: **nothing composed, everything traceabl
 to a checked source.** The two generators above are the pattern for closing the
 rest — find the verified supply the repo already owns, and import it.
 
-**Real audio remains open.** Everything is Edge neural TTS. He asked for authentic
-recordings; Qur'an recitation is the obvious first candidate now that the corpus
-is the whole of juz' 'Amma, and his Qur'an site may already carry per-ayah audio
-worth wiring up. Everyday MSA still needs a rights-clean source.
+**Real Audio Implemented:** All Qur'an recitation strictly uses Reza's favourite Qari, **Mishary Rashid Alafasy**, across surahs, individual ayahs, and word-by-word clips (`data/quran-word-audio.json`). Everyday MSA sentence frames and vocabulary use pre-generated natural neural audio (`ar-SA-HamedNeural`, `en-GB-RyanNeural`) via `scripts/gen-audio.py`.
 
 ## 9. Data contracts
 

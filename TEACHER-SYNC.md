@@ -130,12 +130,14 @@ node scripts/test-shell.js    # every class row must resolve to a live card
 
 `data/classes.json` is GENERATED and holds no content of its own — every row it
 shows is a pointer into the file that teaches it, so the repository can never
-drift from the material. `class.html` renders it, and `learn.html?class=<id>`
-is the class test: everything she gave, proved or not, a different sample each
-retake.
+drift from the material. `class.html` renders it directly:
+- **Embedded Reading Passage:** Full passage with audio, word-by-word gloss, and `🌿 root` links.
+- **Class Vocabulary Table:** Graded with interval buttons (`30d`, `7d`, `2d`, `1d`, `Retire`), Practice Mode (`All`, `Arabic Prompt`, `English Prompt`), and `📉 Weakest First` sort.
+- **Class Sentences:** Practice Mode and `📉 Weakest First` sort.
+- **Comprehensive Untimed Mastery Test:** Embedded on the page, testing reading comprehension, vocabulary meaning, active recall, dialogue sentences, and grammar without an artificial countdown clock ($\ge 80\%$ confirms mastery).
+- **Tailored AI Voice Prompt:** 1-click prompt generator drilling sentence variations with ChatGPT / Claude Voice Mode.
 
 **Ask him the questions.** The record carries a `questions[]` list precisely
-because photographs of a whiteboard are ambiguous — whether a rule was taught or
+because photographs of notes/whiteboards can be ambiguous — whether a rule was taught or
 merely appeared, what the homework was, whether a topic was real or an aside.
-They show on `class.html` and should be put to him in chat. Answers change what
-gets built, so they are worth one message.
+Answers change what gets built, so they are always worth one message.
