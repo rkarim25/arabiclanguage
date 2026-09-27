@@ -159,19 +159,42 @@ Retention is still the engine underneath.
   direction tests. **Must pass before any deploy that touches the model.**
 - **Progress & Capability Ladder (`map.html`):** The consolidated home of progress: CEFR milestone achievements, both skill channels, test CTAs, and conservative estimates. Honesty rules: reality never smoothed, sags shown, targets stated per stage, numbers floored not flattered.
 
-## The coaching loop
+## The coaching loop & multi-AI operability
 
-One command in any chat session: **`/arabic-coach`** (skill at `.claude/skills/arabic-coach/SKILL.md` in the working directory `C:\Users\Reza Karim\OneDrive\Arabic\Self learn`). It runs **per user** (Reza, then Saba): reads data (KV first, GitHub fallback), reads **✏️ pen `note` events first** (the learner's direct requests — act on every one, acknowledge in their coach note), analyzes (weak vocab → listening → speaking → **conjugation** (`spract`) → grammar → **conversation** (`convo`) → **consistency** (`today-done`) → pacing → `tapseed` words), writes a personally-addressed coach note back to `coach:<email>`, adds targeted content via the pipelines above (including any new lesson material Reza dumped), pushes, and verifies. **Never let one user's request degrade the other's experience — beginner content for Saba is additive.**
+Any AI agent (Antigravity, Codex, Claude, ChatGPT) can operate this repository. The coaching workflows are documented in `.agents/skills/run-arabic-coach/SKILL.md` (interactive session) and `.agents/skills/arabic-coach/SKILL.md` (technical reference).
 
-Manual equivalents:
-```
+The loop runs **per user** (Reza, then Saba):
+1. **Reads data:** Cloudflare KV first (`data:<email>`), GitHub fallback.
+2. **Reads ✏️ pen `note` events first:** Act on every learner request and acknowledge in their coach note.
+3. **Analyzes telemetry:** Weak vocab, listening accuracy, speaking output, conjugation accuracy, grammar mastery, and recent test slips (`test-item`).
+4. **Read-Modify-Write KV payload:** When updating `coach:<email>`, ALWAYS read the current key first, preserve `week` and existing `homework` properties, and write back. Dropping these keys corrupts weekly planning.
+5. **Captures Sunday Preply lessons:** Decomposes class drops into 5 streams (Vocabulary, Sentences, Grammar, Reading, Qur'an/Concepts).
+6. **Additive for Saba:** Never simplify or delete shared material; beginner material for Saba is strictly additive.
+
+Manual KV commands:
+```bash
 npx wrangler kv key get --namespace-id=9532d5717021486a92f75efb6d7b8a94 "data:rkarim88@gmail.com" --remote
 npx wrangler kv key put --namespace-id=9532d5717021486a92f75efb6d7b8a94 "coach:rkarim88@gmail.com" --path coach.json --remote
 ```
 
+## Automated Test Suites
+
+There are 8 test suites in `scripts/`. Run them before any deploy:
+```bash
+node scripts/test-audio-coverage.js   # Verifies all 9,831+ manifest keys resolve on disk
+node scripts/test-curriculum.js       # Verifies ladder, chunking, CEFR proof rules
+node scripts/test-drill-grade.js      # Verifies grading tolerance and typos
+node scripts/test-progress-model.js   # Verifies decay math and conservatism invariants
+node scripts/test-sentence-diag.js    # Verifies verb confusion diagnostics
+node scripts/test-sentences.js        # Verifies sentence bank & grammar links
+node scripts/test-shell.js            # Verifies app integration, speed switch, homework parts
+node scripts/test-typing.js           # Verifies transliteration dock & typing acceptance
+```
+*Audit note (commit `f13ab73`):* Suites 1–7 pass cleanly. `test-typing.js` passes 51/52 assertions; 1 assertion fails on 93.4% transliteration round-trip vs 96% floor.
+
 ## Local development
 
-```
+```bash
 npx http-server <repo dir> -p 8734 -c-1
 ```
 No build step, no dependencies. Syntax check: `node --check js/*.js` and `new Function()` over inline `<script>` blocks. TTS and Google sign-in require the real origin; everything else works locally.

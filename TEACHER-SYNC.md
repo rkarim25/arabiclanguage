@@ -93,21 +93,19 @@ Rules for the coach writing it:
 
 A **per-lesson retention view** feeding a **teacher-facing progress sheet** (an honest what's-retained-vs-stuck summary Reza can paste to his teacher before lessons — the readiness strip is the seed of it).
 
-## Every class is decomposed into FOUR streams (2026-08-30, his rule)
+## Every class is decomposed into FIVE streams (Updated 2026-09-27)
 
 > "when i give a lesson, you can put it into category of vocabulary and sentences
 > as well to unify the learning approach. if she gives a whole lesson, you can put
 > it in reading section with word by word and audio for me to read and understand
 > or listen to and see if i understand."
 >
-> "i want you to maintain a repository of lesson material putting into category of
-> vocabulary, sentences and anything else (that can be grammar/etc) you will have
-> to figure it out from the images i send you and you can ask me questions to
-> better understand what was covered in the class."
+> "i am attaching the lesson from today. i did surah nas and falaq so that can be added
+> as the quran section. i am attaching photos to show which words we were focusing on
+> but we need to particular attention to words which really should be concepts rather
+> than using a word english translation and spend some time going into details for it."
 
-A class drop is never filed as "a class". It is split on arrival into the four
-things the site actually teaches, and each part goes into the file that teaches
-that kind of thing:
+A class drop is never filed as a loose blob. It is split on arrival into the five things the site actually teaches, and each part goes into the file that teaches that kind of thing:
 
 | stream | file | tag it needs |
 |---|---|---|
@@ -115,23 +113,44 @@ that kind of thing:
 | **sentences** | `data/prompts.json` | `lesson: "<class tag>"`, `source: "teacher"` (hers) or `"core"` — **constructed**: ≤7 words, ONE grammar frame each (`pattern`), class words + words he holds, ~3 per new word across the frames (CURRICULUM.md §5 "Core sentences are constructed") |
 | **grammar** | `data/grammar.json` — a new pattern where the rule is real and reusable | named in the class record's `grammar[]` with a `why` |
 | **reading** | `data/story-NN.json` — the whole passage, every word glossed | `source: "teacher"`, `lesson: "<class tag>"`, named in the class record's `reading` |
+| **quran & concepts** | `data/classes-meta.json` (`quran` object) + `class.html` | Qur'an surahs with Mishary Rashid Alafasy audio (`reciteVerse()`, `speakQuranWord()`) + deep classical linguistic concept cards explaining imagery, roots, and contrasts (never just a flat 1-word translation) |
 
 Then add ONE record to **`data/classes-meta.json`** — id, date, title, its tags,
-its milestone, its reading, its grammar points, anything else worth noting, and
+its milestone, its reading, its grammar points, its `quran` section (surahs & deep concepts), anything else worth noting, and
 **the questions you still have about what she covered** — and run:
 
-```
+```bash
+# 1. Compile class view from metadata
 node scripts/gen-classes.js   # -> data/classes.json, the repository view
-node scripts/gen-curriculum.js <payload>   # the ladder lessons
-node scripts/gen-sentences.js && node scripts/gen-lexicon.js
+
+# 2. Recompile curriculum milestone ladder
+node scripts/gen-curriculum.js
+
+# 3. Compile sentence bank & cross-references
+node scripts/gen-sentences.js
+
+# 4. Rebuild dictionary / lexicon lookup
+node scripts/gen-lexicon.js
+
+# 5. Generate neural audio clips for new text
+# (On Windows PowerShell: $env:PYTHONIOENCODING="utf-8")
 python scripts/gen-audio.py
-node scripts/test-shell.js    # every class row must resolve to a live card
+
+# 6. Run all test suites
+node scripts/test-curriculum.js
+node scripts/test-sentences.js
+node scripts/test-shell.js
+node scripts/test-audio-coverage.js
+
+# 7. Bump cache version (?v= tokens and sw.js)
+node scripts/bump-version.js
 ```
 
 `data/classes.json` is GENERATED and holds no content of its own — every row it
 shows is a pointer into the file that teaches it, so the repository can never
 drift from the material. `class.html` renders it directly:
 - **Embedded Reading Passage:** Full passage with audio, word-by-word gloss, and `🌿 root` links.
+- **Dedicated Qur'an Section:** Real Mishary Rashid Alafasy verse recitation, word-by-word clips, and classical concept cards.
 - **Class Vocabulary Table:** Graded with interval buttons (`30d`, `7d`, `2d`, `1d`, `Retire`), Practice Mode (`All`, `Arabic Prompt`, `English Prompt`), and `📉 Weakest First` sort.
 - **Class Sentences:** Practice Mode and `📉 Weakest First` sort.
 - **Comprehensive Untimed Mastery Test:** Embedded on the page, testing reading comprehension, vocabulary meaning, active recall, dialogue sentences, and grammar without an artificial countdown clock ($\ge 80\%$ confirms mastery).
