@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muje7ykq">
-  <link rel="stylesheet" href="css/style.css?v=muje7ykq">
+  <link rel="stylesheet" href="css/fonts.css?v=mujebdaa">
+  <link rel="stylesheet" href="css/style.css?v=mujebdaa">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -90,7 +90,7 @@
     .chip:hover { border-color: var(--accent); color: var(--ink); }
     .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
     
-    /* Untimed Test Box */
+    /* Mastery Test Box */
     .mastery-test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 20px; background: var(--card); margin: 24px 0; }
     .q-choice { display: block; width: 100%; text-align: left; padding: 10px 14px; margin: 7px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14.5px; }
     .q-choice:hover { border-color: var(--accent); background: var(--accent-soft); }
@@ -106,8 +106,8 @@
   <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
     <div>
       <span class="class-tag">🧑‍🏫 Live Preply Teacher Lessons</span>
-      <h1 style="margin:4px 0">Sunday Classes &amp; Untimed Mastery</h1>
-      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word hover, and an untimed mastery test.</p>
+      <h1 style="margin:4px 0">Sunday Classes &amp; Mastery Tests</h1>
+      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word breakdown, and a comprehensive mastery test.</p>
     </div>
     <span id="lessonStatusBadge" class="status-pill" style="font-size:13px;padding:6px 14px">Checking status…</span>
   </div>
@@ -122,7 +122,7 @@
         <span style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 1 · 30 AUG 2026</span>
         <h2 style="margin:2px 0 6px">The Flat, The Week &amp; The Family (سَامِر يَبْحَثُ عَنْ شَقَّةٍ)</h2>
       </div>
-      <button type="button" class="primary" onclick="scrollToTest()">📝 Take Untimed Test</button>
+      <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
     </div>
     <p style="font-size:14.5px;line-height:1.6;margin:8px 0 16px">
       From your Preply teacher: <b>Bayna Yadayk Unit 1</b>. Housing vocabulary (flat, room by room, furniture), the seven days of the week, relatives on mother's side with dual forms (خَال / خَالَانِ), and the reading dialogue about Samer searching for a flat.
@@ -198,17 +198,17 @@
     </details>
   </div>
 
-  <!-- 4. UNTIMED MASTERY TEST -->
+  <!-- 4. COMPREHENSIVE MASTERY TEST -->
   <div class="mastery-test-box" id="testBox">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
       <div>
-        <h2 style="margin:0;color:var(--accent)">🏅 Untimed Mastery Test: 30 Aug Lesson</h2>
-        <p class="sub" style="margin:2px 0">No timer, no pressure. Take your time. Score 80%+ to achieve confirmed mastery.</p>
+        <h2 style="margin:0;color:var(--accent)">🏅 Comprehensive Mastery Test: 30 Aug Lesson</h2>
+        <p class="sub" style="margin:2px 0">Comprehensively tests this Sunday's vocabulary, sentences, and reading passage. Score 80%+ to confirm mastery.</p>
       </div>
       <span id="testScorePill" class="status-pill" style="font-size:13.5px">Untested</span>
     </div>
     <div id="testArea">
-      <button type="button" class="primary" style="font-size:15px;padding:10px 22px" onclick="startMasteryTest()">Start Untimed Test →</button>
+      <button type="button" class="primary" style="font-size:15px;padding:10px 22px" onclick="startMasteryTest()">Start Mastery Test →</button>
     </div>
   </div>
 
@@ -216,7 +216,7 @@
   <div class="paste-card">
     <h3 style="margin:0 0 6px">📥 Paste Your Next Preply Lesson</h3>
     <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
-      After your Sunday 07:00 class, simply paste your notes or upload photos of your teacher's slides here. It will automatically be formatted into the next chapter and untimed test.
+      After your Sunday 07:00 class, simply paste your notes or upload photos of your teacher's slides here. It will automatically be formatted into the next chapter and comprehensive test.
     </p>
     <textarea id="pasteText" placeholder="Paste class notes, sentences, or word list here..." style="width:100%;min-height:90px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:10px"></textarea>
     <div style="display:flex;justify-content:space-between;align-items:center">
@@ -229,11 +229,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muje7ykq"></script>
-<script src="js/curriculum.js?v=muje7ykq"></script>
-<script src="js/app.js?v=muje7ykq"></script>
-<script src="js/tracker.js?v=muje7ykq"></script>
-<script src="js/plan.js?v=muje7ykq"></script>
+<script src="js/progress-model.js?v=mujebdaa"></script>
+<script src="js/curriculum.js?v=mujebdaa"></script>
+<script src="js/app.js?v=mujebdaa"></script>
+<script src="js/tracker.js?v=mujebdaa"></script>
+<script src="js/plan.js?v=mujebdaa"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -874,51 +874,160 @@ function updateMasteryStatus() {
   }
 }
 
-/* UNTIMED MASTERY TEST */
-function startMasteryTest() {
-  const questions = [
-    {
-      q: "What does <b class='arabic' style='font-size:22px;color:var(--accent)'>شَقَّة</b> mean?",
-      opts: ["flat, apartment", "kitchen", "mirror"],
-      correct: 0
-    },
-    {
-      q: "How do you say <i>'bedroom'</i> in Arabic?",
-      opts: ["غُرْفَةُ جُلُوسٍ", "غُرْفَةُ نَوْمٍ", "مَطْبَخ"],
+/* COMPREHENSIVE CLASS MASTERY TEST */
+function buildClassMasteryQuestions() {
+  const qList = [];
+
+  // 1. Reading Passage Comprehension (from STORY_DATA)
+  if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {
+    STORY_DATA.questions.forEach(sq => {
+      qList.push({
+        section: "📖 Reading Comprehension",
+        q: sq.q,
+        opts: sq.options,
+        correct: sq.answer
+      });
+    });
+  } else {
+    qList.push({
+      section: "📖 Reading Comprehension",
+      q: "What was Samer looking for on Sunday in the passage?",
+      opts: ["a car", "a new flat to live in", "a university book", "a workplace"],
       correct: 1
-    },
-    {
-      q: "What is the meaning of <b class='arabic' style='font-size:22px;color:var(--accent)'>مَطْبَخ</b>?",
-      opts: ["bathroom", "dining table", "kitchen"],
-      correct: 2
-    },
-    {
-      q: "How do you say <i>'Tuesday'</i> in Arabic?",
-      opts: ["يَوْمُ الأَحَدِ", "يَوْمُ الثُّلَاثَاءِ", "يَوْمُ الجُمُعَةِ"],
-      correct: 1
-    },
-    {
-      q: "In Arabic, what is <b class='arabic' style='font-size:22px;color:var(--accent)'>سَرِير</b>?",
-      opts: ["bed", "sofa", "closet"],
+    });
+    qList.push({
+      section: "📖 Reading Comprehension",
+      q: "Who went with Samer to view the flat?",
+      opts: ["his brother", "his father", "his teacher", "he went alone"],
       correct: 0
-    },
+    });
+    qList.push({
+      section: "📖 Reading Comprehension",
+      q: "What furniture was in the bedroom?",
+      opts: ["a bed and mirror", "a new oven", "a dining table", "just a rug"],
+      correct: 0
+    });
+    qList.push({
+      section: "📖 Reading Comprehension",
+      q: "When can Samer move into the flat?",
+      opts: ["on Thursday or Tuesday", "on Friday only", "next month", "on Sunday only"],
+      correct: 0
+    });
+    qList.push({
+      section: "📖 Reading Comprehension",
+      q: "Why did the flat appeal to Samer?",
+      opts: ["the building is beautiful and the neighbourhood is quiet", "because it was cheap", "it was close to university", "it had an elevator"],
+      correct: 0
+    });
+  }
+
+  // 2. Class Vocabulary (The Flat, Rooms, Furniture, Days of Week, Adjectives)
+  const vocabQuestions = [
+    { ar: "شَقَّة", en: "flat, apartment", opts: ["flat, apartment", "kitchen", "mirror", "balcony"] },
+    { ar: "غُرْفَةُ نَوْمٍ", en: "bedroom", opts: ["living room", "bedroom", "kitchen", "bathroom"] },
+    { ar: "غُرْفَةُ جُلُوسٍ", en: "living room", opts: ["living room", "dining room", "bedroom", "balcony"] },
+    { ar: "مَطْبَخ", en: "kitchen", opts: ["bathroom", "dining table", "kitchen", "bedroom"] },
+    { ar: "سَرِير", en: "bed", opts: ["bed", "sofa", "closet", "curtain"] },
+    { ar: "مِرْآة", en: "mirror", opts: ["carpet", "mirror", "table", "chair"] },
+    { ar: "فُرْن", en: "oven", opts: ["refrigerator", "oven", "washing machine", "sink"] },
+    { ar: "يَوْمُ الثُّلَاثَاءِ", en: "Tuesday", opts: ["Sunday", "Tuesday", "Friday", "Thursday"] },
+    { ar: "يَوْمُ الخَمِيسِ", en: "Thursday", opts: ["Monday", "Wednesday", "Thursday", "Saturday"] },
+    { ar: "الجُمُعَة", en: "Friday", opts: ["Friday", "Saturday", "Sunday", "Monday"] },
+    { ar: "السَّبْت", en: "Saturday", opts: ["Sunday", "Thursday", "Friday", "Saturday"] },
+    { ar: "وَاسِع", en: "spacious, wide", opts: ["narrow", "spacious, wide", "expensive", "small"] },
+    { ar: "مُرِيح", en: "comfortable", opts: ["noisy", "comfortable", "far", "old"] },
+    { ar: "مُتَاح", en: "available", opts: ["forbidden", "available", "occupied", "expensive"] },
+    { ar: "الدُّخُول", en: "entering, moving in", opts: ["departing", "entering, moving in", "selling", "inspecting"] }
+  ];
+
+  vocabQuestions.forEach(v => {
+    const correctIdx = v.opts.indexOf(v.en);
+    qList.push({
+      section: "🏷️ Vocabulary Meaning",
+      q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
+      opts: v.opts,
+      correct: correctIdx
+    });
+  });
+
+  // Reverse English -> Arabic recall
+  const reverseRecall = [
+    { en: "bedroom", ar: "غُرْفَةُ نَوْمٍ", opts: ["غُرْفَةُ جُلُوسٍ", "غُرْفَةُ نَوْمٍ", "مَطْبَخ", "حَمَّام"] },
+    { en: "Tuesday", ar: "يَوْمُ الثُّلَاثَاءِ", opts: ["يَوْمُ الأَحَدِ", "يَوْمُ الثُّلَاثَاءِ", "يَوْمُ الجُمُعَةِ", "يَوْمُ الخَمِيسِ"] },
+    { en: "living room", ar: "غُرْفَةُ جُلُوسٍ", opts: ["غُرْفَةُ نَوْمٍ", "غُرْفَةُ جُلُوسٍ", "شَقَّة", "مَطْبَخ"] }
+  ];
+
+  reverseRecall.forEach(v => {
+    const correctIdx = v.opts.indexOf(v.ar);
+    qList.push({
+      section: "🏷️ Active Recall",
+      q: `How do you say <i>'${v.en}'</i> in Arabic?`,
+      opts: v.opts,
+      correct: correctIdx
+    });
+  });
+
+  // 3. Class Sentences & Expressions
+  const sentenceQuestions = [
     {
       q: "Translate the class sentence: <b class='arabic' style='font-size:22px;color:var(--accent)'>لَيْسَ عِنْدِي</b>",
-      opts: ["I have two", "I don't have", "I want to look for"],
+      opts: ["I have two", "I don't have", "I want to look for", "I live here"],
       correct: 1
     },
     {
-      q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--accent)'>خَال</b> (uncle on mother's side)?",
-      opts: ["خَالَانِ", "أَخَوَات", "إِخْوَة"],
-      correct: 0
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أُرِيدُ أَنْ أَسْكُنَ هُنَا.</b>",
+      opts: ["I want to study here.", "I want to live here.", "I am moving away.", "I will buy this flat."],
+      correct: 1
     },
     {
-      q: "What was Samer looking for on Sunday in the passage?",
-      opts: ["a car", "a new flat to live in", "a university book"],
+      q: "What does the polite request <b class='arabic' style='font-size:22px;color:var(--accent)'>مِنْ فَضْلِكَ</b> mean?",
+      opts: ["thank you", "if you please / excuse me", "good morning", "welcome"],
+      correct: 1
+    },
+    {
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>فِي المَطْبَخِ فُرْنٌ جَدِيدٌ.</b>",
+      opts: ["In the bedroom is a new bed.", "In the kitchen there is a new oven.", "The kitchen is clean.", "The flat has a new balcony."],
       correct: 1
     }
   ];
 
+  sentenceQuestions.forEach(s => {
+    qList.push({
+      section: "💬 Class Sentences",
+      q: s.q,
+      opts: s.opts,
+      correct: s.correct
+    });
+  });
+
+  // 4. Grammar & Relatives Dual Forms
+  const grammarQuestions = [
+    {
+      q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--accent)'>خَال</b> (maternal uncle)?",
+      opts: ["خَالَانِ", "أَخَوَات", "إِخْوَة", "خَالَات"],
+      correct: 0
+    },
+    {
+      q: "How does Arabic express <i>'on Tuesday'</i>?",
+      opts: ["فِي ثُلَاثَاء", "يَوْمَ الثُّلَاثَاءِ", "إِلَى الثُّلَاثَاءِ", "عَلَى الثُّلَاثَاءِ"],
+      correct: 1
+    }
+  ];
+
+  grammarQuestions.forEach(g => {
+    qList.push({
+      section: "📐 Grammar & Patterns",
+      q: g.q,
+      opts: g.opts,
+      correct: g.correct
+    });
+  });
+
+  return qList;
+}
+
+function startMasteryTest() {
+  const questions = buildClassMasteryQuestions();
   let curQ = 0, score = 0;
   const area = document.getElementById("testArea");
 
@@ -936,7 +1045,7 @@ function startMasteryTest() {
           </h3>
           <p style="font-size:16px">Your Score: <b>${pct}%</b> (${score} of ${questions.length})</p>
           <p style="font-size:14px;color:var(--muted)">
-            ${passed ? 'You have demonstrated complete mastery of this Preply teacher lesson without time pressure.' : 'Review the vocabulary and reading passage above, then retake the test.'}
+            ${passed ? 'You have demonstrated comprehensive mastery of this Preply teacher lesson.' : 'Review the vocabulary and reading passage above, then retake the test.'}
           </p>
           <button type="button" class="primary" onclick="startMasteryTest()" style="margin-top:10px">Retake Mastery Test</button>
         </div>
@@ -946,9 +1055,9 @@ function startMasteryTest() {
 
     const qItem = questions[curQ];
     area.innerHTML = `
-      <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px">
         <span>Question ${curQ + 1} of ${questions.length}</span>
-        <span>Untimed · No rush</span>
+        <span style="background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:6px;font-weight:600">${qItem.section || 'Class Material'}</span>
       </div>
       <div style="font-size:16px;margin-bottom:14px">${qItem.q}</div>
       <div>
