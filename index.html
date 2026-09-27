@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujesirq">
-  <link rel="stylesheet" href="css/style.css?v=mujesirq">
+  <link rel="stylesheet" href="css/fonts.css?v=mujf15xi">
+  <link rel="stylesheet" href="css/style.css?v=mujf15xi">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -53,16 +53,16 @@
     .audio-bar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
     /* Quran Verse Card */
-    .q-verse { padding: 12px 0; border-bottom: 1px dashed var(--border); }
+    .q-verse { padding: 10px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
     .q-verse:last-child { border-bottom: none; }
-    .q-ar { font-family: var(--font-ar); font-size: 25px; line-height: 2.1; direction: rtl; text-align: right; color: var(--ink); margin-bottom: 6px; }
-    .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 6px 0; }
+    .q-ar { font-family: var(--font-ar); font-size: 24px; line-height: 1.9; direction: rtl; text-align: right; color: var(--ink); }
+    .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0 4px; }
     .q-chip { border: 1px solid var(--border); border-radius: 8px; padding: 3px 8px; background: var(--card); text-align: center; cursor: pointer; }
     .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
     .q-chip .ar-w { font-family: var(--font-ar); font-size: 19px; color: var(--accent); display: block; }
     .q-chip .en-w { font-size: 11px; color: var(--muted); display: block; direction: ltr; }
-    .q-trans { font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-    .q-ref { font-size: 12px; font-weight: 700; color: var(--amber); }
+    .q-trans { font-size: 14.5px; color: var(--ink); line-height: 1.5; }
+    .q-ref { font-size: 11.5px; font-weight: 700; color: var(--amber); }
 
     /* Conditional Grammar Box */
     .grammar-box { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 14px 0; }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mujesirq"></script>
-<script src="js/curriculum.js?v=mujesirq"></script>
-<script src="js/app.js?v=mujesirq"></script>
-<script src="js/tracker.js?v=mujesirq"></script>
-<script src="js/plan.js?v=mujesirq"></script>
-<script src="js/account.js?v=mujesirq"></script>
+<script src="js/progress-model.js?v=mujf15xi"></script>
+<script src="js/curriculum.js?v=mujf15xi"></script>
+<script src="js/app.js?v=mujf15xi"></script>
+<script src="js/tracker.js?v=mujf15xi"></script>
+<script src="js/plan.js?v=mujf15xi"></script>
+<script src="js/account.js?v=mujf15xi"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2653,6 +2653,8 @@ function initChapterSelector() {
 
 function loadChapter(chap) {
   curChap = chap;
+  quranRevealed = {};
+  quranEnVisible = {};
   document.getElementById("chapSelect").value = chap.id;
 
   // Render Sentences
@@ -2866,40 +2868,171 @@ function renderAiReportHistory() {
   `;
 }
 
+let currentQuranSurahId = null;
+let quranPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let quranRevealed = {};
+let quranEnVisible = {};
+let allQuranEnVisible = false;
+let allQuranWbwVisible = false;
+
+function setQuranPracticeMode(mode) {
+  quranPracticeMode = mode;
+  quranRevealed = {};
+  renderQuranSection();
+}
+
+function revealQuranAyah(vIdx) {
+  quranRevealed[vIdx] = true;
+  quranEnVisible[vIdx] = true;
+  renderQuranSection();
+}
+
+function toggleAllQuranReveal(reveal) {
+  if (!VERSES_DATA) return;
+  const targetId = currentQuranSurahId || (curChap ? curChap.surahId : "fatiha");
+  const surah = (VERSES_DATA.surahs || []).find(s => s.id === targetId);
+  if (!surah) return;
+  surah.verses.slice(0, 5).forEach((_, vIdx) => {
+    quranRevealed[vIdx] = reveal;
+    if (reveal) quranEnVisible[vIdx] = true;
+  });
+  renderQuranSection();
+}
+
+function toggleQuranEn(vIdx) {
+  if (quranPracticeMode === "ar-only" && !quranRevealed[vIdx]) {
+    revealQuranAyah(vIdx);
+    return;
+  }
+  const el = document.getElementById("q-en-" + vIdx);
+  const btn = document.getElementById("btn-qen-" + vIdx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "block" : "none";
+  quranEnVisible[vIdx] = isHidden;
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleAllQuranEn() {
+  if (quranPracticeMode === "ar-only") {
+    const targetId = currentQuranSurahId || (curChap ? curChap.surahId : "fatiha");
+    const surah = (VERSES_DATA.surahs || []).find(s => s.id === targetId);
+    const verses = surah ? surah.verses.slice(0, 5) : [];
+    const allRevealed = verses.length > 0 && verses.every((_, i) => quranRevealed[i]);
+    toggleAllQuranReveal(!allRevealed);
+    return;
+  }
+  allQuranEnVisible = !allQuranEnVisible;
+  document.querySelectorAll("[id^='q-en-']").forEach((el, idx) => {
+    el.style.display = allQuranEnVisible ? "block" : "none";
+    quranEnVisible[idx] = allQuranEnVisible;
+  });
+  document.querySelectorAll("[id^='btn-qen-']").forEach(btn => {
+    btn.classList.toggle("active", allQuranEnVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllQuranEn");
+  if (btnAll) btnAll.classList.toggle("active", allQuranEnVisible);
+}
+
+function toggleQuranWbw(vIdx) {
+  const el = document.getElementById("qwbw-" + vIdx);
+  const btn = document.getElementById("btn-qwbw-" + vIdx);
+  if (!el) return;
+  const isHidden = el.style.display === "none" || !el.style.display;
+  el.style.display = isHidden ? "flex" : "none";
+  if (btn) btn.classList.toggle("active", isHidden);
+}
+
+function toggleAllQuranWbw() {
+  allQuranWbwVisible = !allQuranWbwVisible;
+  document.querySelectorAll("[id^='qwbw-']").forEach(el => {
+    el.style.display = allQuranWbwVisible ? "flex" : "none";
+  });
+  document.querySelectorAll("[id^='btn-qwbw-']").forEach(btn => {
+    btn.classList.toggle("active", allQuranWbwVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllQuranWbw");
+  if (btnAll) btnAll.classList.toggle("active", allQuranWbwVisible);
+}
+
 function renderQuranSection(surahId) {
   const qDiv = document.getElementById("quranVerses");
   if (!VERSES_DATA) { qDiv.textContent = "Loading verses…"; return; }
-  const surah = (VERSES_DATA.surahs || []).find(s => s.id === surahId);
+  if (surahId) currentQuranSurahId = surahId;
+  const targetId = currentQuranSurahId || (curChap ? curChap.surahId : "fatiha");
+  const surah = (VERSES_DATA.surahs || []).find(s => s.id === targetId);
   if (!surah) { qDiv.textContent = "Surah data not found."; return; }
 
   document.getElementById("quranTitle").innerHTML = `2. Qur'an: ${surah.nameEn} <span style="font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;margin-left:6px">🎙 Qari: Mishary Rashid Alafasy</span>`;
   document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
 
   qDiv.innerHTML = `
-    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
-      <button type="button" class="book-toggle-pill" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()" title="Show/hide word breakdown across all verses">🧩 All Words</button>
+    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'all' ? 'active' : ''}" id="btnQuranModeAll" onclick="setQuranPracticeMode('all')" title="Show both Arabic and English">All</button>
+        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'ar-only' ? 'active' : ''}" id="btnQuranModeAr" onclick="setQuranPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
+        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'en-only' ? 'active' : ''}" id="btnQuranModeEn" onclick="setQuranPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill ${allQuranEnVisible ? 'active' : ''}" id="btnToggleAllQuranEn" onclick="toggleAllQuranEn()" title="Show/hide English translation across all verses">🌐 Translation</button>
+        <button type="button" class="book-toggle-pill ${allQuranWbwVisible ? 'active' : ''}" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()" title="Show/hide word breakdown across all verses">🧩 Words</button>
+        ${quranPracticeMode !== 'all' ? `
+          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(true)" style="font-size:11.5px;padding:2px 8px" title="Reveal all hidden prompts">👁️ Reveal All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(false)" style="font-size:11.5px;padding:2px 8px" title="Hide all revealed prompts">🙈 Hide All</button>
+        ` : ''}
+      </div>
     </div>
-    ${surah.verses.slice(0, 5).map((v, vIdx) => `
-      <div class="q-verse">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px">
-          <span class="q-ref">${v.ref}</span>
-          <div class="sym-group">
-            <button type="button" class="sym-badge" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" title="Recitation by Mishary Rashid Alafasy" aria-label="Recite">🔊</button>
-            <button type="button" class="sym-badge" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
+    ${surah.verses.slice(0, 5).map((v, vIdx) => {
+      const isRevealed = quranPracticeMode === "all" || quranRevealed[vIdx];
+      const isEnShown = quranPracticeMode === "en-only" || (quranPracticeMode === "ar-only" && isRevealed) || (quranPracticeMode === "all" && (allQuranEnVisible || quranEnVisible[vIdx]));
+
+      let arContent;
+      if (quranPracticeMode === "en-only" && !isRevealed) {
+        arContent = `<span class="vocab-reveal-btn" onclick="revealQuranAyah(${vIdx})" title="Tap to check Arabic verse">👁️ Check Ayah</span>`;
+      } else {
+        arContent = `<span class="arabic q-ar" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.9;display:block">${v.ar}</span>`;
+      }
+
+      let enContent;
+      if (quranPracticeMode === "ar-only" && !isRevealed) {
+        enContent = `<span class="vocab-reveal-btn" onclick="revealQuranAyah(${vIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+      } else {
+        enContent = `<div class="q-trans" id="q-en-${vIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:14.5px;color:var(--ink);line-height:1.5">${v.en}</div>`;
+      }
+
+      return `
+        <div class="book-line q-verse" id="qrow-${vIdx}">
+          <div class="book-line-row">
+            <div class="line-badge-dock" aria-label="Ayah tools">
+              <span class="line-num-badge" style="width:auto;min-width:32px;padding:0 6px;border-radius:10px;font-size:11px" title="Ayah ${v.ref}">${v.ref}</span>
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" title="Recitation by Mishary Rashid Alafasy" aria-label="Recite">🔊</button>
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-qen-${vIdx}" onclick="toggleQuranEn(${vIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                <button type="button" class="sym-badge ${allQuranWbwVisible ? 'active' : ''}" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
+              </div>
+            </div>
+            <div class="s-content-wrap">
+              <div class="s-meta-side">
+                ${enContent}
+              </div>
+              <div class="s-ar-side">
+                ${arContent}
+              </div>
+            </div>
+          </div>
+          <div class="q-wbw-tray" id="qwbw-${vIdx}" style="display:${allQuranWbwVisible ? 'flex' : 'none'}">
+            ${v.words.map((w, wIdx) => `
+              <div class="q-chip" onclick="speakQuranWord('${surah.id}', ${vIdx}, ${wIdx}, '${(w[0] || '').replace(/'/g, "\\'")}')" title="${w[3] || ''}">
+                <span class="ar-w">${w[0]}</span>
+                <span class="en-w">${w[2]}</span>
+              </div>
+            `).join("")}
           </div>
         </div>
-        <div class="q-ar">${v.ar}</div>
-        <div class="q-wbw-tray" id="qwbw-${vIdx}" style="display:none">
-          ${v.words.map((w, wIdx) => `
-            <div class="q-chip" onclick="speakQuranWord('${surah.id}', ${vIdx}, ${wIdx}, '${(w[0] || '').replace(/'/g, "\\'")}')" title="${w[3] || ''}">
-              <span class="ar-w">${w[0]}</span>
-              <span class="en-w">${w[2]}</span>
-            </div>
-          `).join("")}
-        </div>
-        <div class="q-trans">${v.en}</div>
-      </div>
-    `).join("")}
+      `;
+    }).join("")}
   `;
 
   document.getElementById("btnPlayQuran").onclick = () => {
@@ -2972,28 +3105,6 @@ function toggleAllDayTr() {
   });
   const btnAll = document.getElementById("btnToggleAllDayTr");
   if (btnAll) btnAll.classList.toggle("active", allDayTrVisible);
-}
-
-function toggleQuranWbw(vIdx) {
-  const el = document.getElementById("qwbw-" + vIdx);
-  const btn = document.getElementById("btn-qwbw-" + vIdx);
-  if (!el) return;
-  const isHidden = el.style.display === "none" || !el.style.display;
-  el.style.display = isHidden ? "flex" : "none";
-  if (btn) btn.classList.toggle("active", isHidden);
-}
-
-let allQuranWbwVisible = false;
-function toggleAllQuranWbw() {
-  allQuranWbwVisible = !allQuranWbwVisible;
-  document.querySelectorAll("[id^='qwbw-']").forEach(el => {
-    el.style.display = allQuranWbwVisible ? "flex" : "none";
-  });
-  document.querySelectorAll("[id^='btn-qwbw-']").forEach(btn => {
-    btn.classList.toggle("active", allQuranWbwVisible);
-  });
-  const btnAll = document.getElementById("btnToggleAllQuranWbw");
-  if (btnAll) btnAll.classList.toggle("active", allQuranWbwVisible);
 }
 
 function playQuranAyah(surahN, ayahN) {

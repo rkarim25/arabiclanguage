@@ -258,6 +258,26 @@ button.primary:disabled:hover { background: var(--accent); }
   border-color: var(--accent);
 }
 
+.vocab-reveal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px dashed var(--accent);
+  user-select: none;
+  transition: all 0.12s;
+}
+.vocab-reveal-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ---------- Side-by-side Sentence Layout (Responsive) ---------- */
 .s-content-wrap {
   display: flex;
