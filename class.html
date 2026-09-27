@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujehd1h">
-  <link rel="stylesheet" href="css/style.css?v=mujehd1h">
+  <link rel="stylesheet" href="css/fonts.css?v=mujeklgd">
+  <link rel="stylesheet" href="css/style.css?v=mujeklgd">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -84,11 +84,9 @@
 
     .rate-feedback { font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 5px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
 
-    /* Topic & Status Filter Chips */
-    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 14px; }
-    .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--muted); transition: all 0.15s; }
-    .chip:hover { border-color: var(--accent); color: var(--ink); }
-    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+    /* Vocab Practice Mode Reveal Button */
+    .vocab-reveal-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-soft); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px dashed var(--accent); user-select: none; transition: all 0.12s; }
+    .vocab-reveal-btn:hover { background: var(--accent); color: #fff; }
     
     /* Mastery Test Box */
     .mastery-test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 20px; background: var(--card); margin: 24px 0; }
@@ -140,14 +138,15 @@
     <!-- 2. Class Vocabulary -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <span>📇 Class Vocabulary (Flat, Week &amp; Relatives)</span>
-        <span id="classVocabStats" class="status-pill" style="font-size:12px;padding:3px 10px">Loading stats…</span>
+        <span>📇 Class Vocabulary</span>
+        <div style="display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()">
+          <span style="font-size:12px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+          <button type="button" class="book-toggle-pill active" id="btnVocabModeAll" onclick="setVocabPracticeMode('all')" title="Show both Arabic and English">All</button>
+          <button type="button" class="book-toggle-pill" id="btnVocabModeAr" onclick="setVocabPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
+          <button type="button" class="book-toggle-pill" id="btnVocabModeEn" onclick="setVocabPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
+        </div>
       </summary>
-      <p style="font-size:13px;color:var(--muted);margin:8px 0 10px">
-        Grade each word directly into your <b>Spaced Repetition (SRS)</b> master database. Graded words automatically sync across your 10-word drills, reviews, and learner profile.
-      </p>
-      <div id="vocabFilterChips" class="filter-chips"></div>
-      <div id="vocabContainer" style="overflow-x:auto">Loading vocabulary…</div>
+      <div id="vocabContainer" style="overflow-x:auto;margin-top:8px">Loading vocabulary…</div>
     </details>
 
     <!-- 3. Class Sentences -->
@@ -229,11 +228,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujehd1h"></script>
-<script src="js/curriculum.js?v=mujehd1h"></script>
-<script src="js/app.js?v=mujehd1h"></script>
-<script src="js/tracker.js?v=mujehd1h"></script>
-<script src="js/plan.js?v=mujehd1h"></script>
+<script src="js/progress-model.js?v=mujeklgd"></script>
+<script src="js/curriculum.js?v=mujeklgd"></script>
+<script src="js/app.js?v=mujeklgd"></script>
+<script src="js/tracker.js?v=mujeklgd"></script>
+<script src="js/plan.js?v=mujeklgd"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -468,56 +467,35 @@ function getWordBucket(item) {
   return null;
 }
 
-function updateClassVocabStats() {
-  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const cls = CLASS_DATA.classes[0];
-  const vocab = cls.vocabulary || [];
-  const srs = getSrs();
-  const graded = vocab.filter(v => !!getWordBucket(srs[v.key]));
-  const held = vocab.filter(v => {
-    const b = getWordBucket(srs[v.key]);
-    return b === "strong" || b === "medium" || b === "never";
-  });
-  const badge = document.getElementById("classVocabStats");
-  if (badge) {
-    badge.textContent = `${graded.length} of ${vocab.length} graded (${held.length} held in SRS)`;
-    if (graded.length === vocab.length && vocab.length > 0) {
-      badge.className = "status-pill done";
-    } else {
-      badge.className = "status-pill";
-    }
-  }
-  renderVocabFilterChips();
-}
+let vocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let vocabRevealed = {};
 
-function renderVocabFilterChips() {
-  const container = document.getElementById("vocabFilterChips");
-  if (!container || !CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
-  const cls = CLASS_DATA.classes[0];
-  const vocab = cls.vocabulary || [];
-  const srs = getSrs();
-  const gradedCount = vocab.filter(v => !!getWordBucket(srs[v.key])).length;
-  const ungradedCount = vocab.length - gradedCount;
-
-  const filters = [
-    { id: "all", label: `All (${vocab.length})` },
-    { id: "ungraded", label: `To Grade (${ungradedCount})` },
-    { id: "graded", label: `Graded (${gradedCount})` },
-    { id: "home", label: "Flat & Home (26)" },
-    { id: "family", label: "Family (6)" },
-    { id: "week", label: "Days (10)" },
-    { id: "other", label: "Weather & Attributes (11)" }
-  ];
-
-  container.innerHTML = filters.map(f => `
-    <button type="button" class="chip ${currentVocabFilter === f.id ? 'active' : ''}" data-filter="${f.id}" onclick="setVocabFilter('${f.id}')">${f.label}</button>
-  `).join("");
-}
-
-function setVocabFilter(filterId) {
-  currentVocabFilter = filterId;
-  renderVocabFilterChips();
+function setVocabPracticeMode(mode) {
+  vocabPracticeMode = mode;
+  vocabRevealed = {};
+  const btnAll = document.getElementById("btnVocabModeAll");
+  const btnAr = document.getElementById("btnVocabModeAr");
+  const btnEn = document.getElementById("btnVocabModeEn");
+  if (btnAll) btnAll.classList.toggle("active", mode === "all");
+  if (btnAr) btnAr.classList.toggle("active", mode === "ar-only");
+  if (btnEn) btnEn.classList.toggle("active", mode === "en-only");
   renderVocabTable();
+}
+
+function revealVocabWord(key) {
+  vocabRevealed[key] = true;
+  renderVocabTable();
+}
+
+function toggleAllVocabReveal(reveal) {
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const vocab = CLASS_DATA.classes[0].vocabulary || [];
+  vocab.forEach(v => { vocabRevealed[v.key] = reveal; });
+  renderVocabTable();
+}
+
+function updateClassVocabStats() {
+  // Lightweight hook
 }
 
 function renderVocabTable() {
@@ -528,66 +506,65 @@ function renderVocabTable() {
   const vDiv = document.getElementById("vocabContainer");
   if (!vDiv) return;
 
-  const filtered = vocab.filter(v => {
-    const cur = getWordBucket(srs[v.key]);
-    if (currentVocabFilter === "all") return true;
-    if (currentVocabFilter === "ungraded") return !cur;
-    if (currentVocabFilter === "graded") return !!cur;
-    if (currentVocabFilter === "home") return v.group === "lesson-home";
-    if (currentVocabFilter === "family") return v.group === "family";
-    if (currentVocabFilter === "week") return v.group === "lesson-week";
-    if (currentVocabFilter === "other") return v.group === "lesson-divine" || v.group === "lesson-weather";
-    return true;
-  });
-
-  if (!filtered.length) {
-    vDiv.innerHTML = `
-      <div style="text-align:center;padding:24px 16px;color:var(--muted)">
-        <p style="margin:0 0 8px;font-size:15px">No words in this filter view.</p>
-        <button type="button" class="small" onclick="setVocabFilter('all')">Show All ${vocab.length} Words</button>
-      </div>
-    `;
-    return;
-  }
-
   vDiv.innerHTML = `
-    <div class="srs-legend-bar" style="margin:6px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <div class="srs-legend-bar" style="margin:4px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
         <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
         <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
         <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
         <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
-      <span style="font-size:11.5px;color:var(--muted)">Rate recall: 🟢 30d · 🔵 7d · 🟠 2d · 🔴 1d · ⚪ Retire</span>
+      ${vocabPracticeMode !== 'all' ? `
+        <div style="display:flex;gap:6px">
+          <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(false)" style="font-size:11.5px;padding:2px 8px">🙈 Hide All</button>
+        </div>
+      ` : ''}
     </div>
     <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
       <thead>
         <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
-          <th style="width:34%">Arabic</th>
-          <th style="width:40%">English Meaning</th>
+          <th style="width:36%">Arabic</th>
+          <th style="width:38%">English Meaning</th>
           <th style="width:26%;text-align:right">Rating</th>
         </tr>
       </thead>
       <tbody>
-        ${filtered.map(v => {
+        ${vocab.map(v => {
           const item = srs[v.key];
           const curBucket = getWordBucket(item);
+          const isRevealed = vocabPracticeMode === "all" || vocabRevealed[v.key];
+
+          let arContent;
+          if (vocabPracticeMode === "en-only" && !isRevealed) {
+            arContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check Arabic word">👁️ Check Arabic</span>`;
+          } else {
+            arContent = `
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
+                  ${v.ar}
+                </span>
+                <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              </div>
+            `;
+          }
+
+          let enContent;
+          if (vocabPracticeMode === "ar-only" && !isRevealed) {
+            enContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check English meaning">👁️ Check English</span>`;
+          } else {
+            enContent = `
+              <div style="font-weight:600;font-size:14.5px;color:var(--ink)">${v.en}</div>
+              ${v.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${v.note}</div>` : ''}
+            `;
+          }
+
           return `
             <tr>
-              <td>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
-                    ${v.ar}
-                  </span>
-                  <button type="button" class="small icon-btn" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Play pronunciation">🔊</button>
-                </div>
-              </td>
-              <td>
-                <div style="font-weight:600;font-size:14px;color:var(--ink)">${v.en}</div>
-                ${v.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${v.note}</div>` : ''}
-              </td>
-              <td style="text-align:right">
+              <td style="vertical-align:middle">${arContent}</td>
+              <td style="vertical-align:middle">${enContent}</td>
+              <td style="text-align:right;vertical-align:middle">
                 <div class="rate-bar" data-key="${v.key}">
                   <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
                   <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
@@ -607,6 +584,7 @@ function renderVocabTable() {
 
 function gradeClassWord(key, bucket, btn) {
   setBucket(key, bucket);
+  vocabRevealed[key] = true;
 
   let wordAr = "", wordEn = "";
   if (CLASS_DATA && CLASS_DATA.classes) {
@@ -656,7 +634,26 @@ function gradeClassWord(key, bucket, btn) {
     }
   }
 
-  updateClassVocabStats();
+  // Smoothly unmask cell in place if in practice mode
+  const row = btn.closest("tr");
+  if (row && vocabPracticeMode === "ar-only") {
+    const enCell = row.children[1];
+    if (enCell && enCell.querySelector(".vocab-reveal-btn")) {
+      enCell.innerHTML = `<div style="font-weight:600;font-size:14.5px;color:var(--ink)">${wordEn}</div>`;
+    }
+  } else if (row && vocabPracticeMode === "en-only") {
+    const arCell = row.children[0];
+    if (arCell && arCell.querySelector(".vocab-reveal-btn")) {
+      arCell.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
+            ${wordAr}
+          </span>
+          <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+        </div>
+      `;
+    }
+  }
 }
 
 function renderVocabAndSentences() {
