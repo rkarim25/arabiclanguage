@@ -48,7 +48,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 | Page | Feature | What It Drills | Best For |
 |---|---|---|---|
 | **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the day + variations | Daily 5-minute fluency habit |
-| **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | Bayna Yadayk Unit 1, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
+| **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
 | **End-of-Week Review (`converse.html`)** | Spoken Review & Oral Exam | All sentences of the current week + 8 real-life Umrah scenarios | Weekly oral check & progress benchmarking |
 
 ---
@@ -91,7 +91,7 @@ If you use ChatGPT Plus, you can set up a permanent voice tutor so you never hav
 4. In Voice Settings, select a clear, natural voice (e.g., **"Breeze"** or **"Juniper"**).
 5. Now, any time you open that Custom GPT on your phone:
    - Tap the **Headphones** icon.
-   - Say: *"Let's practice Chapter 1: Everyday Foundations"* or *"Let's roleplay Samer looking for a flat from Sunday's class."*
+   - Say: *"Let's practice Chapter 1: Everyday Foundations"* or *"Let's roleplay Samer looking for a flat from Sunday's class"* or *"Let's roleplay the Working Day and Day Off routine from Sunday 27 Sep lesson."*
    - The AI already knows your exact level, known vocabulary, and pedagogical boundaries!
 
 ---

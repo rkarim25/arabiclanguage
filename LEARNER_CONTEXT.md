@@ -13,10 +13,10 @@
   1. **Understand the Qur'an by ear** (primary goal; favourite Qari: **Mishary Rashid Alafasy**).
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
-  - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family & Daily Routines).
+  - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry:** 2,473 recorded practice events; passed Sunday Class Lesson 9 (89% mastery); Lesson 10 retake queued (67% diagnostic score).
-  - **Recent Activity:** Sep 24 study session (11 minutes on home page drilling `نَعَمْ`, `مَاء`, `مِنْ فَضْلِكَ`, `جَائِع`, `تَتَكَلَّمُ`, and verb conjugation `تَكَلَّمَ`).
+  - **Live Telemetry:** 2,648 recorded practice events; 713 cards in SRS (225 Box 5 strong); passed Sunday Preply Class Mastery Test at 100%; passed Chapter 1 test at 100%; passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score).
+  - **Recent Activity:** Sep 26 study session (drilling Chapter 1 test, Sunday class mastery test at 100%, and vocabulary rating pills); Sep 27 lesson deployment.
 
 ---
 
@@ -51,12 +51,16 @@
 
 Reza's active vocabulary is drawn from the following verified curriculum clusters:
 
-### A. Preply Teacher Class (Bayna Yadayk Unit 1)
+### A. Preply Teacher Class (Bayna Yadayk Unit 1 & Sunday Lessons)
 - **Housing & The Flat:** شَقَّة (flat), عِمَارَة (building), طَابِق (floor), غُرْفَة (room), غُرْفَة نَوْم (bedroom), غُرْفَة جُلُوس (living room), مَطْبَخ (kitchen), حَمَّام (bathroom), سَرِير (bed), فُرْن (oven), ثَلَّاجَة (fridge), سِتَارَة (curtain), سَجَّادَة (rug/carpet), مُشْتَرٍ (buyer), بَائِع (seller), إِيجَار (rent).
 - **The Seven Days of the Week:** السَّبْت (Saturday), الأَحَد (Sunday), الاِثْنَيْن (Monday), الثُّلَاثَاء (Tuesday), الأَرْبِعَاء (Wednesday), الخَمِيس (Thursday), الجُمُعَة (Friday).
 - **Family & Relatives (Maternal):** خَال (maternal uncle), خَالَة (maternal aunt), خَالَانِ (two maternal uncles), خَالَتَانِ (two maternal aunts), أَخ (brother), أُخْت (sister).
-- **Key Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives/resides), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (I forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes).
-- **Dialogue Anchor:** Samer looking for a flat (*سَامِر يَبْحَثُ عَنْ شَقَّةٍ*).
+- **Daily Routines & The Working Day (27 Sep):** يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ (I wake up), مُبَكِّرًا (early), مُتَأَخِّرًا (late), السَّاعَةُ السَّابِعَةُ (7 o'clock), السَّاعَةُ الثَّامِنَةُ (8 o'clock), السَّاعَةُ الثَّانِيَةَ عَشْرَةَ (12 o'clock), أَغْسِلُ (I wash), أَلْبَسُ (I wear), مَلَابِس (clothes), أَعُودُ (I return), أَتَنَاوَلُ (I eat/have meal), الفَطُور (breakfast), صَحِيفَة (newspaper), التِّلْفَاز (television), أُسَاعِدُ (I help), كَنَس (sweeping), أَطْبَاق (dishes), حَفْلَة (party), رِحْلَة (trip/journey), أُرَتِّبُ (I arrange/tidy), أَنَامُ (I sleep).
+- **Deep Protection Concepts — Mu'awwidhatayn (Falaq & Nas, 27 Sep):** أَعُوذُ (I seek refuge), الْفَلَق (the daybreak/cleaving), غَاسِق (intense nightfall), وَقَبَ (penetrating darkness), النَّفَّاثَات (blowers upon knots), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور (chests), مَلِك (Sovereign King), النَّاس (humankind).
+- **Key Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives/resides), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (I forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange), أَنَامُ (I sleep).
+- **Dialogue Anchors:**
+  1. *Samer looking for a flat* (*سَامِر يَبْحَثُ عَنْ شَقَّةٍ*).
+  2. *A Working Day & The Day Off* (*يَوْمُ العَمَلِ وَالعُطْلَةِ*).
 
 ### B. High-Frequency Everyday Sentence Frames (10 Chapters)
 
@@ -94,15 +98,21 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 - **Surahs:** Al-Fatiha (1), Al-Ikhlas (112), Al-Falaq (113), An-Nas (114), Al-Asr (103), Al-Kawthar (108), Al-Qadr (97), Quraysh (106), Al-Kafirun (109), An-Nasr (110).
 - **Core Qur'anic Vocabulary:** رَبّ, عَبْد, صَلَاة, يَوْم, دِين, خَيْر, شَرّ, نَاس, مَلِك, إِلَه, حَقّ, صَبْر.
 
-### D. Current Diagnostic Focus & Review Vocabulary (Lesson 10 Gaps)
-The following words were identified in recent test diagnostics as requiring reinforcement:
-- **سَرِير** (*sarīr*) — bed (plural: *surur*)
-- **مُرِيح** (*murīḥ*) — comfortable (from *rāḥah*, rest)
-- **فُرْن** (*furn*) — oven / bakery
-- **مِرْآة** (*mirʾāt*) — mirror (instrument noun from *ra'ā*, to see)
-- **مُتَاح** (*mutāḥ*) — available (passive participle)
-- **وَاسِع** (*wāsiʿ*) — spacious / wide (also Divine Name *Al-Wāsiʿ*)
-- **الانْتِقَال** (*al-intiqāl*) — moving / relocating (verbal noun)
+### D. Current Diagnostic Focus & Review Vocabulary
+The following words were identified in recent telemetry and test diagnostics as requiring reinforcement:
+- **Telemetry Slips to Reinforce (Rated Weak / Learning):**
+  - **مِصْبَاح** (*miṣbāḥ*) — lamp (plural: *maṣābīḥ*; rated `weak` in 10-word drill)
+  - **الحَيّ** (*al-Ḥayy*) — the Ever-Living (Divine Name; rated `learning`)
+  - **السَّتَّار** (*as-Sattār*) — the Concealer of faults (Divine attribute; rated `learning`)
+  - **خَال** (*khāl*) — maternal uncle (rated `medium`)
+- **Lesson 10 Retake Items (Samer Flat Reading 2/3):**
+  - **سَرِير** (*sarīr*) — bed (plural: *surur*)
+  - **مُرِيح** (*murīḥ*) — comfortable (from *rāḥah*, rest)
+  - **فُرْن** (*furn*) — oven / bakery
+  - **مِرْآة** (*mirʾāt*) — mirror (instrument noun from *ra'ā*, to see)
+  - **مُتَاح** (*mutāḥ*) — available (passive participle)
+  - **وَاسِع** (*wāsiʿ*) — spacious / wide (also Divine Name *Al-Wāsiʿ*)
+  - **الانْتِقَال** (*al-intiqāl*) — moving / relocating (verbal noun)
 
 ---
 
