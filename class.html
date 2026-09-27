@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mujeklgd">
-  <link rel="stylesheet" href="css/style.css?v=mujeklgd">
+  <link rel="stylesheet" href="css/fonts.css?v=mujemcrq">
+  <link rel="stylesheet" href="css/style.css?v=mujemcrq">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -228,11 +228,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mujeklgd"></script>
-<script src="js/curriculum.js?v=mujeklgd"></script>
-<script src="js/app.js?v=mujeklgd"></script>
-<script src="js/tracker.js?v=mujeklgd"></script>
-<script src="js/plan.js?v=mujeklgd"></script>
+<script src="js/progress-model.js?v=mujemcrq"></script>
+<script src="js/curriculum.js?v=mujemcrq"></script>
+<script src="js/app.js?v=mujemcrq"></script>
+<script src="js/tracker.js?v=mujemcrq"></script>
+<script src="js/plan.js?v=mujemcrq"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -469,6 +469,8 @@ function getWordBucket(item) {
 
 let vocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
 let vocabRevealed = {};
+let vocabTrVisible = {};
+let allVocabTrVisible = false;
 
 function setVocabPracticeMode(mode) {
   vocabPracticeMode = mode;
@@ -494,6 +496,29 @@ function toggleAllVocabReveal(reveal) {
   renderVocabTable();
 }
 
+function toggleWordTr(key) {
+  vocabTrVisible[key] = !vocabTrVisible[key];
+  const el = document.getElementById("vtr-" + key);
+  const btn = document.getElementById("btnVTr-" + key);
+  if (el) el.style.display = vocabTrVisible[key] ? "block" : "none";
+  if (btn) btn.classList.toggle("active", !!vocabTrVisible[key]);
+}
+
+function toggleAllWordTr() {
+  allVocabTrVisible = !allVocabTrVisible;
+  if (!CLASS_DATA || !CLASS_DATA.classes || !CLASS_DATA.classes[0]) return;
+  const vocab = CLASS_DATA.classes[0].vocabulary || [];
+  vocab.forEach(v => {
+    vocabTrVisible[v.key] = allVocabTrVisible;
+    const el = document.getElementById("vtr-" + v.key);
+    const btn = document.getElementById("btnVTr-" + v.key);
+    if (el) el.style.display = allVocabTrVisible ? "block" : "none";
+    if (btn) btn.classList.toggle("active", allVocabTrVisible);
+  });
+  const btnAll = document.getElementById("btnToggleAllVocabTr");
+  if (btnAll) btnAll.classList.toggle("active", allVocabTrVisible);
+}
+
 function updateClassVocabStats() {
   // Lightweight hook
 }
@@ -515,12 +540,13 @@ function renderVocabTable() {
         <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
-      ${vocabPracticeMode !== 'all' ? `
-        <div style="display:flex;gap:6px">
+      <div style="display:flex;gap:6px;align-items:center">
+        <button type="button" class="book-toggle-pill ${allVocabTrVisible ? 'active' : ''}" id="btnToggleAllVocabTr" onclick="toggleAllWordTr()" title="Show/hide transliteration across all words">🔤 Translit</button>
+        ${vocabPracticeMode !== 'all' ? `
           <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
           <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(false)" style="font-size:11.5px;padding:2px 8px">🙈 Hide All</button>
-        </div>
-      ` : ''}
+        ` : ''}
+      </div>
     </div>
     <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
       <thead>
@@ -535,17 +561,24 @@ function renderVocabTable() {
           const item = srs[v.key];
           const curBucket = getWordBucket(item);
           const isRevealed = vocabPracticeMode === "all" || vocabRevealed[v.key];
+          const isTrActive = vocabTrVisible[v.key] || allVocabTrVisible;
 
           let arContent;
           if (vocabPracticeMode === "en-only" && !isRevealed) {
             arContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check Arabic word">👁️ Check Arabic</span>`;
           } else {
             arContent = `
-              <div style="display:flex;align-items:center;gap:8px">
-                <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
-                  ${v.ar}
-                </span>
-                <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent);line-height:1.4" title="Click to listen">
+                    ${v.ar}
+                  </span>
+                  <div class="sym-group">
+                    <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                    ${v.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${v.key}" onclick="toggleWordTr('${v.key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                  </div>
+                </div>
+                ${v.tr ? `<div id="vtr-${v.key}" class="vocab-tr-line" style="display:${isTrActive ? 'block' : 'none'};font-size:13px;color:var(--muted);font-style:italic;margin-top:3px">${v.tr}</div>` : ''}
               </div>
             `;
           }
@@ -555,8 +588,8 @@ function renderVocabTable() {
             enContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check English meaning">👁️ Check English</span>`;
           } else {
             enContent = `
-              <div style="font-weight:600;font-size:14.5px;color:var(--ink)">${v.en}</div>
-              ${v.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${v.note}</div>` : ''}
+              <div style="font-weight:600;font-size:15px;color:var(--ink)">${v.en}</div>
+              ${v.note ? `<div style="font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.45">${v.note}</div>` : ''}
             `;
           }
 
@@ -639,17 +672,29 @@ function gradeClassWord(key, bucket, btn) {
   if (row && vocabPracticeMode === "ar-only") {
     const enCell = row.children[1];
     if (enCell && enCell.querySelector(".vocab-reveal-btn")) {
-      enCell.innerHTML = `<div style="font-weight:600;font-size:14.5px;color:var(--ink)">${wordEn}</div>`;
+      const found = CLASS_DATA.classes[0].vocabulary.find(x => x.key === key);
+      enCell.innerHTML = `
+        <div style="font-weight:600;font-size:15px;color:var(--ink)">${wordEn}</div>
+        ${found && found.note ? `<div style="font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.45">${found.note}</div>` : ''}
+      `;
     }
   } else if (row && vocabPracticeMode === "en-only") {
     const arCell = row.children[0];
     if (arCell && arCell.querySelector(".vocab-reveal-btn")) {
+      const found = CLASS_DATA.classes[0].vocabulary.find(x => x.key === key);
+      const isTrActive = vocabTrVisible[key] || allVocabTrVisible;
       arCell.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent)" title="Click to listen">
-            ${wordAr}
-          </span>
-          <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" style="cursor:pointer;font-size:22px;color:var(--accent);line-height:1.4" title="Click to listen">
+              ${wordAr}
+            </span>
+            <div class="sym-group">
+              <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              ${found && found.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${key}" onclick="toggleWordTr('${key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+            </div>
+          </div>
+          ${found && found.tr ? `<div id="vtr-${key}" class="vocab-tr-line" style="display:${isTrActive ? 'block' : 'none'};font-size:13px;color:var(--muted);font-style:italic;margin-top:3px">${found.tr}</div>` : ''}
         </div>
       `;
     }
