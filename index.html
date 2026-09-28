@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muk30se9">
-  <link rel="stylesheet" href="css/style.css?v=muk30se9">
+  <link rel="stylesheet" href="css/fonts.css?v=mulie35t">
+  <link rel="stylesheet" href="css/style.css?v=mulie35t">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -214,12 +214,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muk30se9"></script>
-<script src="js/curriculum.js?v=muk30se9"></script>
-<script src="js/app.js?v=muk30se9"></script>
-<script src="js/tracker.js?v=muk30se9"></script>
-<script src="js/plan.js?v=muk30se9"></script>
-<script src="js/account.js?v=muk30se9"></script>
+<script src="js/progress-model.js?v=mulie35t"></script>
+<script src="js/curriculum.js?v=mulie35t"></script>
+<script src="js/app.js?v=mulie35t"></script>
+<script src="js/tracker.js?v=mulie35t"></script>
+<script src="js/plan.js?v=mulie35t"></script>
+<script src="js/account.js?v=mulie35t"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2718,6 +2718,7 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Practice affirmative vs negative answers.\n`;
+  p += `   - Optional Review Challenge: If natural in context, weave in 1 of Reza's recent diagnostic slips to check retention (e.g. مِصْبَاح lamp, الحَيّ the Ever-Living, السَّتَّار the Concealer of faults, خَال maternal uncle, سَرِير bed, مُرِيح comfortable, فُرْن oven).\n`;
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;
   p += `   - NEVER give long monologues, lectures, or automatic translations.\n`;

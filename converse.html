@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Conversation Partner — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muk30se9">
-  <link rel="stylesheet" href="css/style.css?v=muk30se9">
+  <link rel="stylesheet" href="css/fonts.css?v=mulie35t">
+  <link rel="stylesheet" href="css/style.css?v=mulie35t">
   <style>
     .cv-steps { display: grid; gap: 10px; margin: 8px 0 2px; }
     .cv-step { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
@@ -35,11 +35,11 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/progress-model.js?v=muk30se9"></script>
-<script src="js/curriculum.js?v=muk30se9"></script>
-<script src="js/app.js?v=muk30se9"></script>
-<script src="js/tracker.js?v=muk30se9"></script>
-<script src="js/plan.js?v=muk30se9"></script>
+<script src="js/progress-model.js?v=mulie35t"></script>
+<script src="js/curriculum.js?v=mulie35t"></script>
+<script src="js/app.js?v=mulie35t"></script>
+<script src="js/tracker.js?v=mulie35t"></script>
+<script src="js/plan.js?v=mulie35t"></script>
 <script>
 renderNav("converse");
 trackPage("converse");
@@ -182,9 +182,15 @@ async function buildWeekBriefing() {
 
 function render() {
   content.innerHTML = `
-    <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span>Conversation Partner</span>
-      <span class="arabic" style="color:var(--accent)" dir="rtl">مُحادَثَة</span>
+    <h1 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span>Conversation Partner</span>
+        <a href="SPEAK_WITH_AI.md" target="_blank" class="small" style="font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:2px 8px">📘 Guide</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button type="button" id="btnConverseCopyDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
+        <span class="arabic" style="color:var(--accent)" dir="rtl">مُحادَثَة</span>
+      </div>
     </h1>
     <p class="sub">Practise out loud with any AI — Gemini, Claude or ChatGPT — tuned to exactly the words you know.
     <b>🎙 This week, out loud</b> is the end-of-week one: it hands the AI this week's actual sentences and tells it to make you
@@ -241,6 +247,15 @@ function render() {
   document.getElementById("cvCopy").onclick = copyOut;
   document.getElementById("cvDl").onclick = downloadOut;
   document.getElementById("cvSave").onclick = saveReport;
+  const btnDossier = document.getElementById("btnConverseCopyDossier");
+  if (btnDossier) {
+    btnDossier.onclick = () => {
+      copyLearnerDossier().then(() => {
+        btnDossier.textContent = "✓ Copied Dossier!";
+        setTimeout(() => btnDossier.textContent = "📄 Copy Learner Dossier", 2000);
+      });
+    };
+  }
   renderHistory();
 }
 

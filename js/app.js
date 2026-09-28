@@ -2004,7 +2004,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muk30se9";
+const DATA_V = "mulie35t";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3532,16 +3532,17 @@ async function packTextsForKeys(keys, ctx) {
 
 /* ---------- AI Tutors & Learner Dossier Export ---------- */
 function generateLearnerDossierMarkdown(currentContext) {
-  const wordsState = store.get("ats-words", {});
+  const wordsState = store.get("ats-srs", store.get("ats-words", {}));
   const log = store.get("ats-log", []);
 
   let totalTracked = 0, solidCount = 0, learningCount = 0, weakCount = 0, retiredCount = 0;
   Object.values(wordsState).forEach(item => {
+    if (!item) return;
     totalTracked++;
-    const b = item.box || 0;
-    if (item.retired) retiredCount++;
-    else if (b >= 3) solidCount++;
-    else if (b >= 1) learningCount++;
+    const b = (item.box !== undefined) ? item.box : 0;
+    if (item.retired || item.b === "never") retiredCount++;
+    else if (b >= 3 || item.b === "know" || item.b === "strong") solidCount++;
+    else if (b >= 1 || item.b === "learning" || item.b === "medium") learningCount++;
     else weakCount++;
   });
 
@@ -3555,7 +3556,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `- **Learner:** Reza Karim (rkarim88@gmail.com) — Time-poor senior investment manager\n`;
   md += `- **Ranked Goals:** (1) Understand Qur'an by ear (Qari: Mishary Rashid Alafasy), (2) Spoken MSA conversation\n`;
   md += `- **Active Course:** Live Preply teacher on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
-  md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3), ${learningCount} active learning, ${weakCount} need review\n`;
+  md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3 / Know), ${learningCount} active learning, ${weakCount} need review (${totalTracked} total tracked)\n`;
   md += `- **Milestones Cleared:** ${masteredChapTests} chapters mastered, ${masteredClasses} teacher lessons mastered\n\n`;
 
   md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;

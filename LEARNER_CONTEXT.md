@@ -15,8 +15,8 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry:** 2,648 recorded practice events; 713 cards in SRS (225 Box 5 strong); passed Sunday Preply Class Mastery Test at 100%; passed Chapter 1 test at 100%; passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score).
-  - **Recent Activity:** Sep 26 study session (drilling Chapter 1 test, Sunday class mastery test at 100%, and vocabulary rating pills); Sep 27 lesson deployment.
+  - **Live Telemetry:** 2,656 recorded practice events; 713 cards in SRS (250 solid/strong: 114 Box 5, 82 know, 25 Box 4, 27 Box 3, 2 strong; 377 active learning; 59 need review; 27 retired); passed Sunday Preply Class Mastery Test at 100%; passed Chapter 1 test at 100%; passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score).
+  - **Recent Activity:** Sep 27 evening study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28 coach audit & Speak with AI enhancements.
 
 ---
 

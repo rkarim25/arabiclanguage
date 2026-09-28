@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-09-27.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
+**Updated 2026-09-28.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
 
 ---
 
@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `f13ab73` (remote `origin/main` clean).
+- **Current Deployed Commit:** `a8dcd66` (remote `origin/main` clean, cache `v=muk30se9`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -78,12 +78,15 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ---
 
-## 4. Cloudflare KV & Journal Status (Deferred Operations)
+## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-During the rapid authoring and deployment of the 27 Sep Sunday lesson:
-1. **`coach:rkarim88@gmail.com` in KV:** **Deferred** (remains at previous stamp `2026-09-26`).
-2. **`coach-remote.json` (local working cache):** **Deferred** (stamped `2026-09-26`).
-3. **`coach-journal.md` (private repo `rkarim25/arabic-learning-data`):** **Deferred**.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-09-27` and fully active. Preserves Sunday 27 Sep lesson focus, homework contract, and recent diagnostic slips.
+- **Telemetry Verified:** 2,656 logged events, 713 cards in SRS (250 solid/strong, 377 learning, 59 weak/review, 27 retired).
+- **Speak with AI Enhancements (28 Sep):**
+  - Repaired `generateLearnerDossierMarkdown` in `js/app.js` to correctly query `ats-srs` and compute exact live counts (solid/learning/weak/retired) across `box` and `bucket` states.
+  - Added optional review challenge for recent slips (`مِصْبَاح`, `الحَيّ`, `السَّتَّار`, `خَال`, `سَرِير`, `مُرِيح`, `فُرْن`) directly into `buildChapterAiPrompt` on `index.html`.
+  - Added "📄 Copy Learner Dossier" button and "📘 Guide" link on `converse.html` for complete parity with `index.html` and `class.html`.
+  - Updated `SPEAK_WITH_AI.md` and `LEARNER_CONTEXT.md` with verified figures and Sep 27 evening session review notes.
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:

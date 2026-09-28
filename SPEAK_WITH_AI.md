@@ -17,10 +17,10 @@ This guide explains how to get the most out of the **Speak with AI** features ac
    ↓  4. Say "I'm done" → AI produces a 3-line progress receipt
 ```
 
-1. **On the Website (`index.html` or `class.html`):**
+1. **On the Website (`index.html`, `class.html`, or `converse.html`):**
    - Each chapter and Preply lesson includes a dedicated **Speak with AI** box.
    - Tap **"📋 Copy Voice Prompt"** to copy the specific drill tailored to that lesson's 10 sentences or class reading.
-   - Or tap **"📄 Copy Learner Dossier"** if starting a fresh chat session and you want the AI to remember your complete profile, active vocabulary boundaries, and pedagogical rules.
+   - Or tap **"📄 Copy Learner Dossier"** (available on `index.html`, `class.html`, `converse.html`, and `words.html`) to copy your live profile, real-time SRS breakdown, active vocabulary boundaries, and pedagogical rules into any fresh chat session.
 
 2. **In the AI App (ChatGPT / Claude / Gemini):**
    - Open the mobile app on your iPhone or Android phone.
