@@ -81,24 +81,57 @@ If the AI speaks too fast, uses unknown vocabulary, or you lose the thread, spea
 
 ---
 
-## 5. Setting Up a Dedicated Custom GPT (Zero-Paste Workflow)
+## 5. Setting Up a Dedicated Custom GPT / Project (Zero-Paste Workflow)
 
-If you use ChatGPT Plus, you can set up a permanent voice tutor so you never have to paste text each session:
+If you use ChatGPT Plus, Claude Pro, or Gemini, you can set up a permanent voice tutor so you never have to paste text each session:
 
+### Option A: ChatGPT Custom GPT
 1. In ChatGPT on web or desktop, go to **Explore GPTs** ➔ **Create**.
 2. Name it **"Arabic Coach Reza"**.
-3. In the **Instructions** box, copy and paste the contents of [`LEARNER_CONTEXT.md`](file:///c:/Users/Reza%20Karim/OneDrive/Arabic/Self%20learn/arabiclanguage/LEARNER_CONTEXT.md).
-4. In Voice Settings, select a clear, natural voice (e.g., **"Breeze"** or **"Juniper"**).
+3. In the **Instructions** box, copy and paste the contents of [`LEARNER_CONTEXT.md`](file:///c:/Users/Reza%20Karim/OneDrive/Arabic/Self%20learn/arabiclanguage/LEARNER_CONTEXT.md) (or tap **"📄 Copy Learner Dossier"** on any page).
+4. In Voice Settings, select a clear, natural voice (e.g., **"Breeze"**, **"Juniper"**, or **"Cove"**).
 5. Now, any time you open that Custom GPT on your phone:
    - Tap the **Headphones** icon.
-   - Say: *"Let's practice Chapter 1: Everyday Foundations"* or *"Let's roleplay Samer looking for a flat from Sunday's class"* or *"Let's roleplay the Working Day and Day Off routine from Sunday 27 Sep lesson."*
+   - Say: *"Let's practice Chapter 1: Everyday Foundations"* or *"Let's roleplay Samer looking for a flat"* or *"Let's roleplay the Working Day and Day Off routine from Sunday 27 Sep lesson."*
    - The AI already knows your exact level, known vocabulary, and pedagogical boundaries!
+
+### Option B: Claude Project / System Prompt
+1. Create a Project named **"Arabic Coach"**.
+2. Paste the Learner Dossier into the **Custom Instructions / System Prompt**.
+3. Use Claude's mobile app voice dictation for spoken turns.
+
+### Option C: Quick Paste on the Fly (Free Tier)
+1. On `index.html` or `class.html`, tap **"📋 Copy Voice Prompt"**.
+2. Open ChatGPT or Claude on your phone, paste into the text box, and press Send.
+3. Tap the **Headphones** icon to begin the spoken session immediately.
 
 ---
 
-## 6. Pro-Tips for Spoken Voice Sessions
+## 6. The Telemetry Feedback Loop (How Pasting Reports Helps You)
 
-- **Use Earphones / AirPods:** Prevents the AI's spoken voice from leaking back into your phone mic.
-- **Short Pause (1 Second):** When you finish speaking, pause for one second before the AI replies so it doesn't interrupt compound phrases.
-- **Speak with Tashkeel:** Try vocalizing the endings (e.g. *fī l-bayti*, *shukran jazīlan*) — the neural speech models recognize vowelled Arabic much faster than vowelless pause forms.
-- **Keep it to 5–10 Minutes:** Short daily consistency beats long sporadic sessions.
+When you conclude your voice chat and say **"I'm done"**, the AI produces the structured report:
+```text
+=== AI VOICE SESSION REPORT ===
+Lesson: Sunday 27 Sep Lesson: A Working Day & The Day Off
+Phrases Mastered: أَسْتَيْقِظُ مُبَكِّرًا، أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ
+Hesitations & Errors: confused أَسْتَيْقِظُ with أَسْكُنُ; hesitated on مَلَابِس
+Words to Review: مَلَابِس، كَنَسَ، أَطْبَاق
+Next Recommended Focus: Practice morning chore verbs and ordinal hours
+===============================
+```
+
+When you paste this report into the **"📥 Paste AI Voice Session Report"** box and tap **"💾 Save Session Report"**:
+1. It logs an `ai-session-report`, a `note`, and a `convo` event into your telemetry log (`ats-log`).
+2. The `Words to Review` are automatically prioritized in your next 10-word vocabulary drill on `words.html`.
+3. Your Coach's Note on the dashboard acknowledges the session and adjusts your next study priority.
+4. Your progress model recognizes oral production without manual data entry!
+
+---
+
+## 7. Pro-Tips for Spoken Voice Sessions
+
+- **Use Earphones / AirPods:** Prevents the AI's spoken voice from leaking back into your phone mic and cutting off compound sentences.
+- **Short Pause (1 Second):** When you finish speaking, pause for one second before the AI replies so it doesn't interrupt multi-clause phrases.
+- **Speak with Tashkeel:** Try vocalizing the endings (e.g. *fī l-bayti*, *shukran jazīlan*, *fī s-sāʿati th-thāminah*) — the neural speech models recognize vowelled Arabic much faster than vowelless pause forms.
+- **Keep it to 5–10 Minutes:** A tight, energetic 5-minute drill daily beats an exhausting 45-minute grammar lecture every single time.
+
