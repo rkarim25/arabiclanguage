@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-09-29.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
+**Updated 2026-09-30.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
 
 ---
 
@@ -80,13 +80,12 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-09-27` and fully active. Preserves Sunday 27 Sep lesson focus, homework contract, and recent diagnostic slips.
-- **Telemetry Verified:** 2,656 logged events, 713 cards in SRS (250 solid/strong, 377 learning, 59 weak/review, 27 retired).
-- **Speak with AI Enhancements (28 Sep):**
-  - Repaired `generateLearnerDossierMarkdown` in `js/app.js` to correctly query `ats-srs` and compute exact live counts (solid/learning/weak/retired) across `box` and `bucket` states.
-  - Added optional review challenge for recent slips (`مِصْبَاح`, `الحَيّ`, `السَّتَّار`, `خَال`, `سَرِير`, `مُرِيح`, `فُرْن`) directly into `buildChapterAiPrompt` on `index.html`.
-  - Added "📄 Copy Learner Dossier" button and "📘 Guide" link on `converse.html` for complete parity with `index.html` and `class.html`.
-  - Updated `SPEAK_WITH_AI.md` and `LEARNER_CONTEXT.md` with verified figures and Sep 27 evening session review notes.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-09-30` and fully active. Preserves Sunday 27 Sep lesson focus, homework contract (59 keys, 2 tasks), and recent diagnostic slips.
+- **Telemetry Verified (30 Sep 2026):** 2,656 logged events, 713 cards in SRS: 278 solid/strong (225 Box 5, 25 Box 4, 28 Box 3), 375 active learning (332 Box 1, 43 Box 2), 60 Box 0 (need review), 27 retired.
+- **Speak with AI Enhancements (30 Sep):**
+  - Updated `SPEAK_WITH_AI.md` with Section 8 containing ready-to-use direct copy-paste Voice Mode starters for mobile.
+  - Updated `LEARNER_CONTEXT.md` with Section 7 containing quick-start prompts targeting Lesson 10 slips (`سَرِير`, `مُرِيح`, `فُرْن`, `مِصْبَاح`) and Sunday 27 Sep daily routines.
+  - Verified live prompt builders and dossier copy functions across `index.html`, `class.html`, and `converse.html`.
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:

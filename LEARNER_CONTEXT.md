@@ -15,8 +15,8 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry:** 2,656 recorded practice events; 713 cards in SRS (251 solid/strong: 225 Box 5, 25 Box 4, 28 Box 3; 377 active learning: 332 Box 1, 43 Box 2; 58 need review: 60 Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score, 2 questions from 80% mastery mark).
-  - **Recent Activity:** Sep 27 study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28–29 coach health audit, all 8 test suites passing, and Speak with AI section upgrades.
+  - **Live Telemetry (30 Sep 2026):** 2,656 recorded practice events; 713 cards in SRS (278 solid/strong: 225 Box 5, 25 Box 4, 28 Box 3; 375 active learning: 332 Box 1, 43 Box 2; 60 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score on سَرِير، مُرِيح، فُرْن, 2 questions from 80% mastery mark); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Recent Activity:** Sep 27 study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28–30 coach health audits, all 8 test suites passing, live site verified at 200 OK, and Speak with AI guides fully upgraded.
 
 ---
 
@@ -158,3 +158,38 @@ If the AI speaks too fast or uses unknown words, Reza can say:
 - **كَرِّرْ مِنْ فَضْلِكَ** (*Repeat, please*)
 - **مَا مَعْنَى هَذِهِ الكَلِمَةِ؟** (*What is the meaning of this word?*)
 - **كَيْفَ أَقُولُ [English Word] بِالعَرَبِيَّةِ؟** (*How do I say [X] in Arabic?*)
+
+---
+
+## 7. Ready-to-Use Spoken Drill Prompts (Direct Voice Mode Starters)
+
+Attach this dossier or paste one of these prompts directly into ChatGPT / Claude Voice:
+
+### Prompt 1: Lesson 10 Review Words (Bed, Oven, Comfortable, Lamp)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor.
+Context: Reza needs a 5-minute spoken drill focusing on recent vocabulary slips from his flat/housing lessons:
+- سَرِير (bed), مُرِيح (comfortable), فُرْن (oven), مِصْبَاح (lamp), مَطْبَخ (kitchen), غُرْفَة نَوْم (bedroom).
+Instructions:
+1. Greet Reza warmly in Arabic and ask if he lives in a house or flat.
+2. Ask him what is in his bedroom (prompt him to produce "سَرِيرٌ مُرِيحٌ").
+3. Ask him what is in his kitchen (prompt him to produce "فُرْنٌ وَثَلَّاجَةٌ").
+4. Drill variations: swap pronouns (أَسْكُنُ / هُوَ يَسْكُنُ), ask questions with هَلْ and أَيْنَ.
+5. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
+6. When he says "I'm done", provide the 3-line AI Voice Session Report.
+```
+
+### Prompt 2: Sunday 27 Sep Work Day & Day Off Routine + Surah Falaq/Nas
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor.
+Context: Sunday 27 Sep Preply lesson covered daily routines and protection concepts:
+- يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ مُبَكِّرًا (I wake early), مَلَابِس (clothes), أُسَاعِدُ (I help), أَعُودُ (I return).
+- Qur'an Protection Concepts: أَعُوذُ (I seek refuge), الْفَلَق (daybreak), غَاسِق (nightfall), الْوَسْوَاس (whisperer), صُدُور (chests).
+Instructions:
+1. Greet Reza and ask what time he wakes up on a work day vs a day off.
+2. Ask what chores he does at home (washing dishes, sweeping).
+3. Ask him what he recites for protection (Surah Al-Falaq / An-Nas) and ask why "صُدُور" (chests) is mentioned instead of hearts.
+4. Keep turns under 2 sentences, full tashkeel, prompt-driven.
+5. When he says "I'm done", provide the 3-line AI Voice Session Report.
+```
+
