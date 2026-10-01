@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-09-30.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
+**Updated 2026-10-01.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
 
 ---
 
@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `d2f9708` (remote `origin/main` clean, cache `v=muod99bf`).
+- **Current Deployed Commit:** `[pending commit]` (remote `origin/main` clean, cache `v=mupsoach`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -80,11 +80,11 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-09-30` and fully active. Preserves Sunday 27 Sep lesson focus, homework contract (59 keys, 2 tasks), and recent diagnostic slips.
-- **Telemetry Verified (30 Sep 2026):** 2,656 logged events, 713 cards in SRS: 278 solid/strong (225 Box 5, 25 Box 4, 28 Box 3), 375 active learning (332 Box 1, 43 Box 2), 60 Box 0 (need review), 27 retired.
-- **Speak with AI Enhancements (30 Sep):**
-  - Updated `SPEAK_WITH_AI.md` with Section 8 containing ready-to-use direct copy-paste Voice Mode starters for mobile.
-  - Updated `LEARNER_CONTEXT.md` with Section 7 containing quick-start prompts targeting Lesson 10 slips (`سَرِير`, `مُرِيح`, `فُرْن`, `مِصْبَاح`) and Sunday 27 Sep daily routines.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-01` and fully active via refreshed OAuth token. Preserves Sunday 27 Sep lesson focus, homework contract (59 keys, 2 tasks), and recent diagnostic slips.
+- **Telemetry Verified (01 Oct 2026):** 2,656 logged events, 713 cards in SRS: 278 solid/strong (225 Box 5, 25 Box 4, 28 Box 3), 375 active learning (332 Box 1, 43 Box 2), 60 Box 0 (need review), 27 retired.
+- **Speak with AI Enhancements (01 Oct):**
+  - Updated `SPEAK_WITH_AI.md` Section 8 with Prompt C covering Divine Attributes (`الْحَيّ`, `السَّتَّار`) and Seeking Refuge (`أَعُوذُ بِـ`, `الْوَسْوَاس`).
+  - Updated `LEARNER_CONTEXT.md` Section 7 with Prompt 3 targeting Divine Names and recent telemetry ratings.
   - Verified live prompt builders and dossier copy functions across `index.html`, `class.html`, and `converse.html`.
 
 ### Strict KV Read-Modify-Write Protocol:

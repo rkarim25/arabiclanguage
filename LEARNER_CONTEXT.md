@@ -15,8 +15,8 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (30 Sep 2026):** 2,656 recorded practice events; 713 cards in SRS (278 solid/strong: 225 Box 5, 25 Box 4, 28 Box 3; 375 active learning: 332 Box 1, 43 Box 2; 60 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score on سَرِير، مُرِيح، فُرْن, 2 questions from 80% mastery mark); Sunday 27 Sep Untimed Mastery Test ready to sit.
-  - **Recent Activity:** Sep 27 study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28–30 coach health audits, all 8 test suites passing, live site verified at 200 OK, and Speak with AI guides fully upgraded.
+  - **Live Telemetry (01 Oct 2026):** 2,656 recorded practice events; 713 cards in SRS (278 solid/strong: 225 Box 5, 25 Box 4, 28 Box 3; 375 active learning: 332 Box 1, 43 Box 2; 60 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score on سَرِير، مُرِيح، فُرْن, 2 questions from 80% mastery mark); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Recent Activity:** Sep 27 study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28–Oct 01 coach health audits, all 8 test suites verified, live site verified at 200 OK, and Speak with AI guides fully enriched with targeted prompts for Divine attributes (الحَيّ، السَّتَّار) and housing vocabulary.
 
 ---
 
@@ -192,4 +192,19 @@ Instructions:
 4. Keep turns under 2 sentences, full tashkeel, prompt-driven.
 5. When he says "I'm done", provide the 3-line AI Voice Session Report.
 ```
+
+### Prompt 3: Divine Names & Daily Invocations (Al-Hayy, As-Sattar & Seeking Refuge)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor.
+Context: Reza needs a 5-minute spoken drill reinforcing Divine Attributes and Qur'anic protection concepts from recent telemetry:
+- الحَيّ (the Ever-Living), السَّتَّار (the Concealer of faults), أَعُوذُ بِـ (I seek refuge in), رَبّ الفَلَق (Lord of the daybreak), الْوَسْوَاس (the whisperer), صُدُور النَّاس (chests of mankind).
+Instructions:
+1. Greet Reza warmly in Arabic and ask how he begins his morning or evening prayers.
+2. Ask him which Divine Names he remembers from recent lessons (prompt for "يَا حَيُّ" and "يَا سَتَّارُ").
+3. Ask him what Surahs he recites for protection (prompt for Surah Al-Falaq and An-Nas).
+4. Drill variations: swap prepositions (أَعُوذُ بِـ / أَسْتَعِينُ بِـ), practice asking simple questions with مَنْ and مَاذَا.
+5. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
+6. When he says "I'm done", provide the 3-line AI Voice Session Report.
+```
+
 
