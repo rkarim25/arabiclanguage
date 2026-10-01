@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `[pending commit]` (remote `origin/main` clean, cache `v=mupsoach`).
+- **Current Deployed Commit:** `deefb7c` (remote `origin/main` clean, cache `v=mupsoach`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
