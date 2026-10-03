@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musnde5r">
-  <link rel="stylesheet" href="css/style.css?v=musnde5r">
+  <link rel="stylesheet" href="css/fonts.css?v=musx1x7z">
+  <link rel="stylesheet" href="css/style.css?v=musx1x7z">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -133,9 +133,14 @@
 
   <!-- Audio Controls -->
   <div class="audio-bar">
-    <span style="font-size:13px;font-weight:700">🎧 Audio:</span>
-    <button type="button" id="btnPlayAll">▶ Play All 10</button>
-    <button type="button" id="btnPlayPauses" title="Plays Arabic, pauses 3.5s for you to recall, then says English">⏸ Play with Pauses</button>
+    <span style="font-size:13px;font-weight:700">🎧 Audio Mode:</span>
+    <div class="audio-lang-switch" id="audioLangSwitch">
+      <button type="button" class="audio-mode-pill active" id="btnAudioArEn" onclick="setAudioVoiceMode('ar-en')" title="Learn mode: Plays Arabic, then English translation right after">🌐 Arabic + English</button>
+      <button type="button" class="audio-mode-pill" id="btnAudioRecall" onclick="setAudioVoiceMode('recall')" title="Recall mode: Plays Arabic, pauses 3s for you to recall, then says English to check">⏳ Ar ➔ Pause ➔ En</button>
+      <button type="button" class="audio-mode-pill" id="btnAudioArOnly" onclick="setAudioVoiceMode('ar-only')" title="Immersion mode: Plays Arabic pronunciation only">🇸🇦 Arabic Only</button>
+    </div>
+    <button type="button" id="btnPlayAll">▶ Play All (Ar + En)</button>
+    <button type="button" id="btnPlayPauses" style="display:none" title="Plays Arabic, pauses 3.5s for you to recall, then says English">⏸ Play with Pauses</button>
     <button type="button" id="btnStopAudio" style="display:none">⏹ Stop</button>
     <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
       <button type="button" class="small" id="spNormal">🔊 Normal</button>
@@ -240,12 +245,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=musnde5r"></script>
-<script src="js/curriculum.js?v=musnde5r"></script>
-<script src="js/app.js?v=musnde5r"></script>
-<script src="js/tracker.js?v=musnde5r"></script>
-<script src="js/plan.js?v=musnde5r"></script>
-<script src="js/account.js?v=musnde5r"></script>
+<script src="js/progress-model.js?v=musx1x7z"></script>
+<script src="js/curriculum.js?v=musx1x7z"></script>
+<script src="js/app.js?v=musx1x7z"></script>
+<script src="js/tracker.js?v=musx1x7z"></script>
+<script src="js/plan.js?v=musx1x7z"></script>
+<script src="js/account.js?v=musx1x7z"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2772,6 +2777,7 @@ function updateResumeBanner() {
 
   if (lineNumEl) lineNumEl.textContent = lineIdx + 1;
   if (audioNumEl) audioNumEl.textContent = lineIdx + 1;
+  updateAudioModeButtons();
 
   if (mastered) {
     if (pillEl) {
@@ -2851,16 +2857,63 @@ function jumpToSavedLine() {
   }
 }
 
-function playFromSavedLine() {
-  const lineIdx = getSavedChapterLine(curChap.id);
-  startAudioQueueFromLine(lineIdx, false);
+let audioVoiceMode = (typeof store !== "undefined" && store.get("ats-audio-voice-mode")) || "ar-en"; // 'ar-en' | 'recall' | 'ar-only'
+let _singleSentenceTimer = null;
+
+function setAudioVoiceMode(mode) {
+  audioVoiceMode = mode;
+  if (typeof store !== "undefined") {
+    store.set("ats-audio-voice-mode", mode);
+  } else {
+    localStorage.setItem("ats-audio-voice-mode", mode);
+  }
+  updateAudioModeButtons();
+  renderDailySentences();
+  renderChapterVocab();
 }
 
-function startAudioQueueFromLine(startIdx, withPause) {
+function updateAudioModeButtons() {
+  const btnArEn = document.getElementById("btnAudioArEn");
+  const btnRecall = document.getElementById("btnAudioRecall");
+  const btnArOnly = document.getElementById("btnAudioArOnly");
+  const btnPlayAll = document.getElementById("btnPlayAll");
+
+  if (btnArEn) btnArEn.classList.toggle("active", audioVoiceMode === "ar-en");
+  if (btnRecall) btnRecall.classList.toggle("active", audioVoiceMode === "recall");
+  if (btnArOnly) btnArOnly.classList.toggle("active", audioVoiceMode === "ar-only");
+
+  if (btnPlayAll) {
+    if (audioVoiceMode === "ar-en") {
+      btnPlayAll.textContent = "▶ Play All (Ar + En)";
+      btnPlayAll.title = "Plays Arabic followed immediately by English translation";
+    } else if (audioVoiceMode === "recall") {
+      btnPlayAll.textContent = "▶ Play All (Recall)";
+      btnPlayAll.title = "Plays Arabic, pauses 3s for you to recall, then says English to verify";
+    } else {
+      btnPlayAll.textContent = "▶ Play All (Arabic)";
+      btnPlayAll.title = "Plays Arabic pronunciation only";
+    }
+  }
+
+  const btnResumeAudio = document.getElementById("btnResumeAudio");
+  const lineNumEl = document.getElementById("lblResumeAudioNum");
+  const lineNum = lineNumEl ? lineNumEl.textContent : "1";
+  if (btnResumeAudio) {
+    const modeTag = audioVoiceMode === "ar-en" ? "Ar + En" : (audioVoiceMode === "recall" ? "Recall" : "Ar");
+    btnResumeAudio.innerHTML = `▶ Play from Line <span id="lblResumeAudioNum">${lineNum}</span> (${modeTag})`;
+  }
+}
+
+function playFromSavedLine() {
+  const lineIdx = getSavedChapterLine(curChap.id);
+  startAudioQueueFromLine(lineIdx);
+}
+
+function startAudioQueueFromLine(startIdx) {
   stopAllAudio();
   isAudioRunning = true;
   document.getElementById("btnStopAudio").style.display = "inline-block";
-  document.getElementById(withPause ? "btnPlayPauses" : "btnPlayAll").classList.add("playing");
+  document.getElementById("btnPlayAll").classList.add("playing");
 
   const srs = (typeof getSrs === "function") ? getSrs() : {};
   let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
@@ -2876,9 +2929,46 @@ function startAudioQueueFromLine(startIdx, withPause) {
   let targetQueueIdx = items.findIndex(it => it.origIdx === startIdx);
   if (targetQueueIdx === -1) targetQueueIdx = 0;
 
-  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: withPause ? s.en : null, idx: origIdx }));
+  const includeEn = audioVoiceMode !== "ar-only";
+  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: includeEn ? s.en : null, idx: origIdx }));
   audioIndex = targetQueueIdx;
-  playNextInQueue(withPause);
+  playNextInQueue(audioVoiceMode);
+}
+
+function playEnglishOnly(encodedEn, lineIdx) {
+  stopAllAudio();
+  const text = decodeURIComponent(encodedEn);
+  if (curChap && typeof lineIdx === "number") {
+    saveChapterLine(curChap.id, lineIdx);
+  }
+  speak(text, 1.0);
+  logEvent({ e: "audio-play", text, type: "english", t: Date.now() });
+}
+
+function playVocabWord(encodedAr, encodedEn) {
+  stopAllAudio();
+  const ar = decodeURIComponent(encodedAr);
+  const en = encodedEn ? decodeURIComponent(encodedEn) : null;
+  if (_singleSentenceTimer) {
+    clearTimeout(_singleSentenceTimer);
+    _singleSentenceTimer = null;
+  }
+  if (audioVoiceMode === "ar-en" && en) {
+    speak(ar, 0.85, () => {
+      _singleSentenceTimer = setTimeout(() => {
+        speak(en, 1.0);
+      }, 600);
+    });
+  } else if (audioVoiceMode === "recall" && en) {
+    speak(ar, 0.85, () => {
+      _singleSentenceTimer = setTimeout(() => {
+        speak(en, 1.0);
+      }, 2500);
+    });
+  } else {
+    speak(ar, 0.85);
+  }
+  logEvent({ e: "audio-play", text: ar, type: "vocab", mode: audioVoiceMode, t: Date.now() });
 }
 
 function handleSentenceRowClick(event, origIdx) {
@@ -2900,6 +2990,7 @@ function handleSentenceRowClick(event, origIdx) {
   initChapterSelector();
   loadChapter(targetChap);
   setupAudioSpeedButtons();
+  updateAudioModeButtons();
 })();
 
 function loadChapter(chap, resumeLineIdx) {
@@ -3462,10 +3553,15 @@ function renderDailySentences() {
         enContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
       } else {
         enContent = `
-          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">
+            ${s.en}
+            <button type="button" class="en-audio-badge" onclick="event.stopPropagation(); playEnglishOnly('${encodeURIComponent(s.en)}', ${origIdx})" title="Listen to English translation only">🔊 En</button>
+          </div>
           ${s.tr ? `<div class="s-tr" id="day-tr-${origIdx}" style="display:${allDayTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
         `;
       }
+
+      const audioTitle = audioVoiceMode === 'ar-en' ? 'Listen (Arabic + English)' : (audioVoiceMode === 'recall' ? 'Listen (Ar ➔ Pause ➔ En)' : 'Listen (Arabic Only)');
 
       return `
         <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="srow-${origIdx}" onclick="handleSentenceRowClick(event, ${origIdx})">
@@ -3473,7 +3569,7 @@ function renderDailySentences() {
             <div class="line-badge-dock" aria-label="Sentence tools">
               <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
               <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="${audioTitle}" aria-label="Listen">🔊</button>
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
@@ -3640,9 +3736,10 @@ function playAllChapVocab() {
   stopAllAudio();
   isAudioRunning = true;
   document.getElementById("btnStopAudio").style.display = "inline-block";
-  audioQueue = list.map(v => ({ ar: v.ar, en: null }));
+  const includeEn = audioVoiceMode !== "ar-only";
+  audioQueue = list.map(v => ({ ar: v.ar, en: includeEn ? (v.en || null) : null }));
   audioIndex = 0;
-  playNextInQueue(false);
+  playNextInQueue(audioVoiceMode);
 }
 
 function renderChapterVocab() {
@@ -3675,6 +3772,8 @@ function renderChapterVocab() {
     });
   }
 
+  const vocabAudioModeTitle = audioVoiceMode === 'ar-en' ? 'Arabic + English' : (audioVoiceMode === 'recall' ? 'Ar ➔ Pause ➔ En' : 'Arabic Only');
+
   vList.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
@@ -3682,7 +3781,7 @@ function renderChapterVocab() {
         <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'all' ? 'active' : ''}" onclick="setChapVocabPracticeMode('all')" title="Show Arabic and English">All</button>
         <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'ar-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('ar-only')" title="Show Arabic only; tap to reveal English">Arabic Prompt</button>
         <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'en-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('en-only')" title="Show English only; tap to reveal Arabic">English Prompt</button>
-        <button type="button" class="book-toggle-pill" onclick="playAllChapVocab()" title="Play all chapter vocabulary audio">🔊 Play Vocab</button>
+        <button type="button" class="book-toggle-pill" onclick="playAllChapVocab()" title="Play all chapter vocabulary audio (${vocabAudioModeTitle})">🔊 Play Vocab</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
@@ -3723,10 +3822,10 @@ function renderChapterVocab() {
           } else {
             arContent = `
               <div style="display:flex;align-items:center;gap:6px">
-                <span class="arabic" dir="rtl" onclick="speak('${encodeURIComponent(v.ar)}')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen">
+                <span class="arabic" dir="rtl" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen (${vocabAudioModeTitle})">
                   ${v.ar}
                 </span>
-                <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(v.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" title="Listen (${vocabAudioModeTitle})" aria-label="Listen">🔊</button>
               </div>
             `;
           }
@@ -3738,6 +3837,7 @@ function renderChapterVocab() {
             enContent = `
               <div>
                 <span style="font-size:14.5px;color:var(--ink);font-weight:500">${v.en}</span>
+                ${v.en ? `<button type="button" class="en-audio-badge" onclick="event.stopPropagation(); playEnglishOnly('${encodeURIComponent(v.en)}')" title="Listen to English translation only">🔊 En</button>` : ''}
                 ${fam ? `<span class="wbw-rf-badge" style="margin-left:6px;font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
                 ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid</div>` : ''}
               </div>
@@ -3862,8 +3962,31 @@ function playSingleSentence(encodedAr, lineIdx) {
   if (curChap && typeof lineIdx === "number") {
     saveChapterLine(curChap.id, lineIdx);
   }
-  speak(text, 0.85);
-  logEvent({ e: "audio-play", text, type: "sentence", t: Date.now() });
+
+  if (_singleSentenceTimer) {
+    clearTimeout(_singleSentenceTimer);
+    _singleSentenceTimer = null;
+  }
+
+  const sentenceObj = (curChap && curChap.sentences && typeof lineIdx === "number") ? curChap.sentences[lineIdx] : null;
+  const en = sentenceObj ? sentenceObj.en : null;
+
+  if (audioVoiceMode === "ar-en" && en) {
+    speak(text, 0.85, () => {
+      _singleSentenceTimer = setTimeout(() => {
+        speak(en, 1.0);
+      }, 600);
+    });
+  } else if (audioVoiceMode === "recall" && en) {
+    speak(text, 0.85, () => {
+      _singleSentenceTimer = setTimeout(() => {
+        speak(en, 1.0);
+      }, 3000);
+    });
+  } else {
+    speak(text, 0.85);
+  }
+  logEvent({ e: "audio-play", text, type: "sentence", mode: audioVoiceMode, t: Date.now() });
 }
 
 function setupAudioSpeedButtons() {
@@ -3894,34 +4017,24 @@ document.getElementById("btnPlayAll").onclick = () => {
       return a.origIdx - b.origIdx;
     });
   }
-  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: null, idx: origIdx }));
+  const includeEn = audioVoiceMode !== "ar-only";
+  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: includeEn ? s.en : null, idx: origIdx }));
   audioIndex = 0;
-  playNextInQueue(false);
+  playNextInQueue(audioVoiceMode);
 };
 
 document.getElementById("btnPlayPauses").onclick = () => {
-  stopAllAudio();
-  isAudioRunning = true;
-  document.getElementById("btnStopAudio").style.display = "inline-block";
-  document.getElementById("btnPlayPauses").classList.add("playing");
-  const srs = (typeof getSrs === "function") ? getSrs() : {};
-  let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
-  if (daySortWeakest) {
-    items.sort((a, b) => {
-      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
-      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
-      if (ra !== rb) return ra - rb;
-      return a.origIdx - b.origIdx;
-    });
-  }
-  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: s.en, idx: origIdx }));
-  audioIndex = 0;
-  playNextInQueue(true);
+  setAudioVoiceMode("recall");
+  document.getElementById("btnPlayAll").click();
 };
 
 document.getElementById("btnStopAudio").onclick = stopAllAudio;
 
 function stopAllAudio() {
+  if (_singleSentenceTimer) {
+    clearTimeout(_singleSentenceTimer);
+    _singleSentenceTimer = null;
+  }
   isAudioRunning = false;
   stopSpeak();
   stopRecitation();
@@ -3932,17 +4045,18 @@ function stopAllAudio() {
   document.getElementById("btnStopAudio").style.display = "none";
 }
 
-function playNextInQueue(withPause) {
+function playNextInQueue(mode) {
   if (!isAudioRunning || audioIndex >= audioQueue.length) {
     stopAllAudio();
     return;
   }
+  const effectiveMode = (typeof mode === "string") ? mode : (mode === true ? "recall" : (mode === false ? "ar-only" : audioVoiceMode));
   const item = audioQueue[audioIndex];
   if (curChap && typeof item.idx === "number") {
     saveChapterLine(curChap.id, item.idx);
   }
   document.querySelectorAll(".s-row").forEach(r => r.classList.remove("active"));
-  const row = document.getElementById("srow-" + item.idx);
+  const row = (typeof item.idx === "number") ? document.getElementById("srow-" + item.idx) : null;
   if (row) {
     row.classList.add("active");
     row.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -3958,7 +4072,7 @@ function playNextInQueue(withPause) {
       if (!isAudioRunning) {
         isAudioRunning = true;
         setAppMediaSession({ state: "playing" });
-        playNextInQueue(withPause);
+        playNextInQueue(effectiveMode);
       }
     },
     onPause: () => {
@@ -3969,13 +4083,13 @@ function playNextInQueue(withPause) {
     onNext: () => {
       if (audioQueue.length > 0) {
         audioIndex = (audioIndex + 1) % audioQueue.length;
-        playNextInQueue(withPause);
+        playNextInQueue(effectiveMode);
       }
     },
     onPrev: () => {
       if (audioQueue.length > 0) {
         audioIndex = Math.max(0, audioIndex - 1);
-        playNextInQueue(withPause);
+        playNextInQueue(effectiveMode);
       }
     },
     onStop: stopAllAudio,
@@ -3984,20 +4098,23 @@ function playNextInQueue(withPause) {
 
   speak(item.ar, 0.85, () => {
     if (!isAudioRunning) return;
-    if (withPause && item.en) {
+    if (item.en && effectiveMode !== "ar-only") {
+      const pauseDuration = effectiveMode === "recall" ? 3200 : 700;
       setTimeout(() => {
         if (!isAudioRunning) return;
         speak(item.en, 1.0, () => {
           setTimeout(() => {
+            if (!isAudioRunning) return;
             audioIndex++;
-            playNextInQueue(withPause);
-          }, 1000);
+            playNextInQueue(effectiveMode);
+          }, 1100);
         });
-      }, 3500);
+      }, pauseDuration);
     } else {
       setTimeout(() => {
+        if (!isAudioRunning) return;
         audioIndex++;
-        playNextInQueue(withPause);
+        playNextInQueue(effectiveMode);
       }, 1200);
     }
   });
