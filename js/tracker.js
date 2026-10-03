@@ -118,10 +118,38 @@ function _mergeRemoteState(remote) {
     }
   });
   if (ivChanged) store.set("ats-item-votes", iv);
+
+  // Chapter progression and line resume
+  if (remote.currentChapId && !store.get("ats-current-chap-id")) {
+    store.set("ats-current-chap-id", remote.currentChapId);
+  }
+  if (remote.chapLines && typeof remote.chapLines === "object") {
+    Object.entries(remote.chapLines).forEach(([cid, line]) => {
+      if (store.get("ats-chap-line-" + cid) === null) {
+        store.set("ats-chap-line-" + cid, line);
+      }
+    });
+  }
 }
 
 function _payload(log) {
-  return { progress: getProgress(), srs: getSrs(), itemVotes: store.get("ats-item-votes", {}), tapwords: store.get("ats-tapwords", {}), log, savedAt: Date.now() };
+  const chapLines = {};
+  for (let i = 1; i <= 10; i++) {
+    const cid = "chap-" + i;
+    const l = store.get("ats-chap-line-" + cid, null);
+    if (l !== null) chapLines[cid] = l;
+  }
+  const curChapId = store.get("ats-current-chap-id", null);
+  return {
+    progress: getProgress(),
+    srs: getSrs(),
+    itemVotes: store.get("ats-item-votes", {}),
+    tapwords: store.get("ats-tapwords", {}),
+    chapLines,
+    currentChapId: curChapId,
+    log,
+    savedAt: Date.now()
+  };
 }
 
 /* ---------- Worker (Google) backend ---------- */
@@ -236,6 +264,12 @@ async function restoreFromCloud() {
   if (remote.srs) store.set("ats-srs", remote.srs);
   if (remote.itemVotes) store.set("ats-item-votes", remote.itemVotes);
   if (remote.tapwords) store.set("ats-tapwords", remote.tapwords);
+  if (remote.currentChapId) store.set("ats-current-chap-id", remote.currentChapId);
+  if (remote.chapLines && typeof remote.chapLines === "object") {
+    Object.entries(remote.chapLines).forEach(([cid, line]) => {
+      store.set("ats-chap-line-" + cid, line);
+    });
+  }
   if (remote.log) store.set(LOG_KEY, remote.log);
 }
 

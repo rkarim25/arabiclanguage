@@ -1003,3 +1003,172 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
   background: var(--accent);
   color: #fff;
 }
+
+/* Chapter Progression & Line Resume Banner */
+.resume-banner {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent);
+}
+
+.resume-banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.resume-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resume-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.resume-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resume-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.resume-sub {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.resume-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-resume {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-resume:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.btn-resume.audio {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-resume.audio:hover {
+  background: #09634d;
+}
+
+/* 10-Chapter Interactive Progress Track */
+.chapter-dots-track {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.chap-dot-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chap-dot-btn:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.chap-dot-btn.mastered {
+  background: #ecfdf5;
+  border-color: #86efac;
+  color: #059669;
+}
+
+.chap-dot-btn.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 2px rgba(13, 122, 95, 0.25);
+  font-weight: 700;
+}
+
+.chap-dot-btn.current.mastered {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+}
+
+/* Resume Line Highlight */
+.s-row.resume-active {
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 14px rgba(13, 122, 95, 0.18) !important;
+  background: rgba(13, 122, 95, 0.05) !important;
+  transition: all 0.3s ease;
+}

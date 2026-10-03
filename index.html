@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musmxc7l">
-  <link rel="stylesheet" href="css/style.css?v=musmxc7l">
+  <link rel="stylesheet" href="css/fonts.css?v=musnde5r">
+  <link rel="stylesheet" href="css/style.css?v=musnde5r">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -95,6 +95,25 @@
       <select id="chapSelect" class="chap-select" title="Choose Chapter"></select>
       <span id="chapBadge" class="status-pill">Loading…</span>
     </div>
+  </div>
+
+  <!-- RESUME & CHAPTER PROGRESS BANNER -->
+  <div class="resume-banner" id="resumeBanner">
+    <div class="resume-banner-top">
+      <div class="resume-info">
+        <div class="resume-pill-row">
+          <span class="resume-pill" id="resumePill">🎯 Seamless Resume</span>
+          <span id="resumeStatusBadge" style="font-size:12px;font-weight:600;color:var(--muted)"></span>
+        </div>
+        <div class="resume-title" id="resumeTitle">Loading chapter progress…</div>
+        <div class="resume-sub" id="resumeSub"></div>
+      </div>
+      <div class="resume-actions">
+        <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Jump to Line <span id="lblResumeLineNum">1</span></button>
+        <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from Line <span id="lblResumeAudioNum">1</span></button>
+      </div>
+    </div>
+    <div class="chapter-dots-track" id="chapterDotsTrack" aria-label="10-Chapter Curriculum Progress Track"></div>
   </div>
 
   <!-- COLLAPSIBLE COACH'S NOTE -->
@@ -221,12 +240,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=musmxc7l"></script>
-<script src="js/curriculum.js?v=musmxc7l"></script>
-<script src="js/app.js?v=musmxc7l"></script>
-<script src="js/tracker.js?v=musmxc7l"></script>
-<script src="js/plan.js?v=musmxc7l"></script>
-<script src="js/account.js?v=musmxc7l"></script>
+<script src="js/progress-model.js?v=musnde5r"></script>
+<script src="js/curriculum.js?v=musnde5r"></script>
+<script src="js/app.js?v=musnde5r"></script>
+<script src="js/tracker.js?v=musnde5r"></script>
+<script src="js/plan.js?v=musnde5r"></script>
+<script src="js/account.js?v=musnde5r"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2634,6 +2653,239 @@ let audioQueue = [];
 let audioIndex = 0;
 let isAudioRunning = false;
 
+function isChapterMastered(chapId) {
+  const log = (typeof store !== "undefined" && store.get("ats-log", [])) || [];
+  return log.some(x => x.e === "chap-test" && x.chap === chapId && (x.score >= 80 || x.pass === true));
+}
+
+function getChapterBestScore(chapId) {
+  const log = (typeof store !== "undefined" && store.get("ats-log", [])) || [];
+  const tests = log.filter(x => x.e === "chap-test" && x.chap === chapId);
+  if (!tests.length) return null;
+  return Math.max(...tests.map(x => typeof x.score === "number" ? x.score : (x.pass ? 100 : 0)));
+}
+
+function getSavedChapterLine(chapId) {
+  const raw = (typeof store !== "undefined" && store.get(`ats-chap-line-${chapId}`)) || localStorage.getItem(`ats-chap-line-${chapId}`);
+  const num = parseInt(raw, 10);
+  return (!isNaN(num) && num >= 0 && num < 10) ? num : 0;
+}
+
+function saveChapterLine(chapId, lineIdx) {
+  if (typeof lineIdx !== "number" || lineIdx < 0 || lineIdx >= 10) return;
+  if (typeof store !== "undefined") {
+    store.set(`ats-chap-line-${chapId}`, lineIdx);
+    store.set("ats-current-chap-id", chapId);
+  } else {
+    localStorage.setItem(`ats-chap-line-${chapId}`, lineIdx);
+    localStorage.setItem("ats-current-chap-id", chapId);
+  }
+  updateResumeBanner();
+  updateChapterSelector();
+  updateTestBadge();
+}
+
+function getActiveOrNextChapter() {
+  const savedId = (typeof store !== "undefined" && store.get("ats-current-chap-id")) || localStorage.getItem("ats-current-chap-id");
+  if (savedId) {
+    const found = CHAPTERS.find(c => c.id === savedId);
+    if (found) {
+      if (!isChapterMastered(found.id)) {
+        return found;
+      }
+      // If the saved chapter is mastered, check if subsequent chapter is available
+      const idx = CHAPTERS.findIndex(c => c.id === savedId);
+      if (idx !== -1 && idx + 1 < CHAPTERS.length) {
+        const next = CHAPTERS[idx + 1];
+        if (!isChapterMastered(next.id)) return next;
+      }
+      return found;
+    }
+  }
+  // Fallback: pick first unmastered chapter, else Chapter 1
+  const firstUnmastered = CHAPTERS.find(c => !isChapterMastered(c.id));
+  return firstUnmastered || CHAPTERS[0];
+}
+
+function selectChapterById(chapId) {
+  const found = CHAPTERS.find(c => c.id === chapId);
+  if (!found) return;
+  if (typeof store !== "undefined") store.set("ats-current-chap-id", found.id);
+  loadChapter(found);
+}
+
+function advanceToNextChapter(nextId) {
+  const next = CHAPTERS.find(c => c.id === nextId);
+  if (!next) return;
+  if (typeof store !== "undefined") store.set("ats-current-chap-id", next.id);
+  saveChapterLine(next.id, 0);
+  loadChapter(next, 0);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updateChapterSelector() {
+  const sel = document.getElementById("chapSelect");
+  if (!sel) return;
+  const currentVal = curChap ? curChap.id : (sel.value || CHAPTERS[0].id);
+  sel.innerHTML = CHAPTERS.map(c => {
+    const mastered = isChapterMastered(c.id);
+    const best = getChapterBestScore(c.id);
+    const line = getSavedChapterLine(c.id);
+    let tag = "○ ";
+    if (mastered) {
+      tag = `✓ [Mastered${best ? ` ${best}%` : ''}] `;
+    } else if (line > 0) {
+      tag = `▶ [Line ${line + 1}/10] `;
+    }
+    return `<option value="${c.id}">${tag}${c.title}</option>`;
+  }).join("");
+  sel.value = currentVal;
+}
+
+function initChapterSelector() {
+  const sel = document.getElementById("chapSelect");
+  if (!sel) return;
+  updateChapterSelector();
+  sel.onchange = e => {
+    const found = CHAPTERS.find(c => c.id === e.target.value);
+    if (found) {
+      if (typeof store !== "undefined") store.set("ats-current-chap-id", found.id);
+      loadChapter(found);
+    }
+  };
+}
+
+function updateResumeBanner() {
+  const banner = document.getElementById("resumeBanner");
+  if (!banner || !curChap) return;
+  const lineIdx = getSavedChapterLine(curChap.id);
+  const mastered = isChapterMastered(curChap.id);
+  const bestScore = getChapterBestScore(curChap.id);
+  const s = curChap.sentences && curChap.sentences[lineIdx] ? curChap.sentences[lineIdx] : (curChap.sentences ? curChap.sentences[0] : null);
+
+  const titleEl = document.getElementById("resumeTitle");
+  const subEl = document.getElementById("resumeSub");
+  const pillEl = document.getElementById("resumePill");
+  const badgeEl = document.getElementById("resumeStatusBadge");
+  const lineNumEl = document.getElementById("lblResumeLineNum");
+  const audioNumEl = document.getElementById("lblResumeAudioNum");
+
+  if (lineNumEl) lineNumEl.textContent = lineIdx + 1;
+  if (audioNumEl) audioNumEl.textContent = lineIdx + 1;
+
+  if (mastered) {
+    if (pillEl) {
+      pillEl.innerHTML = "✓ Mastered";
+      pillEl.style.background = "#ecfdf5";
+      pillEl.style.color = "#059669";
+    }
+    if (badgeEl) badgeEl.textContent = `Score: ${bestScore || 100}% · Reviewing Chapter ${curChap.num}`;
+  } else {
+    if (pillEl) {
+      pillEl.innerHTML = "🎯 In Progress";
+      pillEl.style.background = "var(--accent-soft)";
+      pillEl.style.color = "var(--accent)";
+    }
+    if (badgeEl) badgeEl.textContent = `Line ${lineIdx + 1} of 10 · Next: Chapter Test`;
+  }
+
+  if (titleEl) {
+    titleEl.textContent = `${curChap.title} · Sentence ${lineIdx + 1} of 10`;
+  }
+
+  if (subEl && s) {
+    subEl.innerHTML = `
+      <span class="arabic" dir="rtl" style="font-size:16px;color:var(--accent);font-weight:600">${s.ar}</span>
+      <span style="color:var(--muted)">— "${s.en}"</span>
+    `;
+  }
+
+  updateChapterDotsTrack();
+}
+
+function updateChapterDotsTrack() {
+  const track = document.getElementById("chapterDotsTrack");
+  if (!track) return;
+  const masteredCount = CHAPTERS.filter(c => isChapterMastered(c.id)).length;
+  track.innerHTML = `
+    <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:4px">
+      <span style="font-size:11.5px;font-weight:600;color:var(--muted)">
+        Curriculum Progress: <b style="color:var(--ink)">${masteredCount} of 10 Chapters Mastered</b> (${Math.round((masteredCount / 10) * 100)}%)
+      </span>
+      <span style="font-size:11px;color:var(--muted)">Tap any chapter to open</span>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%">
+      ${CHAPTERS.map(c => {
+        const isCur = curChap && c.id === curChap.id;
+        const isMast = isChapterMastered(c.id);
+        const best = getChapterBestScore(c.id);
+        const line = getSavedChapterLine(c.id);
+        let cls = "chap-dot-btn";
+        if (isMast) cls += " mastered";
+        if (isCur) cls += " current";
+        let icon = isMast ? "✓" : (isCur ? "▶" : c.num);
+        let label = `Ch ${c.num}`;
+        let titleTip = `${c.title}${isMast ? ` (Mastered ${best || 100}%)` : (line > 0 ? ` (Line ${line + 1}/10)` : '')}`;
+        return `
+          <button type="button" class="${cls}" onclick="selectChapterById('${c.id}')" title="${titleTip}">
+            <span>${icon}</span>
+            <span>${label}</span>
+            ${isMast ? `<span style="font-size:9.5px;opacity:0.85">${best || 100}%</span>` : (line > 0 && !isCur ? `<span style="font-size:9.5px;opacity:0.8">L${line+1}</span>` : '')}
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function jumpToSavedLine() {
+  if (curChapView !== "sentences") {
+    switchChapView("sentences");
+  }
+  const lineIdx = getSavedChapterLine(curChap.id);
+  const row = document.getElementById("srow-" + lineIdx);
+  if (row) {
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+    row.classList.add("resume-active");
+    setTimeout(() => { row.classList.remove("resume-active"); }, 2500);
+  }
+}
+
+function playFromSavedLine() {
+  const lineIdx = getSavedChapterLine(curChap.id);
+  startAudioQueueFromLine(lineIdx, false);
+}
+
+function startAudioQueueFromLine(startIdx, withPause) {
+  stopAllAudio();
+  isAudioRunning = true;
+  document.getElementById("btnStopAudio").style.display = "inline-block";
+  document.getElementById(withPause ? "btnPlayPauses" : "btnPlayAll").classList.add("playing");
+
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
+  if (daySortWeakest) {
+    items.sort((a, b) => {
+      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
+      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  }
+
+  let targetQueueIdx = items.findIndex(it => it.origIdx === startIdx);
+  if (targetQueueIdx === -1) targetQueueIdx = 0;
+
+  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: withPause ? s.en : null, idx: origIdx }));
+  audioIndex = targetQueueIdx;
+  playNextInQueue(withPause);
+}
+
+function handleSentenceRowClick(event, origIdx) {
+  if (event.target.closest("button") || event.target.closest("input") || event.target.closest(".wbw-chip") || event.target.closest(".vocab-reveal-btn")) return;
+  if (curChap && typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
+}
+
 /* Initialise page */
 (async () => {
   try {
@@ -2644,27 +2896,21 @@ let isAudioRunning = false;
     ]);
   } catch (e) { console.error("Could not load initial data", e); }
 
+  const targetChap = getActiveOrNextChapter();
   initChapterSelector();
-  loadChapter(CHAPTERS[0]);
+  loadChapter(targetChap);
   setupAudioSpeedButtons();
 })();
 
-function initChapterSelector() {
-  const sel = document.getElementById("chapSelect");
-  sel.innerHTML = CHAPTERS.map(c => `<option value="${c.id}">${c.title}</option>`).join("");
-  sel.onchange = e => {
-    const found = CHAPTERS.find(c => c.id === e.target.value);
-    if (found) loadChapter(found);
-  };
-}
-
-function loadChapter(chap) {
+function loadChapter(chap, resumeLineIdx) {
   curChap = chap;
   quranRevealed = {};
   quranEnVisible = {};
   dayRevealed = {};
   dayEnVisible = {};
-  document.getElementById("chapSelect").value = chap.id;
+  if (typeof store !== "undefined") store.set("ats-current-chap-id", chap.id);
+  const sel = document.getElementById("chapSelect");
+  if (sel) sel.value = chap.id;
 
   // Render Sentences
   renderDailySentences();
@@ -2709,6 +2955,23 @@ function loadChapter(chap) {
   updateTestBadge();
   resetTestArea();
   renderAiReportHistory();
+
+  // Update Selector and Resume Banner
+  updateChapterSelector();
+  updateResumeBanner();
+
+  // Line Resume: auto-scroll to saved line if > 0 or explicitly provided
+  const targetLine = (typeof resumeLineIdx === "number") ? resumeLineIdx : getSavedChapterLine(chap.id);
+  if (targetLine > 0) {
+    setTimeout(() => {
+      const row = document.getElementById(`srow-${targetLine}`);
+      if (row) {
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        row.classList.add("resume-active");
+        setTimeout(() => { row.classList.remove("resume-active"); }, 2500);
+      }
+    }, 200);
+  }
 }
 
 function buildChapterAiPrompt(chap) {
@@ -3048,6 +3311,7 @@ function toggleDaySortWeakest() {
 }
 
 function revealDaySentence(idx) {
+  if (curChap && typeof idx === "number") saveChapterLine(curChap.id, idx);
   dayRevealed[idx] = true;
   renderDailySentences();
 }
@@ -3060,6 +3324,7 @@ function toggleAllDayReveal(reveal) {
 
 function voteDaySentence(origIdx, type) {
   if (!curChap || !curChap.sentences) return;
+  if (typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
   const s = curChap.sentences[origIdx];
   if (!s) return;
   const sKey = `chap:${curChap.num}:${origIdx}`;
@@ -3203,12 +3468,12 @@ function renderDailySentences() {
       }
 
       return `
-        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="srow-${origIdx}">
+        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="srow-${origIdx}" onclick="handleSentenceRowClick(event, ${origIdx})">
           <div class="book-line-row">
             <div class="line-badge-dock" aria-label="Sentence tools">
               <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
               <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
@@ -3507,6 +3772,7 @@ function renderChapterVocab() {
 }
 
 function toggleDayEn(idx) {
+  if (curChap && typeof idx === "number") saveChapterLine(curChap.id, idx);
   if (dayPracticeMode === "ar-only" && !dayRevealed[idx]) {
     dayRevealed[idx] = true;
     renderDailySentences();
@@ -3541,6 +3807,7 @@ function toggleAllDayEn() {
 }
 
 function toggleDayWbw(idx) {
+  if (curChap && typeof idx === "number") saveChapterLine(curChap.id, idx);
   const el = document.getElementById("day-wbw-" + idx);
   const btn = document.getElementById("btn-dwbw-" + idx);
   if (!el) return;
@@ -3550,6 +3817,7 @@ function toggleDayWbw(idx) {
 }
 
 function toggleDayTr(idx) {
+  if (curChap && typeof idx === "number") saveChapterLine(curChap.id, idx);
   const el = document.getElementById("day-tr-" + idx);
   const btn = document.getElementById("btn-dtr-" + idx);
   if (!el) return;
@@ -3588,9 +3856,12 @@ function playQuranAyah(surahN, ayahN) {
 }
 
 /* AUDIO ENGINE: Single, Play All, and Play with Pauses */
-function playSingleSentence(encodedAr) {
+function playSingleSentence(encodedAr, lineIdx) {
   stopAllAudio();
   const text = decodeURIComponent(encodedAr);
+  if (curChap && typeof lineIdx === "number") {
+    saveChapterLine(curChap.id, lineIdx);
+  }
   speak(text, 0.85);
   logEvent({ e: "audio-play", text, type: "sentence", t: Date.now() });
 }
@@ -3667,6 +3938,9 @@ function playNextInQueue(withPause) {
     return;
   }
   const item = audioQueue[audioIndex];
+  if (curChap && typeof item.idx === "number") {
+    saveChapterLine(curChap.id, item.idx);
+  }
   document.querySelectorAll(".s-row").forEach(r => r.classList.remove("active"));
   const row = document.getElementById("srow-" + item.idx);
   if (row) {
@@ -3731,20 +4005,29 @@ function playNextInQueue(withPause) {
 
 /* DYNAMIC 5-MINUTE CHAPTER TEST */
 function updateTestBadge() {
-  const log = store.get("ats-log", []);
+  const log = (typeof store !== "undefined" && store.get("ats-log", [])) || [];
   const pass = log.find(x => x.e === "chap-test" && x.chap === curChap.id && x.score >= 80);
   const pill = document.getElementById("testScorePill");
   const badge = document.getElementById("chapBadge");
+  const lineIdx = getSavedChapterLine(curChap.id);
   if (pass) {
-    pill.textContent = `Mastered (${pass.score}%)`;
-    pill.className = "status-pill done";
-    badge.textContent = "✓ Mastered";
-    badge.className = "status-pill done";
+    if (pill) {
+      pill.textContent = `Mastered (${pass.score}%)`;
+      pill.className = "status-pill done";
+    }
+    if (badge) {
+      badge.textContent = `✓ Mastered (${pass.score}%)`;
+      badge.className = "status-pill done";
+    }
   } else {
-    pill.textContent = "Untested";
-    pill.className = "status-pill";
-    badge.textContent = "In progress";
-    badge.className = "status-pill";
+    if (pill) {
+      pill.textContent = lineIdx > 0 ? `In Progress (${lineIdx + 1}/10)` : "Untested";
+      pill.className = "status-pill";
+    }
+    if (badge) {
+      badge.textContent = lineIdx > 0 ? `▶ Line ${lineIdx + 1}/10` : "In progress";
+      badge.className = "status-pill";
+    }
   }
 }
 
@@ -3793,8 +4076,19 @@ function runChapterTest() {
       const passed = pct >= 80;
       logEvent({ e: "chap-test", chap: curChap.id, score: pct, pass: passed, t: Date.now() });
       updateTestBadge();
+      updateChapterSelector();
+      updateResumeBanner();
       autoSync();
       if (typeof loadCoach === "function") loadCoach();
+
+      const curIdx = CHAPTERS.findIndex(c => c.id === curChap.id);
+      const nextChap = (curIdx !== -1 && curIdx + 1 < CHAPTERS.length) ? CHAPTERS[curIdx + 1] : null;
+
+      if (passed && nextChap) {
+        if (typeof store !== "undefined") store.set("ats-current-chap-id", nextChap.id);
+        saveChapterLine(nextChap.id, 0);
+      }
+
       area.innerHTML = `
         <div style="text-align:center;padding:16px">
           <h3 style="font-size:20px;color:${passed ? 'var(--accent)' : 'var(--amber)'}">
@@ -3802,7 +4096,16 @@ function runChapterTest() {
           </h3>
           <p style="font-size:15px">Your Score: <b>${pct}%</b> (${score}/${questions.length})</p>
           <p style="font-size:13px;color:var(--muted)">${passed ? 'You have demonstrated mastery of these high-frequency sentences.' : 'Review the sentences and retake the test anytime.'}</p>
-          <button type="button" class="primary" onclick="runChapterTest()" style="margin-top:10px">Retake Test</button>
+          ${passed && nextChap ? `
+            <div style="margin-top:14px">
+              <button type="button" class="primary" onclick="advanceToNextChapter('${nextChap.id}')" style="font-size:15px;padding:10px 22px">
+                🚀 Continue to Chapter ${nextChap.num}: ${nextChap.title.replace(/^Chapter \d+:\s*/, '')} →
+              </button>
+            </div>
+          ` : passed ? `
+            <p style="color:var(--accent);font-weight:700;margin-top:10px">🏆 All 10 Chapters Mastered! Outstanding fluency milestone.</p>
+          ` : ''}
+          <button type="button" class="btn-resume" onclick="runChapterTest()" style="margin-top:12px">Retake Test</button>
         </div>
       `;
       return;
