@@ -106,10 +106,22 @@ function _mergeRemoteState(remote) {
   let twChanged = false;
   Object.entries(remote.tapwords || {}).forEach(([k, v]) => { if (!tw[k]) { tw[k] = v; twChanged = true; } });
   if (twChanged) store.set("ats-tapwords", tw);
+
+  // Up/down item votes — merge by latest timestamp
+  const iv = store.get("ats-item-votes", {});
+  let ivChanged = false;
+  Object.entries(remote.itemVotes || {}).forEach(([k, r]) => {
+    const l = iv[k];
+    if (!l || (r.u || 0) > (l.u || 0)) {
+      iv[k] = r;
+      ivChanged = true;
+    }
+  });
+  if (ivChanged) store.set("ats-item-votes", iv);
 }
 
 function _payload(log) {
-  return { progress: getProgress(), srs: getSrs(), tapwords: store.get("ats-tapwords", {}), log, savedAt: Date.now() };
+  return { progress: getProgress(), srs: getSrs(), itemVotes: store.get("ats-item-votes", {}), tapwords: store.get("ats-tapwords", {}), log, savedAt: Date.now() };
 }
 
 /* ---------- Worker (Google) backend ---------- */
@@ -222,6 +234,7 @@ async function restoreFromCloud() {
   }
   if (remote.progress) store.set("ats-progress", remote.progress);
   if (remote.srs) store.set("ats-srs", remote.srs);
+  if (remote.itemVotes) store.set("ats-item-votes", remote.itemVotes);
   if (remote.tapwords) store.set("ats-tapwords", remote.tapwords);
   if (remote.log) store.set(LOG_KEY, remote.log);
 }

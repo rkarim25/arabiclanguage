@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musmdtyf">
-  <link rel="stylesheet" href="css/style.css?v=musmdtyf">
+  <link rel="stylesheet" href="css/fonts.css?v=musmxc7l">
+  <link rel="stylesheet" href="css/style.css?v=musmxc7l">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,11 +497,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=musmdtyf"></script>
-<script src="js/curriculum.js?v=musmdtyf"></script>
-<script src="js/app.js?v=musmdtyf"></script>
-<script src="js/tracker.js?v=musmdtyf"></script>
-<script src="js/plan.js?v=musmdtyf"></script>
+<script src="js/progress-model.js?v=musmxc7l"></script>
+<script src="js/curriculum.js?v=musmxc7l"></script>
+<script src="js/app.js?v=musmxc7l"></script>
+<script src="js/tracker.js?v=musmxc7l"></script>
+<script src="js/plan.js?v=musmxc7l"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -905,9 +905,22 @@ function getCurrentClass() {
   return CLASS_DATA.classes.find(c => c.id === CURRENT_CLASS_ID) || CLASS_DATA.classes[0];
 }
 
-function getSentenceWeaknessRank(s, srs, vocabMap) {
-  if (s.key && srs[s.key]) {
-    const b = getWordBucket(srs[s.key]);
+function getSentenceWeaknessRank(s, srs, vocabMap, idx) {
+  const cls = getCurrentClass();
+  const sKey = s.key || (cls ? `cls:${cls.id}:${idx}` : null);
+  const vote = (typeof getItemVote === "function" && sKey) ? getItemVote(sKey) : { vote: 0, score: 0 };
+  const arVote = (typeof getItemVote === "function" && s.ar) ? getItemVote(s.ar) : { vote: 0, score: 0 };
+  const effectiveVote = (vote.vote !== 0) ? vote : arVote;
+
+  if (effectiveVote.vote === -1) {
+    return -10 + (effectiveVote.score || -1); // Downvoted: highest weakness priority (-11, -12...)
+  }
+  if (effectiveVote.vote === 1) {
+    return 100 + (effectiveVote.score || 1); // Upvoted: solid recall (101, 102...)
+  }
+
+  if (sKey && srs[sKey]) {
+    const b = getWordBucket(srs[sKey]);
     if (b === "learning") return 0;
     if (b === "weak") return 1;
     if (b === "medium") return 3;
@@ -916,6 +929,10 @@ function getSentenceWeaknessRank(s, srs, vocabMap) {
   const words = (s.ar || "").split(/\s+/).map(w => w.replace(/[.,!؟،]/g, "").trim());
   let minRank = 2;
   for (const w of words) {
+    if (typeof getItemVote === "function") {
+      const wv = getItemVote(w);
+      if (wv.vote === -1) return 0; // Sentence contains downvoted word
+    }
     if (vocabMap && vocabMap[w]) {
       const vItem = srs[vocabMap[w].key];
       const b = getWordBucket(vItem);
@@ -926,6 +943,23 @@ function getSentenceWeaknessRank(s, srs, vocabMap) {
     }
   }
   return minRank;
+}
+
+function voteClassSentence(idx, type) {
+  const cls = getCurrentClass();
+  if (!cls || !cls.sentences) return;
+  const s = cls.sentences[idx];
+  if (!s) return;
+  const sKey = s.key || `cls:${cls.id}:${idx}`;
+  const curVote = (typeof getItemVote === "function") ? getItemVote(sKey) : { vote: 0 };
+  const targetVote = type === "weak" ? -1 : 1;
+  const newType = (curVote.vote === targetVote) ? "clear" : type;
+
+  if (typeof setItemVote === "function") {
+    setItemVote(sKey, newType, { src: "class-sentence", text: s.ar });
+    if (s.ar) setItemVote(s.ar, newType, { src: "class-sentence" });
+  }
+  renderClassSentences();
 }
 
 function renderClassSentences() {
@@ -942,12 +976,13 @@ function renderClassSentences() {
     if (bare) vocabMap[bare] = v;
   });
 
-  let sentences = (cls.sentences || []).slice(0, 10);
+  let sentences = (cls.sentences || []).slice(0, 10).map((s, origIdx) => ({ s, origIdx }));
   if (clsSentSortWeakest) {
-    sentences = sentences.slice().sort((a, b) => {
-      const ra = getSentenceWeaknessRank(a, srs, vocabMap);
-      const rb = getSentenceWeaknessRank(b, srs, vocabMap);
-      return ra - rb;
+    sentences.sort((a, b) => {
+      const ra = getSentenceWeaknessRank(a.s, srs, vocabMap, a.origIdx);
+      const rb = getSentenceWeaknessRank(b.s, srs, vocabMap, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
     });
   }
 
@@ -971,41 +1006,50 @@ function renderClassSentences() {
         ` : ''}
       </div>
     </div>
-    ${sentences.map((s, idx) => {
-      const isRevealed = clsSentPracticeMode === "all" || clsSentRevealed[idx];
-      const isEnShown = clsSentPracticeMode === "en-only" || (clsSentPracticeMode === "ar-only" && isRevealed) || (clsSentPracticeMode === "all" && (allClsSentEnVisible || clsSentEnVisible[idx]));
+    ${sentences.map(({ s, origIdx }) => {
+      const isRevealed = clsSentPracticeMode === "all" || clsSentRevealed[origIdx];
+      const isEnShown = clsSentPracticeMode === "en-only" || (clsSentPracticeMode === "ar-only" && isRevealed) || (clsSentPracticeMode === "all" && (allClsSentEnVisible || clsSentEnVisible[origIdx]));
+      const sKey = s.key || `cls:${cls.id}:${origIdx}`;
+      const vote = (typeof getItemVote === "function") ? getItemVote(sKey) : { vote: 0 };
+      const isWeak = vote.vote === -1;
+      const isStrong = vote.vote === 1;
 
       let arContent;
       if (clsSentPracticeMode === "en-only" && !isRevealed) {
-        arContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${idx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
+        arContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
       } else {
         arContent = `<span class="arabic" dir="rtl" style="font-size:23px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>`;
       }
 
       let enContent;
       if (clsSentPracticeMode === "ar-only" && !isRevealed) {
-        enContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${idx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+        enContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
       } else {
         enContent = `
-          <div id="cls-en-${idx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-          ${s.tr ? `<div id="cls-tr-${idx}" class="cls-tr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+          <div id="cls-en-${origIdx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+          ${s.tr ? `<div id="cls-tr-${origIdx}" class="cls-tr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
         `;
       }
 
       return `
-        <div class="book-line s-row" id="cls-srow-${idx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
+        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="cls-srow-${origIdx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
           <div class="book-line-row">
             <div class="line-badge-dock" aria-label="Sentence tools">
-              <span class="line-num-badge" title="Sentence ${idx + 1}">${idx + 1}</span>
+              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
               <div class="sym-group">
                 <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${idx}" onclick="toggleClsSentenceEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-                ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${idx}" onclick="toggleClsSentenceTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${origIdx}" onclick="toggleClsSentenceEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${origIdx}" onclick="toggleClsSentenceTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                <div class="vote-badge-group">
+                  <button type="button" class="vote-btn down ${isWeak ? 'active' : ''}" onclick="voteClassSentence(${origIdx}, 'weak')" title="Mark weak / downvote (need review)" aria-label="Mark weak">👎</button>
+                  <button type="button" class="vote-btn up ${isStrong ? 'active' : ''}" onclick="voteClassSentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
+                </div>
               </div>
             </div>
             <div class="s-content-wrap">
               <div class="s-meta-side">
                 ${enContent}
+                ${isWeak ? `<span class="vote-status-tag weak" style="margin-top:4px">⚠️ Weak Review Priority</span>` : isStrong ? `<span class="vote-status-tag strong" style="margin-top:4px">✓ Solid Recall</span>` : ''}
               </div>
               <div class="s-ar-side">
                 ${arContent}
@@ -1033,7 +1077,8 @@ function getWordBucket(item) {
 }
 
 let vocabPracticeMode = "all";
-let vocabSortWeakest = false;
+let vocabSortMode = (typeof store !== "undefined" && store.get("ats-class-vocab-sort")) || "default"; // 'default' | 'weakest' | 'strongest'
+let vocabSortWeakest = (vocabSortMode === "weakest");
 let vocabRevealed = {};
 let vocabTrVisible = {};
 let allVocabTrVisible = false;
@@ -1050,23 +1095,39 @@ function setVocabPracticeMode(mode) {
   renderVocabTable();
 }
 
-function toggleVocabSortWeakest() {
-  vocabSortWeakest = !vocabSortWeakest;
-  const btn = document.getElementById("btnVocabSortWeakest");
-  if (btn) btn.classList.toggle("active", vocabSortWeakest);
-  const btnInner = document.getElementById("btnVocabSortWeakestInner");
-  if (btnInner) btnInner.classList.toggle("active", vocabSortWeakest);
+function setVocabSortMode(mode) {
+  vocabSortMode = mode;
+  vocabSortWeakest = (mode === "weakest");
+  if (typeof store !== "undefined") store.set("ats-class-vocab-sort", mode);
   renderVocabTable();
 }
 
-function getWordWeaknessRank(item) {
+function toggleVocabSortWeakest() {
+  setVocabSortMode(vocabSortMode === "weakest" ? "default" : "weakest");
+}
+
+function getWordWeaknessRank(item, key) {
+  const vote = (typeof getItemVote === "function" && key) ? getItemVote(key) : { vote: 0, score: 0 };
   const b = getWordBucket(item);
-  let rank = 2;
-  if (b === "learning") rank = 0;
-  else if (b === "weak") rank = 1;
-  else if (b === "medium") rank = 3;
-  else if (b === "strong") rank = 4;
-  else if (b === "never") rank = 5;
+  let rank = 2; // unrated default
+
+  if (vote.vote === -1) {
+    // Explicit downvote / weak: priority #1!
+    rank = -10 + (vote.score || -1); // e.g. -11, -12
+  } else if (vote.vote === 1) {
+    // Explicit upvote / strong: lowest priority in weakest
+    rank = 100 + (vote.score || 1); // e.g. 101, 102
+  } else if (b === "learning") {
+    rank = 0;
+  } else if (b === "weak") {
+    rank = 1;
+  } else if (b === "medium") {
+    rank = 3;
+  } else if (b === "strong") {
+    rank = 4;
+  } else if (b === "never") {
+    rank = 50;
+  }
 
   const fails = item ? (item.f || item.slips || 0) : 0;
   const box = item && typeof item.box === "number" ? item.box : 0;
@@ -1110,26 +1171,47 @@ function toggleAllWordTr() {
   if (btnAll) btnAll.classList.toggle("active", allVocabTrVisible);
 }
 
+function voteClassWord(key, type, btn) {
+  const currentVote = (typeof getItemVote === "function") ? getItemVote(key) : { vote: 0 };
+  const targetVote = type === "weak" ? -1 : 1;
+  const newType = (currentVote.vote === targetVote) ? "clear" : type;
+  if (typeof setItemVote === "function") {
+    setItemVote(key, newType, { src: "class-vocab" });
+  }
+  vocabRevealed[key] = true;
+  renderVocabTable();
+}
+
 function renderVocabTable() {
   const cls = getCurrentClass();
   if (!cls) return;
-  let vocab = (cls.vocabulary || []).slice();
+  let vocab = (cls.vocabulary || []).map((v, origIdx) => ({ v, origIdx }));
   const srs = getSrs();
   const vDiv = document.getElementById("vocabContainer");
   if (!vDiv) return;
 
-  if (vocabSortWeakest) {
+  if (vocabSortMode === "weakest") {
     vocab.sort((a, b) => {
-      const wa = getWordWeaknessRank(srs[a.key]);
-      const wb = getWordWeaknessRank(srs[b.key]);
+      const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
+      const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
       if (wa.rank !== wb.rank) return wa.rank - wb.rank;
       if (wb.fails !== wa.fails) return wb.fails - wa.fails;
-      return wa.box - wb.box;
+      if (wa.box !== wb.box) return wa.box - wb.box;
+      return a.origIdx - b.origIdx;
+    });
+  } else if (vocabSortMode === "strongest") {
+    vocab.sort((a, b) => {
+      const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
+      const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
+      if (wb.rank !== wa.rank) return wb.rank - wa.rank;
+      if (wb.box !== wa.box) return wb.box - wa.box;
+      if (wa.fails !== wb.fails) return wa.fails - wb.fails;
+      return a.origIdx - b.origIdx;
     });
   }
 
   const btnOuter = document.getElementById("btnVocabSortWeakest");
-  if (btnOuter) btnOuter.classList.toggle("active", vocabSortWeakest);
+  if (btnOuter) btnOuter.classList.toggle("active", vocabSortMode === "weakest");
 
   vDiv.innerHTML = `
     <div class="srs-legend-bar" style="margin:4px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -1141,7 +1223,10 @@ function renderVocabTable() {
         <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <button type="button" class="book-toggle-pill ${vocabSortWeakest ? 'active' : ''}" id="btnVocabSortWeakestInner" onclick="toggleVocabSortWeakest()" title="Sort vocabulary by weakest rating first">📉 Weakest First</button>
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
+        <button type="button" class="book-toggle-pill ${vocabSortMode === 'weakest' ? 'active' : ''}" id="btnVocabSortWeakestInner" onclick="setVocabSortMode(vocabSortMode === 'weakest' ? 'default' : 'weakest')" title="Sort vocabulary by weakest recall first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill ${vocabSortMode === 'strongest' ? 'active' : ''}" id="btnVocabSortStrongestInner" onclick="setVocabSortMode(vocabSortMode === 'strongest' ? 'default' : 'strongest')" title="Sort vocabulary by strongest recall first">📈 Strongest First</button>
+        <button type="button" class="book-toggle-pill ${vocabSortMode === 'default' ? 'active' : ''}" id="btnVocabSortDefaultInner" onclick="setVocabSortMode('default')" title="Original class order">🔢 Lesson Order</button>
         <button type="button" class="book-toggle-pill ${allVocabTrVisible ? 'active' : ''}" id="btnToggleAllVocabTr" onclick="toggleAllWordTr()" title="Show/hide transliteration across all words">🔤 Translit</button>
         ${vocabPracticeMode !== 'all' ? `
           <button type="button" class="book-toggle-pill" onclick="toggleAllVocabReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
@@ -1153,14 +1238,17 @@ function renderVocabTable() {
       <thead>
         <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
           <th style="width:26%">Arabic</th>
-          <th style="width:50%">English Meaning</th>
-          <th style="width:24%;text-align:right">Rating</th>
+          <th style="width:46%">English Meaning</th>
+          <th style="width:28%;text-align:right">Recall &amp; Rating</th>
         </tr>
       </thead>
       <tbody>
-        ${vocab.map(v => {
+        ${vocab.map(({ v }) => {
           const item = srs[v.key];
           const curBucket = getWordBucket(item);
+          const vote = (typeof getItemVote === "function") ? getItemVote(v.key) : { vote: 0, score: 0 };
+          const isWeak = vote.vote === -1 || curBucket === "weak" || curBucket === "learning";
+          const isStrong = vote.vote === 1 || curBucket === "strong";
           const isRevealed = vocabPracticeMode === "all" || vocabRevealed[v.key];
           const isTrActive = vocabTrVisible[v.key] || allVocabTrVisible;
 
@@ -1192,22 +1280,29 @@ function renderVocabTable() {
               <div class="vocab-en-wrap">
                 <span class="vocab-en-main">${v.en}</span>
                 ${v.note ? `<span class="vocab-en-note">— ${v.note}</span>` : ''}
+                ${vote.vote === -1 ? `<span class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</span>` : vote.vote === 1 ? `<span class="vote-status-tag strong" style="margin-top:3px">✓ Solid</span>` : ''}
               </div>
             `;
           }
 
           return `
-            <tr>
+            <tr class="${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}">
               <td style="vertical-align:middle">${arContent}</td>
               <td style="vertical-align:middle">${enContent}</td>
               <td style="text-align:right;vertical-align:middle">
-                <div class="rate-bar" data-key="${v.key}">
-                  <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
-                  <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
-                  <span class="rate-feedback"></span>
+                <div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end">
+                  <div class="vote-badge-group">
+                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'weak', this)" title="Mark weak / downvote (struggling recall)" aria-label="Mark weak">👎</button>
+                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'strong', this)" title="Mark strong / upvote (solid recall)" aria-label="Mark strong">👍</button>
+                  </div>
+                  <div class="rate-bar" data-key="${v.key}">
+                    <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
+                    <span class="rate-feedback"></span>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -1221,6 +1316,16 @@ function renderVocabTable() {
 function gradeClassWord(key, bucket, btn) {
   setBucket(key, bucket);
   vocabRevealed[key] = true;
+
+  if (typeof setItemVote === "function") {
+    if (bucket === "weak" || bucket === "learning") {
+      setItemVote(key, "weak", { src: "class-rate" });
+    } else if (bucket === "strong") {
+      setItemVote(key, "strong", { src: "class-rate" });
+    } else {
+      setItemVote(key, "clear", { src: "class-rate" });
+    }
+  }
 
   let wordAr = "", wordEn = "";
   if (CLASS_DATA && CLASS_DATA.classes) {
@@ -1250,60 +1355,7 @@ function gradeClassWord(key, bucket, btn) {
 
   if (typeof autoSync === "function") autoSync();
 
-  const bar = btn.closest(".rate-bar");
-  if (bar) {
-    bar.querySelectorAll(".rate-btn").forEach(b => {
-      b.classList.toggle("selected", b.dataset.b === bucket);
-    });
-    const msg = bar.querySelector(".rate-feedback");
-    if (msg) {
-      const labels = {
-        strong: "30d",
-        medium: "7d",
-        weak: "2d",
-        learning: "1d",
-        never: "Ret."
-      };
-      msg.textContent = `✓ ${labels[bucket] || bucket}`;
-      msg.style.opacity = "1";
-      setTimeout(() => { msg.style.opacity = "0"; }, 2000);
-    }
-  }
-
-  const row = btn.closest("tr");
-  const cls = getCurrentClass();
-  if (row && vocabPracticeMode === "ar-only") {
-    const enCell = row.children[1];
-    if (enCell && enCell.querySelector(".vocab-reveal-btn")) {
-      const found = cls ? cls.vocabulary.find(x => x.key === key) : null;
-      enCell.innerHTML = `
-        <div class="vocab-en-wrap">
-          <span class="vocab-en-main">${wordEn}</span>
-          ${found && found.note ? `<span class="vocab-en-note">— ${found.note}</span>` : ''}
-        </div>
-      `;
-    }
-  } else if (row && vocabPracticeMode === "en-only") {
-    const arCell = row.children[0];
-    if (arCell && arCell.querySelector(".vocab-reveal-btn")) {
-      const found = cls ? cls.vocabulary.find(x => x.key === key) : null;
-      const isTrActive = vocabTrVisible[key] || allVocabTrVisible;
-      arCell.innerHTML = `
-        <div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen">
-              ${wordAr}
-            </span>
-            <div class="sym-group">
-              <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(wordAr)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-              ${found && found.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${key}" onclick="toggleWordTr('${key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-            </div>
-          </div>
-          ${found && found.tr ? `<div id="vtr-${key}" class="vocab-tr-line" style="display:${isTrActive ? 'block' : 'none'}">${found.tr}</div>` : ''}
-        </div>
-      `;
-    }
-  }
+  renderVocabTable();
 }
 
 function renderVocabAndSentences() {

@@ -220,6 +220,56 @@ function toggleRetire(key) {
   return true;
 }
 
+/* ---------- Item Upvote / Downvote & Strength of Recall ----------
+   Allows Reza to explicitly upvote (strong/mastered recall) or downvote (weak/struggling)
+   sentences and vocabulary. Downvoting sets SRS bucket to "weak" (or increments weakness
+   priority), while upvoting sets "strong". Persisted in ats-item-votes and synced to KV. */
+function getItemVotes() {
+  return store.get("ats-item-votes", {});
+}
+
+function getItemVote(key) {
+  if (!key) return { vote: 0, score: 0 };
+  const votes = getItemVotes();
+  return votes[key] || { vote: 0, score: 0 };
+}
+
+function setItemVote(key, voteType, meta) {
+  if (!key) return { vote: 0, score: 0 };
+  const votes = getItemVotes();
+  const cur = votes[key] || { vote: 0, score: 0 };
+
+  if (voteType === "weak" || voteType === "down") {
+    cur.vote = -1;
+    // Repeated downvoting deepens the weakness priority score (-1, -2, -3...)
+    cur.score = (cur.score <= 0) ? (cur.score - 1) : -1;
+    setBucket(key, "weak");
+  } else if (voteType === "strong" || voteType === "up") {
+    cur.vote = 1;
+    cur.score = (cur.score >= 0) ? (cur.score + 1) : 1;
+    setBucket(key, "strong");
+  } else if (voteType === "clear" || voteType === "reset") {
+    cur.vote = 0;
+    cur.score = 0;
+  }
+  cur.u = Date.now();
+  if (meta) cur.meta = meta;
+  votes[key] = cur;
+  store.set("ats-item-votes", votes);
+
+  logEvent({
+    e: "item-vote",
+    key,
+    vote: cur.vote,
+    score: cur.score,
+    src: (meta && meta.src) || "vote",
+    t: Date.now()
+  });
+
+  if (typeof autoSync === "function") autoSync();
+  return cur;
+}
+
 /* categories (not mutually exclusive): every word is Quran and/or MSA */
 function catsOf(key) {
   const sid = key.split(":")[0];
@@ -2043,7 +2093,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "musmdtyf";
+const DATA_V = "musmxc7l";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

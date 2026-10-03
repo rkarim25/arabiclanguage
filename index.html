@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musmdtyf">
-  <link rel="stylesheet" href="css/style.css?v=musmdtyf">
+  <link rel="stylesheet" href="css/fonts.css?v=musmxc7l">
+  <link rel="stylesheet" href="css/style.css?v=musmxc7l">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -124,13 +124,20 @@
     </span>
   </div>
 
-  <!-- SECTION 1: 10 HIGH-FREQUENCY SENTENCES -->
+  <!-- SECTION 1: 10 HIGH-FREQUENCY SENTENCES & CHAPTER VOCABULARY -->
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
-      <h2 style="margin:0;font-size:17px">1. High-Frequency Sentences (10)</h2>
-      <span style="font-size:12px;color:var(--muted)">Tap any word for instant meaning</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:17px" id="chapSectionTitle">1. Chapter Sentences &amp; Vocabulary</h2>
+        <div class="view-switch-pills" style="display:inline-flex;border:1px solid var(--border);border-radius:999px;background:var(--bg);padding:2px">
+          <button type="button" class="view-switch-btn active" id="btnViewSentences" onclick="switchChapView('sentences')">📖 Sentences (10)</button>
+          <button type="button" class="view-switch-btn" id="btnViewVocab" onclick="switchChapView('vocab')">🔤 Chapter Vocabulary</button>
+        </div>
+      </div>
+      <span style="font-size:12px;color:var(--muted)" id="chapSectionSub">Tap any word for instant meaning</span>
     </div>
     <div class="sentence-list" id="sentenceList">Loading sentences…</div>
+    <div class="vocab-list" id="chapterVocabList" style="display:none;overflow-x:auto">Loading vocabulary…</div>
     <div style="margin-top:10px;text-align:right">
       <a href="sentences.html?view=list" style="font-size:12.5px;color:var(--accent);text-decoration:none">View full sentence bank &amp; verb frames →</a>
     </div>
@@ -214,12 +221,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=musmdtyf"></script>
-<script src="js/curriculum.js?v=musmdtyf"></script>
-<script src="js/app.js?v=musmdtyf"></script>
-<script src="js/tracker.js?v=musmdtyf"></script>
-<script src="js/plan.js?v=musmdtyf"></script>
-<script src="js/account.js?v=musmdtyf"></script>
+<script src="js/progress-model.js?v=musmxc7l"></script>
+<script src="js/curriculum.js?v=musmxc7l"></script>
+<script src="js/app.js?v=musmxc7l"></script>
+<script src="js/tracker.js?v=musmxc7l"></script>
+<script src="js/plan.js?v=musmxc7l"></script>
+<script src="js/account.js?v=musmxc7l"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2662,6 +2669,9 @@ function loadChapter(chap) {
   // Render Sentences
   renderDailySentences();
 
+  // Render Chapter Vocabulary
+  renderChapterVocab();
+
   // Render Quran Verses
   renderQuranSection(chap.surahId);
 
@@ -2992,6 +3002,32 @@ function renderQuranSection(surahId) {
   };
 }
 
+let curChapView = "sentences"; // 'sentences' | 'vocab'
+
+function switchChapView(view) {
+  curChapView = view;
+  const sList = document.getElementById("sentenceList");
+  const vList = document.getElementById("chapterVocabList");
+  const bSent = document.getElementById("btnViewSentences");
+  const bVocab = document.getElementById("btnViewVocab");
+  const sub = document.getElementById("chapSectionSub");
+
+  if (bSent) bSent.classList.toggle("active", view === "sentences");
+  if (bVocab) bVocab.classList.toggle("active", view === "vocab");
+
+  if (view === "sentences") {
+    if (sList) sList.style.display = "block";
+    if (vList) vList.style.display = "none";
+    if (sub) sub.textContent = "Tap any word for instant meaning";
+    renderDailySentences();
+  } else {
+    if (sList) sList.style.display = "none";
+    if (vList) vList.style.display = "block";
+    if (sub) sub.textContent = "Rate words based on recall to review weakest first";
+    renderChapterVocab();
+  }
+}
+
 let dayPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
 let daySortWeakest = false;
 let dayRevealed = {};
@@ -3022,8 +3058,37 @@ function toggleAllDayReveal(reveal) {
   renderDailySentences();
 }
 
-function getDaySentenceWeaknessRank(s, srs) {
+function voteDaySentence(origIdx, type) {
+  if (!curChap || !curChap.sentences) return;
+  const s = curChap.sentences[origIdx];
+  if (!s) return;
+  const sKey = `chap:${curChap.num}:${origIdx}`;
+  const curVote = (typeof getItemVote === "function") ? getItemVote(sKey) : { vote: 0 };
+  const targetVote = type === "weak" ? -1 : 1;
+  const newType = (curVote.vote === targetVote) ? "clear" : type;
+
+  if (typeof setItemVote === "function") {
+    setItemVote(sKey, newType, { src: "chap-sentence", text: s.ar });
+    if (s.ar) setItemVote(s.ar, newType, { src: "chap-sentence" });
+  }
+  renderDailySentences();
+  renderChapterVocab();
+}
+
+function getDaySentenceWeaknessRank(s, srs, origIdx) {
   if (!s) return 2;
+  const sKey = (curChap && typeof origIdx === "number") ? `chap:${curChap.num}:${origIdx}` : (s.key || null);
+  const vote = (typeof getItemVote === "function" && sKey) ? getItemVote(sKey) : { vote: 0, score: 0 };
+  const arVote = (typeof getItemVote === "function" && s.ar) ? getItemVote(s.ar) : { vote: 0, score: 0 };
+  const effectiveVote = (vote.vote !== 0) ? vote : arVote;
+
+  if (effectiveVote.vote === -1) {
+    return -10 + (effectiveVote.score || -1); // Downvoted: highest priority (-11, -12...)
+  }
+  if (effectiveVote.vote === 1) {
+    return 100 + (effectiveVote.score || 1); // Upvoted: solid recall (101, 102...)
+  }
+
   const getB = item => {
     if (!item) return null;
     if (item.b === "never") return "never";
@@ -3038,8 +3103,8 @@ function getDaySentenceWeaknessRank(s, srs) {
     return null;
   };
 
-  if (s.key && srs && srs[s.key]) {
-    const b = getB(srs[s.key]);
+  if (sKey && srs && srs[sKey]) {
+    const b = getB(srs[sKey]);
     if (b === "learning") return 0;
     if (b === "weak") return 1;
     if (b === "medium") return 3;
@@ -3055,6 +3120,10 @@ function getDaySentenceWeaknessRank(s, srs) {
 
   for (const w of words) {
     if (!w) continue;
+    if (typeof getItemVote === "function") {
+      const wv = getItemVote(w);
+      if (wv.vote === -1) return 0; // Sentence contains downvoted word
+    }
     let vItem = srs[w];
     if (!vItem) {
       const bare = w.replace(/[\u064B-\u065F\u0670]/g, "");
@@ -3081,8 +3150,8 @@ function renderDailySentences() {
 
   if (daySortWeakest) {
     items.sort((a, b) => {
-      const ra = getDaySentenceWeaknessRank(a.s, srs);
-      const rb = getDaySentenceWeaknessRank(b.s, srs);
+      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
+      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
       if (ra !== rb) return ra - rb;
       return a.origIdx - b.origIdx;
     });
@@ -3095,7 +3164,7 @@ function renderDailySentences() {
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'all' ? 'active' : ''}" id="btnDayModeAll" onclick="setDayPracticeMode('all')" title="Show both Arabic and English">All</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
-        <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest First</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
@@ -3111,6 +3180,10 @@ function renderDailySentences() {
     ${items.map(({ s, origIdx }) => {
       const isRevealed = dayPracticeMode === "all" || dayRevealed[origIdx];
       const isEnShown = dayPracticeMode === "en-only" || (dayPracticeMode === "ar-only" && isRevealed) || (dayPracticeMode === "all" && (allDayEnVisible || dayEnVisible[origIdx]));
+      const sKey = `chap:${curChap.num}:${origIdx}`;
+      const vote = (typeof getItemVote === "function") ? getItemVote(sKey) : { vote: 0 };
+      const isWeak = vote.vote === -1;
+      const isStrong = vote.vote === 1;
 
       let arContent;
       if (dayPracticeMode === "en-only" && !isRevealed) {
@@ -3130,7 +3203,7 @@ function renderDailySentences() {
       }
 
       return `
-        <div class="book-line s-row" id="srow-${origIdx}">
+        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="srow-${origIdx}">
           <div class="book-line-row">
             <div class="line-badge-dock" aria-label="Sentence tools">
               <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
@@ -3139,11 +3212,16 @@ function renderDailySentences() {
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                <div class="vote-badge-group">
+                  <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
+                  <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
+                </div>
               </div>
             </div>
             <div class="s-content-wrap">
               <div class="s-meta-side">
                 ${enContent}
+                ${vote.vote === -1 ? `<span class="vote-status-tag weak" style="margin-top:4px">⚠️ Weak Review Priority (${vote.score || -1})</span>` : vote.vote === 1 ? `<span class="vote-status-tag strong" style="margin-top:4px">✓ Solid Recall</span>` : ''}
               </div>
               <div class="s-ar-side">
                 ${arContent}
@@ -3154,11 +3232,14 @@ function renderDailySentences() {
             <div class="s-wbw" id="day-wbw-${origIdx}" style="display:${allDayWbwVisible ? 'flex' : 'none'};margin-top:8px">
               <div class="wbw-chips-wrap" style="display:flex;gap:6px;flex-wrap:wrap">
                 ${s.words.map((w, wIdx) => {
-                  const fam = famLookup(w[0]);
+                  const fam = typeof famLookup === "function" ? famLookup(w[0]) : null;
+                  const wVote = (typeof getItemVote === "function") ? getItemVote(w[0]) : { vote: 0 };
+                  const isWordWeak = wVote.vote === -1;
                   return `
-                    <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                    <div class="wbw-chip ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}" style="${isWordWeak ? 'border-color:#ef4444;background:#fef2f2;' : ''}">
                       <span class="w-ar">${w[0]}</span>
                       <span class="w-en">${w[1]}</span>
+                      ${isWordWeak ? `<span style="font-size:10px;color:#dc2626;font-weight:700">⚠️</span>` : ''}
                       ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('day-${origIdx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
                     </div>
                   `;
@@ -3170,6 +3251,258 @@ function renderDailySentences() {
         </div>
       `;
     }).join("")}
+  `;
+}
+
+/* ==================== CHAPTER VOCABULARY ENGINE ==================== */
+let chapVocabSortMode = (typeof store !== "undefined" && store.get("ats-chap-vocab-sort")) || "weakest"; // 'weakest' | 'strongest' | 'default'
+let chapVocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let chapVocabRevealed = {};
+let chapVocabTrVisible = false;
+
+function setChapVocabSortMode(mode) {
+  chapVocabSortMode = mode;
+  if (typeof store !== "undefined") store.set("ats-chap-vocab-sort", mode);
+  renderChapterVocab();
+}
+
+function setChapVocabPracticeMode(mode) {
+  chapVocabPracticeMode = mode;
+  chapVocabRevealed = {};
+  renderChapterVocab();
+}
+
+function toggleChapVocabReveal(idx, reveal) {
+  chapVocabRevealed[idx] = reveal;
+  renderChapterVocab();
+}
+
+function toggleAllChapVocabReveal(reveal) {
+  const list = getChapterVocabList(curChap);
+  list.forEach((_, idx) => { chapVocabRevealed[idx] = reveal; });
+  renderChapterVocab();
+}
+
+function getChapterVocabList(chap) {
+  if (!chap || !chap.sentences) return [];
+  const map = new Map();
+  chap.sentences.forEach((s, sIdx) => {
+    if (s.words && s.words.length) {
+      s.words.forEach(w => {
+        const ar = (w[0] || "").trim();
+        const en = (w[1] || "").trim();
+        if (!ar || map.has(ar)) return;
+        map.set(ar, { ar, en, sentenceIdx: sIdx, hint: s.hint });
+      });
+    } else if (s.ar) {
+      s.ar.split(/\s+/).forEach(w => {
+        const ar = w.replace(/[.,!؟،]/g, "").trim();
+        if (!ar || map.has(ar)) return;
+        map.set(ar, { ar, en: "", sentenceIdx: sIdx });
+      });
+    }
+  });
+  return Array.from(map.values()).map((item, origIdx) => ({ ...item, origIdx }));
+}
+
+function getVocabItemWeaknessRank(v, srs) {
+  const vote = (typeof getItemVote === "function") ? getItemVote(v.ar) : { vote: 0, score: 0 };
+  let vItem = srs ? srs[v.ar] : null;
+  if (!vItem && srs) {
+    const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
+    if (bare && srs[bare]) vItem = srs[bare];
+  }
+
+  let rank = 2; // unrated default
+  if (vote.vote === -1) {
+    rank = -10 + (vote.score || -1); // downvoted: highest priority!
+  } else if (vote.vote === 1) {
+    rank = 100 + (vote.score || 1); // upvoted: solid recall!
+  } else if (vItem) {
+    const b = vItem.b;
+    if (b === "learning") rank = 0;
+    else if (b === "weak") rank = 1;
+    else if (b === "medium") rank = 3;
+    else if (b === "strong") rank = 4;
+    else if (b === "never") rank = 50;
+  }
+  const fails = vItem ? (vItem.f || vItem.slips || 0) : 0;
+  const box = vItem && typeof vItem.box === "number" ? vItem.box : 0;
+  return { rank, fails, box };
+}
+
+function voteChapVocabWord(encodedAr, type) {
+  const ar = decodeURIComponent(encodedAr);
+  const curVote = (typeof getItemVote === "function") ? getItemVote(ar) : { vote: 0 };
+  const targetVote = type === "weak" ? -1 : 1;
+  const newType = (curVote.vote === targetVote) ? "clear" : type;
+
+  if (typeof setItemVote === "function") {
+    setItemVote(ar, newType, { src: "chap-vocab", ar });
+  }
+  renderChapterVocab();
+  renderDailySentences();
+}
+
+function gradeChapVocabWord(encodedAr, bucket) {
+  const ar = decodeURIComponent(encodedAr);
+  setBucket(ar, bucket);
+  if (typeof setItemVote === "function") {
+    if (bucket === "weak" || bucket === "learning") {
+      setItemVote(ar, "weak", { src: "chap-vocab-rate", ar });
+    } else if (bucket === "strong") {
+      setItemVote(ar, "strong", { src: "chap-vocab-rate", ar });
+    } else {
+      setItemVote(ar, "clear", { src: "chap-vocab-rate", ar });
+    }
+  }
+  renderChapterVocab();
+  renderDailySentences();
+}
+
+function playAllChapVocab() {
+  if (!curChap) return;
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let list = getChapterVocabList(curChap);
+  if (chapVocabSortMode === "weakest") {
+    list.sort((a, b) => {
+      const wa = getVocabItemWeaknessRank(a, srs);
+      const wb = getVocabItemWeaknessRank(b, srs);
+      if (wa.rank !== wb.rank) return wa.rank - wb.rank;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  stopAllAudio();
+  isAudioRunning = true;
+  document.getElementById("btnStopAudio").style.display = "inline-block";
+  audioQueue = list.map(v => ({ ar: v.ar, en: null }));
+  audioIndex = 0;
+  playNextInQueue(false);
+}
+
+function renderChapterVocab() {
+  const vList = document.getElementById("chapterVocabList");
+  if (!vList || !curChap) return;
+
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let list = getChapterVocabList(curChap);
+
+  const bVocab = document.getElementById("btnViewVocab");
+  if (bVocab) bVocab.textContent = `🔤 Chapter Vocabulary (${list.length})`;
+
+  if (chapVocabSortMode === "weakest") {
+    list.sort((a, b) => {
+      const wa = getVocabItemWeaknessRank(a, srs);
+      const wb = getVocabItemWeaknessRank(b, srs);
+      if (wa.rank !== wb.rank) return wa.rank - wb.rank;
+      if (wb.fails !== wa.fails) return wb.fails - wa.fails;
+      if (wa.box !== wb.box) return wa.box - wb.box;
+      return a.origIdx - b.origIdx;
+    });
+  } else if (chapVocabSortMode === "strongest") {
+    list.sort((a, b) => {
+      const wa = getVocabItemWeaknessRank(a, srs);
+      const wb = getVocabItemWeaknessRank(b, srs);
+      if (wb.rank !== wa.rank) return wb.rank - wa.rank;
+      if (wb.box !== wa.box) return wb.box - wa.box;
+      if (wa.fails !== wb.fails) return wa.fails - wb.fails;
+      return a.origIdx - b.origIdx;
+    });
+  }
+
+  vList.innerHTML = `
+    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Practice:</span>
+        <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'all' ? 'active' : ''}" onclick="setChapVocabPracticeMode('all')" title="Show Arabic and English">All</button>
+        <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'ar-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('ar-only')" title="Show Arabic only; tap to reveal English">Arabic Prompt</button>
+        <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'en-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('en-only')" title="Show English only; tap to reveal Arabic">English Prompt</button>
+        <button type="button" class="book-toggle-pill" onclick="playAllChapVocab()" title="Play all chapter vocabulary audio">🔊 Play Vocab</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
+        <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'weakest' ? 'active' : ''}" onclick="setChapVocabSortMode(chapVocabSortMode === 'weakest' ? 'default' : 'weakest')" title="Sort vocabulary by weakest recall first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'strongest' ? 'active' : ''}" onclick="setChapVocabSortMode(chapVocabSortMode === 'strongest' ? 'default' : 'strongest')" title="Sort vocabulary by strongest recall first">📈 Strongest First</button>
+        <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'default' ? 'active' : ''}" onclick="setChapVocabSortMode('default')" title="Original chapter order">🔢 Chapter Order</button>
+        ${chapVocabPracticeMode !== 'all' ? `
+          <button type="button" class="book-toggle-pill" onclick="toggleAllChapVocabReveal(true)" style="font-size:11.5px;padding:2px 8px">👁️ Reveal All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllChapVocabReveal(false)" style="font-size:11.5px;padding:2px 8px">🙈 Hide All</button>
+        ` : ''}
+      </div>
+    </div>
+    <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
+      <thead>
+        <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
+          <th style="width:30%">Arabic Word</th>
+          <th style="width:42%">English Meaning</th>
+          <th style="width:28%;text-align:right">Recall &amp; Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map(v => {
+          const vote = (typeof getItemVote === "function") ? getItemVote(v.ar) : { vote: 0, score: 0 };
+          let srsItem = srs[v.ar];
+          if (!srsItem) {
+            const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
+            if (bare && srs[bare]) srsItem = srs[bare];
+          }
+          const curBucket = srsItem ? srsItem.b : null;
+          const isWeak = vote.vote === -1 || curBucket === "weak" || curBucket === "learning";
+          const isStrong = vote.vote === 1 || curBucket === "strong";
+          const isRevealed = chapVocabPracticeMode === "all" || chapVocabRevealed[v.origIdx];
+          const fam = typeof famLookup === "function" ? famLookup(v.ar) : null;
+
+          let arContent;
+          if (chapVocabPracticeMode === "en-only" && !isRevealed) {
+            arContent = `<span class="vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check Arabic word">👁️ Check Arabic</span>`;
+          } else {
+            arContent = `
+              <div style="display:flex;align-items:center;gap:6px">
+                <span class="arabic" dir="rtl" onclick="speak('${encodeURIComponent(v.ar)}')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen">
+                  ${v.ar}
+                </span>
+                <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(v.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+              </div>
+            `;
+          }
+
+          let enContent;
+          if (chapVocabPracticeMode === "ar-only" && !isRevealed) {
+            enContent = `<span class="vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check English translation">👁️ Check English</span>`;
+          } else {
+            enContent = `
+              <div>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">${v.en}</span>
+                ${fam ? `<span class="wbw-rf-badge" style="margin-left:6px;font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid</div>` : ''}
+              </div>
+            `;
+          }
+
+          return `
+            <tr class="${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}">
+              <td style="vertical-align:middle;padding:8px 6px">${arContent}</td>
+              <td style="vertical-align:middle;padding:8px 6px">${enContent}</td>
+              <td style="text-align:right;vertical-align:middle;padding:8px 6px">
+                <div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end">
+                  <div class="vote-badge-group">
+                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
+                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
+                  </div>
+                  <div class="rate-bar" data-key="${v.ar}">
+                    <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'medium')">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'learning')">✓</button>
+                    <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'never')">✓</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
   `;
 }
 
@@ -3280,7 +3613,17 @@ document.getElementById("btnPlayAll").onclick = () => {
   isAudioRunning = true;
   document.getElementById("btnStopAudio").style.display = "inline-block";
   document.getElementById("btnPlayAll").classList.add("playing");
-  audioQueue = curChap.sentences.map((s, idx) => ({ ar: s.ar, en: null, idx }));
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
+  if (daySortWeakest) {
+    items.sort((a, b) => {
+      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
+      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: null, idx: origIdx }));
   audioIndex = 0;
   playNextInQueue(false);
 };
@@ -3290,7 +3633,17 @@ document.getElementById("btnPlayPauses").onclick = () => {
   isAudioRunning = true;
   document.getElementById("btnStopAudio").style.display = "inline-block";
   document.getElementById("btnPlayPauses").classList.add("playing");
-  audioQueue = curChap.sentences.map((s, idx) => ({ ar: s.ar, en: s.en, idx }));
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
+  if (daySortWeakest) {
+    items.sort((a, b) => {
+      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
+      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: s.en, idx: origIdx }));
   audioIndex = 0;
   playNextInQueue(true);
 };
