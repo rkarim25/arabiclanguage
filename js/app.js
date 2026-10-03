@@ -1775,26 +1775,55 @@ function _voiceScore(v) {
   const n = (v.name || "").toLowerCase();
   const l = (v.lang || "").toLowerCase();
   let s = 0;
+
+  // Disqualify / heavily penalize female voices for English
+  if (l.startsWith("en") || !l.startsWith("ar")) {
+    if (n.includes("female") || n.includes("woman") || n.includes("girl") ||
+        n.includes("sonia") || n.includes("libby") || n.includes("martha") ||
+        n.includes("serena") || n.includes("jenny") || n.includes("aria") ||
+        n.includes("samantha") || n.includes("victoria") || n.includes("zira") ||
+        n.includes("hazel") || n.includes("stephanie") || n.includes("mia") ||
+        n.includes("susan") || n.includes("karen") || n.includes("catherine") ||
+        n.includes("linda")) {
+      return -5000;
+    }
+  }
+
   // Heavily penalize legacy robotic desktop synthesizers (SAPI5, etc.)
   if (n.includes("desktop") || n.includes("david") || n.includes("zira") || n.includes("mark") || n.includes("hazel") || n.includes("espeak") || n.includes("pico")) s -= 25;
 
-  // Google AI cloud neural voices (Chrome, Android, Pixel)
-  if (n.includes("google")) s += 16;
-  if (n.includes("google") && (n.includes("uk english") || n.includes("british") || n.includes("us english") || n.includes("arabic") || n.includes("عربي"))) s += 6;
+  // Gold standard: British Ryan Neural / Natural (same voice across both sites)
+  if (n.includes("ryan")) s += 1000;
+
+  // Google UK English Male on Chrome / Android
+  if (n.includes("google") && (l.startsWith("en-gb") || n.includes("uk english") || n.includes("british"))) {
+    if (n.includes("male") && !n.includes("female")) s += 800;
+    else s += 20;
+  }
+
+  // British male natural voices
+  if (l.startsWith("en-gb") || l.startsWith("en_gb")) {
+    s += 200;
+    if (n.includes("male")) s += 400;
+    if (n.includes("oliver") || n.includes("daniel") || n.includes("george") || n.includes("arthur") || n.includes("guy") || n.includes("brian") || n.includes("william")) {
+      s += 600;
+    }
+  }
+
+  // Google AI cloud neural voices for Arabic
+  if (n.includes("google") && (l.startsWith("ar") || n.includes("arabic") || n.includes("عربي"))) s += 22;
 
   // Modern Neural / Natural online voices (Edge, Windows, Azure)
-  if (n.includes("natural") || n.includes("neural")) s += 15;
-  if (n.includes("online")) s += 6;
-  if (n.includes("premium") || n.includes("enhanced")) s += 12;
+  if (n.includes("natural") || n.includes("neural")) s += 50;
+  if (n.includes("online")) s += 20;
+  if (n.includes("premium") || n.includes("enhanced")) s += 40;
 
-  // Top named human-sounding neural voices
-  if (n.includes("hamed") || n.includes("zariyah") || n.includes("shakir") || n.includes("salma") || n.includes("maged") || n.includes("tarik")) s += 8;
-  if (n.includes("ryan") || n.includes("sonia") || n.includes("jenny") || n.includes("oliver") || n.includes("daniel") || n.includes("samantha")) s += 8;
+  // Top named human-sounding neural Arabic voices
+  if (n.includes("hamed") || n.includes("shakir") || n.includes("maged") || n.includes("tarik")) s += 30;
 
   // Dialect / Locale preference
-  if (l === "ar-sa" || l === "ar_sa" || l === "ar-xa") s += 5;
-  if (l === "en-gb" || l === "en_gb" || l === "en-us" || l === "en_us") s += 4;
-  if (v.localService === false) s += 4; // cloud neural engine
+  if (l === "ar-sa" || l === "ar_sa" || l === "ar-xa") s += 15;
+  if (v.localService === false) s += 10; // cloud neural engine
   return s;
 }
 function _bestVoice(vs, langPrefix) {
@@ -1841,10 +1870,25 @@ function loadAudioManifest() {
 loadAudioManifest();
 function _audioFileFor(text) {
   const isAr = /[؀-ۿ]/.test(text);
-  const key = isAr ? normalizeAr(text) : String(text).trim().toLowerCase().replace(/\s+/g, " ");
+  const rawKey = String(text).trim().toLowerCase().replace(/\s+/g, " ");
+  const key = isAr ? normalizeAr(text) : rawKey;
   if (isAr && _ayahAud && _ayahAud.map[key]) return { src: _ayahAud.base + _ayahAud.map[key] + ".mp3", real: true };
   if (!_audioMan) return null;
-  const name = (_audioMan[isAr ? "ar" : "en"] || {})[key];
+  const map = _audioMan[isAr ? "ar" : "en"] || {};
+  let name = map[key];
+  if (!name && !isAr) {
+    // English punctuation-stripped fallback (e.g. "i read the book." -> "i read the book")
+    const cleanKey = rawKey.replace(/[.,!?;:'"()«»—–-]/g, "").replace(/\s+/g, " ").trim();
+    name = map[cleanKey];
+    if (!name) {
+      for (const k in map) {
+        if (k.replace(/[.,!?;:'"()«»—–-]/g, "").replace(/\s+/g, " ").trim() === cleanKey) {
+          name = map[k];
+          break;
+        }
+      }
+    }
+  }
   return name ? { src: `audio/${isAr ? "ar" : "en"}/${name}.mp3`, real: false } : null;
 }
 /* ONE shared element, reused for every clip. Mobile autoplay policy blesses a
@@ -1968,15 +2012,17 @@ function _playFile(file, text, rate, onend) {
   const p = a.play();
   if (p && p.then) p.then(() => { if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
 }
-/* Natural Google AI streaming voice fallback (Translate WaveNet/Neural TTS) */
+/* Natural Google AI streaming voice fallback (Translate WaveNet/Neural TTS for Arabic only) */
 function _speakGoogleTts(text, rate, onend) {
   const isAr = /[؀-ۿ]/.test(text);
   const clean = String(text || "").trim();
-  if (!navigator.onLine || !clean || clean.length > 200) {
+  // CRITICAL: English translation must NEVER call Google Translate's female TTS service.
+  // Strictly route English to the deep, dignified British male voice (Ryan / Google UK Male / Daniel).
+  if (!isAr || !navigator.onLine || !clean || clean.length > 200) {
     _speakTts(clean, rate, onend);
     return;
   }
-  const lang = isAr ? "ar" : "en";
+  const lang = "ar";
   const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(clean)}&tl=${lang}&client=tw-ob`;
   const a = _getSpeakEl();
   let done = false;
@@ -1999,7 +2045,7 @@ function _speakGoogleTts(text, rate, onend) {
   };
   a.onerror = fallback;
 
-  const pr = (isAr ? 0.9 : 1.0) * _speedMul();
+  const pr = 0.9 * _speedMul();
   a.src = url;
   a.playbackRate = pr;
   const p = a.play();
@@ -2013,11 +2059,12 @@ function _speakTts(text, rate, onend) {
   const u = new SpeechSynthesisUtterance(text);
   _loadVoices();
   const isAr = /[؀-ۿ]/.test(text);
-  u.lang = isAr ? "ar-SA" : "en-US";
+  u.lang = isAr ? "ar-SA" : "en-GB";
   const v = isAr ? _arVoice : _enVoice;
   if (v) { u.voice = v; if (!isAr) u.lang = v.lang; }
-  u.rate = (rate || (isAr ? 0.85 : 1.0)) * _speedMul();
-  u.pitch = 1.0;
+  // Calm, unhurried rate (0.94) and dignified slightly deeper pitch (0.95)
+  u.rate = (rate || (isAr ? 0.85 : 0.94)) * _speedMul();
+  u.pitch = isAr ? 1.0 : 0.95;
   if (onend) {
     let fired = false;
     const fin = () => { if (!fired) { fired = true; onend(); } };
@@ -2146,7 +2193,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "musxkvnj";
+const DATA_V = "musy6qnv";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
