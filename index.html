@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musxalgz">
-  <link rel="stylesheet" href="css/style.css?v=musxalgz">
+  <link rel="stylesheet" href="css/fonts.css?v=musxkvnj">
+  <link rel="stylesheet" href="css/style.css?v=musxkvnj">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -141,6 +141,7 @@
     </div>
     <button type="button" id="btnPlayAll">▶ Play All (Ar + En)</button>
     <button type="button" id="btnPlayPauses" style="display:none" title="Plays Arabic, pauses 3.5s for you to recall, then says English">⏸ Play with Pauses</button>
+    <button type="button" id="btnPauseAudio" style="display:none" onclick="togglePauseAudio()" title="Pause audio playback">⏸ Pause</button>
     <button type="button" id="btnStopAudio" style="display:none">⏹ Stop</button>
     <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
       <button type="button" class="small" id="spNormal">🔊 Normal</button>
@@ -245,12 +246,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=musxalgz"></script>
-<script src="js/curriculum.js?v=musxalgz"></script>
-<script src="js/app.js?v=musxalgz"></script>
-<script src="js/tracker.js?v=musxalgz"></script>
-<script src="js/plan.js?v=musxalgz"></script>
-<script src="js/account.js?v=musxalgz"></script>
+<script src="js/progress-model.js?v=musxkvnj"></script>
+<script src="js/curriculum.js?v=musxkvnj"></script>
+<script src="js/app.js?v=musxkvnj"></script>
+<script src="js/tracker.js?v=musxkvnj"></script>
+<script src="js/plan.js?v=musxkvnj"></script>
+<script src="js/account.js?v=musxkvnj"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2912,6 +2913,14 @@ function playFromSavedLine() {
 function startAudioQueueFromLine(startIdx) {
   stopAllAudio();
   isAudioRunning = true;
+  isAudioPaused = false;
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.style.display = "inline-block";
+    btnPause.textContent = "⏸ Pause";
+    btnPause.title = "Pause audio playback";
+    btnPause.classList.remove("paused");
+  }
   document.getElementById("btnStopAudio").style.display = "inline-block";
   document.getElementById("btnPlayAll").classList.add("playing");
 
@@ -3735,6 +3744,14 @@ function playAllChapVocab() {
   }
   stopAllAudio();
   isAudioRunning = true;
+  isAudioPaused = false;
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.style.display = "inline-block";
+    btnPause.textContent = "⏸ Pause";
+    btnPause.title = "Pause audio playback";
+    btnPause.classList.remove("paused");
+  }
   document.getElementById("btnStopAudio").style.display = "inline-block";
   const includeEn = audioVoiceMode !== "ar-only";
   audioQueue = list.map(v => ({ ar: v.ar, en: includeEn ? (v.en || null) : null }));
@@ -4005,6 +4022,14 @@ function setupAudioSpeedButtons() {
 document.getElementById("btnPlayAll").onclick = () => {
   stopAllAudio();
   isAudioRunning = true;
+  isAudioPaused = false;
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.style.display = "inline-block";
+    btnPause.textContent = "⏸ Pause";
+    btnPause.title = "Pause audio playback";
+    btnPause.classList.remove("paused");
+  }
   document.getElementById("btnStopAudio").style.display = "inline-block";
   document.getElementById("btnPlayAll").classList.add("playing");
   const srs = (typeof getSrs === "function") ? getSrs() : {};
@@ -4030,24 +4055,80 @@ document.getElementById("btnPlayPauses").onclick = () => {
 
 document.getElementById("btnStopAudio").onclick = stopAllAudio;
 
+let isAudioPaused = false;
+let _queueTimer = null;
+
+function pauseAudio() {
+  if (!isAudioRunning || isAudioPaused) return;
+  isAudioPaused = true;
+  stopSpeak();
+  if (_queueTimer) {
+    clearTimeout(_queueTimer);
+    _queueTimer = null;
+  }
+  if (_singleSentenceTimer) {
+    clearTimeout(_singleSentenceTimer);
+    _singleSentenceTimer = null;
+  }
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.textContent = "▶ Resume";
+    btnPause.title = "Resume audio playback";
+    btnPause.classList.add("paused");
+  }
+  setAppMediaSession({ state: "paused" });
+}
+
+function resumeAudio() {
+  if (!isAudioRunning || !isAudioPaused) return;
+  isAudioPaused = false;
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.textContent = "⏸ Pause";
+    btnPause.title = "Pause audio playback";
+    btnPause.classList.remove("paused");
+  }
+  setAppMediaSession({ state: "playing" });
+  playNextInQueue(audioVoiceMode);
+}
+
+function togglePauseAudio() {
+  if (isAudioPaused) {
+    resumeAudio();
+  } else {
+    pauseAudio();
+  }
+}
+
 function stopAllAudio() {
   if (_singleSentenceTimer) {
     clearTimeout(_singleSentenceTimer);
     _singleSentenceTimer = null;
   }
+  if (_queueTimer) {
+    clearTimeout(_queueTimer);
+    _queueTimer = null;
+  }
   isAudioRunning = false;
+  isAudioPaused = false;
   stopSpeak();
   stopRecitation();
   clearAppMediaSession();
   document.querySelectorAll(".s-row").forEach(r => r.classList.remove("active"));
   document.getElementById("btnPlayAll").classList.remove("playing");
   document.getElementById("btnPlayPauses").classList.remove("playing");
+  const btnPause = document.getElementById("btnPauseAudio");
+  if (btnPause) {
+    btnPause.style.display = "none";
+    btnPause.textContent = "⏸ Pause";
+    btnPause.classList.remove("paused");
+  }
   document.getElementById("btnStopAudio").style.display = "none";
 }
 
 function playNextInQueue(mode) {
-  if (!isAudioRunning || audioIndex >= audioQueue.length) {
-    stopAllAudio();
+  if (!isAudioRunning || isAudioPaused || audioIndex >= audioQueue.length) {
+    if (audioIndex >= audioQueue.length) stopAllAudio();
     return;
   }
   const effectiveMode = (typeof mode === "string") ? mode : (mode === true ? "recall" : (mode === false ? "ar-only" : audioVoiceMode));
@@ -4069,50 +4150,54 @@ function playNextInQueue(mode) {
       album: `${typeof curChap !== "undefined" && curChap ? curChap.title : "Lesson"} · ${audioIndex + 1}/${audioQueue.length}`
     },
     onPlay: () => {
-      if (!isAudioRunning) {
+      if (isAudioPaused) {
+        resumeAudio();
+      } else if (!isAudioRunning) {
         isAudioRunning = true;
+        isAudioPaused = false;
         setAppMediaSession({ state: "playing" });
         playNextInQueue(effectiveMode);
       }
     },
     onPause: () => {
-      isAudioRunning = false;
-      stopSpeak();
-      setAppMediaSession({ state: "paused" });
+      pauseAudio();
     },
     onNext: () => {
       if (audioQueue.length > 0) {
         audioIndex = (audioIndex + 1) % audioQueue.length;
-        playNextInQueue(effectiveMode);
+        if (isAudioPaused) resumeAudio();
+        else playNextInQueue(effectiveMode);
       }
     },
     onPrev: () => {
       if (audioQueue.length > 0) {
         audioIndex = Math.max(0, audioIndex - 1);
-        playNextInQueue(effectiveMode);
+        if (isAudioPaused) resumeAudio();
+        else playNextInQueue(effectiveMode);
       }
     },
     onStop: stopAllAudio,
-    state: "playing"
+    state: isAudioPaused ? "paused" : "playing"
   });
 
   speak(item.ar, 0.85, () => {
-    if (!isAudioRunning) return;
+    if (!isAudioRunning || isAudioPaused) return;
     if (item.en && effectiveMode !== "ar-only") {
       const pauseDuration = effectiveMode === "recall" ? 3200 : 700;
-      setTimeout(() => {
-        if (!isAudioRunning) return;
+      _queueTimer = setTimeout(() => {
+        if (!isAudioRunning || isAudioPaused) return;
         speak(item.en, 1.0, () => {
-          setTimeout(() => {
-            if (!isAudioRunning) return;
+          if (!isAudioRunning || isAudioPaused) return;
+          _queueTimer = setTimeout(() => {
+            if (!isAudioRunning || isAudioPaused) return;
             audioIndex++;
             playNextInQueue(effectiveMode);
           }, 1100);
         });
       }, pauseDuration);
     } else {
-      setTimeout(() => {
-        if (!isAudioRunning) return;
+      _queueTimer = setTimeout(() => {
+        if (!isAudioRunning || isAudioPaused) return;
         audioIndex++;
         playNextInQueue(effectiveMode);
       }, 1200);
