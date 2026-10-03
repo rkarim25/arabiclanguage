@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>All activities — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mupsoach">
-  <link rel="stylesheet" href="css/style.css?v=mupsoach">
+  <link rel="stylesheet" href="css/fonts.css?v=musm0p4z">
+  <link rel="stylesheet" href="css/style.css?v=musm0p4z">
   <style>
     .act-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
     .act {
@@ -33,12 +33,18 @@
     <p style="font-size:14px;color:var(--muted)" id="syncIntro">
       Your progress syncs to the cloud so it survives a lost phone, your coach reads it to plan your milestones — and the 🎤 only hears you through Whisper when this browser is signed in.</p>
     <div id="syncSetup">
+      <div id="gsiButton" style="margin-bottom:12px;min-height:44px"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin:12px 0 14px;color:var(--muted);font-size:12.5px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span>or sign in with sync code</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
         <input id="loginEmail" type="email" placeholder="your email" style="flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
         <input id="loginCode" type="password" placeholder="sync code" style="flex:1;min-width:140px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px">
         <button class="primary" id="btnCodeLogin">Sign in</button>
       </div>
-      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">This box only appears on a device that hasn't signed in yet. Ask your coach in chat to reset the code any time.</p>
+      <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">Sign in once per device (phone &amp; laptop) and all your progress, reviews, and audio stay in sync.</p>
       <details>
         <summary style="cursor:pointer;font-size:13px;color:var(--muted)">Or connect with a GitHub token</summary>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -118,12 +124,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mupsoach"></script>
-<script src="js/curriculum.js?v=mupsoach"></script>
-<script src="js/app.js?v=mupsoach"></script>
-<script src="js/tracker.js?v=mupsoach"></script>
-<script src="js/account.js?v=mupsoach"></script>
-<script src="js/plan.js?v=mupsoach"></script>
+<script src="js/progress-model.js?v=musm0p4z"></script>
+<script src="js/curriculum.js?v=musm0p4z"></script>
+<script src="js/app.js?v=musm0p4z"></script>
+<script src="js/tracker.js?v=musm0p4z"></script>
+<script src="js/account.js?v=musm0p4z"></script>
+<script src="js/plan.js?v=musm0p4z"></script>
 <script>
   renderNav("more");
   trackPage("more");

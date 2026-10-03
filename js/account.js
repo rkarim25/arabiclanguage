@@ -18,12 +18,13 @@ function refreshSyncUI() {
   if (m) {
     const who = whoami();
     document.getElementById("syncMethodLabel").textContent =
-      (who ? who.full + " · " : "") + (m === "google" ? "sync code / Google" : "GitHub token");
+      (who ? who.full + " · " : "") + (m === "google" ? "Google account" : "GitHub token");
   }
   const last = store.get(SYNC_KEY, 0);
   document.getElementById("lastSync").textContent = last ? `Last synced ${new Date(last).toLocaleString()}` : "Not synced yet.";
 }
 refreshSyncUI();
+initGoogleSignin();
 
 /* email + sync code sign-in */
 on("btnCodeLogin", async () => {
@@ -70,7 +71,71 @@ on("btnRestore", async () => {
   try { await restoreFromCloud(); location.reload(); }
   catch (e) { alert("No cloud data found yet."); }
 });
-on("btnDisconnect", () => { setToken(null); setSession(null); store.set("ats-email", null); refreshSyncUI(); });
+on("btnDisconnect", () => {
+  setToken(null);
+  setSession(null);
+  store.set("ats-email", null);
+  refreshSyncUI();
+  initGoogleSignin();
+});
+
+/* Google sign-in */
+async function initGoogleSignin() {
+  if (syncMethod()) return;
+  const btnContainer = document.getElementById("gsiButton");
+  if (!btnContainer) return;
+  const clientId = await getGoogleClientId();
+  if (!clientId) return;
+
+  const render = () => {
+    if (!window.google || !window.google.accounts || !window.google.accounts.id) return;
+    try {
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async (resp) => {
+          try {
+            btnContainer.innerHTML = "<span style='font-size:14px;color:var(--muted)'>Signing in with Google…</span>";
+            await googleLogin(resp.credential);
+            await syncNow();
+            refreshSyncUI();
+            loadCoach();
+          } catch (e) {
+            alert(e.message === "email-not-allowed"
+              ? "That Google account isn't allowed — please sign in as rkarim88@gmail.com."
+              : "Google sign-in failed: " + e.message);
+            refreshSyncUI();
+            initGoogleSignin();
+          }
+        },
+      });
+      btnContainer.innerHTML = "";
+      google.accounts.id.renderButton(btnContainer, {
+        theme: "outline",
+        size: "large",
+        type: "standard",
+        shape: "rectangular",
+        text: "signin_with",
+        width: 250
+      });
+    } catch (e) {
+      console.warn("Google sign-in init error:", e);
+    }
+  };
+
+  if (window.google && window.google.accounts && window.google.accounts.id) {
+    render();
+  } else if (!document.getElementById("gsiScript")) {
+    const s = document.createElement("script");
+    s.id = "gsiScript";
+    s.src = "https://accounts.google.com/gsi/client";
+    s.async = true;
+    s.defer = true;
+    s.onload = render;
+    document.head.appendChild(s);
+  } else {
+    render();
+  }
+}
 
 /* coach notes */
 async function loadCoach() {

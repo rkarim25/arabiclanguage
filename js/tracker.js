@@ -233,7 +233,7 @@ async function getGoogleClientId() {
     const c = await r.json();
     if (c.clientId) return c.clientId;
   } catch (e) { /* offline */ }
-  return store.get(GCLIENT_KEY, null);
+  return store.get(GCLIENT_KEY, "958505787875-g5nfbudjoembmlfves8c794mvb3udqdr.apps.googleusercontent.com");
 }
 
 async function codeLogin(email, password) {
