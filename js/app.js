@@ -1775,17 +1775,30 @@ function _voiceScore(v) {
   const n = (v.name || "").toLowerCase();
   const l = (v.lang || "").toLowerCase();
   let s = 0;
-  if (n.includes("natural") || n.includes("neural")) s += 10;
-  if (n.includes("online")) s += 3;
-  if (n.includes("premium") || n.includes("enhanced")) s += 6;
-  if (n.includes("shakir") || n.includes("hamed") || n.includes("zariyah")) s += 5;
-  if (n.includes("google")) s += 4;
-  if (l === "ar-sa" || l === "ar_sa") s += 4;
-  if (v.localService === false) s += 1;
+  // Heavily penalize legacy robotic desktop synthesizers (SAPI5, etc.)
+  if (n.includes("desktop") || n.includes("david") || n.includes("zira") || n.includes("mark") || n.includes("hazel") || n.includes("espeak") || n.includes("pico")) s -= 25;
+
+  // Google AI cloud neural voices (Chrome, Android, Pixel)
+  if (n.includes("google")) s += 16;
+  if (n.includes("google") && (n.includes("uk english") || n.includes("british") || n.includes("us english") || n.includes("arabic") || n.includes("عربي"))) s += 6;
+
+  // Modern Neural / Natural online voices (Edge, Windows, Azure)
+  if (n.includes("natural") || n.includes("neural")) s += 15;
+  if (n.includes("online")) s += 6;
+  if (n.includes("premium") || n.includes("enhanced")) s += 12;
+
+  // Top named human-sounding neural voices
+  if (n.includes("hamed") || n.includes("zariyah") || n.includes("shakir") || n.includes("salma") || n.includes("maged") || n.includes("tarik")) s += 8;
+  if (n.includes("ryan") || n.includes("sonia") || n.includes("jenny") || n.includes("oliver") || n.includes("daniel") || n.includes("samantha")) s += 8;
+
+  // Dialect / Locale preference
+  if (l === "ar-sa" || l === "ar_sa" || l === "ar-xa") s += 5;
+  if (l === "en-gb" || l === "en_gb" || l === "en-us" || l === "en_us") s += 4;
+  if (v.localService === false) s += 4; // cloud neural engine
   return s;
 }
 function _bestVoice(vs, langPrefix) {
-  let best = null, bestScore = -1;
+  let best = null, bestScore = -999;
   vs.forEach(v => {
     if (!v.lang || !v.lang.toLowerCase().startsWith(langPrefix)) return;
     const s = _voiceScore(v);
@@ -1931,7 +1944,7 @@ function _speakNow(text, rate, onend) {
       if (ok) { if (onend) onend(); return; }
       const local = file.real && _audioMan && (_audioMan.ar || {})[normalizeAr(text)];
       if (local) _playFile({ src: `audio/ar/${local}.mp3`, real: false }, text, rate, onend);
-      else _speakTts(text, rate, onend);
+      else _speakGoogleTts(text, rate, onend);
     };
     a.onended = () => fin(true);
     a.onerror = () => fin(false);
@@ -1941,19 +1954,58 @@ function _speakNow(text, rate, onend) {
     if (p && p.then) p.then(() => { a.playbackRate = pr; if (onend) setTimeout(() => fin(true), 30000); }).catch(() => fin(false));
     return;
   }
-  _speakTts(text, rate, onend);
+  _speakGoogleTts(text, rate, onend);
 }
 /* the fallback leg of speak() — a local clip after a remote one failed */
 function _playFile(file, text, rate, onend) {
   const a = _getSpeakEl();
   let done = false;
-  const fin = ok => { if (done) return; done = true; a.onended = null; a.onerror = null; if (!ok) _speakTts(text, rate, onend); else if (onend) onend(); };
+  const fin = ok => { if (done) return; done = true; a.onended = null; a.onerror = null; if (!ok) _speakGoogleTts(text, rate, onend); else if (onend) onend(); };
   a.onended = () => fin(true);
   a.onerror = () => fin(false);
   a.src = file.src;
   a.playbackRate = Math.min(1.15, Math.max(0.8, (rate || 0.85) + 0.2)) * _speedMul();
   const p = a.play();
   if (p && p.then) p.then(() => { if (onend) setTimeout(() => fin(true), 20000); }).catch(() => fin(false));
+}
+/* Natural Google AI streaming voice fallback (Translate WaveNet/Neural TTS) */
+function _speakGoogleTts(text, rate, onend) {
+  const isAr = /[؀-ۿ]/.test(text);
+  const clean = String(text || "").trim();
+  if (!navigator.onLine || !clean || clean.length > 200) {
+    _speakTts(clean, rate, onend);
+    return;
+  }
+  const lang = isAr ? "ar" : "en";
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(clean)}&tl=${lang}&client=tw-ob`;
+  const a = _getSpeakEl();
+  let done = false;
+  const fallback = () => {
+    if (done) return;
+    done = true;
+    a.onended = null;
+    a.onerror = null;
+    _speakTts(clean, rate, onend);
+  };
+  const timer = setTimeout(fallback, 3500);
+
+  a.onended = () => {
+    if (done) return;
+    done = true;
+    clearTimeout(timer);
+    a.onended = null;
+    a.onerror = null;
+    if (onend) onend();
+  };
+  a.onerror = fallback;
+
+  const pr = (isAr ? 0.9 : 1.0) * _speedMul();
+  a.src = url;
+  a.playbackRate = pr;
+  const p = a.play();
+  if (p && p.then) {
+    p.then(() => { a.playbackRate = pr; }).catch(fallback);
+  }
 }
 function _speakTts(text, rate, onend) {
   if (!window.speechSynthesis) { if (onend) onend(); return; }
@@ -1964,7 +2016,8 @@ function _speakTts(text, rate, onend) {
   u.lang = isAr ? "ar-SA" : "en-US";
   const v = isAr ? _arVoice : _enVoice;
   if (v) { u.voice = v; if (!isAr) u.lang = v.lang; }
-  u.rate = (rate || 0.85) * _speedMul();
+  u.rate = (rate || (isAr ? 0.85 : 1.0)) * _speedMul();
+  u.pitch = 1.0;
   if (onend) {
     let fired = false;
     const fin = () => { if (!fired) { fired = true; onend(); } };
@@ -2093,7 +2146,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "musx1x7z";
+const DATA_V = "musxalgz";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

@@ -128,12 +128,23 @@ for v in sen["verbs"]:
             en_verb = v["past"] if tk == "past" else ("will " + v["base"] if tk == "fut" else v["base"])
             add("en", f'{PERSON_EN.get(pk, pk)} {en_verb} {v["obj"]["en"]}')
 
-# Chapter sentences from index.html (Daily Reader)
+# Chapter sentences and vocabulary from index.html (Daily Reader)
 try:
     index_txt = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
-    for m in re.finditer(r'{\s*ar:\s*"([^"]+)",\s*en:\s*"([^"]+)"', index_txt):
-        add("ar", m.group(1))
-        add("en", m.group(2))
+    m_chap = re.search(r'const CHAPTERS = (\[[\s\S]*?\n\]);', index_txt)
+    if m_chap:
+        chaps = json.loads(m_chap.group(1))
+        for c in chaps:
+            for s in c.get("sentences", []):
+                if s.get("ar"): add("ar", s["ar"])
+                if s.get("en"): add("en", s["en"])
+                for w in s.get("words", []):
+                    if len(w) > 0 and w[0]: add("ar", w[0])
+                    if len(w) > 1 and w[1]: add("en", w[1])
+    else:
+        for m in re.finditer(r'["\']ar["\']:\s*["\']([^"\']+)["\'],\s*["\']en["\']:\s*["\']([^"\']+)["\']', index_txt):
+            add("ar", m.group(1))
+            add("en", m.group(2))
 except Exception as e:
     print("Warning: could not parse index.html chapters", e)
 
