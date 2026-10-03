@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musm0p4z">
-  <link rel="stylesheet" href="css/style.css?v=musm0p4z">
+  <link rel="stylesheet" href="css/fonts.css?v=musmdtyf">
+  <link rel="stylesheet" href="css/style.css?v=musmdtyf">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=musm0p4z"></script>
-<script src="js/curriculum.js?v=musm0p4z"></script>
-<script src="js/app.js?v=musm0p4z"></script>
-<script src="js/tracker.js?v=musm0p4z"></script>
-<script src="js/plan.js?v=musm0p4z"></script>
+<script src="js/progress-model.js?v=musmdtyf"></script>
+<script src="js/curriculum.js?v=musmdtyf"></script>
+<script src="js/app.js?v=musmdtyf"></script>
+<script src="js/tracker.js?v=musmdtyf"></script>
+<script src="js/plan.js?v=musmdtyf"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -850,42 +850,118 @@ async function runLesson(lesson, ms, ctx, handsFree) {
 
   /* ---- hands-free ----
      Same material, no taps: the sentence's meaning, then the sentence. Three
-     oversized targets while it plays (his 2026-08-30 ask) — got it / missed it /
-     pause — and a tap grades the sentence and every word in it for real. */
+     oversized targets while it plays — got it / missed it / pause.
+     Now enhanced with full Mobile Lock-Screen Controls (Play/Pause, Prev/Next track)
+     and Live On-Screen Sentence Tracking so the learner sees what they hear. */
   function handsFreeRun() {
     let i = 0, pass = 1, paused = false, timer = null, token = 0;
     let graded = 0, right = 0;
     const PASSES = 2;
 
-    app.innerHTML = head("Hands-free. It plays on its own — tap only if you want to mark one.") + `
+    const listHtml = items.map((it, idx) => `
+      <div class="h-track-row" id="htrow-${idx}" data-idx="${idx}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;transition:all .15s">
+        <div style="flex:1;min-width:140px">
+          <span style="font-size:11.5px;color:var(--muted);font-weight:700">#${idx + 1}</span>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);margin-top:2px">${esc(it.s.en)}</div>
+        </div>
+        <div class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);text-align:right;flex-shrink:0">${esc(it.s.ar)}</div>
+      </div>
+    `).join("");
+
+    app.innerHTML = head("Hands-free. Plays on its own with lock-screen controls. Tap any row to jump.") + `
       <div class="card">
-        <div class="hands"><div class="w" id="hw">…</div>
-          <p style="color:var(--muted);font-size:15px;min-height:22px" id="hs"></p></div>
-        <div class="prog"><i id="hp" style="width:0%"></i></div>
-        <div style="display:flex;gap:10px;margin-top:16px">
-          <button id="hno"  style="flex:1;padding:22px 8px;font-size:17px">✗ missed it</button>
-          <button class="primary" id="hyes" style="flex:1;padding:22px 8px;font-size:17px">✓ got it</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:8px">
+          <span>Sentence <b id="hCurIdx">1</b> of ${items.length}</span>
+          <span id="hPassPill" class="pill" style="font-weight:600">Pass 1 of 2</span>
         </div>
-        <div style="display:flex;gap:10px;margin-top:10px">
-          <button id="hpause" style="flex:1;padding:16px 8px;font-size:16px">⏸ Pause</button>
-          <button id="hstop"  style="flex:1;padding:16px 8px;font-size:16px">Finish</button>
+        <div class="hands" style="text-align:center;padding:12px 6px">
+          <div class="w arabic" id="hw" dir="rtl" style="font-size:27px;line-height:1.6;font-family:var(--font-ar);color:var(--ink);min-height:48px">…</div>
+          <p style="color:var(--accent);font-size:14px;font-style:italic;margin:4px 0 6px;min-height:18px" id="htr"></p>
+          <p style="color:var(--text);font-size:16px;font-weight:600;min-height:24px;margin:4px 0" id="hs"></p>
+          <p style="color:var(--muted);font-size:13px;margin:2px 0 0" id="hprompt"></p>
         </div>
-        <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0" id="hcount"></p>
+        <div class="prog" style="margin:12px 0"><i id="hp" style="width:0%"></i></div>
+
+        <!-- Lock-screen sync & Transport controls -->
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button id="hprev" style="flex:1;padding:12px 6px;font-size:14px">⏮ Prev</button>
+          <button id="hpause" class="primary" style="flex:2;padding:12px 6px;font-size:15px">⏸ Pause</button>
+          <button id="hnext" style="flex:1;padding:12px 6px;font-size:14px">Next ⏭</button>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="hno" style="flex:1;padding:11px 8px;font-size:14px">✗ Missed it</button>
+          <button id="hyes" style="flex:1;padding:11px 8px;font-size:14px">✓ Got it</button>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--muted)">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px">
+            <input type="checkbox" id="hVoiceToggle"> Also speak English meaning
+          </label>
+          <button id="hstop" class="small" style="padding:4px 10px">Finish &amp; save</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin:8px 0 0;text-align:center" id="hcount"></p>
+      </div>
+
+      <div class="card" style="margin-top:14px;text-align:left">
+        <h3 style="margin:0 0 4px;font-size:14.5px">📋 Sentences in this lesson (${items.length})</h3>
+        <p style="margin:0 0 10px;font-size:12px;color:var(--muted)">Currently playing sentence is highlighted. Tap any row to jump directly to it.</p>
+        <div id="hList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:2px">
+          ${listHtml}
+        </div>
       </div>`;
 
-    const w = document.getElementById("hw"), sub = document.getElementById("hs"), bar = document.getElementById("hp");
+    const w = document.getElementById("hw"), trEl = document.getElementById("htr"), sub = document.getElementById("hs");
+    const promptEl = document.getElementById("hprompt"), bar = document.getElementById("hp");
     const countEl = document.getElementById("hcount"), pauseBtn = document.getElementById("hpause");
+    const curIdxEl = document.getElementById("hCurIdx"), passPill = document.getElementById("hPassPill");
+    const voiceToggle = document.getElementById("hVoiceToggle");
 
     const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
     const later = (fn, ms) => { const t = token; clearTimer(); timer = setTimeout(() => { if (t === token && !paused) fn(); }, ms); };
 
     document.getElementById("hyes").onclick = () => mark(true);
     document.getElementById("hno").onclick = () => mark(false);
-    document.getElementById("hstop").onclick = () => { token++; clearTimer(); stopSpeak(); finish(right, graded, "hands", graded === 0); };
-    pauseBtn.onclick = () => {
-      if (paused) { paused = false; pauseBtn.textContent = "⏸ Pause"; step(); }
-      else { paused = true; token++; clearTimer(); stopSpeak(); pauseBtn.textContent = "▶ Resume"; sub.textContent = "paused"; }
+    document.getElementById("hprev").onclick = () => {
+      token++; clearTimer(); stopSpeak();
+      if (i > 0) i--;
+      else if (pass > 1) { pass--; i = items.length - 1; }
+      step();
     };
+    document.getElementById("hnext").onclick = () => {
+      token++; clearTimer(); stopSpeak();
+      if (i + 1 < items.length) i++;
+      else if (pass < PASSES) { pass++; i = 0; }
+      step();
+    };
+    document.getElementById("hstop").onclick = () => {
+      token++; clearTimer(); stopSpeak(); clearAppMediaSession();
+      finish(right, graded, "hands", graded === 0);
+    };
+    pauseBtn.onclick = () => {
+      if (paused) {
+        paused = false; pauseBtn.textContent = "⏸ Pause";
+        setAppMediaSession({ state: "playing" });
+        step();
+      } else {
+        paused = true; token++; clearTimer(); stopSpeak();
+        pauseBtn.textContent = "▶ Resume"; promptEl.textContent = "paused";
+        setAppMediaSession({ state: "paused" });
+      }
+    };
+
+    // Row click navigation
+    document.querySelectorAll(".h-track-row").forEach(row => {
+      row.onclick = () => {
+        const targetIdx = +row.dataset.idx;
+        if (targetIdx >= 0 && targetIdx < items.length) {
+          token++; clearTimer(); stopSpeak();
+          i = targetIdx;
+          if (paused) { paused = false; pauseBtn.textContent = "⏸ Pause"; }
+          step();
+        }
+      };
+    });
 
     function mark(ok) {
       if (paused || i >= items.length) return;
@@ -894,36 +970,108 @@ async function runLesson(lesson, ms, ctx, handsFree) {
       graded++; if (ok) right++;
       countEl.textContent = `${right} of ${graded} marked right`;
       token++; clearTimer(); stopSpeak();
-      sub.textContent = (ok ? "✓ " : "✗ ") + s.en;
+      promptEl.textContent = (ok ? "✓ " : "✗ ") + s.en;
       i++;
-      later(step, 700);
+      later(step, 600);
     }
 
     function step() {
       if (paused) return;
-      if (i >= items.length) { if (++pass > PASSES) return finish(right, graded, "hands"); i = 0; }
+      if (i >= items.length) {
+        if (++pass > PASSES) {
+          clearAppMediaSession();
+          return finish(right, graded, "hands");
+        }
+        i = 0;
+      }
+      if (i < 0) i = 0;
       const s = items[i].s;
       const total = items.length * PASSES, at = (pass - 1) * items.length + i;
       bar.style.width = Math.round(100 * at / total) + "%";
-      const t = ++token;
-      // meaning first, then the Arabic — the same order as on screen
-      w.textContent = s.en;
-      sub.textContent = pass === 1 ? "how would you say it?" : "say it with me";
-      speak(s.en, 1.0, () => {
-        if (t !== token || paused) return;
-        later(() => {
-          w.textContent = s.ar;
-          speak(s.ar, 0.85, () => {
-            if (t !== token || paused) return;
-            i++; later(step, 400);
-          });
-        }, pass === 1 ? 2600 : 900);
+      curIdxEl.textContent = String(i + 1);
+      passPill.textContent = `Pass ${pass} of ${PASSES}`;
+
+      w.textContent = s.ar;
+      trEl.textContent = s.tr || "";
+      sub.textContent = s.en;
+      promptEl.textContent = pass === 1 ? "🎧 Listen & recall" : "🗣 Say it with the audio";
+
+      // Visual active row tracking + auto-scroll into view
+      document.querySelectorAll(".h-track-row").forEach(r => {
+        r.style.borderColor = "var(--border)";
+        r.style.background = "var(--card)";
+        r.style.boxShadow = "none";
       });
+      const activeRow = document.getElementById("htrow-" + i);
+      if (activeRow) {
+        activeRow.style.borderColor = "var(--accent)";
+        activeRow.style.background = "rgba(13, 122, 95, 0.09)";
+        activeRow.style.boxShadow = "0 0 0 1px var(--accent)";
+        activeRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      // Mobile Lock Screen Media Session integration
+      setAppMediaSession({
+        metadata: {
+          title: s.ar,
+          artist: s.en,
+          album: `${lesson.title} · #${i + 1}/${items.length} (Pass ${pass}/${PASSES})`
+        },
+        onPlay: () => {
+          if (paused) {
+            paused = false; pauseBtn.textContent = "⏸ Pause";
+            setAppMediaSession({ state: "playing" });
+            step();
+          }
+        },
+        onPause: () => {
+          paused = true; token++; clearTimer(); stopSpeak();
+          pauseBtn.textContent = "▶ Resume"; promptEl.textContent = "paused";
+          setAppMediaSession({ state: "paused" });
+        },
+        onNext: () => {
+          token++; clearTimer(); stopSpeak();
+          if (i + 1 < items.length) i++;
+          else if (pass < PASSES) { pass++; i = 0; }
+          step();
+        },
+        onPrev: () => {
+          token++; clearTimer(); stopSpeak();
+          if (i > 0) i--;
+          else if (pass > 1) { pass--; i = items.length - 1; }
+          step();
+        },
+        onStop: () => {
+          token++; clearTimer(); stopSpeak(); clearAppMediaSession();
+          finish(right, graded, "hands", true);
+        },
+        state: paused ? "paused" : "playing"
+      });
+
+      const t = ++token;
+      const speakEnglish = voiceToggle && voiceToggle.checked;
+      if (speakEnglish) {
+        speak(s.en, 1.0, () => {
+          if (t !== token || paused) return;
+          later(() => {
+            speak(s.ar, 0.85, () => {
+              if (t !== token || paused) return;
+              i++; later(step, 800);
+            });
+          }, 600);
+        });
+      } else {
+        speak(s.ar, 0.85, () => {
+          if (t !== token || paused) return;
+          i++; later(step, 1400); // 1.4s gap before next sentence
+        });
+      }
     }
     step();
   }
 
   function finish(right, total, how, stopped) {
+    clearAppMediaSession();
     if (!stopped) logEvent({ e: "chunk-done", chunk: chunk.id, lesson: lesson.id, milestone: ms.id, mode: how, right, total });
     try { if (typeof syncSoon === "function") syncSoon(); } catch (e) {}
     app.innerHTML = `

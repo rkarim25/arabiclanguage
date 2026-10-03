@@ -1915,7 +1915,14 @@ function _speakTts(text, rate, onend) {
   const v = isAr ? _arVoice : _enVoice;
   if (v) { u.voice = v; if (!isAr) u.lang = v.lang; }
   u.rate = (rate || 0.85) * _speedMul();
-  if (onend) u.onend = onend;
+  if (onend) {
+    let fired = false;
+    const fin = () => { if (!fired) { fired = true; onend(); } };
+    u.onend = fin;
+    u.onerror = fin;
+    const timeoutMs = Math.max(2500, Math.ceil(((text || "").length * 120) / (rate || 0.85)) + 1500);
+    setTimeout(fin, timeoutMs);
+  }
   speechSynthesis.speak(u);
 }
 function stopSpeak() {
@@ -1928,6 +1935,38 @@ function stopSpeak() {
 function speakBusy() {
   if (_speakEl && _speakEl.src && !_speakEl.paused && !_speakEl.ended) return true;
   return !!(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending));
+}
+
+/* ================= GLOBAL MEDIA SESSION (LOCK SCREEN CONTROLS) ================= */
+function setAppMediaSession(opts) {
+  if (!("mediaSession" in navigator)) return;
+  try {
+    if (opts.metadata) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: opts.metadata.title || "Arabic",
+        artist: opts.metadata.artist || "Arabic Coach",
+        album: opts.metadata.album || "Arabic Learning",
+        artwork: [
+          { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
+          { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" }
+        ]
+      });
+    }
+    if (opts.onPlay) navigator.mediaSession.setActionHandler("play", opts.onPlay);
+    if (opts.onPause) navigator.mediaSession.setActionHandler("pause", opts.onPause);
+    if (opts.onNext) navigator.mediaSession.setActionHandler("nexttrack", opts.onNext);
+    if (opts.onPrev) navigator.mediaSession.setActionHandler("previoustrack", opts.onPrev);
+    if (opts.onStop) navigator.mediaSession.setActionHandler("stop", opts.onStop);
+    navigator.mediaSession.playbackState = opts.state || "playing";
+  } catch (e) {
+    console.warn("mediaSession:", e);
+  }
+}
+function clearAppMediaSession() {
+  if (!("mediaSession" in navigator)) return;
+  try {
+    navigator.mediaSession.playbackState = "none";
+  } catch (e) {}
 }
 
 /* ---------- real recitation audio (everyayah.com, Alafasy) ----------
@@ -2004,7 +2043,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "musm0p4z";
+const DATA_V = "musmdtyf";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musm0p4z">
-  <link rel="stylesheet" href="css/style.css?v=musm0p4z">
+  <link rel="stylesheet" href="css/fonts.css?v=musmdtyf">
+  <link rel="stylesheet" href="css/style.css?v=musmdtyf">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -278,10 +278,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=musm0p4z"></script>
-<script src="js/curriculum.js?v=musm0p4z"></script>
-<script src="js/app.js?v=musm0p4z"></script>
-<script src="js/tracker.js?v=musm0p4z"></script>
+<script src="js/progress-model.js?v=musmdtyf"></script>
+<script src="js/curriculum.js?v=musmdtyf"></script>
+<script src="js/app.js?v=musmdtyf"></script>
+<script src="js/tracker.js?v=musmdtyf"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -831,6 +831,7 @@ document.getElementById("btnStop").onclick = stopAudio;
 function stopAudio() {
   isPlaying = false;
   stopSpeak();
+  clearAppMediaSession();
   document.querySelectorAll(".sheet-row, .w-card").forEach(c => c.classList.remove("playing", "active"));
   document.getElementById("btnPlayAll").classList.remove("playing");
   document.getElementById("btnPlayPauses").classList.remove("playing");
@@ -845,7 +846,40 @@ function playStep(withPause) {
   const w = ACTIVE_WORDS[audioIdx];
   document.querySelectorAll(".sheet-row, .w-card").forEach(c => c.classList.remove("playing", "active"));
   const row = document.getElementById("wrow-" + audioIdx) || document.getElementById("wcard-" + audioIdx);
-  if (row) row.classList.add("playing");
+  if (row) {
+    row.classList.add("playing");
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  setAppMediaSession({
+    metadata: {
+      title: w.ar,
+      artist: w.en + (w.tr ? ` (${w.tr})` : ""),
+      album: `Words · ${audioIdx + 1}/${ACTIVE_WORDS.length}`
+    },
+    onPlay: () => {
+      if (!isPlaying) {
+        isPlaying = true;
+        setAppMediaSession({ state: "playing" });
+        playStep(withPause);
+      }
+    },
+    onPause: () => {
+      isPlaying = false;
+      stopSpeak();
+      setAppMediaSession({ state: "paused" });
+    },
+    onNext: () => {
+      audioIdx = (audioIdx + 1) % ACTIVE_WORDS.length;
+      playStep(withPause);
+    },
+    onPrev: () => {
+      audioIdx = Math.max(0, audioIdx - 1);
+      playStep(withPause);
+    },
+    onStop: stopAudio,
+    state: "playing"
+  });
 
   speak(w.ar, 0.85, () => {
     if (!isPlaying) return;
