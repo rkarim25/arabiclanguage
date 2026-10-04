@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musxkvnj">
-  <link rel="stylesheet" href="css/style.css?v=musxkvnj">
+  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
+  <link rel="stylesheet" href="css/style.css?v=muubkuif">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -194,6 +194,7 @@
       <div class="pt-group">
         <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
         <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
+        <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause / Resume audio">⏸</button>
         <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
         <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
           <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
@@ -278,10 +279,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=musxkvnj"></script>
-<script src="js/curriculum.js?v=musxkvnj"></script>
-<script src="js/app.js?v=musxkvnj"></script>
-<script src="js/tracker.js?v=musxkvnj"></script>
+<script src="js/progress-model.js?v=muubkuif"></script>
+<script src="js/curriculum.js?v=muubkuif"></script>
+<script src="js/app.js?v=muubkuif"></script>
+<script src="js/tracker.js?v=muubkuif"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -808,9 +809,48 @@ function setupAudioSpeed() {
   update();
 }
 
+let isPaused = false;
+let currentWithPause = false;
+let _wordAudioToken = 0;
+
+const btnPause = document.getElementById("btnPause");
+
+function pauseWordAudio() {
+  if (!isPlaying || isPaused) return;
+  isPaused = true;
+  _wordAudioToken++;
+  stopSpeak();
+  if (btnPause) {
+    btnPause.textContent = "▶";
+    btnPause.title = "Resume audio playback";
+  }
+  setAppMediaSession({ state: "paused" });
+}
+
+function resumeWordAudio() {
+  if (!isPlaying || !isPaused) return;
+  isPaused = false;
+  if (btnPause) {
+    btnPause.textContent = "⏸";
+    btnPause.title = "Pause audio playback";
+  }
+  setAppMediaSession({ state: "playing" });
+  playStep(currentWithPause);
+}
+
+function toggleWordPause() {
+  if (isPaused) resumeWordAudio();
+  else pauseWordAudio();
+}
+
+if (btnPause) btnPause.onclick = toggleWordPause;
+
 document.getElementById("btnPlayAll").onclick = () => {
   stopAudio();
   isPlaying = true;
+  isPaused = false;
+  currentWithPause = false;
+  if (btnPause) { btnPause.style.display = "inline-block"; btnPause.textContent = "⏸"; }
   document.getElementById("btnStop").style.display = "inline-block";
   document.getElementById("btnPlayAll").classList.add("playing");
   audioIdx = 0;
@@ -820,6 +860,9 @@ document.getElementById("btnPlayAll").onclick = () => {
 document.getElementById("btnPlayPauses").onclick = () => {
   stopAudio();
   isPlaying = true;
+  isPaused = false;
+  currentWithPause = true;
+  if (btnPause) { btnPause.style.display = "inline-block"; btnPause.textContent = "⏸"; }
   document.getElementById("btnStop").style.display = "inline-block";
   document.getElementById("btnPlayPauses").classList.add("playing");
   audioIdx = 0;
@@ -829,20 +872,41 @@ document.getElementById("btnPlayPauses").onclick = () => {
 document.getElementById("btnStop").onclick = stopAudio;
 
 function stopAudio() {
+  _wordAudioToken++;
   isPlaying = false;
+  isPaused = false;
   stopSpeak();
   clearAppMediaSession();
   document.querySelectorAll(".sheet-row, .w-card").forEach(c => c.classList.remove("playing", "active"));
   document.getElementById("btnPlayAll").classList.remove("playing");
   document.getElementById("btnPlayPauses").classList.remove("playing");
+  if (btnPause) btnPause.style.display = "none";
   document.getElementById("btnStop").style.display = "none";
 }
 
+function nextWord() {
+  if (!isPlaying) return;
+  _wordAudioToken++;
+  stopSpeak();
+  audioIdx = (audioIdx + 1) % ACTIVE_WORDS.length;
+  playStep(currentWithPause);
+}
+
+function prevWord() {
+  if (!isPlaying) return;
+  _wordAudioToken++;
+  stopSpeak();
+  audioIdx = (audioIdx - 1 + ACTIVE_WORDS.length) % ACTIVE_WORDS.length;
+  playStep(currentWithPause);
+}
+
 function playStep(withPause) {
-  if (!isPlaying || audioIdx >= ACTIVE_WORDS.length) {
-    stopAudio();
+  currentWithPause = !!withPause;
+  if (!isPlaying || isPaused || audioIdx >= ACTIVE_WORDS.length) {
+    if (audioIdx >= ACTIVE_WORDS.length) stopAudio();
     return;
   }
+  const myToken = ++_wordAudioToken;
   const w = ACTIVE_WORDS[audioIdx];
   document.querySelectorAll(".sheet-row, .w-card").forEach(c => c.classList.remove("playing", "active"));
   const row = document.getElementById("wrow-" + audioIdx) || document.getElementById("wcard-" + audioIdx);
@@ -858,40 +922,41 @@ function playStep(withPause) {
       album: `Words · ${audioIdx + 1}/${ACTIVE_WORDS.length}`
     },
     onPlay: () => {
-      if (!isPlaying) {
-        isPlaying = true;
-        setAppMediaSession({ state: "playing" });
-        playStep(withPause);
-      }
+      if (isPaused) resumeWordAudio();
     },
     onPause: () => {
-      isPlaying = false;
-      stopSpeak();
-      setAppMediaSession({ state: "paused" });
+      pauseWordAudio();
     },
     onNext: () => {
-      audioIdx = (audioIdx + 1) % ACTIVE_WORDS.length;
-      playStep(withPause);
+      nextWord();
     },
     onPrev: () => {
-      audioIdx = Math.max(0, audioIdx - 1);
-      playStep(withPause);
+      prevWord();
     },
     onStop: stopAudio,
     state: "playing"
   });
 
   speak(w.ar, 0.85, () => {
-    if (!isPlaying) return;
+    if (myToken !== _wordAudioToken || !isPlaying || isPaused) return;
     if (withPause) {
-      setTimeout(() => {
-        if (!isPlaying) return;
+      playAudioGap(3.0, () => {
+        if (myToken !== _wordAudioToken || !isPlaying || isPaused) return;
         speak(w.en, 1.0, () => {
-          setTimeout(() => { audioIdx++; playStep(withPause); }, 1000);
+          if (myToken !== _wordAudioToken || !isPlaying || isPaused) return;
+          playAudioGap(1.0, () => {
+            if (myToken !== _wordAudioToken || !isPlaying || isPaused) return;
+            audioIdx++;
+            playStep(withPause);
+          });
         });
-      }, 3000);
+      });
     } else {
-      setTimeout(() => { audioIdx++; playStep(withPause); }, 1200);
+      playAudioGap(1.2, () => {
+        if (myToken !== _wordAudioToken || !isPlaying || isPaused) return;
+        audioIdx++;
+        playStep(withPause);
+      });
     }
   });
 }

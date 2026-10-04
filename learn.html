@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musy6qnv">
-  <link rel="stylesheet" href="css/style.css?v=musy6qnv">
+  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
+  <link rel="stylesheet" href="css/style.css?v=muubkuif">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,11 +33,11 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=musy6qnv"></script>
-<script src="js/curriculum.js?v=musy6qnv"></script>
-<script src="js/app.js?v=musy6qnv"></script>
-<script src="js/tracker.js?v=musy6qnv"></script>
-<script src="js/plan.js?v=musy6qnv"></script>
+<script src="js/progress-model.js?v=muubkuif"></script>
+<script src="js/curriculum.js?v=muubkuif"></script>
+<script src="js/app.js?v=muubkuif"></script>
+<script src="js/tracker.js?v=muubkuif"></script>
+<script src="js/plan.js?v=muubkuif"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -918,7 +918,17 @@ async function runLesson(lesson, ms, ctx, handsFree) {
     const voiceToggle = document.getElementById("hVoiceToggle");
 
     const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
-    const later = (fn, ms) => { const t = token; clearTimer(); timer = setTimeout(() => { if (t === token && !paused) fn(); }, ms); };
+    const later = (fn, ms) => {
+      const t = token;
+      clearTimer();
+      if (typeof playAudioGap === "function" && ms > 0) {
+        playAudioGap(ms / 1000, () => {
+          if (t === token && !paused) fn();
+        });
+      } else {
+        timer = setTimeout(() => { if (t === token && !paused) fn(); }, ms);
+      }
+    };
 
     document.getElementById("hyes").onclick = () => mark(true);
     document.getElementById("hno").onclick = () => mark(false);

@@ -2102,11 +2102,20 @@ function setAppMediaSession(opts) {
         ]
       });
     }
-    if (opts.onPlay) navigator.mediaSession.setActionHandler("play", opts.onPlay);
-    if (opts.onPause) navigator.mediaSession.setActionHandler("pause", opts.onPause);
-    if (opts.onNext) navigator.mediaSession.setActionHandler("nexttrack", opts.onNext);
-    if (opts.onPrev) navigator.mediaSession.setActionHandler("previoustrack", opts.onPrev);
-    if (opts.onStop) navigator.mediaSession.setActionHandler("stop", opts.onStop);
+    const safeSet = (act, fn) => {
+      try { navigator.mediaSession.setActionHandler(act, fn || null); } catch (e) {}
+    };
+    if (opts.onPlay !== undefined) safeSet("play", opts.onPlay);
+    if (opts.onPause !== undefined) safeSet("pause", opts.onPause);
+    if (opts.onNext !== undefined) {
+      safeSet("nexttrack", opts.onNext);
+      safeSet("seekforward", opts.onNext);
+    }
+    if (opts.onPrev !== undefined) {
+      safeSet("previoustrack", opts.onPrev);
+      safeSet("seekbackward", opts.onPrev);
+    }
+    if (opts.onStop !== undefined) safeSet("stop", opts.onStop);
     navigator.mediaSession.playbackState = opts.state || "playing";
   } catch (e) {
     console.warn("mediaSession:", e);
@@ -2116,7 +2125,43 @@ function clearAppMediaSession() {
   if (!("mediaSession" in navigator)) return;
   try {
     navigator.mediaSession.playbackState = "none";
+    const actions = ["play", "pause", "stop", "nexttrack", "previoustrack", "seekforward", "seekbackward"];
+    actions.forEach(act => {
+      try { navigator.mediaSession.setActionHandler(act, null); } catch (e) {}
+    });
   } catch (e) {}
+}
+
+/* Plays a silent gap clip through the shared primed audio element.
+   With mobile devices locked in a pocket, timers (setTimeout) get throttled or suspended.
+   Playing real audio keeps the audio session alive, preventing iOS / Android
+   from killing the background playback and lock-screen controls. */
+function playAudioGap(sec, onend) {
+  const rounded = (sec >= 4 ? 5 : (sec >= 2.5 ? 3 : (sec >= 1.5 ? 2 : 1)));
+  const a = _getSpeakEl();
+  stopSpeak();
+  let done = false;
+  const fin = () => {
+    if (done) return;
+    done = true;
+    a.onended = null;
+    a.onerror = null;
+    if (onend) onend();
+  };
+  a.onended = fin;
+  a.onerror = () => {
+    setTimeout(fin, (sec || 1) * 1000);
+  };
+  a.src = `audio/ui/gap${rounded}.wav`;
+  a.playbackRate = 1.0 * _speedMul();
+  const p = a.play();
+  if (p && p.catch) {
+    p.catch(() => {
+      setTimeout(fin, (sec || 1) * 1000);
+    });
+  }
+  // Safety timeout in case audio stalls
+  setTimeout(fin, (sec || 1) * 1000 + 4000);
 }
 
 /* ---------- real recitation audio (everyayah.com, Alafasy) ----------
@@ -2128,25 +2173,93 @@ function recitationUrl(surahN, ayah) {
   return RECITER_BASE + p(surahN) + p(ayah) + ".mp3";
 }
 let _recAudio = null;
+function _getRecAudio() {
+  if (!_recAudio) _recAudio = new Audio();
+  return _recAudio;
+}
 function stopRecitation() {
-  if (_recAudio) { _recAudio.onended = null; _recAudio.pause(); _recAudio = null; }
+  if (_recAudio) {
+    try {
+      _recAudio.onended = null;
+      _recAudio.onerror = null;
+      _recAudio.pause();
+    } catch (e) {}
+  }
+  clearAppMediaSession();
 }
 /* items: [{n, ayah, ...}]; onEach(item, i) fires as each ayah starts; onDone(err?) at the end */
 function playRecitation(items, onEach, onDone) {
   stopRecitation(); stopSpeak();
+  if (!items || !items.length) { if (onDone) onDone(); return; }
   let i = 0;
-  const next = () => {
-    if (i >= items.length) { _recAudio = null; if (onDone) onDone(); return; }
+  let recToken = 0;
+  let isRecPaused = false;
+
+  const playIndex = (idx) => {
+    if (idx < 0 || idx >= items.length) {
+      stopRecitation();
+      if (onDone) onDone();
+      return;
+    }
+    i = idx;
     const it = items[i];
+    const myTok = ++recToken;
     if (onEach) onEach(it, i);
-    const a = new Audio(recitationUrl(it.n, it.ayah));
-    _recAudio = a;
+
+    setAppMediaSession({
+      metadata: {
+        title: `Ayah ${it.ayah} (Surah ${it.n})`,
+        artist: "Mishary Rashid Alafasy",
+        album: `Qur'an Recitation · Ayah ${i + 1} of ${items.length}`
+      },
+      onPlay: () => {
+        if (isRecPaused) {
+          isRecPaused = false;
+          setAppMediaSession({ state: "playing" });
+          if (_recAudio) _recAudio.play().catch(() => {});
+        }
+      },
+      onPause: () => {
+        isRecPaused = true;
+        setAppMediaSession({ state: "paused" });
+        if (_recAudio) _recAudio.pause();
+      },
+      onNext: () => {
+        if (i + 1 < items.length) playIndex(i + 1);
+        else stopRecitation();
+      },
+      onPrev: () => {
+        playIndex(Math.max(0, i - 1));
+      },
+      onStop: () => {
+        stopRecitation();
+      },
+      state: isRecPaused ? "paused" : "playing"
+    });
+
+    const a = _getRecAudio();
+    a.src = recitationUrl(it.n, it.ayah);
     a.playbackRate = _speedMul();
-    a.onended = () => { i++; next(); };
-    a.onerror = () => { _recAudio = null; if (onDone) onDone("audio-failed"); };
-    a.play().catch(() => { _recAudio = null; if (onDone) onDone("blocked"); });
+    a.onended = () => {
+      if (myTok !== recToken) return;
+      playIndex(i + 1);
+    };
+    a.onerror = () => {
+      if (myTok !== recToken) return;
+      stopRecitation();
+      if (onDone) onDone("audio-failed");
+    };
+    const p = a.play();
+    if (p && p.catch) {
+      p.catch(() => {
+        if (myTok !== recToken) return;
+        stopRecitation();
+        if (onDone) onDone("blocked");
+      });
+    }
   };
-  next();
+
+  playIndex(0);
 }
 
 /* Real qari voice for single Quran words (his 2026-08-17 pen note). The clips
@@ -2193,7 +2306,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "musy6qnv";
+const DATA_V = "muubkuif";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

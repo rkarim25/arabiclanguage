@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musxkvnj">
-  <link rel="stylesheet" href="css/style.css?v=musxkvnj">
+  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
+  <link rel="stylesheet" href="css/style.css?v=muubkuif">
 </head>
 <body>
 <main>
@@ -22,9 +22,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=musxkvnj"></script>
-<script src="js/tracker.js?v=musxkvnj"></script>
-<script src="js/plan.js?v=musxkvnj"></script>
+<script src="js/app.js?v=muubkuif"></script>
+<script src="js/tracker.js?v=muubkuif"></script>
+<script src="js/plan.js?v=muubkuif"></script>
 <script>
 renderNav("stories");
 
@@ -140,17 +140,70 @@ function renderListen() {
   function highlight(i) {
     [...list.children].forEach((li, j) => li.classList.toggle("playing", j === i));
   }
+  let _storyAudioToken = 0;
   document.getElementById("playAll").onclick = () => {
     let i = 0;
+    const myToken = ++_storyAudioToken;
     const playNext = () => {
-      if (i >= story.sentences.length) { highlight(-1); logEvent({ e: "listenall", story: storyId }); markDone("listen"); return; }
+      if (myToken !== _storyAudioToken) return;
+      if (i >= story.sentences.length) {
+        highlight(-1);
+        clearAppMediaSession();
+        logEvent({ e: "listenall", story: storyId });
+        markDone("listen");
+        return;
+      }
       highlight(i);
-      speak(story.sentences[i].ar, rate(), () => { i++; playNext(); });
+      const curr = story.sentences[i];
+      setAppMediaSession({
+        metadata: {
+          title: curr.ar,
+          artist: curr.en || story.title,
+          album: `${story.title} · Sentence ${i + 1}/${story.sentences.length}`
+        },
+        onPlay: () => {
+          // If paused, will resume
+        },
+        onPause: () => {
+          stopSpeak();
+          setAppMediaSession({ state: "paused" });
+        },
+        onNext: () => {
+          _storyAudioToken++;
+          stopSpeak();
+          if (i + 1 < story.sentences.length) { i++; playNext(); }
+        },
+        onPrev: () => {
+          _storyAudioToken++;
+          stopSpeak();
+          if (i > 0) { i--; playNext(); }
+        },
+        onStop: () => {
+          _storyAudioToken++;
+          stopSpeak();
+          highlight(-1);
+          clearAppMediaSession();
+        },
+        state: "playing"
+      });
+      speak(curr.ar, rate(), () => {
+        if (myToken !== _storyAudioToken) return;
+        playAudioGap(0.8, () => {
+          if (myToken !== _storyAudioToken) return;
+          i++;
+          playNext();
+        });
+      });
     };
     stopSpeak();
     playNext();
   };
-  document.getElementById("stopBtn").onclick = () => { stopSpeak(); highlight(-1); };
+  document.getElementById("stopBtn").onclick = () => {
+    _storyAudioToken++;
+    stopSpeak();
+    clearAppMediaSession();
+    highlight(-1);
+  };
 }
 
 /* ============ READ ============ */

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musxkvnj">
-  <link rel="stylesheet" href="css/style.css?v=musxkvnj">
+  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
+  <link rel="stylesheet" href="css/style.css?v=muubkuif">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -207,6 +207,7 @@
       <div class="pt-group">
         <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
         <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
+        <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
         <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
         <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
           <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
@@ -284,10 +285,10 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=musxkvnj"></script>
-<script src="js/curriculum.js?v=musxkvnj"></script>
-<script src="js/app.js?v=musxkvnj"></script>
-<script src="js/tracker.js?v=musxkvnj"></script>
+<script src="js/progress-model.js?v=muubkuif"></script>
+<script src="js/curriculum.js?v=muubkuif"></script>
+<script src="js/app.js?v=muubkuif"></script>
+<script src="js/tracker.js?v=muubkuif"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -918,10 +919,78 @@ function setupAudioSpeed() {
   update();
 }
 
+let isPlaying = false;
+let isPaused = false;
+let currentWithPause = false;
+let _sentenceToken = 0;
+
+function stopAudio() {
+  _sentenceToken++;
+  isPlaying = false;
+  isPaused = false;
+  stopSpeak();
+  clearAppMediaSession();
+  document.querySelectorAll(".sheet-row, .s-card").forEach(c => c.classList.remove("playing", "active"));
+  document.getElementById("btnPlayAll").classList.remove("playing");
+  document.getElementById("btnPlayPauses").classList.remove("playing");
+  const pBtn = document.getElementById("btnPause");
+  if (pBtn) { pBtn.style.display = "none"; pBtn.textContent = "⏸ Pause"; }
+  document.getElementById("btnStop").style.display = "none";
+}
+
+function pauseSentenceAudio() {
+  if (!isPlaying || isPaused) return;
+  _sentenceToken++;
+  isPaused = true;
+  stopSpeak();
+  const pBtn = document.getElementById("btnPause");
+  if (pBtn) pBtn.textContent = "▶ Resume";
+  setAppMediaSession({ state: "paused" });
+}
+
+function resumeSentenceAudio() {
+  if (!isPlaying || !isPaused) return;
+  isPaused = false;
+  const pBtn = document.getElementById("btnPause");
+  if (pBtn) pBtn.textContent = "⏸ Pause";
+  setAppMediaSession({ state: "playing" });
+  playStep(currentWithPause);
+}
+
+function nextSentence() {
+  if (!ACTIVE_SENTENCES || ACTIVE_SENTENCES.length === 0) return;
+  _sentenceToken++;
+  stopSpeak();
+  audioIdx = (audioIdx + 1) % ACTIVE_SENTENCES.length;
+  if (isPaused) {
+    isPaused = false;
+    const pBtn = document.getElementById("btnPause");
+    if (pBtn) pBtn.textContent = "⏸ Pause";
+  }
+  playStep(currentWithPause);
+}
+
+function prevSentence() {
+  if (!ACTIVE_SENTENCES || ACTIVE_SENTENCES.length === 0) return;
+  _sentenceToken++;
+  stopSpeak();
+  audioIdx = audioIdx > 0 ? audioIdx - 1 : ACTIVE_SENTENCES.length - 1;
+  if (isPaused) {
+    isPaused = false;
+    const pBtn = document.getElementById("btnPause");
+    if (pBtn) pBtn.textContent = "⏸ Pause";
+  }
+  playStep(currentWithPause);
+}
+
 document.getElementById("btnPlayAll").onclick = () => {
   stopAudio();
   isPlaying = true;
+  isPaused = false;
+  currentWithPause = false;
   document.getElementById("btnStop").style.display = "inline-block";
+  const pBtn = document.getElementById("btnPause");
+  if (pBtn) { pBtn.style.display = "inline-block"; pBtn.textContent = "⏸ Pause"; }
   document.getElementById("btnPlayAll").classList.add("playing");
   audioIdx = 0;
   playStep(false);
@@ -930,29 +999,33 @@ document.getElementById("btnPlayAll").onclick = () => {
 document.getElementById("btnPlayPauses").onclick = () => {
   stopAudio();
   isPlaying = true;
+  isPaused = false;
+  currentWithPause = true;
   document.getElementById("btnStop").style.display = "inline-block";
+  const pBtn = document.getElementById("btnPause");
+  if (pBtn) { pBtn.style.display = "inline-block"; pBtn.textContent = "⏸ Pause"; }
   document.getElementById("btnPlayPauses").classList.add("playing");
   audioIdx = 0;
   playStep(true);
 };
 
-document.getElementById("btnStop").onclick = stopAudio;
-
-function stopAudio() {
-  isPlaying = false;
-  stopSpeak();
-  clearAppMediaSession();
-  document.querySelectorAll(".sheet-row, .s-card").forEach(c => c.classList.remove("playing", "active"));
-  document.getElementById("btnPlayAll").classList.remove("playing");
-  document.getElementById("btnPlayPauses").classList.remove("playing");
-  document.getElementById("btnStop").style.display = "none";
+const pBtn = document.getElementById("btnPause");
+if (pBtn) {
+  pBtn.onclick = () => {
+    if (isPaused) resumeSentenceAudio();
+    else pauseSentenceAudio();
+  };
 }
 
+document.getElementById("btnStop").onclick = stopAudio;
+
 function playStep(withPause) {
-  if (!isPlaying || audioIdx >= ACTIVE_SENTENCES.length) {
-    stopAudio();
+  if (!isPlaying || isPaused || audioIdx >= ACTIVE_SENTENCES.length) {
+    if (audioIdx >= ACTIVE_SENTENCES.length) stopAudio();
     return;
   }
+  currentWithPause = !!withPause;
+  const myTok = ++_sentenceToken;
   const s = ACTIVE_SENTENCES[audioIdx];
   document.querySelectorAll(".sheet-row, .s-card").forEach(c => c.classList.remove("playing", "active"));
   const row = document.getElementById("srow-" + audioIdx) || document.getElementById("scard-" + audioIdx);
@@ -968,40 +1041,40 @@ function playStep(withPause) {
       album: `Sentences · ${audioIdx + 1}/${ACTIVE_SENTENCES.length}`
     },
     onPlay: () => {
-      if (!isPlaying) {
+      if (isPaused) resumeSentenceAudio();
+      else if (!isPlaying) {
         isPlaying = true;
-        setAppMediaSession({ state: "playing" });
+        isPaused = false;
         playStep(withPause);
       }
     },
-    onPause: () => {
-      isPlaying = false;
-      stopSpeak();
-      setAppMediaSession({ state: "paused" });
-    },
-    onNext: () => {
-      audioIdx = (audioIdx + 1) % ACTIVE_SENTENCES.length;
-      playStep(withPause);
-    },
-    onPrev: () => {
-      audioIdx = Math.max(0, audioIdx - 1);
-      playStep(withPause);
-    },
+    onPause: pauseSentenceAudio,
+    onNext: nextSentence,
+    onPrev: prevSentence,
     onStop: stopAudio,
-    state: "playing"
+    state: isPaused ? "paused" : "playing"
   });
 
   speak(s.ar, 0.85, () => {
-    if (!isPlaying) return;
+    if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
     if (withPause) {
-      setTimeout(() => {
-        if (!isPlaying) return;
+      playAudioGap(3, () => {
+        if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
         speak(s.en, 1.0, () => {
-          setTimeout(() => { audioIdx++; playStep(withPause); }, 1000);
+          if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
+          playAudioGap(1, () => {
+            if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
+            audioIdx++;
+            playStep(withPause);
+          });
         });
-      }, 3000);
+      });
     } else {
-      setTimeout(() => { audioIdx++; playStep(withPause); }, 1200);
+      playAudioGap(1, () => {
+        if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
+        audioIdx++;
+        playStep(withPause);
+      });
     }
   });
 }

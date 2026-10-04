@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=musy6qnv">
-  <link rel="stylesheet" href="css/style.css?v=musy6qnv">
+  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
+  <link rel="stylesheet" href="css/style.css?v=muubkuif">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,12 +246,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=musy6qnv"></script>
-<script src="js/curriculum.js?v=musy6qnv"></script>
-<script src="js/app.js?v=musy6qnv"></script>
-<script src="js/tracker.js?v=musy6qnv"></script>
-<script src="js/plan.js?v=musy6qnv"></script>
-<script src="js/account.js?v=musy6qnv"></script>
+<script src="js/progress-model.js?v=muubkuif"></script>
+<script src="js/curriculum.js?v=muubkuif"></script>
+<script src="js/app.js?v=muubkuif"></script>
+<script src="js/tracker.js?v=muubkuif"></script>
+<script src="js/plan.js?v=muubkuif"></script>
+<script src="js/account.js?v=muubkuif"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3972,7 +3972,11 @@ function playQuranAyah(surahN, ayahN) {
   playRecitation([{ n: surahN, ayah: ayahN }]);
 }
 
-/* AUDIO ENGINE: Single, Play All, and Play with Pauses */
+/* AUDIO ENGINE: Single, Play All, and Play with Pauses with Mobile Lock-Screen Controls */
+let _audioToken = 0;
+let isAudioPaused = false;
+let _queueTimer = null;
+
 function playSingleSentence(encodedAr, lineIdx) {
   stopAllAudio();
   const text = decodeURIComponent(encodedAr);
@@ -3987,18 +3991,41 @@ function playSingleSentence(encodedAr, lineIdx) {
 
   const sentenceObj = (curChap && curChap.sentences && typeof lineIdx === "number") ? curChap.sentences[lineIdx] : null;
   const en = sentenceObj ? sentenceObj.en : null;
+  const chapTitle = (typeof curChap !== "undefined" && curChap ? curChap.title : "Lesson");
 
+  setAppMediaSession({
+    metadata: {
+      title: text,
+      artist: en || chapTitle,
+      album: chapTitle
+    },
+    onPlay: () => {
+      playSingleSentence(encodedAr, lineIdx);
+    },
+    onPause: () => {
+      stopSpeak();
+      setAppMediaSession({ state: "paused" });
+    },
+    onStop: stopAllAudio,
+    state: "playing"
+  });
+
+  const myTok = ++_audioToken;
   if (audioVoiceMode === "ar-en" && en) {
     speak(text, 0.85, () => {
-      _singleSentenceTimer = setTimeout(() => {
+      if (myTok !== _audioToken) return;
+      playAudioGap(1, () => {
+        if (myTok !== _audioToken) return;
         speak(en, 1.0);
-      }, 600);
+      });
     });
   } else if (audioVoiceMode === "recall" && en) {
     speak(text, 0.85, () => {
-      _singleSentenceTimer = setTimeout(() => {
+      if (myTok !== _audioToken) return;
+      playAudioGap(3, () => {
+        if (myTok !== _audioToken) return;
         speak(en, 1.0);
-      }, 3000);
+      });
     });
   } else {
     speak(text, 0.85);
@@ -4055,11 +4082,9 @@ document.getElementById("btnPlayPauses").onclick = () => {
 
 document.getElementById("btnStopAudio").onclick = stopAllAudio;
 
-let isAudioPaused = false;
-let _queueTimer = null;
-
 function pauseAudio() {
   if (!isAudioRunning || isAudioPaused) return;
+  _audioToken++;
   isAudioPaused = true;
   stopSpeak();
   if (_queueTimer) {
@@ -4100,7 +4125,42 @@ function togglePauseAudio() {
   }
 }
 
+function nextSentence() {
+  if (!audioQueue || audioQueue.length === 0) return;
+  _audioToken++;
+  stopSpeak();
+  if (_queueTimer) { clearTimeout(_queueTimer); _queueTimer = null; }
+  audioIndex = (audioIndex + 1) % audioQueue.length;
+  if (isAudioPaused) {
+    isAudioPaused = false;
+    const btnPause = document.getElementById("btnPauseAudio");
+    if (btnPause) {
+      btnPause.textContent = "⏸ Pause";
+      btnPause.classList.remove("paused");
+    }
+  }
+  playNextInQueue(audioVoiceMode);
+}
+
+function prevSentence() {
+  if (!audioQueue || audioQueue.length === 0) return;
+  _audioToken++;
+  stopSpeak();
+  if (_queueTimer) { clearTimeout(_queueTimer); _queueTimer = null; }
+  audioIndex = audioIndex > 0 ? audioIndex - 1 : audioQueue.length - 1;
+  if (isAudioPaused) {
+    isAudioPaused = false;
+    const btnPause = document.getElementById("btnPauseAudio");
+    if (btnPause) {
+      btnPause.textContent = "⏸ Pause";
+      btnPause.classList.remove("paused");
+    }
+  }
+  playNextInQueue(audioVoiceMode);
+}
+
 function stopAllAudio() {
+  _audioToken++;
   if (_singleSentenceTimer) {
     clearTimeout(_singleSentenceTimer);
     _singleSentenceTimer = null;
@@ -4131,6 +4191,7 @@ function playNextInQueue(mode) {
     if (audioIndex >= audioQueue.length) stopAllAudio();
     return;
   }
+  const myToken = ++_audioToken;
   const effectiveMode = (typeof mode === "string") ? mode : (mode === true ? "recall" : (mode === false ? "ar-only" : audioVoiceMode));
   const item = audioQueue[audioIndex];
   if (curChap && typeof item.idx === "number") {
@@ -4143,64 +4204,50 @@ function playNextInQueue(mode) {
     row.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
+  const chapTitle = (typeof curChap !== "undefined" && curChap ? curChap.title : "Lesson");
   setAppMediaSession({
     metadata: {
       title: item.ar,
-      artist: item.en || (typeof curChap !== "undefined" && curChap ? curChap.title : "Arabic"),
-      album: `${typeof curChap !== "undefined" && curChap ? curChap.title : "Lesson"} · ${audioIndex + 1}/${audioQueue.length}`
+      artist: item.en || chapTitle,
+      album: `${chapTitle} · Sentence ${audioIndex + 1} of ${audioQueue.length}`
     },
     onPlay: () => {
-      if (isAudioPaused) {
-        resumeAudio();
-      } else if (!isAudioRunning) {
+      if (isAudioPaused) resumeAudio();
+      else if (!isAudioRunning) {
         isAudioRunning = true;
         isAudioPaused = false;
-        setAppMediaSession({ state: "playing" });
         playNextInQueue(effectiveMode);
       }
     },
-    onPause: () => {
-      pauseAudio();
-    },
-    onNext: () => {
-      if (audioQueue.length > 0) {
-        audioIndex = (audioIndex + 1) % audioQueue.length;
-        if (isAudioPaused) resumeAudio();
-        else playNextInQueue(effectiveMode);
-      }
-    },
-    onPrev: () => {
-      if (audioQueue.length > 0) {
-        audioIndex = Math.max(0, audioIndex - 1);
-        if (isAudioPaused) resumeAudio();
-        else playNextInQueue(effectiveMode);
-      }
-    },
+    onPause: pauseAudio,
+    onNext: nextSentence,
+    onPrev: prevSentence,
     onStop: stopAllAudio,
     state: isAudioPaused ? "paused" : "playing"
   });
 
   speak(item.ar, 0.85, () => {
-    if (!isAudioRunning || isAudioPaused) return;
+    if (myToken !== _audioToken || !isAudioRunning || isAudioPaused) return;
+
     if (item.en && effectiveMode !== "ar-only") {
-      const pauseDuration = effectiveMode === "recall" ? 3200 : 700;
-      _queueTimer = setTimeout(() => {
-        if (!isAudioRunning || isAudioPaused) return;
+      const gapSec = effectiveMode === "recall" ? 3 : 1;
+      playAudioGap(gapSec, () => {
+        if (myToken !== _audioToken || !isAudioRunning || isAudioPaused) return;
         speak(item.en, 1.0, () => {
-          if (!isAudioRunning || isAudioPaused) return;
-          _queueTimer = setTimeout(() => {
-            if (!isAudioRunning || isAudioPaused) return;
+          if (myToken !== _audioToken || !isAudioRunning || isAudioPaused) return;
+          playAudioGap(1, () => {
+            if (myToken !== _audioToken || !isAudioRunning || isAudioPaused) return;
             audioIndex++;
             playNextInQueue(effectiveMode);
-          }, 1100);
+          });
         });
-      }, pauseDuration);
+      });
     } else {
-      _queueTimer = setTimeout(() => {
-        if (!isAudioRunning || isAudioPaused) return;
+      playAudioGap(1, () => {
+        if (myToken !== _audioToken || !isAudioRunning || isAudioPaused) return;
         audioIndex++;
         playNextInQueue(effectiveMode);
-      }, 1200);
+      });
     }
   });
 }
