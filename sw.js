@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-muvil5qa";
+const CACHE = "ats-muvqnvdi";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -48,10 +48,11 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
-  if (e.request.method !== "GET" || url.origin !== location.origin) return; // recitation/API pass through
+  const isRemoteQuranAudio = url.hostname === "everyayah.com" || url.hostname === "audio.qurancdn.com";
+  if (e.request.method !== "GET" || (url.origin !== location.origin && !isRemoteQuranAudio)) return; // recitation/API pass through
 
   // immutable under their URL → cache-first
-  const isAudio = url.pathname.includes("/audio/");
+  const isAudio = url.pathname.includes("/audio/") || isRemoteQuranAudio;
   if (isAudio || url.searchParams.has("v") || url.pathname.includes("/fonts/")) {
     const cacheName = isAudio ? AUDIO_CACHE : CACHE;
     e.respondWith((async () => {
@@ -59,7 +60,7 @@ self.addEventListener("fetch", e => {
       if (hit) return hit;
       try {
         const res = await fetch(e.request);
-        if (res.ok) { const copy = res.clone(); caches.open(cacheName).then(c => c.put(e.request, copy)); }
+        if (res.ok || res.type === "opaque") { const copy = res.clone(); caches.open(cacheName).then(c => c.put(e.request, copy)); }
         return res;
       } catch (err) {
         // offline first-sight of a stamped asset: any older stamp beats nothing

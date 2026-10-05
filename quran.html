@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muvil5qa">
-  <link rel="stylesheet" href="css/style.css?v=muvil5qa">
+  <link rel="stylesheet" href="css/fonts.css?v=muvqnvdi">
+  <link rel="stylesheet" href="css/style.css?v=muvqnvdi">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,9 +46,9 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/app.js?v=muvil5qa"></script>
-<script src="js/tracker.js?v=muvil5qa"></script>
-<script src="js/plan.js?v=muvil5qa"></script>
+<script src="js/app.js?v=muvqnvdi"></script>
+<script src="js/tracker.js?v=muvqnvdi"></script>
+<script src="js/plan.js?v=muvqnvdi"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -77,6 +77,13 @@ function renderList() {
     <h1>Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
     <p class="sub">Word-by-word surahs you hear recited constantly. Study each word, then test yourself by filling in the meanings.
     These use the Quran's highest-frequency vocabulary — every word here pays off across the whole mushaf.</p>
+    <div class="card" id="qOfflineCard" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:14px;background:var(--card);border-color:var(--border)">
+      <div>
+        <strong style="font-size:14px">📥 Offline Commute Pack</strong>
+        <span id="qAllOfflineStatus" style="font-size:12.5px;color:var(--muted);display:block;margin-top:2px">Checking saved recitation…</span>
+      </div>
+      <button type="button" class="small primary" id="btnPackAllQuran" style="font-size:12px;padding:6px 14px">📥 Load All for Offline (2.5MB)</button>
+    </div>
     <div class="card" style="border-color:var(--accent);margin-bottom:16px">
       <p style="margin:0;font-size:14.5px">🔁 <a href="quran.html?listen=1" style="color:var(--accent);font-weight:600">Listen queue</a> —
       real recitation of every surah you've studied, back to back. Zero clicks once it starts.</p>
@@ -100,6 +107,36 @@ function renderList() {
     `;
     grid.appendChild(a);
   });
+
+  const updateOfflineOverview = async () => {
+    if (typeof getQuranOfflineStatus !== "function") return;
+    const st = await getQuranOfflineStatus();
+    const lbl = document.getElementById("qAllOfflineStatus");
+    const btn = document.getElementById("btnPackAllQuran");
+    if (!lbl || !btn) return;
+    if (st.isReady) {
+      lbl.innerHTML = `<span style="color:var(--accent);font-weight:600">✓ All ${st.total} ayahs saved</span> · ready for flights & commute`;
+      btn.textContent = "✓ Saved (Re-verify)";
+      btn.classList.remove("primary");
+    } else {
+      lbl.textContent = `${st.cached} of ${st.total} ayahs saved on this phone`;
+    }
+  };
+  updateOfflineOverview();
+
+  const btnPack = document.getElementById("btnPackAllQuran");
+  if (btnPack) {
+    btnPack.onclick = async () => {
+      btnPack.disabled = true;
+      btnPack.textContent = "Downloading 2.5MB…";
+      const lbl = document.getElementById("qAllOfflineStatus");
+      await offlinePackQuran(null, (n, total) => {
+        if (lbl) lbl.textContent = `Downloading recitation: ${n} of ${total} ayahs…`;
+      });
+      btnPack.disabled = false;
+      updateOfflineOverview();
+    };
+  }
 }
 
 /* Listen queue: real recitation of the surahs you've already studied — repeated
@@ -112,6 +149,9 @@ function renderListenQueue() {
   const STARTER_IDS = ["fatiha", "ikhlas"];
   const isStarter = !studied.length;
   const queue = studied.length ? studied : DATA.filter(s => STARTER_IDS.includes(s.id));
+  if (queue.length && typeof offlinePackQuran === "function") {
+    offlinePackQuran(queue.map(s => s.id));
+  }
   content.innerHTML = `
     <p><a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a></p>
     <h1>Listen queue <span class="arabic" style="color:var(--accent)">اِسْتَمِعْ وَافْهَمْ</span></h1>
@@ -261,11 +301,12 @@ function renderSurah(s, mode) {
       <button id="mListen" class="${surahDone(s.id, "listen") ? "done" : ""}"><span class="ar">اِسْتَمِعْ</span><span>🎧 Cold listen</span></button>
     </div>
     <div class="card">
-      <div class="listen-controls">
-        <button class="primary" id="playRec">▶ Real recitation</button>
-        <button id="playAll">▶ Browser voice</button>
-        <button id="stopBtn">■ Stop</button>
-        <label style="font-size:13px;color:var(--muted)">Voice speed <input type="range" id="rate" min="0.5" max="1.0" step="0.05" value="0.75"></label>
+      <div class="listen-controls" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="primary" id="playRec" style="padding:6px 14px;font-size:13.5px">▶ Real recitation</button>
+        <button id="stopBtn" style="display:none;padding:6px 12px;font-size:13px">⏹ Stop</button>
+        <button type="button" class="q-speed-pill" id="rateToggle" title="Toggle recitation speed">⚡ ${(store.get("ats-speed") === "slow") ? "0.75x" : "1.0x"}</button>
+        <span class="q-offline-pill" id="qOfflineBadge" title="Offline audio status">📥 Checking offline…</span>
+        <input type="hidden" id="rate" value="${(store.get('ats-speed') === 'slow') ? 0.75 : 1.0}">
       </div>
       <div id="verses"></div>
       ${mode === "test" ? `<div class="ex-row" style="margin-top:14px"><button class="primary" id="checkAll">✓ Check my answers</button></div><div class="quiz-score" id="score"></div>` : `<div class="ex-row" style="margin-top:14px"><button class="primary" id="toTest">I know these — test me →</button></div>`}
@@ -274,7 +315,44 @@ function renderSurah(s, mode) {
   document.getElementById("mStudy").onclick = () => renderSurah(s, "study");
   document.getElementById("mTest").onclick = () => renderSurah(s, "test");
   document.getElementById("mListen").onclick = () => renderListenTest(s);
-  const rate = () => parseFloat(document.getElementById("rate").value);
+  const rate = () => ((store.get("ats-speed") === "slow") ? 0.75 : 1.0);
+  const rateToggle = document.getElementById("rateToggle");
+  const rateInput = document.getElementById("rate");
+  if (rateToggle) {
+    rateToggle.onclick = () => {
+      const cur = store.get("ats-speed") || "normal";
+      const nxt = cur === "slow" ? "normal" : "slow";
+      store.set("ats-speed", nxt);
+      if (_recAudio) _recAudio.playbackRate = _speedMul();
+      const val = nxt === "slow" ? 0.75 : 1.0;
+      if (rateInput) rateInput.value = val;
+      rateToggle.textContent = `⚡ ${val}x`;
+    };
+  }
+
+  // Preload this surah for offline listening
+  if (typeof getQuranOfflineStatus === "function") {
+    const badge = document.getElementById("qOfflineBadge");
+    getQuranOfflineStatus(s.id).then(st => {
+      if (!badge) return;
+      if (st.isReady) {
+        badge.className = "q-offline-pill ready";
+        badge.textContent = "✓ Saved offline";
+      } else {
+        badge.textContent = `📥 ${st.cached}/${st.total} offline`;
+        if (navigator.onLine && typeof offlinePackQuran === "function") {
+          offlinePackQuran([s.id], (n, total) => {
+            if (badge) badge.textContent = `📥 Saving ${n}/${total}…`;
+          }).then(r => {
+            if (badge && r.n === r.total) {
+              badge.className = "q-offline-pill ready";
+              badge.textContent = "✓ Saved offline";
+            }
+          });
+        }
+      }
+    });
+  }
 
   const versesEl = document.getElementById("verses");
   loadQuranWordAudio(); // real qari clips for word taps (idempotent)
@@ -343,15 +421,9 @@ function renderSurah(s, mode) {
     versesEl.appendChild(block);
   });
 
-  document.getElementById("playAll").onclick = () => {
-    let i = 0;
-    const next = () => {
-      if (i >= s.verses.length) { logEvent({ e: "qlisten", surah: s.id }); return; }
-      speak(s.verses[i].ar, rate(), () => { i++; next(); });
-    };
-    stopRecitation(); stopSpeak(); next();
-  };
   document.getElementById("playRec").onclick = () => {
+    const stopBtn = document.getElementById("stopBtn");
+    if (stopBtn) stopBtn.style.display = "inline-flex";
     const blocks = versesEl.querySelectorAll(".verse-block");
     const items = s.verses.map(v => ({ n: s.n, ayah: parseInt(v.ref.split(":")[1]) }));
     playRecitation(items,
@@ -361,11 +433,17 @@ function renderSurah(s, mode) {
       },
       err => {
         blocks.forEach(b => b.style.background = "");
+        if (stopBtn) stopBtn.style.display = "none";
         if (!err) logEvent({ e: "rlisten", surah: s.id });
         else if (err === "audio-failed") alert("Recitation audio didn't load — check your connection (it streams from everyayah.com).");
       });
   };
-  document.getElementById("stopBtn").onclick = () => { stopSpeak(); stopRecitation(); };
+  document.getElementById("stopBtn").onclick = () => {
+    stopSpeak();
+    stopRecitation();
+    const stopBtn = document.getElementById("stopBtn");
+    if (stopBtn) stopBtn.style.display = "none";
+  };
 
   if (mode === "study") {
     document.getElementById("toTest").onclick = () => {

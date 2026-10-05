@@ -2174,9 +2174,77 @@ function recitationUrl(surahN, ayah) {
 }
 let _recAudio = null;
 function _getRecAudio() {
-  if (!_recAudio) _recAudio = new Audio();
+  if (!_recAudio) {
+    _recAudio = new Audio();
+    _recAudio.crossOrigin = "anonymous";
+  }
   return _recAudio;
 }
+
+let _quranDockEl = null;
+function _getQuranDockEl() {
+  if (typeof document === "undefined") return null;
+  if (!_quranDockEl) {
+    _quranDockEl = document.getElementById("quranAudioDock");
+    if (!_quranDockEl) {
+      _quranDockEl = document.createElement("div");
+      _quranDockEl.id = "quranAudioDock";
+      _quranDockEl.className = "quran-audio-dock";
+      document.body.appendChild(_quranDockEl);
+    }
+  }
+  return _quranDockEl;
+}
+
+function _updateQuranDock(opts) {
+  const dock = _getQuranDockEl();
+  if (!dock) return;
+  if (!opts || opts.hide) {
+    dock.style.display = "none";
+    return;
+  }
+  dock.style.display = "flex";
+  const speedLabel = (store.get("ats-speed") === "slow") ? "0.75x" : "1.0x";
+  dock.innerHTML = `
+    <div class="qdock-left">
+      <span class="qdock-badge">Ayah ${opts.ayah}${opts.total > 1 ? ` <span class="qdock-sub">(${opts.index + 1}/${opts.total})</span>` : ""}</span>
+      <span class="qdock-qari">· Alafasy</span>
+    </div>
+    <div class="qdock-center">
+      ${opts.total > 1 ? `<button type="button" class="qdock-btn" id="qdockPrev" title="Previous Ayah" aria-label="Previous">⏮</button>` : ""}
+      <button type="button" class="qdock-btn qdock-playpause" id="qdockPlayPause" title="${opts.isPaused ? 'Resume' : 'Pause'}" aria-label="Play/Pause">${opts.isPaused ? '▶' : '⏸'}</button>
+      ${opts.total > 1 ? `<button type="button" class="qdock-btn" id="qdockNext" title="Next Ayah" aria-label="Next">⏭</button>` : ""}
+      <button type="button" class="qdock-btn qdock-stop" id="qdockStop" title="Stop Recitation" aria-label="Stop">⏹</button>
+    </div>
+    <div class="qdock-right">
+      <button type="button" class="qdock-speed" id="qdockSpeed" title="Recitation speed">⚡ ${speedLabel}</button>
+    </div>
+  `;
+
+  const btnPrev = document.getElementById("qdockPrev");
+  if (btnPrev && opts.onPrev) btnPrev.onclick = opts.onPrev;
+
+  const btnPlayPause = document.getElementById("qdockPlayPause");
+  if (btnPlayPause && opts.onTogglePause) btnPlayPause.onclick = opts.onTogglePause;
+
+  const btnNext = document.getElementById("qdockNext");
+  if (btnNext && opts.onNext) btnNext.onclick = opts.onNext;
+
+  const btnStop = document.getElementById("qdockStop");
+  if (btnStop && opts.onStop) btnStop.onclick = opts.onStop;
+
+  const btnSpeed = document.getElementById("qdockSpeed");
+  if (btnSpeed) {
+    btnSpeed.onclick = () => {
+      const cur = store.get("ats-speed") || "normal";
+      const nxt = cur === "slow" ? "normal" : "slow";
+      store.set("ats-speed", nxt);
+      if (_recAudio) _recAudio.playbackRate = _speedMul();
+      btnSpeed.textContent = `⚡ ${nxt === "slow" ? "0.75x" : "1.0x"}`;
+    };
+  }
+}
+
 function stopRecitation() {
   if (_recAudio) {
     try {
@@ -2185,6 +2253,7 @@ function stopRecitation() {
       _recAudio.pause();
     } catch (e) {}
   }
+  _updateQuranDock({ hide: true });
   clearAppMediaSession();
 }
 /* items: [{n, ayah, ...}]; onEach(item, i) fires as each ayah starts; onDone(err?) at the end */
@@ -2194,6 +2263,39 @@ function playRecitation(items, onEach, onDone) {
   let i = 0;
   let recToken = 0;
   let isRecPaused = false;
+
+  const updateDock = () => {
+    const it = items[i];
+    if (!it) return;
+    _updateQuranDock({
+      surahN: it.n,
+      ayah: it.ayah,
+      index: i,
+      total: items.length,
+      isPaused: isRecPaused,
+      onPrev: () => { playIndex(Math.max(0, i - 1)); },
+      onNext: () => {
+        if (i + 1 < items.length) playIndex(i + 1);
+        else stopRecitation();
+      },
+      onTogglePause: () => {
+        if (isRecPaused) {
+          isRecPaused = false;
+          setAppMediaSession({ state: "playing" });
+          if (_recAudio) _recAudio.play().catch(() => {});
+        } else {
+          isRecPaused = true;
+          setAppMediaSession({ state: "paused" });
+          if (_recAudio) _recAudio.pause();
+        }
+        updateDock();
+      },
+      onStop: () => {
+        stopRecitation();
+        if (onDone) onDone();
+      }
+    });
+  };
 
   const playIndex = (idx) => {
     if (idx < 0 || idx >= items.length) {
@@ -2205,6 +2307,7 @@ function playRecitation(items, onEach, onDone) {
     const it = items[i];
     const myTok = ++recToken;
     if (onEach) onEach(it, i);
+    updateDock();
 
     setAppMediaSession({
       metadata: {
@@ -2217,12 +2320,14 @@ function playRecitation(items, onEach, onDone) {
           isRecPaused = false;
           setAppMediaSession({ state: "playing" });
           if (_recAudio) _recAudio.play().catch(() => {});
+          updateDock();
         }
       },
       onPause: () => {
         isRecPaused = true;
         setAppMediaSession({ state: "paused" });
         if (_recAudio) _recAudio.pause();
+        updateDock();
       },
       onNext: () => {
         if (i + 1 < items.length) playIndex(i + 1);
@@ -2306,7 +2411,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muvil5qa";
+const DATA_V = "muvqnvdi";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3806,6 +3911,86 @@ async function offlinePack(texts, onProgress) {
   const q = urls.slice();
   await Promise.all(Array.from({ length: 6 }, async () => { while (q.length) await one(q.shift()); }));
   return { n, total: urls.length, fetched, skipped: false };
+}
+
+/* ---------- QURAN OFFLINE PACK ----------
+   Packs real recitation clips (everyayah.com, Alafasy) into AUDIO_CACHE (PACK_CACHE)
+   so the Qur'an by ear and Cold listen work fully offline during commutes and flights.
+   Cross-origin responses are cached with CORS support matching sw.js. */
+async function offlinePackQuran(surahIds, onProgress) {
+  if (!window.caches || !navigator.onLine) return { n: 0, total: 0, fetched: 0, skipped: true };
+  let cache;
+  try { cache = await caches.open(PACK_CACHE); } catch (e) { return { n: 0, total: 0, fetched: 0, skipped: true }; }
+
+  let versesData = null;
+  try {
+    const res = await fetch("data/verses.json");
+    versesData = await res.json();
+  } catch (e) { return { n: 0, total: 0, fetched: 0, skipped: true }; }
+
+  let surahs = versesData.surahs || [];
+  if (surahIds && surahIds.length) {
+    const idSet = new Set(surahIds.map(x => String(x)));
+    surahs = surahs.filter(s => idSet.has(s.id) || idSet.has(String(s.n)));
+  }
+
+  const urls = [];
+  surahs.forEach(s => {
+    (s.verses || []).forEach(v => {
+      const ayahN = parseInt(v.ref.split(":")[1]);
+      urls.push(recitationUrl(s.n, ayahN));
+    });
+  });
+
+  const uniqueUrls = [...new Set(urls)];
+  let n = 0, fetched = 0;
+  const one = async url => {
+    try {
+      if (await cache.match(url)) {
+        n++;
+      } else {
+        const r = await fetch(url, { mode: "cors" });
+        if (r.ok || r.type === "opaque") {
+          await cache.put(url, r);
+          n++;
+          fetched++;
+        }
+      }
+    } catch (e) {}
+    if (onProgress) onProgress(n, uniqueUrls.length);
+  };
+
+  const q = uniqueUrls.slice();
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    while (q.length) await one(q.shift());
+  }));
+
+  return { n, total: uniqueUrls.length, fetched, skipped: false };
+}
+
+async function getQuranOfflineStatus(surahId) {
+  if (!window.caches) return { total: 0, cached: 0, isReady: false };
+  try {
+    const cache = await caches.open(PACK_CACHE);
+    const res = await fetch("data/verses.json");
+    const versesData = await res.json();
+    let surahs = versesData.surahs || [];
+    if (surahId) {
+      surahs = surahs.filter(s => s.id === surahId || String(s.n) === String(surahId));
+    }
+    let total = 0, cached = 0;
+    for (const s of surahs) {
+      for (const v of (s.verses || [])) {
+        total++;
+        const ayahN = parseInt(v.ref.split(":")[1]);
+        const hit = await cache.match(recitationUrl(s.n, ayahN));
+        if (hit) cached++;
+      }
+    }
+    return { total, cached, isReady: total > 0 && cached === total };
+  } catch (e) {
+    return { total: 0, cached: 0, isReady: false };
+  }
 }
 /* the words behind a set of card keys — from the sentence bank first (the same
    text the lessons show), then the data files for keys the bank never met */

@@ -1249,3 +1249,178 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
   border-color: #f59e0b !important;
   font-weight: 700;
 }
+
+/* ---------- Floating Quran Audio Mini-Player Dock ---------- */
+#quranAudioDock {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 440px;
+  height: 46px;
+  background: rgba(13, 122, 95, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  z-index: 120;
+  box-sizing: border-box;
+  font-family: var(--font-ui);
+  animation: qdockSlideUp 0.2s ease-out;
+}
+
+@keyframes qdockSlideUp {
+  from { opacity: 0; transform: translate(-50%, 14px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.qdock-left {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  overflow: hidden;
+}
+.qdock-badge {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.qdock-sub {
+  font-size: 11px;
+  opacity: 0.85;
+  font-weight: 500;
+}
+.qdock-qari {
+  font-size: 11px;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.qdock-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.qdock-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+}
+.qdock-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.qdock-btn.qdock-playpause {
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 17px;
+}
+.qdock-btn.qdock-playpause:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.qdock-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.qdock-speed {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.qdock-speed:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.q-speed-pill {
+  font-size: 12.5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.q-speed-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.q-offline-pill {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--muted);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.q-offline-pill.ready {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .listen-controls {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .listen-controls button {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+  .audio-bar {
+    padding: 6px 10px;
+    gap: 6px;
+    margin: 4px 0 10px;
+  }
+  .audio-bar button, .audio-mode-pill {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  #quranAudioDock {
+    bottom: 12px;
+    width: calc(100% - 16px);
+    height: 44px;
+    padding: 0 10px;
+  }
+  .qdock-badge {
+    font-size: 12px;
+  }
+  .qdock-qari {
+    display: none;
+  }
+  .qdock-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+}
+
