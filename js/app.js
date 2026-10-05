@@ -2306,7 +2306,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muubkuif";
+const DATA_V = "muvil5qa";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3864,9 +3864,9 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;
   md += `- **Preply Unit 1 & Sunday Lessons:**\n`;
   md += `  - *Housing & The Flat:* flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
-  md += `  - *Daily Routine & Chores (27 Sep):* work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), newspaper (صَحِيفَة), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), party (حَفْلَة), trip (رِحْلَة), sleep (أَنَامُ)\n`;
-  md += `  - *Protection Concepts (Falaq & Nas, 27 Sep):* refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), whisperer (الْوَسْوَاس), slinker (الْخَنَّاس), chests (صُدُور)\n`;
-  md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return)\n`;
+  md += `  - *Daily Routine & Chores (27 Sep):* work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), newspaper (صَحِيفَة), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), tidy (أُرَتِّبُ), party (حَفْلَة), trip (رِحْلَة), sleep (أَنَامُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
+  md += `  - *Protection Concepts (Falaq & Nas, 27 Sep):* refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), King (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), slinker (الْخَنَّاس), chests (صُدُور)\n`;
+  md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange)\n`;
   md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى* / *فِي السَّاعَةِ*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
   md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
 
@@ -3879,6 +3879,8 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
 
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
+  md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
+  md += `- Recent Routine & Chores Drill Items: return (أَعُودُ), have meal (أَتَنَاوَلُ), help (أُسَاعِدُ), dishes (أَطْبَاق), tidy (أُرَتِّبُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
   md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
   md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;
 

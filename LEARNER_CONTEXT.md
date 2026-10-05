@@ -15,8 +15,12 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (01 Oct 2026):** 2,656 recorded practice events; 713 cards in SRS (278 solid/strong: 225 Box 5, 25 Box 4, 28 Box 3; 375 active learning: 332 Box 1, 43 Box 2; 60 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); passed Lesson 9 exam at 89% (100% ear score); Lesson 10 retake queued (67% diagnostic score on سَرِير، مُرِيح، فُرْن, 2 questions from 80% mastery mark); Sunday 27 Sep Untimed Mastery Test ready to sit.
-  - **Recent Activity:** Sep 27 study session (15+ min reviewing Sunday 27 Sep lesson: Work Day & Day Off routines, Mu'awwidhatayn protection concepts, and listening to class vocabulary); Sep 28–Oct 01 coach health audits, all 8 test suites verified, live site verified at 200 OK, and Speak with AI guides fully enriched with targeted prompts for Divine attributes (الحَيّ، السَّتَّار) and housing vocabulary.
+  - **Live Telemetry (05 Oct 2026):** 2,891 recorded practice events; 727 cards in SRS (255 solid/strong: 202 Box 5, 25 Box 4, 28 Box 3; 377 active learning: 334 Box 1, 43 Box 2; 68 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Curriculum Standings:**
+    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
+    - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
+  - **Recent Activity:** Oct 4 session drilling Chapter 2 restaurant & request sentences (re-played halal food 7 times, bill please 4 times, thirsty tea 4 times, coffee, bathroom); Oct 5 morning study (12+ min on `classes.html` drilling Sunday 27 Sep reading passage & Surah An-Nas, tapping and learning key routine verbs and whisperer protection vocabulary).
+
 
 ---
 
@@ -100,6 +104,21 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 
 ### D. Current Diagnostic Focus & Review Vocabulary
 The following words were identified in recent telemetry and test diagnostics as requiring reinforcement:
+- **Active Chapter 2 Practice Items (At the Restaurant / Wants & Requests):**
+  - **أُرِيدُ أَنْ آكُلَ شَيْئًا** (*urīdu an ākula shayʾan*) — I want to eat something
+  - **هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟** (*hal ʿindakum ṭaʿāmun ḥalāl?*) — Do you have halal food? (listened 7x)
+  - **الحِسَابَ مِنْ فَضْلِكَ** (*al-ḥisāba min faḍlik*) — The bill, please (upvoted item)
+  - **أَنَا عَطْشَانُ، أُرِيدُ شَايًا** (*anā ʿaṭshānu, urīdu shāyan*) — I am thirsty, I want tea
+  - **أَيْنَ الحَمَّامُ؟** (*ayna l-ḥammām?*) — Where is the bathroom? (upvoted item)
+  - **أُرِيدُ فِنْجَانَ قَهْوَةٍ** (*urīdu finjāna qahwah*) — I want a cup of coffee
+- **Recent Telemetry Slips & Studied Items (05 Oct Morning Routine Drill):**
+  - **أَعُودُ** (*aʿūdu*) — I return (marked `tap-learn`)
+  - **أَتَنَاوَلُ** (*atanāwalu*) — I eat / take a meal (marked `tap-learn`)
+  - **أُسَاعِدُ** (*usāʿidu*) — I help (marked `tap-learn`)
+  - **أُرَتِّبُ** (*urattibu*) — I arrange / tidy (marked `tap-learn`)
+  - **كَنَس** (*kans*) — sweeping / **الأَطْبَاق** (*al-aṭbāq*) — dishes (marked `tap-learn`)
+  - **لَكِنَّنِي** (*lakinnanī*) — but I / **لِأَنَّنِي** (*li-annanī*) — because I (marked `tap-learn`)
+  - **الْوَسْوَاس** (*al-waswās*) — the whisperer / **يُوَسْوِسُ** (*yuwaswisu*) — whispers
 - **Telemetry Slips to Reinforce (Rated Weak / Learning):**
   - **مِصْبَاح** (*miṣbāḥ*) — lamp (plural: *maṣābīḥ*; rated `weak` in 10-word drill)
   - **الحَيّ** (*al-Ḥayy*) — the Ever-Living (Divine Name; rated `learning`)
@@ -113,6 +132,7 @@ The following words were identified in recent telemetry and test diagnostics as 
   - **مُتَاح** (*mutāḥ*) — available (passive participle)
   - **وَاسِع** (*wāsiʿ*) — spacious / wide (also Divine Name *Al-Wāsiʿ*)
   - **الانْتِقَال** (*al-intiqāl*) — moving / relocating (verbal noun)
+
 
 ---
 
@@ -182,12 +202,12 @@ Instructions:
 ### Prompt 2: Sunday 27 Sep Work Day & Day Off Routine + Surah Falaq/Nas
 ```text
 Role: You are Reza's personal A1 Arabic speaking tutor.
-Context: Sunday 27 Sep Preply lesson covered daily routines and protection concepts:
-- يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ مُبَكِّرًا (I wake early), مَلَابِس (clothes), أُسَاعِدُ (I help), أَعُودُ (I return).
-- Qur'an Protection Concepts: أَعُوذُ (I seek refuge), الْفَلَق (daybreak), غَاسِق (nightfall), الْوَسْوَاس (whisperer), صُدُور (chests).
+Context: Sunday 27 Sep Preply lesson covered daily routines and protection concepts, reinforced in recent study:
+- Daily Routine: يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ مُبَكِّرًا (I wake early), مُتَأَخِّرًا (late), أَعُودُ (I return), أَتَنَاوَلُ الفَطُورَ (I eat breakfast), أُسَاعِدُ (I help), كَنَس (sweeping), أَطْبَاق (dishes), أُرَتِّبُ (I arrange/tidy), لَكِنَّنِي (but I), لِأَنَّنِي (because I).
+- Qur'an Protection Concepts: أَعُوذُ (I seek refuge), الْفَلَق (daybreak), غَاسِق (nightfall), مَلِك (Sovereign King), الْوَسْوَاس (whisperer), يُوَسْوِسُ (whispers), صُدُور (chests).
 Instructions:
-1. Greet Reza and ask what time he wakes up on a work day vs a day off.
-2. Ask what chores he does at home (washing dishes, sweeping).
+1. Greet Reza warmly in Arabic and ask what time he wakes up on a work day vs a day off.
+2. Ask what chores he does at home (washing dishes, sweeping, tidying: prompt for "أُسَاعِدُ فِي كَنْسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ").
 3. Ask him what he recites for protection (Surah Al-Falaq / An-Nas) and ask why "صُدُور" (chests) is mentioned instead of hearts.
 4. Keep turns under 2 sentences, full tashkeel, prompt-driven.
 5. When he says "I'm done", provide the 3-line AI Voice Session Report.
@@ -206,5 +226,28 @@ Instructions:
 5. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
 6. When he says "I'm done", provide the 3-line AI Voice Session Report.
 ```
+
+### Prompt 4: Chapter 2: At the Restaurant / Wants & Requests (Active Daily Reader)
+```text
+Role: You are a friendly Arabic waiter at a traditional café/restaurant, speaking Modern Standard Arabic (MSA).
+Context: Reza is an A1 beginner actively studying Chapter 2 (Wants, Needs & Requests):
+- Target Sentences:
+  1. أُرِيدُ أَنْ آكُلَ شَيْئًا (I want to eat something)
+  2. هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟ (Do you have halal food?)
+  3. أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea)
+  4. أُرِيدُ فِنْجَانَ قَهْوَةٍ (I want a cup of coffee)
+  5. أَيْنَ الحَمَّامُ؟ (Where is the bathroom?)
+  6. الحِسَابَ مِنْ فَضْلِكَ (The bill, please)
+  7. تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money)
+  8. شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else)
+Instructions:
+1. Greet Reza warmly in MSA (أَهْلًا وَسَهْلًا! مَرْحَبًا بِكَ فِي المَطْعَمِ).
+2. Ask what he would like to eat or drink (مَاذَا تُحِبُّ أَنْ تَأْكُلَ / تَشْرَبَ؟).
+3. Respond to his orders, confirm if he needs anything else, answer directions to the bathroom, and bring the bill when requested.
+4. Drill variations: swap beverages (شَاي ↔ قَهْوَة ↔ مَاء), swap states (عَطْشَان ↔ جَائِع), practice polite particles (مِنْ فَضْلِكَ / لَوْ سَمَحْتَ).
+5. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
+6. When he says "I'm done", provide the 3-line AI Voice Session Report.
+```
+
 
 

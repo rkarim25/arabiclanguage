@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muubkuif">
-  <link rel="stylesheet" href="css/style.css?v=muubkuif">
+  <link rel="stylesheet" href="css/fonts.css?v=muvil5qa">
+  <link rel="stylesheet" href="css/style.css?v=muvil5qa">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,11 +497,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=muubkuif"></script>
-<script src="js/curriculum.js?v=muubkuif"></script>
-<script src="js/app.js?v=muubkuif"></script>
-<script src="js/tracker.js?v=muubkuif"></script>
-<script src="js/plan.js?v=muubkuif"></script>
+<script src="js/progress-model.js?v=muvil5qa"></script>
+<script src="js/curriculum.js?v=muvil5qa"></script>
+<script src="js/app.js?v=muvil5qa"></script>
+<script src="js/tracker.js?v=muvil5qa"></script>
+<script src="js/plan.js?v=muvil5qa"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1412,8 +1412,9 @@ function buildClassAiPrompt(cls) {
       p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
     });
     p += `\nKey Routine & Qur'an Vocabulary:\n`;
-    p += `- Routine: work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), party (حَفْلَة), trip (رِحْلَة).\n`;
-    p += `- Protection Concepts: refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), whisperer (الْوَسْوَاس), slinker (الْخَنَّاس), chests (صُدُور).\n\n`;
+    p += `- Routine: work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), have meal (أَتَنَاوَلُ), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), tidy (أُرَتِّبُ), party (حَفْلَة), trip (رِحْلَة), but I (لَكِنَّنِي), because I (لِأَنَّنِي).\n`;
+    p += `- Protection Concepts: refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), Sovereign King (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), slinker (الْخَنَّاس), chests (صُدُور).\n\n`;
+
     p += `Goal & Voice Mode Instructions:\n`;
     p += `1. Conversational Roleplay: Ask me about my work routine (What time do you wake up? How do you travel? What do you do on your day off?).\n`;
     p += `2. Actively prompt me to speak in Arabic using our class sentences and variations:\n`;
