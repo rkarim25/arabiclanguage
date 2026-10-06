@@ -2411,7 +2411,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muvqnvdi";
+const DATA_V = "muwy84f6";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4066,6 +4066,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
   md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
   md += `- Recent Routine & Chores Drill Items: return (أَعُودُ), have meal (أَتَنَاوَلُ), help (أُسَاعِدُ), dishes (أَطْبَاق), tidy (أُرَتِّبُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
+  md += `- Surah An-Nas Protection Concepts: King/Sovereign (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), chests (صُدُور)\n`;
   md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
   md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;
 
