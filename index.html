@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muxf6cez">
-  <link rel="stylesheet" href="css/style.css?v=muxf6cez">
+  <link rel="stylesheet" href="css/fonts.css?v=muxp0i3t">
+  <link rel="stylesheet" href="css/style.css?v=muxp0i3t">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,12 +246,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muxf6cez"></script>
-<script src="js/curriculum.js?v=muxf6cez"></script>
-<script src="js/app.js?v=muxf6cez"></script>
-<script src="js/tracker.js?v=muxf6cez"></script>
-<script src="js/plan.js?v=muxf6cez"></script>
-<script src="js/account.js?v=muxf6cez"></script>
+<script src="js/progress-model.js?v=muxp0i3t"></script>
+<script src="js/curriculum.js?v=muxp0i3t"></script>
+<script src="js/app.js?v=muxp0i3t"></script>
+<script src="js/tracker.js?v=muxp0i3t"></script>
+<script src="js/plan.js?v=muxp0i3t"></script>
+<script src="js/account.js?v=muxp0i3t"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3429,8 +3429,7 @@ function voteDaySentence(origIdx, type) {
   if (!s) return;
   const sKey = `chap:${curChap.num}:${origIdx}`;
   const curVote = (typeof getItemVote === "function") ? getItemVote(sKey) : { vote: 0 };
-  const targetVote = type === "weak" ? -1 : 1;
-  const newType = (curVote.vote === targetVote) ? "clear" : type;
+  const newType = type;
 
   if (typeof setItemVote === "function") {
     setItemVote(sKey, newType, { src: "chap-sentence", text: s.ar });
@@ -3704,8 +3703,7 @@ function getVocabItemWeaknessRank(v, srs) {
 function voteChapVocabWord(encodedAr, type) {
   const ar = decodeURIComponent(encodedAr);
   const curVote = (typeof getItemVote === "function") ? getItemVote(ar) : { vote: 0 };
-  const targetVote = type === "weak" ? -1 : 1;
-  const newType = (curVote.vote === targetVote) ? "clear" : type;
+  const newType = type;
 
   if (typeof setItemVote === "function") {
     setItemVote(ar, newType, { src: "chap-vocab", ar });
@@ -3717,15 +3715,7 @@ function voteChapVocabWord(encodedAr, type) {
 function gradeChapVocabWord(encodedAr, bucket) {
   const ar = decodeURIComponent(encodedAr);
   setBucket(ar, bucket);
-  if (typeof setItemVote === "function") {
-    if (bucket === "weak" || bucket === "learning") {
-      setItemVote(ar, "weak", { src: "chap-vocab-rate", ar });
-    } else if (bucket === "strong") {
-      setItemVote(ar, "strong", { src: "chap-vocab-rate", ar });
-    } else {
-      setItemVote(ar, "clear", { src: "chap-vocab-rate", ar });
-    }
-  }
+  if (typeof syncVoteToBucket === "function") syncVoteToBucket(ar, bucket, { src: "chap-vocab-rate" });
   renderChapterVocab();
   renderDailySentences();
 }
@@ -3856,7 +3846,7 @@ function renderChapterVocab() {
                 <span style="font-size:14.5px;color:var(--ink);font-weight:500">${v.en}</span>
                 ${v.en ? `<button type="button" class="en-audio-badge" onclick="event.stopPropagation(); playEnglishOnly('${encodeURIComponent(v.en)}')" title="Listen to English translation only">🔊 En</button>` : ''}
                 ${fam ? `<span class="wbw-rf-badge" style="margin-left:6px;font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
-                ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid</div>` : ''}
+                ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid (+${vote.score || 1})</div>` : ''}
               </div>
             `;
           }

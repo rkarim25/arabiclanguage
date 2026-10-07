@@ -239,19 +239,18 @@ function setItemVote(key, voteType, meta) {
   const votes = getItemVotes();
   const cur = votes[key] || { vote: 0, score: 0 };
 
+  /* Each tap moves a net score one step: 👎 = -1, 👍 = +1. Repeated taps stack
+     (-1, -2, -3... = weaker, +1, +2... = more solid) and a tap the other way
+     walks it back towards 0 (cleared). The score only orders items; it never
+     touches the 1d/2d/7d/30d bucket, which is set by the rating circles alone. */
   if (voteType === "weak" || voteType === "down") {
-    cur.vote = -1;
-    // Repeated downvoting deepens the weakness priority score (-1, -2, -3...)
-    cur.score = (cur.score <= 0) ? (cur.score - 1) : -1;
-    setBucket(key, "weak");
+    cur.score = (cur.score || 0) - 1;
   } else if (voteType === "strong" || voteType === "up") {
-    cur.vote = 1;
-    cur.score = (cur.score >= 0) ? (cur.score + 1) : 1;
-    setBucket(key, "strong");
+    cur.score = (cur.score || 0) + 1;
   } else if (voteType === "clear" || voteType === "reset") {
-    cur.vote = 0;
     cur.score = 0;
   }
+  cur.vote = cur.score < 0 ? -1 : cur.score > 0 ? 1 : 0;
   cur.u = Date.now();
   if (meta) cur.meta = meta;
   votes[key] = cur;
@@ -268,6 +267,13 @@ function setItemVote(key, voteType, meta) {
 
   if (typeof autoSync === "function") autoSync();
   return cur;
+}
+
+/* Rating a word 30d/7d/Retire retires a stale "weak" thumb score; rating it 2d/1d retires a stale "solid" one. */
+function syncVoteToBucket(key, bucket, meta) {
+  const v = getItemVote(key);
+  const promoted = bucket === "strong" || bucket === "medium" || bucket === "never";
+  if ((promoted && v.vote === -1) || (!promoted && v.vote === 1)) setItemVote(key, "clear", meta);
 }
 
 /* categories (not mutually exclusive): every word is Quran and/or MSA */
@@ -2411,7 +2417,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "muxf6cez";
+const DATA_V = "muxp0i3t";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
