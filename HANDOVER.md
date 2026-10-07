@@ -75,14 +75,14 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-06` and verified active in Cloudflare KV. Preserves Sunday 27 Sep lesson focus, homework contract (59 keys, 2 tasks), and Chapter 2 restaurant & routine practice.
-- **Telemetry Verified (06 Oct 2026):** 2,891 logged events, 727 cards in SRS: 255 solid/strong (202 Box 5, 25 Box 4, 28 Box 3), 375 active learning (332 Box 1, 43 Box 2), 70 Box 0 (need review), 27 retired. Passed Chapter 1 test at 100%, passed Sunday mastery test at 100%. Active on Chapter 2 (At the Restaurant).
-- **Speak with AI Enhancements (06 Oct):**
-  - Updated `SPEAK_WITH_AI.md` Section 8 with **Prompt E** (Morning Schedule & Café Integration Drill) and **Prompt F** (Rapid-Fire Sentence Variation Matrix).
-  - Added Section 9 to `SPEAK_WITH_AI.md` with guidelines for Hands-Free Spoken Practice on Commute & Apple CarPlay.
-  - Updated `LEARNER_CONTEXT.md` Section 1, Section 3, and Section 7 with Prompts 5 & 6 and refreshed live telemetry statistics.
-  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with An-Nas protection vocabulary (`مَلِك`, `الْوَسْوَاس`, `يُوَسْوِسُ`, `صُدُور`) and freshly drilled routine verbs.
-  - Verified live prompt builders, dossier copy functions, and report history across `index.html`, `class.html`, `converse.html`, and `words.html`.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-07` and verified active in Cloudflare KV. Acknowledges 294 solid cards milestone, morning routine drill, and prompts for Chapter 2 & Placement check.
+- **Telemetry Verified (07 Oct 2026):** 3,053 logged events (+162 events), 745 cards in SRS: **294 solid/strong** in Box 3–5 (235 Box 5, 25 Box 4, 34 Box 3 — up from 255!), 381 active learning (338 Box 1, 43 Box 2), 70 Box 0 (need review), 27 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation at 73%.
+- **Speak with AI Enhancements (07 Oct):**
+  - Updated `SPEAK_WITH_AI.md` Section 8 with **Prompt G** (The Breakfast, Morning Newspaper & Return Routine).
+  - Updated `LEARNER_CONTEXT.md` Section 1, Section 3.D, and Section 7 with **Prompt 7** and newly deployed mnemonics (`جَزِيلًا` = thanks a GAZILLION, `سُرُور` = shurshuri joy tickle).
+  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with Oct 07 morning routine slips (`أَتَنَاوَلُ الفَطُورَ` rated weak 8x, `أَعُودُ`, `صَحِيفَة`, `التِّلْفَاز`, `السَّاعَةُ الثَّانِيَةَ عَشْرَةَ`).
+  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`).
+  - Verified all prompt builders and 1-click copy buttons across `index.html`, `class.html`, `converse.html`, and `words.html`.
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:

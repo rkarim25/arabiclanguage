@@ -15,11 +15,11 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (06 Oct 2026):** 2,891 recorded practice events; 727 cards in SRS (255 solid/strong: 202 Box 5, 25 Box 4, 28 Box 3; 375 active learning: 332 Box 1, 43 Box 2; 70 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Live Telemetry (07 Oct 2026):** 3,053 recorded practice events (+162 events); 745 cards in SRS (294 solid/strong in Box 3–5: 235 Box 5, 25 Box 4, 34 Box 3 — up from 255!; 381 active learning: 338 Box 1, 43 Box 2; 70 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
     - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
-  - **Recent Activity:** Oct 4 session drilling Chapter 2 restaurant & request sentences (re-played halal food 7 times, bill please 4 times, thirsty tea 4 times, coffee, bathroom); Oct 5 morning study (12+ min on `classes.html` drilling Sunday 27 Sep reading passage & Surah An-Nas, tapping and learning key routine verbs and whisperer protection vocabulary).
+  - **Recent Activity:** Oct 7 morning study (49 word ratings & item votes on `classes.html` drilling `ev-lesson-routine`, reinforcing work day routine and flagging meal/free-time verbs); Oct 4–5 sessions drilling Chapter 2 restaurant & request sentences and Surah An-Nas protection concepts. Two new mnemonics deployed: `جَزِيلًا` (thanks a GAZILLION) and `سُرُور` (shurshuri joy tickle).
 
 
 ---
@@ -111,9 +111,17 @@ The following words were identified in recent telemetry and test diagnostics as 
   - **أَنَا عَطْشَانُ، أُرِيدُ شَايًا** (*anā ʿaṭshānu, urīdu shāyan*) — I am thirsty, I want tea
   - **أَيْنَ الحَمَّامُ؟** (*ayna l-ḥammām?*) — Where is the bathroom? (upvoted item)
   - **أُرِيدُ فِنْجَانَ قَهْوَةٍ** (*urīdu finjāna qahwah*) — I want a cup of coffee
+- **Oct 07 Morning Routine Telemetry Slips (From 49 Word Ratings & Votes on classes.html):**
+  - **أَتَنَاوَلُ** (*atanāwalu*) — I eat / take a meal (rated `weak` 8x in Oct 07 drill; #1 struggle item)
+  - **الفَطُور** (*al-faṭūr*) — breakfast (rated `weak` and `learning` multiple times)
+  - **أَعُودُ** (*aʿūdu*) — I return / go back (rated `learning`)
+  - **صَحِيفَة** (*ṣaḥīfah*) — newspaper (rated `learning`)
+  - **التِّلْفَاز** (*at-tilfāz*) — television (rated `learning`)
+  - **السَّاعَةُ الثَّانِيَةَ عَشْرَةَ** (*as-sāʿatu ath-thāniyata ʿashrah*) — 12 o'clock (rated `learning`)
+- **Active Mnemonic Associations:**
+  - **جَزِيلًا** (*jazīlan*) = "thanks a GAZILLION"
+  - **سُرُور** (*surūr*) = "সুড়সুড়ি (shurshuri) tickle = the burst of joy / with pleasure"
 - **Recent Telemetry Slips & Studied Items (05 Oct Morning Routine Drill):**
-  - **أَعُودُ** (*aʿūdu*) — I return (marked `tap-learn`)
-  - **أَتَنَاوَلُ** (*atanāwalu*) — I eat / take a meal (marked `tap-learn`)
   - **أُسَاعِدُ** (*usāʿidu*) — I help (marked `tap-learn`)
   - **أُرَتِّبُ** (*urattibu*) — I arrange / tidy (marked `tap-learn`)
   - **كَنَس** (*kans*) — sweeping / **الأَطْبَاق** (*al-aṭbāq*) — dishes (marked `tap-learn`)
@@ -282,3 +290,21 @@ Instructions:
 5. Keep pace brisk, energetic, and encouraging. Strictly 1-2 short sentences per turn, full tashkeel.
 6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
+
+### Prompt 7: Morning Routine, Breakfast & Media Verification Drill (Oct 07 Focus)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor.
+Context: Reza needs a 5-minute spoken workout focusing on recent morning routine and meal vocabulary slips:
+- Target Weak Spots: أَتَنَاوَلُ الفَطُورَ (I eat breakfast — rated weak in today's drill), أَعُودُ (I return / go back), صَحِيفَة (newspaper), التِّلْفَاز (television), السَّاعَةُ الثَّانِيَةَ عَشْرَةَ (12 o'clock).
+- Solid Anchors: عَمَل (work), يَوْمُ العَمَلِ (work day), عُطْلَة (holiday / weekend), مُبَكِّرًا (early), مُتَأَخِّرًا (late), السَّاعَةُ الثَّامِنَةُ (8 o'clock).
+- Active Mnemonics: جَزِيلًا (thanks a GAZILLION), سُرُور (shurshuri joy tickle).
+Instructions:
+1. Greet Reza warmly in Arabic and ask what he does first after waking up early (prompt for "أَتَنَاوَلُ الفَطُورَ فِي الصَّبَاحِ").
+2. Ask what time he eats breakfast and what he drinks (swap tea / coffee / water).
+3. Ask if he reads the newspaper or watches television in his free time (prompt for "أَقْرَأُ الصَّحِيفَةَ" or "أُشَاهِدُ التِّلْفَازَ").
+4. Ask what time he returns home on a work day vs a day off (prompt for "أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ" vs "السَّاعَةِ الثَّانِيَةَ عَشْرَةَ").
+5. Drill pronoun variations: swap "I eat" (أَتَنَاوَلُ) to "do you eat?" (هَلْ تَتَنَاوَلُ؟) and "he eats" (يَتَنَاوَلُ).
+6. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
