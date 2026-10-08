@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muz43q8e">
-  <link rel="stylesheet" href="css/style.css?v=muz43q8e">
+  <link rel="stylesheet" href="css/fonts.css?v=muzst86k">
+  <link rel="stylesheet" href="css/style.css?v=muzst86k">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -36,6 +36,8 @@
       <button class="primary" id="micTest">🎤 Test my mic (5s)</button>
       <button class="small" id="selfToggle"></button>
       <a href="converse.html"><button class="small">🗣 practise with a live AI instead</button></a>
+      <a href="SPEAK_WITH_AI.md" target="_blank"><button class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📘 AI Voice Guide</button></a>
+      <button type="button" id="btnSpeakingDossier" class="small" style="background:var(--accent-soft);color:var(--accent);font-weight:600">📄 Copy Learner Dossier</button>
     </div>
     <div id="micLevelWrap" style="display:none;margin-top:12px">
       <div style="height:12px;border-radius:999px;background:var(--border);overflow:hidden">
@@ -67,9 +69,9 @@
   </div>
 </main>
 
-<script src="js/app.js?v=muz43q8e"></script>
-<script src="js/tracker.js?v=muz43q8e"></script>
-<script src="js/plan.js?v=muz43q8e"></script>
+<script src="js/app.js?v=muzst86k"></script>
+<script src="js/tracker.js?v=muzst86k"></script>
+<script src="js/plan.js?v=muzst86k"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -445,6 +447,15 @@ async function renderShadow() {
 paintSelfToggle();
 document.getElementById("selfToggle").onclick = () => setSelfGrade(MIC);
 document.getElementById("micTest").onclick = runMicTest;
+const btnSpeakingDossier = document.getElementById("btnSpeakingDossier");
+if (btnSpeakingDossier) {
+  btnSpeakingDossier.onclick = () => {
+    copyLearnerDossier().then(() => {
+      btnSpeakingDossier.textContent = "✓ Copied Dossier!";
+      setTimeout(() => btnSpeakingDossier.textContent = "📄 Copy Learner Dossier", 2000);
+    });
+  };
+}
 if (!SR) {
   document.getElementById("micVerdict").innerHTML =
     `<span style="color:var(--amber)">This browser has no speech recognition at all — everything below is in self-grading mode. Chrome or Edge give you the mic back; a <a href="converse.html">live AI partner</a> works anywhere.</span>`;

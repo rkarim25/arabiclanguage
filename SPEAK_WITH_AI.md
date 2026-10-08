@@ -49,6 +49,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 |---|---|---|---|
 | **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the day + variations | Daily 5-minute fluency habit |
 | **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
+| **Speaking Lab (`speaking.html`)** | Mic Drill & AI Tutor Bridge | Pronunciation self-check, shadow sentences + 1-click Learner Dossier copy | Pronunciation calibration & hands-free prep |
 | **End-of-Week Review (`converse.html`)** | Spoken Review & Oral Exam | All sentences of the current week + 8 real-life Umrah scenarios | Weekly oral check & progress benchmarking |
 
 ---
@@ -255,6 +256,35 @@ Instructions:
 6. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
+
+### H. The Breakfast Mnemonic Drill & Routine Mastery (Oct 08 Deploy)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting a rapid memory-hook reinforcement drill.
+Context: Reza has 4 newly deployed mnemonic hooks targeting his morning routine slips:
+1. أَتَنَاوَلُ (atanāwalu) = "a TUNA I WALLOW in" (I eat / have a meal)
+2. فَطُور (faṭūr) = mini-iftar (root f-ṭ-r: breaking overnight fast) + "a FAT TOUR of the table"
+3. أَعُودُ (aʿūdu) = 1 letter from أَعُوذُ — you return to your refuge (home) at day's end (plain dāl)
+4. صَحِيفَة (ṣaḥīfah) = shares the root ص-ح-ف ("pages") with المُصْحَف (the written Qur'an)
+- Anchors: جَزِيلًا (thanks a GAZILLION), بِكُلِّ سُرُورٍ (shurshuri joy tickle: with all pleasure).
+Instructions:
+1. Greet Reza warmly in Arabic: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! صَبَاحُ الخَيْرِ."
+2. Prompt him for his breakfast action: "مَاذَا تَفْعَلُ فِي الصَّبَاحِ؟" (Cue him to produce "أَتَنَاوَلُ الفَطُورَ" — celebrate the tuna/mini-iftar connection!).
+3. Ask what he reads while eating breakfast (prompt for "أَقْرَأُ الصَّحِيفَةَ" — remind him of the muṣḥaf pages root).
+4. Ask what time he returns home from work: "مَتَى تَعُودُ إِلَى البَيْتِ؟" (prompt for "أَعُودُ فِي السَّاعَةِ..." and reinforce the plain 'd' sound).
+5. Drill 2 rapid variations: swap "I eat" (أَتَنَاوَلُ) to "she eats" (تَتَنَاوَلُ) and "do you return?" (هَلْ تَعُودُ؟).
+6. Strict Voice Rules: Max 2 short sentences per turn, full tashkeel, wait for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Mnemonic Quick-Reference Matrix for AI Voice Partners
+| Word | Arabic | Mnemonic Association | Core Meaning |
+|---|---|---|---|
+| *atanāwalu* | `أَتَنَاوَلُ` | **"a TUNA I WALLOW in"** | I eat / take a meal |
+| *faṭūr* | `فَطُور` | **Mini-Iftar (root f-ṭ-r) / FAT TOUR of table** | Breakfast (break-fast) |
+| *aʿūdu* | `أَعُودُ` | **1 letter from أعوذ — return to refuge (home)** | I return / go back |
+| *ṣaḥīfah* | `صَحِيفَة` | **Shares pages-root with المُصْحَف** | Newspaper |
+| *jazīlan* | `جَزِيلًا` | **Thanks a GAZILLION** | Deeply / abundantly |
+| *surūr* | `سُرُور` | **Bengali shurshuri (সুড়সুড়ি) joy tickle** | Pleasure / delight |
 
 ---
 

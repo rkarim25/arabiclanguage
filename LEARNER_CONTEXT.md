@@ -15,11 +15,11 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (07 Oct 2026):** 3,053 recorded practice events (+162 events); 745 cards in SRS (294 solid/strong in Box 3–5: 235 Box 5, 25 Box 4, 34 Box 3 — up from 255!; 381 active learning: 338 Box 1, 43 Box 2; 70 need review: Box 0; 27 retired); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Live Telemetry (08 Oct 2026):** 3,053 recorded practice events; 745 cards in SRS (**294 solid/strong** in Box 3–5: 235 Box 5, 25 Box 4, 34 Box 3 — up from 255 cards from Tuesday burst!); 381 active learning (338 Box 1, 43 Box 2); 70 need review (Box 0); 27 retired; passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
     - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
-  - **Recent Activity:** Oct 7 morning study (49 word ratings & item votes on `classes.html` drilling `ev-lesson-routine`, reinforcing work day routine and flagging meal/free-time verbs); Oct 4–5 sessions drilling Chapter 2 restaurant & request sentences and Surah An-Nas protection concepts. Two new mnemonics deployed: `جَزِيلًا` (thanks a GAZILLION) and `سُرُور` (shurshuri joy tickle).
+  - **Recent Activity:** Oct 8 morning coach refresh (4 newly deployed memory hooks targeting breakfast and routine slips: أَتَنَاوَلُ "tuna wallow", فَطُور "mini-iftar", أَعُودُ "return to refuge", صَحِيفَة "pages-root with al-muṣḥaf"); Oct 7 morning drill on `classes.html` drilling `ev-lesson-routine`; Chapter 2 restaurant & request roleplay active.
 
 
 ---
@@ -119,6 +119,10 @@ The following words were identified in recent telemetry and test diagnostics as 
   - **التِّلْفَاز** (*at-tilfāz*) — television (rated `learning`)
   - **السَّاعَةُ الثَّانِيَةَ عَشْرَةَ** (*as-sāʿatu ath-thāniyata ʿashrah*) — 12 o'clock (rated `learning`)
 - **Active Mnemonic Associations:**
+  - **أَتَنَاوَلُ** (*atanāwalu*) = **"a TUNA I WALLOW in"** — picture wallowing in a giant tin of tuna at breakfast, eating your way out. (I eat / have a meal).
+  - **فَطُور** (*faṭūr*) = **Mini-Iftar (same root as إِفْطَار)** — every breakfast is a mini-iftar breaking your overnight fast. Bonus hook: a "FAT TOUR of the breakfast table".
+  - **أَعُودُ** (*aʿūdu*) = **1 letter from أَعُوذُ** — you return to your refuge (home) at day's end (root عَادَ / د; plain dāl, not dhāl).
+  - **صَحِيفَة** (*ṣaḥīfah*) = **Shares pages-root ص-ح-ف with المُصْحَف** — the muṣḥaf holds eternal pages, the ṣaḥīfa holds today's news.
   - **جَزِيلًا** (*jazīlan*) = "thanks a GAZILLION"
   - **سُرُور** (*surūr*) = "সুড়সুড়ি (shurshuri) tickle = the burst of joy / with pleasure"
 - **Recent Telemetry Slips & Studied Items (05 Oct Morning Routine Drill):**
@@ -307,4 +311,24 @@ Instructions:
 6. Strict Voice Rules: Under 2 sentences per turn, full tashkeel, pause for his answer.
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
+
+### Prompt 8: Breakfast Mnemonics & Morning Routine Mastery Drill (Oct 08 Deploy)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting a rapid memory-hook reinforcement drill.
+Context: Reza has 4 newly deployed mnemonic hooks targeting his morning routine slips:
+1. أَتَنَاوَلُ (atanāwalu) = "a TUNA I WALLOW in" (I eat / have a meal)
+2. فَطُور (faṭūr) = mini-iftar (root f-ṭ-r: breaking overnight fast) + "a FAT TOUR of the table"
+3. أَعُودُ (aʿūdu) = 1 letter from أَعُوذُ — you return to your refuge (home) at day's end (plain dāl)
+4. صَحِيفَة (ṣaḥīfah) = shares the root ص-ح-ف ("pages") with المُصْحَف (the written Qur'an)
+- Anchors: جَزِيلًا (thanks a GAZILLION), بِكُلِّ سُرُورٍ (shurshuri joy tickle: with all pleasure).
+Instructions:
+1. Greet Reza warmly in Arabic: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! صَبَاحُ الخَيْرِ."
+2. Prompt him for his breakfast action: "مَاذَا تَفْعَلُ فِي الصَّبَاحِ؟" (Cue him to produce "أَتَنَاوَلُ الفَطُورَ" — celebrate the tuna/mini-iftar connection!).
+3. Ask what he reads while eating breakfast (prompt for "أَقْرَأُ الصَّحِيفَةَ" — remind him of the muṣḥaf pages root).
+4. Ask what time he returns home from work: "مَتَى تَعُودُ إِلَى البَيْتِ؟" (prompt for "أَعُودُ فِي السَّاعَةِ..." and reinforce the plain 'd' sound).
+5. Drill 2 rapid variations: swap "I eat" (أَتَنَاوَلُ) to "she eats" (تَتَنَاوَلُ) and "do you return?" (هَلْ تَعُودُ؟).
+6. Strict Voice Rules: Max 2 short sentences per turn, full tashkeel, wait for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
 
