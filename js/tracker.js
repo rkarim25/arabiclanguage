@@ -91,6 +91,10 @@ function _mergeRemoteState(remote) {
       else if (!(r.u || l.u) && r.b === "never" && l.b !== "never") srs[k] = r;
       return;
     }
+    /* scheduler cards (js/srs.js) carry stability/difficulty/history: the newer
+       write is the truth, on whichever device it happened. The box rule below
+       only arbitrates between two pre-stamp legacy cards. */
+    if (r.u && l.u && (typeof r.s === "number" || typeof l.s === "number")) { if (r.u > l.u) srs[k] = r; return; }
     if (l.b) return; // explicit local mark (know/repeat/later) = latest intent on this device
     if (r.box > l.box || (r.box === l.box && r.due > l.due)) srs[k] = r;
   });

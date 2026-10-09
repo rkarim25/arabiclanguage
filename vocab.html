@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,9 +52,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
-<script src="js/plan.js?v=mv1glewd"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
+<script src="js/plan.js?v=mv1heyd3"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -673,25 +674,7 @@ async function renderBrowseView(body) {
       `;
       tr.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
       const slot = tr.querySelector(".bucket-slot");
-      const bar = document.createElement("div");
-      bar.className = "bucket-bar";
-      BUCKETS.forEach(b => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.dataset.b = b.id;
-        btn.title = b.name;
-        btn.textContent = "✓";
-        const cur = bucketOf(key);
-        const isMatch = (b.id === cur) || (b.id === "strong" && cur === "know") || (b.id === "medium" && cur === "later") || (b.id === "learning" && cur === "repeat");
-        if (isMatch && cur !== "unmarked") btn.classList.add("sel", b.id === "never" ? "never" : "x");
-        btn.onclick = () => {
-          setBucket(key, b.id);
-          logEvent({ e: "bucket", key, b: b.id, src: "browse" });
-          refresh();
-        };
-        bar.appendChild(btn);
-      });
-      slot.appendChild(bar);
+      SRS.mountRateBar(slot, key, { src: "browse", onRate: () => refresh() });   // ✗ ≈ ✓ ★
       tbody.appendChild(tr);
       mountMnem(tr, tr.querySelector(".row-speak").parentElement, v.ar, key);
     });

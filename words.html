@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -154,7 +154,7 @@
         <span>Vocabulary Practice</span>
         <span class="arabic" style="color:var(--accent);font-size:26px">المُفْرَدَات</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Active recall · 10-word dynamic batches · 70/30 review ratio</p>
+      <p class="sub" style="margin:2px 0">Active recall · you give the verdict (✗ ≈ ✓ ★), the site sets the next date · 70/30 old/new</p>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div class="stat-strip">
@@ -209,15 +209,12 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <div>
           <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Words</h2>
-          <div class="srs-legend-bar">
-            <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
-            <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
-            <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
-            <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
-            <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
-          </div>
+          <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
-        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+        <span style="display:inline-flex;align-items:center;gap:8px">
+          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same ten again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
+          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+        </span>
       </div>
       <div class="sheet-wrap">
         <table class="sheet-table">
@@ -279,10 +276,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv1glewd"></script>
-<script src="js/curriculum.js?v=mv1glewd"></script>
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
+<script src="js/progress-model.js?v=mv1heyd3"></script>
+<script src="js/curriculum.js?v=mv1heyd3"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -335,6 +333,7 @@ const BATCH_SIZE = 10;
     });
 
     updateOverallStats();
+    const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
     load10Words();
     setupAudioSpeed();
   } catch (e) {
@@ -397,84 +396,37 @@ function load10Words() {
     if (m.question) missedWords.add(normalizeAr(m.question));
   });
 
-  // Eligible pool: exclude retired words and words rated during current sitting (session cooldown)
-  const eligible = pool.filter(w => {
-    const item = srs[w.key];
-    if (item && item.b === "never") return false;
-    if (SESSION_COOLDOWN.has(w.key)) return false; // Cooldown prevents immediate looping
-    return true;
-  });
-
-  const available = eligible.length >= BATCH_SIZE ? eligible : pool.filter(w => (srs[w.key] || {}).b !== "never");
-
-  // Categorize: Due items vs New items
-  const dueList = [];
-  const newList = [];
-
-  available.forEach(w => {
-    const item = srs[w.key];
-    const norm = normalizeAr(w.ar);
-    if (!item || !item.u) {
-      newList.push(w);
-    } else {
-      let weight = 0;
-      if (missedWords.has(norm)) weight += 100; // Prioritize test stumbles
-      if (item.due && item.due <= now) weight += 50; // Due for review
-      if (item.b === "weak" || item.b === "learning") weight += 30; // Weak stumbles
-      dueList.push({ w, weight });
-    }
-  });
-
-  dueList.sort((a, b) => b.weight - a.weight);
-
-  let chosen = [];
-  if (currentFilter === "weakest") {
-    const weakList = available.slice().sort((a, b) => {
-      const ia = srs[a.key];
-      const ib = srs[b.key];
-      const ba = (ia && ia.b) || (ia && ia.box >= 4 ? "strong" : ia && ia.box >= 2 ? "medium" : ia && ia.box === 1 ? "weak" : ia && ia.box === 0 ? "learning" : null);
-      const bb = (ib && ib.b) || (ib && ib.box >= 4 ? "strong" : ib && ib.box >= 2 ? "medium" : ib && ib.box === 1 ? "weak" : ib && ib.box === 0 ? "learning" : null);
-      const rank = bkt => (bkt === "learning" ? 0 : bkt === "weak" ? 1 : !bkt ? 2 : bkt === "medium" ? 3 : 4);
-      const diff = rank(ba) - rank(bb);
-      if (diff !== 0) return diff;
-      const failsA = (ia ? (ia.f || ia.slips || 0) : 0) + (missedWords.has(normalizeAr(a.ar)) ? 10 : 0);
-      const failsB = (ib ? (ib.f || ib.slips || 0) : 0) + (missedWords.has(normalizeAr(b.ar)) ? 10 : 0);
-      return failsB - failsA;
-    });
-    chosen = weakList.slice(0, BATCH_SIZE);
-  } else if (currentFilter === "due") {
-    chosen = dueList.slice(0, BATCH_SIZE).map(x => x.w);
-    if (chosen.length < BATCH_SIZE) {
-      chosen = chosen.concat(newList.slice(0, BATCH_SIZE - chosen.length));
-    }
-  } else if (currentFilter === "new") {
-    chosen = newList.slice(0, BATCH_SIZE);
-  } else {
-    // Golden 70/30 Ratio: 7 Due + 3 New
-    const targetDue = Math.min(7, dueList.length);
-    const targetNew = Math.min(BATCH_SIZE - targetDue, newList.length);
-    
-    chosen = dueList.slice(0, targetDue).map(x => x.w);
-    chosen = chosen.concat(newList.slice(0, targetNew));
-
-    // Fill remaining up to 10 if needed
-    if (chosen.length < BATCH_SIZE) {
-      const remainingDue = dueList.slice(targetDue).map(x => x.w);
-      chosen = chosen.concat(remainingDue.slice(0, BATCH_SIZE - chosen.length));
-    }
-    if (chosen.length < BATCH_SIZE) {
-      const remainingNew = newList.slice(targetNew);
-      chosen = chosen.concat(remainingNew.slice(0, BATCH_SIZE - chosen.length));
-    }
-  }
+  /* the scheduler builds the batch (js/srs.js): due = recall has sunk below 90%,
+     weakest = his last verdicts + recall, balanced = 7 old + 3 new, never empty */
+  const byKey = new Map(pool.map(x => [x.key, x]));
+  const boost = key => { const x = byKey.get(key); return x && missedWords.has(normalizeAr(x.ar)) ? 100 : 0; };
+  const mode = ["weakest", "due", "new"].includes(currentFilter) ? currentFilter : "balanced";
+  const chosen = SRS.buildBatch(pool, { size: BATCH_SIZE, mode, exclude: SESSION_COOLDOWN, boost, srs, now });
 
   const titleEl = document.getElementById("sessionTitle");
   if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Batch of 10 Weakest Words" : "Batch of 10 Words";
 
+  LAST_BATCH_KEYS = chosen.map(x => x.key);
   ACTIVE_WORDS = chosen.slice(0, BATCH_SIZE);
   render10Cards();
 }
 const load20Words = load10Words; // Backward compatibility
+let LAST_BATCH_KEYS = [];
+/* ↻ the same ten again, weakest first — his verdicts decide the order, not him */
+function redoBatch() {
+  if (!LAST_BATCH_KEYS.length) { load10Words(); return; }
+  stopAudio();
+  REVEALED.clear();
+  const chosen = SRS.buildBatch(MASTER_WORDS, { size: BATCH_SIZE, mode: "redo", redoKeys: LAST_BATCH_KEYS });
+  const titleEl = document.getElementById("sessionTitle");
+  if (titleEl) titleEl.textContent = "Redo — weakest first";
+  ACTIVE_WORDS = chosen;
+  LAST_BATCH_KEYS = chosen.map(x => x.key);
+  logEvent({ e: "redo-batch", kind: "words", n: chosen.length, t: Date.now() });
+  render10Cards();
+  const list = document.getElementById("wordList");
+  if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 function render10Cards() {
   const srs = getSrs();
@@ -546,13 +498,7 @@ function render10Cards() {
           `}
         </td>
         <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateWord('${w.key}', 'strong', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateWord('${w.key}', 'medium', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateWord('${w.key}', 'weak', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateWord('${w.key}', 'learning', ${idx})">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateWord('${w.key}', 'never', ${idx})">✓</button>
-          </div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateWord", [idx])}</div>
         </td>
       </tr>
     `;
@@ -589,42 +535,16 @@ function setDirection(dir) {
   render10Cards();
 }
 
-function rateWord(key, bucket, cardIdx) {
-  setBucket(key, bucket);
-  
-  // Update repetition count in SRS record
-  const srs = getSrs();
-  if (srs[key]) {
-    srs[key].reps = (srs[key].reps || 0) + 1;
-    store.set("ats-srs", srs);
-  }
-
-  // Session cooldown: block this word from reappearing in the very next batch today
-  SESSION_COOLDOWN.add(key);
-
+function rateWord(key, g, cardIdx) {
+  const nc = SRS.rate(key, g);                 // ✗ ≈ ✓ ★ → stability → next date
+  SESSION_COOLDOWN.add(key);                   // block this word from the very next batch today
   updateOverallStats();
-  
   const w = ACTIVE_WORDS[cardIdx];
   if (w) {
-    logEvent({
-      e: "vocab-rate",
-      key,
-      bucket,
-      wordAr: w.ar,
-      wordEn: w.en,
-      src: w.src,
-      t: Date.now()
-    });
+    logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, wordAr: w.ar, wordEn: w.en, src: w.src, t: Date.now() });
     autoSync();
   }
-
-  // Highlight chosen button
-  const row = document.getElementById("wrow-" + cardIdx) || document.getElementById("wcard-" + cardIdx);
-  if (row) {
-    row.querySelectorAll(".rate-btn").forEach(b => {
-      b.classList.toggle("selected", b.dataset.b === bucket);
-    });
-  }
+  SRS.paintBar(document.getElementById("wrow-" + cardIdx) || document.getElementById("wcard-" + cardIdx), key, nc);
   updateSessionProgress();
 }
 
@@ -638,8 +558,9 @@ function updateSessionProgress() {
     doneArea.innerHTML = `
       <div class="done-banner">
         <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Words Complete!</h3>
-        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have moved forward. Cooldown is active.</p>
+        <p style="margin:0 0 12px;font-size:14px">Each verdict set its own next date — nothing for you to decide. Redo now if you want them again, weakest first.</p>
         <button type="button" class="primary" onclick="load10Words()" style="font-size:15px;padding:9px 22px">Load Next Batch (10) →</button>
+        <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px;margin-left:8px" title="The same ten again, weakest first">↻ Redo these 10</button>
       </div>
     `;
   } else {
@@ -733,13 +654,7 @@ function renderMasterTable() {
             `<span class="exp-badge" style="background:#f0f9ff;color:#0284c7;font-size:10.5px;padding:2px 6px">Learning</span>`}
         </td>
         <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateMasterWord('${w.key}', 'strong', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateMasterWord('${w.key}', 'medium', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateMasterWord('${w.key}', 'weak', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateMasterWord('${w.key}', 'learning', '${encodeURIComponent(w.ar)}')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateMasterWord('${w.key}', 'never', '${encodeURIComponent(w.ar)}')">✓</button>
-          </div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encodeURIComponent(w.ar)])}</div>
         </td>
       </tr>
       ${fam ? `
@@ -775,14 +690,14 @@ function toggleMasterRootDrawer(idx) {
   row.style.display = isHidden ? "table-row" : "none";
 }
 
-function rateMasterWord(key, bucket, encodedAr) {
-  setBucket(key, bucket);
+function rateMasterWord(key, g, encodedAr) {
+  const nc = SRS.rate(key, g);
   if (encodedAr) {
     const ar = decodeURIComponent(encodedAr);
     const norm = normalizeAr(ar).replace(/^ال/, "");
-    if (norm) setBucket("tw:" + norm, bucket);
+    if (norm && getSrs()["tw:" + norm]) SRS.rate("tw:" + norm, g);   // a tapped-word twin rides along
   }
-  logEvent({ e: "vocab-rate", key, bucket, t: Date.now() });
+  logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, src: "master", t: Date.now() });
   autoSync();
   updateOverallStats();
   renderMasterTable();

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -222,15 +222,12 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <div>
           <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
-          <div class="srs-legend-bar">
-            <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
-            <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
-            <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
-            <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
-            <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
-          </div>
+          <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
-        <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+        <span style="display:inline-flex;align-items:center;gap:8px">
+          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same ten again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
+          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+        </span>
       </div>
       <div class="sentence-list" id="sentenceList">Loading sentences…</div>
       <div id="doneArea"></div>
@@ -285,10 +282,11 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv1glewd"></script>
-<script src="js/curriculum.js?v=mv1glewd"></script>
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
+<script src="js/progress-model.js?v=mv1heyd3"></script>
+<script src="js/curriculum.js?v=mv1heyd3"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -321,7 +319,6 @@ let currentFilter = "balanced";
 let bankFilter = "all";
 let promptDirection = "en-first";
 let audioIdx = 0;
-let isPlaying = false;
 const BATCH_SIZE = 10;
 
 (async () => {
@@ -375,6 +372,7 @@ const BATCH_SIZE = 10;
     });
 
     updateOverallStats();
+    const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
     load10Sentences();
     setupAudioSpeed();
   } catch (e) {
@@ -426,78 +424,34 @@ function load10Sentences() {
   else if (currentFilter === "quran") pool = MASTER_SENTENCES.filter(s => s.track === "quran");
   else if (currentFilter === "everyday") pool = MASTER_SENTENCES.filter(s => s.track === "everyday");
 
-  // Eligible pool: exclude retired and words in session cooldown
-  const eligible = pool.filter(s => {
-    const item = srs[s.key];
-    if (item && item.b === "never") return false;
-    if (SESSION_COOLDOWN.has(s.key)) return false;
-    return true;
-  });
-
-  const available = eligible.length >= BATCH_SIZE ? eligible : pool.filter(s => (srs[s.key] || {}).b !== "never");
-
-  const dueList = [];
-  const newList = [];
-
-  available.forEach(s => {
-    const item = srs[s.key];
-    if (!item || !item.u) {
-      newList.push(s);
-    } else {
-      let weight = 0;
-      if (item.due && item.due <= now) weight += 50;
-      if (item.b === "weak" || item.b === "learning") weight += 30;
-      dueList.push({ s, weight });
-    }
-  });
-
-  dueList.sort((a, b) => b.weight - a.weight);
-
-  let chosen = [];
-  if (currentFilter === "weakest") {
-    const weakList = eligible.slice().sort((a, b) => {
-      const ia = srs[a.key];
-      const ib = srs[b.key];
-      const ba = (ia && ia.b) || (ia && ia.box >= 4 ? "strong" : ia && ia.box >= 2 ? "medium" : ia && ia.box === 1 ? "weak" : ia && ia.box === 0 ? "learning" : null);
-      const bb = (ib && ib.b) || (ib && ib.box >= 4 ? "strong" : ib && ib.box >= 2 ? "medium" : ib && ib.box === 1 ? "weak" : ib && ib.box === 0 ? "learning" : null);
-      const rank = bkt => (bkt === "learning" ? 0 : bkt === "weak" ? 1 : !bkt ? 2 : bkt === "medium" ? 3 : 4);
-      const diff = rank(ba) - rank(bb);
-      if (diff !== 0) return diff;
-      const failsA = ia ? (ia.f || ia.slips || 0) : 0;
-      const failsB = ib ? (ib.f || ib.slips || 0) : 0;
-      return failsB - failsA;
-    });
-    chosen = weakList.slice(0, BATCH_SIZE);
-  } else if (currentFilter === "due") {
-    chosen = dueList.slice(0, BATCH_SIZE).map(x => x.s);
-    if (chosen.length < BATCH_SIZE) {
-      chosen = chosen.concat(newList.slice(0, BATCH_SIZE - chosen.length));
-    }
-  } else if (currentFilter === "new") {
-    chosen = newList.slice(0, BATCH_SIZE);
-  } else {
-    // Golden 70/30 Ratio: 7 Due + 3 New
-    const targetDue = Math.min(7, dueList.length);
-    const targetNew = Math.min(BATCH_SIZE - targetDue, newList.length);
-
-    chosen = dueList.slice(0, targetDue).map(x => x.s);
-    chosen = chosen.concat(newList.slice(0, targetNew));
-
-    if (chosen.length < BATCH_SIZE) {
-      const remainingDue = dueList.slice(targetDue).map(x => x.s);
-      chosen = chosen.concat(remainingDue.slice(0, BATCH_SIZE - chosen.length));
-    }
-    if (chosen.length < BATCH_SIZE) {
-      const remainingNew = newList.slice(targetNew);
-      chosen = chosen.concat(remainingNew.slice(0, BATCH_SIZE - chosen.length));
-    }
-  }
+  /* the scheduler builds the batch (js/srs.js): due = recall below 90%, weakest =
+     his last verdicts + recall, balanced = 7 old + 3 new, never empty */
+  const mode = ["weakest", "due", "new"].includes(currentFilter) ? currentFilter : "balanced";
+  const chosen = SRS.buildBatch(pool, { size: BATCH_SIZE, mode, exclude: SESSION_COOLDOWN, srs, now });
 
   const titleEl = document.getElementById("sessionTitle");
   if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Batch of 10 Weakest Sentences" : "Batch of 10 Sentences";
 
+  LAST_BATCH_KEYS = chosen.map(x => x.key);
   ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
   render10Cards();
+}
+
+let LAST_BATCH_KEYS = [];
+/* ↻ the same ten again, weakest first — his verdicts decide the order, not him */
+function redoBatch() {
+  if (!LAST_BATCH_KEYS.length) { load10Sentences(); return; }
+  stopAudio();
+  REVEALED.clear();
+  const chosen = SRS.buildBatch(MASTER_SENTENCES, { size: BATCH_SIZE, mode: "redo", redoKeys: LAST_BATCH_KEYS });
+  const titleEl = document.getElementById("sessionTitle");
+  if (titleEl) titleEl.textContent = "Redo — weakest first";
+  ACTIVE_SENTENCES = chosen;
+  LAST_BATCH_KEYS = chosen.map(x => x.key);
+  logEvent({ e: "redo-batch", kind: "sentences", n: chosen.length, t: Date.now() });
+  render10Cards();
+  const list = document.getElementById("sentenceList");
+  if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function render10Cards() {
@@ -530,13 +484,7 @@ function render10Cards() {
             <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
               👁️ Check ${isEnFirst ? 'Arabic sentence & vocabulary' : 'English translation & vocabulary'} ▾
             </div>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
-            </div>
+            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
           </div>
         ` : `
           <div class="s-revealed-body">
@@ -586,13 +534,7 @@ function render10Cards() {
 
           <div class="s-action-bar" style="margin-top:4px">
             <span style="font-size:11.5px;color:var(--muted)">Rate recall:</span>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">
-              <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateSentence('${s.key}', 'strong', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateSentence('${s.key}', 'medium', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateSentence('${s.key}', 'weak', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateSentence('${s.key}', 'learning', ${idx})">✓</button>
-              <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateSentence('${s.key}', 'never', ${idx})">✓</button>
-            </div>
+            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
           </div>
         `}
       </div>
@@ -628,49 +570,23 @@ function setDirection(dir) {
   render10Cards();
 }
 
-function rateSentence(key, bucket, cardIdx) {
-  setBucket(key, bucket);
-
-  const srs = getSrs();
-  if (srs[key]) {
-    srs[key].reps = (srs[key].reps || 0) + 1;
-    store.set("ats-srs", srs);
-  }
-
+/* a sentence verdict also grades the words inside it — they were met in context */
+function wordGradeFor(g) { return g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"; }
+function rateSentence(key, g, cardIdx) {
+  const nc = SRS.rate(key, g);                 // ✗ ≈ ✓ ★ → stability → next date
   SESSION_COOLDOWN.add(key);
-
   const s = ACTIVE_SENTENCES[cardIdx];
   if (s) {
-    // Grade word cards inside sentence to reinforce vocabulary
-    const g = (bucket === "strong" || bucket === "medium") ? "good" : "again";
-    (s.words || []).forEach(w => {
+    if (g !== "retire") (s.words || []).forEach(w => {
       const norm = normalizeAr(w[0]).replace(/^ال/, "");
-      if (norm) {
-        const wid = _wordKeyFor ? _wordKeyFor(norm) : null;
-        if (wid) gradeCard(wid, g);
-      }
+      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
+      if (wid) SRS.rate(wid, wordGradeFor(g));
     });
-
-    logEvent({
-      e: "sentence-rate",
-      key,
-      bucket,
-      ar: s.ar,
-      en: s.en,
-      src: s.src,
-      t: Date.now()
-    });
+    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
     autoSync();
   }
-
   updateOverallStats();
-
-  const row = document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx);
-  if (row) {
-    row.querySelectorAll(".rate-btn").forEach(b => {
-      b.classList.toggle("selected", b.dataset.b === bucket);
-    });
-  }
+  SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
   updateSessionProgress();
 }
 
@@ -684,8 +600,9 @@ function updateSessionProgress() {
     doneArea.innerHTML = `
       <div class="done-banner">
         <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Sentences Complete!</h3>
-        <p style="margin:0 0 12px;font-size:14px">Your spaced-repetition ratings have moved forward. Cooldown is active.</p>
+        <p style="margin:0 0 12px;font-size:14px">Each verdict set its own next date — nothing for you to decide. Redo now if you want them again, weakest first.</p>
         <button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Load Next Batch (10) →</button>
+        <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px;margin-left:8px" title="The same ten again, weakest first">↻ Redo these 10</button>
       </div>
     `;
   } else {
@@ -800,13 +717,7 @@ function renderMasterBank() {
             `<span style="color:var(--muted);font-size:11px">—</span>`}
         </td>
         <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
-            <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="rateMasterSentence('${s.key}', 'strong')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="rateMasterSentence('${s.key}', 'medium')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="rateMasterSentence('${s.key}', 'weak')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="rateMasterSentence('${s.key}', 'learning')">✓</button>
-            <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="rateMasterSentence('${s.key}', 'never')">✓</button>
-          </div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [])}</div>
         </td>
       </tr>
     `;
@@ -879,19 +790,16 @@ function toggleAllTblTr() {
   if (btnAll) btnAll.classList.toggle("active", allTblTrVisible);
 }
 
-function rateMasterSentence(key, bucket) {
-  setBucket(key, bucket);
+function rateMasterSentence(key, g) {
+  const nc = SRS.rate(key, g);
   const s = MASTER_SENTENCES.find(x => x.key === key);
   if (s) {
-    const g = (bucket === "strong" || bucket === "medium") ? "good" : "again";
-    (s.words || []).forEach(w => {
+    if (g !== "retire") (s.words || []).forEach(w => {
       const norm = normalizeAr(w[0]).replace(/^ال/, "");
-      if (norm) {
-        const wid = _wordKeyFor ? _wordKeyFor(norm) : null;
-        if (wid) gradeCard(wid, g);
-      }
+      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
+      if (wid) SRS.rate(wid, wordGradeFor(g));
     });
-    logEvent({ e: "sentence-rate", key, bucket, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
+    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
   }
   autoSync();
   updateOverallStats();

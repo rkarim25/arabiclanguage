@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,12 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv1glewd"></script>
-<script src="js/curriculum.js?v=mv1glewd"></script>
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
-<script src="js/plan.js?v=mv1glewd"></script>
-<script src="js/account.js?v=mv1glewd"></script>
+<script src="js/progress-model.js?v=mv1heyd3"></script>
+<script src="js/curriculum.js?v=mv1heyd3"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
+<script src="js/plan.js?v=mv1heyd3"></script>
+<script src="js/account.js?v=mv1heyd3"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3423,6 +3424,20 @@ function toggleAllDayReveal(reveal) {
   renderDailySentences();
 }
 
+/* ✗ ≈ ✓ ★ on a Daily Reader line — one card shared with the Sentences page and Review */
+function rateDaySentence(key, g, origIdx) {
+  if (!curChap || !curChap.sentences) return;
+  const s = curChap.sentences[origIdx];
+  if (!s) return;
+  if (typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
+  const nc = SRS.rate(key, g);
+  const srsNow = getSrs();
+  (s.words || []).forEach(w => { if (srsNow[w[0]]) SRS.rate(w[0], g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"); });
+  logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "chapters", t: Date.now() });
+  if (typeof autoSync === "function") autoSync();
+  SRS.paintBar(document.getElementById("srow-" + origIdx), key, nc);
+}
+
 function voteDaySentence(origIdx, type) {
   if (!curChap || !curChap.sentences) return;
   if (typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
@@ -3588,6 +3603,7 @@ function renderDailySentences() {
                   <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
                   <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
                 </div>
+                ${SRS.rateBarHtml(sKey, "rateDaySentence", [origIdx], { compact: true, retire: false })}
               </div>
             </div>
             <div class="s-content-wrap">
@@ -3798,6 +3814,11 @@ function drillRecord(idx, ok, how, extra) {
   const item = drillItem(idx);
   if (!curChap || !item) return;
   logEvent(Object.assign({ e: "sent-drill", chap: curChap.id, idx, rung: st.rung, ok: !!ok, how, en: item.en, t: Date.now() }, extra || {}));
+  // the drill is evidence about the base sentence: a clean pass is ★/✓, a miss is ✗
+  if (typeof SRS === "object" && SRS && SRS.rate) {
+    const strong = ok && extra && (extra.tier === "perfect" || (typeof extra.score === "number" && extra.score >= 0.8));
+    SRS.rate(`chap:${curChap.num}:${idx}`, ok ? (strong ? "solid" : "yes") : "no");
+  }
   if (typeof autoSync === "function") { try { autoSync(); } catch (e) {} }
 }
 function drillReveal(idx) {
@@ -3972,10 +3993,13 @@ function voteChapVocabWord(encodedAr, type) {
   renderDailySentences();
 }
 
-function gradeChapVocabWord(encodedAr, bucket) {
-  const ar = decodeURIComponent(encodedAr);
-  setBucket(ar, bucket);
+function gradeChapVocabWord(ar, g) {
+  if (/%[0-9A-Fa-f]{2}/.test(ar)) { try { ar = decodeURIComponent(ar); } catch (e) {} }
+  const nc = SRS.rate(ar, g);                        // ✗ ≈ ✓ ★ → the scheduler sets the date
+  const bucket = SRS.LEGACY_BUCKET[g] || g;
+  logEvent({ e: "vocab-rate", key: ar, bucket, g, s: nc.s, box: nc.box, wordAr: ar, src: "chapter", t: Date.now() });
   if (typeof syncVoteToBucket === "function") syncVoteToBucket(ar, bucket, { src: "chap-vocab-rate" });
+  if (typeof autoSync === "function") autoSync();
   renderChapterVocab();
   renderDailySentences();
 }
@@ -4121,13 +4145,7 @@ function renderChapterVocab() {
                     <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
                     <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
                   </div>
-                  <div class="rate-bar" data-key="${v.ar}">
-                    <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'medium')">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'learning')">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeChapVocabWord('${encodeURIComponent(v.ar)}', 'never')">✓</button>
-                  </div>
+                  <div class="rate-bar" data-key="${v.ar}">${SRS.rateBarHtml(v.ar, "gradeChapVocabWord", [], { compact: true })}</div>
                 </div>
               </td>
             </tr>

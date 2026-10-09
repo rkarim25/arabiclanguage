@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
 </head>
 <body>
 <main>
@@ -20,9 +20,10 @@
   </div>
 </main>
 
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
-<script src="js/plan.js?v=mv1glewd"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
+<script src="js/plan.js?v=mv1heyd3"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -39,7 +40,7 @@ const REVIEW_ONLY = new URLSearchParams(location.search).get("only");
    plan bar offered "72 due words" and Sentences-review looked empty. This must
    stay identical to Curriculum.isSentenceKey; that is what the comment above
    promises and it had quietly stopped being true. */
-const isSentenceKey = k => k.startsWith("s:") || k.startsWith("ph-") || /^story-\d+:/.test(k) || k.startsWith("gt:");
+const isSentenceKey = k => k.startsWith("s:") || k.startsWith("ph-") || k.startsWith("chap:") || /^story-\d+:/.test(k) || k.startsWith("gt:");
 function dueFiltered() {
   const all = dueCards();
   if (REVIEW_ONLY === "sentences") return all.filter(isSentenceKey);

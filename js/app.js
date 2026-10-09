@@ -140,6 +140,11 @@ const DAY = 24 * 60 * 60 * 1000;
 
 function getSrs() { return store.get("ats-srs", {}); }
 function gradeCard(key, grade) {
+  /* 2026-10-09: the scheduler (js/srs.js) owns the interval. again/hard/good/easy
+     become ✗ ≈ ✓ ★ and stability sets the date. The Leitner body below stays as
+     the fallback when srs.js is not loaded (and as the executable spec the shell
+     test runs). */
+  if (typeof SRS === "object" && SRS && typeof SRS.legacyGrade === "function") { SRS.legacyGrade(key, grade); return; }
   const srs = getSrs();
   const c = srs[key] || { box: 0, due: 0 };
   // Retired ("never") cards: a correct answer leaves them retired — that's the
@@ -192,6 +197,8 @@ function setBucket(key, b) {
   const srs = getSrs();
   const def = BUCKETS.find(x => x.id === b) || LEGACY_BUCKETS[b];
   if (!def) return;
+  // 30d/7d/2d/1d were HIS interval guesses; they now read as ★ ✓ ≈ ✗ and the scheduler decides
+  if (typeof SRS === "object" && SRS && typeof SRS.rate === "function") { SRS.rate(key, SRS.FROM_LEGACY[b] || b); return; }
   const canonicalId = def.id;
   const due = canonicalId === "never" ? NEVER_DUE : (b === "repeat" ? Date.now() + 10 * 60 * 1000 : Date.now() + def.days * DAY);
   const curItem = srs[key] || {};
@@ -2417,7 +2424,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv1glewd";
+const DATA_V = "mv1heyd3";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3008,7 +3015,7 @@ function fuzzyEn(typed, gloss) {
    Keys: "story-01:5", "fam-qwl:3", "qc:12", "qw:fatiha:2:1" */
 async function resolveCards(keys) {
   const needStories = new Set();
-  let needFams = false, needCore = false, needVerses = false, needEv = false, needGrammar = false, needPhrases = false;
+  let needFams = false, needCore = false, needVerses = false, needEv = false, needGrammar = false, needPhrases = false, needChapters = false;
   keys.forEach(k => {
     const sid = k.split(":")[0];
     if (sid === "qc") needCore = true;
@@ -3021,19 +3028,21 @@ async function resolveCards(keys) {
        twice and silently dropping those keys. Caught in the network trace on
        2026-08-30 while checking the week briefing. */
     else if (sid === "s" || sid === "w") { /* sentence-level keys: not word cards */ }
+    else if (sid === "chap") needChapters = true;
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;
     else if (sid.startsWith("ph-")) needPhrases = true;
     else needStories.add(sid);
   });
   const stories = {};
-  const [fams, core, verses, everyday, grammar, phrases] = await Promise.all([
+  const [fams, core, verses, everyday, grammar, phrases, chapters] = await Promise.all([
     needFams ? fetch("data/families.json").then(r => r.json()).then(d => d.families) : null,
     needCore ? fetch("data/quran-core.json").then(r => r.json()).then(d => d.words) : null,
     needVerses ? fetch("data/verses.json").then(r => r.json()).then(d => d.surahs) : null,
     needEv ? fetch("data/everyday.json").then(r => r.json()).then(d => d.groups) : null,
     needGrammar ? fetch("data/grammar.json").then(r => r.json()).then(d => d.patterns) : null,
     needPhrases ? fetch("data/phrases.json").then(r => r.json()).then(d => d.groups) : null,
+    needChapters ? fetch("data/chapters.json").then(r => r.json()).then(d => d.chapters).catch(() => null) : null,
     Promise.all([...needStories].map(async id => {
       try { stories[id] = await loadStory(id); } catch (e) { /* removed story */ }
     })),
@@ -3064,6 +3073,10 @@ async function resolveCards(keys) {
       const g = everyday && everyday.find(x => "ev-" + x.id === p[0]);
       const m = g && g.members[parseInt(p[1])];
       if (m) v = { ar: m.ar, en: m.en, tr: m.tr, note: "everyday: " + g.theme.split("—")[0].trim() };
+    } else if (p[0] === "chap") {
+      const ch = chapters && chapters.find(x => String(x.num) === p[1]);
+      const s = ch && ch.sentences && ch.sentences[parseInt(p[2])];
+      if (s) v = { ar: s.ar, en: s.en, tr: s.tr || "", note: "Chapter " + ch.num + (s.hint ? " — " + s.hint : "") };
     } else if (p[0].startsWith("ph-")) {
       const g = phrases && phrases.find(x => "ph-" + x.id === p[0]);
       const m = g && g.members[parseInt(p[1])];
@@ -3143,6 +3156,10 @@ function bucketSaidText(id) {
 }
 function mountBucketBar(slot, key, onSet) {
   if (!slot) return;
+  if (typeof SRS === "object" && SRS && typeof SRS.mountRateBar === "function") {
+    SRS.mountRateBar(slot, key, { src: "bar", onRate: (g, legacyId) => { if (onSet) onSet(legacyId); } });
+    return;
+  }
   const bar = document.createElement("div");
   bar.className = "bucket-bar";
   const said = document.createElement("span");

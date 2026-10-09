@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
-  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,11 +497,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv1glewd"></script>
-<script src="js/curriculum.js?v=mv1glewd"></script>
-<script src="js/app.js?v=mv1glewd"></script>
-<script src="js/tracker.js?v=mv1glewd"></script>
-<script src="js/plan.js?v=mv1glewd"></script>
+<script src="js/progress-model.js?v=mv1heyd3"></script>
+<script src="js/curriculum.js?v=mv1heyd3"></script>
+<script src="js/srs.js?v=mv1heyd3"></script>
+<script src="js/app.js?v=mv1heyd3"></script>
+<script src="js/tracker.js?v=mv1heyd3"></script>
+<script src="js/plan.js?v=mv1heyd3"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1293,14 +1294,7 @@ function renderVocabTable() {
                     <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'weak', this)" title="Mark weak / downvote (struggling recall)" aria-label="Mark weak">👎</button>
                     <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'strong', this)" title="Mark strong / upvote (solid recall)" aria-label="Mark strong">👍</button>
                   </div>
-                  <div class="rate-bar" data-key="${v.key}">
-                    <button type="button" class="rate-btn ${curBucket === 'strong' ? 'selected' : ''}" data-b="strong" title="30 days" onclick="gradeClassWord('${v.key}', 'strong', this)">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'medium' ? 'selected' : ''}" data-b="medium" title="7 days" onclick="gradeClassWord('${v.key}', 'medium', this)">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'weak' ? 'selected' : ''}" data-b="weak" title="2 days" onclick="gradeClassWord('${v.key}', 'weak', this)">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'learning' ? 'selected' : ''}" data-b="learning" title="1 day" onclick="gradeClassWord('${v.key}', 'learning', this)">✓</button>
-                    <button type="button" class="rate-btn ${curBucket === 'never' ? 'selected' : ''}" data-b="never" title="Retire" onclick="gradeClassWord('${v.key}', 'never', this)">✓</button>
-                    <span class="rate-feedback"></span>
-                  </div>
+                  <div class="rate-bar" data-key="${v.key}">${SRS.rateBarHtml(v.key, "gradeClassWord", [])}</div>
                 </div>
               </td>
             </tr>
@@ -1311,8 +1305,9 @@ function renderVocabTable() {
   `;
 }
 
-function gradeClassWord(key, bucket, btn) {
-  setBucket(key, bucket);
+function gradeClassWord(key, g, btn) {
+  const nc = SRS.rate(key, g);                       // ✗ ≈ ✓ ★ → the scheduler sets the date
+  const bucket = SRS.LEGACY_BUCKET[g] || g;          // the name the log has always carried
   vocabRevealed[key] = true;
 
   if (typeof syncVoteToBucket === "function") syncVoteToBucket(key, bucket, { src: "class-rate" });

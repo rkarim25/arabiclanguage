@@ -1440,3 +1440,31 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 .drill-answer { margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .drill-heard { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .sym-badge.drill-badge.done { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+
+/* ---------- ✗ ≈ ✓ ★ — the verdict bar (js/srs.js). He gives the verdict, the site sets the date. ---------- */
+.srs-bar { display: inline-flex; gap: 4px; align-items: center; direction: ltr; flex-wrap: wrap; vertical-align: middle; }
+.srs-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--card); padding: 0;
+  cursor: pointer; font-size: 13px; font-weight: 700; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.12s; color: var(--muted); font-family: inherit; }
+.srs-btn:hover { transform: scale(1.12); }
+.srs-btn.no     { border-color: #ef4444; color: #dc2626; background: #fef2f2; }
+.srs-btn.maybe  { border-color: #d97706; color: #b45309; background: #fffbeb; }
+.srs-btn.yes    { border-color: #0284c7; color: #0369a1; background: #f0f9ff; }
+.srs-btn.solid  { border-color: #10b981; color: #047857; background: #ecfdf5; }
+.srs-btn.retire { border-color: #cbd5e1; color: #94a3b8; background: #f8fafc; font-size: 12px; margin-left: 4px; }
+.srs-btn.sel { color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(0,0,0,0.08); }
+.srs-btn.no.sel     { background: #dc2626; border-color: #dc2626; }
+.srs-btn.maybe.sel  { background: #d97706; border-color: #d97706; }
+.srs-btn.yes.sel    { background: #0284c7; border-color: #0284c7; }
+.srs-btn.solid.sel  { background: #059669; border-color: #059669; }
+.srs-btn.retire.sel { background: #64748b; border-color: #64748b; }
+.srs-said { font-size: 11.5px; color: var(--accent); margin-left: 6px; white-space: nowrap; font-weight: 600; }
+.srs-said:empty { display: none; }
+.srs-bar.compact { gap: 3px; }
+.srs-bar.compact .srs-btn { width: 22px; height: 22px; font-size: 11.5px; }
+.srs-bar.compact .srs-said { font-size: 10.5px; margin-left: 4px; }
+.srs-legend { display: inline-flex; gap: 10px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); align-items: center; }
+.srs-legend .leg { display: inline-flex; gap: 4px; align-items: center; }
+.srs-legend .leg.muted { opacity: 0.8; }
+.srs-btn.mini { width: 17px; height: 17px; font-size: 9.5px; cursor: default; pointer-events: none; }
