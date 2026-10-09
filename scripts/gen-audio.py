@@ -161,6 +161,16 @@ try:
 except Exception as e:
     print("Warning: could not parse classes.json", e)
 
+# Sentence variation drills (data/chapter-drills.json) — the 🎯 on each Daily Reader line
+try:
+    drills = loadd("chapter-drills.json")
+    for cid, sents in drills.get("chapters", {}).items():
+        for rungs in sents:
+            for d in rungs:
+                if d.get("ar"): add("ar", d["ar"])
+except Exception as e:
+    print("Warning: could not parse chapter-drills.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 

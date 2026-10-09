@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "note": "Per-sentence variation drills for the Daily Reader (Reza's 2026-10-09 pen note). For each chapter sentence: three rungs. Rung 1 = swap one word for one he already knows. Rung 2 = change the person, number or question form. Rung 3 = combine with another known sentence or add one known word (still ≤ 8 words). Every item is hand-checked for tashkeel and case endings. 'swap' is the one-line hint shown before the reveal. Audio: scripts/gen-audio.py reads this file; scripts/test-chapter-drills.js guards shape + clip coverage.",
+  "chapters": {
+    "chap-1": [
+      [
+        { "rung": 1, "en": "And upon you peace. (the reply)", "ar": "وَعَلَيْكُمُ السَّلَامُ", "tr": "wa-ʿalaykumu s-salām", "swap": "greeting → its reply (the words swap places)" },
+        { "rung": 2, "en": "Peace be upon you and the mercy of Allah.", "ar": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ", "tr": "as-salāmu ʿalaykum wa-raḥmatu llāh", "swap": "+ and the mercy of Allah" },
+        { "rung": 3, "en": "Peace be upon you, good morning.", "ar": "السَّلَامُ عَلَيْكُمْ، صَبَاحُ الخَيْرِ", "tr": "as-salāmu ʿalaykum, ṣabāḥu l-khayr", "swap": "join sentence 1 + sentence 2" }
+      ],
+      [
+        { "rung": 1, "en": "Morning of light. (the reply)", "ar": "صَبَاحُ النُّورِ", "tr": "ṣabāḥu n-nūr", "swap": "goodness → light" },
+        { "rung": 2, "en": "Good evening.", "ar": "مَسَاءُ الخَيْرِ", "tr": "masāʾu l-khayr", "swap": "morning → evening" },
+        { "rung": 3, "en": "Good morning, how are you?", "ar": "صَبَاحُ الخَيْرِ، كَيْفَ حَالُكَ؟", "tr": "ṣabāḥu l-khayr, kayfa ḥāluk?", "swap": "+ how are you?" }
+      ],
+      [
+        { "rung": 1, "en": "Thank you, my brother.", "ar": "شُكْرًا يَا أَخِي", "tr": "shukran yā akhī", "swap": "very much → my brother" },
+        { "rung": 2, "en": "You're welcome.", "ar": "عَفْوًا", "tr": "ʿafwan", "swap": "thanks → the reply" },
+        { "rung": 3, "en": "Thank you very much for the water.", "ar": "شُكْرًا جَزِيلًا عَلَى المَاءِ", "tr": "shukran jazīlan ʿalā l-māʾ", "swap": "+ for the water" }
+      ],
+      [
+        { "rung": 1, "en": "No, thank you.", "ar": "لَا، شُكْرًا", "tr": "lā, shukran", "swap": "yes → no" },
+        { "rung": 2, "en": "Yes, of course.", "ar": "نَعَمْ، طَبْعًا", "tr": "naʿam, ṭabʿan", "swap": "with pleasure → of course" },
+        { "rung": 3, "en": "With pleasure, here you go.", "ar": "بِكُلِّ سُرُورٍ، تَفَضَّلْ", "tr": "bi-kulli surūr, tafaḍḍal", "swap": "+ here you go" }
+      ],
+      [
+        { "rung": 1, "en": "I want tea, please.", "ar": "أُرِيدُ شَايًا مِنْ فَضْلِكَ", "tr": "urīdu shāyan min faḍlik", "swap": "water → tea" },
+        { "rung": 2, "en": "Do you want water?", "ar": "هَلْ تُرِيدُ مَاءً؟", "tr": "hal turīdu māʾan?", "swap": "I want → do you want?" },
+        { "rung": 3, "en": "We want coffee and water, please.", "ar": "نُرِيدُ قَهْوَةً وَمَاءً مِنْ فَضْلِكَ", "tr": "nurīdu qahwatan wa-māʾan min faḍlik", "swap": "I → we, + coffee and" }
+      ],
+      [
+        { "rung": 1, "en": "I am very thirsty.", "ar": "أَنَا عَطْشَانُ جِدًّا", "tr": "anā ʿaṭshānu jiddan", "swap": "hungry → thirsty" },
+        { "rung": 2, "en": "Are you hungry?", "ar": "هَلْ أَنْتَ جَائِعٌ؟", "tr": "hal anta jāʾiʿ?", "swap": "I am → are you?" },
+        { "rung": 3, "en": "I am hungry, I want food.", "ar": "أَنَا جَائِعٌ، أُرِيدُ طَعَامًا", "tr": "anā jāʾiʿ, urīdu ṭaʿāman", "swap": "+ I want food" }
+      ],
+      [
+        { "rung": 1, "en": "Where is the near hotel?", "ar": "أَيْنَ الفُنْدُقُ القَرِيبُ؟", "tr": "ayna l-funduqu l-qarīb?", "swap": "mosque → hotel" },
+        { "rung": 2, "en": "Where is the big mosque?", "ar": "أَيْنَ المَسْجِدُ الكَبِيرُ؟", "tr": "ayna l-masjidu l-kabīr?", "swap": "near → big" },
+        { "rung": 3, "en": "Is the mosque near here?", "ar": "هَلِ المَسْجِدُ قَرِيبٌ مِنْ هُنَا؟", "tr": "hali l-masjidu qarībun min hunā?", "swap": "where? → is it near here?" }
+      ],
+      [
+        { "rung": 1, "en": "How much is this book?", "ar": "كَمْ سِعْرُ هَذَا الكِتَابِ؟", "tr": "kam siʿru hādhā l-kitāb?", "swap": "this → this book" },
+        { "rung": 2, "en": "How much is the price for that?", "ar": "كَمِ السِّعْرُ لِذَلِكَ؟", "tr": "kami s-siʿru li-dhālik?", "swap": "this → that" },
+        { "rung": 3, "en": "The price is very high.", "ar": "السِّعْرُ غَالٍ جِدًّا", "tr": "as-siʿru ghālin jiddan", "swap": "question → statement, + very high" }
+      ],
+      [
+        { "rung": 1, "en": "Do you speak English?", "ar": "هَلْ تَتَكَلَّمُ الإِنْجِلِيزِيَّةَ؟", "tr": "hal tatakallamu l-injilīziyyah?", "swap": "Arabic → English" },
+        { "rung": 2, "en": "I speak a little Arabic.", "ar": "أَتَكَلَّمُ العَرَبِيَّةَ قَلِيلًا", "tr": "atakallamu l-ʿarabiyyata qalīlan", "swap": "do you speak → I speak, + a little" },
+        { "rung": 3, "en": "Do you (to a woman) speak Arabic?", "ar": "هَلْ تَتَكَلَّمِينَ العَرَبِيَّةَ؟", "tr": "hal tatakallamīna l-ʿarabiyyah?", "swap": "you (m) → you (f)" }
+      ],
+      [
+        { "rung": 1, "en": "See you tomorrow.", "ar": "إِلَى اللِّقَاءِ غَدًا", "tr": "ilā l-liqāʾi ghadan", "swap": "+ tomorrow" },
+        { "rung": 2, "en": "In Allah's protection. (the reply)", "ar": "فِي أَمَانِ اللهِ", "tr": "fī amāni llāh", "swap": "goodbye → its reply" },
+        { "rung": 3, "en": "Thank you very much, goodbye.", "ar": "شُكْرًا جَزِيلًا، مَعَ السَّلَامَةِ", "tr": "shukran jazīlan, maʿa s-salāmah", "swap": "join sentence 3 + goodbye" }
+      ]
+    ],
+    "chap-2": [
+      [
+        { "rung": 1, "en": "I want to drink something.", "ar": "أُرِيدُ أَنْ أَشْرَبَ شَيْئًا", "tr": "urīdu an ashraba shayʾan", "swap": "eat → drink" },
+        { "rung": 2, "en": "Do you want to eat something?", "ar": "هَلْ تُرِيدُ أَنْ تَأْكُلَ شَيْئًا؟", "tr": "hal turīdu an taʾkula shayʾan?", "swap": "I want → do you want? (both verbs change)" },
+        { "rung": 3, "en": "I want to have breakfast now.", "ar": "أُرِيدُ أَنْ أَتَنَاوَلَ الفَطُورَ الآنَ", "tr": "urīdu an atanāwala l-faṭūra l-ān", "swap": "eat something → have breakfast, + now" }
+      ],
+      [
+        { "rung": 1, "en": "Do you have tea?", "ar": "هَلْ عِنْدَكُمْ شَايٌ؟", "tr": "hal ʿindakum shāy?", "swap": "halal food → tea" },
+        { "rung": 2, "en": "Do you (one person) have a book?", "ar": "هَلْ عِنْدَكَ كِتَابٌ؟", "tr": "hal ʿindaka kitāb?", "swap": "you (plural) → you (one person)" },
+        { "rung": 3, "en": "We have halal food here.", "ar": "عِنْدَنَا طَعَامٌ حَلَالٌ هُنَا", "tr": "ʿindanā ṭaʿāmun ḥalālun hunā", "swap": "do you have? → we have, + here" }
+      ],
+      [
+        { "rung": 1, "en": "The menu, please.", "ar": "القَائِمَةَ مِنْ فَضْلِكَ", "tr": "al-qāʾimata min faḍlik", "swap": "bill → menu" },
+        { "rung": 2, "en": "The bill, please. (to a woman)", "ar": "الحِسَابَ مِنْ فَضْلِكِ", "tr": "al-ḥisāba min faḍliki", "swap": "please (m) → please (f)" },
+        { "rung": 3, "en": "I want the bill now, please.", "ar": "أُرِيدُ الحِسَابَ الآنَ مِنْ فَضْلِكَ", "tr": "urīdu l-ḥisāba l-āna min faḍlik", "swap": "+ I want, + now" }
+      ],
+      [
+        { "rung": 1, "en": "I am thirsty, I want water.", "ar": "أَنَا عَطْشَانُ، أُرِيدُ مَاءً", "tr": "anā ʿaṭshān, urīdu māʾan", "swap": "tea → water" },
+        { "rung": 2, "en": "Are you thirsty?", "ar": "هَلْ أَنْتَ عَطْشَانُ؟", "tr": "hal anta ʿaṭshān?", "swap": "I am → are you?" },
+        { "rung": 3, "en": "I am thirsty, I want a cup of tea.", "ar": "أَنَا عَطْشَانُ، أُرِيدُ كُوبَ شَايٍ", "tr": "anā ʿaṭshān, urīdu kūba shāy", "swap": "tea → a cup of tea" }
+      ],
+      [
+        { "rung": 1, "en": "Where is the kitchen?", "ar": "أَيْنَ المَطْبَخُ؟", "tr": "ayna l-maṭbakh?", "swap": "restroom → kitchen" },
+        { "rung": 2, "en": "Where is the restroom, please?", "ar": "أَيْنَ الحَمَّامُ مِنْ فَضْلِكَ؟", "tr": "ayna l-ḥammāmu min faḍlik?", "swap": "+ please" },
+        { "rung": 3, "en": "The restroom is there.", "ar": "الحَمَّامُ هُنَاكَ", "tr": "al-ḥammāmu hunāk", "swap": "where? → it is there" }
+      ],
+      [
+        { "rung": 1, "en": "I want a cup of tea.", "ar": "أُرِيدُ فِنْجَانَ شَايٍ", "tr": "urīdu finjāna shāy", "swap": "coffee → tea" },
+        { "rung": 2, "en": "I want two cups of coffee.", "ar": "أُرِيدُ فِنْجَانَيْ قَهْوَةٍ", "tr": "urīdu finjānay qahwah", "swap": "a cup → two cups (the dual)" },
+        { "rung": 3, "en": "I want a cup of coffee with milk.", "ar": "أُرِيدُ فِنْجَانَ قَهْوَةٍ بِالحَلِيبِ", "tr": "urīdu finjāna qahwatin bi-l-ḥalīb", "swap": "+ with milk" }
+      ],
+      [
+        { "rung": 1, "en": "Here you go, this is your book.", "ar": "تَفَضَّلْ، هَذَا كِتَابُكَ", "tr": "tafaḍḍal, hādhā kitābuk", "swap": "money → book" },
+        { "rung": 2, "en": "Here you go (to a woman), this is your money.", "ar": "تَفَضَّلِي، هَذَا مَالُكِ", "tr": "tafaḍḍalī, hādhā māluki", "swap": "to a man → to a woman" },
+        { "rung": 3, "en": "Here you go, this is the bill.", "ar": "تَفَضَّلْ، هَذَا هُوَ الحِسَابُ", "tr": "tafaḍḍal, hādhā huwa l-ḥisāb", "swap": "your money → the bill (needs 'huwa')" }
+      ],
+      [
+        { "rung": 1, "en": "Can you help us?", "ar": "هَلْ يُمْكِنُكَ مُسَاعَدَتُنَا؟", "tr": "hal yumkinuka musāʿadatunā?", "swap": "me → us" },
+        { "rung": 2, "en": "Can I help you?", "ar": "هَلْ يُمْكِنُنِي مُسَاعَدَتُكَ؟", "tr": "hal yumkinunī musāʿadatuk?", "swap": "you help me → I help you" },
+        { "rung": 3, "en": "Can you help me, please?", "ar": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي مِنْ فَضْلِكَ؟", "tr": "hal yumkinuka musāʿadatī min faḍlik?", "swap": "+ please" }
+      ],
+      [
+        { "rung": 1, "en": "I need this key.", "ar": "أَحْتَاجُ إِلَى هَذَا المِفْتَاحِ", "tr": "aḥtāju ilā hādhā l-miftāḥ", "swap": "book → key" },
+        { "rung": 2, "en": "Do you need this book?", "ar": "هَلْ تَحْتَاجُ إِلَى هَذَا الكِتَابِ؟", "tr": "hal taḥtāju ilā hādhā l-kitāb?", "swap": "I need → do you need?" },
+        { "rung": 3, "en": "I need water and food.", "ar": "أَحْتَاجُ إِلَى مَاءٍ وَطَعَامٍ", "tr": "aḥtāju ilā māʾin wa-ṭaʿām", "swap": "this book → water and food" }
+      ],
+      [
+        { "rung": 1, "en": "I don't want tea.", "ar": "لَا أُرِيدُ شَايًا", "tr": "lā urīdu shāyan", "swap": "anything else → tea" },
+        { "rung": 2, "en": "Do you want anything else?", "ar": "هَلْ تُرِيدُ شَيْئًا آخَرَ؟", "tr": "hal turīdu shayʾan ākhar?", "swap": "I don't want → do you want?" },
+        { "rung": 3, "en": "Thank you, I don't need anything else.", "ar": "شُكْرًا، لَا أَحْتَاجُ إِلَى شَيْءٍ آخَرَ", "tr": "shukran, lā aḥtāju ilā shayʾin ākhar", "swap": "want → need (takes 'ilā')" }
+      ]
+    ],
+    "chap-3": [
+      [
+        { "rung": 1, "en": "I have a reservation at the restaurant.", "ar": "عِنْدِي حَجْزٌ فِي المَطْعَمِ", "tr": "ʿindī ḥajzun fī l-maṭʿam", "swap": "hotel → restaurant" },
+        { "rung": 2, "en": "Do you have a reservation?", "ar": "هَلْ عِنْدَكَ حَجْزٌ؟", "tr": "hal ʿindaka ḥajz?", "swap": "I have → do you have?" },
+        { "rung": 3, "en": "We have a reservation at the hotel today.", "ar": "عِنْدَنَا حَجْزٌ فِي الفُنْدُقِ اليَوْمَ", "tr": "ʿindanā ḥajzun fī l-funduqi l-yawm", "swap": "I → we, + today" }
+      ],
+      [
+        { "rung": 1, "en": "Where is the car key?", "ar": "أَيْنَ مِفْتَاحُ السَّيَّارَةِ؟", "tr": "ayna miftāḥu s-sayyārah?", "swap": "room → car" },
+        { "rung": 2, "en": "This is the room key.", "ar": "هَذَا مِفْتَاحُ الغُرْفَةِ", "tr": "hādhā miftāḥu l-ghurfah", "swap": "where is? → this is" },
+        { "rung": 3, "en": "I need the room key, please.", "ar": "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ مِنْ فَضْلِكَ", "tr": "aḥtāju ilā miftāḥi l-ghurfati min faḍlik", "swap": "where is? → I need, + please" }
+      ],
+      [
+        { "rung": 1, "en": "Take me to the mosque, please.", "ar": "خُذْنِي إِلَى المَسْجِدِ مِنْ فَضْلِكَ", "tr": "khudhnī ilā l-masjidi min faḍlik", "swap": "hotel → mosque" },
+        { "rung": 2, "en": "Take us to the station, please.", "ar": "خُذْنَا إِلَى المَحَطَّةِ مِنْ فَضْلِكَ", "tr": "khudhnā ilā l-maḥaṭṭati min faḍlik", "swap": "me → us, hotel → station" },
+        { "rung": 3, "en": "Take me to the airport quickly, please.", "ar": "خُذْنِي إِلَى المَطَارِ بِسُرْعَةٍ مِنْ فَضْلِكَ", "tr": "khudhnī ilā l-maṭāri bi-surʿatin min faḍlik", "swap": "hotel → airport, + quickly" }
+      ],
+      [
+        { "rung": 1, "en": "Where is the bus station?", "ar": "أَيْنَ مَحَطَّةُ الحَافِلَةِ؟", "tr": "ayna maḥaṭṭatu l-ḥāfilah?", "swap": "train → bus" },
+        { "rung": 2, "en": "Is the station near?", "ar": "هَلِ المَحَطَّةُ قَرِيبَةٌ؟", "tr": "hali l-maḥaṭṭatu qarībah?", "swap": "where? → is it near? (station is feminine)" },
+        { "rung": 3, "en": "Where is the train station? Is it far?", "ar": "أَيْنَ مَحَطَّةُ القِطَارِ؟ هَلْ هِيَ بَعِيدَةٌ؟", "tr": "ayna maḥaṭṭatu l-qiṭār? hal hiya baʿīdah?", "swap": "+ is it far?" }
+      ],
+      [
+        { "rung": 1, "en": "This is my luggage in the room.", "ar": "هَذِهِ أَمْتِعَتِي فِي الغُرْفَةِ", "tr": "hādhihi amtiʿatī fī l-ghurfah", "swap": "car → room" },
+        { "rung": 2, "en": "Is this your luggage?", "ar": "هَلْ هَذِهِ أَمْتِعَتُكَ؟", "tr": "hal hādhihi amtiʿatuk?", "swap": "my → your, + question" },
+        { "rung": 3, "en": "My luggage is in the car, not here.", "ar": "أَمْتِعَتِي فِي السَّيَّارَةِ، لَيْسَتْ هُنَا", "tr": "amtiʿatī fī s-sayyārah, laysat hunā", "swap": "+ not here (laysat)" }
+      ],
+      [
+        { "rung": 1, "en": "How much is the fare to the hotel?", "ar": "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟", "tr": "kami l-ujratu ilā l-funduq?", "swap": "there → the hotel" },
+        { "rung": 2, "en": "How much is the fare to the airport?", "ar": "كَمِ الأُجْرَةُ إِلَى المَطَارِ؟", "tr": "kami l-ujratu ilā l-maṭār?", "swap": "there → the airport" },
+        { "rung": 3, "en": "The fare is very expensive.", "ar": "الأُجْرَةُ غَالِيَةٌ جِدًّا", "tr": "al-ujratu ghāliyatun jiddan", "swap": "question → statement, + very expensive (f)" }
+      ],
+      [
+        { "rung": 1, "en": "Stop there, please.", "ar": "تَوَقَّفْ هُنَاكَ، لَوْ سَمَحْتَ", "tr": "tawaqqaf hunāk, law samaḥt", "swap": "here → there" },
+        { "rung": 2, "en": "Wait here, please.", "ar": "اِنْتَظِرْ هُنَا، لَوْ سَمَحْتَ", "tr": "intaẓir hunā, law samaḥt", "swap": "stop → wait" },
+        { "rung": 3, "en": "Stop here, near the mosque, please.", "ar": "تَوَقَّفْ هُنَا قُرْبَ المَسْجِدِ، لَوْ سَمَحْتَ", "tr": "tawaqqaf hunā qurba l-masjid, law samaḥt", "swap": "+ near the mosque" }
+      ],
+      [
+        { "rung": 1, "en": "My key is missing.", "ar": "مِفْتَاحِي مَفْقُودٌ", "tr": "miftāḥī mafqūd", "swap": "passport → key" },
+        { "rung": 2, "en": "My luggage is missing.", "ar": "أَمْتِعَتِي مَفْقُودَةٌ", "tr": "amtiʿatī mafqūdah", "swap": "passport → luggage (missing becomes feminine)" },
+        { "rung": 3, "en": "This is my passport, here you go.", "ar": "هَذَا جَوَازُ سَفَرِي، تَفَضَّلْ", "tr": "hādhā jawāzu safarī, tafaḍḍal", "swap": "is missing → this is, + here you go" }
+      ],
+      [
+        { "rung": 1, "en": "This is the room door.", "ar": "هَذَا بَابُ الغُرْفَةِ", "tr": "hādhā bābu l-ghurfah", "swap": "emergency → room" },
+        { "rung": 2, "en": "Where is the emergency door?", "ar": "أَيْنَ بَابُ الطَّوَارِئِ؟", "tr": "ayna bābu ṭ-ṭawāriʾ?", "swap": "this is → where is?" },
+        { "rung": 3, "en": "The emergency door is there, near the lift.", "ar": "بَابُ الطَّوَارِئِ هُنَاكَ قُرْبَ المِصْعَدِ", "tr": "bābu ṭ-ṭawāriʾi hunāk qurba l-miṣʿad", "swap": "+ there, near the lift" }
+      ],
+      [
+        { "rung": 1, "en": "Do you need help?", "ar": "هَلْ تَحْتَاجُ إِلَى مُسَاعَدَةٍ؟", "tr": "hal taḥtāju ilā musāʿadah?", "swap": "service → help" },
+        { "rung": 2, "en": "Yes, I need a taxi.", "ar": "نَعَمْ، أَحْتَاجُ إِلَى سَيَّارَةِ أُجْرَةٍ", "tr": "naʿam, aḥtāju ilā sayyārati ujrah", "swap": "do you need? → yes, I need, + a taxi" },
+        { "rung": 3, "en": "No thank you, I don't need anything.", "ar": "لَا شُكْرًا، لَا أَحْتَاجُ إِلَى شَيْءٍ", "tr": "lā shukran, lā aḥtāju ilā shayʾ", "swap": "question → polite refusal" }
+      ]
+    ]
+  }
+}

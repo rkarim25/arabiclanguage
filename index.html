@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=muzst86k">
-  <link rel="stylesheet" href="css/style.css?v=muzst86k">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1glewd">
+  <link rel="stylesheet" href="css/style.css?v=mv1glewd">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,12 +246,12 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=muzst86k"></script>
-<script src="js/curriculum.js?v=muzst86k"></script>
-<script src="js/app.js?v=muzst86k"></script>
-<script src="js/tracker.js?v=muzst86k"></script>
-<script src="js/plan.js?v=muzst86k"></script>
-<script src="js/account.js?v=muzst86k"></script>
+<script src="js/progress-model.js?v=mv1glewd"></script>
+<script src="js/curriculum.js?v=mv1glewd"></script>
+<script src="js/app.js?v=mv1glewd"></script>
+<script src="js/tracker.js?v=mv1glewd"></script>
+<script src="js/plan.js?v=mv1glewd"></script>
+<script src="js/account.js?v=mv1glewd"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2991,6 +2991,7 @@ function handleSentenceRowClick(event, origIdx) {
     loadQuranWordAudio();
     await Promise.all([
       fetch("data/verses.json").then(r => r.json()).then(d => { VERSES_DATA = d; }).catch(() => {}),
+      fetch("data/chapter-drills.json").then(r => r.json()).then(d => { CHAPTER_DRILLS = (d && d.chapters) || {}; }).catch(() => {}),
       loadFamIdx()
     ]);
   } catch (e) { console.error("Could not load initial data", e); }
@@ -3529,6 +3530,7 @@ function renderDailySentences() {
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
         <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest First</button>
+        ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of each sentence in turn — recall first, then reveal. Three rungs per sentence, each a little harder.">🎯 Drill round${drillRoundProgressLabel()}</button>` : ''}
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
@@ -3581,6 +3583,7 @@ function renderDailySentences() {
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Drill — say a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Drill">🎯</button>` : ''}
                 <div class="vote-badge-group">
                   <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
                   <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
@@ -3617,10 +3620,267 @@ function renderDailySentences() {
               <div class="wbw-drawer-slot" id="wbw-drawer-slot-day-${origIdx}"></div>
             </div>
           ` : ''}
+          ${sentenceDrills(origIdx).length ? `<div class="s-drill" id="day-drill-${origIdx}" style="display:${dayDrillOpen[origIdx] ? 'block' : 'none'}">${dayDrillOpen[origIdx] ? renderDayDrillHtml(origIdx) : ''}</div>` : ''}
         </div>
       `;
     }).join("")}
   `;
+}
+
+/* ==================== SENTENCE VARIATION DRILL (🎯) ====================
+   Reza's 2026-10-09 pen note: "for each sentence I can click a drill button
+   which prompts me to say a slightly different version … progressively more
+   advanced … every time it should give me the answer." Three hand-written rungs
+   per sentence live in data/chapter-drills.json. Recall first (say it / type
+   it), then reveal; the mic is graded exactly like speaking.html so a spoken
+   pass also counts as a PROVEN prompt for the speaking line. */
+let CHAPTER_DRILLS = {};
+let dayDrillOpen = {};
+let dayDrillState = {};
+let dayDrillRound = false;
+
+function sentenceDrills(idx) {
+  const c = curChap && CHAPTER_DRILLS[curChap.id];
+  return (c && c[idx]) || [];
+}
+function chapHasDrills() {
+  return !!(curChap && CHAPTER_DRILLS[curChap.id] && CHAPTER_DRILLS[curChap.id].length);
+}
+function drillLog() {
+  return (typeof store !== "undefined" && store.get("ats-log", [])) || [];
+}
+/* highest rung ever passed for this sentence — the ladder never resets */
+function drillRungDone(idx) {
+  if (!curChap) return 0;
+  let best = 0;
+  drillLog().forEach(x => {
+    if (x.e === "sent-drill" && x.chap === curChap.id && x.idx === idx && x.ok && x.rung > best) best = x.rung;
+  });
+  return best;
+}
+function drillRoundProgressLabel() {
+  if (!curChap || !curChap.sentences) return "";
+  const total = curChap.sentences.filter((s, i) => sentenceDrills(i).length).length;
+  const done = curChap.sentences.filter((s, i) => sentenceDrills(i).length && drillRungDone(i) >= 3).length;
+  return done ? ` · ${done}/${total}` : "";
+}
+function drillState(idx) {
+  if (!dayDrillState[idx]) {
+    dayDrillState[idx] = { rung: Math.min(drillRungDone(idx) + 1, 3), revealed: false, heard: "", result: null, listening: false };
+  }
+  return dayDrillState[idx];
+}
+function drillItem(idx) {
+  const list = sentenceDrills(idx);
+  const st = drillState(idx);
+  return list.find(d => d.rung === st.rung) || list[0] || null;
+}
+function toggleDayDrill(idx) {
+  const open = !dayDrillOpen[idx];
+  dayDrillOpen = {};
+  if (open) {
+    dayDrillOpen[idx] = true;
+    const st = drillState(idx);
+    st.revealed = false; st.result = null; st.heard = "";
+    if (curChap) saveChapterLine(curChap.id, idx);
+  } else {
+    dayDrillRound = false;
+  }
+  renderDailySentences();
+  if (open) {
+    const el = document.getElementById("srow-" + idx);
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    const inp = document.getElementById("drill-inp-" + idx);
+    if (inp && window.innerWidth > 700) inp.focus();
+  }
+}
+function nextDrillIdx(after) {
+  if (!curChap || !curChap.sentences) return -1;
+  const n = curChap.sentences.length;
+  for (let k = 1; k <= n; k++) {
+    const i = (after + k) % n;
+    if (sentenceDrills(i).length && drillRungDone(i) < 3) return i;
+  }
+  return -1;
+}
+function startDayDrillRound() {
+  dayDrillRound = true;
+  let i = nextDrillIdx(-1);
+  if (i < 0) {
+    /* every rung is done — a review round starts again at rung 1 of sentence 1 */
+    i = 0;
+    dayDrillState[0] = { rung: 1, revealed: false, result: null, heard: "", listening: false };
+  }
+  dayDrillOpen = {};
+  toggleDayDrill(i);
+}
+function setDrillRung(idx, r) {
+  const st = drillState(idx);
+  st.rung = r; st.revealed = false; st.result = null; st.heard = ""; st.listening = false;
+  renderDayDrillPanel(idx);
+}
+function renderDayDrillPanel(idx) {
+  const el = document.getElementById("day-drill-" + idx);
+  if (el) el.innerHTML = renderDayDrillHtml(idx);
+  const b = document.getElementById("btn-ddrill-" + idx);
+  if (b) { b.classList.toggle("done", drillRungDone(idx) >= 3); b.title = `Drill — say a variation of this sentence (${drillRungDone(idx)}/3 rungs done)`; }
+  const pill = document.getElementById("btnDayDrillRound");
+  if (pill) pill.textContent = "🎯 Drill round" + drillRoundProgressLabel();
+}
+function drillEsc(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function renderDayDrillHtml(idx) {
+  const item = drillItem(idx);
+  if (!item) return "";
+  const st = drillState(idx);
+  const done = drillRungDone(idx);
+  const hasMic = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  const rungs = [1, 2, 3].map(r => {
+    const cls = (r === st.rung ? " active" : "") + (r <= done ? " done" : "");
+    const lbl = r === 1 ? "1 · swap a word" : r === 2 ? "2 · change who / ask" : "3 · build on it";
+    return `<button type="button" class="drill-rung${cls}" onclick="setDrillRung(${idx}, ${r})" title="${r <= done ? 'Done — tap to practise again' : r === done + 1 ? 'Your next rung' : 'Skip ahead if you like'}">${r <= done ? '✓ ' : ''}${lbl}</button>`;
+  }).join("");
+
+  let body = "";
+  if (!st.revealed) {
+    body = `
+      <div class="drill-prompt">Say in Arabic: <b>${drillEsc(item.en)}</b></div>
+      <div class="drill-swap">Change: ${drillEsc(item.swap)}</div>
+      ${st.listening ? `<div class="drill-heard" id="drill-heard-${idx}">🔴 listening… say it now</div>` : ""}
+      <div class="drill-row">
+        ${hasMic ? `<button type="button" class="book-toggle-pill ${st.listening ? 'active' : ''}" onclick="drillMic(${idx})" title="Say it out loud — graded against the model sentence" ${st.listening ? 'disabled' : ''}>🎤 Say it</button>` : ""}
+        <input type="text" id="drill-inp-${idx}" class="arabic" placeholder="…or type it in Arabic" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();drillCheckTyped(${idx});}">
+        <button type="button" class="book-toggle-pill" onclick="drillCheckTyped(${idx})" title="Check what you typed">✓ Check</button>
+        <button type="button" class="book-toggle-pill" onclick="drillReveal(${idx})" title="Show the answer (then grade yourself honestly)">👁️ Show answer</button>
+      </div>`;
+  } else {
+    const res = st.result || {};
+    let verdict = "";
+    if (res.how === "mic") {
+      verdict = res.ok
+        ? `<span style="color:var(--accent);font-weight:700">${res.score >= 0.8 ? "✓ matches the model" : "✓ close — a different correct phrasing also counts"}</span>`
+        : `<span style="color:var(--red,#dc2626);font-weight:700">✗ not yet</span> <span style="color:var(--muted)">— listen, say it again, then 🎤 once more</span>`;
+      if (st.heard) verdict += `<div class="drill-heard">heard: <span class="arabic" dir="rtl">${drillEsc(st.heard)}</span></div>`;
+    } else if (res.how === "typed") {
+      verdict = res.tier === "perfect" ? `<span style="color:var(--accent);font-weight:700">✓ letter-perfect</span>`
+        : res.tier === "sound" ? `<span style="color:var(--warn,#d97706);font-weight:700">✓ right by sound</span> <span style="color:var(--muted)">— check the spelling below</span>`
+        : res.tier === "part" ? `<span style="color:var(--red,#dc2626);font-weight:700">${res.right} of ${res.total} words</span> <span style="color:var(--muted)">— compare, then try again</span>`
+        : `<span style="color:var(--red,#dc2626);font-weight:700">✗ not yet</span> <span style="color:var(--muted)">— compare, then try again</span>`;
+    } else if (res.how === "self") {
+      verdict = res.ok ? `<span style="color:var(--accent);font-weight:700">✓ you said it</span>` : `<span style="color:var(--red,#dc2626);font-weight:700">✗ missed</span> <span style="color:var(--muted)">— listen, say it, try again</span>`;
+    }
+    const passed = !!res.ok;
+    const nextLabel = st.rung < 3 ? "Next rung →" : (dayDrillRound && nextDrillIdx(idx) >= 0 ? "Next sentence →" : "Done ✓");
+    body = `
+      <div class="drill-prompt" style="font-size:14px;color:var(--muted)">${drillEsc(item.en)}</div>
+      <div class="drill-answer">
+        <span class="arabic" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;cursor:pointer" onclick="speak('${encodeURIComponent(item.ar)}', 0.8)" title="Listen">${item.ar}</span>
+        <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(item.ar)}', 0.8)" title="Listen" aria-label="Listen">🔊</button>
+        ${item.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic">${drillEsc(item.tr)}</div>` : ""}
+      </div>
+      <div style="margin-top:8px;font-size:13.5px">${verdict}</div>
+      <div class="drill-row">
+        ${!st.result ? `<span style="font-size:12.5px;color:var(--muted)">Did you say it right?</span>
+          <button type="button" class="book-toggle-pill" onclick="drillSelf(${idx}, true)">✓ Yes, I said it</button>
+          <button type="button" class="book-toggle-pill" onclick="drillSelf(${idx}, false)">✗ Missed</button>` : ""}
+        ${st.result && !passed ? `<button type="button" class="book-toggle-pill" onclick="drillRetry(${idx})">↺ Try again</button>` : ""}
+        ${passed ? `<button type="button" class="book-toggle-pill active" onclick="drillNext(${idx})">${nextLabel}</button>` : ""}
+        ${st.result ? `<button type="button" class="book-toggle-pill" onclick="drillRetry(${idx})" title="Say this one once more">🔁 Once more</button>` : ""}
+      </div>`;
+  }
+  return `
+    <div class="drill-rungs"><span>🎯 Variation</span>${rungs}</div>
+    ${body}`;
+}
+function drillRecord(idx, ok, how, extra) {
+  const st = drillState(idx);
+  const item = drillItem(idx);
+  if (!curChap || !item) return;
+  logEvent(Object.assign({ e: "sent-drill", chap: curChap.id, idx, rung: st.rung, ok: !!ok, how, en: item.en, t: Date.now() }, extra || {}));
+  if (typeof autoSync === "function") { try { autoSync(); } catch (e) {} }
+}
+function drillReveal(idx) {
+  const st = drillState(idx);
+  st.revealed = true; st.result = null;
+  renderDayDrillPanel(idx);
+  const item = drillItem(idx);
+  if (item) speak(item.ar, 0.8);
+}
+function drillSelf(idx, ok) {
+  const st = drillState(idx);
+  st.result = { how: "self", ok: !!ok };
+  drillRecord(idx, ok, "self");
+  renderDayDrillPanel(idx);
+}
+function drillRetry(idx) {
+  const st = drillState(idx);
+  st.revealed = false; st.result = null; st.heard = ""; st.listening = false;
+  renderDayDrillPanel(idx);
+  const inp = document.getElementById("drill-inp-" + idx);
+  if (inp && window.innerWidth > 700) inp.focus();
+}
+function drillNext(idx) {
+  const st = drillState(idx);
+  if (st.rung < 3) { setDrillRung(idx, st.rung + 1); return; }
+  if (dayDrillRound) {
+    const n = nextDrillIdx(idx);
+    if (n >= 0) { toggleDayDrill(n); return; }
+  }
+  dayDrillOpen = {};
+  dayDrillRound = false;
+  renderDailySentences();
+}
+function drillCheckTyped(idx) {
+  const inp = document.getElementById("drill-inp-" + idx);
+  const item = drillItem(idx);
+  if (!inp || !item) return;
+  const typed = inp.value.trim();
+  if (!typed) { inp.focus(); return; }
+  const target = String(item.ar).replace(/[.،؟!]/g, "");
+  const exact = arMatch(typed, target);
+  const g = exact ? null : writeMatchAr(typed, target);
+  const ok = exact || (g && g.ok);
+  const tier = exact ? "perfect" : ok ? "sound" : (g && g.right > 0) ? "part" : "miss";
+  const st = drillState(idx);
+  st.revealed = true;
+  st.result = { how: "typed", ok: !!ok, tier, right: g ? g.right : null, total: g ? g.total : null };
+  drillRecord(idx, ok, "typed", { typed, tier });
+  renderDayDrillPanel(idx);
+  if (!ok) speak(item.ar, 0.8);
+}
+async function drillMic(idx) {
+  const item = drillItem(idx);
+  const st = drillState(idx);
+  if (!item || st.listening) return;
+  if (typeof stopAllAudio === "function") stopAllAudio();
+  st.listening = true; st.heard = "";
+  renderDayDrillPanel(idx);
+  const r = await micListen("ar-SA", 6000, txt => {
+    const h = document.getElementById("drill-heard-" + idx);
+    if (h) h.innerHTML = `🔴 listening… <span class="arabic" dir="rtl">${drillEsc(txt)}</span>`;
+  });
+  st.listening = false;
+  if (r.err === "no-sr") {
+    st.heard = "";
+    renderDayDrillPanel(idx);
+    const h = document.getElementById("day-drill-" + idx);
+    if (h) h.insertAdjacentHTML("beforeend", `<div class="drill-heard">This browser has no speech recognition — type it, or reveal and grade yourself.</div>`);
+    return;
+  }
+  st.heard = r.heard || "";
+  /* graded exactly like speaking.html's prompts: share of model words heard */
+  const target = normalizeAr(item.ar).split(" ").filter(Boolean);
+  const heardW = new Set(normalizeAr(st.heard).split(" "));
+  const hit = target.filter(w => heardW.has(w)).length;
+  const score = target.length ? Math.round((hit / target.length) * 100) / 100 : 0;
+  const ok = st.heard ? (arMatch(st.heard, item.ar) || score >= 0.5) : false;
+  st.revealed = true;
+  st.result = { how: "mic", ok, score: ok && arMatch(st.heard, item.ar) ? 1 : score };
+  drillRecord(idx, ok, "mic", { heard: st.heard, score: st.result.score });
+  if (st.heard) logEvent({ e: "prompt", en: item.en, heard: st.heard, score: st.result.score, src: "sent-drill", t: Date.now() });
+  renderDayDrillPanel(idx);
+  if (!ok) speak(item.ar, 0.8);
 }
 
 /* ==================== CHAPTER VOCABULARY ENGINE ==================== */

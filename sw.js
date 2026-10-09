@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-muzst86k";
+const CACHE = "ats-mv1glewd";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -31,6 +31,7 @@ const CORE = [
   "data/frequency.json",              // probability of use — what the bursts are ranked by
   "data/ayah-audio.json",             // which ayat have a real recitation
   "data/classes.json",                // the class repository
+  "data/chapter-drills.json",         // 🎯 variation drills on every Daily Reader line
   "class.html", "words.html",
 ];
 
