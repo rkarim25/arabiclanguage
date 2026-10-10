@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1heyd3">
-  <link rel="stylesheet" href="css/style.css?v=mv1heyd3">
+  <link rel="stylesheet" href="css/fonts.css?v=mv1poqas">
+  <link rel="stylesheet" href="css/style.css?v=mv1poqas">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv1heyd3"></script>
-<script src="js/curriculum.js?v=mv1heyd3"></script>
-<script src="js/srs.js?v=mv1heyd3"></script>
-<script src="js/app.js?v=mv1heyd3"></script>
-<script src="js/tracker.js?v=mv1heyd3"></script>
-<script src="js/plan.js?v=mv1heyd3"></script>
-<script src="js/account.js?v=mv1heyd3"></script>
+<script src="js/progress-model.js?v=mv1poqas"></script>
+<script src="js/curriculum.js?v=mv1poqas"></script>
+<script src="js/srs.js?v=mv1poqas"></script>
+<script src="js/app.js?v=mv1poqas"></script>
+<script src="js/tracker.js?v=mv1poqas"></script>
+<script src="js/plan.js?v=mv1poqas"></script>
+<script src="js/account.js?v=mv1poqas"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -473,7 +473,7 @@ const CHAPTERS = [
     "num": 2,
     "title": "Chapter 2: Wants, Needs & Requests",
     "surahId": "falaq",
-    "grammar": null,
+    "grammar": {"title":"Wanting: أُرِيدُ + Thing vs. أُرِيدُ أَنْ + Action","text":"To want a thing, <b>أُرِيدُ</b> takes the noun directly: <b>أُرِيدُ فِنْجَانَ قَهْوَةٍ</b> = <i>I want a cup of coffee</i>. To want an action, bridge with <b>أَنْ</b> and the verb takes a soft -a ending: <b>أُرِيدُ أَنْ آكُلَ شَيْئًا</b> = <i>I want to eat something</i>. Needing uses إِلَى: <b>أَحْتَاجُ إِلَى هَذَا الكِتَابِ</b> = <i>I need this book</i>."},
     "sentences": [
       {
         "ar": "أُرِيدُ أَنْ آكُلَ شَيْئًا",
@@ -944,7 +944,7 @@ const CHAPTERS = [
     "num": 4,
     "title": "Chapter 4: Time, Routine & Actions",
     "surahId": "asr",
-    "grammar": null,
+    "grammar": {"title":"Past ـتُ vs. Present أَـ (Verb Tense)","text":"Past-tense 'I' verbs end in <b>ـتُ</b>: <b>قَرَأْتُ</b> = <i>I read (already done)</i>, <b>كَتَبْتُ</b> = <i>I wrote</i>. Present 'I' verbs start with <b>أَ</b>: <b>أَعْرِفُ</b> = <i>I know</i>. For the future just add <b>سَـ</b> to the present: <b>سَأَذْهَبُ</b> = <i>I will go</i>."},
     "sentences": [
       {
         "ar": "مَاذَا تَفْعَلُ اليَوْمَ؟",
@@ -1178,7 +1178,7 @@ const CHAPTERS = [
     "num": 5,
     "title": "Chapter 5: Questions & Meeting People",
     "surahId": "kawthar",
-    "grammar": null,
+    "grammar": {"title":"The Question Toolkit (أَدَوَات الاسْتِفْهَام)","text":"<b>هَلْ</b> opens a yes/no question: <b>هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟</b> = <i>is it possible you help me?</i>. The others ask for information: <b>مَا</b> = <i>what</i> (مَا اسْمُكَ؟), <b>مِنْ أَيْنَ</b> = <i>from where</i> (مِنْ أَيْنَ أَنْتَ؟), and <b>كَيْفَ</b> = <i>how</i> (كَيْفَ الحَالُ؟)."},
     "sentences": [
       {
         "ar": "مَا اسْمُكَ الكَرِيمُ؟",
@@ -1673,7 +1673,7 @@ const CHAPTERS = [
     "num": 7,
     "title": "Chapter 7: Shopping & The Market",
     "surahId": "quraysh",
-    "grammar": null,
+    "grammar": {"title":"This & That: هَذَا / هَذِهِ / ذَاكَ","text":"Pointing words stand alone before an indefinite word: <b>هَذَا رَخِيصٌ وَذَاكَ غَالٍ</b> = <i>this is cheap and that is expensive</i>. Before a noun with الـ they mean 'this X': كَمْ سِعْرُ <b>هَذَا القَمِيصِ</b>؟ = <i>how much is this shirt?</i>. Feminine nouns take <b>هَذِهِ</b>: هَذِهِ النُّقُودُ = <i>this money</i>."},
     "sentences": [
       {
         "ar": "كَمْ سِعْرُ هَذَا القَمِيصِ؟",
@@ -1919,7 +1919,7 @@ const CHAPTERS = [
     "num": 8,
     "title": "Chapter 8: The Conversation Repair Kit",
     "surahId": "kafirun",
-    "grammar": null,
+    "grammar": {"title":"Polite Commands (فِعْل الأَمْر)","text":"Command verbs are short and direct: <b>كَرِّرْ</b> = <i>repeat</i>, <b>تَكَلَّمْ</b> = <i>speak</i>, <b>اكْتُبْ</b> = <i>write</i>, <b>انْتَظِرْ</b> = <i>wait</i>. Soften any of them with مِنْ فَضْلِكَ or لَوْ سَمَحْتَ. To say what did NOT happen, use لَمْ + present verb: <b>لَمْ أَفْهَمْ</b> = <i>I did not understand</i>."},
     "sentences": [
       {
         "ar": "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟",
@@ -2157,7 +2157,7 @@ const CHAPTERS = [
     "num": 9,
     "title": "Chapter 9: The Mosque & Worship",
     "surahId": "fatiha",
-    "grammar": null,
+    "grammar": {"title":"We Did It: the ـنَا Ending","text":"A past verb ending in <b>ـنَا</b> means 'we did it': <b>صَلَّيْنَا جَمَاعَةً</b> = <i>we prayed in congregation</i>. In du'ā formulas the ـكَ on the verb is 'you': <b>جَزَاكَ اللَّهُ خَيْرًا</b> = <i>may Allah reward you</i> — literally 'may Allah reward YOU with good'."},
     "sentences": [
       {
         "ar": "أَيْنَ مَكَانُ الوُضُوءِ؟",
@@ -2391,7 +2391,7 @@ const CHAPTERS = [
     "num": 10,
     "title": "Chapter 10: Days, Weeks & Plans",
     "surahId": "nasr",
-    "grammar": null,
+    "grammar": {"title":"Time Phrases with فِي, and كَانَ for 'Was'","text":"<b>فِي</b> anchors a time of day: <b>فِي الصَّبَاحِ أَشْرَبُ الشَّايَ</b> = <i>in the morning I drink tea</i>. The present needs no 'is' (اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ), but the past needs <b>كَانَ</b>: <b>أَمْسِ كَانَ يَوْمَ الخَمِيسِ</b> = <i>yesterday was Thursday</i>."},
     "sentences": [
       {
         "ar": "اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ.",
@@ -4556,33 +4556,59 @@ function resetTestArea() {
 
 function runChapterTest() {
   const s = curChap.sentences;
-  const questions = [
-    {
-      q: `What is the meaning of: <b class="arabic" style="font-size:22px;color:var(--accent)">${s[0].ar}</b>?`,
-      opts: [s[0].en, s[1].en, s[2].en],
-      correct: 0
-    },
-    {
-      q: `How do you say in Arabic: <i>"${s[4].en}"</i>?`,
-      opts: [s[3].ar, s[4].ar, s[5].ar],
-      correct: 1
-    },
-    {
-      q: `What does <b class="arabic" style="font-size:22px;color:var(--accent)">${s[6].ar}</b> mean?`,
-      opts: [s[6].en, s[7].en, s[1].en],
-      correct: 0
-    },
-    {
-      q: `Choose the correct Arabic for: <i>"${s[8].en}"</i>:`,
-      opts: [s[2].ar, s[7].ar, s[8].ar],
-      correct: 2
-    },
-    {
-      q: `In this chapter, what does <b class="arabic" style="font-size:22px;color:var(--accent)">${s[2].ar}</b> mean?`,
-      opts: [s[9].en, s[2].en, s[5].en],
-      correct: 1
+  const shuffle = arr => {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
-  ];
+    return a;
+  };
+  const bigAr = ar => `<b class="arabic" style="font-size:22px;color:var(--accent)">${ar}</b>`;
+  const questions = [];
+
+  // 5 sentence questions on a fresh random draw, so a retake is never the same test
+  shuffle(s.map((_, i) => i)).slice(0, 5).forEach((idx, n) => {
+    const others = shuffle(s.filter((_, i) => i !== idx)).slice(0, 2);
+    if (n % 2 === 0) {
+      const opts = shuffle([s[idx].en, others[0].en, others[1].en]);
+      questions.push({ q: `What is the meaning of: ${bigAr(s[idx].ar)}?`, opts, correct: opts.indexOf(s[idx].en) });
+    } else {
+      const opts = shuffle([s[idx].ar, others[0].ar, others[1].ar]);
+      questions.push({ q: `How do you say in Arabic: <i>"${s[idx].en}"</i>?`, opts, correct: opts.indexOf(s[idx].ar) });
+    }
+  });
+
+  // 3 chapter-vocabulary questions, weakest words first
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  const vocab = getChapterVocabList(curChap).filter(v => v.en);
+  const ranked = vocab.slice().sort((a, b) => {
+    const ra = getVocabItemWeaknessRank(a, srs), rb = getVocabItemWeaknessRank(b, srs);
+    return (ra.rank - rb.rank) || (rb.fails - ra.fails);
+  });
+  ranked.slice(0, 3).forEach(v => {
+    const others = [];
+    for (const x of shuffle(vocab)) {
+      if (x.ar === v.ar || x.en === v.en || others.some(o => o.en === x.en)) continue;
+      others.push(x);
+      if (others.length === 2) break;
+    }
+    if (others.length < 2) return;
+    const opts = shuffle([v.en, others[0].en, others[1].en]);
+    questions.push({ q: `Chapter vocabulary — what does ${bigAr(v.ar)} mean?`, opts, correct: opts.indexOf(v.en) });
+  });
+
+  // 1 grammar question when the chapter has a pattern note
+  if (curChap.grammar && curChap.grammar.text) {
+    const m = curChap.grammar.text.match(/<b>([^<]+)<\/b>\s*(?:=|means)\s*<i>([^<]+)<\/i>/) ||
+              curChap.grammar.text.match(/<b>([^<]+)<\/b>\s*\(([^)]+)\)/);
+    if (m) {
+      const gAr = m[1], gEn = m[2];
+      const others = shuffle(s.filter(x => x.en !== gEn)).slice(0, 2);
+      const opts = shuffle([gEn, others[0].en, others[1].en]);
+      questions.push({ q: `📐 ${curChap.grammar.title} — what does ${bigAr(gAr)} mean?`, opts, correct: opts.indexOf(gEn) });
+    }
+  }
 
   let curQ = 0, score = 0;
   const area = document.getElementById("testArea");

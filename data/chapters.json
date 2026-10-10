@@ -214,7 +214,10 @@
       "num": 2,
       "title": "Chapter 2: Wants, Needs & Requests",
       "surahId": "falaq",
-      "grammar": null,
+      "grammar": {
+        "title": "Wanting: أُرِيدُ + Thing vs. أُرِيدُ أَنْ + Action",
+        "text": "To want a thing, <b>أُرِيدُ</b> takes the noun directly: <b>أُرِيدُ فِنْجَانَ قَهْوَةٍ</b> = <i>I want a cup of coffee</i>. To want an action, bridge with <b>أَنْ</b> and the verb takes a soft -a ending: <b>أُرِيدُ أَنْ آكُلَ شَيْئًا</b> = <i>I want to eat something</i>. Needing uses إِلَى: <b>أَحْتَاجُ إِلَى هَذَا الكِتَابِ</b> = <i>I need this book</i>."
+      },
       "sentences": [
         {
           "ar": "أُرِيدُ أَنْ آكُلَ شَيْئًا",
@@ -685,7 +688,10 @@
       "num": 4,
       "title": "Chapter 4: Time, Routine & Actions",
       "surahId": "asr",
-      "grammar": null,
+      "grammar": {
+        "title": "Past ـتُ vs. Present أَـ (Verb Tense)",
+        "text": "Past-tense 'I' verbs end in <b>ـتُ</b>: <b>قَرَأْتُ</b> = <i>I read (already done)</i>, <b>كَتَبْتُ</b> = <i>I wrote</i>. Present 'I' verbs start with <b>أَ</b>: <b>أَعْرِفُ</b> = <i>I know</i>. For the future just add <b>سَـ</b> to the present: <b>سَأَذْهَبُ</b> = <i>I will go</i>."
+      },
       "sentences": [
         {
           "ar": "مَاذَا تَفْعَلُ اليَوْمَ؟",
@@ -919,7 +925,10 @@
       "num": 5,
       "title": "Chapter 5: Questions & Meeting People",
       "surahId": "kawthar",
-      "grammar": null,
+      "grammar": {
+        "title": "The Question Toolkit (أَدَوَات الاسْتِفْهَام)",
+        "text": "<b>هَلْ</b> opens a yes/no question: <b>هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟</b> = <i>is it possible you help me?</i>. The others ask for information: <b>مَا</b> = <i>what</i> (مَا اسْمُكَ؟), <b>مِنْ أَيْنَ</b> = <i>from where</i> (مِنْ أَيْنَ أَنْتَ؟), and <b>كَيْفَ</b> = <i>how</i> (كَيْفَ الحَالُ؟)."
+      },
       "sentences": [
         {
           "ar": "مَا اسْمُكَ الكَرِيمُ؟",
@@ -1414,7 +1423,10 @@
       "num": 7,
       "title": "Chapter 7: Shopping & The Market",
       "surahId": "quraysh",
-      "grammar": null,
+      "grammar": {
+        "title": "This & That: هَذَا / هَذِهِ / ذَاكَ",
+        "text": "Pointing words stand alone before an indefinite word: <b>هَذَا رَخِيصٌ وَذَاكَ غَالٍ</b> = <i>this is cheap and that is expensive</i>. Before a noun with الـ they mean 'this X': كَمْ سِعْرُ <b>هَذَا القَمِيصِ</b>؟ = <i>how much is this shirt?</i>. Feminine nouns take <b>هَذِهِ</b>: هَذِهِ النُّقُودُ = <i>this money</i>."
+      },
       "sentences": [
         {
           "ar": "كَمْ سِعْرُ هَذَا القَمِيصِ؟",
@@ -1660,7 +1672,10 @@
       "num": 8,
       "title": "Chapter 8: The Conversation Repair Kit",
       "surahId": "kafirun",
-      "grammar": null,
+      "grammar": {
+        "title": "Polite Commands (فِعْل الأَمْر)",
+        "text": "Command verbs are short and direct: <b>كَرِّرْ</b> = <i>repeat</i>, <b>تَكَلَّمْ</b> = <i>speak</i>, <b>اكْتُبْ</b> = <i>write</i>, <b>انْتَظِرْ</b> = <i>wait</i>. Soften any of them with مِنْ فَضْلِكَ or لَوْ سَمَحْتَ. To say what did NOT happen, use لَمْ + present verb: <b>لَمْ أَفْهَمْ</b> = <i>I did not understand</i>."
+      },
       "sentences": [
         {
           "ar": "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟",
@@ -1898,7 +1913,10 @@
       "num": 9,
       "title": "Chapter 9: The Mosque & Worship",
       "surahId": "fatiha",
-      "grammar": null,
+      "grammar": {
+        "title": "We Did It: the ـنَا Ending",
+        "text": "A past verb ending in <b>ـنَا</b> means 'we did it': <b>صَلَّيْنَا جَمَاعَةً</b> = <i>we prayed in congregation</i>. In du'ā formulas the ـكَ on the verb is 'you': <b>جَزَاكَ اللَّهُ خَيْرًا</b> = <i>may Allah reward you</i> — literally 'may Allah reward YOU with good'."
+      },
       "sentences": [
         {
           "ar": "أَيْنَ مَكَانُ الوُضُوءِ؟",
@@ -2132,7 +2150,10 @@
       "num": 10,
       "title": "Chapter 10: Days, Weeks & Plans",
       "surahId": "nasr",
-      "grammar": null,
+      "grammar": {
+        "title": "Time Phrases with فِي, and كَانَ for 'Was'",
+        "text": "<b>فِي</b> anchors a time of day: <b>فِي الصَّبَاحِ أَشْرَبُ الشَّايَ</b> = <i>in the morning I drink tea</i>. The present needs no 'is' (اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ), but the past needs <b>كَانَ</b>: <b>أَمْسِ كَانَ يَوْمَ الخَمِيسِ</b> = <i>yesterday was Thursday</i>."
+      },
       "sentences": [
         {
           "ar": "اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ.",
