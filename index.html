@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv1poqas">
-  <link rel="stylesheet" href="css/style.css?v=mv1poqas">
+  <link rel="stylesheet" href="css/fonts.css?v=mv2nryek">
+  <link rel="stylesheet" href="css/style.css?v=mv2nryek">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -183,7 +183,7 @@
   <!-- SECTION 3: CONDITIONAL GRAMMAR NOTE -->
   <div id="grammarSection" style="display:none">
     <div class="grammar-box">
-      <h3 id="grammarTitle">📐 Pattern Insight</h3>
+      <h3 id="grammarTitle">3. 📐 Pattern Insight</h3>
       <p id="grammarBody"></p>
       <div style="margin-top:8px;text-align:right">
         <a href="grammar.html" style="font-size:12px;color:var(--amber);font-weight:600;text-decoration:none">Explore all grammar patterns →</a>
@@ -195,7 +195,7 @@
   <div class="card ai-box">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <div style="display:flex;align-items:center;gap:8px">
-        <h2 style="margin:0;font-size:15px">3. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+        <h2 style="margin:0;font-size:15px">4. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
         <a href="SPEAK_WITH_AI.md" target="_blank" class="small" style="font-size:11.5px;color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:2px 8px">📘 Guide</a>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -234,7 +234,7 @@
   <div class="test-box" id="testBox">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div>
-        <h2 style="margin:0;font-size:17px">4. 📝 Chapter Test (5 Mins)</h2>
+        <h2 style="margin:0;font-size:17px">5. 📝 Chapter Test (5 Mins)</h2>
         <p class="sub" style="margin:2px 0 0">Test your comprehension of today's sentences and ayats. Pass at 80%+ to clear this chapter.</p>
       </div>
       <span id="testScorePill" class="status-pill" style="font-size:13px">Untested</span>
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv1poqas"></script>
-<script src="js/curriculum.js?v=mv1poqas"></script>
-<script src="js/srs.js?v=mv1poqas"></script>
-<script src="js/app.js?v=mv1poqas"></script>
-<script src="js/tracker.js?v=mv1poqas"></script>
-<script src="js/plan.js?v=mv1poqas"></script>
-<script src="js/account.js?v=mv1poqas"></script>
+<script src="js/progress-model.js?v=mv2nryek"></script>
+<script src="js/curriculum.js?v=mv2nryek"></script>
+<script src="js/srs.js?v=mv2nryek"></script>
+<script src="js/app.js?v=mv2nryek"></script>
+<script src="js/tracker.js?v=mv2nryek"></script>
+<script src="js/plan.js?v=mv2nryek"></script>
+<script src="js/account.js?v=mv2nryek"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3027,7 +3027,7 @@ function loadChapter(chap, resumeLineIdx) {
   const gSec = document.getElementById("grammarSection");
   if (chap.grammar) {
     gSec.style.display = "block";
-    document.getElementById("grammarTitle").innerHTML = "📐 " + chap.grammar.title;
+    document.getElementById("grammarTitle").innerHTML = "3. 📐 " + chap.grammar.title;
     document.getElementById("grammarBody").innerHTML = chap.grammar.text;
   } else {
     gSec.style.display = "none";
@@ -3086,13 +3086,34 @@ function buildChapterAiPrompt(chap) {
     p += `\nGrammar Focus: ${chap.grammar.title} (${chap.grammar.text.replace(/<[^>]*>/g, '')})\n`;
   }
   p += `\nScenario: ${chap.aiScenario}\n\n`;
+
+  const chDrills = (typeof CHAPTER_DRILLS !== "undefined" && CHAPTER_DRILLS) ? CHAPTER_DRILLS[chap.id] : null;
+  if (chDrills && chDrills.length) {
+    p += `Target Sentence Variation Drills (Drill these progressive rungs!):\n`;
+    chap.sentences.forEach((s, idx) => {
+      const rungs = chDrills[idx];
+      if (rungs && rungs.length) {
+        p += `Sentence ${idx + 1} (${s.ar}):\n`;
+        rungs.forEach(r => {
+          p += `   - Rung ${r.rung} [${r.swap}]: ${r.ar} — "${r.en}"${r.tr ? ` (${r.tr})` : ''}\n`;
+        });
+      }
+    });
+    p += `\n`;
+  }
+
   p += `Goal & Voice Mode Instructions:\n`;
   p += `1. Start by greeting me warmly in Arabic and waiting for my response.\n`;
   p += `2. Actively prompt me to speak and test me on these 10 sentences and NATURAL VARIATIONS of them:\n`;
   p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
-  p += `   - Optional Review Challenge: If natural in context, weave in 1 of Reza's recent diagnostic slips to check retention using his active memory hooks (e.g. أَتَنَاوَلُ الفَطُورَ I have breakfast ['tuna wallow' + mini-iftar], أَعُودُ I return [plain d, return to refuge], أَقْرَأُ الصَّحِيفَةَ I read the newspaper [pages-root with al-muṣḥaf], أُشَاهِدُ التِّلْفَازَ I watch TV, أُرِيدُ أَنْ آكُلَ شَيْئًا I want to eat, هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ do you have halal food, الحِسَابَ مِنْ فَضْلِكَ the bill please, أَنَا عَطْشَانُ I am thirsty, أُسَاعِدُ I help, أُرَتِّبُ I arrange, مِصْبَاح lamp, الحَيّ the Ever-Living, السَّتَّار the Concealer of faults, خَال maternal uncle, سَرِير bed, مُرِيح comfortable, فُرْن oven).\n`;
+  p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
+  p += `     * أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — verb swap slip on Sentence 1!)\n`;
+  p += `     * الْوَسْوَاس (the repetitive whisperer — subtle evil promptings, rated weak)\n`;
+  p += `     * عُقَد (knots), حَاسِد (envier), الْخَنَّاس (the slinker), غَاسِق (intense nightfall)\n`;
+  p += `     * Routine slips: أَعُودُ (I return [plain d, return to refuge]), أَقْرَأُ الصَّحِيفَةَ (newspaper [pages-root with al-muṣḥaf]), أُرَتِّبُ (I arrange), أَنَامُ (I sleep)\n`;
+  p += `     * Celebrate win: الفَطُور (breakfast) is now solid thanks to the 'mini-iftar' / 'FAT TOUR' mnemonic!\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;

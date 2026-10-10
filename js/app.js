@@ -2424,7 +2424,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv1poqas";
+const DATA_V = "mv2nryek";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4087,10 +4087,14 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
 
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- Oct 07 Morning Routine Telemetry Focus: have breakfast (أَتَنَاوَلُ الفَطُورَ — rated weak 8x), return home (أَعُودُ), newspaper (صَحِيفَة), television (التِّلْفَاز), 12 o'clock (السَّاعَةُ الثَّانِيَةَ عَشْرَةَ)\n`;
+  md += `- **Active Telemetry Slips & Variation Misses (10 Oct):**\n`;
+  md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
+  md += `  - *الْوَسْوَاس* (the repetitive whisperer) — subtle evil promptings; rated weak in recent review\n`;
+  md += `  - *عُقَد* (knots), *حَاسِد* (envier), *الْخَنَّاس* (the slinker), *غَاسِق* (intense nightfall) — active learning in protection cluster\n`;
+  md += `  - *أُرَتِّبُ* (I tidy/arrange), *أَنَامُ* (I sleep), *أَعُودُ* (I return [plain d]), *صَحِيفَة* (newspaper) — active routine items\n`;
+  md += `  - *الفَطُور* (breakfast) — **celebrated win!** Promoted to solid via the mini-iftar / FAT TOUR mnemonic\n`;
   md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
   md += `- Mnemonics in Use: a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), return to refuge (أَعُودُ), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور)\n`;
-  md += `- Recent Routine & Chores Drill Items: return (أَعُودُ), have meal (أَتَنَاوَلُ), help (أُسَاعِدُ), dishes (أَطْبَاق), tidy (أُرَتِّبُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
   md += `- Surah An-Nas Protection Concepts: King/Sovereign (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), chests (صُدُور)\n`;
   md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
   md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;

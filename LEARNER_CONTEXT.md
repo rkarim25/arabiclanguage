@@ -15,11 +15,15 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (08 Oct 2026):** 3,053 recorded practice events; 745 cards in SRS (**294 solid/strong** in Box 3–5: 235 Box 5, 25 Box 4, 34 Box 3 — up from 255 cards from Tuesday burst!); 381 active learning (338 Box 1, 43 Box 2); 70 need review (Box 0); 27 retired; passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); currently advancing through Chapter 2: Wants, Needs & Requests (At the Restaurant, line 5/10); passed Lesson 9 exam at 89% (100% ear score); Sunday 27 Sep Untimed Mastery Test ready to sit.
+  - **Live Telemetry (10 Oct 2026):** 3,186 recorded practice events; 763 cards in SRS (**278 solid/strong** in Box 3–5: 218 Box 5, 25 Box 4, 35 Box 3); 380 active learning (337 Box 1, 43 Box 2); 78 need review (Box 0); 27 retired; passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); actively testing on-site progressive sentence variation drills (`sent-drill`).
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
     - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
-  - **Recent Activity:** Oct 8 morning coach refresh (4 newly deployed memory hooks targeting breakfast and routine slips: أَتَنَاوَلُ "tuna wallow", فَطُور "mini-iftar", أَعُودُ "return to refuge", صَحِيفَة "pages-root with al-muṣḥaf"); Oct 7 morning drill on `classes.html` drilling `ev-lesson-routine`; Chapter 2 restaurant & request roleplay active.
+  - **Recent Activity & Diagnostic Wins:**
+    - Chapter 2 cleared at 100% (5/5) with 9 fresh test questions (sentences, weak vocabulary, and *أُرِيدُ أَنْ + فعل* grammar insight).
+    - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
+    - Active Sentence Variation Drill: Handcrafted 3-rung variation drills deployed across Daily Reader chapters; first drill attempted on *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something).
+    - Tomorrow: Sunday 11 Oct 07:00 UK live Preply lesson.
 
 
 ---
@@ -104,6 +108,16 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 
 ### D. Current Diagnostic Focus & Review Vocabulary
 The following words were identified in recent telemetry and test diagnostics as requiring reinforcement:
+- **Active Telemetry Slips & Variation Misses (10 Oct):**
+  - **أُرِيدُ أَنْ أَشْرَبَ شَيْئًا** (*urīdu an ashraba shayʾan*) — I want to drink something (verb substitution slip on Chapter 2, Sentence 1 variation drill!)
+  - **الْوَسْوَاس** (*al-waswās*) — the repetitive whisperer (subtle, continuous evil promptings; rated `weak` in 09 Oct review)
+  - **عُقَد** (*ʿuqad*) — knots (rated `learning`)
+  - **حَاسِد** (*ḥāsid*) — envier (rated `learning`)
+  - **الْخَنَّاس** (*al-khannās*) — the slinker (retreating upon dhikr; rated `learning`)
+  - **غَاسِق** (*ghāsiq*) — intense nightfall (rated `learning`)
+  - **أُرَتِّبُ** (*urattibu*) — I arrange / tidy (rated `learning`)
+  - **أَنَامُ** (*anāmu*) — I sleep (rated `learning`)
+  - **Celebrated Mnemonic Win:** **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 - **Active Chapter 2 Practice Items (At the Restaurant / Wants & Requests):**
   - **أُرِيدُ أَنْ آكُلَ شَيْئًا** (*urīdu an ākula shayʾan*) — I want to eat something
   - **هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟** (*hal ʿindakum ṭaʿāmun ḥalāl?*) — Do you have halal food? (listened 7x)
@@ -111,13 +125,12 @@ The following words were identified in recent telemetry and test diagnostics as 
   - **أَنَا عَطْشَانُ، أُرِيدُ شَايًا** (*anā ʿaṭshānu, urīdu shāyan*) — I am thirsty, I want tea
   - **أَيْنَ الحَمَّامُ؟** (*ayna l-ḥammām?*) — Where is the bathroom? (upvoted item)
   - **أُرِيدُ فِنْجَانَ قَهْوَةٍ** (*urīdu finjāna qahwah*) — I want a cup of coffee
-- **Oct 07 Morning Routine Telemetry Slips (From 49 Word Ratings & Votes on classes.html):**
-  - **أَتَنَاوَلُ** (*atanāwalu*) — I eat / take a meal (rated `weak` 8x in Oct 07 drill; #1 struggle item)
-  - **الفَطُور** (*al-faṭūr*) — breakfast (rated `weak` and `learning` multiple times)
-  - **أَعُودُ** (*aʿūdu*) — I return / go back (rated `learning`)
-  - **صَحِيفَة** (*ṣaḥīfah*) — newspaper (rated `learning`)
-  - **التِّلْفَاز** (*at-tilfāz*) — television (rated `learning`)
-  - **السَّاعَةُ الثَّانِيَةَ عَشْرَةَ** (*as-sāʿatu ath-thāniyata ʿashrah*) — 12 o'clock (rated `learning`)
+- **Morning Routine Telemetry Reinforcement:**
+  - **أَتَنَاوَلُ** (*atanāwalu*) — I eat / take a meal (memory hook: "a TUNA I WALLOW in")
+  - **أَعُودُ** (*aʿūdu*) — I return / go back (1 letter from أعوذ: return to refuge, plain dāl)
+  - **صَحِيفَة** (*ṣaḥīfah*) — newspaper (shares pages-root ص-ح-ف with المُصْحَف)
+  - **التِّلْفَاز** (*at-tilfāz*) — television
+  - **السَّاعَةُ الثَّانِيَةَ عَشْرَةَ** (*as-sāʿatu ath-thāniyata ʿashrah*) — 12 o'clock
 - **Active Mnemonic Associations:**
   - **أَتَنَاوَلُ** (*atanāwalu*) = **"a TUNA I WALLOW in"** — picture wallowing in a giant tin of tuna at breakfast, eating your way out. (I eat / have a meal).
   - **فَطُور** (*faṭūr*) = **Mini-Iftar (same root as إِفْطَار)** — every breakfast is a mini-iftar breaking your overnight fast. Bonus hook: a "FAT TOUR of the breakfast table".
@@ -329,6 +342,46 @@ Instructions:
 5. Drill 2 rapid variations: swap "I eat" (أَتَنَاوَلُ) to "she eats" (تَتَنَاوَلُ) and "do you return?" (هَلْ تَعُودُ؟).
 6. Strict Voice Rules: Max 2 short sentences per turn, full tashkeel, wait for his answer.
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Prompt 9: Sunday 11 Oct Preply Pre-Class Warmup & Review (Routine, Chores & Mu'awwidhatayn)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting his Sunday Pre-Class warmup.
+Context: Reza has his live 1-on-1 Preply class at 07:00 UK. He needs a brisk 5-minute review covering the Working Day/Day Off routine, household chores, and the Mu'awwidhatayn protection concepts:
+- Working Day & Routines: يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ مُبَكِّرًا (I wake early), مُتَأَخِّرًا (late), أَتَنَاوَلُ الفَطُورَ (I eat breakfast), أَعُودُ (I return home), السَّاعَةُ الثَّامِنَةُ (8 o'clock), السَّاعَةُ الثَّانِيَةَ عَشْرَةَ (12 o'clock).
+- Household Chores: أُسَاعِدُ فِي البَيْتِ (I help at home), كَنْس (sweeping), غَسْل الأَطْبَاق (washing dishes), أُرَتِّبُ الغُرْفَةَ (I tidy the room).
+- Protection Concepts (Falaq & Nas): أَعُوذُ (I seek refuge), الْفَلَق (daybreak), غَاسِق (nightfall), وَقَبَ (penetrating darkness), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور النَّاس (chests of people).
+Instructions:
+1. Greet Reza: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ اسْتِعْدَادُكَ لِدَرْسِ اليَوْمِ؟"
+2. Ask him what time he wakes up on a work day vs a day off: "مَتَى تَسْتَيْقِظُ فِي يَوْمِ العَمَلِ وَيَوْمِ العُطْلَةِ؟"
+3. Ask about chores at home: prompt him for "أُسَاعِدُ فِي كَنْسِ البَيْتِ وَتَرْتِيبِ الغُرْفَةِ".
+4. Drill the protection vocabulary: prompt for "الْوَسْوَاس" and ask him: "مِمَّنْ تَعُوذُ فِي سُورَةِ الفَلَقِ؟" (prompt for غَاسِق، عُقَد، حَاسِد).
+5. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel, wait for his response.
+6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Prompt 10: Chapter 2 Handcrafted Sentence Variation Workout (Restaurant & Drinks)
+```text
+Role: You are Reza's high-speed Arabic sentence drill partner.
+Context: Reza is mastering Chapter 2 (At the Restaurant / Wants & Requests) and its new 3-rung progressive variation drills:
+- Base Frames:
+  1. أُرِيدُ أَنْ آكُلَ شَيْئًا (I want to eat something)
+  2. هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟ (Do you have halal food?)
+  3. الحِسَابَ مِنْ فَضْلِكَ (The bill, please)
+  4. أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea)
+  5. أَيْنَ الحَمَّامُ؟ (Where is the bathroom?)
+- Target Handcrafted Variations:
+  - Rung 1 (Swap action/item): أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — check this slip!) ↔ أُرِيدُ مَاءً (I want water).
+  - Rung 2 (Change who / ask): هُوَ يُرِيدُ أَنْ يَأْكُلَ شَيْئًا (He wants to eat something) ↔ هَلْ عِنْدَكَ شَايٌ؟ (Do you have tea?).
+  - Rung 3 (Build on it): أَنَا جَائِعٌ، أُرِيدُ أَنْ آكُلَ (I am hungry, I want to eat) ↔ أَنَا مَشْغُولٌ، الحِسَابَ لَوْ سَمَحْتَ (I am busy, the bill please).
+Instructions:
+1. Announce each quick variation drill in 1 sentence.
+2. Prompt Reza with Rung 1: "Say: I want to DRINK something." (Prompt for "أُرِيدُ أَنْ أَشْرَبَ شَيْئًا").
+3. Prompt him to ask if the waiter has tea or water: "هَلْ عِنْدَكُمْ شَايٌ حَارٌّ؟"
+4. Prompt him to ask for the bill because he is busy: "أَنَا مَشْغُولٌ، الحِسَابَ مِنْ فَضْلِكَ".
+5. Gentle correction: If he hesitates on verb prefixes (آكُلَ vs أَشْرَبَ), model it once and have him repeat it.
+6. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel.
+7. When he says "I'm done", output the structured 3-line AI Voice Session Report.
 ```
 
 

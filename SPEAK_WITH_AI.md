@@ -54,18 +54,25 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 
 ---
 
-## 3. The 4 Sentence Variation Drills (What the AI Does)
+## 3. The Sentence Variation Drills & On-Site Rung Engine
 
-Rather than just repeating the same sentence, the AI is instructed to drill 4 high-yield variations:
+Rather than just repeating the same sentence, the whole learning engine of the site is built around **sentence variations**. On `index.html`, every chapter sentence has a **🎯 Drill** button featuring 3 progressive, handcrafted rungs that always reveal the target answer with real neural audio:
 
-1. **Pronoun / Subject Swaps:**
-   - *أُرِيدُ مَاءً* (I want water) ➔ *هَلْ تُرِيدُ مَاءً؟* (Do you want water?) ➔ *هُوَ يُرِيدُ مَاءً* (He wants water).
-2. **Noun / Object Substitutions:**
-   - *أُرِيدُ مَاءً* (water) ➔ *أُرِيدُ شَايًا* (tea) ➔ *أُرِيدُ قَهْوَةً* (coffee).
-3. **Question Formations:**
-   - Turning statements into inquiries using *هَلْ* (is/do?), *أَيْنَ* (where?), *مَتَى* (when?), *كَمْ* (how much?), *مَاذَا* (what?).
-4. **Negation:**
-   - Affirmative to negative: *عِنْدِي مَوْعِدٌ* (I have an appointment) ➔ *لَيْسَ عِنْدِي مَوْعِدٌ* (I don't have an appointment).
+```
+[ Base Sentence ]  أُرِيدُ أَنْ آكُلَ شَيْئًا (I want to eat something)
+       ↓
+  Rung 1: Swap a word       ➔  أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something)
+       ↓
+  Rung 2: Change who / ask   ➔  هُوَ يُرِيدُ أَنْ يَأْكُلَ شَيْئًا (He wants to eat something)
+       ↓
+  Rung 3: Build on it       ➔  أَنَا جَائِعٌ، أُرِيدُ أَنْ آكُلَ (I am hungry, I want to eat)
+```
+
+When you tap **"📋 Copy Voice Prompt"** on `index.html`, the site embeds these exact 3-rung variation matrices into the prompt text! When you talk with ChatGPT / Claude Voice, the AI acts as your spoken sparring partner for these exact variations:
+1. **Rung 1 (Swap a word / object):** Tests your core vocabulary flexibility (*آكُلَ* ↔ *أَشْرَبَ*, *مَاء* ↔ *شَاي* ↔ *قَهْوَة*).
+2. **Rung 2 (Change who / ask):** Drills pronoun and verb prefixes (*أُرِيدُ* ↔ *تُرِيدُ* ↔ *يُرِيدُ*) and flips statements into inquiries with *هَلْ* or *أَيْنَ*.
+3. **Rung 3 (Build on it):** Compounds the clause with states or reasons (*أَنَا جَائِعٌ* / *أَنَا عَطْشَانُ* / *لِأَنَّنِي مَشْغُولٌ*).
+4. **Gentle Verification:** The AI pauses for your voice, models the phrase cleanly if you stumble, and asks you to repeat it once.
 
 ---
 
@@ -276,15 +283,59 @@ Instructions:
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
 
+### I. Sunday 11 Oct Preply Pre-Class Warmup & Review
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting his Sunday Pre-Class warmup.
+Context: Reza has his live 1-on-1 Preply class at 07:00 UK. He needs a brisk 5-minute review covering the Working Day/Day Off routine, household chores, and the Mu'awwidhatayn protection concepts:
+- Working Day & Routines: يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ مُبَكِّرًا (I wake early), مُتَأَخِّرًا (late), أَتَنَاوَلُ الفَطُورَ (I eat breakfast), أَعُودُ (I return home), السَّاعَةُ الثَّامِنَةُ (8 o'clock), السَّاعَةُ الثَّانِيَةَ عَشْرَةَ (12 o'clock).
+- Household Chores: أُسَاعِدُ فِي البَيْتِ (I help at home), كَنْس (sweeping), غَسْل الأَطْبَاق (washing dishes), أُرَتِّبُ الغُرْفَةَ (I tidy the room).
+- Protection Concepts (Falaq & Nas): أَعُوذُ (I seek refuge), الْفَلَق (daybreak), غَاسِق (nightfall), وَقَبَ (penetrating darkness), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور النَّاس (chests of people).
+Instructions:
+1. Greet Reza: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ اسْتِعْدَادُكَ لِدَرْسِ اليَوْمِ؟"
+2. Ask him what time he wakes up on a work day vs a day off: "مَتَى تَسْتَيْقِظُ فِي يَوْمِ العَمَلِ وَيَوْمِ العُطْلَةِ؟"
+3. Ask about chores at home: prompt him for "أُسَاعِدُ فِي كَنْسِ البَيْتِ وَتَرْتِيبِ الغُرْفَةِ".
+4. Drill the protection vocabulary: prompt for "الْوَسْوَاس" and ask him: "مِمَّنْ تَعُوذُ فِي سُورَةِ الفَلَقِ؟" (prompt for غَاسِق، عُقَد، حَاسِد).
+5. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel, wait for his response.
+6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### J. Chapter 2 Handcrafted Sentence Variation Drill (Restaurant & Drinks)
+```text
+Role: You are Reza's high-speed Arabic sentence drill partner.
+Context: Reza is mastering Chapter 2 (At the Restaurant / Wants & Requests) and its new 3-rung progressive variation drills:
+- Base Frames:
+  1. أُرِيدُ أَنْ آكُلَ شَيْئًا (I want to eat something)
+  2. هَلْ عِنْدَكُمْ طَعَامٌ حَلَالٌ؟ (Do you have halal food?)
+  3. الحِسَابَ مِنْ فَضْلِكَ (The bill, please)
+  4. أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea)
+  5. أَيْنَ الحَمَّامُ؟ (Where is the bathroom?)
+- Target Handcrafted Variations:
+  - Rung 1 (Swap action/item): أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — check this slip!) ↔ أُرِيدُ مَاءً (I want water).
+  - Rung 2 (Change who / ask): هُوَ يُرِيدُ أَنْ يَأْكُلَ شَيْئًا (He wants to eat something) ↔ هَلْ عِنْدَكَ شَايٌ؟ (Do you have tea?).
+  - Rung 3 (Build on it): أَنَا جَائِعٌ، أُرِيدُ أَنْ آكُلَ (I am hungry, I want to eat) ↔ أَنَا مَشْغُولٌ، الحِسَابَ لَوْ سَمَحْتَ (I am busy, the bill please).
+Instructions:
+1. Announce each quick variation drill in 1 sentence.
+2. Prompt Reza with Rung 1: "Say: I want to DRINK something." (Prompt for "أُرِيدُ أَنْ أَشْرَبَ شَيْئًا").
+3. Prompt him to ask if the waiter has tea or water: "هَلْ عِنْدَكُمْ شَايٌ حَارٌّ؟"
+4. Prompt him to ask for the bill because he is busy: "أَنَا مَشْغُولٌ، الحِسَابَ مِنْ فَضْلِكَ".
+5. Gentle correction: If he hesitates on verb prefixes (آكُلَ vs أَشْرَبَ), model it once and have him repeat it.
+6. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel.
+7. When he says "I'm done", output the structured 3-line AI Voice Session Report.
+```
+
 ### Mnemonic Quick-Reference Matrix for AI Voice Partners
 | Word | Arabic | Mnemonic Association | Core Meaning |
 |---|---|---|---|
 | *atanāwalu* | `أَتَنَاوَلُ` | **"a TUNA I WALLOW in"** | I eat / take a meal |
-| *faṭūr* | `فَطُور` | **Mini-Iftar (root f-ṭ-r) / FAT TOUR of table** | Breakfast (break-fast) |
-| *aʿūdu* | `أَعُودُ` | **1 letter from أعوذ — return to refuge (home)** | I return / go back |
+| *faṭūr* | `فَطُور` | **Mini-Iftar (root f-ṭ-r) / FAT TOUR of table** | Breakfast (break-fast) — *promoted to solid!* |
+| *aʿūdu* | `أَعُودُ` | **1 letter from أعوذ — return to refuge (home)** | I return / go back (plain dāl) |
 | *ṣaḥīfah* | `صَحِيفَة` | **Shares pages-root with المُصْحَف** | Newspaper |
 | *jazīlan* | `جَزِيلًا` | **Thanks a GAZILLION** | Deeply / abundantly |
 | *surūr* | `سُرُور` | **Bengali shurshuri (সুড়সুড়ি) joy tickle** | Pleasure / delight |
+| *al-waswās* | `الْوَسْوَاس` | **Repeated whispered promptings** (root w-s-w-s) | The repetitive whisperer (subtle evil promptings) |
+| *al-khannās* | `الْخَنَّاس` | **The slinker** (retreats upon God's mention) | The one who slinks away upon dhikr |
+| *ghāsiq* | `غَاسِق` | **Pitch black nightfall** | Night as darkness completely penetrates |
+| *ʿuqad* | `عُقَد` | **Knots** | Knots in thread / tangled knots in affairs |
 
 ---
 
