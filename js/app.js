@@ -1038,7 +1038,7 @@ function micBrowser() {
   return "other";
 }
 /* one listening pass, with nothing else holding the microphone */
-function micListen(lang, ms, onText) {
+function micListen(lang, ms, onText, ctl) {
   return new Promise(resolve => {
     if (!SR) return resolve({ heard: "", err: "no-sr" });
     let rec = null, done = false, heard = "", err = "";
@@ -1047,6 +1047,7 @@ function micListen(lang, ms, onText) {
       try { if (rec) { rec.onresult = rec.onerror = rec.onend = null; rec.abort(); } } catch (e) {}
       resolve({ heard: heard.trim(), err });
     };
+    if (ctl) ctl.stop = fin;   // optional: the caller may end the take early (he finished speaking)
     try {
       rec = new SR();
       rec.lang = lang; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 3;
@@ -2424,7 +2425,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv44jl6v";
+const DATA_V = "mv45324m";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

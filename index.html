@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv44jl6v">
-  <link rel="stylesheet" href="css/style.css?v=mv44jl6v">
+  <link rel="stylesheet" href="css/fonts.css?v=mv45324m">
+  <link rel="stylesheet" href="css/style.css?v=mv45324m">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv44jl6v"></script>
-<script src="js/curriculum.js?v=mv44jl6v"></script>
-<script src="js/srs.js?v=mv44jl6v"></script>
-<script src="js/app.js?v=mv44jl6v"></script>
-<script src="js/tracker.js?v=mv44jl6v"></script>
-<script src="js/plan.js?v=mv44jl6v"></script>
-<script src="js/account.js?v=mv44jl6v"></script>
+<script src="js/progress-model.js?v=mv45324m"></script>
+<script src="js/curriculum.js?v=mv45324m"></script>
+<script src="js/srs.js?v=mv45324m"></script>
+<script src="js/app.js?v=mv45324m"></script>
+<script src="js/tracker.js?v=mv45324m"></script>
+<script src="js/plan.js?v=mv45324m"></script>
+<script src="js/account.js?v=mv45324m"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3796,7 +3796,7 @@ function renderDayDrillHtml(idx) {
     body = `
       <div class="drill-prompt">Say in Arabic: <b>${drillEsc(item.en)}</b></div>
       <div class="drill-swap">Change: ${drillEsc(item.swap)}</div>
-      ${st.listening ? `<div class="drill-heard" id="drill-heard-${idx}">🔴 listening… say it now</div>` : ""}
+      ${st.listening ? `<div class="drill-heard" id="drill-heard-${idx}">🔴 listening… take your time — it closes by itself after you stop <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="drillMicDone(${idx})">✓ I'm done</button></div>` : ""}
       <div class="drill-row">
         ${hasMic ? `<button type="button" class="book-toggle-pill ${st.listening ? 'active' : ''}" onclick="drillMic(${idx})" title="Say it out loud — graded against the model sentence" ${st.listening ? 'disabled' : ''}>🎤 Say it</button>` : ""}
         <input type="text" id="drill-inp-${idx}" class="arabic" placeholder="…or type it in Arabic" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault();drillCheckTyped(${idx});}">
@@ -3903,6 +3903,10 @@ function drillCheckTyped(idx) {
   renderDayDrillPanel(idx);
   if (!ok) speak(item.ar, 0.8);
 }
+function drillMicDone(idx) {
+  const st = drillState(idx);
+  if (st.micCtl && st.micCtl.stop) st.micCtl.stop();
+}
 async function drillMic(idx) {
   const item = drillItem(idx);
   const st = drillState(idx);
@@ -3910,10 +3914,24 @@ async function drillMic(idx) {
   if (typeof stopAllAudio === "function") stopAllAudio();
   st.listening = true; st.heard = "";
   renderDayDrillPanel(idx);
-  const r = await micListen("ar-SA", 6000, txt => {
+  /* His 2026-10-11 note: "the long sentence was pretty quick for the microphone,
+     couldn't finish saying it. I would be a bit slow." So the window scales with
+     the sentence (≈ 2.2 s per word, never under 10 s, up to 30 s), stays open while
+     words are still arriving, and closes itself 2.5 s after he stops — or the
+     moment he taps "I'm done". Nobody is timed out mid-sentence any more. */
+  const nWords = String(item.ar).replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).length;
+  const windowMs = Math.min(30000, Math.max(10000, 4000 + 2200 * nWords));
+  const ctl = {};
+  st.micCtl = ctl;
+  let quiet = null;
+  const r = await micListen("ar-SA", windowMs, txt => {
     const h = document.getElementById("drill-heard-" + idx);
-    if (h) h.innerHTML = `🔴 listening… <span class="arabic" dir="rtl">${drillEsc(txt)}</span>`;
-  });
+    if (h) h.innerHTML = `🔴 listening… <span class="arabic" dir="rtl">${drillEsc(txt)}</span> <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="drillMicDone(${idx})">✓ I'm done</button>`;
+    if (quiet) clearTimeout(quiet);
+    quiet = setTimeout(() => { if (ctl.stop) ctl.stop(); }, 2500);   // 2.5 s of silence after speech = finished
+  }, ctl);
+  if (quiet) clearTimeout(quiet);
+  st.micCtl = null;
   st.listening = false;
   if (r.err === "no-sr") {
     st.heard = "";
