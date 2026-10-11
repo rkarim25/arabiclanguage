@@ -157,6 +157,238 @@
         { "rung": 2, "en": "Yes, I need a taxi.", "ar": "نَعَمْ، أَحْتَاجُ إِلَى سَيَّارَةِ أُجْرَةٍ", "tr": "naʿam, aḥtāju ilā sayyārati ujrah", "swap": "do you need? → yes, I need, + a taxi" },
         { "rung": 3, "en": "No thank you, I don't need anything.", "ar": "لَا شُكْرًا، لَا أَحْتَاجُ إِلَى شَيْءٍ", "tr": "lā shukran, lā aḥtāju ilā shayʾ", "swap": "question → polite refusal" }
       ]
+    ],
+    "chap-4": [
+      [
+        {
+          "rung": 1,
+          "en": "What are you doing now?",
+          "ar": "مَاذَا تَفْعَلُ الآنَ؟",
+          "tr": "mādhā tafʿalu l-ān?",
+          "swap": "today → now"
+        },
+        {
+          "rung": 2,
+          "en": "What is your friend doing today?",
+          "ar": "مَاذَا يَفْعَلُ صَدِيقُكَ اليَوْمَ؟",
+          "tr": "mādhā yafʿalu ṣadīquka l-yawm?",
+          "swap": "you → your friend (he)"
+        },
+        {
+          "rung": 3,
+          "en": "What are you doing today after the lesson?",
+          "ar": "مَاذَا تَفْعَلُ اليَوْمَ بَعْدَ الدَّرْسِ؟",
+          "tr": "mādhā tafʿalu l-yawma baʿda d-dars?",
+          "swap": "+ after the lesson"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "I will go to the market tomorrow.",
+          "ar": "سَأَذْهَبُ إِلَى السُّوقِ غَدًا",
+          "tr": "sa-adhhabu ilā s-sūqi ghadan",
+          "swap": "the lesson → the market"
+        },
+        {
+          "rung": 2,
+          "en": "We will go to the mosque tomorrow.",
+          "ar": "سَنَذْهَبُ إِلَى المَسْجِدِ غَدًا",
+          "tr": "sa-nadhhabu ilā l-masjidi ghadan",
+          "swap": "I will → WE will (سَأَ → سَنَـ)"
+        },
+        {
+          "rung": 3,
+          "en": "I will go to the lesson tomorrow after Fajr.",
+          "ar": "سَأَذْهَبُ إِلَى الدَّرْسِ غَدًا بَعْدَ الفَجْرِ",
+          "tr": "sa-adhhabu ilā d-darsi ghadan baʿda l-fajr",
+          "swap": "+ after Fajr"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "I read the Quran before sleep.",
+          "ar": "قَرَأْتُ القُرْآنَ قَبْلَ النَّوْمِ",
+          "tr": "qaraʾtu l-qurʾāna qabla n-nawm",
+          "swap": "after Fajr → before sleep"
+        },
+        {
+          "rung": 2,
+          "en": "Did you read the Quran today?",
+          "ar": "هَلْ قَرَأْتَ القُرْآنَ اليَوْمَ؟",
+          "tr": "hal qaraʾta l-qurʾāna l-yawm?",
+          "swap": "I read → DID YOU read? (ـتُ → ـتَ)"
+        },
+        {
+          "rung": 3,
+          "en": "I read the Quran after Fajr at home.",
+          "ar": "قَرَأْتُ القُرْآنَ بَعْدَ الفَجْرِ فِي البَيْتِ",
+          "tr": "qaraʾtu l-qurʾāna baʿda l-fajri fī l-bayt",
+          "swap": "+ at home"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "When does the work begin?",
+          "ar": "مَتَى يَبْدَأُ العَمَلُ؟",
+          "tr": "matā yabdaʾu l-ʿamal?",
+          "swap": "the lesson → the work"
+        },
+        {
+          "rung": 2,
+          "en": "When does your lesson begin?",
+          "ar": "مَتَى يَبْدَأُ دَرْسُكَ؟",
+          "tr": "matā yabdaʾu darsuk?",
+          "swap": "the lesson → YOUR lesson (ـكَ)"
+        },
+        {
+          "rung": 3,
+          "en": "When does the lesson begin tomorrow morning?",
+          "ar": "مَتَى يَبْدَأُ الدَّرْسُ غَدًا صَبَاحًا؟",
+          "tr": "matā yabdaʾu d-darsu ghadan ṣabāḥan?",
+          "swap": "+ tomorrow morning"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "I have an appointment in the morning.",
+          "ar": "عِنْدِي مَوْعِدٌ فِي الصَّبَاحِ",
+          "tr": "ʿindī mawʿidun fī ṣ-ṣabāḥ",
+          "swap": "evening → morning"
+        },
+        {
+          "rung": 2,
+          "en": "Do you have an appointment today?",
+          "ar": "هَلْ عِنْدَكَ مَوْعِدٌ اليَوْمَ؟",
+          "tr": "hal ʿindaka mawʿidun al-yawm?",
+          "swap": "I have → DO YOU have? (عِنْدِي → عِنْدَكَ)"
+        },
+        {
+          "rung": 3,
+          "en": "I have an appointment in the evening after Maghrib.",
+          "ar": "عِنْدِي مَوْعِدٌ فِي المَسَاءِ بَعْدَ المَغْرِبِ",
+          "tr": "ʿindī mawʿidun fī l-masāʾi baʿda l-maghrib",
+          "swap": "+ after Maghrib"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "I wrote a letter to my sister.",
+          "ar": "كَتَبْتُ رِسَالَةً لِأُخْتِي",
+          "tr": "katabtu risālatan li-ukhtī",
+          "swap": "my brother → my sister"
+        },
+        {
+          "rung": 2,
+          "en": "Did you write the letter?",
+          "ar": "هَلْ كَتَبْتَ الرِّسَالَةَ؟",
+          "tr": "hal katabta r-risālah?",
+          "swap": "I wrote → DID YOU write? (ـتُ → ـتَ)"
+        },
+        {
+          "rung": 3,
+          "en": "I wrote a letter to my brother after the lesson.",
+          "ar": "كَتَبْتُ رِسَالَةً لِأَخِي بَعْدَ الدَّرْسِ",
+          "tr": "katabtu risālatan li-akhī baʿda d-dars",
+          "swap": "+ after the lesson"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "Did you pray Fajr?",
+          "ar": "هَلْ صَلَّيْتَ الفَجْرَ؟",
+          "tr": "hal ṣallayta l-fajr?",
+          "swap": "Asr → Fajr"
+        },
+        {
+          "rung": 2,
+          "en": "I prayed Asr in the mosque. (answer it)",
+          "ar": "صَلَّيْتُ العَصْرَ فِي المَسْجِدِ",
+          "tr": "ṣallaytu l-ʿaṣra fī l-masjid",
+          "swap": "you → I — answer the question (ـتَ → ـتُ)"
+        },
+        {
+          "rung": 3,
+          "en": "No, I will pray Asr after the lesson.",
+          "ar": "لَا، سَأُصَلِّي العَصْرَ بَعْدَ الدَّرْسِ",
+          "tr": "lā, sa-uṣallī l-ʿaṣra baʿda d-dars",
+          "swap": "answer with the FUTURE: سَـ + I pray"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "We are learning the Quran.",
+          "ar": "نَحْنُ نَتَعَلَّمُ القُرْآنَ",
+          "tr": "naḥnu nataʿallamu l-qurʾān",
+          "swap": "Arabic → the Quran"
+        },
+        {
+          "rung": 2,
+          "en": "I am learning Arabic.",
+          "ar": "أَنَا أَتَعَلَّمُ العَرَبِيَّةَ",
+          "tr": "anā ataʿallamu l-ʿarabiyyah",
+          "swap": "we → I (نَتَـ → أَتَـ)"
+        },
+        {
+          "rung": 3,
+          "en": "We are learning Arabic every day.",
+          "ar": "نَحْنُ نَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ",
+          "tr": "naḥnu nataʿallamu l-ʿarabiyyata kulla yawm",
+          "swap": "+ every day"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "I don't know the meaning of this sentence.",
+          "ar": "لَا أَعْرِفُ مَعْنَى هَذِهِ الجُمْلَةِ",
+          "tr": "lā aʿrifu maʿnā hādhihi l-jumlah",
+          "swap": "word → sentence (جُمْلَة)"
+        },
+        {
+          "rung": 2,
+          "en": "Do you know the meaning of this word?",
+          "ar": "هَلْ تَعْرِفُ مَعْنَى هَذِهِ الكَلِمَةِ؟",
+          "tr": "hal taʿrifu maʿnā hādhihi l-kalimah?",
+          "swap": "I don't know → DO YOU know? (أَعْرِفُ → تَعْرِفُ)"
+        },
+        {
+          "rung": 3,
+          "en": "I don't know this word — what does it mean?",
+          "ar": "لَا أَعْرِفُ هَذِهِ الكَلِمَةَ، مَا مَعْنَاهَا؟",
+          "tr": "lā aʿrifu hādhihi l-kalimah, mā maʿnāhā?",
+          "swap": "+ ask back: what does it mean?"
+        }
+      ],
+      [
+        {
+          "rung": 1,
+          "en": "The time now is exactly five o'clock.",
+          "ar": "السَّاعَةُ الآنَ الخَامِسَةُ تَمَامًا",
+          "tr": "as-sāʿatu l-āna l-khāmisatu tamāman",
+          "swap": "three → five (الخَامِسَة)"
+        },
+        {
+          "rung": 2,
+          "en": "What time is it now?",
+          "ar": "كَمِ السَّاعَةُ الآنَ؟",
+          "tr": "kami s-sāʿatu l-ān?",
+          "swap": "turn it into the QUESTION: كَمِ السَّاعَةُ؟"
+        },
+        {
+          "rung": 3,
+          "en": "It is three o'clock now, and the lesson is in an hour.",
+          "ar": "السَّاعَةُ الآنَ الثَّالِثَةُ وَالدَّرْسُ بَعْدَ سَاعَةٍ",
+          "tr": "as-sāʿatu l-āna th-thālithatu wa-d-darsu baʿda sāʿah",
+          "swap": "+ and the lesson is in an hour"
+        }
+      ]
     ]
   }
 }
