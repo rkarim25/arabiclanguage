@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv34z8rf">
-  <link rel="stylesheet" href="css/style.css?v=mv34z8rf">
+  <link rel="stylesheet" href="css/fonts.css?v=mv43ahaf">
+  <link rel="stylesheet" href="css/style.css?v=mv43ahaf">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,12 +497,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv34z8rf"></script>
-<script src="js/curriculum.js?v=mv34z8rf"></script>
-<script src="js/srs.js?v=mv34z8rf"></script>
-<script src="js/app.js?v=mv34z8rf"></script>
-<script src="js/tracker.js?v=mv34z8rf"></script>
-<script src="js/plan.js?v=mv34z8rf"></script>
+<script src="js/progress-model.js?v=mv43ahaf"></script>
+<script src="js/curriculum.js?v=mv43ahaf"></script>
+<script src="js/srs.js?v=mv43ahaf"></script>
+<script src="js/app.js?v=mv43ahaf"></script>
+<script src="js/tracker.js?v=mv43ahaf"></script>
+<script src="js/plan.js?v=mv43ahaf"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1422,11 +1422,11 @@ function buildClassAiPrompt(cls) {
       p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`;
     });
     p += `\nKey Class Vocabulary:\n`;
-    p += `- Housing: flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة).\n`;
+    p += `- Housing: flat (شَقَّة), building (عِمَارَة), floor/storey (طَابِق / دَوْر), cupboards/closets (خَزَائِن), curtain (سِتَارَة), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة).\n`;
     p += `- Days: Saturday to Friday (السَّبْت، الأَحَد، الاِثْنَيْن، الثُّلَاثَاء، الخَمِيس، الجُمُعَة).\n\n`;
     p += `Goal & Voice Mode Instructions:\n`;
     p += `1. Roleplay: You are an apartment owner or landlord, and I am looking for a flat.\n`;
-    p += `2. Drill variations: ask which floor the flat is on, how many rooms, and which day I can move in.\n`;
+    p += `2. Drill variations: ask which floor the flat is on (طَابِق / دَوْر), how many rooms, what furniture is inside (سَرِير، خَزَائِن، سِتَارَة، فُرْن), and which day I can move in.\n`;
   }
 
   p += `3. Strict Voice Mode Rules:\n`;

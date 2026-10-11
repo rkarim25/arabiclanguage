@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv34z8rf">
-  <link rel="stylesheet" href="css/style.css?v=mv34z8rf">
+  <link rel="stylesheet" href="css/fonts.css?v=mv43ahaf">
+  <link rel="stylesheet" href="css/style.css?v=mv43ahaf">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -159,7 +159,7 @@
           <button type="button" class="view-switch-btn" id="btnViewVocab" onclick="switchChapView('vocab')">🔤 Chapter Vocabulary</button>
         </div>
       </div>
-      <span style="font-size:12px;color:var(--muted)" id="chapSectionSub">Tap any word for instant meaning</span>
+      <span style="font-size:12px;color:var(--muted)" id="chapSectionSub">Tap any word for instant meaning • Switch tab for 🔤 Chapter Vocabulary</span>
     </div>
     <div class="sentence-list" id="sentenceList">Loading sentences…</div>
     <div class="vocab-list" id="chapterVocabList" style="display:none;overflow-x:auto">Loading vocabulary…</div>
@@ -183,7 +183,7 @@
   <!-- SECTION 3: CONDITIONAL GRAMMAR NOTE -->
   <div id="grammarSection" style="display:none">
     <div class="grammar-box">
-      <h3 id="grammarTitle">3. 📐 Pattern Insight</h3>
+      <h3 id="grammarTitle">3. 📐 Grammar &amp; Pattern Insight</h3>
       <p id="grammarBody"></p>
       <div style="margin-top:8px;text-align:right">
         <a href="grammar.html" style="font-size:12px;color:var(--amber);font-weight:600;text-decoration:none">Explore all grammar patterns →</a>
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv34z8rf"></script>
-<script src="js/curriculum.js?v=mv34z8rf"></script>
-<script src="js/srs.js?v=mv34z8rf"></script>
-<script src="js/app.js?v=mv34z8rf"></script>
-<script src="js/tracker.js?v=mv34z8rf"></script>
-<script src="js/plan.js?v=mv34z8rf"></script>
-<script src="js/account.js?v=mv34z8rf"></script>
+<script src="js/progress-model.js?v=mv43ahaf"></script>
+<script src="js/curriculum.js?v=mv43ahaf"></script>
+<script src="js/srs.js?v=mv43ahaf"></script>
+<script src="js/app.js?v=mv43ahaf"></script>
+<script src="js/tracker.js?v=mv43ahaf"></script>
+<script src="js/plan.js?v=mv43ahaf"></script>
+<script src="js/account.js?v=mv43ahaf"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3027,7 +3027,7 @@ function loadChapter(chap, resumeLineIdx) {
   const gSec = document.getElementById("grammarSection");
   if (chap.grammar) {
     gSec.style.display = "block";
-    document.getElementById("grammarTitle").innerHTML = "3. 📐 " + chap.grammar.title;
+    document.getElementById("grammarTitle").innerHTML = "3. 📐 Grammar: " + chap.grammar.title;
     document.getElementById("grammarBody").innerHTML = chap.grammar.text;
   } else {
     gSec.style.display = "none";
@@ -3109,10 +3109,12 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
+  p += `     * Flat & Housing slips (Sunday 11 Oct review): خَزَائِن (cupboards / treasuries — rated weak), طَابِق (floor, storey — rated learning), سِتَارَة (curtain), دَوْر (floor / turn)\n`;
   p += `     * أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — verb swap slip on Sentence 1!)\n`;
   p += `     * الْوَسْوَاس (the repetitive whisperer — subtle evil promptings, rated weak)\n`;
   p += `     * عُقَد (knots), حَاسِد (envier), الْخَنَّاس (the slinker), غَاسِق (intense nightfall)\n`;
   p += `     * Routine slips: أَعُودُ (I return [plain d, return to refuge]), أَقْرَأُ الصَّحِيفَةَ (newspaper [pages-root with al-muṣḥaf]), أُرَتِّبُ (I arrange), أَنَامُ (I sleep)\n`;
+  p += `     * Verb tense distinction (Chapter 4): past ـتُ (قَرَأْتُ / صَلَّيْتُ) vs present أَـ (أَقْرَأُ / أُصَلِّي) vs future سَـ (سَأَذْهَبُ)\n`;
   p += `     * Celebrate win: الفَطُور (breakfast) is now solid thanks to the 'mini-iftar' / 'FAT TOUR' mnemonic!\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
