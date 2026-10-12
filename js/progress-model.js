@@ -378,6 +378,11 @@
       else if (e.e === "spract" && (e.exact || e.got)) { outputMin += 0.4; }
       else if (e.e === "alisten-sent") outputMin += 0.3;
       else if (e.e === "trans" && e.ok) outputMin += 0.5;
+      // spoken mic takes: speaking.html free prompts + 🎯 drill mic passes both log "prompt"
+      // (a drill mic take logs sent-drill AND prompt, so only prompt is credited — no double count;
+      //  keyless, so they move outputMin only, never provenKeys: the estimate stays conservative)
+      else if (e.e === "prompt" && e.heard) outputMin += 0.5;
+      else if (e.e === "sent-drill" && e.how === "typed") outputMin += 0.4;
       else if (e.e === "convo") outputMin += 10;
     }
     const hoursGate = Math.min(1, outputMin / SKILL_CAL.OUTPUT_TARGET_MIN);
