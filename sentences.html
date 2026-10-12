@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4u8ogz">
-  <link rel="stylesheet" href="css/style.css?v=mv4u8ogz">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4uiy82">
+  <link rel="stylesheet" href="css/style.css?v=mv4uiy82">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -214,6 +214,8 @@
           <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
         </span>
         <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal All</button>
+        <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
+        <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
       </div>
     </div>
 
@@ -282,11 +284,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4u8ogz"></script>
-<script src="js/curriculum.js?v=mv4u8ogz"></script>
-<script src="js/srs.js?v=mv4u8ogz"></script>
-<script src="js/app.js?v=mv4u8ogz"></script>
-<script src="js/tracker.js?v=mv4u8ogz"></script>
+<script src="js/progress-model.js?v=mv4uiy82"></script>
+<script src="js/curriculum.js?v=mv4uiy82"></script>
+<script src="js/srs.js?v=mv4uiy82"></script>
+<script src="js/tryit.js?v=mv4uiy82"></script>
+<script src="js/app.js?v=mv4uiy82"></script>
+<script src="js/tracker.js?v=mv4uiy82"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -373,6 +376,24 @@ const BATCH_SIZE = 10;
 
     updateOverallStats();
     const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
+    /* 🎯 Try it — say it or write it; ✨ Free try builds a batch from what he holds */
+    TryIt.setup({
+      src: "sentences",
+      items: () => ACTIVE_SENTENCES,
+      rowId: idx => "scard-" + idx,
+      pool: () => MASTER_SENTENCES,
+      size: BATCH_SIZE,
+      onVerdict: (it, g, idx) => rateSentence(it.key, g, idx),
+      onFree: (list, L) => {
+        stopAudio();
+        REVEALED.clear();
+        ACTIVE_SENTENCES = list;
+        LAST_BATCH_KEYS = list.map(x => x.key);
+        const t = document.getElementById("sessionTitle");
+        if (t) t.textContent = `Free try — built from what you hold (about ${L} words a sentence)`;
+        render10Cards();
+      },
+    });
     load10Sentences();
     setupAudioSpeed();
   } catch (e) {
@@ -414,6 +435,7 @@ function updateOverallStats() {
 /* 70/30 DYNAMIC BATCH ENGINE FOR SENTENCES */
 function load10Sentences() {
   stopAudio();
+  if (window.TryIt) TryIt.endFree();
   REVEALED.clear();
   const srs = getSrs();
   const now = Date.now();
@@ -471,7 +493,7 @@ function render10Cards() {
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
           <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>
+            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}
             <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
               ${isEnFirst ? s.en : s.ar}
             </span>
@@ -537,15 +559,17 @@ function render10Cards() {
             <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
           </div>
         `}
+        ${TryIt.slotHtml(idx)}
       </div>
     `;
   }).join("");
+  if (window.TryIt) TryIt.rewire();
 
   updateSessionProgress();
 }
 
 function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
+  if (e.target.closest("button") || e.target.closest(".tryit") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }

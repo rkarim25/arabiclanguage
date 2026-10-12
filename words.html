@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4u8ogz">
-  <link rel="stylesheet" href="css/style.css?v=mv4u8ogz">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4uiy82">
+  <link rel="stylesheet" href="css/style.css?v=mv4uiy82">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -201,6 +201,7 @@
           <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
         </span>
         <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal All</button>
+        <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each word in turn, then see the answer">🎯 Try them all</button>
       </div>
     </div>
 
@@ -276,11 +277,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4u8ogz"></script>
-<script src="js/curriculum.js?v=mv4u8ogz"></script>
-<script src="js/srs.js?v=mv4u8ogz"></script>
-<script src="js/app.js?v=mv4u8ogz"></script>
-<script src="js/tracker.js?v=mv4u8ogz"></script>
+<script src="js/progress-model.js?v=mv4uiy82"></script>
+<script src="js/curriculum.js?v=mv4uiy82"></script>
+<script src="js/srs.js?v=mv4uiy82"></script>
+<script src="js/tryit.js?v=mv4uiy82"></script>
+<script src="js/app.js?v=mv4uiy82"></script>
+<script src="js/tracker.js?v=mv4uiy82"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -334,6 +336,13 @@ const BATCH_SIZE = 10;
 
     updateOverallStats();
     const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
+    /* 🎯 Try it — English in, Arabic out (said or written), then the answer */
+    TryIt.setup({
+      src: "words",
+      items: () => ACTIVE_WORDS,
+      rowId: idx => "wrow-" + idx,
+      onVerdict: (it, g, idx) => rateWord(it.key, g, idx),
+    });
     load10Words();
     setupAudioSpeed();
   } catch (e) {
@@ -452,6 +461,7 @@ function render10Cards() {
               <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
             </div>
           `}
+          ${TryIt.badgeHtml(idx)}
         </td>
         <td>
           ${!isRevealed ? `
@@ -496,6 +506,7 @@ function render10Cards() {
               `;
             })()}
           `}
+          ${TryIt.slotHtml(idx)}
         </td>
         <td style="text-align:right">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateWord", [idx])}</div>
@@ -503,13 +514,14 @@ function render10Cards() {
       </tr>
     `;
   }).join("");
+  if (window.TryIt) TryIt.rewire();
 
   updateSessionProgress();
 }
 const render20Cards = render10Cards; // Backward compatibility
 
 function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest(".sheet-rate-bar") || e.target.closest(".rate-bar")) return;
+  if (e.target.closest("button") || e.target.closest(".tryit") || e.target.closest(".sheet-rate-bar") || e.target.closest(".rate-bar")) return;
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }

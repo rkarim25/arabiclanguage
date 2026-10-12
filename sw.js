@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mv4u8ogz";
+const CACHE = "ats-mv4uiy82";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -28,6 +28,7 @@ const CORE = [
   "js/progress-model.js", "js/plan.js", "data/progress-series.json",
   "js/curriculum.js", "data/curriculum.json", "js/account.js",
   "js/srs.js",                        // the scheduler that owns the interval (✗ ≈ ✓ ★)
+  "js/tryit.js",                      // 🎯 Try it / Try them all / ✨ Free try on the batch pages
   "data/sentence-bank.json",          // what every lesson is built from — must work on the commute
   "data/quran-sentences.json",        // the short surahs: Al-Fatiha + juz' 'Amma
   "data/frequency.json",              // probability of use — what the bursts are ranked by
