@@ -125,5 +125,20 @@ console.log("\n-- grammar: weak frames get more, unmet essential frames get one,
   yes(tested.profile.have.weakness > 0.6 && tested.profile.have.evidence === 1, "a poor grammar-page test counts as evidence of weakness");
 }
 
+console.log("\n-- the content: every essential frame has short sentences to practise on --");
+{
+  const fs = require("fs");
+  const D = f => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", f), "utf8"));
+  const bank = D("sentence-bank.json").sentences;
+  const chapters = D("chapters.json").chapters.flatMap(c => c.sentences.map((s, i) => Object.assign({}, s, { key: `chap:${c.num}:${i}` })));
+  const cov = F.coverage(bank.concat(chapters), 5);
+  const FLOOR = 7;
+  const thin = F.ESSENTIAL.filter(p => cov[p].short < FLOOR);
+  yes(!thin.length, thin.length ? `frames with fewer than ${FLOOR} short sentences: ${thin.map(p => `${p} (${cov[p].short})`).join(", ")}` : `every essential frame has ≥ ${FLOOR} sentences of ≤ 5 words (min ${Math.min(...F.ESSENTIAL.map(p => cov[p].short))})`);
+  const untagged = bank.filter(s => !s.frames || !s.frames.length).length;
+  yes(untagged < bank.length * 0.03, `${bank.length - untagged} of ${bank.length} bank sentences carry frames`);
+  yes(chapters.every(s => s.frames && s.frames.length), "every chapter sentence carries frames");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

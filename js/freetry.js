@@ -149,15 +149,29 @@
      batch, in the order a learner needs them. */
   const ESSENTIAL = ["nominal", "idafa", "have", "questions", "demonstratives", "negation", "pronouns", "tenses", "prep-pron",
     "connectors", "past-tu", "kana", "ordinals", "plurals", "imperative", "gender", "inna", "dual", "wujud", "who-acts", "alladhina"];
+  /* every frame a sentence exercises: stamped by the pipeline (frames), else its label, else tagged on the spot */
+  const framesOf = s => {
+    if (s.frames && s.frames.length) return s.frames;
+    if (s.pattern && s.pattern !== "-") return [s.pattern];
+    const Fr = (typeof Frames !== "undefined" && Frames) || (typeof require === "function" ? (() => { try { return require("./frames.js"); } catch (e) { return null; } })() : null);
+    return Fr ? Fr.detect(s.ar).frames : [];
+  };
+  const primaryOf = s => (s.pattern && s.pattern !== "-") ? s.pattern : (framesOf(s)[0] || null);
   function grammarProfile(pool, ctx) {
     const byKey = new Map(pool.map(s => [s.key, s]));
     const since = ctx.now - P.lookbackDays * DAY;
     const prof = {};
     const touch = p => (prof[p] = prof[p] || { tries: 0, passes: 0, w: 0, wPass: 0, tests: 0, testScore: 0 });
     triesOf(pool, ctx).forEach(x => {
-      const p = byKey.get(x.key).pattern || "-"; if (p === "-") return;
-      const r = touch(p); const w = 0.5 + 0.5 * (x.t - since) / (ctx.now - since);   // recent tries weigh up to 2× old ones
-      r.tries++; r.w += w; if (x.ok) { r.passes++; r.wPass += w; }
+      const s = byKey.get(x.key);
+      const prim = primaryOf(s);
+      const w0 = 0.5 + 0.5 * (x.t - since) / (ctx.now - since);   // recent tries weigh up to 2× old ones
+      // a try is evidence for EVERY frame the sentence exercises: the label at full weight, the rest at half
+      framesOf(s).forEach(p => {
+        const w = p === prim ? w0 : w0 * 0.5;
+        const r = touch(p);
+        r.tries += p === prim ? 1 : 0.5; r.w += w; if (x.ok) { r.passes += p === prim ? 1 : 0.5; r.wPass += w; }
+      });
     });
     (ctx.log || []).forEach(x => {
       if (x && x.t >= since && x.e === "gtest-done" && x.g && x.total) { const r = touch(x.g); r.tests++; r.testScore += x.score / x.total; }
@@ -205,13 +219,15 @@
     });
 
     const G = grammarProfile(pool, ctx);
-    const pat = r => r.s.pattern && r.s.pattern !== "-" ? r.s.pattern : null;
-    const gw = r => { const p = pat(r); return p && G.profile[p] ? G.profile[p].weakness : 0; };
+    const pat = r => primaryOf(r.s);
+    const exercises = (r, p) => !!p && framesOf(r.s).includes(p);
+    // the sentence's weakest exercised frame drives its grammar value
+    const gw = r => framesOf(r.s).reduce((m, p) => Math.max(m, G.profile[p] ? G.profile[p].weakness : 0), 0);
     const score = r => {
       const dist = Math.abs(r.f.dStruct - sweet);
       const p = pat(r);
       return -dist + (r.hwHit ? 1.5 : 0) + (r.f.due > 0 ? 0.8 : 0) + (r.f.fresh === 1 ? 0.6 : 0) + 0.4 * r.useful
-        + 1.2 * gw(r) + (p && p === G.focus ? 0.8 : 0) + (p && p === G.introduce ? 0.6 : 0)
+        + 1.2 * gw(r) + (exercises(r, G.focus) ? 0.8 : 0) + (exercises(r, G.introduce) ? 0.6 : 0)
         - (r.recentPass ? 1.0 : 0) + (r.retry ? 3 : 0) + Math.random() * 0.3;
     };
     // the gates, relaxed step by step so a batch is never empty
@@ -235,8 +251,8 @@
     const take = (pred, n, out, noCap) => { for (const r of ok) { if (out.length >= ctx.size || n <= 0) break; if (out.includes(r) || !pred(r)) continue; const p = pat(r); if (!noCap && p && count(out, p) >= CAP) continue; out.push(r); n--; } };
     const out = [];
     take(r => r.retry, 2, out);
-    take(r => G.focus && pat(r) === G.focus, 3, out);
-    take(r => G.introduce && pat(r) === G.introduce, 1, out);
+    take(r => exercises(r, G.focus), 3, out);
+    take(r => exercises(r, G.introduce), 1, out);
     take(r => r.f.fresh === 1 || r.f.due > 0, 4, out);
     take(r => r.f.fresh === 0 && r.f.due === 0 && r.f.dStruct <= sweet, 3, out);
     take(() => true, ctx.size, out);
@@ -245,8 +261,8 @@
     const why = r => {
       const p = pat(r);
       if (r.retry) return "missed yesterday — again";
-      if (p && p === G.focus && !G.profile[p].unseen) return `grammar focus: ${p}${G.profile[p].passRate != null ? ` (you pass ${G.profile[p].passRate}%)` : ""}`;
-      if (p && p === G.introduce) return `new grammar: ${p}`;
+      if (G.focus && exercises(r, G.focus) && G.profile[G.focus] && !G.profile[G.focus].unseen) return `grammar focus: ${G.focus}${G.profile[G.focus].passRate != null ? ` (you pass ${G.profile[G.focus].passRate}%)` : ""}`;
+      if (G.introduce && exercises(r, G.introduce)) return `new grammar: ${G.introduce}`;
       if (r.hwHit) return "homework word";
       if (r.f.fresh === 1) return "one new word";
       if (r.f.due > 0) return `${r.f.due} word${r.f.due > 1 ? "s" : ""} due for review`;
@@ -257,10 +273,21 @@
       theta: Math.round(theta * 10) / 10, tries, sweet: Math.round(sweet * 10) / 10,
       candidates: ok.length, relaxed: level, gated: rows.length,
       grammar: { focus: G.focus, introduce: G.introduce, profile: G.profile },
-      mix: { retry: out.filter(r => r.retry).length, grammar: out.filter(r => !r.retry && pat(r) && (pat(r) === G.focus || pat(r) === G.introduce)).length,
+      mix: { retry: out.filter(r => r.retry).length, grammar: out.filter(r => !r.retry && (exercises(r, G.focus) || exercises(r, G.introduce))).length,
         stretch: out.filter(r => !r.retry && (r.f.fresh === 1 || r.f.due > 0)).length, consolidate: out.filter(r => !r.retry && r.f.fresh === 0 && r.f.due === 0).length },
     };
   }
 
-  return { P, ESSENTIAL, recall, wordState, rarity, features, difficulty, tries: triesOf, ability, grammarProfile, plan, sigmoid: sig };
+  /* how many short sentences (≤ maxWords) exercise each essential frame — the content audit Free try depends on */
+  function coverage(pool, maxWords) {
+    maxWords = maxWords || 5;
+    const out = {};
+    ESSENTIAL.forEach(p => { out[p] = { short: 0, all: 0 }; });
+    pool.forEach(s => {
+      const n = tokens(s.ar).length;
+      framesOf(s).forEach(p => { if (!out[p]) return; out[p].all++; if (n <= maxWords) out[p].short++; });
+    });
+    return out;
+  }
+  return { P, ESSENTIAL, recall, wordState, rarity, features, difficulty, tries: triesOf, ability, grammarProfile, plan, coverage, framesOf, primaryOf, sigmoid: sig };
 });

@@ -56,7 +56,12 @@
      "to live in / for dwelling"
     ]
    ],
-   "tr": "fī yawmi l-aḥad, arāda sāmir an yabḥatha ʿan baytin jadīdin li-s-sakan."
+   "tr": "fī yawmi l-aḥad, arāda sāmir an yabḥatha ʿan baytin jadīdin li-s-sakan.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "ar": "ذَهَبَ مَعَ أَخِيهِ إِلَى حَيِّ الجَامِعَةِ، وَشَاهَدَا شَقَّةً جَمِيلَةً فِيهَا غُرْفَةُ جُلُوسٍ وَاسِعَةٌ وَغُرْفَةُ نَوْمٍ مُرِيحَةٌ وَمَطْبَخٌ صَغِيرٌ.",
@@ -135,7 +140,13 @@
      "small"
     ]
    ],
-   "tr": "dhahaba maʿa akhīhi ilā ḥayyi l-jāmiʿah, wa-shāhadā shaqqatan jamīlatan fīhā ghurfatu julūsin wāsiʿatun wa-ghurfatu nawmin murīḥatun wa-maṭbakhun ṣaghīr."
+   "tr": "dhahaba maʿa akhīhi ilā ḥayyi l-jāmiʿah, wa-shāhadā shaqqatan jamīlatan fīhā ghurfatu julūsin wāsiʿatun wa-ghurfatu nawmin murīḥatun wa-maṭbakhun ṣaghīr.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "ar": "كَانَ فِي غُرْفَةِ النَّوْمِ سَرِيرٌ وَمِرْآةٌ، وَفِي المَطْبَخِ فُرْنٌ جَدِيدٌ.",
@@ -182,7 +193,14 @@
      "new"
     ]
    ],
-   "tr": "kāna fī ghurfati n-nawmi sarīrun wa-mirʾāh, wa-fī l-maṭbakhi furnun jadīd."
+   "tr": "kāna fī ghurfati n-nawmi sarīrun wa-mirʾāh, wa-fī l-maṭbakhi furnun jadīd.",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "ar": "سَأَلَ سَامِر صَاحِبَ البَيْتِ: مِنْ فَضْلِكَ، هَلْ هَذِهِ الشَّقَّةُ مُتَاحَةٌ يَوْمَ الثُّلَاثَاءِ؟",
@@ -237,7 +255,16 @@
      "Tuesday"
     ]
    ],
-   "tr": "saʾala sāmir ṣāḥiba l-bayt: min faḍlika, hal hādhihi sh-shaqqatu mutāḥatun yawma th-thulāthāʾ?"
+   "tr": "saʾala sāmir ṣāḥiba l-bayt: min faḍlika, hal hādhihi sh-shaqqatu mutāḥatun yawma th-thulāthāʾ?",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "demonstratives",
+    "tenses",
+    "idafa",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "ar": "فَأَجَابَهُ: نَعَمْ، يُمْكِنُكَ الدُّخُولُ يَوْمَ الثُّلَاثَاءِ، وَإِذَا أَرَدْتَ يُمْكِنُكَ الانْتِقَالُ يَوْمَ الخَمِيسِ.",
@@ -284,7 +311,13 @@
      "Thursday"
     ]
    ],
-   "tr": "fa-ajābah: naʿam, yumkinuka d-dukhūlu yawma th-thulāthāʾ, wa-idhā aradta yumkinuka l-intiqālu yawma l-khamīs."
+   "tr": "fa-ajābah: naʿam, yumkinuka d-dukhūlu yawma th-thulāthāʾ, wa-idhā aradta yumkinuka l-intiqālu yawma l-khamīs.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa"
+   ]
   },
   {
    "ar": "أَعْجَبَتْ سَامِر الشَّقَّةُ، فَقَالَ: أُرِيدُ أَنْ أَسْكُنَ هُنَا، فَالبَيْتُ جَمِيلٌ وَالحَيُّ هَادِئٌ.",
@@ -339,7 +372,14 @@
      "quiet"
     ]
    ],
-   "tr": "aʿjabat sāmira sh-shaqqah, fa-qāla: urīdu an askuna hunā, fa-l-baytu jamīlun wa-l-ḥayyu hādiʾ."
+   "tr": "aʿjabat sāmira sh-shaqqah, fa-qāla: urīdu an askuna hunā, fa-l-baytu jamīlun wa-l-ḥayyu hādiʾ.",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors",
+    "pronouns"
+   ]
   }
  ],
  "vocab": [

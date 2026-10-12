@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4v8xmy">
-  <link rel="stylesheet" href="css/style.css?v=mv4v8xmy">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4wnvra">
+  <link rel="stylesheet" href="css/style.css?v=mv4wnvra">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -284,13 +284,14 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4v8xmy"></script>
-<script src="js/curriculum.js?v=mv4v8xmy"></script>
-<script src="js/srs.js?v=mv4v8xmy"></script>
-<script src="js/freetry.js?v=mv4v8xmy"></script>
-<script src="js/tryit.js?v=mv4v8xmy"></script>
-<script src="js/app.js?v=mv4v8xmy"></script>
-<script src="js/tracker.js?v=mv4v8xmy"></script>
+<script src="js/progress-model.js?v=mv4wnvra"></script>
+<script src="js/curriculum.js?v=mv4wnvra"></script>
+<script src="js/srs.js?v=mv4wnvra"></script>
+<script src="js/frames.js?v=mv4wnvra"></script>
+<script src="js/freetry.js?v=mv4wnvra"></script>
+<script src="js/tryit.js?v=mv4wnvra"></script>
+<script src="js/app.js?v=mv4wnvra"></script>
+<script src="js/tracker.js?v=mv4wnvra"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -358,14 +359,14 @@ const BATCH_SIZE = 10;
     // 1. Chapters 1-10 sentences (Reza's daily units)
     (cRes.chapters || []).forEach(c => {
       (c.sentences || []).forEach((s, idx) => {
-        add(`chap:${c.num}:${idx}`, s.ar, s.en, s.tr, s.hint, s.words, "chapters", "everyday", `Chapter ${c.num}: ${c.title}`);
+        add(`chap:${c.num}:${idx}`, s.ar, s.en, s.tr, s.hint, s.words, "chapters", "everyday", `Chapter ${c.num}: ${c.title}`, { pattern: s.pattern || null, frames: s.frames || [] });
       });
     });
 
     // 2. Preply Teacher sentences
     (clsRes.classes || []).forEach(c => {
       (c.sentences || []).forEach((s, idx) => {
-        add(`cls:${c.id}:${idx}`, s.ar, s.en, s.tr, s.note, s.words, "teacher", "class", `Preply: ${c.title}`);
+        add(`cls:${c.id}:${idx}`, s.ar, s.en, s.tr, s.note, s.words, "teacher", "class", `Preply: ${c.title}`, { pattern: s.pattern || null, frames: s.frames || [] });
       });
     });
 
@@ -373,7 +374,7 @@ const BATCH_SIZE = 10;
     (bRes.sentences || []).forEach(s => {
       const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
       add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}` : s.pattern || "",
-        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), pattern: s.pattern || "-", use: s.use || 0 });
+        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
     });
 
     updateOverallStats();

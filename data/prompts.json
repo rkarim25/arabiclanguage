@@ -6,6 +6,11 @@
    "ar": "السَّلَامُ عَلَيْكُمْ",
    "keys": [
     "ev-greetings:0"
+   ],
+   "pattern": "prep-pron",
+   "frames": [
+    "prep-pron",
+    "nominal"
    ]
   },
   {
@@ -13,6 +18,10 @@
    "ar": "صَبَاح الخَيْر",
    "keys": [
     "ev-greetings:2"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -20,7 +29,9 @@
    "ar": "شُكْرًا",
    "keys": [
     "ev-greetings:4"
-   ]
+   ],
+   "pattern": null,
+   "frames": []
   },
   {
    "en": "Yes, of course!",
@@ -28,6 +39,10 @@
    "keys": [
     "ev-glue:0",
     "ev-glue:1"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -36,6 +51,10 @@
    "keys": [
     "ev-want-need:0",
     "ev-food:0"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -44,6 +63,10 @@
    "keys": [
     "ev-people:0",
     "ev-food:6"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -52,6 +75,10 @@
    "keys": [
     "ev-people:0",
     "ev-food:7"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -60,6 +87,11 @@
    "keys": [
     "ev-questions:2",
     "story-02:6"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -68,6 +100,12 @@
    "keys": [
     "ev-questions:2",
     "story-02:3"
+   ],
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -76,6 +114,11 @@
    "keys": [
     "ev-questions:4",
     "ev-people:1"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -84,6 +127,11 @@
    "keys": [
     "ev-questions:0",
     "ev-want-need:0"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
    ]
   },
   {
@@ -92,6 +140,11 @@
    "keys": [
     "qc:3",
     "ev-want-need:4"
+   ],
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses"
    ]
   },
   {
@@ -100,6 +153,11 @@
    "keys": [
     "qc:3",
     "ev-want-need:5"
+   ],
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses"
    ]
   },
   {
@@ -109,6 +167,12 @@
     "ev-commands:0",
     "ev-food:0",
     "ev-greetings:6"
+   ],
+   "pattern": "imperative",
+   "frames": [
+    "imperative",
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -117,6 +181,11 @@
    "keys": [
     "ev-commands:7",
     "ev-greetings:6"
+   ],
+   "pattern": "imperative",
+   "frames": [
+    "imperative",
+    "pronouns"
    ]
   },
   {
@@ -125,6 +194,10 @@
    "keys": [
     "ev-glue:3",
     "ev-time:2"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -133,6 +206,12 @@
    "keys": [
     "ev-time:0",
     "ev-time:2"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "connectors",
+    "nominal"
    ]
   },
   {
@@ -141,6 +220,13 @@
    "keys": [
     "ev-glue:4",
     "ev-questions:5"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "prep-pron",
+    "connectors",
+    "nominal"
    ]
   },
   {
@@ -149,6 +235,11 @@
    "keys": [
     "ev-glue:5",
     "ev-food:6"
+   ],
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "tenses"
    ]
   },
   {
@@ -157,6 +248,12 @@
    "keys": [
     "ev-commands:2",
     "ev-people:9"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -165,6 +262,10 @@
    "keys": [
     "ev-commands:5",
     "ev-commands:4"
+   ],
+   "pattern": "imperative",
+   "frames": [
+    "imperative"
    ]
   },
   {
@@ -173,6 +274,11 @@
    "keys": [
     "ev-questions:6",
     "ev-food:8"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -182,6 +288,11 @@
     "ev-numbers:0",
     "ev-numbers:1",
     "ev-numbers:2"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "plurals",
+    "nominal"
    ]
   },
   {
@@ -192,6 +303,11 @@
     "story-01:9",
     "story-01:1",
     "qc:5"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
    ]
   },
   {
@@ -202,6 +318,11 @@
     "story-01:14",
     "story-01:15",
     "qc:11"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
    ]
   },
   {
@@ -211,6 +332,10 @@
     "story-01:24",
     "qc:22",
     "story-01:23"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -220,6 +345,11 @@
     "story-02:3",
     "story-02:5",
     "story-02:6"
+   ],
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "nominal"
    ]
   },
   {
@@ -229,6 +359,11 @@
     "story-02:2",
     "story-02:3",
     "story-02:4"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "who-acts"
    ]
   },
   {
@@ -237,6 +372,11 @@
    "keys": [
     "story-02:13",
     "story-02:14"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -245,6 +385,11 @@
    "keys": [
     "ev-want-need:6",
     "story-01:28"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -253,6 +398,10 @@
    "keys": [
     "story-03:31",
     "story-03:25"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -261,6 +410,10 @@
    "keys": [
     "story-03:0",
     "ev-opposites:4"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -269,6 +422,11 @@
    "keys": [
     "ev-questions:2",
     "ev-directions:3"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -277,6 +435,11 @@
    "keys": [
     "ev-directions:9",
     "ev-haram:0"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -285,6 +448,12 @@
    "keys": [
     "ev-directions:0",
     "ev-directions:1"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "connectors",
+    "nominal"
    ]
   },
   {
@@ -293,6 +462,10 @@
    "keys": [
     "ev-directions:8",
     "ev-directions:5"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -301,6 +474,11 @@
    "keys": [
     "ev-questions:2",
     "ev-haram:9"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -309,6 +487,10 @@
    "keys": [
     "ev-want-need:0",
     "ev-haram:5"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -316,6 +498,13 @@
    "ar": "بِكَمْ هَذَا؟",
    "keys": [
     "ev-shopping:0"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "demonstratives",
+    "prep-pron",
+    "nominal"
    ]
   },
   {
@@ -324,6 +513,10 @@
    "keys": [
     "ev-shopping:1",
     "ev-shopping:2"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -332,6 +525,12 @@
    "keys": [
     "ev-shopping:3",
     "ev-shopping:6"
+   ],
+   "pattern": "have",
+   "frames": [
+    "have",
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -340,6 +539,11 @@
    "keys": [
     "ev-shopping:8",
     "ev-greetings:4"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -347,6 +551,10 @@
    "ar": "أَحْتَاجُ طَبِيبًا",
    "keys": [
     "ev-medical:0"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -355,6 +563,11 @@
    "keys": [
     "ev-questions:2",
     "ev-medical:1"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -365,6 +578,11 @@
     "ev-medical:3",
     "ev-want-need:1",
     "ev-medical:2"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -373,6 +591,10 @@
    "keys": [
     "ev-hotel-taxi:3",
     "ev-hotel-taxi:0"
+   ],
+   "pattern": "imperative",
+   "frames": [
+    "imperative"
    ]
   },
   {
@@ -381,6 +603,11 @@
    "keys": [
     "ev-hotel-taxi:4",
     "ev-greetings:6"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -389,6 +616,11 @@
    "keys": [
     "ev-hotel-taxi:5",
     "ev-hotel-taxi:8"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -397,6 +629,12 @@
    "keys": [
     "ev-help:0",
     "ev-help:1"
+   ],
+   "pattern": "imperative",
+   "frames": [
+    "imperative",
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -405,6 +643,11 @@
    "keys": [
     "ev-help:5",
     "ev-greetings:6"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -413,6 +656,12 @@
    "keys": [
     "ev-help:6",
     "ev-help:7"
+   ],
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -421,6 +670,11 @@
    "keys": [
     "ev-questions:2",
     "ev-help:3"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -429,6 +683,12 @@
    "keys": [
     "story-05:5",
     "story-05:7"
+   ],
+   "pattern": "dual",
+   "frames": [
+    "dual",
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -436,6 +696,12 @@
    "ar": "مَاذَا عِنْدَكُمُ اليَوْمَ؟",
    "keys": [
     "story-05:10"
+   ],
+   "pattern": "have",
+   "frames": [
+    "have",
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -444,6 +710,10 @@
    "keys": [
     "story-05:11",
     "story-05:13"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -452,6 +722,10 @@
    "keys": [
     "story-05:24",
     "story-05:25"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -460,6 +734,11 @@
    "keys": [
     "story-05:27",
     "story-05:7"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -468,6 +747,13 @@
    "keys": [
     "story-04:20",
     "story-04:0"
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "gender",
+    "nominal"
    ]
   },
   {
@@ -475,6 +761,10 @@
    "ar": "أَتَعَلَّمُ العَرَبِيَّةَ",
    "keys": [
     "story-04:29"
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -483,6 +773,11 @@
    "keys": [
     "story-04:8",
     "story-04:9"
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
    ]
   },
   {
@@ -490,21 +785,38 @@
    "ar": "مَا عِنْدِي",
    "keys": [],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ]
   },
   {
    "en": "I don't have… (the other way to say it)",
    "ar": "لَيْسَ عِنْدِي",
    "keys": [],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "negation",
+   "frames": [
+    "have",
+    "negation",
+    "nominal"
+   ]
   },
   {
    "en": "I have two uncles and two aunts.",
    "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
    "keys": [],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "dual",
+   "frames": [
+    "dual",
+    "have",
+    "nominal"
+   ]
   },
   {
    "en": "What furniture is there in your house?",
@@ -514,7 +826,14 @@
     "ev-questions:1"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "wujud",
+   "frames": [
+    "wujud",
+    "questions",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "There is a table, chairs and beds.",
@@ -523,21 +842,36 @@
     "ev-lesson-home:9"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "wujud",
+   "frames": [
+    "wujud",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "I live in the airport neighbourhood.",
    "ar": "أَسْكُنُ فِي حَيِّ المَطَارِ",
    "keys": [],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "Allah is Ever-Living, He does not die.",
    "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
    "keys": [],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses"
+   ]
   },
   {
    "en": "What floor is your house on?",
@@ -547,7 +881,13 @@
     "ev-lesson-home:20"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "I have a curtain for the window.",
@@ -556,7 +896,13 @@
     "ev-lesson-home:16"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "Allah is the Concealer of faults.",
@@ -566,7 +912,11 @@
     "ev-lesson-divine:3"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "How many times a day do you prostrate?",
@@ -576,7 +926,12 @@
     "ev-lesson-divine:4"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "This is a beautiful Pakistani carpet.",
@@ -585,7 +940,13 @@
     "ev-lesson-home:18"
    ],
    "source": "teacher",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "The flat has a bedroom, a living room and a kitchen.",
@@ -596,7 +957,12 @@
     "ev-lesson-home:4"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "What furniture is there in the flat?",
@@ -606,7 +972,13 @@
     "ev-questions:1"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "wujud",
+   "frames": [
+    "wujud",
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "In the living room there is a sofa and a chair.",
@@ -616,7 +988,13 @@
     "ev-lesson-home:7"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "idafa",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "We have many sofas and chairs.",
@@ -625,7 +1003,13 @@
     "ev-lesson-home:8"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "In the kitchen there is a fridge and an oven.",
@@ -634,7 +1018,11 @@
     "ev-lesson-home:14"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "I have a big cupboard in the bedroom.",
@@ -644,21 +1032,37 @@
     "ev-home:1"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "idafa",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "The cupboards are new.",
    "ar": "الخَزَائِنُ جَدِيدَةٌ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "I open the window in the morning.",
    "ar": "أَفْتَحُ الشُّبَّاكَ فِي الصَّبَاحِ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
+   ]
   },
   {
    "en": "The mirror is in the bedroom.",
@@ -667,14 +1071,23 @@
     "ev-home:1"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "The lamp is small.",
    "ar": "المِصْبَاحُ صَغِيرٌ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "My house is on the third floor.",
@@ -683,7 +1096,13 @@
     "ev-directions:4"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "Do you have a lift?",
@@ -693,7 +1112,13 @@
     "ev-shopping:3"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "Today is Monday and tomorrow is Tuesday.",
@@ -705,7 +1130,11 @@
    ],
    "source": "class-built",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
-   "pattern": "nominal"
+   "pattern": "nominal",
+   "frames": [
+    "dual",
+    "nominal"
+   ]
   },
   {
    "en": "Wednesday is after Tuesday.",
@@ -715,7 +1144,12 @@
     "ev-lesson-week:2"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "connectors",
+    "nominal"
+   ]
   },
   {
    "en": "Saturday and Sunday are a holiday.",
@@ -726,7 +1160,12 @@
     "ev-lesson-week:0"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "nominal"
+   ]
   },
   {
    "en": "The week is seven days.",
@@ -735,7 +1174,12 @@
     "ev-numbers:6"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "On Tuesday I go to the lesson.",
@@ -746,7 +1190,13 @@
     "ev-lesson-week:9"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "The weather is cold and there is snow.",
@@ -755,7 +1205,13 @@
     "ev-lesson-weather:0"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "prep-pron",
+   "frames": [
+    "prep-pron",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "The rain comes down from the clouds.",
@@ -764,21 +1220,34 @@
     "ev-questions:1"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "The sun is hot and the wind is cold.",
    "ar": "الشَّمْسُ حَارَّةٌ وَالرِّيحُ بَارِدَةٌ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "My sister is in the house.",
    "ar": "أُخْتِي فِي البَيْتِ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "My uncle and my aunt are from my mother's side.",
@@ -787,7 +1256,12 @@
     "ev-questions:1"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "This is my sister's husband.",
@@ -796,14 +1270,25 @@
     "ev-family:14"
    ],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "His wife is a teacher.",
    "ar": "زَوْجَتُهُ مُعَلِّمَةٌ",
    "keys": [],
    "source": "class-built",
-   "lesson": "Class — 30 Aug: the flat, the week, the family"
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "Straighten up, and close the gaps!",
@@ -814,7 +1299,12 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "imperative",
+   "frames": [
+    "imperative",
+    "who-acts"
+   ]
   },
   {
    "en": "Straighten your rows — straight rows are part of the prayer.",
@@ -825,7 +1315,14 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "tenses",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "en": "Align yourselves and move forward.",
@@ -835,7 +1332,12 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "who-acts"
+   ]
   },
   {
    "en": "Complete the first row, then the one after it.",
@@ -845,7 +1347,14 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "alladhina",
+   "frames": [
+    "alladhina",
+    "ordinals",
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "The iqama has been given — the prayer has begun.",
@@ -855,7 +1364,12 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "nominal",
+   "frames": [
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "We are waiting for the iqama.",
@@ -864,7 +1378,12 @@
     "ev-masjid:6"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "who-acts"
+   ]
   },
   {
    "en": "Congregational prayer is gathering!",
@@ -874,7 +1393,12 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "nominal",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "After the prayer there is a funeral prayer.",
@@ -884,7 +1408,14 @@
    ],
    "source": "built",
    "lesson": "Masjid and Haram",
-   "heard": true
+   "heard": true,
+   "pattern": "nominal",
+   "frames": [
+    "connectors",
+    "idafa",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "Please move forward, there is a place in the first row.",
@@ -894,7 +1425,13 @@
     "ev-greetings:6"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "Where is the Kaaba from here?",
@@ -905,7 +1442,12 @@
     "ev-questions:1"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "I want to perform tawaf around the Kaaba.",
@@ -915,7 +1457,11 @@
     "ev-haram:1"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "Where does the tawaf begin?",
@@ -926,7 +1472,12 @@
     "ev-haram:2"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "The tawaf area is crowded now.",
@@ -936,7 +1487,11 @@
     "ev-time:0"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "Where does the sa'i begin?",
@@ -947,7 +1502,12 @@
     "ev-haram:3"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "The sa'i is between Safa and Marwa.",
@@ -957,7 +1517,11 @@
     "ev-haram:4"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "I am performing Umrah today.",
@@ -968,7 +1532,11 @@
     "ev-time:1"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "I am in ihram.",
@@ -977,7 +1545,11 @@
     "ev-people:0"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "Where do I put on the ihram?",
@@ -987,7 +1559,12 @@
     "ev-haram:7"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "Where is the Station of Ibrahim?",
@@ -997,7 +1574,12 @@
     "ev-haram:8"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "Is there Zamzam water here?",
@@ -1008,7 +1590,13 @@
     "ev-haram:5"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "wujud",
+   "frames": [
+    "wujud",
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "Excuse me — where is the exit to the Haram?",
@@ -1018,7 +1606,12 @@
     "ev-haram:0"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "What time is the prayer in the Haram?",
@@ -1028,7 +1621,12 @@
     "ev-haram:0"
    ],
    "source": "built",
-   "lesson": "Masjid and Haram"
+   "lesson": "Masjid and Haram",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "The flat is spacious.",
@@ -1041,7 +1639,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "The bed is comfortable.",
@@ -1054,7 +1656,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The neighbourhood is quiet.",
@@ -1066,7 +1671,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The chair is new.",
@@ -1077,7 +1685,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The chairs are in the kitchen.",
@@ -1090,7 +1701,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The oven is in the kitchen.",
@@ -1104,7 +1718,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The flat is available now.",
@@ -1118,7 +1735,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "The housing is near the mosque.",
@@ -1129,7 +1750,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The bedroom is small and comfortable.",
@@ -1142,7 +1766,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "idafa",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "The living room is spacious.",
@@ -1155,7 +1784,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "The owner of the flat is at home.",
@@ -1168,7 +1801,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "idafa",
-   "frame": "idafa"
+   "frame": "idafa",
+   "frames": [
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "I have a chair and a table.",
@@ -1180,7 +1817,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "I don't have an oven.",
@@ -1192,7 +1834,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "negation",
+    "nominal"
+   ]
   },
   {
    "en": "On Thursday I have a lesson.",
@@ -1204,7 +1851,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "Is there an oven in the kitchen?",
@@ -1219,7 +1871,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "wujud",
-   "frame": "wujud"
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "There is a chair in the bedroom.",
@@ -1232,7 +1889,13 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "wujud",
-   "frame": "wujud"
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "tenses",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "en": "There is no lift here.",
@@ -1243,7 +1906,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "wujud",
-   "frame": "wujud"
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "negation",
+    "tenses"
+   ]
   },
   {
    "en": "Where are the chairs?",
@@ -1255,7 +1923,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ]
   },
   {
    "en": "Where is the owner of the flat?",
@@ -1269,7 +1941,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "When can I move in?",
@@ -1281,7 +1958,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "Is the flat available on Saturday?",
@@ -1297,7 +1978,13 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "Can you move tomorrow?",
@@ -1311,7 +1998,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "You can move in on Thursday.",
@@ -1325,7 +2016,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "You can move this week.",
@@ -1338,7 +2033,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "tenses"
+   ]
   },
   {
    "en": "I want a quiet flat.",
@@ -1352,7 +2051,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "gender"
+   ]
   },
   {
    "en": "I want to move on Friday.",
@@ -1366,7 +2069,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "I want a comfortable bed.",
@@ -1380,7 +2087,10 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "On Friday I go to the mosque.",
@@ -1392,7 +2102,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "Thursday is after Wednesday.",
@@ -1404,7 +2118,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "connectors",
+    "nominal"
+   ]
   },
   {
    "en": "The weekly holiday is on Friday.",
@@ -1418,7 +2136,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "idafa",
-   "frame": "idafa"
+   "frame": "idafa",
+   "frames": [
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "The flat was spacious and comfortable.",
@@ -1432,7 +2154,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "kana",
-   "frame": "kana"
+   "frame": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ]
   },
   {
    "en": "The neighbourhood was quiet.",
@@ -1444,7 +2170,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "kana",
-   "frame": "kana"
+   "frame": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ]
   },
   {
    "en": "I liked the flat.",
@@ -1457,7 +2187,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "pronouns",
-   "frame": "pronouns"
+   "frame": "pronouns",
+   "frames": [
+    "pronouns",
+    "tenses"
+   ]
   },
   {
    "en": "I liked the quiet neighbourhood.",
@@ -1470,7 +2204,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "pronouns",
-   "frame": "pronouns"
+   "frame": "pronouns",
+   "frames": [
+    "pronouns",
+    "tenses"
+   ]
   },
   {
    "en": "The beds and the chairs are new.",
@@ -1482,7 +2220,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "plurals",
-   "frame": "plurals"
+   "frame": "plurals",
+   "frames": [
+    "plurals",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "In the flat there are three rooms.",
@@ -1496,7 +2239,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "plurals",
-   "frame": "plurals"
+   "frame": "plurals",
+   "frames": [
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "This bed is very comfortable.",
@@ -1509,7 +2256,11 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ]
   },
   {
    "en": "This room is spacious.",
@@ -1521,7 +2272,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "On Sunday I have a lesson.",
@@ -1533,7 +2289,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "Sunday is the first day of the week.",
@@ -1545,7 +2306,12 @@
    "source": "core",
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "idafa",
-   "frame": "idafa"
+   "frame": "idafa",
+   "frames": [
+    "ordinals",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "Move forward — there is space in the row.",
@@ -1557,7 +2323,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "imperative",
-   "frame": "imperative"
+   "frame": "imperative",
+   "frames": [
+    "imperative",
+    "tenses",
+    "who-acts"
+   ]
   },
   {
    "en": "The house has four doors.",
@@ -1569,7 +2340,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "wujud",
-   "frame": "wujud"
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "I have five riyals.",
@@ -1581,7 +2357,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "I bought six pens.",
@@ -1593,7 +2374,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "plurals"
+   ]
   },
   {
    "en": "A week has seven days, not eight.",
@@ -1606,7 +2392,13 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "wujud",
-   "frame": "wujud"
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "negation",
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "He has nine books.",
@@ -1618,7 +2410,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "tenses",
+    "plurals"
+   ]
   },
   {
    "en": "This is ten riyals.",
@@ -1630,7 +2427,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "plurals",
+    "nominal"
+   ]
   },
   {
    "en": "How much is this, brother?",
@@ -1642,7 +2444,14 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "demonstratives",
+    "prep-pron",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "This is a gift for my mother.",
@@ -1654,7 +2463,11 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "tenses"
+   ]
   },
   {
    "en": "I got the tea for free.",
@@ -1666,7 +2479,12 @@
    "source": "core",
    "lesson": "Ladder core — numbers, the masjid, and shopping",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "The meat is expensive and the chicken is cheap.",
@@ -1680,7 +2498,10 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "I drink milk in the morning.",
@@ -1692,7 +2513,10 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "We have fruit and milk at home.",
@@ -1705,7 +2529,11 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ]
   },
   {
    "en": "Walk straight ahead to the door.",
@@ -1718,7 +2546,11 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "imperative",
-   "frame": "imperative"
+   "frame": "imperative",
+   "frames": [
+    "imperative",
+    "nominal"
+   ]
   },
   {
    "en": "Where is the entrance of the market?",
@@ -1730,7 +2562,12 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "The lesson is easy and the exam is difficult.",
@@ -1742,7 +2579,10 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "The train is fast and the bus is slow.",
@@ -1755,7 +2595,11 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
   },
   {
    "en": "My room is spacious and the kitchen is narrow.",
@@ -1767,7 +2611,11 @@
    "source": "core",
    "lesson": "Ladder core — food, the street, and opposites",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "I always read the Qur'an after fajr.",
@@ -1779,7 +2627,11 @@
    "source": "core",
    "lesson": "Ladder core — time words",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "I woke up late today.",
@@ -1792,7 +2644,11 @@
    "source": "core",
    "lesson": "Ladder core — time words",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ]
   },
   {
    "en": "I have a pain in my head.",
@@ -1804,7 +2660,12 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "I have a fever and I am ill.",
@@ -1817,7 +2678,12 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "My head hurts me a lot.",
@@ -1829,7 +2695,11 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "pronouns",
-   "frame": "pronouns"
+   "frame": "pronouns",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "I have an allergy to milk.",
@@ -1842,7 +2712,11 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ]
   },
   {
    "en": "I need an ambulance.",
@@ -1855,7 +2729,11 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "idafa",
-   "frame": "idafa"
+   "frame": "idafa",
+   "frames": [
+    "idafa",
+    "tenses"
+   ]
   },
   {
    "en": "I am ill and I have diabetes.",
@@ -1868,7 +2746,12 @@
    "source": "core",
    "lesson": "Ladder core — at the pharmacy",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "I have a reservation at the hotel.",
@@ -1881,7 +2764,11 @@
    "source": "core",
    "lesson": "Ladder core — hotels and taxis",
    "pattern": "have",
-   "frame": "have"
+   "frame": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ]
   },
   {
    "en": "Where is the room key?",
@@ -1894,7 +2781,12 @@
    "source": "core",
    "lesson": "Ladder core — hotels and taxis",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "Where is the train station?",
@@ -1907,7 +2799,12 @@
    "source": "core",
    "lesson": "Ladder core — hotels and taxis",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "This is my luggage in the car.",
@@ -1920,7 +2817,12 @@
    "source": "core",
    "lesson": "Ladder core — hotels and taxis",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "pronouns",
+    "nominal"
+   ]
   },
   {
    "en": "Do you need any service?",
@@ -1932,7 +2834,11 @@
    "source": "core",
    "lesson": "Ladder core — hotels and taxis",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "en": "Do you speak English, please?",
@@ -1945,7 +2851,12 @@
    "source": "core",
    "lesson": "Ladder core — getting help",
    "pattern": "questions",
-   "frame": "questions"
+   "frame": "questions",
+   "frames": [
+    "questions",
+    "tenses",
+    "pronouns"
+   ]
   },
   {
    "en": "My passport is missing.",
@@ -1958,7 +2869,11 @@
    "source": "core",
    "lesson": "Ladder core — getting help",
    "pattern": "nominal",
-   "frame": "nominal"
+   "frame": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
+   ]
   },
   {
    "en": "This is the emergency door.",
@@ -1971,7 +2886,12 @@
    "source": "core",
    "lesson": "Ladder core — getting help",
    "pattern": "demonstratives",
-   "frame": "demonstratives"
+   "frame": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "idafa",
+    "nominal"
+   ]
   },
   {
    "en": "On a work day, I wake up early at seven in the morning.",
@@ -1985,7 +2905,14 @@
     "ev-lesson-routine:9"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "idafa",
+    "gender"
+   ]
   },
   {
    "en": "I wash my face and put on my clothes, then I go to the mosque.",
@@ -1997,7 +2924,13 @@
     "ev-lesson-routine:12"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
+   ]
   },
   {
    "en": "After the prayer I return home and eat breakfast.",
@@ -2009,7 +2942,12 @@
     "ev-lesson-routine:15"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "At eight o'clock I go to school in my car.",
@@ -2019,7 +2957,14 @@
     "ev-lesson-routine:6"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "en": "At twelve o'clock I return home.",
@@ -2030,7 +2975,14 @@
     "ev-lesson-routine:13"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "plurals",
+    "gender"
+   ]
   },
   {
    "en": "I help my mother sweep the house and wash the dishes.",
@@ -2042,7 +2994,14 @@
     "ev-lesson-routine:20"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "en": "As for on the day off, I wake up late.",
@@ -2054,7 +3013,13 @@
     "ev-lesson-routine:9"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa"
+   ]
   },
   {
    "en": "I read a book before I sleep.",
@@ -2064,7 +3029,12 @@
     "ev-lesson-routine:24"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "When do you return home on a work day?",
@@ -2076,7 +3046,13 @@
     "ev-lesson-routine:13"
    ],
    "source": "class-built",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "I love the work day because I learn new things.",
@@ -2086,7 +3062,14 @@
     "ev-lesson-routine:1"
    ],
    "source": "teacher",
-   "lesson": "Class — 27 Sep: a working day"
+   "lesson": "Class — 27 Sep: a working day",
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "tenses",
+    "connectors",
+    "idafa"
+   ]
   },
   {
    "en": "I woke up and washed my face, then I drank tea and began work at home in the morning.",
@@ -2097,7 +3080,14 @@
     "ev-lesson-routine:8"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors",
+    "pronouns"
+   ]
   },
   {
    "en": "At noon I ate lunch, then I went to the mosque for Friday prayer, and after it I returned to my house.",
@@ -2109,7 +3099,16 @@
     "ev-lesson-week:5"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors",
+    "idafa",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "en": "I worked a little more, then I finished work.",
@@ -2120,7 +3119,13 @@
     "ev-lesson-routine:0"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "I am always hungry.",
@@ -2132,7 +3137,11 @@
     "ev-lesson-village:26"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ]
   },
   {
    "en": "He ate a first egg, then a second and a third.",
@@ -2143,7 +3152,14 @@
     "ev-lesson-village:28"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "connectors",
+    "gender"
+   ]
   },
   {
    "en": "I prefer helping the poor.",
@@ -2153,7 +3169,12 @@
     "ev-lesson-village:25"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
+   ]
   },
   {
    "en": "One meal is not enough for the whole day.",
@@ -2164,7 +3185,13 @@
     "ev-time:1"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses",
+    "gender"
+   ]
   },
   {
    "en": "Why don't we go to the village again next week?",
@@ -2178,7 +3205,16 @@
     "ev-lesson-week:7"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "negation",
+    "questions",
+    "tenses",
+    "who-acts",
+    "gender"
+   ]
   },
   {
    "en": "I want to eat healthy food every day.",
@@ -2191,7 +3227,11 @@
     "ev-time:1"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ]
   },
   {
    "en": "Or feeding, on a day of hunger. (Qur'an 90:14)",
@@ -2203,7 +3243,12 @@
     "ev-lesson-quran-words:7"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: words that meet the Qur'an"
+   "lesson": "Class — 11 Oct: words that meet the Qur'an",
+   "pattern": "nominal",
+   "frames": [
+    "connectors",
+    "nominal"
+   ]
   },
   {
    "en": "He has truly won a great triumph. (Qur'an 33:71)",
@@ -2213,7 +3258,12 @@
     "ev-lesson-quran-words:4"
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: words that meet the Qur'an"
+   "lesson": "Class — 11 Oct: words that meet the Qur'an",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "en": "I drank a glass of milk.",
@@ -2227,7 +3277,11 @@
    "source": "core",
    "lesson": "Class — 11 Oct: a trip to the village",
    "pattern": "past-tu",
-   "frame": "past-tu"
+   "frame": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ]
   },
   {
    "en": "The food was very delicious.",
@@ -2239,7 +3293,11 @@
    "source": "core",
    "lesson": "Class — 11 Oct: a trip to the village",
    "pattern": "kana",
-   "frame": "kana"
+   "frame": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ]
   },
   {
    "en": "We sat under a big tree.",
@@ -2252,7 +3310,12 @@
    "source": "core",
    "lesson": "Class — 11 Oct: a trip to the village",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "en": "I ate a piece of bread with cheese.",
@@ -2264,7 +3327,12 @@
    "source": "core",
    "lesson": "Class — 11 Oct: a trip to the village",
    "pattern": "idafa",
-   "frame": "idafa"
+   "frame": "idafa",
+   "frames": [
+    "idafa",
+    "past-tu",
+    "tenses"
+   ]
   },
   {
    "en": "The rich man bought fruit and grapes.",
@@ -2278,7 +3346,630 @@
    "source": "core",
    "lesson": "Class — 11 Oct: a trip to the village",
    "pattern": "tenses",
-   "frame": "tenses"
+   "frame": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "I drink tea, then I go to the mosque.",
+   "ar": "أَشْرَبُ الشَّايَ ثُمَّ أَذْهَبُ إِلَى المَسْجِدِ.",
+   "tr": "ashrabu sh-shāya thumma adhhabu ilā l-masjid",
+   "keys": [
+    "story-01:8",
+    "story-01:31",
+    "qc:19",
+    "ev-commands:3",
+    "qc:11",
+    "ev-worship:2"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "I read the Qur'an before sleeping.",
+   "ar": "أَقْرَأُ القُرْآنَ قَبْلَ النَّوْمِ.",
+   "tr": "aqraʾu l-qurʾāna qabla n-nawm",
+   "keys": [
+    "story-01:24",
+    "qc:131",
+    "qc:32",
+    "story-01:29"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "After the prayer we eat breakfast.",
+   "ar": "بَعْدَ الصَّلَاةِ نَأْكُلُ الفَطُورَ.",
+   "tr": "baʿda ṣ-ṣalāti naʾkulu l-faṭūr",
+   "keys": [
+    "qc:37",
+    "qc:57",
+    "ev-lesson-routine:15"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "tenses",
+    "connectors",
+    "who-acts"
+   ]
+  },
+  {
+   "en": "I like tea, but I don't like coffee.",
+   "ar": "أُحِبُّ الشَّايَ لَكِنْ لَا أُحِبُّ القَهْوَةَ.",
+   "tr": "uḥibbu sh-shāya lākin lā uḥibbu l-qahwah",
+   "keys": [
+    "ev-want-need:6",
+    "story-01:31",
+    "ev-glue:4",
+    "ph-talk:1",
+    "story-01:9"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "negation",
+    "prep-pron",
+    "connectors",
+    "nominal"
+   ]
+  },
+  {
+   "en": "When I return home, I sleep.",
+   "ar": "عِنْدَمَا أَعُودُ إِلَى البَيْتِ أَنَامُ.",
+   "tr": "ʿindamā aʿūdu ilā l-bayti anām",
+   "keys": [
+    "ev-lesson-routine:13",
+    "qc:11",
+    "story-02:3",
+    "ev-lesson-routine:24"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "First I wash, then I pray.",
+   "ar": "أَوَّلًا أَغْسِلُ ثُمَّ أُصَلِّي.",
+   "tr": "awwalan aghsilu thumma uṣallī",
+   "keys": [
+    "ev-lesson-routine:10",
+    "qc:19",
+    "story-01:5"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "connectors",
+   "frame": "connectors",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "The teachers are in the mosque.",
+   "ar": "المُعَلِّمُونَ فِي المَسْجِدِ.",
+   "tr": "al-muʿallimūna fī l-masjid",
+   "keys": [
+    "qc:5",
+    "ev-worship:2"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "plurals",
+    "nominal"
+   ]
+  },
+  {
+   "en": "I have three books.",
+   "ar": "عِنْدِي ثَلَاثَةُ كُتُبٍ.",
+   "tr": "ʿindī thalāthatu kutub",
+   "keys": [
+    "ev-numbers:2"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "have",
+    "tenses",
+    "plurals"
+   ]
+  },
+  {
+   "en": "In the house there are four rooms.",
+   "ar": "فِي البَيْتِ أَرْبَعُ غُرَفٍ.",
+   "tr": "fī l-bayti arbaʿu ghuraf",
+   "keys": [
+    "qc:5",
+    "story-02:3"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "plurals",
+    "nominal"
+   ]
+  },
+  {
+   "en": "The Muslims pray in the mosque.",
+   "ar": "المُسْلِمُونَ يُصَلُّونَ فِي المَسْجِدِ.",
+   "tr": "al-muslimūna yuṣallūna fī l-masjid",
+   "keys": [
+    "qc:5",
+    "ev-worship:2"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "tenses",
+    "plurals"
+   ]
+  },
+  {
+   "en": "I read three pages today.",
+   "ar": "قَرَأْتُ ثَلَاثَ صَفَحَاتٍ اليَوْمَ.",
+   "tr": "qaraʾtu thalātha ṣafaḥātin al-yawm",
+   "keys": [
+    "ev-time:1"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "plurals"
+   ]
+  },
+  {
+   "en": "Five days in the week.",
+   "ar": "خَمْسَةُ أَيَّامٍ فِي الأُسْبُوعِ.",
+   "tr": "khamsatu ayyāmin fī l-usbūʿ",
+   "keys": [
+    "ev-numbers:4",
+    "qc:5",
+    "ev-lesson-week:7"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "plurals",
+   "frame": "plurals",
+   "frames": [
+    "plurals",
+    "nominal"
+   ]
+  },
+  {
+   "en": "Indeed Allah is Forgiving, Merciful.",
+   "ar": "إِنَّ اللهَ غَفُورٌ رَحِيمٌ.",
+   "tr": "inna llāha ghafūrun raḥīm",
+   "keys": [
+    "ev-time:0",
+    "qc:1",
+    "qc:55",
+    "qc:51"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "nominal"
+   ]
+  },
+  {
+   "en": "Indeed the house is big.",
+   "ar": "إِنَّ البَيْتَ كَبِيرٌ.",
+   "tr": "inna l-bayta kabīr",
+   "keys": [
+    "ev-time:0",
+    "story-02:3",
+    "story-02:20"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "nominal"
+   ]
+  },
+  {
+   "en": "I know that the lesson is easy.",
+   "ar": "أَعْرِفُ أَنَّ الدَّرْسَ سَهْلٌ.",
+   "tr": "aʿrifu anna d-darsa sahl",
+   "keys": [
+    "ev-want-need:4",
+    "ev-time:0"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "tenses"
+   ]
+  },
+  {
+   "en": "I am indeed very hungry.",
+   "ar": "إِنَّنِي جَائِعٌ جِدًّا.",
+   "tr": "innanī jāʾiʿun jiddan",
+   "keys": [
+    "ev-food:6",
+    "story-05:25"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "tenses"
+   ]
+  },
+  {
+   "en": "But the food is delicious.",
+   "ar": "لَكِنَّ الطَّعَامَ لَذِيذٌ.",
+   "tr": "lākinna ṭ-ṭaʿāma ladhīdh",
+   "keys": [
+    "ev-glue:4",
+    "story-03:25"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "prep-pron",
+    "connectors",
+    "nominal"
+   ]
+  },
+  {
+   "en": "I study Arabic because I love the Qur'an.",
+   "ar": "أَدْرُسُ العَرَبِيَّةَ لِأَنَّنِي أُحِبُّ القُرْآنَ.",
+   "tr": "adrusu l-ʿarabiyyata li-annanī uḥibbu l-qurʾān",
+   "keys": [
+    "ev-want-need:6",
+    "qc:131"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "inna",
+   "frame": "inna",
+   "frames": [
+    "inna",
+    "tenses",
+    "connectors"
+   ]
+  },
+  {
+   "en": "We read and they write.",
+   "ar": "نَحْنُ نَقْرَأُ وَهُمْ يَكْتُبُونَ.",
+   "tr": "naḥnu naqraʾu wa-hum yaktubūn",
+   "keys": [
+    "ev-people:5",
+    "ev-people:6"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "who-acts",
+   "frame": "who-acts",
+   "frames": [
+    "tenses",
+    "pronouns",
+    "plurals",
+    "who-acts"
+   ]
+  },
+  {
+   "en": "We go to the market on Saturday.",
+   "ar": "نَذْهَبُ إِلَى السُّوقِ يَوْمَ السَّبْتِ.",
+   "tr": "nadhhabu ilā s-sūqi yawma s-sabt",
+   "keys": [
+    "qc:11",
+    "story-03:0",
+    "ev-time:1",
+    "ev-lesson-week:6"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "who-acts",
+   "frame": "who-acts",
+   "frames": [
+    "tenses",
+    "idafa",
+    "who-acts"
+   ]
+  },
+  {
+   "en": "They drink coffee in the morning.",
+   "ar": "هُمْ يَشْرَبُونَ القَهْوَةَ صَبَاحًا.",
+   "tr": "hum yashrabūna l-qahwata ṣabāḥan",
+   "keys": [
+    "ev-people:6",
+    "story-01:9",
+    "ev-lesson-routine:8"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "who-acts",
+   "frame": "who-acts",
+   "frames": [
+    "tenses",
+    "plurals",
+    "who-acts"
+   ]
+  },
+  {
+   "en": "We pray Fajr in the mosque.",
+   "ar": "نُصَلِّي الفَجْرَ فِي المَسْجِدِ.",
+   "tr": "nuṣallī l-fajra fī l-masjid",
+   "keys": [
+    "story-04:30",
+    "story-01:6",
+    "qc:5",
+    "ev-worship:2"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "who-acts",
+   "frame": "who-acts",
+   "frames": [
+    "who-acts",
+    "tenses"
+   ]
+  },
+  {
+   "en": "They live in a small village.",
+   "ar": "هُمْ يَسْكُنُونَ فِي قَرْيَةٍ صَغِيرَةٍ.",
+   "tr": "hum yaskunūna fī qaryatin ṣaghīrah",
+   "keys": [
+    "ev-people:6",
+    "qc:5",
+    "ev-lesson-village:0"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "who-acts",
+   "frame": "who-acts",
+   "frames": [
+    "tenses",
+    "plurals",
+    "who-acts",
+    "gender"
+   ]
+  },
+  {
+   "en": "There is a mosque near the house.",
+   "ar": "يُوجَدُ مَسْجِدٌ قَرِيبٌ مِنَ البَيْتِ.",
+   "tr": "yūjadu masjidun qarībun mina l-bayt",
+   "keys": [
+    "ev-worship:2",
+    "ev-questions:1",
+    "story-02:3"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "wujud",
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "tenses"
+   ]
+  },
+  {
+   "en": "Is there a restaurant here?",
+   "ar": "هَلْ يُوجَدُ مَطْعَمٌ هُنَا؟",
+   "tr": "hal yūjadu maṭʿamun hunā?",
+   "keys": [
+    "ev-questions:7",
+    "story-05:1"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "wujud",
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "questions",
+    "tenses"
+   ]
+  },
+  {
+   "en": "There is no water in the glass.",
+   "ar": "لَا يُوجَدُ مَاءٌ فِي الكَأْسِ.",
+   "tr": "lā yūjadu māʾun fī l-kaʾs",
+   "keys": [
+    "ph-talk:1",
+    "ev-food:0",
+    "qc:5",
+    "ev-lesson-village:4"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "wujud",
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "negation",
+    "tenses"
+   ]
+  },
+  {
+   "en": "There is a big tree in the garden.",
+   "ar": "تُوجَدُ شَجَرَةٌ كَبِيرَةٌ فِي الحَدِيقَةِ.",
+   "tr": "tūjadu shajaratun kabīratun fī l-ḥadīqah",
+   "keys": [
+    "ev-home:5",
+    "qc:5",
+    "story-02:9"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "wujud",
+   "frame": "wujud",
+   "frames": [
+    "wujud",
+    "tenses",
+    "gender"
+   ]
+  },
+  {
+   "en": "The car is new and the house is old.",
+   "ar": "السَّيَّارَةُ جَدِيدَةٌ وَالبَيْتُ قَدِيمٌ.",
+   "tr": "as-sayyāratu jadīdatun wa-l-baytu qadīm",
+   "keys": [
+    "story-01:15"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "gender",
+   "frame": "gender",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
+  },
+  {
+   "en": "The room is big and beautiful.",
+   "ar": "الغُرْفَةُ كَبِيرَةٌ وَجَمِيلَةٌ.",
+   "tr": "al-ghurfatu kabīratun wa-jamīlah",
+   "keys": [
+    "ev-home:1"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "gender",
+   "frame": "gender",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
+  },
+  {
+   "en": "The village is small and quiet.",
+   "ar": "القَرْيَةُ صَغِيرَةٌ وَهَادِئَةٌ.",
+   "tr": "al-qaryatu ṣaghīratun wa-hādiʾah",
+   "keys": [
+    "ev-lesson-village:0"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "gender",
+   "frame": "gender",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
+  },
+  {
+   "en": "A small cup and a big glass.",
+   "ar": "فِنْجَانٌ صَغِيرٌ وَكَأْسٌ كَبِيرَةٌ.",
+   "tr": "finjānun ṣaghīrun wa-kaʾsun kabīrah",
+   "keys": [
+    "story-02:4",
+    "ev-lesson-village:4"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "gender",
+   "frame": "gender",
+   "frames": [
+    "gender",
+    "nominal"
+   ]
+  },
+  {
+   "en": "The weather was beautiful yesterday.",
+   "ar": "كَانَ الجَوُّ جَمِيلًا أَمْسِ.",
+   "tr": "kāna l-jawwu jamīlan ams",
+   "keys": [
+    "qc:8",
+    "ev-lesson-weather:5",
+    "ev-time:3"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "kana",
+   "frame": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ]
+  },
+  {
+   "en": "I was in the mosque in the morning.",
+   "ar": "كُنْتُ فِي المَسْجِدِ صَبَاحًا.",
+   "tr": "kuntu fī l-masjidi ṣabāḥan",
+   "keys": [
+    "qc:5",
+    "ev-worship:2",
+    "ev-lesson-routine:8"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "kana",
+   "frame": "kana",
+   "frames": [
+    "past-tu",
+    "kana",
+    "tenses"
+   ]
+  },
+  {
+   "en": "The flat was spacious.",
+   "ar": "كَانَتِ الشَّقَّةُ وَاسِعَةً.",
+   "tr": "kānati sh-shaqqatu wāsiʿah",
+   "keys": [
+    "ev-lesson-home:0"
+   ],
+   "source": "core",
+   "lesson": "Coach — grammar frames (12 Oct)",
+   "pattern": "kana",
+   "frame": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ]
   }
  ]
 }

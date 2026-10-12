@@ -11,189 +11,579 @@
    "ar": "فِي يَوْمِ العَمَلِ أَسْتَيْقِظُ مُبَكِّرًا فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا.",
    "en": "On a work day, I wake up early at seven o'clock in the morning.",
    "words": [
-    ["فِي", "in / on"],
-    ["يَوْمِ", "the day of"],
-    ["العَمَلِ", "work"],
-    ["أَسْتَيْقِظُ", "I wake up"],
-    ["مُبَكِّرًا", "early"],
-    ["فِي", "at / in"],
-    ["السَّاعَةِ", "the hour / o'clock"],
-    ["السَّابِعَةِ", "the seventh (seven)"],
-    ["صَبَاحًا", "in the morning"]
+    [
+     "فِي",
+     "in / on"
+    ],
+    [
+     "يَوْمِ",
+     "the day of"
+    ],
+    [
+     "العَمَلِ",
+     "work"
+    ],
+    [
+     "أَسْتَيْقِظُ",
+     "I wake up"
+    ],
+    [
+     "مُبَكِّرًا",
+     "early"
+    ],
+    [
+     "فِي",
+     "at / in"
+    ],
+    [
+     "السَّاعَةِ",
+     "the hour / o'clock"
+    ],
+    [
+     "السَّابِعَةِ",
+     "the seventh (seven)"
+    ],
+    [
+     "صَبَاحًا",
+     "in the morning"
+    ]
    ],
-   "tr": "fī yawmi l-ʿamal, astayqiẓu mubakkiran fī s-sāʿati s-sābiʿati ṣabāḥā."
+   "tr": "fī yawmi l-ʿamal, astayqiẓu mubakkiran fī s-sāʿati s-sābiʿati ṣabāḥā.",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "idafa",
+    "gender"
+   ]
   },
   {
    "ar": "أَغْسِلُ وَجْهِي وَأَلْبَسُ مَلَابِسِي، ثُمَّ أَذْهَبُ إِلَى المَسْجِدِ لِأَدَاءِ صَلَاةِ الفَجْرِ.",
    "en": "I wash my face and put on my clothes, then I go to the mosque to perform the Fajr prayer.",
    "words": [
-    ["أَغْسِلُ", "I wash"],
-    ["وَجْهِي", "my face"],
-    ["وَأَلْبَسُ", "and I wear / put on"],
-    ["مَلَابِسِي", "my clothes"],
-    ["ثُمَّ", "then"],
-    ["أَذْهَبُ", "I go"],
-    ["إِلَى", "to"],
-    ["المَسْجِدِ", "the mosque"],
-    ["لِأَدَاءِ", "for performing"],
-    ["صَلَاةِ", "the prayer of"],
-    ["الفَجْرِ", "the dawn (Fajr)"]
+    [
+     "أَغْسِلُ",
+     "I wash"
+    ],
+    [
+     "وَجْهِي",
+     "my face"
+    ],
+    [
+     "وَأَلْبَسُ",
+     "and I wear / put on"
+    ],
+    [
+     "مَلَابِسِي",
+     "my clothes"
+    ],
+    [
+     "ثُمَّ",
+     "then"
+    ],
+    [
+     "أَذْهَبُ",
+     "I go"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "المَسْجِدِ",
+     "the mosque"
+    ],
+    [
+     "لِأَدَاءِ",
+     "for performing"
+    ],
+    [
+     "صَلَاةِ",
+     "the prayer of"
+    ],
+    [
+     "الفَجْرِ",
+     "the dawn (Fajr)"
+    ]
    ],
-   "tr": "aghsilu wajhī wa-albasu malābisī, thumma adhhabu ilā l-masjidi li-adāʾi ṣalāti l-fajr."
+   "tr": "aghsilu wajhī wa-albasu malābisī, thumma adhhabu ilā l-masjidi li-adāʾi ṣalāti l-fajr.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "ar": "بَعْدَ الصَّلَاةِ أَعُودُ إِلَى البَيْتِ، وَأَتَنَاوَلُ الفَطُورَ وَأَقْرَأُ الصَّحِيفَةَ وَأُشَاهِدُ التِّلْفَازَ قَلِيلًا.",
    "en": "After the prayer I return home, eat breakfast, read the newspaper and watch television a little.",
    "words": [
-    ["بَعْدَ", "after"],
-    ["الصَّلَاةِ", "the prayer"],
-    ["أَعُودُ", "I return"],
-    ["إِلَى", "to"],
-    ["البَيْتِ", "the house / home"],
-    ["وَأَتَنَاوَلُ", "and I eat / take"],
-    ["الفَطُورَ", "breakfast"],
-    ["وَأَقْرَأُ", "and I read"],
-    ["الصَّحِيفَةَ", "the newspaper"],
-    ["وَأُشَاهِدُ", "and I watch"],
-    ["التِّلْفَازَ", "the television"],
-    ["قَلِيلًا", "a little"]
+    [
+     "بَعْدَ",
+     "after"
+    ],
+    [
+     "الصَّلَاةِ",
+     "the prayer"
+    ],
+    [
+     "أَعُودُ",
+     "I return"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "البَيْتِ",
+     "the house / home"
+    ],
+    [
+     "وَأَتَنَاوَلُ",
+     "and I eat / take"
+    ],
+    [
+     "الفَطُورَ",
+     "breakfast"
+    ],
+    [
+     "وَأَقْرَأُ",
+     "and I read"
+    ],
+    [
+     "الصَّحِيفَةَ",
+     "the newspaper"
+    ],
+    [
+     "وَأُشَاهِدُ",
+     "and I watch"
+    ],
+    [
+     "التِّلْفَازَ",
+     "the television"
+    ],
+    [
+     "قَلِيلًا",
+     "a little"
+    ]
    ],
-   "tr": "baʿda ṣ-ṣalāti aʿūdu ilā l-bayt, wa-atanāwalu l-faṭūra wa-aqraʾu ṣ-ṣaḥīfata wa-ushāhidu t-tilfāza qalīlā."
+   "tr": "baʿda ṣ-ṣalāti aʿūdu ilā l-bayt, wa-atanāwalu l-faṭūra wa-aqraʾu ṣ-ṣaḥīfata wa-ushāhidu t-tilfāza qalīlā.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "ar": "فِي السَّاعَةِ الثَّامِنَةِ أَذْهَبُ إِلَى المَدْرَسَةِ فِي سَيَّارَتِي.",
    "en": "At eight o'clock I go to school in my car.",
    "words": [
-    ["فِي", "at"],
-    ["السَّاعَةِ", "the hour / o'clock"],
-    ["الثَّامِنَةِ", "the eighth (eight)"],
-    ["أَذْهَبُ", "I go"],
-    ["إِلَى", "to"],
-    ["المَدْرَسَةِ", "the school"],
-    ["فِي", "in"],
-    ["سَيَّارَتِي", "my car"]
+    [
+     "فِي",
+     "at"
+    ],
+    [
+     "السَّاعَةِ",
+     "the hour / o'clock"
+    ],
+    [
+     "الثَّامِنَةِ",
+     "the eighth (eight)"
+    ],
+    [
+     "أَذْهَبُ",
+     "I go"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "المَدْرَسَةِ",
+     "the school"
+    ],
+    [
+     "فِي",
+     "in"
+    ],
+    [
+     "سَيَّارَتِي",
+     "my car"
+    ]
    ],
-   "tr": "fī s-sāʿati th-thāminati adhhabu ilā l-madrasati fī sayyāratī."
+   "tr": "fī s-sāʿati th-thāminati adhhabu ilā l-madrasati fī sayyāratī.",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "pronouns",
+    "gender"
+   ]
   },
   {
    "ar": "فِي المَدْرَسَةِ أَتَعَلَّمُ العَرَبِيَّةَ وَأَقْرَأُ كِتَابًا.",
    "en": "At school I learn Arabic and read a book.",
    "words": [
-    ["فِي", "at / in"],
-    ["المَدْرَسَةِ", "the school"],
-    ["أَتَعَلَّمُ", "I learn"],
-    ["العَرَبِيَّةَ", "Arabic"],
-    ["وَأَقْرَأُ", "and I read"],
-    ["كِتَابًا", "a book"]
+    [
+     "فِي",
+     "at / in"
+    ],
+    [
+     "المَدْرَسَةِ",
+     "the school"
+    ],
+    [
+     "أَتَعَلَّمُ",
+     "I learn"
+    ],
+    [
+     "العَرَبِيَّةَ",
+     "Arabic"
+    ],
+    [
+     "وَأَقْرَأُ",
+     "and I read"
+    ],
+    [
+     "كِتَابًا",
+     "a book"
+    ]
    ],
-   "tr": "fī l-madrasati ataʿallamu l-ʿarabiyyata wa-aqraʾu kitābā."
+   "tr": "fī l-madrasati ataʿallamu l-ʿarabiyyata wa-aqraʾu kitābā.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
+   ]
   },
   {
    "ar": "فِي السَّاعَةِ الثَّانِيَةَ عَشْرَةَ أَعُودُ إِلَى البَيْتِ.",
    "en": "At twelve o'clock I return home.",
    "words": [
-    ["فِي", "at"],
-    ["السَّاعَةِ", "the hour / o'clock"],
-    ["الثَّانِيَةَ", "the second"],
-    ["عَشْرَةَ", "ten (twelve)"],
-    ["أَعُودُ", "I return"],
-    ["إِلَى", "to"],
-    ["البَيْتِ", "the house / home"]
+    [
+     "فِي",
+     "at"
+    ],
+    [
+     "السَّاعَةِ",
+     "the hour / o'clock"
+    ],
+    [
+     "الثَّانِيَةَ",
+     "the second"
+    ],
+    [
+     "عَشْرَةَ",
+     "ten (twelve)"
+    ],
+    [
+     "أَعُودُ",
+     "I return"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "البَيْتِ",
+     "the house / home"
+    ]
    ],
-   "tr": "fī s-sāʿati th-thāniyata ʿashrata aʿūdu ilā l-bayt."
+   "tr": "fī s-sāʿati th-thāniyata ʿashrata aʿūdu ilā l-bayt.",
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "plurals",
+    "gender"
+   ]
   },
   {
    "ar": "أُسَاعِدُ أُمِّي فِي كَنَسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ.",
    "en": "I help my mother sweep the house and wash the dishes.",
    "words": [
-    ["أُسَاعِدُ", "I help"],
-    ["أُمِّي", "my mother"],
-    ["فِي", "in"],
-    ["كَنَسِ", "sweeping of"],
-    ["البَيْتِ", "the house"],
-    ["وَغَسْلِ", "and washing of"],
-    ["الأَطْبَاقِ", "the dishes / plates"]
+    [
+     "أُسَاعِدُ",
+     "I help"
+    ],
+    [
+     "أُمِّي",
+     "my mother"
+    ],
+    [
+     "فِي",
+     "in"
+    ],
+    [
+     "كَنَسِ",
+     "sweeping of"
+    ],
+    [
+     "البَيْتِ",
+     "the house"
+    ],
+    [
+     "وَغَسْلِ",
+     "and washing of"
+    ],
+    [
+     "الأَطْبَاقِ",
+     "the dishes / plates"
+    ]
    ],
-   "tr": "usāʿidu ummī fī kanasi l-bayti wa-ghasli l-aṭbāq."
+   "tr": "usāʿidu ummī fī kanasi l-bayti wa-ghasli l-aṭbāq.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa",
+    "pronouns"
+   ]
   },
   {
    "ar": "أَمَّا فِي يَوْمِ العُطْلَةِ، فَأَسْتَيْقِظُ مُتَأَخِّرًا.",
    "en": "As for on the day off, I wake up late.",
    "words": [
-    ["أَمَّا", "as for"],
-    ["فِي", "on / in"],
-    ["يَوْمِ", "the day of"],
-    ["العُطْلَةِ", "the holiday / day off"],
-    ["فَأَسْتَيْقِظُ", "then I wake up"],
-    ["مُتَأَخِّرًا", "late"]
+    [
+     "أَمَّا",
+     "as for"
+    ],
+    [
+     "فِي",
+     "on / in"
+    ],
+    [
+     "يَوْمِ",
+     "the day of"
+    ],
+    [
+     "العُطْلَةِ",
+     "the holiday / day off"
+    ],
+    [
+     "فَأَسْتَيْقِظُ",
+     "then I wake up"
+    ],
+    [
+     "مُتَأَخِّرًا",
+     "late"
+    ]
    ],
-   "tr": "ammā fī yawmi l-ʿuṭlah, fa-astayqiẓu mutaʾakhkhirā."
+   "tr": "ammā fī yawmi l-ʿuṭlah, fa-astayqiẓu mutaʾakhkhirā.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "idafa"
+   ]
   },
   {
    "ar": "وَأَحْيَانًا أَذْهَبُ مَعَ عَائِلَتِي إِلَى حَفْلَةٍ أَوْ نَذْهَبُ فِي رِحْلَةٍ بِالسَّيَّارَةِ.",
    "en": "And sometimes I go with my family to a party or we go on a road trip by car.",
    "words": [
-    ["وَأَحْيَانًا", "and sometimes"],
-    ["أَذْهَبُ", "I go"],
-    ["مَعَ", "with"],
-    ["عَائِلَتِي", "my family"],
-    ["إِلَى", "to"],
-    ["حَفْلَةٍ", "a party / celebration"],
-    ["أَوْ", "or"],
-    ["نَذْهَبُ", "we go"],
-    ["فِي", "on"],
-    ["رِحْلَةٍ", "a trip / journey"],
-    ["بِالسَّيَّارَةِ", "by car"]
+    [
+     "وَأَحْيَانًا",
+     "and sometimes"
+    ],
+    [
+     "أَذْهَبُ",
+     "I go"
+    ],
+    [
+     "مَعَ",
+     "with"
+    ],
+    [
+     "عَائِلَتِي",
+     "my family"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "حَفْلَةٍ",
+     "a party / celebration"
+    ],
+    [
+     "أَوْ",
+     "or"
+    ],
+    [
+     "نَذْهَبُ",
+     "we go"
+    ],
+    [
+     "فِي",
+     "on"
+    ],
+    [
+     "رِحْلَةٍ",
+     "a trip / journey"
+    ],
+    [
+     "بِالسَّيَّارَةِ",
+     "by car"
+    ]
    ],
-   "tr": "wa-aḥyānan adhhabu maʿa ʿāʾilatī ilā ḥaflatin aw nadhhabu fī riḥlatin bi-s-sayyārah."
+   "tr": "wa-aḥyānan adhhabu maʿa ʿāʾilatī ilā ḥaflatin aw nadhhabu fī riḥlatin bi-s-sayyārah.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns",
+    "who-acts",
+    "gender"
+   ]
   },
   {
    "ar": "مَتَى أَعُودُ إِلَى البَيْتِ؟ أَعُودُ مُتَأَخِّرًا.",
    "en": "When do I return home? I return late.",
    "words": [
-    ["مَتَى", "when?"],
-    ["أَعُودُ", "do I return"],
-    ["إِلَى", "to"],
-    ["البَيْتِ", "the house / home"],
-    ["أَعُودُ", "I return"],
-    ["مُتَأَخِّرًا", "late"]
+    [
+     "مَتَى",
+     "when?"
+    ],
+    [
+     "أَعُودُ",
+     "do I return"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "البَيْتِ",
+     "the house / home"
+    ],
+    [
+     "أَعُودُ",
+     "I return"
+    ],
+    [
+     "مُتَأَخِّرًا",
+     "late"
+    ]
    ],
-   "tr": "matā aʿūdu ilā l-bayt? aʿūdu mutaʾakhkhirā."
+   "tr": "matā aʿūdu ilā l-bayt? aʿūdu mutaʾakhkhirā.",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ]
   },
   {
    "ar": "ثُمَّ أُرَتِّبُ مَلَابِسِي وَأَقْرَأُ كِتَابًا قَبْلَ أَنْ أَنَامَ.",
    "en": "Then I arrange my clothes and read a book before I sleep.",
    "words": [
-    ["ثُمَّ", "then"],
-    ["أُرَتِّبُ", "I arrange / tidy"],
-    ["مَلَابِسِي", "my clothes"],
-    ["وَأَقْرَأُ", "and I read"],
-    ["كِتَابًا", "a book"],
-    ["قَبْلَ", "before"],
-    ["أَنْ", "that"],
-    ["أَنَامَ", "I sleep"]
+    [
+     "ثُمَّ",
+     "then"
+    ],
+    [
+     "أُرَتِّبُ",
+     "I arrange / tidy"
+    ],
+    [
+     "مَلَابِسِي",
+     "my clothes"
+    ],
+    [
+     "وَأَقْرَأُ",
+     "and I read"
+    ],
+    [
+     "كِتَابًا",
+     "a book"
+    ],
+    [
+     "قَبْلَ",
+     "before"
+    ],
+    [
+     "أَنْ",
+     "that"
+    ],
+    [
+     "أَنَامَ",
+     "I sleep"
+    ]
    ],
-   "tr": "thumma urattibu malābisī wa-aqraʾu kitāban qabla an anām."
+   "tr": "thumma urattibu malābisī wa-aqraʾu kitāban qabla an anām.",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
+   ]
   },
   {
    "ar": "أَنَا أُحِبُّ يَوْمَ العُطْلَةِ، لَكِنَّنِي أَيْضًا أُحِبُّ يَوْمَ العَمَلِ لِأَنَّنِي أَتَعَلَّمُ أَشْيَاءَ جَدِيدَةً.",
    "en": "I love the day off, but I also love the work day because I learn new things.",
    "words": [
-    ["أَنَا", "I"],
-    ["أُحِبُّ", "love / like"],
-    ["يَوْمَ", "the day of"],
-    ["العُطْلَةِ", "the holiday / day off"],
-    ["لَكِنَّنِي", "but I"],
-    ["أَيْضًا", "also"],
-    ["أُحِبُّ", "love / like"],
-    ["يَوْمَ", "the day of"],
-    ["العَمَلِ", "work"],
-    ["لِأَنَّنِي", "because I"],
-    ["أَتَعَلَّمُ", "learn"],
-    ["أَشْيَاءَ", "things"],
-    ["جَدِيدَةً", "new"]
+    [
+     "أَنَا",
+     "I"
+    ],
+    [
+     "أُحِبُّ",
+     "love / like"
+    ],
+    [
+     "يَوْمَ",
+     "the day of"
+    ],
+    [
+     "العُطْلَةِ",
+     "the holiday / day off"
+    ],
+    [
+     "لَكِنَّنِي",
+     "but I"
+    ],
+    [
+     "أَيْضًا",
+     "also"
+    ],
+    [
+     "أُحِبُّ",
+     "love / like"
+    ],
+    [
+     "يَوْمَ",
+     "the day of"
+    ],
+    [
+     "العَمَلِ",
+     "work"
+    ],
+    [
+     "لِأَنَّنِي",
+     "because I"
+    ],
+    [
+     "أَتَعَلَّمُ",
+     "learn"
+    ],
+    [
+     "أَشْيَاءَ",
+     "things"
+    ],
+    [
+     "جَدِيدَةً",
+     "new"
+    ]
    ],
-   "tr": "anā uḥibbu yawma l-ʿuṭlah, lākinnanī ayḍan uḥibbu yawma l-ʿamal li-annanī ataʿallamu ashyāʾa jadīdah."
+   "tr": "anā uḥibbu yawma l-ʿuṭlah, lākinnanī ayḍan uḥibbu yawma l-ʿamal li-annanī ataʿallamu ashyāʾa jadīdah.",
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "tenses",
+    "connectors",
+    "idafa",
+    "pronouns"
+   ]
   }
  ],
  "vocab": [

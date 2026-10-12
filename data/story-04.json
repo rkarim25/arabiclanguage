@@ -21,6 +21,11 @@
      "الجُمُعَةِ.",
      "Friday"
     ]
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "idafa",
+    "nominal"
    ]
   },
   {
@@ -39,6 +44,11 @@
      "وَأَغْتَسِلُ.",
      "and I bathe (ghusl)"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -65,6 +75,12 @@
      "العِطْرَ.",
      "the perfume"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "idafa",
+    "who-acts"
    ]
   },
   {
@@ -87,6 +103,11 @@
      "مَاشِيًا.",
      "walking / on foot"
     ]
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal",
+    "tenses"
    ]
   },
   {
@@ -117,6 +138,12 @@
      "القُرْآنَ.",
      "the Quran"
     ]
+   ],
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -147,6 +174,12 @@
      "عَلَيْكُمْ.",
      "be upon you"
     ]
+   ],
+   "pattern": "prep-pron",
+   "frames": [
+    "prep-pron",
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -169,6 +202,10 @@
      "جَيِّدًا.",
      "well / attentively"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -195,6 +232,10 @@
      "وَالشُّكْرِ.",
      "and gratitude"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -225,6 +266,12 @@
      "العَرَبِيَّةَ.",
      "Arabic"
     ]
+   ],
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "tenses",
+    "plurals"
    ]
   },
   {
@@ -251,6 +298,11 @@
      "الإِمَامِ.",
      "the imam"
     ]
+   ],
+   "pattern": "dual",
+   "frames": [
+    "dual",
+    "tenses"
    ]
   },
   {
@@ -277,6 +329,12 @@
      "إِخْوَانِي.",
      "my brothers"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
    ]
   },
   {
@@ -307,6 +365,11 @@
      "الأُسْبُوعِ.",
      "the week"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "idafa"
    ]
   }
  ],

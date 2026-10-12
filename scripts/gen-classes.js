@@ -86,6 +86,7 @@ const out = meta.classes.map(c => {
   const sentences = (prompts.prompts || []).filter(p => tags.has(p.lesson)).map(p => ({
     ar: p.ar, en: p.en, tr: p.tr || "", from: p.source === "class-built" ? "built" : "teacher",
     key: bankByForm.get(norm(p.ar)) || null, keys: p.keys || [],
+    pattern: p.pattern || null, frames: p.frames || [],
   }));
 
   /* ---- READING: the passage, word-by-word and with audio (story.html) ---- */

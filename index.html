@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4v8xmy">
-  <link rel="stylesheet" href="css/style.css?v=mv4v8xmy">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4wnvra">
+  <link rel="stylesheet" href="css/style.css?v=mv4wnvra">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv4v8xmy"></script>
-<script src="js/curriculum.js?v=mv4v8xmy"></script>
-<script src="js/srs.js?v=mv4v8xmy"></script>
-<script src="js/app.js?v=mv4v8xmy"></script>
-<script src="js/tracker.js?v=mv4v8xmy"></script>
-<script src="js/plan.js?v=mv4v8xmy"></script>
-<script src="js/account.js?v=mv4v8xmy"></script>
+<script src="js/progress-model.js?v=mv4wnvra"></script>
+<script src="js/curriculum.js?v=mv4wnvra"></script>
+<script src="js/srs.js?v=mv4wnvra"></script>
+<script src="js/app.js?v=mv4wnvra"></script>
+<script src="js/tracker.js?v=mv4wnvra"></script>
+<script src="js/plan.js?v=mv4wnvra"></script>
+<script src="js/account.js?v=mv4wnvra"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -283,6 +283,11 @@ const CHAPTERS = [
             "عَلَيْكُمْ",
             "upon you"
           ]
+        ],
+        "pattern": "prep-pron",
+        "frames": [
+          "prep-pron",
+          "nominal"
         ]
       },
       {
@@ -299,6 +304,11 @@ const CHAPTERS = [
             "الخَيْرِ",
             "the goodness / good"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -315,6 +325,10 @@ const CHAPTERS = [
             "جَزِيلًا",
             "abundantly / very much"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -335,6 +349,10 @@ const CHAPTERS = [
             "سُرُورٍ",
             "pleasure / joy"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -359,6 +377,11 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -379,6 +402,10 @@ const CHAPTERS = [
             "جِدًّا",
             "very"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -399,6 +426,11 @@ const CHAPTERS = [
             "القَرِيبُ",
             "the nearby / close"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -419,6 +451,11 @@ const CHAPTERS = [
             "لِهَذَا",
             "for this"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -439,6 +476,11 @@ const CHAPTERS = [
             "العَرَبِيَّةَ",
             "Arabic"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -463,6 +505,10 @@ const CHAPTERS = [
             "اللِّقَاءِ",
             "the meeting / see you"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       }
     ],
@@ -473,7 +519,10 @@ const CHAPTERS = [
     "num": 2,
     "title": "Chapter 2: Wants, Needs & Requests",
     "surahId": "falaq",
-    "grammar": {"title":"Wanting: أُرِيدُ + Thing vs. أُرِيدُ أَنْ + Action","text":"To want a thing, <b>أُرِيدُ</b> takes the noun directly: <b>أُرِيدُ فِنْجَانَ قَهْوَةٍ</b> = <i>I want a cup of coffee</i>. To want an action, bridge with <b>أَنْ</b> and the verb takes a soft -a ending: <b>أُرِيدُ أَنْ آكُلَ شَيْئًا</b> = <i>I want to eat something</i>. Needing uses إِلَى: <b>أَحْتَاجُ إِلَى هَذَا الكِتَابِ</b> = <i>I need this book</i>."},
+    "grammar": {
+      "title": "Wanting: أُرِيدُ + Thing vs. أُرِيدُ أَنْ + Action",
+      "text": "To want a thing, <b>أُرِيدُ</b> takes the noun directly: <b>أُرِيدُ فِنْجَانَ قَهْوَةٍ</b> = <i>I want a cup of coffee</i>. To want an action, bridge with <b>أَنْ</b> and the verb takes a soft -a ending: <b>أُرِيدُ أَنْ آكُلَ شَيْئًا</b> = <i>I want to eat something</i>. Needing uses إِلَى: <b>أَحْتَاجُ إِلَى هَذَا الكِتَابِ</b> = <i>I need this book</i>."
+    },
     "sentences": [
       {
         "ar": "أُرِيدُ أَنْ آكُلَ شَيْئًا",
@@ -497,6 +546,10 @@ const CHAPTERS = [
             "شَيْئًا",
             "something"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -521,6 +574,12 @@ const CHAPTERS = [
             "حَلَالٌ",
             "halal / permissible"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -541,6 +600,11 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -565,6 +629,10 @@ const CHAPTERS = [
             "شَايًا",
             "tea"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -581,6 +649,11 @@ const CHAPTERS = [
             "الحَمَّامُ",
             "the restroom / bathroom"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -601,6 +674,10 @@ const CHAPTERS = [
             "قَهْوَةٍ",
             "coffee"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -621,6 +698,12 @@ const CHAPTERS = [
             "مَالُكَ",
             "your money"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "demonstratives",
+          "pronouns"
         ]
       },
       {
@@ -641,6 +724,12 @@ const CHAPTERS = [
             "مُسَاعَدَتِي",
             "to help me"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -665,6 +754,11 @@ const CHAPTERS = [
             "الكِتَابِ",
             "the book"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "tenses"
         ]
       },
       {
@@ -693,6 +787,11 @@ const CHAPTERS = [
             "آخَرَ",
             "else / other"
           ]
+        ],
+        "pattern": "negation",
+        "frames": [
+          "negation",
+          "tenses"
         ]
       }
     ],
@@ -704,8 +803,8 @@ const CHAPTERS = [
     "title": "Chapter 3: Hotel, Taxis & Travel",
     "surahId": "nas",
     "grammar": {
-      "title": "Having with 'Indi (عِنْدِي)",
-      "text": "Arabic expresses possession with the prepositional phrase <b>عِنْدِي</b> (literally 'at me / with me'). <b>عِنْدِي حَجْزٌ</b> = <i>I have a reservation</i>. To negate: <b>لَيْسَ عِنْدِي</b> or <b>مَا عِنْدِي</b> = <i>I do not have</i>."
+      "title": "Having with 'Indi — and the Iḍāfa (مِفْتَاحُ الغُرْفَةِ)",
+      "text": "Arabic expresses possession with the prepositional phrase <b>عِنْدِي</b> (literally 'at me / with me'). <b>عِنْدِي حَجْزٌ</b> = <i>I have a reservation</i>. To negate: <b>لَيْسَ عِنْدِي</b> or <b>مَا عِنْدِي</b> = <i>I do not have</i>. <br><br>And when two nouns glue together — <b>مِفْتَاحُ الغُرْفَةِ</b> (<i>the room key</i>) — that is the <b>إِضَافَة</b>, and the first noun <u>never</u> takes الـ. Saying <b>المِفْتَاح الغُرْفَة</b> is the classic slip: the الـ belongs only on the second word — مِفْتَاحُ السَّيَّارَةِ (the car key), بَابُ الفُنْدُقِ (the hotel door). One more: مِفْتَاح is masculine, so it is <b>هَذَا</b> مِفْتَاحُ الغُرْفَةِ, never هَذِهِ."
     },
     "sentences": [
       {
@@ -730,6 +829,11 @@ const CHAPTERS = [
             "الفُنْدُقِ",
             "the hotel"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "nominal"
         ]
       },
       {
@@ -750,6 +854,12 @@ const CHAPTERS = [
             "الغُرْفَةِ",
             "the room"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -778,6 +888,11 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "pronouns"
         ]
       },
       {
@@ -798,6 +913,12 @@ const CHAPTERS = [
             "القِطَارِ",
             "the train"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -822,6 +943,12 @@ const CHAPTERS = [
             "السَّيَّارَةِ",
             "the car"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -846,6 +973,11 @@ const CHAPTERS = [
             "هُنَاكَ",
             "there"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -870,6 +1002,11 @@ const CHAPTERS = [
             "سَمَحْتَ",
             "you permit / please"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "tenses"
         ]
       },
       {
@@ -890,6 +1027,10 @@ const CHAPTERS = [
             "مَفْقُودٌ",
             "is missing / lost"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -910,6 +1051,12 @@ const CHAPTERS = [
             "الطَّوَارِئِ",
             "the emergencies"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -934,6 +1081,11 @@ const CHAPTERS = [
             "خِدْمَةٍ",
             "a service"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       }
     ],
@@ -944,7 +1096,10 @@ const CHAPTERS = [
     "num": 4,
     "title": "Chapter 4: Time, Routine & Actions",
     "surahId": "asr",
-    "grammar": {"title":"Past ـتُ vs. Present أَـ (Verb Tense)","text":"Past-tense 'I' verbs end in <b>ـتُ</b>: <b>قَرَأْتُ</b> = <i>I read (already done)</i>, <b>كَتَبْتُ</b> = <i>I wrote</i>. Present 'I' verbs start with <b>أَ</b>: <b>أَعْرِفُ</b> = <i>I know</i>. For the future just add <b>سَـ</b> to the present: <b>سَأَذْهَبُ</b> = <i>I will go</i>."},
+    "grammar": {
+      "title": "Past ـتُ vs. Present أَـ (Verb Tense)",
+      "text": "Past-tense 'I' verbs end in <b>ـتُ</b>: <b>قَرَأْتُ</b> = <i>I read (already done)</i>, <b>كَتَبْتُ</b> = <i>I wrote</i>. Present 'I' verbs start with <b>أَ</b>: <b>أَعْرِفُ</b> = <i>I know</i>. For the future just add <b>سَـ</b> to the present: <b>سَأَذْهَبُ</b> = <i>I will go</i>."
+    },
     "sentences": [
       {
         "ar": "مَاذَا تَفْعَلُ اليَوْمَ؟",
@@ -964,6 +1119,11 @@ const CHAPTERS = [
             "اليَوْمَ",
             "today"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -988,6 +1148,10 @@ const CHAPTERS = [
             "غَدًا",
             "tomorrow"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -1012,6 +1176,12 @@ const CHAPTERS = [
             "الفَجْرِ",
             "the Fajr / dawn"
           ]
+        ],
+        "pattern": "past-tu",
+        "frames": [
+          "past-tu",
+          "tenses",
+          "connectors"
         ]
       },
       {
@@ -1032,6 +1202,11 @@ const CHAPTERS = [
             "الدَّرْسُ",
             "the lesson"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -1056,6 +1231,11 @@ const CHAPTERS = [
             "المَسَاءِ",
             "the evening"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "nominal"
         ]
       },
       {
@@ -1076,6 +1256,11 @@ const CHAPTERS = [
             "لِأَخِي",
             "to my brother"
           ]
+        ],
+        "pattern": "past-tu",
+        "frames": [
+          "past-tu",
+          "tenses"
         ]
       },
       {
@@ -1096,6 +1281,12 @@ const CHAPTERS = [
             "العَصْرَ",
             "Asr (afternoon prayer)"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -1116,6 +1307,11 @@ const CHAPTERS = [
             "العَرَبِيَّةَ",
             "Arabic"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "who-acts"
         ]
       },
       {
@@ -1144,6 +1340,12 @@ const CHAPTERS = [
             "الكَلِمَةِ",
             "the word"
           ]
+        ],
+        "pattern": "negation",
+        "frames": [
+          "negation",
+          "demonstratives",
+          "tenses"
         ]
       },
       {
@@ -1168,6 +1370,11 @@ const CHAPTERS = [
             "تَمَامًا",
             "exactly / precisely"
           ]
+        ],
+        "pattern": "ordinals",
+        "frames": [
+          "ordinals",
+          "tenses"
         ]
       }
     ],
@@ -1178,7 +1385,10 @@ const CHAPTERS = [
     "num": 5,
     "title": "Chapter 5: Questions & Meeting People",
     "surahId": "kawthar",
-    "grammar": {"title":"The Question Toolkit (أَدَوَات الاسْتِفْهَام)","text":"<b>هَلْ</b> opens a yes/no question: <b>هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟</b> = <i>is it possible you help me?</i>. The others ask for information: <b>مَا</b> = <i>what</i> (مَا اسْمُكَ؟), <b>مِنْ أَيْنَ</b> = <i>from where</i> (مِنْ أَيْنَ أَنْتَ؟), and <b>كَيْفَ</b> = <i>how</i> (كَيْفَ الحَالُ؟)."},
+    "grammar": {
+      "title": "The Question Toolkit (أَدَوَات الاسْتِفْهَام)",
+      "text": "<b>هَلْ</b> opens a yes/no question: <b>هَلْ يُمْكِنُ أَنْ تُسَاعِدَنِي؟</b> = <i>is it possible you help me?</i>. The others ask for information: <b>مَا</b> = <i>what</i> (مَا اسْمُكَ؟), <b>مِنْ أَيْنَ</b> = <i>from where</i> (مِنْ أَيْنَ أَنْتَ؟), and <b>كَيْفَ</b> = <i>how</i> (كَيْفَ الحَالُ؟)."
+    },
     "sentences": [
       {
         "ar": "مَا اسْمُكَ الكَرِيمُ؟",
@@ -1198,6 +1408,13 @@ const CHAPTERS = [
             "الكَرِيمُ",
             "the noble / honorable"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -1218,6 +1435,11 @@ const CHAPTERS = [
             "أَنْتَ",
             "are you"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -1238,6 +1460,10 @@ const CHAPTERS = [
             "بَرِيطَانِيَا",
             "Britain"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -1254,6 +1480,11 @@ const CHAPTERS = [
             "بِمَعْرِفَتِكَ",
             "to know you / with your acquaintance"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -1274,6 +1505,11 @@ const CHAPTERS = [
             "اليَوْمَ",
             "today"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -1298,6 +1534,11 @@ const CHAPTERS = [
             "وَعَافِيَةٍ",
             "and good health"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -1322,6 +1563,11 @@ const CHAPTERS = [
             "تُسَاعِدَنِي",
             "you help me"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -1350,6 +1596,10 @@ const CHAPTERS = [
             "التَّأْخِيرِ",
             "the delay / being late"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -1378,6 +1628,11 @@ const CHAPTERS = [
             "وَاجِبٍ",
             "a duty"
           ]
+        ],
+        "pattern": "negation",
+        "frames": [
+          "negation",
+          "tenses"
         ]
       },
       {
@@ -1402,6 +1657,12 @@ const CHAPTERS = [
             "وَحِفْظِهِ",
             "and His protection"
           ]
+        ],
+        "pattern": "dual",
+        "frames": [
+          "dual",
+          "tenses",
+          "pronouns"
         ]
       }
     ],
@@ -1439,6 +1700,11 @@ const CHAPTERS = [
             "جَمِيلَةٍ",
             "beautiful"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "gender"
         ]
       },
       {
@@ -1467,6 +1733,11 @@ const CHAPTERS = [
             "وَمَطْبَخٌ",
             "and a kitchen"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "gender",
+          "nominal"
         ]
       },
       {
@@ -1491,6 +1762,12 @@ const CHAPTERS = [
             "الوَاسِعَةُ",
             "the spacious"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -1519,6 +1796,12 @@ const CHAPTERS = [
             "النَّوْمِ",
             "sleep (the bedroom)"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -1547,6 +1830,10 @@ const CHAPTERS = [
             "جَدِيدٌ",
             "new"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -1571,6 +1858,11 @@ const CHAPTERS = [
             "كَثِيرَةٌ",
             "many"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -1591,6 +1883,12 @@ const CHAPTERS = [
             "الشُّبَّاكِ",
             "the window"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -1615,6 +1913,10 @@ const CHAPTERS = [
             "نَظِيفَةٌ",
             "is clean"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       },
       {
@@ -1639,6 +1941,11 @@ const CHAPTERS = [
             "تَسْكُنُ",
             "do you live"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -1663,6 +1970,11 @@ const CHAPTERS = [
             "الثَّالِثِ",
             "the third"
           ]
+        ],
+        "pattern": "ordinals",
+        "frames": [
+          "ordinals",
+          "tenses"
         ]
       }
     ],
@@ -1673,7 +1985,10 @@ const CHAPTERS = [
     "num": 7,
     "title": "Chapter 7: Shopping & The Market",
     "surahId": "quraysh",
-    "grammar": {"title":"This & That: هَذَا / هَذِهِ / ذَاكَ","text":"Pointing words stand alone before an indefinite word: <b>هَذَا رَخِيصٌ وَذَاكَ غَالٍ</b> = <i>this is cheap and that is expensive</i>. Before a noun with الـ they mean 'this X': كَمْ سِعْرُ <b>هَذَا القَمِيصِ</b>؟ = <i>how much is this shirt?</i>. Feminine nouns take <b>هَذِهِ</b>: هَذِهِ النُّقُودُ = <i>this money</i>."},
+    "grammar": {
+      "title": "This & That: هَذَا / هَذِهِ / ذَاكَ",
+      "text": "Pointing words stand alone before an indefinite word: <b>هَذَا رَخِيصٌ وَذَاكَ غَالٍ</b> = <i>this is cheap and that is expensive</i>. Before a noun with الـ they mean 'this X': كَمْ سِعْرُ <b>هَذَا القَمِيصِ</b>؟ = <i>how much is this shirt?</i>. Feminine nouns take <b>هَذِهِ</b>: هَذِهِ النُّقُودُ = <i>this money</i>."
+    },
     "sentences": [
       {
         "ar": "كَمْ سِعْرُ هَذَا القَمِيصِ؟",
@@ -1697,6 +2012,12 @@ const CHAPTERS = [
             "القَمِيصِ",
             "the shirt"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "demonstratives",
+          "nominal"
         ]
       },
       {
@@ -1721,6 +2042,12 @@ const CHAPTERS = [
             "غَالٍ",
             "expensive"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -1749,6 +2076,12 @@ const CHAPTERS = [
             "هَذَا",
             "this"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "tenses",
+          "plurals"
         ]
       },
       {
@@ -1769,6 +2102,13 @@ const CHAPTERS = [
             "البِطَاقَةَ",
             "the card"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses",
+          "plurals",
+          "who-acts"
         ]
       },
       {
@@ -1793,6 +2133,12 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "pronouns",
+          "who-acts"
         ]
       },
       {
@@ -1817,6 +2163,12 @@ const CHAPTERS = [
             "أَكْبَرُ",
             "bigger / larger"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -1837,6 +2189,12 @@ const CHAPTERS = [
             "الكِتَابَ",
             "the book"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "demonstratives",
+          "tenses"
         ]
       },
       {
@@ -1857,6 +2215,11 @@ const CHAPTERS = [
             "النُّقُودُ",
             "the money"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "demonstratives"
         ]
       },
       {
@@ -1881,6 +2244,11 @@ const CHAPTERS = [
             "جِدًّا",
             "very"
           ]
+        ],
+        "pattern": "demonstratives",
+        "frames": [
+          "demonstratives",
+          "nominal"
         ]
       },
       {
@@ -1909,6 +2277,13 @@ const CHAPTERS = [
             "تِجَارَتِكَ",
             "your business / trade"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "prep-pron",
+          "tenses",
+          "pronouns"
         ]
       }
     ],
@@ -1919,7 +2294,10 @@ const CHAPTERS = [
     "num": 8,
     "title": "Chapter 8: The Conversation Repair Kit",
     "surahId": "kafirun",
-    "grammar": {"title":"Polite Commands (فِعْل الأَمْر)","text":"Command verbs are short and direct: <b>كَرِّرْ</b> = <i>repeat</i>, <b>تَكَلَّمْ</b> = <i>speak</i>, <b>اكْتُبْ</b> = <i>write</i>, <b>انْتَظِرْ</b> = <i>wait</i>. Soften any of them with مِنْ فَضْلِكَ or لَوْ سَمَحْتَ. To say what did NOT happen, use لَمْ + present verb: <b>لَمْ أَفْهَمْ</b> = <i>I did not understand</i>."},
+    "grammar": {
+      "title": "Polite Commands (فِعْل الأَمْر)",
+      "text": "Command verbs are short and direct: <b>كَرِّرْ</b> = <i>repeat</i>, <b>تَكَلَّمْ</b> = <i>speak</i>, <b>اكْتُبْ</b> = <i>write</i>, <b>انْتَظِرْ</b> = <i>wait</i>. Soften any of them with مِنْ فَضْلِكَ or لَوْ سَمَحْتَ. To say what did NOT happen, use لَمْ + present verb: <b>لَمْ أَفْهَمْ</b> = <i>I did not understand</i>."
+    },
     "sentences": [
       {
         "ar": "كَيْفَ أَقُولُ هَذَا بِالعَرَبِيَّةِ؟",
@@ -1943,6 +2321,12 @@ const CHAPTERS = [
             "بِالعَرَبِيَّةِ",
             "in Arabic"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "demonstratives",
+          "tenses"
         ]
       },
       {
@@ -1967,6 +2351,12 @@ const CHAPTERS = [
             "الكَلِمَةِ",
             "the word"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "demonstratives",
+          "nominal"
         ]
       },
       {
@@ -1995,6 +2385,12 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "negation",
+        "frames": [
+          "negation",
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -2019,6 +2415,10 @@ const CHAPTERS = [
             "سَمَحْتَ",
             "you permit / please"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -2043,6 +2443,11 @@ const CHAPTERS = [
             "العَرَبِيَّةَ",
             "Arabic"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "gender"
         ]
       },
       {
@@ -2063,6 +2468,12 @@ const CHAPTERS = [
             "وَاضِحٌ",
             "clear"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -2087,6 +2498,13 @@ const CHAPTERS = [
             "فَضْلِكَ",
             "your favor / please"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "prep-pron",
+          "pronouns",
+          "nominal"
         ]
       },
       {
@@ -2107,6 +2525,11 @@ const CHAPTERS = [
             "وَاحِدَةً",
             "one"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "gender"
         ]
       },
       {
@@ -2127,6 +2550,11 @@ const CHAPTERS = [
             "الآنَ",
             "now"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "who-acts"
         ]
       },
       {
@@ -2147,6 +2575,11 @@ const CHAPTERS = [
             "تَمَامًا",
             "completely / perfectly"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "pronouns"
         ]
       }
     ],
@@ -2157,7 +2590,10 @@ const CHAPTERS = [
     "num": 9,
     "title": "Chapter 9: The Mosque & Worship",
     "surahId": "fatiha",
-    "grammar": {"title":"We Did It: the ـنَا Ending","text":"A past verb ending in <b>ـنَا</b> means 'we did it': <b>صَلَّيْنَا جَمَاعَةً</b> = <i>we prayed in congregation</i>. In du'ā formulas the ـكَ on the verb is 'you': <b>جَزَاكَ اللَّهُ خَيْرًا</b> = <i>may Allah reward you</i> — literally 'may Allah reward YOU with good'."},
+    "grammar": {
+      "title": "We Did It: the ـنَا Ending",
+      "text": "A past verb ending in <b>ـنَا</b> means 'we did it': <b>صَلَّيْنَا جَمَاعَةً</b> = <i>we prayed in congregation</i>. In du'ā formulas the ـكَ on the verb is 'you': <b>جَزَاكَ اللَّهُ خَيْرًا</b> = <i>may Allah reward you</i> — literally 'may Allah reward YOU with good'."
+    },
     "sentences": [
       {
         "ar": "أَيْنَ مَكَانُ الوُضُوءِ؟",
@@ -2177,6 +2613,12 @@ const CHAPTERS = [
             "الوُضُوءِ",
             "the wudu / ablution"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -2197,6 +2639,12 @@ const CHAPTERS = [
             "لِلأَذَانِ",
             "for the adhan"
           ]
+        ],
+        "pattern": "dual",
+        "frames": [
+          "dual",
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -2217,6 +2665,10 @@ const CHAPTERS = [
             "الصَّلَاةَ",
             "the prayer"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -2241,6 +2693,11 @@ const CHAPTERS = [
             "الصُّفُوفِ",
             "the prayer rows"
           ]
+        ],
+        "pattern": "imperative",
+        "frames": [
+          "imperative",
+          "who-acts"
         ]
       },
       {
@@ -2265,6 +2722,11 @@ const CHAPTERS = [
             "المَسْجِدِ",
             "the mosque"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "pronouns"
         ]
       },
       {
@@ -2289,6 +2751,11 @@ const CHAPTERS = [
             "الحَرَمِ",
             "the Haram / Sanctuary"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "nominal"
         ]
       },
       {
@@ -2309,6 +2776,10 @@ const CHAPTERS = [
             "لِلْقِرَاءَةِ",
             "for reading"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -2333,6 +2804,11 @@ const CHAPTERS = [
             "الجَزَاءِ",
             "the reward"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "idafa"
         ]
       },
       {
@@ -2357,6 +2833,12 @@ const CHAPTERS = [
             "بِالتَّوْفِيقِ",
             "with success"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "prep-pron",
+          "tenses"
         ]
       },
       {
@@ -2381,6 +2863,12 @@ const CHAPTERS = [
             "اللَّهِ",
             "Allah"
           ]
+        ],
+        "pattern": "prep-pron",
+        "frames": [
+          "prep-pron",
+          "idafa",
+          "nominal"
         ]
       }
     ],
@@ -2391,7 +2879,10 @@ const CHAPTERS = [
     "num": 10,
     "title": "Chapter 10: Days, Weeks & Plans",
     "surahId": "nasr",
-    "grammar": {"title":"Time Phrases with فِي, and كَانَ for 'Was'","text":"<b>فِي</b> anchors a time of day: <b>فِي الصَّبَاحِ أَشْرَبُ الشَّايَ</b> = <i>in the morning I drink tea</i>. The present needs no 'is' (اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ), but the past needs <b>كَانَ</b>: <b>أَمْسِ كَانَ يَوْمَ الخَمِيسِ</b> = <i>yesterday was Thursday</i>."},
+    "grammar": {
+      "title": "Time Phrases with فِي, and كَانَ for 'Was'",
+      "text": "<b>فِي</b> anchors a time of day: <b>فِي الصَّبَاحِ أَشْرَبُ الشَّايَ</b> = <i>in the morning I drink tea</i>. The present needs no 'is' (اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ), but the past needs <b>كَانَ</b>: <b>أَمْسِ كَانَ يَوْمَ الخَمِيسِ</b> = <i>yesterday was Thursday</i>."
+    },
     "sentences": [
       {
         "ar": "اليَوْمَ هُوَ يَوْمُ الجُمُعَةِ.",
@@ -2415,6 +2906,11 @@ const CHAPTERS = [
             "الجُمُعَةِ",
             "Friday"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -2439,6 +2935,12 @@ const CHAPTERS = [
             "الخَمِيسِ",
             "Thursday"
           ]
+        ],
+        "pattern": "kana",
+        "frames": [
+          "kana",
+          "tenses",
+          "idafa"
         ]
       },
       {
@@ -2467,6 +2969,11 @@ const CHAPTERS = [
             "الأُسْتَاذِ",
             "the teacher / professor"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "tenses"
         ]
       },
       {
@@ -2495,6 +3002,11 @@ const CHAPTERS = [
             "اليَوْمِ",
             "the day"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "tenses"
         ]
       },
       {
@@ -2527,6 +3039,13 @@ const CHAPTERS = [
             "عَائِلَتِي",
             "my family"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses",
+          "idafa",
+          "pronouns",
+          "gender"
         ]
       },
       {
@@ -2551,6 +3070,11 @@ const CHAPTERS = [
             "الشَّايَ",
             "tea"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal",
+          "tenses"
         ]
       },
       {
@@ -2575,6 +3099,10 @@ const CHAPTERS = [
             "كِتَابًا",
             "a book"
           ]
+        ],
+        "pattern": "tenses",
+        "frames": [
+          "tenses"
         ]
       },
       {
@@ -2595,6 +3123,12 @@ const CHAPTERS = [
             "الطَّائِرَةُ",
             "the plane"
           ]
+        ],
+        "pattern": "questions",
+        "frames": [
+          "questions",
+          "idafa",
+          "nominal"
         ]
       },
       {
@@ -2619,6 +3153,11 @@ const CHAPTERS = [
             "الآنَ",
             "now"
           ]
+        ],
+        "pattern": "have",
+        "frames": [
+          "have",
+          "nominal"
         ]
       },
       {
@@ -2647,6 +3186,10 @@ const CHAPTERS = [
             "القَادِمِ",
             "the coming / next"
           ]
+        ],
+        "pattern": "nominal",
+        "frames": [
+          "nominal"
         ]
       }
     ],

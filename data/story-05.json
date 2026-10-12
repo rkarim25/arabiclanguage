@@ -29,6 +29,11 @@
      "المَسَاءِ.",
      "the evening"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "who-acts"
    ]
   },
   {
@@ -51,6 +56,12 @@
      "تَفَضَّلُوا.",
      "please, come in"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "who-acts"
    ]
   },
   {
@@ -77,6 +88,13 @@
      "مِنْ فَضْلِكَ.",
      "please"
     ]
+   ],
+   "pattern": "dual",
+   "frames": [
+    "dual",
+    "prep-pron",
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -103,6 +121,14 @@
      "تُرِيدُونَ؟",
      "do you (pl.) want"
     ]
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "demonstratives",
+    "tenses",
+    "plurals",
+    "who-acts"
    ]
   },
   {
@@ -125,6 +151,12 @@
      "اليَوْمَ؟",
      "today"
     ]
+   ],
+   "pattern": "have",
+   "frames": [
+    "have",
+    "questions",
+    "nominal"
    ]
   },
   {
@@ -155,6 +187,12 @@
      "وَسَلَطَةٌ.",
      "and salad"
     ]
+   ],
+   "pattern": "have",
+   "frames": [
+    "have",
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -189,6 +227,10 @@
      "بَارِدًا.",
      "cold"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
    ]
   },
   {
@@ -215,6 +257,11 @@
      "بِالنَّعْنَاعِ.",
      "with mint"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
    ]
   },
   {
@@ -241,6 +288,10 @@
      "فَقَطْ.",
      "only"
     ]
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
    ]
   },
   {
@@ -267,6 +318,11 @@
      "لِلَّهِ.",
      "to Allah"
     ]
+   ],
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -293,6 +349,12 @@
      "المَجْمُوعُ؟",
      "is the total"
     ]
+   ],
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -319,6 +381,11 @@
      "وَإِلَى اللِّقَاءِ!",
      "and see you again"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "plurals"
    ]
   }
  ],

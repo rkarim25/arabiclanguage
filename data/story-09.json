@@ -56,6 +56,13 @@
      "لَذِيذًا",
      "delicious"
     ]
+   ],
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "connectors",
+    "gender"
    ]
   },
   {
@@ -103,6 +110,15 @@
      "وَجَوْزَةً",
      "and a walnut"
     ]
+   ],
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "demonstratives",
+    "tenses",
+    "connectors",
+    "plurals",
+    "gender"
    ]
   },
   {
@@ -142,6 +158,11 @@
      "الجُبْنِ",
      "the cheese"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -181,6 +202,13 @@
      "القَرْيَةِ",
      "the village"
     ]
+   ],
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "tenses",
+    "pronouns",
+    "gender"
    ]
   },
   {
@@ -228,6 +256,12 @@
      "وَسُكَّرًا",
      "and sugar"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
    ]
   },
   {
@@ -271,6 +305,13 @@
      "وَالقَهْوَةَ",
      "and the coffee"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "who-acts",
+    "gender"
    ]
   },
   {
@@ -322,6 +363,12 @@
      "يَا أَحْمَدُ",
      "O Ahmad"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
    ]
   },
   {
@@ -365,6 +412,12 @@
      "لَذِيذًا",
      "delicious"
     ]
+   ],
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -412,6 +465,12 @@
      "دَجَاجًا",
      "chicken"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns"
    ]
   },
   {
@@ -455,6 +514,13 @@
      "الطَّعَامِ",
      "the food"
     ]
+   ],
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses",
+    "connectors",
+    "pronouns"
    ]
   },
   {
@@ -502,6 +568,14 @@
      "إِلَى الحَدِيقَةِ",
      "to the garden"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "pronouns",
+    "plurals",
+    "who-acts"
    ]
   },
   {
@@ -573,6 +647,12 @@
      "الفَاكِهَةِ",
      "the fruit"
     ]
+   ],
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -616,6 +696,14 @@
      "كَرِيمًا",
      "generous"
     ]
+   ],
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses",
+    "idafa",
+    "plurals",
+    "who-acts"
    ]
   },
   {
@@ -659,6 +747,13 @@
      "الشَّايَ",
      "the tea"
     ]
+   ],
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "tenses",
+    "connectors",
+    "who-acts"
    ]
   },
   {
@@ -702,6 +797,15 @@
      "القَادِمَ",
      "the coming (next)"
     ]
+   ],
+   "pattern": "ordinals",
+   "frames": [
+    "ordinals",
+    "negation",
+    "questions",
+    "tenses",
+    "who-acts",
+    "gender"
    ]
   },
   {
@@ -733,6 +837,12 @@
      "رَائِعَةٌ",
      "wonderful"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors",
+    "gender"
    ]
   },
   {
@@ -780,6 +890,14 @@
      "وَالصِّحَّةِ",
      "and health"
     ]
+   ],
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "have",
+    "tenses",
+    "pronouns",
+    "gender"
    ]
   },
   {
@@ -831,6 +949,14 @@
      "طَوَالَ اليَوْمِ",
      "the whole day"
     ]
+   ],
+   "pattern": "inna",
+   "frames": [
+    "inna",
+    "negation",
+    "tenses",
+    "plurals",
+    "gender"
    ]
   },
   {
@@ -878,6 +1004,11 @@
      "كُلَّ يَوْمٍ",
      "every day"
     ]
+   ],
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "connectors"
    ]
   }
  ],

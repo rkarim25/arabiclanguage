@@ -641,6 +641,13 @@
      "keys": [
       "ev-lesson-routine:0",
       "ev-lesson-routine:8"
+     ],
+     "pattern": "past-tu",
+     "frames": [
+      "past-tu",
+      "tenses",
+      "connectors",
+      "pronouns"
      ]
     },
     {
@@ -653,6 +660,15 @@
       "ev-lesson-village:37",
       "ev-worship:2",
       "ev-lesson-week:5"
+     ],
+     "pattern": "past-tu",
+     "frames": [
+      "past-tu",
+      "tenses",
+      "connectors",
+      "idafa",
+      "pronouns",
+      "gender"
      ]
     },
     {
@@ -664,6 +680,12 @@
      "keys": [
       "ev-questions:1",
       "ev-lesson-routine:0"
+     ],
+     "pattern": "past-tu",
+     "frames": [
+      "past-tu",
+      "tenses",
+      "connectors"
      ]
     },
     {
@@ -676,6 +698,10 @@
       "ev-people:0",
       "ev-time:4",
       "ev-lesson-village:26"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -687,6 +713,13 @@
      "keys": [
       "ev-lesson-village:1",
       "ev-lesson-village:28"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "tenses",
+      "connectors",
+      "gender"
      ]
     },
     {
@@ -697,6 +730,11 @@
      "key": "s:pr:207",
      "keys": [
       "ev-lesson-village:25"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -708,6 +746,12 @@
      "keys": [
       "ev-lesson-village:15",
       "ev-time:1"
+     ],
+     "pattern": "negation",
+     "frames": [
+      "negation",
+      "tenses",
+      "gender"
      ]
     },
     {
@@ -722,6 +766,15 @@
       "ev-lesson-divine:4",
       "ev-lesson-village:28",
       "ev-lesson-week:7"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "negation",
+      "questions",
+      "tenses",
+      "who-acts",
+      "gender"
      ]
     },
     {
@@ -735,6 +788,10 @@
       "ev-time:0",
       "ev-lesson-routine:14",
       "ev-time:1"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses"
      ]
     },
     {
@@ -747,6 +804,11 @@
       "ev-lesson-quran-words:9",
       "ev-time:1",
       "ev-lesson-quran-words:7"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "connectors",
+      "nominal"
      ]
     },
     {
@@ -757,6 +819,11 @@
      "key": "s:pr:212",
      "keys": [
       "ev-lesson-quran-words:4"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors"
      ]
     },
     {
@@ -769,6 +836,11 @@
       "ev-questions:1",
       "ev-food:4",
       "ev-lesson-village:4"
+     ],
+     "pattern": "past-tu",
+     "frames": [
+      "past-tu",
+      "tenses"
      ]
     },
     {
@@ -779,6 +851,11 @@
      "key": "s:pr:214",
      "keys": [
       "ev-lesson-village:10"
+     ],
+     "pattern": "kana",
+     "frames": [
+      "kana",
+      "tenses"
      ]
     },
     {
@@ -790,6 +867,12 @@
      "keys": [
       "ev-directions:6",
       "ev-home:5"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "pronouns",
+      "gender"
      ]
     },
     {
@@ -800,6 +883,12 @@
      "key": "s:pr:216",
      "keys": [
       "ev-lesson-village:5"
+     ],
+     "pattern": "idafa",
+     "frames": [
+      "idafa",
+      "past-tu",
+      "tenses"
      ]
     },
     {
@@ -812,6 +901,11 @@
       "ev-people:7",
       "ev-lesson-village:21",
       "ev-food:5"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors"
      ]
     }
    ],
@@ -1407,6 +1501,13 @@
       "ev-lesson-routine:5",
       "ev-lesson-routine:8",
       "ev-lesson-routine:9"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "tenses",
+      "idafa",
+      "gender"
      ]
     },
     {
@@ -1419,6 +1520,12 @@
       "ev-lesson-routine:10",
       "ev-lesson-routine:11",
       "ev-lesson-routine:12"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors",
+      "pronouns"
      ]
     },
     {
@@ -1431,6 +1538,11 @@
       "ev-lesson-routine:13",
       "ev-lesson-routine:14",
       "ev-lesson-routine:15"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors"
      ]
     },
     {
@@ -1441,6 +1553,13 @@
      "key": "s:st:story-08:3",
      "keys": [
       "ev-lesson-routine:6"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "tenses",
+      "pronouns",
+      "gender"
      ]
     },
     {
@@ -1452,6 +1571,13 @@
      "keys": [
       "ev-lesson-routine:7",
       "ev-lesson-routine:13"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "tenses",
+      "plurals",
+      "gender"
      ]
     },
     {
@@ -1464,6 +1590,13 @@
       "ev-lesson-routine:18",
       "ev-lesson-routine:19",
       "ev-lesson-routine:20"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors",
+      "idafa",
+      "pronouns"
      ]
     },
     {
@@ -1476,6 +1609,12 @@
       "ev-lesson-routine:2",
       "ev-lesson-routine:4",
       "ev-lesson-routine:9"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors",
+      "idafa"
      ]
     },
     {
@@ -1486,6 +1625,11 @@
      "key": "s:pr:199",
      "keys": [
       "ev-lesson-routine:24"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "connectors"
      ]
     },
     {
@@ -1498,6 +1642,12 @@
       "ev-questions:4",
       "ev-lesson-routine:1",
       "ev-lesson-routine:13"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -1508,6 +1658,13 @@
      "key": "s:pr:201",
      "keys": [
       "ev-lesson-routine:1"
+     ],
+     "pattern": "inna",
+     "frames": [
+      "inna",
+      "tenses",
+      "connectors",
+      "idafa"
      ]
     }
    ],
@@ -2253,7 +2410,12 @@
      "tr": "",
      "from": "teacher",
      "key": "s:pr:60",
-     "keys": []
+     "keys": [],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "nominal"
+     ]
     },
     {
      "ar": "لَيْسَ عِنْدِي",
@@ -2261,7 +2423,13 @@
      "tr": "",
      "from": "teacher",
      "key": "s:pr:61",
-     "keys": []
+     "keys": [],
+     "pattern": "negation",
+     "frames": [
+      "have",
+      "negation",
+      "nominal"
+     ]
     },
     {
      "ar": "عِنْدِي خَالَانِ وَخَالَتَانِ",
@@ -2269,7 +2437,13 @@
      "tr": "",
      "from": "teacher",
      "key": "s:pr:62",
-     "keys": []
+     "keys": [],
+     "pattern": "dual",
+     "frames": [
+      "dual",
+      "have",
+      "nominal"
+     ]
     },
     {
      "ar": "مَاذَا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
@@ -2280,6 +2454,13 @@
      "keys": [
       "ev-questions:0",
       "ev-questions:1"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "questions",
+      "tenses",
+      "pronouns"
      ]
     },
     {
@@ -2290,6 +2471,12 @@
      "key": "s:pr:64",
      "keys": [
       "ev-lesson-home:9"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "tenses",
+      "pronouns"
      ]
     },
     {
@@ -2298,7 +2485,11 @@
      "tr": "",
      "from": "teacher",
      "key": "s:pr:65",
-     "keys": []
+     "keys": [],
+     "pattern": "tenses",
+     "frames": [
+      "tenses"
+     ]
     },
     {
      "ar": "اللهُ حَيٌّ لَا يَمُوتُ",
@@ -2306,7 +2497,12 @@
      "tr": "",
      "from": "teacher",
      "key": "s:pr:66",
-     "keys": []
+     "keys": [],
+     "pattern": "negation",
+     "frames": [
+      "negation",
+      "tenses"
+     ]
     },
     {
      "ar": "كَمْ طَابِقٍ بَيْتُكَ؟",
@@ -2317,6 +2513,12 @@
      "keys": [
       "ev-questions:6",
       "ev-lesson-home:20"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2327,6 +2529,12 @@
      "key": "s:pr:68",
      "keys": [
       "ev-lesson-home:16"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2338,6 +2546,10 @@
      "keys": [
       "ev-people:3",
       "ev-lesson-divine:3"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2349,6 +2561,11 @@
      "keys": [
       "ev-questions:6",
       "ev-lesson-divine:4"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "tenses"
      ]
     },
     {
@@ -2359,6 +2576,12 @@
      "key": "s:pr:71",
      "keys": [
       "ev-lesson-home:18"
+     ],
+     "pattern": "demonstratives",
+     "frames": [
+      "demonstratives",
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2371,6 +2594,11 @@
       "ev-home:1",
       "ev-lesson-home:3",
       "ev-lesson-home:4"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2382,6 +2610,12 @@
      "keys": [
       "ev-questions:0",
       "ev-questions:1"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "questions",
+      "tenses"
      ]
     },
     {
@@ -2393,6 +2627,12 @@
      "keys": [
       "ev-home:1",
       "ev-lesson-home:7"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "idafa",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2403,6 +2643,12 @@
      "key": "s:pr:75",
      "keys": [
       "ev-lesson-home:8"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "tenses",
+      "pronouns"
      ]
     },
     {
@@ -2413,6 +2659,10 @@
      "key": "s:pr:76",
      "keys": [
       "ev-lesson-home:14"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2424,6 +2674,13 @@
      "keys": [
       "ev-lesson-home:12",
       "ev-home:1"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "idafa",
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2432,7 +2689,11 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:78",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
+     ]
     },
     {
      "ar": "أَفْتَحُ الشُّبَّاكَ فِي الصَّبَاحِ",
@@ -2440,7 +2701,12 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:79",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "nominal",
+      "tenses"
+     ]
     },
     {
      "ar": "المِرْآةُ فِي غُرْفَةِ النَّوْمِ",
@@ -2450,6 +2716,11 @@
      "key": "s:pr:80",
      "keys": [
       "ev-home:1"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "idafa",
+      "nominal"
      ]
     },
     {
@@ -2458,7 +2729,11 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:81",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
+     ]
     },
     {
      "ar": "بَيْتِي فِي الدَّوْرِ الثَّالِثِ",
@@ -2468,6 +2743,12 @@
      "key": "s:pr:82",
      "keys": [
       "ev-directions:4"
+     ],
+     "pattern": "ordinals",
+     "frames": [
+      "ordinals",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2479,6 +2760,12 @@
      "keys": [
       "ev-questions:7",
       "ev-shopping:3"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "questions",
+      "nominal"
      ]
     },
     {
@@ -2491,6 +2778,11 @@
       "ev-time:1",
       "ev-lesson-week:1",
       "ev-lesson-week:2"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "dual",
+      "nominal"
      ]
     },
     {
@@ -2502,6 +2794,11 @@
      "keys": [
       "ev-lesson-week:3",
       "ev-lesson-week:2"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "connectors",
+      "nominal"
      ]
     },
     {
@@ -2514,6 +2811,11 @@
       "ev-lesson-week:6",
       "ev-lesson-week:8",
       "ev-lesson-week:0"
+     ],
+     "pattern": "past-tu",
+     "frames": [
+      "past-tu",
+      "nominal"
      ]
     },
     {
@@ -2524,6 +2826,11 @@
      "key": "s:pr:87",
      "keys": [
       "ev-numbers:6"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "plurals",
+      "nominal"
      ]
     },
     {
@@ -2536,6 +2843,12 @@
       "ev-lesson-week:2",
       "ev-commands:3",
       "ev-lesson-week:9"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal",
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -2546,6 +2859,12 @@
      "key": "s:pr:89",
      "keys": [
       "ev-lesson-weather:0"
+     ],
+     "pattern": "prep-pron",
+     "frames": [
+      "prep-pron",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2556,6 +2875,10 @@
      "key": "s:pr:90",
      "keys": [
       "ev-questions:1"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses"
      ]
     },
     {
@@ -2564,7 +2887,11 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:91",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
+     ]
     },
     {
      "ar": "أُخْتِي فِي البَيْتِ",
@@ -2572,7 +2899,12 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:92",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "pronouns",
+      "nominal"
+     ]
     },
     {
      "ar": "خَالِي وَخَالَتِي مِنْ أُمِّي",
@@ -2582,6 +2914,11 @@
      "key": "s:pr:93",
      "keys": [
       "ev-questions:1"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2592,6 +2929,12 @@
      "key": "s:pr:94",
      "keys": [
       "ev-family:14"
+     ],
+     "pattern": "demonstratives",
+     "frames": [
+      "demonstratives",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2600,7 +2943,12 @@
      "tr": "",
      "from": "built",
      "key": "s:pr:95",
-     "keys": []
+     "keys": [],
+     "pattern": "nominal",
+     "frames": [
+      "pronouns",
+      "nominal"
+     ]
     },
     {
      "ar": "الشَّقَّةُ وَاسِعَةٌ.",
@@ -2612,6 +2960,11 @@
       "ev-lesson-home:0",
       "story-07:0",
       "story-07:10"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2624,6 +2977,10 @@
       "ev-lesson-home:5",
       "story-07:6",
       "story-07:11"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2635,6 +2992,10 @@
      "keys": [
       "story-07:1",
       "story-07:12"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2645,6 +3006,10 @@
      "key": "s:pr:121",
      "keys": [
       "ev-lesson-home:10"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2657,6 +3022,10 @@
       "ev-lesson-home:11",
       "ev-lesson-home:2",
       "story-07:5"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2670,6 +3039,10 @@
       "story-07:8",
       "ev-lesson-home:2",
       "story-07:5"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2683,6 +3056,11 @@
       "story-07:0",
       "story-07:9",
       "ev-time:0"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2693,6 +3071,10 @@
      "key": "s:pr:125",
      "keys": [
       "story-07:2"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "nominal"
      ]
     },
     {
@@ -2705,6 +3087,12 @@
       "ev-lesson-home:3",
       "story-07:4",
       "story-07:11"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "idafa",
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2717,6 +3105,11 @@
       "ev-lesson-home:4",
       "story-07:3",
       "story-07:10"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "idafa",
+      "nominal"
      ]
     },
     {
@@ -2729,6 +3122,11 @@
       "story-07:13",
       "ev-lesson-home:0",
       "story-07:0"
+     ],
+     "pattern": "idafa",
+     "frames": [
+      "idafa",
+      "nominal"
      ]
     },
     {
@@ -2740,6 +3138,12 @@
      "keys": [
       "ev-lesson-home:10",
       "ev-lesson-home:9"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -2751,6 +3155,12 @@
      "keys": [
       "ev-lesson-home:15",
       "story-07:8"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "negation",
+      "nominal"
      ]
     },
     {
@@ -2762,6 +3172,12 @@
      "keys": [
       "ev-lesson-week:4",
       "ev-lesson-week:9"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -2776,6 +3192,12 @@
       "story-07:8",
       "ev-lesson-home:2",
       "story-07:5"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "questions",
+      "tenses"
      ]
     },
     {
@@ -2788,6 +3210,13 @@
       "ev-lesson-home:10",
       "ev-lesson-home:3",
       "story-07:4"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "tenses",
+      "idafa",
+      "pronouns"
      ]
     },
     {
@@ -2798,6 +3227,12 @@
      "key": "s:pr:134",
      "keys": [
       "ev-lesson-home:25"
+     ],
+     "pattern": "wujud",
+     "frames": [
+      "wujud",
+      "negation",
+      "tenses"
      ]
     },
     {
@@ -2809,6 +3244,11 @@
      "keys": [
       "ev-questions:2",
       "ev-lesson-home:11"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "nominal"
      ]
     },
     {
@@ -2822,6 +3262,12 @@
       "story-07:13",
       "ev-lesson-home:0",
       "story-07:0"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "idafa",
+      "nominal"
      ]
     },
     {
@@ -2833,6 +3279,11 @@
      "keys": [
       "ev-questions:3",
       "story-07:14"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "tenses"
      ]
     },
     {
@@ -2848,6 +3299,13 @@
       "story-07:9",
       "ev-lesson-week:6",
       "ev-lesson-week:9"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "idafa",
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -2861,6 +3319,11 @@
       "story-07:17",
       "story-07:15",
       "ev-time:2"
+     ],
+     "pattern": "questions",
+     "frames": [
+      "questions",
+      "tenses"
      ]
     },
     {
@@ -2874,6 +3337,11 @@
       "story-07:14",
       "ev-lesson-week:4",
       "ev-lesson-week:9"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -2886,6 +3354,11 @@
       "story-07:17",
       "story-07:15",
       "ev-lesson-week:7"
+     ],
+     "pattern": "demonstratives",
+     "frames": [
+      "demonstratives",
+      "tenses"
      ]
     },
     {
@@ -2899,6 +3372,11 @@
       "ev-lesson-home:0",
       "story-07:0",
       "story-07:12"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "gender"
      ]
     },
     {
@@ -2912,6 +3390,11 @@
       "story-07:15",
       "ev-lesson-week:5",
       "ev-lesson-week:9"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -2925,6 +3408,10 @@
       "ev-lesson-home:5",
       "story-07:6",
       "story-07:11"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses"
      ]
     },
     {
@@ -2936,6 +3423,11 @@
      "keys": [
       "ev-lesson-week:5",
       "ev-lesson-week:9"
+     ],
+     "pattern": "tenses",
+     "frames": [
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -2947,6 +3439,11 @@
      "keys": [
       "ev-lesson-week:4",
       "ev-lesson-week:3"
+     ],
+     "pattern": "nominal",
+     "frames": [
+      "connectors",
+      "nominal"
      ]
     },
     {
@@ -2960,6 +3457,11 @@
       "ev-lesson-week:7",
       "ev-lesson-week:5",
       "ev-lesson-week:9"
+     ],
+     "pattern": "idafa",
+     "frames": [
+      "idafa",
+      "nominal"
      ]
     },
     {
@@ -2973,6 +3475,11 @@
       "story-07:0",
       "story-07:10",
       "story-07:11"
+     ],
+     "pattern": "kana",
+     "frames": [
+      "kana",
+      "gender"
      ]
     },
     {
@@ -2984,6 +3491,11 @@
      "keys": [
       "story-07:1",
       "story-07:12"
+     ],
+     "pattern": "kana",
+     "frames": [
+      "kana",
+      "tenses"
      ]
     },
     {
@@ -2996,6 +3508,11 @@
       "story-07:16",
       "ev-lesson-home:0",
       "story-07:0"
+     ],
+     "pattern": "pronouns",
+     "frames": [
+      "pronouns",
+      "tenses"
      ]
     },
     {
@@ -3008,6 +3525,11 @@
       "story-07:16",
       "story-07:1",
       "story-07:12"
+     ],
+     "pattern": "pronouns",
+     "frames": [
+      "pronouns",
+      "tenses"
      ]
     },
     {
@@ -3019,6 +3541,12 @@
      "keys": [
       "ev-lesson-home:6",
       "ev-lesson-home:11"
+     ],
+     "pattern": "plurals",
+     "frames": [
+      "plurals",
+      "pronouns",
+      "nominal"
      ]
     },
     {
@@ -3032,6 +3560,11 @@
       "story-07:0",
       "ev-numbers:2",
       "ev-home:1"
+     ],
+     "pattern": "plurals",
+     "frames": [
+      "plurals",
+      "nominal"
      ]
     },
     {
@@ -3044,6 +3577,11 @@
       "ev-lesson-home:5",
       "story-07:6",
       "story-07:11"
+     ],
+     "pattern": "demonstratives",
+     "frames": [
+      "demonstratives",
+      "nominal"
      ]
     },
     {
@@ -3055,6 +3593,12 @@
      "keys": [
       "ev-home:1",
       "story-07:10"
+     ],
+     "pattern": "demonstratives",
+     "frames": [
+      "demonstratives",
+      "gender",
+      "nominal"
      ]
     },
     {
@@ -3066,6 +3610,12 @@
      "keys": [
       "ev-lesson-week:0",
       "ev-lesson-week:9"
+     ],
+     "pattern": "have",
+     "frames": [
+      "have",
+      "tenses",
+      "idafa"
      ]
     },
     {
@@ -3077,6 +3627,12 @@
      "keys": [
       "ev-lesson-week:0",
       "ev-lesson-week:7"
+     ],
+     "pattern": "idafa",
+     "frames": [
+      "ordinals",
+      "idafa",
+      "nominal"
      ]
     }
    ],

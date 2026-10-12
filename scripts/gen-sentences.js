@@ -165,10 +165,12 @@ const PATTERN_TESTS = [
   ["prep-pron", /(عَلَيْك|عَلَيْه|إِلَيْه|إِلَيْك|فِيه|لَه|لَك|بِه|مِنْه|عليك|عليه|إليه|فيه)/],
   ["tenses", /^(سَ|سَي|سَأ|سَن|يَ|تَ|أَ|نَ)/],
 ];
-const patternFor = ar => {
-  for (const [id, re] of PATTERN_TESTS) if (re.test(ar)) return id;
-  return null;
-};
+/* 2026-10-12: the shared tagger (js/frames.js) replaces the list above — same
+   conservative labelling (one unmistakable marker → one note), plus the frames
+   a sentence EXERCISES for the grammar profile. PATTERN_TESTS stays as the
+   documented history of what the label meant. */
+const Frames = require(path.join(__dirname, "..", "js", "frames.js"));
+const patternFor = ar => Frames.detect(ar).pattern;
 
 /* ---------- Qur'an: the ayah IS the sentence unit ----------
    Measured on his own 57 verses: 5.2 words on average, and 49 of 57 are six
@@ -427,6 +429,13 @@ bank.forEach(u => {
   u.use = content.length ? +(u.weight / content.length).toFixed(3) : 0;
 });
 
+/* every sentence carries the frames it exercises; a hand-set pattern is kept */
+bank.forEach(u => {
+  const d = Frames.detect(u.ar);
+  if (!u.pattern) u.pattern = d.pattern;
+  u.frames = d.frames.slice();
+  if (u.pattern && !u.frames.includes(u.pattern)) u.frames.unshift(u.pattern);
+});
 // the bank IS the order he works through: commonest first, within each track
 bank.sort((a, b) => (a.track === b.track ? 0 : a.track === "quran" ? -1 : 1) || b.use - a.use || b.weight - a.weight);
 
