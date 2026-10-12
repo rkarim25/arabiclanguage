@@ -8,6 +8,8 @@ const STORY_LIST = [
   { id: "story-05", level: 1, n: 5, titleAr: "فِي المَطْعَمِ", titleEn: "At the Restaurant", desc: "Your first full dialogue — ordering dinner, start to bill.", words: 32 },
   { id: "story-06", level: 1, n: 6, titleAr: "حِصَّةٌ مَعَ المُعَلِّمَةِ", titleEn: "The Teacher Session", desc: "A day built around your Arabic lesson — weaving in your Bayna Yadayk Unit 1 words.", words: 27 },
   { id: "story-07", level: 2, n: 7, titleAr: "سَامِر يَبْحَثُ عَنْ شَقَّةٍ", titleEn: "Samer looks for a flat", desc: "Your 30 Aug class reading — the flat, the days of the week, and asking the owner.", words: 18 },
+  { id: "story-08", level: 2, n: 8, titleAr: "يَوْمُ العَمَلِ وَالعُطْلَةِ", titleEn: "A Working Day & The Day Off", desc: "Your 27 Sep class reading — the routine from Fajr to bed, work day against day off.", words: 22 },
+  { id: "story-09", level: 2, n: 9, titleAr: "رِحْلَةٌ إِلَى القَرْيَةِ", titleEn: "A Trip to the Village", desc: "Your 11 Oct class reading — breakfast, the shop on the way, lunch under the tree, and a lesson on healthy meals.", words: 16 },
 ];
 
 /* Root-family manifest (full data in data/families.json) */
@@ -74,6 +76,10 @@ const EVERYDAY_LIST = [
   { id: "help", title: "المُسَاعَدَة", hint: "Umrah: asking for help" },
   { id: "masjid", title: "فِي المَسْجِد", hint: "what the imam says — lines, iqama, janazah" },
   { id: "khutba", title: "خُطْبَة الجُمُعَة", hint: "Friday khutbah stock phrases" },
+  { id: "lesson-routine", title: "يَوْمُ العَمَلِ وَالعُطْلَةِ", hint: "daily routine, work day & weekend — class, 27 Sep" },
+  { id: "lesson-muawwidhatayn", title: "المُعَوِّذَتَانِ", hint: "the protection surahs, concept by concept — class, 27 Sep" },
+  { id: "lesson-village", title: "رِحْلَةٌ إِلَى القَرْيَةِ", hint: "the village: food, meals, ordinals & the clock — class, 11 Oct" },
+  { id: "lesson-quran-words", title: "كَلِمَاتٌ تَلْتَقِي بِالقُرْآنِ", hint: "where the class met the Qur'an — gender exceptions, triumph, hunger — class, 11 Oct" },
 ];
 const UMRAH_GROUPS = ["directions", "haram", "shopping", "medical", "hotel-taxi", "help"];
 const MASJID_GROUPS = ["masjid", "khutba"];
@@ -1639,6 +1645,9 @@ function suggestNext() {
     ["connectors", "وَ / فَـ / ثُمَّ — and, so, then"],
     ["prep-pron", "لَهُ / فِيهِ — fused prepositions"],
     ["verbears", "🎧 who's acting? — verb endings by ear"],
+    ["past-tu", "ـتُ — ‘I did it’: the past for yourself"],
+    ["ordinals", "first, second, third — and the clock"],
+    ["gender", "masculine & feminine — the ة rule and its exceptions"],
   ];
   const nextG = GRAMMAR_LIST.find(([g]) => !stepsDone("gr-" + g).test);
   if (nextG) out.push({
@@ -2425,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv4kf0az";
+const DATA_V = "mv4u8ogz";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

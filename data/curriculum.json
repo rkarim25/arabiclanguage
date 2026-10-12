@@ -608,8 +608,160 @@
    ]
   },
   {
-   "id": "ms-fatiha",
+   "id": "ms-class-1011",
    "order": 3,
+   "track": "conv",
+   "level": "conv-a1",
+   "source": "teacher",
+   "name": "A Trip to the Village — food, meals & the clock (class, 11 Oct)",
+   "can": "tell a day you have lived in the first-person past (ـتُ), order food and name meals, say first/second/third and the clock, and spot the Qur'an's gender exceptions",
+   "why": "From your Sunday Preply class of 11 Oct: the village reading, her Friday narrated in the past tense, and the words where the class met the Qur'an.",
+   "items": 65,
+   "plannedMin": 84,
+   "plannedWeek": 5,
+   "lessons": [
+    {
+     "id": "ms-class-1011-l1",
+     "title": "Class words — the village, meals & the clock (1 of 7)",
+     "keys": [
+      "ev-lesson-village:0",
+      "ev-lesson-village:1",
+      "ev-lesson-village:2",
+      "ev-lesson-village:3",
+      "ev-lesson-village:4",
+      "ev-lesson-village:5"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l2",
+     "title": "Class words — the village, meals & the clock (2 of 7)",
+     "keys": [
+      "ev-lesson-village:6",
+      "ev-lesson-village:7",
+      "ev-lesson-village:8",
+      "ev-lesson-village:9",
+      "ev-lesson-village:10",
+      "ev-lesson-village:11"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l3",
+     "title": "Class words — the village, meals & the clock (3 of 7)",
+     "keys": [
+      "ev-lesson-village:12",
+      "ev-lesson-village:13",
+      "ev-lesson-village:14",
+      "ev-lesson-village:15",
+      "ev-lesson-village:16",
+      "ev-lesson-village:17"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l4",
+     "title": "Class words — the village, meals & the clock (4 of 7)",
+     "keys": [
+      "ev-lesson-village:18",
+      "ev-lesson-village:19",
+      "ev-lesson-village:20",
+      "ev-lesson-village:21",
+      "ev-lesson-village:22",
+      "ev-lesson-village:23"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l5",
+     "title": "Class words — the village, meals & the clock (5 of 7)",
+     "keys": [
+      "ev-lesson-village:24",
+      "ev-lesson-village:25",
+      "ev-lesson-village:26",
+      "ev-lesson-village:27",
+      "ev-lesson-village:28"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l6",
+     "title": "Class words — the village, meals & the clock (6 of 7)",
+     "keys": [
+      "ev-lesson-village:29",
+      "ev-lesson-village:30",
+      "ev-lesson-village:31",
+      "ev-lesson-village:32",
+      "ev-lesson-village:33"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l7",
+     "title": "Class words — the village, meals & the clock (7 of 7)",
+     "keys": [
+      "ev-lesson-village:34",
+      "ev-lesson-village:35",
+      "ev-lesson-village:36",
+      "ev-lesson-village:37",
+      "ev-lesson-village:38"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l8",
+     "title": "Class words — where they meet the Qur'an (1 of 2)",
+     "keys": [
+      "ev-lesson-quran-words:0",
+      "ev-lesson-quran-words:1",
+      "ev-lesson-quran-words:2",
+      "ev-lesson-quran-words:3",
+      "ev-lesson-quran-words:4"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l9",
+     "title": "Class words — where they meet the Qur'an (2 of 2)",
+     "keys": [
+      "ev-lesson-quran-words:5",
+      "ev-lesson-quran-words:6",
+      "ev-lesson-quran-words:7",
+      "ev-lesson-quran-words:8",
+      "ev-lesson-quran-words:9"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l10",
+     "title": "A Trip to the Village — the reading (1 of 3)",
+     "keys": [
+      "story-09:0",
+      "story-09:1",
+      "story-09:2",
+      "story-09:3",
+      "story-09:4",
+      "story-09:5"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l11",
+     "title": "A Trip to the Village — the reading (2 of 3)",
+     "keys": [
+      "story-09:6",
+      "story-09:7",
+      "story-09:8",
+      "story-09:9",
+      "story-09:10"
+     ]
+    },
+    {
+     "id": "ms-class-1011-l12",
+     "title": "A Trip to the Village — the reading (3 of 3)",
+     "keys": [
+      "story-09:11",
+      "story-09:12",
+      "story-09:13",
+      "story-09:14",
+      "story-09:15"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ms-fatiha",
+   "order": 4,
    "track": "quran",
    "level": "quran-a1",
    "name": "Al-Fatiha by ear",
@@ -617,7 +769,7 @@
    "why": "You recite it seventeen times a day. Mapping meaning onto sound you already know is the fastest listening you will ever buy.",
    "items": 29,
    "plannedMin": 42,
-   "plannedWeek": 4,
+   "plannedWeek": 6,
    "lessons": [
     {
      "id": "ms-fatiha-l1",
@@ -688,7 +840,7 @@
   },
   {
    "id": "ms-masjid",
-   "order": 4,
+   "order": 5,
    "track": "conv",
    "level": "conv-b1",
    "name": "In the masjid and the Haram",
@@ -696,7 +848,7 @@
    "why": "Where you will actually be, hearing Arabic spoken for real.",
    "items": 29,
    "plannedMin": 42,
-   "plannedWeek": 5,
+   "plannedWeek": 7,
    "lessons": [
     {
      "id": "ms-masjid-l1",
@@ -767,7 +919,7 @@
   },
   {
    "id": "ms-repair",
-   "order": 5,
+   "order": 6,
    "track": "conv",
    "level": "conv-a1",
    "name": "Keeping a conversation alive",
@@ -775,7 +927,7 @@
    "why": "This is the difference between a conversation that survives an unknown word and one that dies on it. It comes early on purpose.",
    "items": 22,
    "plannedMin": 28,
-   "plannedWeek": 6,
+   "plannedWeek": 8,
    "lessons": [
     {
      "id": "ms-repair-l1",
@@ -827,7 +979,7 @@
   },
   {
    "id": "ms-short-surahs",
-   "order": 6,
+   "order": 7,
    "track": "quran",
    "level": "quran-a2",
    "name": "The short surahs you pray",
@@ -835,7 +987,7 @@
    "why": "Three surahs you already know by heart. Once the meaning is attached, you understand them every time you pray them.",
    "items": 58,
    "plannedMin": 77,
-   "plannedWeek": 7,
+   "plannedWeek": 9,
    "lessons": [
     {
      "id": "ms-short-surahs-l1",
@@ -965,7 +1117,7 @@
   },
   {
    "id": "ms-ask",
-   "order": 7,
+   "order": 8,
    "track": "conv",
    "level": "conv-a1",
    "name": "Asking and needing",
@@ -973,7 +1125,7 @@
    "why": "Questions are how you get anything done in a language you only half speak.",
    "items": 31,
    "plannedMin": 42,
-   "plannedWeek": 8,
+   "plannedWeek": 10,
    "lessons": [
     {
      "id": "ms-ask-l1",
@@ -1046,7 +1198,7 @@
   },
   {
    "id": "ms-core-50",
-   "order": 8,
+   "order": 9,
    "track": "quran",
    "level": "quran-a2",
    "name": "The Qur'an's 50 commonest words",
@@ -1054,7 +1206,7 @@
    "why": "These fifty words are roughly a third of every page. Nothing else you learn pays back this fast.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 10,
+   "plannedWeek": 11,
    "lessons": [
     {
      "id": "ms-core-50-l1",
@@ -1170,7 +1322,7 @@
   },
   {
    "id": "ms-hello",
-   "order": 9,
+   "order": 10,
    "track": "conv",
    "level": "conv-a1",
    "name": "Greeting and introducing yourself",
@@ -1178,7 +1330,7 @@
    "why": "The opening thirty seconds of every conversation you will ever have in Arabic.",
    "items": 22,
    "plannedMin": 28,
-   "plannedWeek": 10,
+   "plannedWeek": 12,
    "lessons": [
     {
      "id": "ms-hello-l1",
@@ -1230,7 +1382,7 @@
   },
   {
    "id": "ms-asr-kawthar",
-   "order": 10,
+   "order": 11,
    "track": "quran",
    "level": "quran-a2",
    "name": "Al-Asr and Al-Kawthar",
@@ -1238,7 +1390,7 @@
    "why": "Two more of your memorised surahs — short, and Al-Asr is a complete argument in three verses.",
    "items": 24,
    "plannedMin": 35,
-   "plannedWeek": 11,
+   "plannedWeek": 13,
    "lessons": [
     {
      "id": "ms-asr-kawthar-l1",
@@ -1298,7 +1450,7 @@
   },
   {
    "id": "ms-shop",
-   "order": 11,
+   "order": 12,
    "track": "conv",
    "level": "conv-a2",
    "name": "Buying and bargaining",
@@ -1306,7 +1458,7 @@
    "why": "Numbers are the half of shopping people forget to learn, so they are in here too.",
    "items": 28,
    "plannedMin": 42,
-   "plannedWeek": 12,
+   "plannedWeek": 14,
    "lessons": [
     {
      "id": "ms-shop-l1",
@@ -1376,7 +1528,7 @@
   },
   {
    "id": "ms-food",
-   "order": 12,
+   "order": 13,
    "track": "conv",
    "level": "conv-a1",
    "name": "Ordering food and drink",
@@ -1384,7 +1536,7 @@
    "why": "Three or four times a day on any trip, and the words repeat endlessly.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 12,
+   "plannedWeek": 14,
    "lessons": [
     {
      "id": "ms-food-l1",
@@ -1431,7 +1583,7 @@
   },
   {
    "id": "ms-directions",
-   "order": 13,
+   "order": 14,
    "track": "conv",
    "level": "conv-a2",
    "name": "Finding your way",
@@ -1439,7 +1591,7 @@
    "why": "Understanding the answer is the hard half, so the direction words come with the questions.",
    "items": 20,
    "plannedMin": 28,
-   "plannedWeek": 13,
+   "plannedWeek": 15,
    "lessons": [
     {
      "id": "ms-directions-l1",
@@ -1489,7 +1641,7 @@
   },
   {
    "id": "ms-core-100",
-   "order": 14,
+   "order": 15,
    "track": "quran",
    "level": "quran-b1",
    "name": "The Qur'an's next 50 words",
@@ -1497,7 +1649,7 @@
    "why": "The second fifty take you from catching fragments to following the shape of a verse.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 14,
+   "plannedWeek": 16,
    "lessons": [
     {
      "id": "ms-core-100-l1",
@@ -1613,7 +1765,7 @@
   },
   {
    "id": "ms-state",
-   "order": 15,
+   "order": 16,
    "track": "conv",
    "level": "conv-a2",
    "name": "Saying how you are",
@@ -1621,7 +1773,7 @@
    "why": "Opposites double your descriptive range for almost no effort.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 15,
+   "plannedWeek": 17,
    "lessons": [
     {
      "id": "ms-state-l1",
@@ -1668,7 +1820,7 @@
   },
   {
    "id": "ms-travel",
-   "order": 16,
+   "order": 17,
    "track": "conv",
    "level": "conv-a2",
    "name": "Hotels, taxis and getting help",
@@ -1676,7 +1828,7 @@
    "why": "The Umrah logistics that happen whether or not you have the words.",
    "items": 21,
    "plannedMin": 28,
-   "plannedWeek": 16,
+   "plannedWeek": 17,
    "lessons": [
     {
      "id": "ms-travel-l1",
@@ -1727,7 +1879,7 @@
   },
   {
    "id": "ms-time",
-   "order": 17,
+   "order": 18,
    "track": "conv",
    "level": "conv-a2",
    "name": "Time and plans",
@@ -1735,7 +1887,7 @@
    "why": "Arranging anything — a lesson, a meal, a taxi — runs on these.",
    "items": 18,
    "plannedMin": 28,
-   "plannedWeek": 16,
+   "plannedWeek": 18,
    "lessons": [
     {
      "id": "ms-time-l1",
@@ -1783,7 +1935,7 @@
   },
   {
    "id": "ms-family",
-   "order": 18,
+   "order": 19,
    "track": "conv",
    "level": "conv-a1",
    "name": "Your family and your home",
@@ -1791,7 +1943,7 @@
    "why": "The first thing anyone asks you, and the material your teacher started with.",
    "items": 46,
    "plannedMin": 56,
-   "plannedWeek": 17,
+   "plannedWeek": 19,
    "lessons": [
     {
      "id": "ms-family-l1",
@@ -1891,7 +2043,7 @@
   },
   {
    "id": "ms-health",
-   "order": 19,
+   "order": 20,
    "track": "conv",
    "level": "conv-b1",
    "name": "If you are unwell",
@@ -1899,7 +2051,7 @@
    "why": "Rarely needed, badly missed when it is.",
    "items": 10,
    "plannedMin": 14,
-   "plannedWeek": 18,
+   "plannedWeek": 19,
    "lessons": [
     {
      "id": "ms-health-l1",
@@ -1927,7 +2079,7 @@
   },
   {
    "id": "ms-qadr",
-   "order": 20,
+   "order": 21,
    "track": "quran",
    "level": "quran-b1",
    "name": "Al-Qadr, Quraysh and Al-Fil",
@@ -1935,7 +2087,7 @@
    "why": "Three more short surahs, moving you past the ones you recite daily.",
    "items": 70,
    "plannedMin": 84,
-   "plannedWeek": 19,
+   "plannedWeek": 21,
    "lessons": [
     {
      "id": "ms-qadr-l1",
@@ -2083,7 +2235,7 @@
   },
   {
    "id": "ms-core-150",
-   "order": 21,
+   "order": 22,
    "track": "quran",
    "level": "quran-b1",
    "name": "The Qur'an's next 50 words",
@@ -2091,7 +2243,7 @@
    "why": "Past this point most verses have only one or two words you have never met.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 21,
+   "plannedWeek": 22,
    "lessons": [
     {
      "id": "ms-core-150-l1",
@@ -2207,7 +2359,7 @@
   },
   {
    "id": "ms-kursi",
-   "order": 22,
+   "order": 23,
    "track": "quran",
    "level": "quran-b2",
    "name": "Ayat al-Kursi",
@@ -2215,7 +2367,7 @@
    "why": "The single most recited verse outside the short surahs, and long enough to be a real test of connected listening.",
    "items": 50,
    "plannedMin": 63,
-   "plannedWeek": 22,
+   "plannedWeek": 24,
    "lessons": [
     {
      "id": "ms-kursi-l1",

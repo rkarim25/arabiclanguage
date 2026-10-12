@@ -1,0 +1,1053 @@
+{
+ "id": "story-09",
+ "level": 2,
+ "source": "teacher",
+ "lesson": "Class — 11 Oct: a trip to the village",
+ "titleAr": "رِحْلَةٌ إِلَى القَرْيَةِ",
+ "titleEn": "A Trip to the Village",
+ "grammar": "Past tense in the third person (اِسْتَيْقَظَ، أَكَلَ، شَرِبَ، ذَهَبَ، رَأَى، اِشْتَرَى، جَلَسُوا، شَرِبُوا)، ordinals with the noun (بَيْضَةً أُولَى، ثَانِيَةً، ثَالِثَةً) and on the clock (السَّاعَةُ السَّادِسَةُ، الثَّامِنَةُ)، counting 3–10 with the plural (ثَلَاثُ تَمَرَاتٍ، ثَلَاثُ سَاعَاتٍ)، and أَمَّا ... فَـ for contrast",
+ "sentences": [
+  {
+   "ar": "فِي يَوْمٍ مِنَ الأَيَّامِ، اسْتَيْقَظَ أَحْمَدُ فِي السَّاعَةِ السَّادِسَةِ صَبَاحًا، وَأَرَادَ أَنْ يَأْكُلَ فَطُورًا لَذِيذًا.",
+   "en": "One day, Ahmad woke up at six in the morning, and wanted to eat a delicious breakfast.",
+   "tr": "fī yawmin mina l-ayyām, istayqaẓa aḥmadu fī s-sāʿati s-sādisati ṣabāḥan, wa-arāda an yaʾkula faṭūran ladhīdhan",
+   "words": [
+    [
+     "فِي يَوْمٍ",
+     "one day"
+    ],
+    [
+     "مِنَ الأَيَّامِ",
+     "of the days"
+    ],
+    [
+     "اسْتَيْقَظَ",
+     "he woke up"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "فِي السَّاعَةِ",
+     "at the hour"
+    ],
+    [
+     "السَّادِسَةِ",
+     "sixth (six o'clock)"
+    ],
+    [
+     "صَبَاحًا",
+     "in the morning"
+    ],
+    [
+     "وَأَرَادَ",
+     "and he wanted"
+    ],
+    [
+     "أَنْ يَأْكُلَ",
+     "to eat"
+    ],
+    [
+     "فَطُورًا",
+     "a breakfast"
+    ],
+    [
+     "لَذِيذًا",
+     "delicious"
+    ]
+   ]
+  },
+  {
+   "ar": "أَكَلَ بَيْضَةً أُولَى، ثُمَّ أَكَلَ ثَانِيَةً وَثَالِثَةً، وَبَعْدَ ذَلِكَ أَكَلَ ثَلَاثَ تَمَرَاتٍ وَجَوْزَةً.",
+   "en": "He ate a first egg, then ate a second and a third, and after that he ate three dates and a walnut.",
+   "tr": "akala bayḍatan ūlā, thumma akala thāniyatan wa-thālithah, wa-baʿda dhālika akala thalātha tamarātin wa-jawzah",
+   "words": [
+    [
+     "أَكَلَ",
+     "he ate"
+    ],
+    [
+     "بَيْضَةً",
+     "an egg"
+    ],
+    [
+     "أُولَى",
+     "first (f.)"
+    ],
+    [
+     "ثُمَّ",
+     "then"
+    ],
+    [
+     "ثَانِيَةً",
+     "a second"
+    ],
+    [
+     "وَثَالِثَةً",
+     "and a third"
+    ],
+    [
+     "وَبَعْدَ ذَلِكَ",
+     "and after that"
+    ],
+    [
+     "ثَلَاثَ",
+     "three"
+    ],
+    [
+     "تَمَرَاتٍ",
+     "dates"
+    ],
+    [
+     "وَجَوْزَةً",
+     "and a walnut"
+    ]
+   ]
+  },
+  {
+   "ar": "شَرِبَ كَأْسًا مِنَ الحَلِيبِ، وَأَكَلَ قِطْعَةَ خُبْزٍ مَعَ الجُبْنِ.",
+   "en": "He drank a glass of milk, and ate a piece of bread with cheese.",
+   "tr": "shariba kaʾsan mina l-ḥalīb, wa-akala qiṭʿata khubzin maʿa l-jubn",
+   "words": [
+    [
+     "شَرِبَ",
+     "he drank"
+    ],
+    [
+     "كَأْسًا",
+     "a glass"
+    ],
+    [
+     "مِنَ الحَلِيبِ",
+     "of milk"
+    ],
+    [
+     "وَأَكَلَ",
+     "and he ate"
+    ],
+    [
+     "قِطْعَةَ",
+     "a piece of"
+    ],
+    [
+     "خُبْزٍ",
+     "bread"
+    ],
+    [
+     "مَعَ",
+     "with"
+    ],
+    [
+     "الجُبْنِ",
+     "the cheese"
+    ]
+   ]
+  },
+  {
+   "ar": "فِي السَّاعَةِ الثَّامِنَةِ، ذَهَبَ أَحْمَدُ مَعَ عَائِلَتِهِ إِلَى القَرْيَةِ.",
+   "en": "At eight o'clock, Ahmad went with his family to the village.",
+   "tr": "fī s-sāʿati th-thāminah, dhahaba aḥmadu maʿa ʿāʾilatihi ilā l-qaryah",
+   "words": [
+    [
+     "فِي السَّاعَةِ",
+     "at the hour"
+    ],
+    [
+     "الثَّامِنَةِ",
+     "eighth (eight o'clock)"
+    ],
+    [
+     "ذَهَبَ",
+     "he went"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "مَعَ",
+     "with"
+    ],
+    [
+     "عَائِلَتِهِ",
+     "his family"
+    ],
+    [
+     "إِلَى",
+     "to"
+    ],
+    [
+     "القَرْيَةِ",
+     "the village"
+    ]
+   ]
+  },
+  {
+   "ar": "وَفِي الطَّرِيقِ، رَأَى دَجَاجًا وَسَمَكًا فِي مَتْجَرٍ صَغِيرٍ، وَاشْتَرَى سَلَطَةً وَسَمْنًا وَسُكَّرًا.",
+   "en": "And on the way, he saw chicken and fish in a small shop, and bought salad, ghee and sugar.",
+   "tr": "wa-fī ṭ-ṭarīq, raʾā dajājan wa-samakan fī matjarin ṣaghīr, wa-shtarā salaṭatan wa-samnan wa-sukkaran",
+   "words": [
+    [
+     "وَفِي الطَّرِيقِ",
+     "and on the way"
+    ],
+    [
+     "رَأَى",
+     "he saw"
+    ],
+    [
+     "دَجَاجًا",
+     "chicken"
+    ],
+    [
+     "وَسَمَكًا",
+     "and fish"
+    ],
+    [
+     "فِي مَتْجَرٍ",
+     "in a shop"
+    ],
+    [
+     "صَغِيرٍ",
+     "small"
+    ],
+    [
+     "وَاشْتَرَى",
+     "and he bought"
+    ],
+    [
+     "سَلَطَةً",
+     "salad"
+    ],
+    [
+     "وَسَمْنًا",
+     "and ghee"
+    ],
+    [
+     "وَسُكَّرًا",
+     "and sugar"
+    ]
+   ]
+  },
+  {
+   "ar": "وَعِنْدَمَا وَصَلُوا، جَلَسُوا تَحْتَ شَجَرَةٍ كَبِيرَةٍ، وَشَرِبُوا الشَّايَ وَالقَهْوَةَ.",
+   "en": "And when they arrived, they sat under a big tree, and drank tea and coffee.",
+   "tr": "wa-ʿindamā waṣalū, jalasū taḥta shajaratin kabīrah, wa-sharibū sh-shāya wa-l-qahwah",
+   "words": [
+    [
+     "وَعِنْدَمَا",
+     "and when"
+    ],
+    [
+     "وَصَلُوا",
+     "they arrived"
+    ],
+    [
+     "جَلَسُوا",
+     "they sat"
+    ],
+    [
+     "تَحْتَ",
+     "under"
+    ],
+    [
+     "شَجَرَةٍ",
+     "a tree"
+    ],
+    [
+     "كَبِيرَةٍ",
+     "big"
+    ],
+    [
+     "وَشَرِبُوا",
+     "and they drank"
+    ],
+    [
+     "الشَّايَ",
+     "the tea"
+    ],
+    [
+     "وَالقَهْوَةَ",
+     "and the coffee"
+    ]
+   ]
+  },
+  {
+   "ar": "قَالَ أَحْمَدُ: «أَنَا عَطْشَانُ، أُرِيدُ أَنْ أَشْرَبَ مَاءً». فَقَالَتْ أُمُّهُ: «تَفَضَّلْ، يَا أَحْمَدُ!».",
+   "en": "Ahmad said: \"I am thirsty, I want to drink water.\" So his mother said: \"Here you go, Ahmad!\"",
+   "tr": "qāla aḥmad: anā ʿaṭshān, urīdu an ashraba māʾan. fa-qālat ummuh: tafaḍḍal, yā aḥmad!",
+   "words": [
+    [
+     "قَالَ",
+     "he said"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "أَنَا",
+     "I am"
+    ],
+    [
+     "عَطْشَانُ",
+     "thirsty"
+    ],
+    [
+     "أُرِيدُ",
+     "I want"
+    ],
+    [
+     "أَنْ أَشْرَبَ",
+     "to drink"
+    ],
+    [
+     "مَاءً",
+     "water"
+    ],
+    [
+     "فَقَالَتْ",
+     "so she said"
+    ],
+    [
+     "أُمُّهُ",
+     "his mother"
+    ],
+    [
+     "تَفَضَّلْ",
+     "here you go"
+    ],
+    [
+     "يَا أَحْمَدُ",
+     "O Ahmad"
+    ]
+   ]
+  },
+  {
+   "ar": "بَعْدَ ذَلِكَ، شَعَرَ أَحْمَدُ بِالجُوعِ، فَقَالَ: «أُرِيدُ أَنْ آكُلَ طَعَامًا لَذِيذًا».",
+   "en": "After that, Ahmad felt hungry, so he said: \"I want to eat delicious food.\"",
+   "tr": "baʿda dhālik, shaʿara aḥmadu bi-l-jūʿ, fa-qāl: urīdu an ākula ṭaʿāman ladhīdhan",
+   "words": [
+    [
+     "بَعْدَ ذَلِكَ",
+     "after that"
+    ],
+    [
+     "شَعَرَ",
+     "he felt"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "بِالجُوعِ",
+     "hunger (felt hungry)"
+    ],
+    [
+     "فَقَالَ",
+     "so he said"
+    ],
+    [
+     "أُرِيدُ",
+     "I want"
+    ],
+    [
+     "أَنْ آكُلَ",
+     "to eat"
+    ],
+    [
+     "طَعَامًا",
+     "food"
+    ],
+    [
+     "لَذِيذًا",
+     "delicious"
+    ]
+   ]
+  },
+  {
+   "ar": "فَطَلَبَتْ أُمُّهُ لَحْمًا، وَطَلَبَ أَبُوهُ سَمَكًا، أَمَّا أُخْتُهُ فَطَلَبَتْ دَجَاجًا.",
+   "en": "So his mother ordered meat, and his father ordered fish; as for his sister, she ordered chicken.",
+   "tr": "fa-ṭalabat ummuhu laḥman, wa-ṭalaba abūhu samakan, ammā ukhtuhu fa-ṭalabat dajājan",
+   "words": [
+    [
+     "فَطَلَبَتْ",
+     "so she ordered"
+    ],
+    [
+     "أُمُّهُ",
+     "his mother"
+    ],
+    [
+     "لَحْمًا",
+     "meat"
+    ],
+    [
+     "وَطَلَبَ",
+     "and he ordered"
+    ],
+    [
+     "أَبُوهُ",
+     "his father"
+    ],
+    [
+     "سَمَكًا",
+     "fish"
+    ],
+    [
+     "أَمَّا",
+     "as for"
+    ],
+    [
+     "أُخْتُهُ",
+     "his sister"
+    ],
+    [
+     "فَطَلَبَتْ",
+     "then she ordered"
+    ],
+    [
+     "دَجَاجًا",
+     "chicken"
+    ]
+   ]
+  },
+  {
+   "ar": "وَكَانَ الطَّعَامُ شَهِيًّا جِدًّا، وَشَكَرَ أَحْمَدُ أُمَّهُ عَلَى الطَّعَامِ.",
+   "en": "And the food was very delicious, and Ahmad thanked his mother for the food.",
+   "tr": "wa-kāna ṭ-ṭaʿāmu shahiyyan jiddan, wa-shakara aḥmadu ummahu ʿalā ṭ-ṭaʿām",
+   "words": [
+    [
+     "وَكَانَ",
+     "and it was"
+    ],
+    [
+     "الطَّعَامُ",
+     "the food"
+    ],
+    [
+     "شَهِيًّا",
+     "delicious"
+    ],
+    [
+     "جِدًّا",
+     "very"
+    ],
+    [
+     "وَشَكَرَ",
+     "and he thanked"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "أُمَّهُ",
+     "his mother"
+    ],
+    [
+     "عَلَى",
+     "for"
+    ],
+    [
+     "الطَّعَامِ",
+     "the food"
+    ]
+   ]
+  },
+  {
+   "ar": "بَعْدَ الغَدَاءِ، لَعِبَ أَحْمَدُ مَعَ أَصْدِقَائِهِ ثَلَاثَ سَاعَاتٍ، ثُمَّ ذَهَبُوا إِلَى الحَدِيقَةِ.",
+   "en": "After lunch, Ahmad played with his friends for three hours, then they went to the garden.",
+   "tr": "baʿda l-ghadāʾ, laʿiba aḥmadu maʿa aṣdiqāʾihi thalātha sāʿāt, thumma dhahabū ilā l-ḥadīqah",
+   "words": [
+    [
+     "بَعْدَ الغَدَاءِ",
+     "after lunch"
+    ],
+    [
+     "لَعِبَ",
+     "he played"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "مَعَ",
+     "with"
+    ],
+    [
+     "أَصْدِقَائِهِ",
+     "his friends"
+    ],
+    [
+     "ثَلَاثَ",
+     "three"
+    ],
+    [
+     "سَاعَاتٍ",
+     "hours"
+    ],
+    [
+     "ثُمَّ",
+     "then"
+    ],
+    [
+     "ذَهَبُوا",
+     "they went"
+    ],
+    [
+     "إِلَى الحَدِيقَةِ",
+     "to the garden"
+    ]
+   ]
+  },
+  {
+   "ar": "رَأَى أَحْمَدُ رَجُلًا غَنِيًّا يَشْتَرِي فَاكِهَةً وَعِنَبًا، وَرَأَى طِفْلًا فَقِيرًا لَا يَمْلِكُ ثَمَنَ الطَّعَامِ، فَأَعْطَاهُ بَعْضَ الفَاكِهَةِ.",
+   "en": "Ahmad saw a rich man buying fruit and grapes, and saw a poor child who did not have the price of food, so he gave him some of the fruit.",
+   "tr": "raʾā aḥmadu rajulan ghaniyyan yashtarī fākihatan wa-ʿinaban, wa-raʾā ṭiflan faqīran lā yamliku thamana ṭ-ṭaʿām, fa-aʿṭāhu baʿḍa l-fākihah",
+   "words": [
+    [
+     "رَأَى",
+     "he saw"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "رَجُلًا",
+     "a man"
+    ],
+    [
+     "غَنِيًّا",
+     "rich"
+    ],
+    [
+     "يَشْتَرِي",
+     "buying"
+    ],
+    [
+     "فَاكِهَةً",
+     "fruit"
+    ],
+    [
+     "وَعِنَبًا",
+     "and grapes"
+    ],
+    [
+     "وَرَأَى",
+     "and he saw"
+    ],
+    [
+     "طِفْلًا",
+     "a child"
+    ],
+    [
+     "فَقِيرًا",
+     "poor"
+    ],
+    [
+     "لَا يَمْلِكُ",
+     "does not own / have"
+    ],
+    [
+     "ثَمَنَ",
+     "the price of"
+    ],
+    [
+     "الطَّعَامِ",
+     "the food"
+    ],
+    [
+     "فَأَعْطَاهُ",
+     "so he gave him"
+    ],
+    [
+     "بَعْضَ",
+     "some of"
+    ],
+    [
+     "الفَاكِهَةِ",
+     "the fruit"
+    ]
+   ]
+  },
+  {
+   "ar": "قَالَ أَحْمَدُ: «أَنَا أُفَضِّلُ مُسَاعَدَةَ الفُقَرَاءِ، وَأُحِبُّ أَنْ أَكُونَ كَرِيمًا».",
+   "en": "Ahmad said: \"I prefer helping the poor, and I love to be generous.\"",
+   "tr": "qāla aḥmad: anā ufaḍḍilu musāʿadata l-fuqarāʾ, wa-uḥibbu an akūna karīman",
+   "words": [
+    [
+     "قَالَ",
+     "he said"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "أَنَا",
+     "I"
+    ],
+    [
+     "أُفَضِّلُ",
+     "prefer"
+    ],
+    [
+     "مُسَاعَدَةَ",
+     "helping"
+    ],
+    [
+     "الفُقَرَاءِ",
+     "the poor"
+    ],
+    [
+     "وَأُحِبُّ",
+     "and I love"
+    ],
+    [
+     "أَنْ أَكُونَ",
+     "to be"
+    ],
+    [
+     "كَرِيمًا",
+     "generous"
+    ]
+   ]
+  },
+  {
+   "ar": "فِي عَشَاءِ ذَلِكَ اليَوْمِ، أَكَلَتِ العَائِلَةُ طَعَامًا خَفِيفًا، ثُمَّ شَرِبُوا الشَّايَ.",
+   "en": "At dinner that day, the family ate a light meal, then they drank tea.",
+   "tr": "fī ʿashāʾi dhālika l-yawm, akalati l-ʿāʾilatu ṭaʿāman khafīfan, thumma sharibū sh-shāy",
+   "words": [
+    [
+     "فِي عَشَاءِ",
+     "at the dinner of"
+    ],
+    [
+     "ذَلِكَ اليَوْمِ",
+     "that day"
+    ],
+    [
+     "أَكَلَتِ",
+     "she (it) ate"
+    ],
+    [
+     "العَائِلَةُ",
+     "the family"
+    ],
+    [
+     "طَعَامًا",
+     "food"
+    ],
+    [
+     "خَفِيفًا",
+     "light"
+    ],
+    [
+     "ثُمَّ",
+     "then"
+    ],
+    [
+     "شَرِبُوا",
+     "they drank"
+    ],
+    [
+     "الشَّايَ",
+     "the tea"
+    ]
+   ]
+  },
+  {
+   "ar": "قَالَتِ الأُمُّ: «لِمَاذَا لَا نَذْهَبُ إِلَى القَرْيَةِ مَرَّةً ثَانِيَةً الأُسْبُوعَ القَادِمَ؟».",
+   "en": "The mother said: \"Why don't we go to the village again next week?\"",
+   "tr": "qālati l-umm: limādhā lā nadhhabu ilā l-qaryati marratan thāniyatan al-usbūʿa l-qādim?",
+   "words": [
+    [
+     "قَالَتِ",
+     "she said"
+    ],
+    [
+     "الأُمُّ",
+     "the mother"
+    ],
+    [
+     "لِمَاذَا",
+     "why"
+    ],
+    [
+     "لَا نَذْهَبُ",
+     "don't we go"
+    ],
+    [
+     "إِلَى القَرْيَةِ",
+     "to the village"
+    ],
+    [
+     "مَرَّةً",
+     "a time"
+    ],
+    [
+     "ثَانِيَةً",
+     "second (again)"
+    ],
+    [
+     "الأُسْبُوعَ",
+     "the week"
+    ],
+    [
+     "القَادِمَ",
+     "the coming (next)"
+    ]
+   ]
+  },
+  {
+   "ar": "فَرِحَ أَحْمَدُ كَثِيرًا وَقَالَ: «فِكْرَةٌ رَائِعَةٌ!».",
+   "en": "Ahmad was very happy and said: \"A wonderful idea!\"",
+   "tr": "fariḥa aḥmadu kathīran wa-qāl: fikratun rāʾiʿah!",
+   "words": [
+    [
+     "فَرِحَ",
+     "he was happy"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "كَثِيرًا",
+     "a lot"
+    ],
+    [
+     "وَقَالَ",
+     "and he said"
+    ],
+    [
+     "فِكْرَةٌ",
+     "an idea"
+    ],
+    [
+     "رَائِعَةٌ",
+     "wonderful"
+    ]
+   ]
+  },
+  {
+   "ar": "وَفِي اليَوْمِ التَّالِي، ذَهَبَ أَحْمَدُ إِلَى المَدْرَسَةِ، وَكَانَتْ عِنْدَهُ مَادَّةٌ جَدِيدَةٌ عَنِ الطَّعَامِ وَالصِّحَّةِ.",
+   "en": "And the next day, Ahmad went to school, and he had a new subject about food and health.",
+   "tr": "wa-fī l-yawmi t-tālī, dhahaba aḥmadu ilā l-madrasah, wa-kānat ʿindahu māddatun jadīdatun ʿani ṭ-ṭaʿāmi wa-ṣ-ṣiḥḥah",
+   "words": [
+    [
+     "وَفِي اليَوْمِ",
+     "and on the day"
+    ],
+    [
+     "التَّالِي",
+     "following (next)"
+    ],
+    [
+     "ذَهَبَ",
+     "he went"
+    ],
+    [
+     "أَحْمَدُ",
+     "Ahmad"
+    ],
+    [
+     "إِلَى المَدْرَسَةِ",
+     "to the school"
+    ],
+    [
+     "وَكَانَتْ عِنْدَهُ",
+     "and he had"
+    ],
+    [
+     "مَادَّةٌ",
+     "a subject"
+    ],
+    [
+     "جَدِيدَةٌ",
+     "new"
+    ],
+    [
+     "عَنِ الطَّعَامِ",
+     "about food"
+    ],
+    [
+     "وَالصِّحَّةِ",
+     "and health"
+    ]
+   ]
+  },
+  {
+   "ar": "تَعَلَّمَ أَنَّ الوَجَبَاتِ الصِّحِّيَّةَ مُهِمَّةٌ لِلْجِسْمِ، وَأَنَّ وَجْبَةً وَاحِدَةً لَا تَكْفِي طَوَالَ اليَوْمِ.",
+   "en": "He learnt that healthy meals are important for the body, and that one meal is not enough for the whole day.",
+   "tr": "taʿallama anna l-wajabāti ṣ-ṣiḥḥiyyata muhimmatun li-l-jism, wa-anna wajbatan wāḥidatan lā takfī ṭawāla l-yawm",
+   "words": [
+    [
+     "تَعَلَّمَ",
+     "he learnt"
+    ],
+    [
+     "أَنَّ",
+     "that"
+    ],
+    [
+     "الوَجَبَاتِ",
+     "the meals"
+    ],
+    [
+     "الصِّحِّيَّةَ",
+     "healthy"
+    ],
+    [
+     "مُهِمَّةٌ",
+     "important"
+    ],
+    [
+     "لِلْجِسْمِ",
+     "for the body"
+    ],
+    [
+     "وَأَنَّ",
+     "and that"
+    ],
+    [
+     "وَجْبَةً",
+     "a meal"
+    ],
+    [
+     "وَاحِدَةً",
+     "one"
+    ],
+    [
+     "لَا تَكْفِي",
+     "is not enough"
+    ],
+    [
+     "طَوَالَ اليَوْمِ",
+     "the whole day"
+    ]
+   ]
+  },
+  {
+   "ar": "وَعِنْدَمَا عَادَ إِلَى البَيْتِ، قَالَ لِأُمِّهِ: «أُرِيدُ أَنْ أَتَنَاوَلَ طَعَامًا صِحِّيًّا كُلَّ يَوْمٍ!».",
+   "en": "And when he returned home, he said to his mother: \"I want to eat healthy food every day!\"",
+   "tr": "wa-ʿindamā ʿāda ilā l-bayt, qāla li-ummih: urīdu an atanāwala ṭaʿāman ṣiḥḥiyyan kulla yawm!",
+   "words": [
+    [
+     "وَعِنْدَمَا",
+     "and when"
+    ],
+    [
+     "عَادَ",
+     "he returned"
+    ],
+    [
+     "إِلَى البَيْتِ",
+     "to the house"
+    ],
+    [
+     "قَالَ",
+     "he said"
+    ],
+    [
+     "لِأُمِّهِ",
+     "to his mother"
+    ],
+    [
+     "أُرِيدُ",
+     "I want"
+    ],
+    [
+     "أَنْ أَتَنَاوَلَ",
+     "to have (eat)"
+    ],
+    [
+     "طَعَامًا",
+     "food"
+    ],
+    [
+     "صِحِّيًّا",
+     "healthy"
+    ],
+    [
+     "كُلَّ يَوْمٍ",
+     "every day"
+    ]
+   ]
+  }
+ ],
+ "vocab": [
+  {
+   "ar": "اسْتَيْقَظَ",
+   "en": "he woke up",
+   "tr": "istayqaẓa",
+   "note": "you know أَسْتَيْقِظُ (I wake up) — same verb, past tense, he"
+  },
+  {
+   "ar": "أَرَادَ",
+   "en": "he wanted",
+   "tr": "arāda",
+   "note": "أُرِيدُ (I want) in the past, for him"
+  },
+  {
+   "ar": "رَأَى",
+   "en": "he saw",
+   "tr": "raʾā",
+   "note": "Qur'an: أَلَمْ تَرَ — have you not seen (105:1)"
+  },
+  {
+   "ar": "اشْتَرَى",
+   "en": "he bought",
+   "tr": "ishtarā",
+   "note": "root ش-ر-ي; Qur'an: اشْتَرَوُا الضَّلَالَةَ (2:16)"
+  },
+  {
+   "ar": "وَصَلُوا",
+   "en": "they arrived",
+   "tr": "waṣalū",
+   "note": "وَصَلَ he arrived + ـُوا they"
+  },
+  {
+   "ar": "جَلَسُوا",
+   "en": "they sat",
+   "tr": "jalasū",
+   "note": "جَلَسَ he sat; مَجْلِس a sitting-place"
+  },
+  {
+   "ar": "شَعَرَ بِـ",
+   "en": "he felt",
+   "tr": "shaʿara bi-",
+   "note": "شَعَرَ بِالجُوعِ — felt hunger; always with بِـ"
+  },
+  {
+   "ar": "طَلَبَ",
+   "en": "he ordered, he asked for",
+   "tr": "ṭalaba",
+   "note": "طَالِب student = one who seeks"
+  },
+  {
+   "ar": "لَعِبَ",
+   "en": "he played",
+   "tr": "laʿiba",
+   "note": "Qur'an: لَعِبٌ وَلَهْوٌ (6:32)"
+  },
+  {
+   "ar": "يَمْلِكُ",
+   "en": "he owns, he has",
+   "tr": "yamliku",
+   "note": "لَا يَمْلِكُ — does not have; Qur'an: مَالِكِ يَوْمِ الدِّينِ"
+  },
+  {
+   "ar": "أَعْطَى",
+   "en": "he gave",
+   "tr": "aʿṭā",
+   "note": "Qur'an: إِنَّا أَعْطَيْنَاكَ الكَوْثَرَ (108:1)"
+  },
+  {
+   "ar": "فَرِحَ",
+   "en": "he was happy, rejoiced",
+   "tr": "fariḥa",
+   "note": "Qur'an: يَفْرَحُ المُؤْمِنُونَ (30:4)"
+  },
+  {
+   "ar": "تَعَلَّمَ",
+   "en": "he learnt",
+   "tr": "taʿallama",
+   "note": "root ع-ل-م; عَلَّمَ to teach, تَعَلَّمَ to learn"
+  },
+  {
+   "ar": "عَادَ",
+   "en": "he returned",
+   "tr": "ʿāda",
+   "note": "you know أَعُودُ (I return) — past, he"
+  },
+  {
+   "ar": "طَوَالَ اليَوْمِ",
+   "en": "the whole day",
+   "tr": "ṭawāla l-yawm",
+   "note": "from طَوِيل long"
+  },
+  {
+   "ar": "التَّالِي",
+   "en": "the following, the next",
+   "tr": "at-tālī",
+   "note": "اليَوْمُ التَّالِي — the next day"
+  }
+ ],
+ "questions": [
+  {
+   "q": "فِي أَيِّ سَاعَةٍ اسْتَيْقَظَ أَحْمَدُ؟",
+   "options": [
+    "فِي السَّاعَةِ السَّادِسَةِ",
+    "فِي السَّاعَةِ الثَّامِنَةِ",
+    "عِنْدَ الظُّهْرِ",
+    "فِي السَّاعَةِ الثَّالِثَةِ"
+   ],
+   "answer": 0
+  },
+  {
+   "q": "مَاذَا اشْتَرَى أَحْمَدُ فِي الطَّرِيقِ؟",
+   "options": [
+    "دَجَاجًا وَسَمَكًا",
+    "سَلَطَةً وَسَمْنًا وَسُكَّرًا",
+    "فَاكِهَةً وَعِنَبًا",
+    "خُبْزًا وَجُبْنًا"
+   ],
+   "answer": 1
+  },
+  {
+   "q": "مَاذَا طَلَبَتْ أُخْتُهُ؟",
+   "options": [
+    "لَحْمًا",
+    "سَمَكًا",
+    "دَجَاجًا",
+    "شَايًا"
+   ],
+   "answer": 2
+  },
+  {
+   "q": "مَاذَا فَعَلَ أَحْمَدُ لِلطِّفْلِ الفَقِيرِ؟",
+   "options": [
+    "أَعْطَاهُ مَاءً",
+    "أَعْطَاهُ بَعْضَ الفَاكِهَةِ",
+    "أَعْطَاهُ خُبْزًا",
+    "لَعِبَ مَعَهُ"
+   ],
+   "answer": 1
+  },
+  {
+   "q": "مَاذَا تَعَلَّمَ أَحْمَدُ فِي المَدْرَسَةِ؟",
+   "options": [
+    "أَنَّ وَجْبَةً وَاحِدَةً تَكْفِي",
+    "أَنَّ الوَجَبَاتِ الصِّحِّيَّةَ مُهِمَّةٌ لِلْجِسْمِ",
+    "أَنَّ الفَاكِهَةَ غَالِيَةٌ",
+    "أَنَّ القَرْيَةَ بَعِيدَةٌ"
+   ],
+   "answer": 1
+  }
+ ],
+ "dictation": [
+  2,
+  6,
+  14
+ ],
+ "translate": [
+  {
+   "en": "At eight o'clock, Ahmad went with his family to the village.",
+   "ar": "فِي السَّاعَةِ الثَّامِنَةِ، ذَهَبَ أَحْمَدُ مَعَ عَائِلَتِهِ إِلَى القَرْيَةِ."
+  },
+  {
+   "en": "I prefer helping the poor.",
+   "ar": "أَنَا أُفَضِّلُ مُسَاعَدَةَ الفُقَرَاءِ."
+  },
+  {
+   "en": "One meal is not enough for the whole day.",
+   "ar": "وَجْبَةٌ وَاحِدَةٌ لَا تَكْفِي طَوَالَ اليَوْمِ."
+  }
+ ]
+}

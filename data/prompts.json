@@ -2087,6 +2087,198 @@
    ],
    "source": "teacher",
    "lesson": "Class — 27 Sep: a working day"
+  },
+  {
+   "en": "I woke up and washed my face, then I drank tea and began work at home in the morning.",
+   "ar": "اِسْتَيْقَظْتُ وَغَسَلْتُ وَجْهِي ثُمَّ شَرِبْتُ شَايًا وَبَدَأْتُ العَمَلَ فِي البَيْتِ صَبَاحًا.",
+   "tr": "istayqaẓtu wa-ghasaltu wajhī thumma sharibtu shāyan wa-badaʾtu l-ʿamala fī l-bayti ṣabāḥan",
+   "keys": [
+    "ev-lesson-routine:0",
+    "ev-lesson-routine:8"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "At noon I ate lunch, then I went to the mosque for Friday prayer, and after it I returned to my house.",
+   "ar": "عِنْدَ الظُّهْرِ أَكَلْتُ الغَدَاءَ ثُمَّ ذَهَبْتُ إِلَى المَسْجِدِ لِصَلَاةِ الجُمُعَةِ وَبَعْدَهَا عُدْتُ إِلَى بَيْتِي.",
+   "tr": "ʿinda ẓ-ẓuhri akaltu l-ghadāʾa thumma dhahabtu ilā l-masjidi li-ṣalāti l-jumuʿati wa-baʿdahā ʿudtu ilā baytī",
+   "keys": [
+    "ev-lesson-village:37",
+    "ev-worship:2",
+    "ev-lesson-week:5"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "I worked a little more, then I finished work.",
+   "ar": "وَعَمِلْتُ قَلِيلًا ثُمَّ انْتَهَيْتُ مِنَ العَمَلِ.",
+   "tr": "wa-ʿamiltu qalīlan thumma ntahaytu mina l-ʿamal",
+   "keys": [
+    "ev-questions:1",
+    "ev-lesson-routine:0"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "I am always hungry.",
+   "ar": "أَنَا دَائِمًا جَوْعَان.",
+   "tr": "anā dāʾiman jawʿān",
+   "keys": [
+    "ev-people:0",
+    "ev-time:4",
+    "ev-lesson-village:26"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "He ate a first egg, then a second and a third.",
+   "ar": "أَكَلَ بَيْضَةً أُولَى، ثُمَّ ثَانِيَةً وَثَالِثَةً.",
+   "tr": "akala bayḍatan ūlā, thumma thāniyatan wa-thālithah",
+   "keys": [
+    "ev-lesson-village:1",
+    "ev-lesson-village:28"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "I prefer helping the poor.",
+   "ar": "أُفَضِّلُ مُسَاعَدَةَ الفُقَرَاءِ.",
+   "tr": "ufaḍḍilu musāʿadata l-fuqarāʾ",
+   "keys": [
+    "ev-lesson-village:25"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "One meal is not enough for the whole day.",
+   "ar": "وَجْبَةٌ وَاحِدَةٌ لَا تَكْفِي طَوَالَ اليَوْمِ.",
+   "tr": "wajbatun wāḥidatun lā takfī ṭawāla l-yawm",
+   "keys": [
+    "ev-lesson-village:15",
+    "ev-time:1"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "Why don't we go to the village again next week?",
+   "ar": "لِمَاذَا لَا نَذْهَبُ إِلَى القَرْيَةِ مَرَّةً ثَانِيَةً الأُسْبُوعَ القَادِمَ؟",
+   "tr": "limādhā lā nadhhabu ilā l-qaryati marratan thāniyatan al-usbūʿa l-qādim?",
+   "keys": [
+    "ev-questions:5",
+    "ev-lesson-village:0",
+    "ev-lesson-divine:4",
+    "ev-lesson-village:28",
+    "ev-lesson-week:7"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "I want to eat healthy food every day.",
+   "ar": "أُرِيدُ أَنْ أَتَنَاوَلَ طَعَامًا صِحِّيًّا كُلَّ يَوْمٍ.",
+   "tr": "urīdu an atanāwala ṭaʿāman ṣiḥḥiyyan kulla yawm",
+   "keys": [
+    "ev-want-need:0",
+    "ev-time:0",
+    "ev-lesson-routine:14",
+    "ev-time:1"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: a trip to the village"
+  },
+  {
+   "en": "Or feeding, on a day of hunger. (Qur'an 90:14)",
+   "ar": "أَوْ إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ",
+   "tr": "aw iṭʿāmun fī yawmin dhī masghabah",
+   "keys": [
+    "ev-lesson-quran-words:9",
+    "ev-time:1",
+    "ev-lesson-quran-words:7"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: words that meet the Qur'an"
+  },
+  {
+   "en": "He has truly won a great triumph. (Qur'an 33:71)",
+   "ar": "فَقَدْ فَازَ فَوْزًا عَظِيمًا",
+   "tr": "fa-qad fāza fawzan ʿaẓīman",
+   "keys": [
+    "ev-lesson-quran-words:4"
+   ],
+   "source": "teacher",
+   "lesson": "Class — 11 Oct: words that meet the Qur'an"
+  },
+  {
+   "en": "I drank a glass of milk.",
+   "ar": "شَرِبْتُ كَأْسًا مِنَ الحَلِيبِ.",
+   "tr": "sharibtu kaʾsan mina l-ḥalīb",
+   "keys": [
+    "ev-questions:1",
+    "ev-food:4",
+    "ev-lesson-village:4"
+   ],
+   "source": "core",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "past-tu",
+   "frame": "past-tu"
+  },
+  {
+   "en": "The food was very delicious.",
+   "ar": "كَانَ الطَّعَامُ شَهِيًّا جِدًّا.",
+   "tr": "kāna ṭ-ṭaʿāmu shahiyyan jiddan",
+   "keys": [
+    "ev-lesson-village:10"
+   ],
+   "source": "core",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "kana",
+   "frame": "kana"
+  },
+  {
+   "en": "We sat under a big tree.",
+   "ar": "جَلَسْنَا تَحْتَ شَجَرَةٍ كَبِيرَةٍ.",
+   "tr": "jalasnā taḥta shajaratin kabīrah",
+   "keys": [
+    "ev-directions:6",
+    "ev-home:5"
+   ],
+   "source": "core",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "tenses",
+   "frame": "tenses"
+  },
+  {
+   "en": "I ate a piece of bread with cheese.",
+   "ar": "أَكَلْتُ قِطْعَةَ خُبْزٍ مَعَ الجُبْنِ.",
+   "tr": "akaltu qiṭʿata khubzin maʿa l-jubn",
+   "keys": [
+    "ev-lesson-village:5"
+   ],
+   "source": "core",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "idafa",
+   "frame": "idafa"
+  },
+  {
+   "en": "The rich man bought fruit and grapes.",
+   "ar": "اِشْتَرَى الرَّجُلُ الغَنِيُّ فَاكِهَةً وَعِنَبًا.",
+   "tr": "ishtarā r-rajulu l-ghaniyyu fākihatan wa-ʿinaban",
+   "keys": [
+    "ev-people:7",
+    "ev-lesson-village:21",
+    "ev-food:5"
+   ],
+   "source": "core",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "pattern": "tenses",
+   "frame": "tenses"
   }
  ]
 }

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4kf0az">
-  <link rel="stylesheet" href="css/style.css?v=mv4kf0az">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4u8ogz">
+  <link rel="stylesheet" href="css/style.css?v=mv4u8ogz">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -246,13 +246,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv4kf0az"></script>
-<script src="js/curriculum.js?v=mv4kf0az"></script>
-<script src="js/srs.js?v=mv4kf0az"></script>
-<script src="js/app.js?v=mv4kf0az"></script>
-<script src="js/tracker.js?v=mv4kf0az"></script>
-<script src="js/plan.js?v=mv4kf0az"></script>
-<script src="js/account.js?v=mv4kf0az"></script>
+<script src="js/progress-model.js?v=mv4u8ogz"></script>
+<script src="js/curriculum.js?v=mv4u8ogz"></script>
+<script src="js/srs.js?v=mv4u8ogz"></script>
+<script src="js/app.js?v=mv4u8ogz"></script>
+<script src="js/tracker.js?v=mv4u8ogz"></script>
+<script src="js/plan.js?v=mv4u8ogz"></script>
+<script src="js/account.js?v=mv4u8ogz"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -2935,6 +2935,10 @@ function startAudioQueueFromLine(startIdx) {
       return a.origIdx - b.origIdx;
     });
   }
+  if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
+    // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
+    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+  }
 
   let targetQueueIdx = items.findIndex(it => it.origIdx === startIdx);
   if (targetQueueIdx === -1) targetQueueIdx = 0;
@@ -3006,6 +3010,7 @@ function handleSentenceRowClick(event, origIdx) {
 
 function loadChapter(chap, resumeLineIdx) {
   curChap = chap;
+  dayRedoOrder = false;
   quranRevealed = {};
   quranEnVisible = {};
   dayRevealed = {};
@@ -3559,6 +3564,10 @@ function renderDailySentences() {
       return a.origIdx - b.origIdx;
     });
   }
+  if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
+    // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
+    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+  }
 
   sList.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
@@ -3568,7 +3577,8 @@ function renderDailySentences() {
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
         <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest First</button>
-        ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of each sentence in turn — recall first, then reveal. Three rungs per sentence, each a little harder.">🎯 Drill round${drillRoundProgressLabel()}</button>` : ''}
+        ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
+        <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
@@ -3621,7 +3631,7 @@ function renderDailySentences() {
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Drill — say a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Drill">🎯</button>` : ''}
+                ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Try it — a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Try it">🎯</button>` : ''}
                 <div class="vote-badge-group">
                   <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
                   <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
@@ -3677,6 +3687,29 @@ let CHAPTER_DRILLS = {};
 let dayDrillOpen = {};
 let dayDrillState = {};
 let dayDrillRound = false;
+let dayRedoOrder = false;
+/* ↻ the same ten sentences again, weakest first — and the prompts hidden so it is a real redo */
+function redoDayBatch() {
+  dayRedoOrder = true;
+  daySortWeakest = false;
+  dayRevealed = {}; dayEnVisible = {}; allDayEnVisible = false;
+  dayDrillOpen = {}; dayDrillRound = false;
+  if (dayPracticeMode === "all") dayPracticeMode = "ar-only";   // nothing to recall when both sides show
+  logEvent({ e: "redo-batch", kind: "chapter", chap: curChap ? curChap.id : null, t: Date.now() });
+  renderDailySentences();
+  const list = document.getElementById("sentenceList");
+  if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function redoChapVocab() {
+  chapVocabSortMode = "weakest";
+  if (typeof store !== "undefined") store.set("ats-chap-vocab-sort", "weakest");
+  chapVocabRevealed = {};
+  if (chapVocabPracticeMode === "all") chapVocabPracticeMode = "en-only";
+  logEvent({ e: "redo-batch", kind: "chapter-vocab", chap: curChap ? curChap.id : null, t: Date.now() });
+  renderChapterVocab();
+  const list = document.getElementById("chapterVocabList");
+  if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 function sentenceDrills(idx) {
   const c = curChap && CHAPTER_DRILLS[curChap.id];
@@ -3772,9 +3805,9 @@ function renderDayDrillPanel(idx) {
   if (el) el.innerHTML = renderDayDrillHtml(idx);
   drillWireInput(idx);
   const b = document.getElementById("btn-ddrill-" + idx);
-  if (b) { b.classList.toggle("done", drillRungDone(idx) >= 3); b.title = `Drill — say a variation of this sentence (${drillRungDone(idx)}/3 rungs done)`; }
+  if (b) { b.classList.toggle("done", drillRungDone(idx) >= 3); b.title = `Try it — a variation of this sentence (${drillRungDone(idx)}/3 rungs done)`; }
   const pill = document.getElementById("btnDayDrillRound");
-  if (pill) pill.textContent = "🎯 Drill round" + drillRoundProgressLabel();
+  if (pill) pill.textContent = "🎯 Try them all" + drillRoundProgressLabel();
 }
 function drillEsc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -4124,6 +4157,7 @@ function renderChapterVocab() {
         <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'ar-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('ar-only')" title="Show Arabic only; tap to reveal English">Arabic Prompt</button>
         <button type="button" class="book-toggle-pill ${chapVocabPracticeMode === 'en-only' ? 'active' : ''}" onclick="setChapVocabPracticeMode('en-only')" title="Show English only; tap to reveal Arabic">English Prompt</button>
         <button type="button" class="book-toggle-pill" onclick="playAllChapVocab()" title="Play all chapter vocabulary audio (${vocabAudioModeTitle})">🔊 Play Vocab</button>
+        <button type="button" class="book-toggle-pill" onclick="redoChapVocab()" title="The same words again, weakest first by your verdicts, with the answers hidden">↻ Redo batch</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
@@ -4387,6 +4421,10 @@ document.getElementById("btnPlayAll").onclick = () => {
       if (ra !== rb) return ra - rb;
       return a.origIdx - b.origIdx;
     });
+  }
+  if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
+    // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
+    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
   }
   const includeEn = audioVoiceMode !== "ar-only";
   audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: includeEn ? s.en : null, idx: origIdx }));

@@ -105,6 +105,16 @@ const SPEC = [
      unstructured. i need you to give it as much structure as possible." So her
      scattered words were sorted into the sets they belong to and each set was
      completed — every item carries from:"teacher" or from:"complete". */
+  { id: "ms-class-1011", track: "conv", level: "conv-a1", source: "teacher",
+    name: "A Trip to the Village — food, meals & the clock (class, 11 Oct)",
+    can: "tell a day you have lived in the first-person past (ـتُ), order food and name meals, say first/second/third and the clock, and spot the Qur'an's gender exceptions",
+    why: "From your Sunday Preply class of 11 Oct: the village reading, her Friday narrated in the past tense, and the words where the class met the Qur'an.",
+    lessons: [
+      { title: "Class words — the village, meals & the clock", src: { ev: "lesson-village" } },
+      { title: "Class words — where they meet the Qur'an", src: { ev: "lesson-quran-words" } },
+      { title: "A Trip to the Village — the reading", src: { story: "story-09" } },
+    ] },
+
   { id: "ms-class-0927", track: "conv", level: "conv-a1", source: "teacher",
     name: "A Working Day & The Protection Surahs (class, 27 Sep)",
     can: "describe your daily routine, hours and chores, and understand the protective concepts of Surah Al-Falaq and Surah An-Nas",

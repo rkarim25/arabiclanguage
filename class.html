@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4kf0az">
-  <link rel="stylesheet" href="css/style.css?v=mv4kf0az">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4u8ogz">
+  <link rel="stylesheet" href="css/style.css?v=mv4u8ogz">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -138,8 +138,7 @@
   <!-- LESSON SELECTOR SWITCHER -->
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
     <span style="font-size:12.5px;color:var(--muted);font-weight:600">Select Lesson:</span>
-    <button type="button" class="book-toggle-pill active" id="btnLesson2" onclick="switchClassLesson('c-2026-09-27')" style="font-size:13px;padding:6px 14px;font-weight:700">⭐ Lesson 2 · 27 Sep 2026 (Work Day &amp; Protection Surahs)</button>
-    <button type="button" class="book-toggle-pill" id="btnLesson1" onclick="switchClassLesson('c-2026-08-30')" style="font-size:13px;padding:6px 14px">Lesson 1 · 30 Aug 2026 (The Flat &amp; Samer)</button>
+    <span id="lessonSwitcher" style="display:contents"></span>
   </div>
 
   <!-- UPCOMING SUNDAY PREPARATION / HOMEWORK CARD -->
@@ -497,17 +496,17 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4kf0az"></script>
-<script src="js/curriculum.js?v=mv4kf0az"></script>
-<script src="js/srs.js?v=mv4kf0az"></script>
-<script src="js/app.js?v=mv4kf0az"></script>
-<script src="js/tracker.js?v=mv4kf0az"></script>
-<script src="js/plan.js?v=mv4kf0az"></script>
+<script src="js/progress-model.js?v=mv4u8ogz"></script>
+<script src="js/curriculum.js?v=mv4u8ogz"></script>
+<script src="js/srs.js?v=mv4u8ogz"></script>
+<script src="js/app.js?v=mv4u8ogz"></script>
+<script src="js/tracker.js?v=mv4u8ogz"></script>
+<script src="js/plan.js?v=mv4u8ogz"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
 
-let CURRENT_CLASS_ID = "c-2026-09-27"; // Default to today's Sunday lesson
+let CURRENT_CLASS_ID = null; // the newest class in the repository (classes.json is sorted newest first)
 let STORY_DATA = null;
 let CLASS_DATA = null;
 let VERSES_DATA = null;
@@ -522,7 +521,9 @@ let VERSES_DATA = null;
     ]);
     CLASS_DATA = cRes;
     VERSES_DATA = vRes;
-    await loadClassLesson(CURRENT_CLASS_ID);
+    renderLessonSwitcher();
+    const want = new URLSearchParams(location.search).get("class");
+    await loadClassLesson(want && CLASS_DATA.classes.some(c => c.id === want) ? want : CLASS_DATA.classes[0].id);
     renderHomeworkCard();
   } catch (e) {
     console.error("Failed to load lesson data", e);
@@ -534,11 +535,8 @@ async function loadClassLesson(classId) {
   const cls = (CLASS_DATA && CLASS_DATA.classes ? CLASS_DATA.classes.find(c => c.id === classId) : null) || (CLASS_DATA && CLASS_DATA.classes ? CLASS_DATA.classes[0] : null);
   if (!cls) return;
 
-  // Switch pill styles
-  const btn2 = document.getElementById("btnLesson2");
-  const btn1 = document.getElementById("btnLesson1");
-  if (btn2) btn2.classList.toggle("active", classId === "c-2026-09-27");
-  if (btn1) btn1.classList.toggle("active", classId === "c-2026-08-30");
+  // Switch pill styles — one pill per class in the repository
+  document.querySelectorAll("#lessonSwitcher [data-class]").forEach(b => b.classList.toggle("active", b.dataset.class === cls.id));
 
   // Update header titles
   const metaDateEl = document.getElementById("lessonMetaDate");
@@ -547,7 +545,7 @@ async function loadClassLesson(classId) {
   const pTitleEl = document.getElementById("passageTitleHeader");
   const testTitleEl = document.getElementById("testBoxTitle");
 
-  if (metaDateEl) metaDateEl.textContent = classId === "c-2026-09-27" ? "LESSON 2 · 27 SEP 2026" : "LESSON 1 · 30 AUG 2026";
+  if (metaDateEl) metaDateEl.textContent = `LESSON ${classNumber(cls.id)} · ${classDateLabel(cls.date).toUpperCase()}`;
   if (titleEl) titleEl.textContent = cls.title || "Preply Sunday Lesson";
   if (descEl) descEl.innerHTML = cls.covered ? `From your Preply teacher: ${cls.covered}` : "";
   if (testTitleEl) testTitleEl.textContent = `🏅 Comprehensive Mastery Test: ${cls.date ? new Date(cls.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : ''} Lesson`;
@@ -570,6 +568,22 @@ async function loadClassLesson(classId) {
 
 function switchClassLesson(classId) {
   loadClassLesson(classId);
+}
+/* the repository is newest-first; lesson numbers count from the oldest */
+function classNumber(id) {
+  const all = (CLASS_DATA && CLASS_DATA.classes) || [];
+  return all.length - all.findIndex(c => c.id === id);
+}
+function classDateLabel(d) {
+  try { return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); } catch (e) { return d || ""; }
+}
+function renderLessonSwitcher() {
+  const slot = document.getElementById("lessonSwitcher");
+  if (!slot || !CLASS_DATA || !CLASS_DATA.classes) return;
+  slot.innerHTML = CLASS_DATA.classes.map((c, i) => {
+    const short = String(c.title || "").split(/ — |\(/)[0].trim();
+    return `<button type="button" class="book-toggle-pill${i === 0 ? " active" : ""}" data-class="${c.id}" onclick="switchClassLesson('${c.id}')" style="font-size:13px;padding:6px 14px${i === 0 ? ";font-weight:700" : ""}">${i === 0 ? "⭐ " : ""}Lesson ${classNumber(c.id)} · ${classDateLabel(c.date)} (${short})</button>`;
+  }).join("");
 }
 
 function renderQuranSection() {
@@ -1410,6 +1424,25 @@ function buildClassAiPrompt(cls) {
     p += `   - Ask whether I read the newspaper or watch television in my free time (أَقْرَأُ الصَّحِيفَةَ أَوْ أُشَاهِدُ التِّلْفَازَ).\n`;
     p += `   - Ask what chores I do at home (sweeping, washing dishes).\n`;
     p += `   - Discuss the protection surahs: ask why we say 'ṣudūr' (chests) instead of 'qulūb' (hearts).\n`;
+  } else if (cls.id !== "c-2026-08-30") {
+    /* any class captured after the two hand-built ones: built from the repository itself */
+    p += `Here is the reading passage we covered (${STORY_DATA && STORY_DATA.titleEn ? STORY_DATA.titleEn : 'class reading'}):\n`;
+    if (STORY_DATA && STORY_DATA.sentences) {
+      STORY_DATA.sentences.forEach((line, idx) => { p += `${idx + 1}. ${line.ar} — "${line.en}"\n`; });
+    }
+    p += `\nClass Sentences Drilled:\n`;
+    (cls.sentences || []).slice(0, 10).forEach(s => { p += `- ${s.ar} — "${s.en}"${s.tr ? ` (${s.tr})` : ''}\n`; });
+    p += `\nKey Class Vocabulary (use ONLY these and words I already hold):\n`;
+    const byGroup = {};
+    (cls.vocabulary || []).forEach(v => { (byGroup[v.groupName || v.group] = byGroup[v.groupName || v.group] || []).push(`${v.en} (${v.ar})`); });
+    Object.entries(byGroup).forEach(([g, ws]) => { p += `- ${g}: ${ws.join(", ")}\n`; });
+    if (cls.grammar && cls.grammar.length) {
+      p += `\nGrammar from this class:\n`;
+      cls.grammar.forEach(g => { p += `- ${g.name || g.pattern}: ${g.why}\n`; });
+    }
+    p += `\nGoal & Voice Mode Instructions:\n`;
+    p += `1. Roleplay the situations in the reading with me (ordering food, a trip, shopping on the way), then ask me to narrate MY OWN day in the first-person past tense (ـتُ).\n`;
+    p += `2. Drill variations: swap the food, the time on the clock (السَّاعَةُ السَّادِسَةُ → السَّابِعَةُ), first/second/third, I → we → they, and turn statements into questions with هَلْ / مَتَى / مَاذَا / لِمَاذَا.\n`;
   } else {
     p += `Here is the reading dialogue we covered (Samer looking for a flat):\n`;
     if (STORY_DATA && STORY_DATA.sentences) {
@@ -1716,6 +1749,30 @@ function buildClassMasteryQuestions() {
       correct: 0
     });
 
+  } else if (CURRENT_CLASS_ID !== "c-2026-08-30") {
+    /* any later class: the test is built from the repository — reading questions,
+       her vocabulary with distractors drawn from the same class, and her sentences */
+    const cls = (CLASS_DATA && CLASS_DATA.classes || []).find(c => c.id === CURRENT_CLASS_ID) || {};
+    if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {
+      STORY_DATA.questions.forEach(sq => qList.push({ section: "📖 Reading Comprehension", q: sq.q, opts: sq.options, correct: sq.answer }));
+    }
+    const seedRnd = (() => { let s = 1011; return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; }; })();   // same test every sitting
+    const pickN = (arr, n, not) => { const pool = arr.filter(x => x !== not); const out = []; while (out.length < n && pool.length) out.push(pool.splice(Math.floor(seedRnd() * pool.length), 1)[0]); return out; };
+    const vocab = (cls.vocabulary || []).filter(v => v.from === "teacher" && v.en && v.ar);
+    const ens = [...new Set(vocab.map(v => v.en))];
+    const chosen = pickN(vocab, Math.min(10, vocab.length));
+    chosen.forEach(v => {
+      const opts = pickN(ens, 3, v.en).concat([v.en]);
+      for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(seedRnd() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
+      qList.push({ section: "🏷️ Class Vocabulary", q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`, opts, correct: opts.indexOf(v.en) });
+    });
+    const sents = (cls.sentences || []).filter(s => s.from === "teacher" && s.ar && s.en);
+    const sEns = [...new Set(sents.map(s => s.en))];
+    pickN(sents, Math.min(3, sents.length)).forEach(s => {
+      const opts = pickN(sEns, 3, s.en).concat([s.en]);
+      for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(seedRnd() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
+      qList.push({ section: "💬 Class Sentences", q: `Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>${s.ar}</b>`, opts, correct: opts.indexOf(s.en) });
+    });
   } else {
     // LESSON 1 (30 Aug 2026): The Flat, Week & Family
     if (STORY_DATA && STORY_DATA.questions && STORY_DATA.questions.length) {

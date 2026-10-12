@@ -1,1848 +1,2209 @@
 {
-  "groups": [
+ "groups": [
+  {
+   "id": "family",
+   "title": "الأُسْرَة",
+   "theme": "Your family — the people you name first (Bayna Yadayk, Unit 1)",
+   "source": "teacher",
+   "book": "aby",
+   "unit": "aby1-u1",
+   "members": [
     {
-      "id": "family",
-      "title": "الأُسْرَة",
-      "theme": "Your family — the people you name first (Bayna Yadayk, Unit 1)",
-      "source": "teacher",
-      "book": "aby",
-      "unit": "aby1-u1",
-      "members": [
-        {
-          "ar": "أُسْرَة",
-          "tr": "usra",
-          "en": "family"
-        },
-        {
-          "ar": "والِد",
-          "tr": "wālid",
-          "en": "father"
-        },
-        {
-          "ar": "والِدَة",
-          "tr": "wālida",
-          "en": "mother"
-        },
-        {
-          "ar": "اِبْن",
-          "tr": "ibn",
-          "en": "son"
-        },
-        {
-          "ar": "اِبْنَة",
-          "tr": "ibna",
-          "en": "daughter"
-        },
-        {
-          "ar": "أَوْلاد",
-          "tr": "awlād",
-          "en": "children; sons"
-        },
-        {
-          "ar": "جَدّ",
-          "tr": "jadd",
-          "en": "grandfather"
-        },
-        {
-          "ar": "جَدَّة",
-          "tr": "jadda",
-          "en": "grandmother"
-        },
-        {
-          "ar": "عَمّ",
-          "tr": "ʿamm",
-          "en": "uncle (father's brother)"
-        },
-        {
-          "ar": "عَمَّة",
-          "tr": "ʿamma",
-          "en": "aunt (father's sister)"
-        },
-        {
-          "ar": "أَخ",
-          "en": "brother",
-          "tr": "akh",
-          "note": "plural إِخْوَة — the passage says ذَهَبَ مَعَ أَخِيهِ",
-          "from": "complete"
-        },
-        {
-          "ar": "أُخْت",
-          "en": "sister",
-          "tr": "ukht",
-          "note": "plural أَخَوَات",
-          "from": "complete"
-        },
-        {
-          "ar": "خَال",
-          "en": "uncle (mother's brother)",
-          "tr": "khāl",
-          "note": "Arabic splits the uncles: خال is your mother's brother, عمّ your father's",
-          "from": "teacher"
-        },
-        {
-          "ar": "خَالَة",
-          "en": "aunt (mother's sister)",
-          "tr": "khāla",
-          "note": "and خالة is your mother's sister, عمّة your father's",
-          "from": "teacher"
-        },
-        {
-          "ar": "زَوْج",
-          "en": "husband",
-          "tr": "zawj",
-          "from": "complete"
-        },
-        {
-          "ar": "زَوْجَة",
-          "en": "wife",
-          "tr": "zawja",
-          "from": "complete"
-        }
-      ],
-      "lesson": "Class — 30 Aug: the flat, the week, the family"
+     "ar": "أُسْرَة",
+     "tr": "usra",
+     "en": "family"
     },
     {
-      "id": "home",
-      "title": "البَيْت وَالأَشْياء",
-      "theme": "Around the house & things you carry (Bayna Yadayk, Unit 1)",
-      "source": "teacher",
-      "book": "aby",
-      "unit": "aby1-u1",
-      "members": [
-        {
-          "ar": "حَمّام",
-          "tr": "ḥammām",
-          "en": "bathroom"
-        },
-        {
-          "ar": "غُرْفَة",
-          "tr": "ghurfa",
-          "en": "room"
-        },
-        {
-          "ar": "صُورَة",
-          "tr": "ṣūra",
-          "en": "picture"
-        },
-        {
-          "ar": "مِعْطَف",
-          "tr": "miʿṭaf",
-          "en": "coat"
-        },
-        {
-          "ar": "نَظَّارَة",
-          "tr": "naẓẓāra",
-          "en": "glasses (spectacles)"
-        },
-        {
-          "ar": "شَجَرَة",
-          "tr": "shajara",
-          "en": "tree"
-        }
-      ]
+     "ar": "والِد",
+     "tr": "wālid",
+     "en": "father"
     },
     {
-      "id": "worship",
-      "title": "العِبادَة اليَوْمِيَّة",
-      "theme": "Words from your day's worship (Bayna Yadayk, Unit 1)",
-      "source": "teacher",
-      "book": "aby",
-      "unit": "aby1-u1",
-      "members": [
-        {
-          "ar": "أَذانُ الفَجْر",
-          "tr": "adhān al-fajr",
-          "en": "the dawn call to prayer"
-        },
-        {
-          "ar": "تَوَضَّأَ / يَتَوَضَّأُ",
-          "tr": "tawaḍḍaʾa / yatawaḍḍaʾu",
-          "en": "did / does wudu (ablution)"
-        },
-        {
-          "ar": "مَسْجِد",
-          "tr": "masjid",
-          "en": "mosque"
-        },
-        {
-          "ar": "مُصَلّى",
-          "tr": "muṣallā",
-          "en": "prayer area; musalla"
-        },
-        {
-          "ar": "رَسُول",
-          "tr": "rasūl",
-          "en": "messenger (the Prophet ﷺ)"
-        },
-        {
-          "ar": "هَيّا بِنا",
-          "tr": "hayyā binā",
-          "en": "let's go!"
-        },
-        {
-          "ar": "اللهُ أَكْبَر",
-          "tr": "allāhu akbar",
-          "en": "Allah is the greatest"
-        },
-        {
-          "ar": "ما شاءَ الله",
-          "tr": "mā shāʾa llāh",
-          "en": "mashaAllah (said in admiration)"
-        },
-        {
-          "ar": "صَلَّى اللهُ عَلَيْهِ وَسَلَّم",
-          "tr": "ṣallā llāhu ʿalayhi wa-sallam",
-          "en": "may Allah bless him & grant him peace"
-        }
-      ]
+     "ar": "والِدَة",
+     "tr": "wālida",
+     "en": "mother"
     },
     {
-      "id": "greetings",
-      "title": "التَّحِيَّات",
-      "theme": "Greetings & politeness — the first things out of your mouth",
-      "members": [
-        {
-          "ar": "السَّلَامُ عَلَيْكُمْ",
-          "tr": "as-salāmu ʿalaykum",
-          "en": "peace be upon you (hello)"
-        },
-        {
-          "ar": "وَعَلَيْكُمُ السَّلَام",
-          "tr": "wa-ʿalaykumu s-salām",
-          "en": "and upon you peace (the reply)"
-        },
-        {
-          "ar": "صَبَاح الخَيْر",
-          "tr": "ṣabāḥ al-khayr",
-          "en": "good morning"
-        },
-        {
-          "ar": "مَسَاء الخَيْر",
-          "tr": "masāʾ al-khayr",
-          "en": "good evening"
-        },
-        {
-          "ar": "شُكْرًا",
-          "tr": "shukran",
-          "en": "thank you"
-        },
-        {
-          "ar": "عَفْوًا",
-          "tr": "ʿafwan",
-          "en": "you're welcome; excuse me"
-        },
-        {
-          "ar": "مِنْ فَضْلِكَ",
-          "tr": "min faḍlika",
-          "en": "please"
-        },
-        {
-          "ar": "آسِف",
-          "tr": "āsif",
-          "en": "sorry"
-        },
-        {
-          "ar": "مَعَ السَّلَامَة",
-          "tr": "maʿa s-salāma",
-          "en": "goodbye"
-        }
-      ]
+     "ar": "اِبْن",
+     "tr": "ibn",
+     "en": "son"
     },
     {
-      "id": "questions",
-      "title": "أَدَوَات الاِسْتِفْهَام",
-      "theme": "Question words — unlock every conversation",
-      "members": [
-        {
-          "ar": "مَاذَا",
-          "tr": "mādhā",
-          "en": "what?",
-          "hear": "إيش؟ — ēsh"
-        },
-        {
-          "ar": "مَنْ",
-          "tr": "man",
-          "en": "who?"
-        },
-        {
-          "ar": "أَيْنَ",
-          "tr": "ayna",
-          "en": "where?",
-          "hear": "وين؟ — wēn"
-        },
-        {
-          "ar": "مَتَى",
-          "tr": "matā",
-          "en": "when?"
-        },
-        {
-          "ar": "كَيْفَ",
-          "tr": "kayfa",
-          "en": "how?"
-        },
-        {
-          "ar": "لِمَاذَا",
-          "tr": "limādhā",
-          "en": "why?",
-          "hear": "ليش؟ — lēsh"
-        },
-        {
-          "ar": "كَمْ",
-          "tr": "kam",
-          "en": "how many? how much?"
-        },
-        {
-          "ar": "هَلْ",
-          "tr": "hal",
-          "en": "(opens a yes/no question)"
-        },
-        {
-          "ar": "أَيّ",
-          "tr": "ayy",
-          "en": "which?"
-        }
-      ]
+     "ar": "اِبْنَة",
+     "tr": "ibna",
+     "en": "daughter"
     },
     {
-      "id": "numbers",
-      "title": "الأَرْقَام",
-      "theme": "Numbers 1–10",
-      "members": [
-        {
-          "ar": "وَاحِد",
-          "tr": "wāḥid",
-          "en": "one"
-        },
-        {
-          "ar": "اِثْنَان",
-          "tr": "ithnān",
-          "en": "two"
-        },
-        {
-          "ar": "ثَلَاثَة",
-          "tr": "thalātha",
-          "en": "three"
-        },
-        {
-          "ar": "أَرْبَعَة",
-          "tr": "arbaʿa",
-          "en": "four"
-        },
-        {
-          "ar": "خَمْسَة",
-          "tr": "khamsa",
-          "en": "five"
-        },
-        {
-          "ar": "سِتَّة",
-          "tr": "sitta",
-          "en": "six"
-        },
-        {
-          "ar": "سَبْعَة",
-          "tr": "sabʿa",
-          "en": "seven"
-        },
-        {
-          "ar": "ثَمَانِيَة",
-          "tr": "thamāniya",
-          "en": "eight"
-        },
-        {
-          "ar": "تِسْعَة",
-          "tr": "tisʿa",
-          "en": "nine"
-        },
-        {
-          "ar": "عَشَرَة",
-          "tr": "ʿashara",
-          "en": "ten"
-        }
-      ]
+     "ar": "أَوْلاد",
+     "tr": "awlād",
+     "en": "children; sons"
     },
     {
-      "id": "time",
-      "title": "كَلِمَات الوَقْت",
-      "theme": "Time words — now, today, tomorrow",
-      "members": [
-        {
-          "ar": "الآن",
-          "tr": "al-ān",
-          "en": "now"
-        },
-        {
-          "ar": "اليَوْم",
-          "tr": "al-yawm",
-          "en": "today"
-        },
-        {
-          "ar": "غَدًا",
-          "tr": "ghadan",
-          "en": "tomorrow"
-        },
-        {
-          "ar": "أَمْسِ",
-          "tr": "amsi",
-          "en": "yesterday"
-        },
-        {
-          "ar": "دَائِمًا",
-          "tr": "dāʾiman",
-          "en": "always"
-        },
-        {
-          "ar": "أَحْيَانًا",
-          "tr": "aḥyānan",
-          "en": "sometimes"
-        },
-        {
-          "ar": "قَرِيبًا",
-          "tr": "qarīban",
-          "en": "soon"
-        },
-        {
-          "ar": "مُبَكِّرًا",
-          "tr": "mubakkiran",
-          "en": "early"
-        },
-        {
-          "ar": "مُتَأَخِّرًا",
-          "tr": "mutaʾakhkhiran",
-          "en": "late"
-        }
-      ]
+     "ar": "جَدّ",
+     "tr": "jadd",
+     "en": "grandfather"
     },
     {
-      "id": "want-need",
-      "title": "أُرِيد وَأَحْتَاج",
-      "theme": "Wanting, needing, being able — the engine of speaking",
-      "members": [
-        {
-          "ar": "أُرِيدُ",
-          "tr": "urīdu",
-          "en": "I want",
-          "hear": "أبغى — abgha"
-        },
-        {
-          "ar": "أَحْتَاجُ إِلَى",
-          "tr": "aḥtāju ilā",
-          "en": "I need"
-        },
-        {
-          "ar": "أَسْتَطِيعُ",
-          "tr": "astaṭīʿu",
-          "en": "I can, I am able",
-          "hear": "أقدر — agdar"
-        },
-        {
-          "ar": "يَجِبُ أَنْ",
-          "tr": "yajibu an",
-          "en": "I must; it is necessary that"
-        },
-        {
-          "ar": "أَعْرِفُ",
-          "tr": "aʿrifu",
-          "en": "I know"
-        },
-        {
-          "ar": "أَفْهَمُ",
-          "tr": "afhamu",
-          "en": "I understand"
-        },
-        {
-          "ar": "أُحِبُّ",
-          "tr": "uḥibbu",
-          "en": "I like; I love"
-        },
-        {
-          "ar": "أَظُنُّ",
-          "tr": "aẓunnu",
-          "en": "I think"
-        }
-      ]
+     "ar": "جَدَّة",
+     "tr": "jadda",
+     "en": "grandmother"
     },
     {
-      "id": "people",
-      "title": "النَّاس وَالضَّمَائِر",
-      "theme": "People & pronouns",
-      "members": [
-        {
-          "ar": "أَنَا",
-          "tr": "ana",
-          "en": "I"
-        },
-        {
-          "ar": "أَنْتَ",
-          "tr": "anta",
-          "en": "you (to a man)"
-        },
-        {
-          "ar": "أَنْتِ",
-          "tr": "anti",
-          "en": "you (to a woman)"
-        },
-        {
-          "ar": "هُوَ",
-          "tr": "huwa",
-          "en": "he"
-        },
-        {
-          "ar": "هِيَ",
-          "tr": "hiya",
-          "en": "she"
-        },
-        {
-          "ar": "نَحْنُ",
-          "tr": "naḥnu",
-          "en": "we"
-        },
-        {
-          "ar": "هُمْ",
-          "tr": "hum",
-          "en": "they"
-        },
-        {
-          "ar": "رَجُل",
-          "tr": "rajul",
-          "en": "man"
-        },
-        {
-          "ar": "اِمْرَأَة",
-          "tr": "imraʾa",
-          "en": "woman"
-        },
-        {
-          "ar": "صَدِيق",
-          "tr": "ṣadīq",
-          "en": "friend"
-        }
-      ]
+     "ar": "عَمّ",
+     "tr": "ʿamm",
+     "en": "uncle (father's brother)"
     },
     {
-      "id": "opposites",
-      "title": "الأَضْدَاد",
-      "theme": "Adjective opposites — learned in pairs, remembered forever",
-      "members": [
-        {
-          "ar": "جَدِيد / قَدِيم",
-          "tr": "jadīd / qadīm",
-          "en": "new / old"
-        },
-        {
-          "ar": "جَيِّد / سَيِّئ",
-          "tr": "jayyid / sayyiʾ",
-          "en": "good / bad"
-        },
-        {
-          "ar": "سَهْل / صَعْب",
-          "tr": "sahl / ṣaʿb",
-          "en": "easy / difficult"
-        },
-        {
-          "ar": "سَرِيع / بَطِيء",
-          "tr": "sarīʿ / baṭīʾ",
-          "en": "fast / slow"
-        },
-        {
-          "ar": "قَرِيب / بَعِيد",
-          "tr": "qarīb / baʿīd",
-          "en": "near / far"
-        },
-        {
-          "ar": "غَالٍ / رَخِيص",
-          "tr": "ghālin / rakhīṣ",
-          "en": "expensive / cheap"
-        },
-        {
-          "ar": "حَارّ / بَارِد",
-          "tr": "ḥārr / bārid",
-          "en": "hot / cold"
-        },
-        {
-          "ar": "وَاسِع / ضَيِّق",
-          "en": "spacious / narrow",
-          "tr": "wāsiʿ / ḍayyiq",
-          "note": "الوَاسِع is also a name of Allah",
-          "from": "teacher"
-        },
-        {
-          "ar": "هَادِئ / مُزْعِج",
-          "en": "quiet / noisy",
-          "tr": "hādiʾ / muzʿij",
-          "note": "the passage ends وَالحَيُّ هَادِئٌ",
-          "from": "teacher"
-        }
-      ]
+     "ar": "عَمَّة",
+     "tr": "ʿamma",
+     "en": "aunt (father's sister)"
     },
     {
-      "id": "glue",
-      "title": "كَلِمَات الرَّبْط",
-      "theme": "Conversation glue — yes, no, maybe, but, because",
-      "members": [
-        {
-          "ar": "نَعَمْ",
-          "tr": "naʿam",
-          "en": "yes"
-        },
-        {
-          "ar": "طَبْعًا",
-          "tr": "ṭabʿan",
-          "en": "of course"
-        },
-        {
-          "ar": "مُمْكِن",
-          "tr": "mumkin",
-          "en": "possible; maybe"
-        },
-        {
-          "ar": "رُبَّمَا",
-          "tr": "rubbamā",
-          "en": "perhaps"
-        },
-        {
-          "ar": "لَكِنْ",
-          "tr": "lākin",
-          "en": "but"
-        },
-        {
-          "ar": "لِأَنَّ",
-          "tr": "liʾanna",
-          "en": "because"
-        },
-        {
-          "ar": "إِذَنْ",
-          "tr": "idhan",
-          "en": "so, in that case"
-        },
-        {
-          "ar": "يَعْنِي",
-          "tr": "yaʿnī",
-          "en": "meaning...; I mean"
-        },
-        {
-          "ar": "طَيِّب",
-          "tr": "ṭayyib",
-          "en": "okay, fine"
-        },
-        {
-          "ar": "أَنْ",
-          "tr": "an",
-          "en": "to (before verbs); that",
-          "note": "connects wanted to / like to / must to a verb: أَرَادَ أَنْ يَبْحَثَ"
-        },
-        {
-          "ar": "عَنْ",
-          "tr": "ʿan",
-          "en": "about; for (with search / ask)",
-          "note": "pairs with searching or asking: يَبْحَثُ عَنْ (searches for)"
-        }
-      ]
+     "ar": "أَخ",
+     "en": "brother",
+     "tr": "akh",
+     "note": "plural إِخْوَة — the passage says ذَهَبَ مَعَ أَخِيهِ",
+     "from": "complete"
     },
     {
-      "id": "commands",
-      "title": "أَوَامِر يَوْمِيَّة",
-      "theme": "Daily commands — give me, take, come, look",
-      "members": [
-        {
-          "ar": "أَعْطِنِي",
-          "tr": "aʿṭinī",
-          "en": "give me"
-        },
-        {
-          "ar": "خُذْ",
-          "tr": "khudh",
-          "en": "take!"
-        },
-        {
-          "ar": "تَعَالَ",
-          "tr": "taʿāla",
-          "en": "come!"
-        },
-        {
-          "ar": "اِذْهَبْ",
-          "tr": "idhhab",
-          "en": "go!"
-        },
-        {
-          "ar": "اُنْظُرْ",
-          "tr": "unẓur",
-          "en": "look!"
-        },
-        {
-          "ar": "اِسْمَعْ",
-          "tr": "ismaʿ",
-          "en": "listen!"
-        },
-        {
-          "ar": "قُلْ لِي",
-          "tr": "qul lī",
-          "en": "tell me"
-        },
-        {
-          "ar": "اِنْتَظِرْ",
-          "tr": "intaẓir",
-          "en": "wait!"
-        }
-      ]
+     "ar": "أُخْت",
+     "en": "sister",
+     "tr": "ukht",
+     "note": "plural أَخَوَات",
+     "from": "complete"
     },
     {
-      "id": "food",
-      "title": "الطَّعَام وَالشَّرَاب",
-      "theme": "Food & drink essentials",
-      "members": [
-        {
-          "ar": "مَاء",
-          "tr": "māʾ",
-          "en": "water"
-        },
-        {
-          "ar": "لَحْم",
-          "tr": "laḥm",
-          "en": "meat"
-        },
-        {
-          "ar": "دَجَاج",
-          "tr": "dajāj",
-          "en": "chicken"
-        },
-        {
-          "ar": "أَرُزّ",
-          "tr": "aruzz",
-          "en": "rice"
-        },
-        {
-          "ar": "حَلِيب",
-          "tr": "ḥalīb",
-          "en": "milk"
-        },
-        {
-          "ar": "فَاكِهَة",
-          "tr": "fākiha",
-          "en": "fruit"
-        },
-        {
-          "ar": "جَائِع",
-          "tr": "jāʾiʿ",
-          "en": "hungry"
-        },
-        {
-          "ar": "عَطْشَان",
-          "tr": "ʿaṭshān",
-          "en": "thirsty"
-        },
-        {
-          "ar": "الحِسَاب",
-          "tr": "al-ḥisāb",
-          "en": "the bill"
-        }
-      ]
+     "ar": "خَال",
+     "en": "uncle (mother's brother)",
+     "tr": "khāl",
+     "note": "Arabic splits the uncles: خال is your mother's brother, عمّ your father's",
+     "from": "teacher"
     },
     {
-      "id": "directions",
-      "title": "الاِتِّجَاهَات",
-      "theme": "Umrah: directions & navigating — find any gate, floor or exit",
-      "members": [
-        {
-          "ar": "يَمِين",
-          "tr": "yamīn",
-          "en": "right"
-        },
-        {
-          "ar": "يَسَار",
-          "tr": "yasār",
-          "en": "left"
-        },
-        {
-          "ar": "عَلَى طُول",
-          "tr": "ʿalā ṭūl",
-          "en": "straight ahead"
-        },
-        {
-          "ar": "بَاب",
-          "tr": "bāb",
-          "en": "gate; door"
-        },
-        {
-          "ar": "الدَّوْر",
-          "tr": "ad-dawr",
-          "en": "the floor, level"
-        },
-        {
-          "ar": "فَوْق",
-          "tr": "fawq",
-          "en": "upstairs; above"
-        },
-        {
-          "ar": "تَحْت",
-          "tr": "taḥt",
-          "en": "downstairs; below"
-        },
-        {
-          "ar": "مَدْخَل",
-          "tr": "madkhal",
-          "en": "entrance"
-        },
-        {
-          "ar": "مَخْرَج",
-          "tr": "makhraj",
-          "en": "exit"
-        },
-        {
-          "ar": "كَيْفَ أَصِلُ إِلَى",
-          "tr": "kayfa aṣilu ilā",
-          "en": "how do I get to…?",
-          "hear": "كيف أروح لـ…؟ — kēf arūḥ la…"
-        }
-      ]
+     "ar": "خَالَة",
+     "en": "aunt (mother's sister)",
+     "tr": "khāla",
+     "note": "and خالة is your mother's sister, عمّة your father's",
+     "from": "teacher"
     },
     {
-      "id": "haram",
-      "title": "فِي الحَرَم",
-      "theme": "Umrah: inside the Haram — the rites and the places",
-      "members": [
-        {
-          "ar": "الحَرَم",
-          "tr": "al-ḥaram",
-          "en": "the Sanctuary (Haram)"
-        },
-        {
-          "ar": "الكَعْبَة",
-          "tr": "al-kaʿba",
-          "en": "the Kaaba"
-        },
-        {
-          "ar": "الطَّوَاف",
-          "tr": "aṭ-ṭawāf",
-          "en": "tawaf — circling the Kaaba"
-        },
-        {
-          "ar": "السَّعْي",
-          "tr": "as-saʿy",
-          "en": "sa'i — walking Safa to Marwa"
-        },
-        {
-          "ar": "الصَّفَا وَالمَرْوَة",
-          "tr": "aṣ-ṣafā wal-marwa",
-          "en": "Safa and Marwa"
-        },
-        {
-          "ar": "زَمْزَم",
-          "tr": "zamzam",
-          "en": "Zamzam water"
-        },
-        {
-          "ar": "العُمْرَة",
-          "tr": "al-ʿumra",
-          "en": "Umrah"
-        },
-        {
-          "ar": "الإِحْرَام",
-          "tr": "al-iḥrām",
-          "en": "ihram (the pilgrim state/garments)"
-        },
-        {
-          "ar": "مَقَام إِبْرَاهِيم",
-          "tr": "maqām ibrāhīm",
-          "en": "the Station of Ibrahim"
-        },
-        {
-          "ar": "المَطَاف",
-          "tr": "al-maṭāf",
-          "en": "the tawaf area"
-        }
-      ]
+     "ar": "زَوْج",
+     "en": "husband",
+     "tr": "zawj",
+     "from": "complete"
     },
     {
-      "id": "shopping",
-      "title": "التَّسَوُّق",
-      "theme": "Umrah: shopping & bargaining — souks, dates and gifts",
-      "members": [
-        {
-          "ar": "بِكَمْ هَذَا؟",
-          "tr": "bikam hādhā?",
-          "en": "how much is this?",
-          "hear": "بكم هادا؟ — bikam hāda"
-        },
-        {
-          "ar": "غَالٍ جِدًّا",
-          "tr": "ghālin jiddan",
-          "en": "too expensive",
-          "hear": "غالي مرة — ghāli marra"
-        },
-        {
-          "ar": "نَزِّلِ السِّعْرَ",
-          "tr": "nazzil as-siʿr",
-          "en": "lower the price",
-          "hear": "نزّل شوي — nazzil shwayy"
-        },
-        {
-          "ar": "هَلْ عِنْدَكَ",
-          "tr": "hal ʿindaka",
-          "en": "do you have…?",
-          "hear": "عندك…؟ — ʿindak…?"
-        },
-        {
-          "ar": "أُرِيدُ أَنْ أَشْتَرِيَ",
-          "tr": "urīdu an ashtariya",
-          "en": "I want to buy"
-        },
-        {
-          "ar": "هَدِيَّة",
-          "tr": "hadiyya",
-          "en": "gift"
-        },
-        {
-          "ar": "تَمْر",
-          "tr": "tamr",
-          "en": "dates"
-        },
-        {
-          "ar": "مَقَاس",
-          "tr": "maqās",
-          "en": "size"
-        },
-        {
-          "ar": "آخُذُهُ",
-          "tr": "ākhudhuhu",
-          "en": "I'll take it"
-        },
-        {
-          "ar": "مَجَّانًا",
-          "tr": "majjānan",
-          "en": "for free"
-        }
-      ]
-    },
-    {
-      "id": "medical",
-      "title": "الصِّحَّة وَالصَّيْدَلِيَّة",
-      "theme": "Umrah: medical help & the pharmacy",
-      "members": [
-        {
-          "ar": "أَحْتَاجُ طَبِيبًا",
-          "tr": "aḥtāju ṭabīban",
-          "en": "I need a doctor",
-          "hear": "أبغى دكتور — abgha duktōr"
-        },
-        {
-          "ar": "صَيْدَلِيَّة",
-          "tr": "ṣaydaliyya",
-          "en": "pharmacy"
-        },
-        {
-          "ar": "دَوَاء",
-          "tr": "dawāʾ",
-          "en": "medicine"
-        },
-        {
-          "ar": "مَرِيض",
-          "tr": "marīḍ",
-          "en": "sick, ill"
-        },
-        {
-          "ar": "أَلَم",
-          "tr": "alam",
-          "en": "pain"
-        },
-        {
-          "ar": "حَرَارَة",
-          "tr": "ḥarāra",
-          "en": "fever"
-        },
-        {
-          "ar": "يُؤْلِمُنِي",
-          "tr": "yuʾlimunī",
-          "en": "it hurts me"
-        },
-        {
-          "ar": "حَسَّاسِيَّة",
-          "tr": "ḥassāsiyya",
-          "en": "allergy"
-        },
-        {
-          "ar": "إِسْعَاف",
-          "tr": "isʿāf",
-          "en": "ambulance"
-        },
-        {
-          "ar": "عِنْدِي سُكَّرِيّ",
-          "tr": "ʿindī sukkarī",
-          "en": "I'm diabetic"
-        }
-      ]
-    },
-    {
-      "id": "hotel-taxi",
-      "title": "الفُنْدُق وَالمُوَاصَلَات",
-      "theme": "Umrah: hotel, taxi & getting around",
-      "members": [
-        {
-          "ar": "فُنْدُق",
-          "tr": "funduq",
-          "en": "hotel"
-        },
-        {
-          "ar": "حَجْز",
-          "tr": "ḥajz",
-          "en": "reservation, booking"
-        },
-        {
-          "ar": "مِفْتَاح",
-          "tr": "miftāḥ",
-          "en": "key"
-        },
-        {
-          "ar": "خُذْنِي إِلَى",
-          "tr": "khudhnī ilā",
-          "en": "take me to…",
-          "hear": "ودّيني — waddīni"
-        },
-        {
-          "ar": "قِفْ هُنَا",
-          "tr": "qif hunā",
-          "en": "stop here",
-          "hear": "وقّف هنا — waggif hina"
-        },
-        {
-          "ar": "كَمِ الأُجْرَة؟",
-          "tr": "kam al-ujra?",
-          "en": "how much is the fare?",
-          "hear": "بكم التوصيلة؟ — bikam at-tawṣīla"
-        },
-        {
-          "ar": "مَحَطَّة",
-          "tr": "maḥaṭṭa",
-          "en": "station"
-        },
-        {
-          "ar": "حَافِلَة",
-          "tr": "ḥāfila",
-          "en": "bus"
-        },
-        {
-          "ar": "مَطَار",
-          "tr": "maṭār",
-          "en": "airport"
-        },
-        {
-          "ar": "أَمْتِعَة",
-          "tr": "amtiʿa",
-          "en": "luggage"
-        },
-        {
-          "ar": "خِدْمَة",
-          "en": "service",
-          "tr": "khidma",
-          "from": "teacher"
-        }
-      ]
-    },
-    {
-      "id": "help",
-      "title": "المُسَاعَدَة",
-      "theme": "Umrah: asking for help & emergencies",
-      "members": [
-        {
-          "ar": "سَاعِدْنِي",
-          "tr": "sāʿidnī",
-          "en": "help me!"
-        },
-        {
-          "ar": "أَنَا تَائِه",
-          "tr": "anā tāʾih",
-          "en": "I'm lost",
-          "hear": "أنا ضايع — ana ḍāyiʿ"
-        },
-        {
-          "ar": "جَوَاز سَفَرِي",
-          "tr": "jawāz safarī",
-          "en": "my passport"
-        },
-        {
-          "ar": "شُرْطَة",
-          "tr": "shurṭa",
-          "en": "police"
-        },
-        {
-          "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّة؟",
-          "tr": "hal tatakallamu l-injlīziyya?",
-          "en": "do you speak English?"
-        },
-        {
-          "ar": "تَكَلَّمْ بِبُطْءٍ",
-          "tr": "takallam bibuṭʾ",
-          "en": "speak slowly",
-          "hear": "على مهلك — ʿala mahlak"
-        },
-        {
-          "ar": "أَعِدْ مِنْ فَضْلِكَ",
-          "tr": "aʿid min faḍlik",
-          "en": "repeat, please",
-          "hear": "مرة ثانية — marra thānya"
-        },
-        {
-          "ar": "لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا",
-          "tr": "lā atakallamu l-ʿarabiyya jayyidan",
-          "en": "I don't speak Arabic well"
-        },
-        {
-          "ar": "مَفْقُود",
-          "tr": "mafqūd",
-          "en": "lost, missing"
-        },
-        {
-          "ar": "طَوَارِئ",
-          "tr": "ṭawāriʾ",
-          "en": "emergency"
-        }
-      ]
-    },
-    {
-      "id": "masjid",
-      "title": "فِي المَسْجِد",
-      "theme": "What the imam says — line up, prayer calls, janazah",
-      "members": [
-        {
-          "ar": "اِسْتَوُوا",
-          "tr": "istawū",
-          "en": "straighten up! (the lines)"
-        },
-        {
-          "ar": "اِعْتَدِلُوا",
-          "tr": "iʿtadilū",
-          "en": "align yourselves!"
-        },
-        {
-          "ar": "سَوُّوا صُفُوفَكُمْ",
-          "tr": "sawwū ṣufūfakum",
-          "en": "straighten your rows"
-        },
-        {
-          "ar": "سُدُّوا الخَلَل",
-          "tr": "suddū l-khalal",
-          "en": "close the gaps"
-        },
-        {
-          "ar": "تَقَدَّمُوا",
-          "tr": "taqaddamū",
-          "en": "move forward!"
-        },
-        {
-          "ar": "أَتِمُّوا الصَّفَّ الأَوَّل",
-          "tr": "atimmū ṣ-ṣaff al-awwal",
-          "en": "complete the first row"
-        },
-        {
-          "ar": "الإِقَامَة",
-          "tr": "al-iqāma",
-          "en": "the iqama (call to start prayer)"
-        },
-        {
-          "ar": "قَدْ قَامَتِ الصَّلَاة",
-          "tr": "qad qāmati ṣ-ṣalāh",
-          "en": "the prayer has begun (from the iqama)"
-        },
-        {
-          "ar": "الصَّلَاةُ جَامِعَة",
-          "tr": "aṣ-ṣalātu jāmiʿa",
-          "en": "congregational prayer is gathering (special-prayer call)"
-        },
-        {
-          "ar": "صَلَاةُ الجِنَازَة",
-          "tr": "ṣalāt al-jināza",
-          "en": "the funeral (janazah) prayer"
-        }
-      ]
-    },
-    {
-      "id": "khutba",
-      "title": "خُطْبَة الجُمُعَة",
-      "theme": "Friday khutbah stock phrases — you hear these every single week",
-      "members": [
-        {
-          "ar": "إِنَّ الحَمْدَ لِلَّه",
-          "tr": "inna l-ḥamda lillāh",
-          "en": "indeed all praise is for Allah (khutbah opener)"
-        },
-        {
-          "ar": "أَمَّا بَعْدُ",
-          "tr": "ammā baʿd",
-          "en": "and now, to the point…"
-        },
-        {
-          "ar": "اِتَّقُوا اللَّه",
-          "tr": "ittaqū llāh",
-          "en": "be mindful of Allah!"
-        },
-        {
-          "ar": "عِبَادَ اللَّه",
-          "tr": "ʿibāda llāh",
-          "en": "O servants of Allah"
-        },
-        {
-          "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا",
-          "tr": "yā ayyuhā lladhīna āmanū",
-          "en": "O you who believe"
-        },
-        {
-          "ar": "قَالَ رَسُولُ اللَّه ﷺ",
-          "tr": "qāla rasūlu llāh",
-          "en": "the Messenger of Allah ﷺ said"
-        },
-        {
-          "ar": "صَلُّوا عَلَى النَّبِيّ",
-          "tr": "ṣallū ʿalā n-nabiyy",
-          "en": "send blessings upon the Prophet"
-        },
-        {
-          "ar": "أَقُولُ قَوْلِي هَذَا",
-          "tr": "aqūlu qawlī hādhā",
-          "en": "I say these words of mine… (closing)"
-        },
-        {
-          "ar": "أَسْتَغْفِرُ اللَّه",
-          "tr": "astaghfiru llāh",
-          "en": "I seek Allah's forgiveness"
-        },
-        {
-          "ar": "رَحِمَكُمُ اللَّه",
-          "tr": "raḥimakumu llāh",
-          "en": "may Allah have mercy on you"
-        }
-      ]
-    },
-    {
-      "id": "lesson-home",
-      "title": "الشَّقَّة وَالأَثَاث",
-      "theme": "Your flat — room by room (class, 30 Aug)",
-      "source": "teacher",
-      "lesson": "Class — 30 Aug: the flat, the week, the family",
-      "members": [
-        {
-          "ar": "شَقَّة",
-          "en": "flat, apartment",
-          "tr": "shaqqa",
-          "note": "from شَقَّ to split — a part split off a building · plural: شُقَق shuqaq",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَثَاث",
-          "en": "furniture",
-          "tr": "athāth",
-          "note": "ماذا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَطْبَخ",
-          "en": "kitchen",
-          "tr": "maṭbakh",
-          "note": "place-noun from طَبَخَ to cook · plural: مَطَابِخ maṭābikh",
-          "from": "teacher"
-        },
-        {
-          "ar": "غُرْفَةُ نَوْمٍ",
-          "en": "bedroom",
-          "tr": "ghurfatu nawm",
-          "note": "literally 'room of sleep' · plural of غُرْفَة: غُرَف ghuraf",
-          "from": "teacher"
-        },
-        {
-          "ar": "غُرْفَةُ جُلُوسٍ",
-          "en": "living room",
-          "tr": "ghurfatu julūs",
-          "note": "literally 'room of sitting'",
-          "from": "teacher"
-        },
-        {
-          "ar": "سَرِير",
-          "en": "bed",
-          "tr": "sarīr",
-          "from": "teacher",
-          "note": "plural: سُرُر surur — the next card"
-        },
-        {
-          "ar": "سُرُر",
-          "en": "beds",
-          "tr": "surur",
-          "note": "the plural she drilled — سَرِير becomes سُرُر",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَرِيكَة",
-          "en": "sofa",
-          "tr": "arīka",
-          "from": "teacher",
-          "note": "plural: أَرَائِك arāʾik — the next card"
-        },
-        {
-          "ar": "أَرَائِك",
-          "en": "sofas",
-          "tr": "arāʾik",
-          "note": "a broken plural; the same shape as خَزَائِن",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَائِدَة",
-          "en": "dining table",
-          "tr": "māʾida",
-          "note": "Surah 5 is named after it — المَائِدَة · plural: مَوَائِد mawāʾid",
-          "from": "teacher"
-        },
-        {
-          "ar": "كُرْسِيّ",
-          "en": "chair",
-          "tr": "kursī",
-          "note": "the same word as the كُرْسِيّ of Ayat al-Kursi · plural: كَرَاسِي karāsī — the next card",
-          "from": "teacher"
-        },
-        {
-          "ar": "كَرَاسِي",
-          "en": "chairs",
-          "tr": "karāsī",
-          "from": "teacher"
-        },
-        {
-          "ar": "خَزَانَة",
-          "en": "cupboard, closet",
-          "tr": "khazāna",
-          "from": "teacher",
-          "note": "plural: خَزَائِن khazāʾin — the next card"
-        },
-        {
-          "ar": "خَزَائِن",
-          "en": "cupboards; treasuries",
-          "tr": "khazāʾin",
-          "note": "her Quran link: وَلَا أَقُولُ لَكُمْ عِندِي خَزَائِنُ اللَّهِ",
-          "from": "teacher"
-        },
-        {
-          "ar": "ثَلَّاجَة",
-          "en": "fridge",
-          "tr": "thallāja",
-          "note": "from ثَلْج ice — the 'ice-maker' · plural: ثَلَّاجَات thallājāt",
-          "from": "teacher"
-        },
-        {
-          "ar": "فُرْن",
-          "en": "oven",
-          "tr": "furn",
-          "note": "also a bakery · plural: أَفْرَان afrān",
-          "from": "teacher"
-        },
-        {
-          "ar": "سِتَارَة",
-          "en": "curtain",
-          "tr": "sitāra",
-          "note": "her Quran link: اللهُ هُوَ السَّتَّار — the Concealer · plural: سَتَائِر satāʾir",
-          "from": "teacher"
-        },
-        {
-          "ar": "شُبَّاك",
-          "en": "window",
-          "tr": "shubbāk",
-          "note": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ · plural: شَبَابِيك shabābīk",
-          "from": "teacher"
-        },
-        {
-          "ar": "سَجَّادَة",
-          "en": "carpet; prayer mat",
-          "tr": "sajjāda",
-          "note": "from سَجَدَ to prostrate — the thing you prostrate on · plural: سَجَاجِيد sajājīd",
-          "from": "teacher"
-        },
-        {
-          "ar": "مِرْآة",
-          "en": "mirror",
-          "tr": "mirʾāt",
-          "note": "instrument-noun from رَأَى to see · plural: مَرَايَا marāyā",
-          "from": "teacher"
-        },
-        {
-          "ar": "طَابِق",
-          "en": "floor, storey",
-          "tr": "ṭābiq",
-          "note": "كَمْ طَابِقٍ بَيْتُكَ؟ · plural: طَوَابِق ṭawābiq",
-          "from": "teacher"
-        },
-        {
-          "ar": "دَوْر",
-          "en": "floor, storey; turn",
-          "tr": "dawr",
-          "note": "the everyday alternative to طَابِق · plural: أَدْوَار adwār",
-          "from": "teacher"
-        },
-        {
-          "ar": "بَاب",
-          "en": "door",
-          "tr": "bāb",
-          "from": "complete",
-          "note": "plural: أَبْوَاب abwāb"
-        },
-        {
-          "ar": "مِصْبَاح",
-          "en": "lamp",
-          "tr": "miṣbāḥ",
-          "note": "from صُبْح dawn — light; the Quran's مِصْبَاح in Ayat an-Nur · plural: مَصَابِيح maṣābīḥ",
-          "from": "complete"
-        },
-        {
-          "ar": "سُلَّم",
-          "en": "stairs, ladder",
-          "tr": "sullam",
-          "from": "complete",
-          "note": "plural: سَلَالِم salālim"
-        },
-        {
-          "ar": "مِصْعَد",
-          "en": "lift, elevator",
-          "tr": "miṣʿad",
-          "note": "from صَعِدَ to go up · plural: مَصَاعِد maṣāʿid",
-          "from": "complete"
-        }
-      ]
-    },
-    {
-      "id": "lesson-week",
-      "title": "أَيَّام الأُسْبُوع",
-      "theme": "The days of the week (class, 30 Aug)",
-      "source": "teacher",
-      "lesson": "Class — 30 Aug: the flat, the week, the family",
-      "members": [
-        {
-          "ar": "الأَحَد",
-          "en": "Sunday",
-          "tr": "al-aḥad",
-          "note": "from أَحَد one — day one",
-          "from": "teacher"
-        },
-        {
-          "ar": "الاثْنَيْن",
-          "en": "Monday",
-          "tr": "al-ithnayn",
-          "note": "from اثْنَان two",
-          "from": "teacher"
-        },
-        {
-          "ar": "الثُّلَاثَاء",
-          "en": "Tuesday",
-          "tr": "ath-thulāthāʾ",
-          "note": "from ثَلَاثَة three — the days are simply counted",
-          "from": "teacher"
-        },
-        {
-          "ar": "الأَرْبِعَاء",
-          "en": "Wednesday",
-          "tr": "al-arbiʿāʾ",
-          "note": "from أَرْبَعَة four",
-          "from": "teacher"
-        },
-        {
-          "ar": "الخَمِيس",
-          "en": "Thursday",
-          "tr": "al-khamīs",
-          "note": "from خَمْسَة five",
-          "from": "teacher"
-        },
-        {
-          "ar": "الجُمُعَة",
-          "en": "Friday",
-          "tr": "al-jumuʿa",
-          "note": "from جَمَعَ to gather — the day of gathering",
-          "from": "teacher"
-        },
-        {
-          "ar": "السَّبْت",
-          "en": "Saturday",
-          "tr": "as-sabt",
-          "note": "the day of rest — same root as 'sabbath'",
-          "from": "teacher"
-        },
-        {
-          "ar": "أُسْبُوع",
-          "en": "week",
-          "tr": "usbūʿ",
-          "from": "complete"
-        },
-        {
-          "ar": "عُطْلَة",
-          "en": "holiday, day off",
-          "tr": "ʿuṭla",
-          "from": "complete"
-        },
-        {
-          "ar": "يَوْمَ الثُّلَاثَاءِ",
-          "en": "on Tuesday",
-          "tr": "yawma th-thulāthāʾ",
-          "note": "'on a day' takes يَوْمَ + the day in the genitive",
-          "from": "teacher"
-        }
-      ]
-    },
-    {
-      "id": "lesson-divine",
-      "title": "مِنَ البَيْتِ إِلَى القُرْآن",
-      "theme": "Where the household words meet the Quran (class, 30 Aug)",
-      "source": "teacher",
-      "lesson": "Class — 30 Aug: the flat, the week, the family",
-      "members": [
-        {
-          "ar": "مَلَك",
-          "en": "angel",
-          "tr": "malak",
-          "note": "وَلَا أَقُولُ لَكُمْ إِنِّي مَلَكٌ — Quran 6:50, the verse she wrote out",
-          "from": "teacher"
-        },
-        {
-          "ar": "الغَيْب",
-          "en": "the unseen",
-          "tr": "al-ghayb",
-          "note": "وَلَا أَعْلَمُ الغَيْبَ — from the same verse",
-          "from": "teacher"
-        },
-        {
-          "ar": "الحَيّ",
-          "en": "the Ever-Living",
-          "tr": "al-ḥayy",
-          "note": "her line: اللهُ حَيٌّ لَا يَمُوتُ — and the same word as حَيّ 'neighbourhood'",
-          "from": "teacher"
-        },
-        {
-          "ar": "السَّتَّار",
-          "en": "the Concealer of faults",
-          "tr": "as-sattār",
-          "note": "her line: اللهُ هُوَ السَّتَّارُ — the root of سِتَارَة, a curtain",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَرَّة",
-          "en": "time, occasion",
-          "tr": "marra",
-          "note": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
-          "from": "teacher"
-        }
-      ]
-    },
-    {
-      "id": "lesson-weather",
-      "title": "الطَّقْس",
-      "theme": "Weather — the set ثَلْج belongs to",
-      "source": "teacher",
-      "lesson": "Class — 30 Aug: the flat, the week, the family",
-      "members": [
-        {
-          "ar": "ثَلْج",
-          "en": "snow; ice",
-          "tr": "thalj",
-          "note": "the root behind ثَلَّاجَة, a fridge",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَطَر",
-          "en": "rain",
-          "tr": "maṭar",
-          "from": "complete"
-        },
-        {
-          "ar": "شَمْس",
-          "en": "sun",
-          "tr": "shams",
-          "note": "Surah 91 is named after it",
-          "from": "complete"
-        },
-        {
-          "ar": "رِيح",
-          "en": "wind",
-          "tr": "rīḥ",
-          "from": "complete"
-        },
-        {
-          "ar": "سَحَاب",
-          "en": "clouds",
-          "tr": "saḥāb",
-          "from": "complete"
-        },
-        {
-          "ar": "جَوّ",
-          "en": "weather, air",
-          "tr": "jaww",
-          "from": "complete"
-        }
-      ]
-    },
-    {
-      "id": "lesson-routine",
-      "title": "يَوْمُ العَمَلِ وَالعُطْلَةِ",
-      "theme": "Daily routine, work day & weekend (class, 27 Sep)",
-      "lesson": "Class — 27 Sep: a working day",
-      "members": [
-        {
-          "ar": "عَمَل",
-          "en": "work, labour",
-          "tr": "ʿamal",
-          "note": "from عَمِلَ — to do, work; root ع-م-ل",
-          "from": "teacher"
-        },
-        {
-          "ar": "يَوْمُ العَمَلِ",
-          "en": "work day, working day",
-          "tr": "yawmu l-ʿamal",
-          "note": "iḍāfa: literally 'day of work'",
-          "from": "teacher"
-        },
-        {
-          "ar": "عُطْلَة",
-          "en": "day off, holiday, weekend",
-          "tr": "ʿuṭla",
-          "note": "يَوْمُ العُطْلَةِ — day of rest from work",
-          "from": "teacher"
-        },
-        {
-          "ar": "مُبَكِّرًا",
-          "en": "early",
-          "tr": "mubakkiran",
-          "note": "أَسْتَيْقِظُ مُبَكِّرًا — I wake up early",
-          "from": "teacher"
-        },
-        {
-          "ar": "مُتَأَخِّرًا",
-          "en": "late",
-          "tr": "mutaʾakhkhiran",
-          "note": "أَعُودُ مُتَأَخِّرًا — I return late",
-          "from": "teacher"
-        },
-        {
-          "ar": "السَّاعَةُ السَّابِعَةُ",
-          "en": "seven o'clock",
-          "tr": "as-sāʿatu s-sābiʿah",
-          "note": "hours use ordinal numbers",
-          "from": "teacher"
-        },
-        {
-          "ar": "السَّاعَةُ الثَّامِنَةُ",
-          "en": "eight o'clock",
-          "tr": "as-sāʿatu th-thāminah",
-          "note": "ordinal from ثَمَانِيَة",
-          "from": "teacher"
-        },
-        {
-          "ar": "السَّاعَةُ الثَّانِيَةَ عَشْرَةَ",
-          "en": "twelve o'clock",
-          "tr": "as-sāʿatu th-thāniyata ʿashrah",
-          "note": "twelve noon / midnight",
-          "from": "teacher"
-        },
-        {
-          "ar": "صَبَاحًا",
-          "en": "in the morning, AM",
-          "tr": "ṣabāḥan",
-          "note": "opposite of مَسَاءً in the evening",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَسْتَيْقِظُ",
-          "en": "I wake up",
-          "tr": "astayqiẓu",
-          "note": "present tense: أَسْتَيْقِظُ فِي السَّاعَةِ السَّابِعَةِ",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَغْسِلُ",
-          "en": "I wash",
-          "tr": "aghsilu",
-          "note": "past: غَسَلَ; verbal noun: غَسْل",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَلْبَسُ",
-          "en": "I wear, I put on clothes",
-          "tr": "albasu",
-          "note": "past: لَبِسَ; related to مَلَابِس clothes",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَلَابِس",
-          "en": "clothes, clothing",
-          "tr": "malābis",
-          "note": "plural of مَلْبَس",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَعُودُ",
-          "en": "I return, I go back",
-          "tr": "aʿūdu",
-          "note": "past: عَادَ; root ع-و-د",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَتَنَاوَلُ",
-          "en": "I eat / have (a meal)",
-          "tr": "atanāwalu",
-          "note": "used for eating meals: أَتَنَاوَلُ الفَطُورَ",
-          "from": "teacher"
-        },
-        {
-          "ar": "الفَطُور",
-          "en": "breakfast",
-          "tr": "al-faṭūr",
-          "note": "the morning meal that breaks the fast (root ف-ط-ر)",
-          "from": "teacher"
-        },
-        {
-          "ar": "صَحِيفَة",
-          "en": "newspaper",
-          "tr": "ṣaḥīfa",
-          "note": "plural: صُحُف ṣuḥuf (as in صُحُفِ إِبْرَاهِيمَ وَمُوسَى)",
-          "from": "teacher"
-        },
-        {
-          "ar": "التِّلْفَاز",
-          "en": "television",
-          "tr": "at-tilfāz",
-          "note": "وَأُشَاهِدُ التِّلْفَازَ قَلِيلًا — and I watch TV a little",
-          "from": "teacher"
-        },
-        {
-          "ar": "أُسَاعِدُ",
-          "en": "I help, I assist",
-          "tr": "usāʿidu",
-          "note": "أُسَاعِدُ أُمِّي — I help my mother",
-          "from": "teacher"
-        },
-        {
-          "ar": "كَنَس",
-          "en": "sweeping",
-          "tr": "kanas",
-          "note": "verbal noun; كَنَسُ البَيْتِ — sweeping the house",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَطْبَاق",
-          "en": "dishes, plates",
-          "tr": "aṭbāq",
-          "note": "plural of طَبَق ṭabaq; غَسْلُ الأَطْبَاقِ — washing dishes",
-          "from": "teacher"
-        },
-        {
-          "ar": "حَفْلَة",
-          "en": "party, gathering",
-          "tr": "ḥafla",
-          "note": "plural: حَفَلَات",
-          "from": "teacher"
-        },
-        {
-          "ar": "رِحْلَة",
-          "en": "trip, journey, excursion",
-          "tr": "riḥla",
-          "note": "Surah Quraysh: رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
-          "from": "teacher"
-        },
-        {
-          "ar": "أُرَتِّبُ",
-          "en": "I arrange, I tidy up",
-          "tr": "urattibu",
-          "note": "أُرَتِّبُ مَلَابِسِي — I tidy my clothes",
-          "from": "teacher"
-        },
-        {
-          "ar": "أَنَامُ",
-          "en": "I sleep",
-          "tr": "anāmu",
-          "note": "قَبْلَ أَنْ أَنَامَ — before I sleep",
-          "from": "teacher"
-        }
-      ]
-    },
-    {
-      "id": "lesson-muawwidhatayn",
-      "title": "المُعَوِّذَتَانِ — مَفَاهِيمُ قُرْآنِيَّةٌ",
-      "theme": "Deep protection concepts: Surah Al-Falaq & An-Nas (class, 27 Sep)",
-      "lesson": "Class — 27 Sep: surah falaq and nas",
-      "members": [
-        {
-          "ar": "أَعُوذُ",
-          "en": "I seek refuge (Isti'ādhah — fleeing to ultimate Sanctuary)",
-          "tr": "aʿūdhu",
-          "note": "Takes مِنْ (from evil/fear) into بِـ (Allah's fortress); total surrender to the Protector",
-          "from": "teacher"
-        },
-        {
-          "ar": "الْفَلَق",
-          "en": "The Daybreak (the violent cleaving of pitch darkness by light)",
-          "tr": "al-falaq",
-          "note": "Root ف-ل-ق: Allah violently splits the darkest night with dawn, and can split any entanglement",
-          "from": "teacher"
-        },
-        {
-          "ar": "غَاسِق",
-          "en": "Intense nightfall (night when it completely darkens and settles)",
-          "tr": "ghāsiq",
-          "note": "Teacher: دَخَلَ الليل وأظلم — when light vanishes and vulnerabilities peak",
-          "from": "teacher"
-        },
-        {
-          "ar": "وَقَبَ",
-          "en": "Penetrating completely (darkness entering and filling all things)",
-          "tr": "waqab",
-          "note": "Teacher: دَخَلَ ظَلَامٌ في كُلِّ شَيْءٍ — darkness falling into every crevice and room",
-          "from": "teacher"
-        },
-        {
-          "ar": "النَّفَّاثَات",
-          "en": "Those blowing with spittle upon knots (sorcery & occult binding)",
-          "tr": "an-naffāthāt",
-          "note": "Teacher: النساء السواحر ينفثن في عقد الخيط عندما يسحرون — blowing moisture while knotting cords",
-          "from": "teacher"
-        },
-        {
-          "ar": "عُقَد",
-          "en": "Knots (knots in thread & tangled knots of life)",
-          "tr": "ʿuqad",
-          "note": "Plural of عُقْدَة — physical knotted cords and emotional/life entanglements",
-          "from": "teacher"
-        },
-        {
-          "ar": "حَاسِد",
-          "en": "Envier (one who maliciously wishes blessings stripped from others)",
-          "tr": "ḥāsid",
-          "note": "Teacher: 'envier who wish evil on other' — refuge sought specifically إِذَا حَسَدَ (when enacted)",
-          "from": "teacher"
-        },
-        {
-          "ar": "الْوَسْوَاس",
-          "en": "The repetitive whisperer (subtle, continuous evil promptings)",
-          "tr": "al-waswās",
-          "note": "Onomatopoeic intensive fa'lāl pattern: recurring whispers disguised as one's own thoughts",
-          "from": "teacher"
-        },
-        {
-          "ar": "الْخَنَّاس",
-          "en": "The slinker (retreating upon dhikr, slinking back upon heedlessness)",
-          "tr": "al-khannās",
-          "note": "Teacher: 'the sneaky' — cowers and withdraws when Allah is remembered, ambushes when forgetful",
-          "from": "teacher"
-        },
-        {
-          "ar": "صُدُور",
-          "en": "Chests (the outer courtyard surrounding the heart / قَلْب)",
-          "tr": "ṣudūr",
-          "note": "Plural of صَدْر — the outer perimeter where waswas strikes; it cannot enter the qalb without invitation",
-          "from": "teacher"
-        },
-        {
-          "ar": "مَلِك",
-          "en": "Sovereign King (supreme ruler, distinct from مَالِك owner)",
-          "tr": "malik",
-          "note": "Teacher: distinguished مَلِك (King who commands subjects) from مَالِك (owner of possessions)",
-          "from": "teacher"
-        },
-        {
-          "ar": "النَّاس",
-          "en": "Humankind, people (in their shared vulnerability & forgetfulness)",
-          "tr": "an-nās",
-          "note": "Teacher: 'people / humankind' — repeated 5 times in Surah An-Nas to emphasize universal need",
-          "from": "teacher"
-        }
-      ]
+     "ar": "زَوْجَة",
+     "en": "wife",
+     "tr": "zawja",
+     "from": "complete"
     }
-  ]
+   ],
+   "lesson": "Class — 30 Aug: the flat, the week, the family"
+  },
+  {
+   "id": "home",
+   "title": "البَيْت وَالأَشْياء",
+   "theme": "Around the house & things you carry (Bayna Yadayk, Unit 1)",
+   "source": "teacher",
+   "book": "aby",
+   "unit": "aby1-u1",
+   "members": [
+    {
+     "ar": "حَمّام",
+     "tr": "ḥammām",
+     "en": "bathroom"
+    },
+    {
+     "ar": "غُرْفَة",
+     "tr": "ghurfa",
+     "en": "room"
+    },
+    {
+     "ar": "صُورَة",
+     "tr": "ṣūra",
+     "en": "picture"
+    },
+    {
+     "ar": "مِعْطَف",
+     "tr": "miʿṭaf",
+     "en": "coat"
+    },
+    {
+     "ar": "نَظَّارَة",
+     "tr": "naẓẓāra",
+     "en": "glasses (spectacles)"
+    },
+    {
+     "ar": "شَجَرَة",
+     "tr": "shajara",
+     "en": "tree"
+    }
+   ]
+  },
+  {
+   "id": "worship",
+   "title": "العِبادَة اليَوْمِيَّة",
+   "theme": "Words from your day's worship (Bayna Yadayk, Unit 1)",
+   "source": "teacher",
+   "book": "aby",
+   "unit": "aby1-u1",
+   "members": [
+    {
+     "ar": "أَذانُ الفَجْر",
+     "tr": "adhān al-fajr",
+     "en": "the dawn call to prayer"
+    },
+    {
+     "ar": "تَوَضَّأَ / يَتَوَضَّأُ",
+     "tr": "tawaḍḍaʾa / yatawaḍḍaʾu",
+     "en": "did / does wudu (ablution)"
+    },
+    {
+     "ar": "مَسْجِد",
+     "tr": "masjid",
+     "en": "mosque"
+    },
+    {
+     "ar": "مُصَلّى",
+     "tr": "muṣallā",
+     "en": "prayer area; musalla"
+    },
+    {
+     "ar": "رَسُول",
+     "tr": "rasūl",
+     "en": "messenger (the Prophet ﷺ)"
+    },
+    {
+     "ar": "هَيّا بِنا",
+     "tr": "hayyā binā",
+     "en": "let's go!"
+    },
+    {
+     "ar": "اللهُ أَكْبَر",
+     "tr": "allāhu akbar",
+     "en": "Allah is the greatest"
+    },
+    {
+     "ar": "ما شاءَ الله",
+     "tr": "mā shāʾa llāh",
+     "en": "mashaAllah (said in admiration)"
+    },
+    {
+     "ar": "صَلَّى اللهُ عَلَيْهِ وَسَلَّم",
+     "tr": "ṣallā llāhu ʿalayhi wa-sallam",
+     "en": "may Allah bless him & grant him peace"
+    }
+   ]
+  },
+  {
+   "id": "greetings",
+   "title": "التَّحِيَّات",
+   "theme": "Greetings & politeness — the first things out of your mouth",
+   "members": [
+    {
+     "ar": "السَّلَامُ عَلَيْكُمْ",
+     "tr": "as-salāmu ʿalaykum",
+     "en": "peace be upon you (hello)"
+    },
+    {
+     "ar": "وَعَلَيْكُمُ السَّلَام",
+     "tr": "wa-ʿalaykumu s-salām",
+     "en": "and upon you peace (the reply)"
+    },
+    {
+     "ar": "صَبَاح الخَيْر",
+     "tr": "ṣabāḥ al-khayr",
+     "en": "good morning"
+    },
+    {
+     "ar": "مَسَاء الخَيْر",
+     "tr": "masāʾ al-khayr",
+     "en": "good evening"
+    },
+    {
+     "ar": "شُكْرًا",
+     "tr": "shukran",
+     "en": "thank you"
+    },
+    {
+     "ar": "عَفْوًا",
+     "tr": "ʿafwan",
+     "en": "you're welcome; excuse me"
+    },
+    {
+     "ar": "مِنْ فَضْلِكَ",
+     "tr": "min faḍlika",
+     "en": "please"
+    },
+    {
+     "ar": "آسِف",
+     "tr": "āsif",
+     "en": "sorry"
+    },
+    {
+     "ar": "مَعَ السَّلَامَة",
+     "tr": "maʿa s-salāma",
+     "en": "goodbye"
+    }
+   ]
+  },
+  {
+   "id": "questions",
+   "title": "أَدَوَات الاِسْتِفْهَام",
+   "theme": "Question words — unlock every conversation",
+   "members": [
+    {
+     "ar": "مَاذَا",
+     "tr": "mādhā",
+     "en": "what?",
+     "hear": "إيش؟ — ēsh"
+    },
+    {
+     "ar": "مَنْ",
+     "tr": "man",
+     "en": "who?"
+    },
+    {
+     "ar": "أَيْنَ",
+     "tr": "ayna",
+     "en": "where?",
+     "hear": "وين؟ — wēn"
+    },
+    {
+     "ar": "مَتَى",
+     "tr": "matā",
+     "en": "when?"
+    },
+    {
+     "ar": "كَيْفَ",
+     "tr": "kayfa",
+     "en": "how?"
+    },
+    {
+     "ar": "لِمَاذَا",
+     "tr": "limādhā",
+     "en": "why?",
+     "hear": "ليش؟ — lēsh"
+    },
+    {
+     "ar": "كَمْ",
+     "tr": "kam",
+     "en": "how many? how much?"
+    },
+    {
+     "ar": "هَلْ",
+     "tr": "hal",
+     "en": "(opens a yes/no question)"
+    },
+    {
+     "ar": "أَيّ",
+     "tr": "ayy",
+     "en": "which?"
+    }
+   ]
+  },
+  {
+   "id": "numbers",
+   "title": "الأَرْقَام",
+   "theme": "Numbers 1–10",
+   "members": [
+    {
+     "ar": "وَاحِد",
+     "tr": "wāḥid",
+     "en": "one"
+    },
+    {
+     "ar": "اِثْنَان",
+     "tr": "ithnān",
+     "en": "two"
+    },
+    {
+     "ar": "ثَلَاثَة",
+     "tr": "thalātha",
+     "en": "three"
+    },
+    {
+     "ar": "أَرْبَعَة",
+     "tr": "arbaʿa",
+     "en": "four"
+    },
+    {
+     "ar": "خَمْسَة",
+     "tr": "khamsa",
+     "en": "five"
+    },
+    {
+     "ar": "سِتَّة",
+     "tr": "sitta",
+     "en": "six"
+    },
+    {
+     "ar": "سَبْعَة",
+     "tr": "sabʿa",
+     "en": "seven"
+    },
+    {
+     "ar": "ثَمَانِيَة",
+     "tr": "thamāniya",
+     "en": "eight"
+    },
+    {
+     "ar": "تِسْعَة",
+     "tr": "tisʿa",
+     "en": "nine"
+    },
+    {
+     "ar": "عَشَرَة",
+     "tr": "ʿashara",
+     "en": "ten"
+    }
+   ]
+  },
+  {
+   "id": "time",
+   "title": "كَلِمَات الوَقْت",
+   "theme": "Time words — now, today, tomorrow",
+   "members": [
+    {
+     "ar": "الآن",
+     "tr": "al-ān",
+     "en": "now"
+    },
+    {
+     "ar": "اليَوْم",
+     "tr": "al-yawm",
+     "en": "today"
+    },
+    {
+     "ar": "غَدًا",
+     "tr": "ghadan",
+     "en": "tomorrow"
+    },
+    {
+     "ar": "أَمْسِ",
+     "tr": "amsi",
+     "en": "yesterday"
+    },
+    {
+     "ar": "دَائِمًا",
+     "tr": "dāʾiman",
+     "en": "always"
+    },
+    {
+     "ar": "أَحْيَانًا",
+     "tr": "aḥyānan",
+     "en": "sometimes"
+    },
+    {
+     "ar": "قَرِيبًا",
+     "tr": "qarīban",
+     "en": "soon"
+    },
+    {
+     "ar": "مُبَكِّرًا",
+     "tr": "mubakkiran",
+     "en": "early"
+    },
+    {
+     "ar": "مُتَأَخِّرًا",
+     "tr": "mutaʾakhkhiran",
+     "en": "late"
+    }
+   ]
+  },
+  {
+   "id": "want-need",
+   "title": "أُرِيد وَأَحْتَاج",
+   "theme": "Wanting, needing, being able — the engine of speaking",
+   "members": [
+    {
+     "ar": "أُرِيدُ",
+     "tr": "urīdu",
+     "en": "I want",
+     "hear": "أبغى — abgha"
+    },
+    {
+     "ar": "أَحْتَاجُ إِلَى",
+     "tr": "aḥtāju ilā",
+     "en": "I need"
+    },
+    {
+     "ar": "أَسْتَطِيعُ",
+     "tr": "astaṭīʿu",
+     "en": "I can, I am able",
+     "hear": "أقدر — agdar"
+    },
+    {
+     "ar": "يَجِبُ أَنْ",
+     "tr": "yajibu an",
+     "en": "I must; it is necessary that"
+    },
+    {
+     "ar": "أَعْرِفُ",
+     "tr": "aʿrifu",
+     "en": "I know"
+    },
+    {
+     "ar": "أَفْهَمُ",
+     "tr": "afhamu",
+     "en": "I understand"
+    },
+    {
+     "ar": "أُحِبُّ",
+     "tr": "uḥibbu",
+     "en": "I like; I love"
+    },
+    {
+     "ar": "أَظُنُّ",
+     "tr": "aẓunnu",
+     "en": "I think"
+    }
+   ]
+  },
+  {
+   "id": "people",
+   "title": "النَّاس وَالضَّمَائِر",
+   "theme": "People & pronouns",
+   "members": [
+    {
+     "ar": "أَنَا",
+     "tr": "ana",
+     "en": "I"
+    },
+    {
+     "ar": "أَنْتَ",
+     "tr": "anta",
+     "en": "you (to a man)"
+    },
+    {
+     "ar": "أَنْتِ",
+     "tr": "anti",
+     "en": "you (to a woman)"
+    },
+    {
+     "ar": "هُوَ",
+     "tr": "huwa",
+     "en": "he"
+    },
+    {
+     "ar": "هِيَ",
+     "tr": "hiya",
+     "en": "she"
+    },
+    {
+     "ar": "نَحْنُ",
+     "tr": "naḥnu",
+     "en": "we"
+    },
+    {
+     "ar": "هُمْ",
+     "tr": "hum",
+     "en": "they"
+    },
+    {
+     "ar": "رَجُل",
+     "tr": "rajul",
+     "en": "man"
+    },
+    {
+     "ar": "اِمْرَأَة",
+     "tr": "imraʾa",
+     "en": "woman"
+    },
+    {
+     "ar": "صَدِيق",
+     "tr": "ṣadīq",
+     "en": "friend"
+    }
+   ]
+  },
+  {
+   "id": "opposites",
+   "title": "الأَضْدَاد",
+   "theme": "Adjective opposites — learned in pairs, remembered forever",
+   "members": [
+    {
+     "ar": "جَدِيد / قَدِيم",
+     "tr": "jadīd / qadīm",
+     "en": "new / old"
+    },
+    {
+     "ar": "جَيِّد / سَيِّئ",
+     "tr": "jayyid / sayyiʾ",
+     "en": "good / bad"
+    },
+    {
+     "ar": "سَهْل / صَعْب",
+     "tr": "sahl / ṣaʿb",
+     "en": "easy / difficult"
+    },
+    {
+     "ar": "سَرِيع / بَطِيء",
+     "tr": "sarīʿ / baṭīʾ",
+     "en": "fast / slow"
+    },
+    {
+     "ar": "قَرِيب / بَعِيد",
+     "tr": "qarīb / baʿīd",
+     "en": "near / far"
+    },
+    {
+     "ar": "غَالٍ / رَخِيص",
+     "tr": "ghālin / rakhīṣ",
+     "en": "expensive / cheap"
+    },
+    {
+     "ar": "حَارّ / بَارِد",
+     "tr": "ḥārr / bārid",
+     "en": "hot / cold"
+    },
+    {
+     "ar": "وَاسِع / ضَيِّق",
+     "en": "spacious / narrow",
+     "tr": "wāsiʿ / ḍayyiq",
+     "note": "الوَاسِع is also a name of Allah",
+     "from": "teacher"
+    },
+    {
+     "ar": "هَادِئ / مُزْعِج",
+     "en": "quiet / noisy",
+     "tr": "hādiʾ / muzʿij",
+     "note": "the passage ends وَالحَيُّ هَادِئٌ",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "glue",
+   "title": "كَلِمَات الرَّبْط",
+   "theme": "Conversation glue — yes, no, maybe, but, because",
+   "members": [
+    {
+     "ar": "نَعَمْ",
+     "tr": "naʿam",
+     "en": "yes"
+    },
+    {
+     "ar": "طَبْعًا",
+     "tr": "ṭabʿan",
+     "en": "of course"
+    },
+    {
+     "ar": "مُمْكِن",
+     "tr": "mumkin",
+     "en": "possible; maybe"
+    },
+    {
+     "ar": "رُبَّمَا",
+     "tr": "rubbamā",
+     "en": "perhaps"
+    },
+    {
+     "ar": "لَكِنْ",
+     "tr": "lākin",
+     "en": "but"
+    },
+    {
+     "ar": "لِأَنَّ",
+     "tr": "liʾanna",
+     "en": "because"
+    },
+    {
+     "ar": "إِذَنْ",
+     "tr": "idhan",
+     "en": "so, in that case"
+    },
+    {
+     "ar": "يَعْنِي",
+     "tr": "yaʿnī",
+     "en": "meaning...; I mean"
+    },
+    {
+     "ar": "طَيِّب",
+     "tr": "ṭayyib",
+     "en": "okay, fine"
+    },
+    {
+     "ar": "أَنْ",
+     "tr": "an",
+     "en": "to (before verbs); that",
+     "note": "connects wanted to / like to / must to a verb: أَرَادَ أَنْ يَبْحَثَ"
+    },
+    {
+     "ar": "عَنْ",
+     "tr": "ʿan",
+     "en": "about; for (with search / ask)",
+     "note": "pairs with searching or asking: يَبْحَثُ عَنْ (searches for)"
+    }
+   ]
+  },
+  {
+   "id": "commands",
+   "title": "أَوَامِر يَوْمِيَّة",
+   "theme": "Daily commands — give me, take, come, look",
+   "members": [
+    {
+     "ar": "أَعْطِنِي",
+     "tr": "aʿṭinī",
+     "en": "give me"
+    },
+    {
+     "ar": "خُذْ",
+     "tr": "khudh",
+     "en": "take!"
+    },
+    {
+     "ar": "تَعَالَ",
+     "tr": "taʿāla",
+     "en": "come!"
+    },
+    {
+     "ar": "اِذْهَبْ",
+     "tr": "idhhab",
+     "en": "go!"
+    },
+    {
+     "ar": "اُنْظُرْ",
+     "tr": "unẓur",
+     "en": "look!"
+    },
+    {
+     "ar": "اِسْمَعْ",
+     "tr": "ismaʿ",
+     "en": "listen!"
+    },
+    {
+     "ar": "قُلْ لِي",
+     "tr": "qul lī",
+     "en": "tell me"
+    },
+    {
+     "ar": "اِنْتَظِرْ",
+     "tr": "intaẓir",
+     "en": "wait!"
+    }
+   ]
+  },
+  {
+   "id": "food",
+   "title": "الطَّعَام وَالشَّرَاب",
+   "theme": "Food & drink essentials",
+   "members": [
+    {
+     "ar": "مَاء",
+     "tr": "māʾ",
+     "en": "water"
+    },
+    {
+     "ar": "لَحْم",
+     "tr": "laḥm",
+     "en": "meat"
+    },
+    {
+     "ar": "دَجَاج",
+     "tr": "dajāj",
+     "en": "chicken"
+    },
+    {
+     "ar": "أَرُزّ",
+     "tr": "aruzz",
+     "en": "rice"
+    },
+    {
+     "ar": "حَلِيب",
+     "tr": "ḥalīb",
+     "en": "milk"
+    },
+    {
+     "ar": "فَاكِهَة",
+     "tr": "fākiha",
+     "en": "fruit"
+    },
+    {
+     "ar": "جَائِع",
+     "tr": "jāʾiʿ",
+     "en": "hungry"
+    },
+    {
+     "ar": "عَطْشَان",
+     "tr": "ʿaṭshān",
+     "en": "thirsty"
+    },
+    {
+     "ar": "الحِسَاب",
+     "tr": "al-ḥisāb",
+     "en": "the bill"
+    }
+   ]
+  },
+  {
+   "id": "directions",
+   "title": "الاِتِّجَاهَات",
+   "theme": "Umrah: directions & navigating — find any gate, floor or exit",
+   "members": [
+    {
+     "ar": "يَمِين",
+     "tr": "yamīn",
+     "en": "right"
+    },
+    {
+     "ar": "يَسَار",
+     "tr": "yasār",
+     "en": "left"
+    },
+    {
+     "ar": "عَلَى طُول",
+     "tr": "ʿalā ṭūl",
+     "en": "straight ahead"
+    },
+    {
+     "ar": "بَاب",
+     "tr": "bāb",
+     "en": "gate; door"
+    },
+    {
+     "ar": "الدَّوْر",
+     "tr": "ad-dawr",
+     "en": "the floor, level"
+    },
+    {
+     "ar": "فَوْق",
+     "tr": "fawq",
+     "en": "upstairs; above"
+    },
+    {
+     "ar": "تَحْت",
+     "tr": "taḥt",
+     "en": "downstairs; below"
+    },
+    {
+     "ar": "مَدْخَل",
+     "tr": "madkhal",
+     "en": "entrance"
+    },
+    {
+     "ar": "مَخْرَج",
+     "tr": "makhraj",
+     "en": "exit"
+    },
+    {
+     "ar": "كَيْفَ أَصِلُ إِلَى",
+     "tr": "kayfa aṣilu ilā",
+     "en": "how do I get to…?",
+     "hear": "كيف أروح لـ…؟ — kēf arūḥ la…"
+    }
+   ]
+  },
+  {
+   "id": "haram",
+   "title": "فِي الحَرَم",
+   "theme": "Umrah: inside the Haram — the rites and the places",
+   "members": [
+    {
+     "ar": "الحَرَم",
+     "tr": "al-ḥaram",
+     "en": "the Sanctuary (Haram)"
+    },
+    {
+     "ar": "الكَعْبَة",
+     "tr": "al-kaʿba",
+     "en": "the Kaaba"
+    },
+    {
+     "ar": "الطَّوَاف",
+     "tr": "aṭ-ṭawāf",
+     "en": "tawaf — circling the Kaaba"
+    },
+    {
+     "ar": "السَّعْي",
+     "tr": "as-saʿy",
+     "en": "sa'i — walking Safa to Marwa"
+    },
+    {
+     "ar": "الصَّفَا وَالمَرْوَة",
+     "tr": "aṣ-ṣafā wal-marwa",
+     "en": "Safa and Marwa"
+    },
+    {
+     "ar": "زَمْزَم",
+     "tr": "zamzam",
+     "en": "Zamzam water"
+    },
+    {
+     "ar": "العُمْرَة",
+     "tr": "al-ʿumra",
+     "en": "Umrah"
+    },
+    {
+     "ar": "الإِحْرَام",
+     "tr": "al-iḥrām",
+     "en": "ihram (the pilgrim state/garments)"
+    },
+    {
+     "ar": "مَقَام إِبْرَاهِيم",
+     "tr": "maqām ibrāhīm",
+     "en": "the Station of Ibrahim"
+    },
+    {
+     "ar": "المَطَاف",
+     "tr": "al-maṭāf",
+     "en": "the tawaf area"
+    }
+   ]
+  },
+  {
+   "id": "shopping",
+   "title": "التَّسَوُّق",
+   "theme": "Umrah: shopping & bargaining — souks, dates and gifts",
+   "members": [
+    {
+     "ar": "بِكَمْ هَذَا؟",
+     "tr": "bikam hādhā?",
+     "en": "how much is this?",
+     "hear": "بكم هادا؟ — bikam hāda"
+    },
+    {
+     "ar": "غَالٍ جِدًّا",
+     "tr": "ghālin jiddan",
+     "en": "too expensive",
+     "hear": "غالي مرة — ghāli marra"
+    },
+    {
+     "ar": "نَزِّلِ السِّعْرَ",
+     "tr": "nazzil as-siʿr",
+     "en": "lower the price",
+     "hear": "نزّل شوي — nazzil shwayy"
+    },
+    {
+     "ar": "هَلْ عِنْدَكَ",
+     "tr": "hal ʿindaka",
+     "en": "do you have…?",
+     "hear": "عندك…؟ — ʿindak…?"
+    },
+    {
+     "ar": "أُرِيدُ أَنْ أَشْتَرِيَ",
+     "tr": "urīdu an ashtariya",
+     "en": "I want to buy"
+    },
+    {
+     "ar": "هَدِيَّة",
+     "tr": "hadiyya",
+     "en": "gift"
+    },
+    {
+     "ar": "تَمْر",
+     "tr": "tamr",
+     "en": "dates"
+    },
+    {
+     "ar": "مَقَاس",
+     "tr": "maqās",
+     "en": "size"
+    },
+    {
+     "ar": "آخُذُهُ",
+     "tr": "ākhudhuhu",
+     "en": "I'll take it"
+    },
+    {
+     "ar": "مَجَّانًا",
+     "tr": "majjānan",
+     "en": "for free"
+    }
+   ]
+  },
+  {
+   "id": "medical",
+   "title": "الصِّحَّة وَالصَّيْدَلِيَّة",
+   "theme": "Umrah: medical help & the pharmacy",
+   "members": [
+    {
+     "ar": "أَحْتَاجُ طَبِيبًا",
+     "tr": "aḥtāju ṭabīban",
+     "en": "I need a doctor",
+     "hear": "أبغى دكتور — abgha duktōr"
+    },
+    {
+     "ar": "صَيْدَلِيَّة",
+     "tr": "ṣaydaliyya",
+     "en": "pharmacy"
+    },
+    {
+     "ar": "دَوَاء",
+     "tr": "dawāʾ",
+     "en": "medicine"
+    },
+    {
+     "ar": "مَرِيض",
+     "tr": "marīḍ",
+     "en": "sick, ill"
+    },
+    {
+     "ar": "أَلَم",
+     "tr": "alam",
+     "en": "pain"
+    },
+    {
+     "ar": "حَرَارَة",
+     "tr": "ḥarāra",
+     "en": "fever"
+    },
+    {
+     "ar": "يُؤْلِمُنِي",
+     "tr": "yuʾlimunī",
+     "en": "it hurts me"
+    },
+    {
+     "ar": "حَسَّاسِيَّة",
+     "tr": "ḥassāsiyya",
+     "en": "allergy"
+    },
+    {
+     "ar": "إِسْعَاف",
+     "tr": "isʿāf",
+     "en": "ambulance"
+    },
+    {
+     "ar": "عِنْدِي سُكَّرِيّ",
+     "tr": "ʿindī sukkarī",
+     "en": "I'm diabetic"
+    }
+   ]
+  },
+  {
+   "id": "hotel-taxi",
+   "title": "الفُنْدُق وَالمُوَاصَلَات",
+   "theme": "Umrah: hotel, taxi & getting around",
+   "members": [
+    {
+     "ar": "فُنْدُق",
+     "tr": "funduq",
+     "en": "hotel"
+    },
+    {
+     "ar": "حَجْز",
+     "tr": "ḥajz",
+     "en": "reservation, booking"
+    },
+    {
+     "ar": "مِفْتَاح",
+     "tr": "miftāḥ",
+     "en": "key"
+    },
+    {
+     "ar": "خُذْنِي إِلَى",
+     "tr": "khudhnī ilā",
+     "en": "take me to…",
+     "hear": "ودّيني — waddīni"
+    },
+    {
+     "ar": "قِفْ هُنَا",
+     "tr": "qif hunā",
+     "en": "stop here",
+     "hear": "وقّف هنا — waggif hina"
+    },
+    {
+     "ar": "كَمِ الأُجْرَة؟",
+     "tr": "kam al-ujra?",
+     "en": "how much is the fare?",
+     "hear": "بكم التوصيلة؟ — bikam at-tawṣīla"
+    },
+    {
+     "ar": "مَحَطَّة",
+     "tr": "maḥaṭṭa",
+     "en": "station"
+    },
+    {
+     "ar": "حَافِلَة",
+     "tr": "ḥāfila",
+     "en": "bus"
+    },
+    {
+     "ar": "مَطَار",
+     "tr": "maṭār",
+     "en": "airport"
+    },
+    {
+     "ar": "أَمْتِعَة",
+     "tr": "amtiʿa",
+     "en": "luggage"
+    },
+    {
+     "ar": "خِدْمَة",
+     "en": "service",
+     "tr": "khidma",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "help",
+   "title": "المُسَاعَدَة",
+   "theme": "Umrah: asking for help & emergencies",
+   "members": [
+    {
+     "ar": "سَاعِدْنِي",
+     "tr": "sāʿidnī",
+     "en": "help me!"
+    },
+    {
+     "ar": "أَنَا تَائِه",
+     "tr": "anā tāʾih",
+     "en": "I'm lost",
+     "hear": "أنا ضايع — ana ḍāyiʿ"
+    },
+    {
+     "ar": "جَوَاز سَفَرِي",
+     "tr": "jawāz safarī",
+     "en": "my passport"
+    },
+    {
+     "ar": "شُرْطَة",
+     "tr": "shurṭa",
+     "en": "police"
+    },
+    {
+     "ar": "هَلْ تَتَكَلَّمُ الإِنْجْلِيزِيَّة؟",
+     "tr": "hal tatakallamu l-injlīziyya?",
+     "en": "do you speak English?"
+    },
+    {
+     "ar": "تَكَلَّمْ بِبُطْءٍ",
+     "tr": "takallam bibuṭʾ",
+     "en": "speak slowly",
+     "hear": "على مهلك — ʿala mahlak"
+    },
+    {
+     "ar": "أَعِدْ مِنْ فَضْلِكَ",
+     "tr": "aʿid min faḍlik",
+     "en": "repeat, please",
+     "hear": "مرة ثانية — marra thānya"
+    },
+    {
+     "ar": "لَا أَتَكَلَّمُ العَرَبِيَّةَ جَيِّدًا",
+     "tr": "lā atakallamu l-ʿarabiyya jayyidan",
+     "en": "I don't speak Arabic well"
+    },
+    {
+     "ar": "مَفْقُود",
+     "tr": "mafqūd",
+     "en": "lost, missing"
+    },
+    {
+     "ar": "طَوَارِئ",
+     "tr": "ṭawāriʾ",
+     "en": "emergency"
+    }
+   ]
+  },
+  {
+   "id": "masjid",
+   "title": "فِي المَسْجِد",
+   "theme": "What the imam says — line up, prayer calls, janazah",
+   "members": [
+    {
+     "ar": "اِسْتَوُوا",
+     "tr": "istawū",
+     "en": "straighten up! (the lines)"
+    },
+    {
+     "ar": "اِعْتَدِلُوا",
+     "tr": "iʿtadilū",
+     "en": "align yourselves!"
+    },
+    {
+     "ar": "سَوُّوا صُفُوفَكُمْ",
+     "tr": "sawwū ṣufūfakum",
+     "en": "straighten your rows"
+    },
+    {
+     "ar": "سُدُّوا الخَلَل",
+     "tr": "suddū l-khalal",
+     "en": "close the gaps"
+    },
+    {
+     "ar": "تَقَدَّمُوا",
+     "tr": "taqaddamū",
+     "en": "move forward!"
+    },
+    {
+     "ar": "أَتِمُّوا الصَّفَّ الأَوَّل",
+     "tr": "atimmū ṣ-ṣaff al-awwal",
+     "en": "complete the first row"
+    },
+    {
+     "ar": "الإِقَامَة",
+     "tr": "al-iqāma",
+     "en": "the iqama (call to start prayer)"
+    },
+    {
+     "ar": "قَدْ قَامَتِ الصَّلَاة",
+     "tr": "qad qāmati ṣ-ṣalāh",
+     "en": "the prayer has begun (from the iqama)"
+    },
+    {
+     "ar": "الصَّلَاةُ جَامِعَة",
+     "tr": "aṣ-ṣalātu jāmiʿa",
+     "en": "congregational prayer is gathering (special-prayer call)"
+    },
+    {
+     "ar": "صَلَاةُ الجِنَازَة",
+     "tr": "ṣalāt al-jināza",
+     "en": "the funeral (janazah) prayer"
+    }
+   ]
+  },
+  {
+   "id": "khutba",
+   "title": "خُطْبَة الجُمُعَة",
+   "theme": "Friday khutbah stock phrases — you hear these every single week",
+   "members": [
+    {
+     "ar": "إِنَّ الحَمْدَ لِلَّه",
+     "tr": "inna l-ḥamda lillāh",
+     "en": "indeed all praise is for Allah (khutbah opener)"
+    },
+    {
+     "ar": "أَمَّا بَعْدُ",
+     "tr": "ammā baʿd",
+     "en": "and now, to the point…"
+    },
+    {
+     "ar": "اِتَّقُوا اللَّه",
+     "tr": "ittaqū llāh",
+     "en": "be mindful of Allah!"
+    },
+    {
+     "ar": "عِبَادَ اللَّه",
+     "tr": "ʿibāda llāh",
+     "en": "O servants of Allah"
+    },
+    {
+     "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا",
+     "tr": "yā ayyuhā lladhīna āmanū",
+     "en": "O you who believe"
+    },
+    {
+     "ar": "قَالَ رَسُولُ اللَّه ﷺ",
+     "tr": "qāla rasūlu llāh",
+     "en": "the Messenger of Allah ﷺ said"
+    },
+    {
+     "ar": "صَلُّوا عَلَى النَّبِيّ",
+     "tr": "ṣallū ʿalā n-nabiyy",
+     "en": "send blessings upon the Prophet"
+    },
+    {
+     "ar": "أَقُولُ قَوْلِي هَذَا",
+     "tr": "aqūlu qawlī hādhā",
+     "en": "I say these words of mine… (closing)"
+    },
+    {
+     "ar": "أَسْتَغْفِرُ اللَّه",
+     "tr": "astaghfiru llāh",
+     "en": "I seek Allah's forgiveness"
+    },
+    {
+     "ar": "رَحِمَكُمُ اللَّه",
+     "tr": "raḥimakumu llāh",
+     "en": "may Allah have mercy on you"
+    }
+   ]
+  },
+  {
+   "id": "lesson-home",
+   "title": "الشَّقَّة وَالأَثَاث",
+   "theme": "Your flat — room by room (class, 30 Aug)",
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "members": [
+    {
+     "ar": "شَقَّة",
+     "en": "flat, apartment",
+     "tr": "shaqqa",
+     "note": "from شَقَّ to split — a part split off a building · plural: شُقَق shuqaq",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَثَاث",
+     "en": "furniture",
+     "tr": "athāth",
+     "note": "ماذا يُوجَدُ فِي بَيْتِكَ مِنَ الأَثَاثِ؟",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَطْبَخ",
+     "en": "kitchen",
+     "tr": "maṭbakh",
+     "note": "place-noun from طَبَخَ to cook · plural: مَطَابِخ maṭābikh",
+     "from": "teacher"
+    },
+    {
+     "ar": "غُرْفَةُ نَوْمٍ",
+     "en": "bedroom",
+     "tr": "ghurfatu nawm",
+     "note": "literally 'room of sleep' · plural of غُرْفَة: غُرَف ghuraf",
+     "from": "teacher"
+    },
+    {
+     "ar": "غُرْفَةُ جُلُوسٍ",
+     "en": "living room",
+     "tr": "ghurfatu julūs",
+     "note": "literally 'room of sitting'",
+     "from": "teacher"
+    },
+    {
+     "ar": "سَرِير",
+     "en": "bed",
+     "tr": "sarīr",
+     "from": "teacher",
+     "note": "plural: سُرُر surur — the next card"
+    },
+    {
+     "ar": "سُرُر",
+     "en": "beds",
+     "tr": "surur",
+     "note": "the plural she drilled — سَرِير becomes سُرُر",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَرِيكَة",
+     "en": "sofa",
+     "tr": "arīka",
+     "from": "teacher",
+     "note": "plural: أَرَائِك arāʾik — the next card"
+    },
+    {
+     "ar": "أَرَائِك",
+     "en": "sofas",
+     "tr": "arāʾik",
+     "note": "a broken plural; the same shape as خَزَائِن",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَائِدَة",
+     "en": "dining table",
+     "tr": "māʾida",
+     "note": "Surah 5 is named after it — المَائِدَة · plural: مَوَائِد mawāʾid",
+     "from": "teacher"
+    },
+    {
+     "ar": "كُرْسِيّ",
+     "en": "chair",
+     "tr": "kursī",
+     "note": "the same word as the كُرْسِيّ of Ayat al-Kursi · plural: كَرَاسِي karāsī — the next card",
+     "from": "teacher"
+    },
+    {
+     "ar": "كَرَاسِي",
+     "en": "chairs",
+     "tr": "karāsī",
+     "from": "teacher"
+    },
+    {
+     "ar": "خَزَانَة",
+     "en": "cupboard, closet",
+     "tr": "khazāna",
+     "from": "teacher",
+     "note": "plural: خَزَائِن khazāʾin — the next card"
+    },
+    {
+     "ar": "خَزَائِن",
+     "en": "cupboards; treasuries",
+     "tr": "khazāʾin",
+     "note": "her Quran link: وَلَا أَقُولُ لَكُمْ عِندِي خَزَائِنُ اللَّهِ",
+     "from": "teacher"
+    },
+    {
+     "ar": "ثَلَّاجَة",
+     "en": "fridge",
+     "tr": "thallāja",
+     "note": "from ثَلْج ice — the 'ice-maker' · plural: ثَلَّاجَات thallājāt",
+     "from": "teacher"
+    },
+    {
+     "ar": "فُرْن",
+     "en": "oven",
+     "tr": "furn",
+     "note": "also a bakery · plural: أَفْرَان afrān",
+     "from": "teacher"
+    },
+    {
+     "ar": "سِتَارَة",
+     "en": "curtain",
+     "tr": "sitāra",
+     "note": "her Quran link: اللهُ هُوَ السَّتَّار — the Concealer · plural: سَتَائِر satāʾir",
+     "from": "teacher"
+    },
+    {
+     "ar": "شُبَّاك",
+     "en": "window",
+     "tr": "shubbāk",
+     "note": "عِنْدِي سِتَارَةٌ لِلشُّبَّاكِ · plural: شَبَابِيك shabābīk",
+     "from": "teacher"
+    },
+    {
+     "ar": "سَجَّادَة",
+     "en": "carpet; prayer mat",
+     "tr": "sajjāda",
+     "note": "from سَجَدَ to prostrate — the thing you prostrate on · plural: سَجَاجِيد sajājīd",
+     "from": "teacher"
+    },
+    {
+     "ar": "مِرْآة",
+     "en": "mirror",
+     "tr": "mirʾāt",
+     "note": "instrument-noun from رَأَى to see · plural: مَرَايَا marāyā",
+     "from": "teacher"
+    },
+    {
+     "ar": "طَابِق",
+     "en": "floor, storey",
+     "tr": "ṭābiq",
+     "note": "كَمْ طَابِقٍ بَيْتُكَ؟ · plural: طَوَابِق ṭawābiq",
+     "from": "teacher"
+    },
+    {
+     "ar": "دَوْر",
+     "en": "floor, storey; turn",
+     "tr": "dawr",
+     "note": "the everyday alternative to طَابِق · plural: أَدْوَار adwār",
+     "from": "teacher"
+    },
+    {
+     "ar": "بَاب",
+     "en": "door",
+     "tr": "bāb",
+     "from": "complete",
+     "note": "plural: أَبْوَاب abwāb"
+    },
+    {
+     "ar": "مِصْبَاح",
+     "en": "lamp",
+     "tr": "miṣbāḥ",
+     "note": "from صُبْح dawn — light; the Quran's مِصْبَاح in Ayat an-Nur · plural: مَصَابِيح maṣābīḥ",
+     "from": "complete"
+    },
+    {
+     "ar": "سُلَّم",
+     "en": "stairs, ladder",
+     "tr": "sullam",
+     "from": "complete",
+     "note": "plural: سَلَالِم salālim"
+    },
+    {
+     "ar": "مِصْعَد",
+     "en": "lift, elevator",
+     "tr": "miṣʿad",
+     "note": "from صَعِدَ to go up · plural: مَصَاعِد maṣāʿid",
+     "from": "complete"
+    }
+   ]
+  },
+  {
+   "id": "lesson-week",
+   "title": "أَيَّام الأُسْبُوع",
+   "theme": "The days of the week (class, 30 Aug)",
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "members": [
+    {
+     "ar": "الأَحَد",
+     "en": "Sunday",
+     "tr": "al-aḥad",
+     "note": "from أَحَد one — day one",
+     "from": "teacher"
+    },
+    {
+     "ar": "الاثْنَيْن",
+     "en": "Monday",
+     "tr": "al-ithnayn",
+     "note": "from اثْنَان two",
+     "from": "teacher"
+    },
+    {
+     "ar": "الثُّلَاثَاء",
+     "en": "Tuesday",
+     "tr": "ath-thulāthāʾ",
+     "note": "from ثَلَاثَة three — the days are simply counted",
+     "from": "teacher"
+    },
+    {
+     "ar": "الأَرْبِعَاء",
+     "en": "Wednesday",
+     "tr": "al-arbiʿāʾ",
+     "note": "from أَرْبَعَة four",
+     "from": "teacher"
+    },
+    {
+     "ar": "الخَمِيس",
+     "en": "Thursday",
+     "tr": "al-khamīs",
+     "note": "from خَمْسَة five",
+     "from": "teacher"
+    },
+    {
+     "ar": "الجُمُعَة",
+     "en": "Friday",
+     "tr": "al-jumuʿa",
+     "note": "from جَمَعَ to gather — the day of gathering",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّبْت",
+     "en": "Saturday",
+     "tr": "as-sabt",
+     "note": "the day of rest — same root as 'sabbath'",
+     "from": "teacher"
+    },
+    {
+     "ar": "أُسْبُوع",
+     "en": "week",
+     "tr": "usbūʿ",
+     "from": "complete"
+    },
+    {
+     "ar": "عُطْلَة",
+     "en": "holiday, day off",
+     "tr": "ʿuṭla",
+     "from": "complete"
+    },
+    {
+     "ar": "يَوْمَ الثُّلَاثَاءِ",
+     "en": "on Tuesday",
+     "tr": "yawma th-thulāthāʾ",
+     "note": "'on a day' takes يَوْمَ + the day in the genitive",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "lesson-divine",
+   "title": "مِنَ البَيْتِ إِلَى القُرْآن",
+   "theme": "Where the household words meet the Quran (class, 30 Aug)",
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "members": [
+    {
+     "ar": "مَلَك",
+     "en": "angel",
+     "tr": "malak",
+     "note": "وَلَا أَقُولُ لَكُمْ إِنِّي مَلَكٌ — Quran 6:50, the verse she wrote out",
+     "from": "teacher"
+    },
+    {
+     "ar": "الغَيْب",
+     "en": "the unseen",
+     "tr": "al-ghayb",
+     "note": "وَلَا أَعْلَمُ الغَيْبَ — from the same verse",
+     "from": "teacher"
+    },
+    {
+     "ar": "الحَيّ",
+     "en": "the Ever-Living",
+     "tr": "al-ḥayy",
+     "note": "her line: اللهُ حَيٌّ لَا يَمُوتُ — and the same word as حَيّ 'neighbourhood'",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّتَّار",
+     "en": "the Concealer of faults",
+     "tr": "as-sattār",
+     "note": "her line: اللهُ هُوَ السَّتَّارُ — the root of سِتَارَة, a curtain",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَرَّة",
+     "en": "time, occasion",
+     "tr": "marra",
+     "note": "كَمْ مَرَّةً تَسْجُدُ فِي اليَوْمِ؟",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "lesson-weather",
+   "title": "الطَّقْس",
+   "theme": "Weather — the set ثَلْج belongs to",
+   "source": "teacher",
+   "lesson": "Class — 30 Aug: the flat, the week, the family",
+   "members": [
+    {
+     "ar": "ثَلْج",
+     "en": "snow; ice",
+     "tr": "thalj",
+     "note": "the root behind ثَلَّاجَة, a fridge",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَطَر",
+     "en": "rain",
+     "tr": "maṭar",
+     "from": "complete"
+    },
+    {
+     "ar": "شَمْس",
+     "en": "sun",
+     "tr": "shams",
+     "note": "Surah 91 is named after it",
+     "from": "complete"
+    },
+    {
+     "ar": "رِيح",
+     "en": "wind",
+     "tr": "rīḥ",
+     "from": "complete"
+    },
+    {
+     "ar": "سَحَاب",
+     "en": "clouds",
+     "tr": "saḥāb",
+     "from": "complete"
+    },
+    {
+     "ar": "جَوّ",
+     "en": "weather, air",
+     "tr": "jaww",
+     "from": "complete"
+    }
+   ]
+  },
+  {
+   "id": "lesson-routine",
+   "title": "يَوْمُ العَمَلِ وَالعُطْلَةِ",
+   "theme": "Daily routine, work day & weekend (class, 27 Sep)",
+   "lesson": "Class — 27 Sep: a working day",
+   "members": [
+    {
+     "ar": "عَمَل",
+     "en": "work, labour",
+     "tr": "ʿamal",
+     "note": "from عَمِلَ — to do, work; root ع-م-ل",
+     "from": "teacher"
+    },
+    {
+     "ar": "يَوْمُ العَمَلِ",
+     "en": "work day, working day",
+     "tr": "yawmu l-ʿamal",
+     "note": "iḍāfa: literally 'day of work'",
+     "from": "teacher"
+    },
+    {
+     "ar": "عُطْلَة",
+     "en": "day off, holiday, weekend",
+     "tr": "ʿuṭla",
+     "note": "يَوْمُ العُطْلَةِ — day of rest from work",
+     "from": "teacher"
+    },
+    {
+     "ar": "مُبَكِّرًا",
+     "en": "early",
+     "tr": "mubakkiran",
+     "note": "أَسْتَيْقِظُ مُبَكِّرًا — I wake up early",
+     "from": "teacher"
+    },
+    {
+     "ar": "مُتَأَخِّرًا",
+     "en": "late",
+     "tr": "mutaʾakhkhiran",
+     "note": "أَعُودُ مُتَأَخِّرًا — I return late",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّاعَةُ السَّابِعَةُ",
+     "en": "seven o'clock",
+     "tr": "as-sāʿatu s-sābiʿah",
+     "note": "hours use ordinal numbers",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّاعَةُ الثَّامِنَةُ",
+     "en": "eight o'clock",
+     "tr": "as-sāʿatu th-thāminah",
+     "note": "ordinal from ثَمَانِيَة",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّاعَةُ الثَّانِيَةَ عَشْرَةَ",
+     "en": "twelve o'clock",
+     "tr": "as-sāʿatu th-thāniyata ʿashrah",
+     "note": "twelve noon / midnight",
+     "from": "teacher"
+    },
+    {
+     "ar": "صَبَاحًا",
+     "en": "in the morning, AM",
+     "tr": "ṣabāḥan",
+     "note": "opposite of مَسَاءً in the evening",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَسْتَيْقِظُ",
+     "en": "I wake up",
+     "tr": "astayqiẓu",
+     "note": "present tense: أَسْتَيْقِظُ فِي السَّاعَةِ السَّابِعَةِ",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَغْسِلُ",
+     "en": "I wash",
+     "tr": "aghsilu",
+     "note": "past: غَسَلَ; verbal noun: غَسْل",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَلْبَسُ",
+     "en": "I wear, I put on clothes",
+     "tr": "albasu",
+     "note": "past: لَبِسَ; related to مَلَابِس clothes",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَلَابِس",
+     "en": "clothes, clothing",
+     "tr": "malābis",
+     "note": "plural of مَلْبَس",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَعُودُ",
+     "en": "I return, I go back",
+     "tr": "aʿūdu",
+     "note": "past: عَادَ; root ع-و-د",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَتَنَاوَلُ",
+     "en": "I eat / have (a meal)",
+     "tr": "atanāwalu",
+     "note": "used for eating meals: أَتَنَاوَلُ الفَطُورَ",
+     "from": "teacher"
+    },
+    {
+     "ar": "الفَطُور",
+     "en": "breakfast",
+     "tr": "al-faṭūr",
+     "note": "the morning meal that breaks the fast (root ف-ط-ر)",
+     "from": "teacher"
+    },
+    {
+     "ar": "صَحِيفَة",
+     "en": "newspaper",
+     "tr": "ṣaḥīfa",
+     "note": "plural: صُحُف ṣuḥuf (as in صُحُفِ إِبْرَاهِيمَ وَمُوسَى)",
+     "from": "teacher"
+    },
+    {
+     "ar": "التِّلْفَاز",
+     "en": "television",
+     "tr": "at-tilfāz",
+     "note": "وَأُشَاهِدُ التِّلْفَازَ قَلِيلًا — and I watch TV a little",
+     "from": "teacher"
+    },
+    {
+     "ar": "أُسَاعِدُ",
+     "en": "I help, I assist",
+     "tr": "usāʿidu",
+     "note": "أُسَاعِدُ أُمِّي — I help my mother",
+     "from": "teacher"
+    },
+    {
+     "ar": "كَنَس",
+     "en": "sweeping",
+     "tr": "kanas",
+     "note": "verbal noun; كَنَسُ البَيْتِ — sweeping the house",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَطْبَاق",
+     "en": "dishes, plates",
+     "tr": "aṭbāq",
+     "note": "plural of طَبَق ṭabaq; غَسْلُ الأَطْبَاقِ — washing dishes",
+     "from": "teacher"
+    },
+    {
+     "ar": "حَفْلَة",
+     "en": "party, gathering",
+     "tr": "ḥafla",
+     "note": "plural: حَفَلَات",
+     "from": "teacher"
+    },
+    {
+     "ar": "رِحْلَة",
+     "en": "trip, journey, excursion",
+     "tr": "riḥla",
+     "note": "Surah Quraysh: رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
+     "from": "teacher"
+    },
+    {
+     "ar": "أُرَتِّبُ",
+     "en": "I arrange, I tidy up",
+     "tr": "urattibu",
+     "note": "أُرَتِّبُ مَلَابِسِي — I tidy my clothes",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَنَامُ",
+     "en": "I sleep",
+     "tr": "anāmu",
+     "note": "قَبْلَ أَنْ أَنَامَ — before I sleep",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "lesson-muawwidhatayn",
+   "title": "المُعَوِّذَتَانِ — مَفَاهِيمُ قُرْآنِيَّةٌ",
+   "theme": "Deep protection concepts: Surah Al-Falaq & An-Nas (class, 27 Sep)",
+   "lesson": "Class — 27 Sep: surah falaq and nas",
+   "members": [
+    {
+     "ar": "أَعُوذُ",
+     "en": "I seek refuge (Isti'ādhah — fleeing to ultimate Sanctuary)",
+     "tr": "aʿūdhu",
+     "note": "Takes مِنْ (from evil/fear) into بِـ (Allah's fortress); total surrender to the Protector",
+     "from": "teacher"
+    },
+    {
+     "ar": "الْفَلَق",
+     "en": "The Daybreak (the violent cleaving of pitch darkness by light)",
+     "tr": "al-falaq",
+     "note": "Root ف-ل-ق: Allah violently splits the darkest night with dawn, and can split any entanglement",
+     "from": "teacher"
+    },
+    {
+     "ar": "غَاسِق",
+     "en": "Intense nightfall (night when it completely darkens and settles)",
+     "tr": "ghāsiq",
+     "note": "Teacher: دَخَلَ الليل وأظلم — when light vanishes and vulnerabilities peak",
+     "from": "teacher"
+    },
+    {
+     "ar": "وَقَبَ",
+     "en": "Penetrating completely (darkness entering and filling all things)",
+     "tr": "waqab",
+     "note": "Teacher: دَخَلَ ظَلَامٌ في كُلِّ شَيْءٍ — darkness falling into every crevice and room",
+     "from": "teacher"
+    },
+    {
+     "ar": "النَّفَّاثَات",
+     "en": "Those blowing with spittle upon knots (sorcery & occult binding)",
+     "tr": "an-naffāthāt",
+     "note": "Teacher: النساء السواحر ينفثن في عقد الخيط عندما يسحرون — blowing moisture while knotting cords",
+     "from": "teacher"
+    },
+    {
+     "ar": "عُقَد",
+     "en": "Knots (knots in thread & tangled knots of life)",
+     "tr": "ʿuqad",
+     "note": "Plural of عُقْدَة — physical knotted cords and emotional/life entanglements",
+     "from": "teacher"
+    },
+    {
+     "ar": "حَاسِد",
+     "en": "Envier (one who maliciously wishes blessings stripped from others)",
+     "tr": "ḥāsid",
+     "note": "Teacher: 'envier who wish evil on other' — refuge sought specifically إِذَا حَسَدَ (when enacted)",
+     "from": "teacher"
+    },
+    {
+     "ar": "الْوَسْوَاس",
+     "en": "The repetitive whisperer (subtle, continuous evil promptings)",
+     "tr": "al-waswās",
+     "note": "Onomatopoeic intensive fa'lāl pattern: recurring whispers disguised as one's own thoughts",
+     "from": "teacher"
+    },
+    {
+     "ar": "الْخَنَّاس",
+     "en": "The slinker (retreating upon dhikr, slinking back upon heedlessness)",
+     "tr": "al-khannās",
+     "note": "Teacher: 'the sneaky' — cowers and withdraws when Allah is remembered, ambushes when forgetful",
+     "from": "teacher"
+    },
+    {
+     "ar": "صُدُور",
+     "en": "Chests (the outer courtyard surrounding the heart / قَلْب)",
+     "tr": "ṣudūr",
+     "note": "Plural of صَدْر — the outer perimeter where waswas strikes; it cannot enter the qalb without invitation",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَلِك",
+     "en": "Sovereign King (supreme ruler, distinct from مَالِك owner)",
+     "tr": "malik",
+     "note": "Teacher: distinguished مَلِك (King who commands subjects) from مَالِك (owner of possessions)",
+     "from": "teacher"
+    },
+    {
+     "ar": "النَّاس",
+     "en": "Humankind, people (in their shared vulnerability & forgetfulness)",
+     "tr": "an-nās",
+     "note": "Teacher: 'people / humankind' — repeated 5 times in Surah An-Nas to emphasize universal need",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "lesson-village",
+   "title": "رِحْلَةٌ إِلَى القَرْيَةِ",
+   "theme": "A trip to the village — food, meals, ordinals & the clock (class, 11 Oct)",
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "source": "teacher",
+   "members": [
+    {
+     "ar": "قَرْيَة",
+     "en": "village",
+     "tr": "qarya",
+     "note": "رِحْلَةٌ إِلَى القَرْيَةِ — the passage title; pl. قُرًى",
+     "from": "teacher"
+    },
+    {
+     "ar": "بَيْضَة",
+     "en": "an egg",
+     "tr": "bayḍa",
+     "note": "بَيْض eggs (collective); أَكَلَ بَيْضَةً أُولَى — he ate a first egg",
+     "from": "teacher"
+    },
+    {
+     "ar": "تَمَرَات",
+     "en": "dates (a few)",
+     "tr": "tamarāt",
+     "note": "pl. of تَمْرَة; ثَلَاثُ تَمَرَاتٍ — three dates (3–10 take the plural)",
+     "from": "teacher"
+    },
+    {
+     "ar": "جَوْزَة",
+     "en": "a walnut",
+     "tr": "jawza",
+     "note": "جَوْز walnuts (collective); one piece gets ة",
+     "from": "teacher"
+    },
+    {
+     "ar": "كَأْس",
+     "en": "glass, cup",
+     "tr": "kaʾs",
+     "note": "كَأْسٌ مِنَ الحَلِيبِ — a glass of milk; Qur'an: كَأْسٍ مِنْ مَعِينٍ (56:18)",
+     "from": "teacher"
+    },
+    {
+     "ar": "قِطْعَة",
+     "en": "piece",
+     "tr": "qiṭʿa",
+     "note": "قِطْعَةُ خُبْزٍ — a piece of bread (iḍāfa)",
+     "from": "teacher"
+    },
+    {
+     "ar": "سَمْن",
+     "en": "ghee, clarified butter",
+     "tr": "samn",
+     "note": "the breakfast shopping list: سَلَطَة وَسَمْن وَسُكَّر",
+     "from": "teacher"
+    },
+    {
+     "ar": "سُكَّر",
+     "en": "sugar",
+     "tr": "sukkar",
+     "note": "Bengali চিনি; English 'sugar' comes from this word via Persian",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَتْجَر",
+     "en": "shop, store",
+     "tr": "matjar",
+     "note": "root ت-ج-ر trade — تِجَارَة (Qur'an 2:16); مَتْجَرٌ صَغِيرٌ",
+     "from": "teacher"
+    },
+    {
+     "ar": "الطَّرِيق",
+     "en": "the road, the way",
+     "tr": "aṭ-ṭarīq",
+     "note": "فِي الطَّرِيقِ — on the way; Qur'an: طَرِيقًا فِي البَحْرِ (20:77)",
+     "from": "teacher"
+    },
+    {
+     "ar": "شَهِيّ",
+     "en": "delicious, appetising",
+     "tr": "shahiyy",
+     "note": "كَانَ الطَّعَامُ شَهِيًّا جِدًّا — root ش-ه-و desire (شَهْوَة)",
+     "from": "teacher"
+    },
+    {
+     "ar": "خَفِيف",
+     "en": "light (not heavy)",
+     "tr": "khafīf",
+     "note": "طَعَامٌ خَفِيفٌ — a light meal; opposite ثَقِيل",
+     "from": "teacher"
+    },
+    {
+     "ar": "صِحِّيّ",
+     "en": "healthy",
+     "tr": "ṣiḥḥiyy",
+     "note": "طَعَامٌ صِحِّيٌّ — healthy food; from صِحَّة",
+     "from": "teacher"
+    },
+    {
+     "ar": "الصِّحَّة",
+     "en": "health",
+     "tr": "aṣ-ṣiḥḥa",
+     "note": "مَادَّةٌ عَنِ الطَّعَامِ وَالصِّحَّةِ — a subject about food and health",
+     "from": "teacher"
+    },
+    {
+     "ar": "الجِسْم",
+     "en": "the body",
+     "tr": "al-jism",
+     "note": "مُهِمٌّ لِلْجِسْمِ — important for the body; Qur'an: زَادَهُ بَسْطَةً فِي العِلْمِ وَالجِسْمِ (2:247)",
+     "from": "teacher"
+    },
+    {
+     "ar": "وَجْبَة",
+     "en": "meal",
+     "tr": "wajba",
+     "note": "وَجْبَةٌ وَاحِدَةٌ لَا تَكْفِي — one meal is not enough",
+     "from": "teacher"
+    },
+    {
+     "ar": "وَجَبَات",
+     "en": "meals",
+     "tr": "wajabāt",
+     "note": "الوَجَبَاتُ الصِّحِّيَّةُ — healthy meals",
+     "from": "teacher"
+    },
+    {
+     "ar": "بُقُولِيَّات",
+     "en": "legumes, pulses",
+     "tr": "buqūliyyāt",
+     "note": "lentils, beans, chickpeas — from بَقْل greens (Qur'an 2:61 بَقْلِهَا)",
+     "from": "teacher"
+    },
+    {
+     "ar": "أَعْنَاب",
+     "en": "grapes (pl.)",
+     "tr": "aʿnāb",
+     "note": "عِنَب grapes (collective) → أَعْنَاب; Qur'an: جَنَّاتٍ مِنْ نَخِيلٍ وَأَعْنَابٍ (2:266)",
+     "from": "teacher"
+    },
+    {
+     "ar": "نَخْل",
+     "en": "date palm(s)",
+     "tr": "nakhl",
+     "note": "collective; her photo of the palm grove. Qur'an: وَالنَّخْلَ بَاسِقَاتٍ (50:10)",
+     "from": "teacher"
+    },
+    {
+     "ar": "نَخِيل",
+     "en": "palm trees",
+     "tr": "nakhīl",
+     "note": "the plural; نَخِيلٍ وَأَعْنَابٍ is a fixed Qur'anic pair (2:266, 17:91, 36:34)",
+     "from": "teacher"
+    },
+    {
+     "ar": "غَنِيّ",
+     "en": "rich",
+     "tr": "ghaniyy",
+     "note": "رَجُلٌ غَنِيٌّ — a rich man; Allah is الغَنِيّ, the Self-Sufficient",
+     "from": "teacher"
+    },
+    {
+     "ar": "فَقِير",
+     "en": "poor",
+     "tr": "faqīr",
+     "note": "طِفْلٌ فَقِيرٌ — a poor child; pl. فُقَرَاء (Qur'an 9:60 لِلْفُقَرَاءِ)",
+     "from": "teacher"
+    },
+    {
+     "ar": "كَرِيم",
+     "en": "generous",
+     "tr": "karīm",
+     "note": "أُحِبُّ أَنْ أَكُونَ كَرِيمًا — I love to be generous; القُرْآنُ الكَرِيمُ",
+     "from": "teacher"
+    },
+    {
+     "ar": "ثَمَن",
+     "en": "price",
+     "tr": "thaman",
+     "note": "ثَمَنُ الطَّعَامِ — the price of the food; Qur'an: ثَمَنًا قَلِيلًا (2:41)",
+     "from": "teacher"
+    },
+    {
+     "ar": "أُفَضِّلُ",
+     "en": "I prefer",
+     "tr": "ufaḍḍilu",
+     "note": "أُفَضِّلُ مُسَاعَدَةَ الفُقَرَاءِ — from فَضْل favour (مِنْ فَضْلِكَ)",
+     "from": "teacher"
+    },
+    {
+     "ar": "جَوْعَان",
+     "en": "hungry",
+     "tr": "jawʿān",
+     "note": "= جَائِع; أَنَا دَائِمًا جَوْعَان — I am always hungry (hers)",
+     "from": "teacher"
+    },
+    {
+     "ar": "أُولَى",
+     "en": "first (f.)",
+     "tr": "ūlā",
+     "note": "m. أَوَّل; بَيْضَةٌ أُولَى — a first egg; الآخِرَة vs الأُولَى (Qur'an 93:4)",
+     "from": "teacher"
+    },
+    {
+     "ar": "ثَانِيَة",
+     "en": "second (f.)",
+     "tr": "thāniya",
+     "note": "m. ثَانٍ; مَرَّةً ثَانِيَةً — a second time, again",
+     "from": "teacher"
+    },
+    {
+     "ar": "ثَالِثَة",
+     "en": "third (f.)",
+     "tr": "thālitha",
+     "note": "m. ثَالِث; أُولَى، ثَانِيَة، ثَالِثَة",
+     "from": "teacher"
+    },
+    {
+     "ar": "القَادِم",
+     "en": "next, coming",
+     "tr": "al-qādim",
+     "note": "الأُسْبُوعَ القَادِمَ — next week",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَادَّة",
+     "en": "subject, material",
+     "tr": "mādda",
+     "note": "مَادَّةٌ جَدِيدَةٌ — a new (school) subject",
+     "from": "teacher"
+    },
+    {
+     "ar": "السَّادِسَة",
+     "en": "six o'clock (the sixth)",
+     "tr": "as-sādisa",
+     "note": "السَّاعَةُ السَّادِسَةُ صَبَاحًا — six in the morning; the clock uses feminine ordinals",
+     "from": "teacher"
+    },
+    {
+     "ar": "الثَّامِنَة",
+     "en": "eight o'clock (the eighth)",
+     "tr": "ath-thāmina",
+     "note": "فِي السَّاعَةِ الثَّامِنَةِ — at eight",
+     "from": "teacher"
+    },
+    {
+     "ar": "سَاعَات",
+     "en": "hours",
+     "tr": "sāʿāt",
+     "note": "ثَلَاثُ سَاعَاتٍ — three hours; sg. سَاعَة",
+     "from": "teacher"
+    },
+    {
+     "ar": "رَائِع",
+     "en": "wonderful",
+     "tr": "rāʾiʿ",
+     "note": "فِكْرَةٌ رَائِعَةٌ! — a wonderful idea!",
+     "from": "teacher"
+    },
+    {
+     "ar": "فِكْرَة",
+     "en": "idea",
+     "tr": "fikra",
+     "note": "from فَكَّرَ to think; Qur'an: يَتَفَكَّرُونَ",
+     "from": "teacher"
+    },
+    {
+     "ar": "الظُّهْر",
+     "en": "noon",
+     "tr": "aẓ-ẓuhr",
+     "note": "عِنْدَ الظُّهْرِ — at noon; صَلَاةُ الظُّهْرِ",
+     "from": "teacher"
+    },
+    {
+     "ar": "كَثِيرًا",
+     "en": "a lot, much",
+     "tr": "kathīran",
+     "note": "فَرِحَ أَحْمَدُ كَثِيرًا — Ahmad was very happy; Qur'an: ذِكْرًا كَثِيرًا (33:41)",
+     "from": "teacher"
+    }
+   ]
+  },
+  {
+   "id": "lesson-quran-words",
+   "title": "كَلِمَاتٌ تَلْتَقِي بِالقُرْآنِ",
+   "theme": "Where the class met the Qur'an — gender exceptions, triumph, hunger (class, 11 Oct)",
+   "lesson": "Class — 11 Oct: words that meet the Qur'an",
+   "source": "teacher",
+   "members": [
+    {
+     "ar": "عِقَاب",
+     "en": "punishment, penalty",
+     "tr": "ʿiqāb",
+     "note": "vs عَذَاب torment — the consequence vs the suffering; Qur'an: شَدِيدُ العِقَابِ (2:196)",
+     "from": "teacher"
+    },
+    {
+     "ar": "دَار",
+     "en": "house, abode",
+     "tr": "dār",
+     "note": "FEMININE although it has no ة: الدَّارُ الآخِرَةُ (the last abode, 2:94); دَارُ السَّلَامِ (6:127)",
+     "from": "teacher"
+    },
+    {
+     "ar": "خَلِيفَة",
+     "en": "successor, vicegerent, caliph",
+     "tr": "khalīfa",
+     "note": "MASCULINE although it ends in ة: إِنِّي جَاعِلٌ فِي الأَرْضِ خَلِيفَةً (2:30)",
+     "from": "teacher"
+    },
+    {
+     "ar": "فَوْز",
+     "en": "win, triumph",
+     "tr": "fawz",
+     "note": "الفَوْزُ العَظِيمُ — the great triumph (4:13, 9:72); vs نَصْر victory over someone",
+     "from": "teacher"
+    },
+    {
+     "ar": "فَازَ",
+     "en": "he won, he succeeded",
+     "tr": "fāza",
+     "note": "فَازَ يَفُوزُ; فَقَدْ فَازَ فَوْزًا عَظِيمًا (33:71)",
+     "from": "teacher"
+    },
+    {
+     "ar": "فَائِز",
+     "en": "winner, successful",
+     "tr": "fāʾiz",
+     "note": "pl. فَائِزُونَ: أُولَئِكَ هُمُ الفَائِزُونَ (59:20)",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَجَاعَة",
+     "en": "famine",
+     "tr": "majāʿa",
+     "note": "from جُوع hunger; the ordinary word",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَسْغَبَة",
+     "en": "hunger, famine",
+     "tr": "masghaba",
+     "note": "Qur'an 90:14 أَوْ إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ — or feeding on a day of hunger",
+     "from": "teacher"
+    },
+    {
+     "ar": "مَخْمَصَة",
+     "en": "starvation, severe hunger",
+     "tr": "makhmaṣa",
+     "note": "Qur'an 5:3 and 9:120 (فِي مَخْمَصَةٍ)",
+     "from": "teacher"
+    },
+    {
+     "ar": "إِطْعَام",
+     "en": "feeding (someone)",
+     "tr": "iṭʿām",
+     "note": "verbal noun of أَطْعَمَ to feed; root ط-ع-م as in طَعَام",
+     "from": "teacher"
+    }
+   ]
+  }
+ ]
 }
