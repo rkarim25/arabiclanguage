@@ -703,7 +703,7 @@ const bank = D("sentence-bank.json");
   yes(/if \(!b\.core\) b\.optional = true;/.test(planSrc) && /find\(b => !b\.done && !b\.optional\)/.test(planSrc), "everything else is optional: the day is done when the core is done");
   yes(/hb\.optional = true; hb\.evening = true;/.test(planSrc) && /never owed/.test(planSrc), "her homework is the evening option, never a required block (his budget, 12 Oct)");
   yes(/four is a full week/.test(planSrc), "four mornings is a full week");
-  yes(/Tell her your budget, in Arabic/.test(planSrc), "he gets the sentence that tells her the budget");
+  yes(/Tell her your budget<\/summary>/.test(planSrc) && /عِنْدِي عَشْرُ دَقَائِقَ/.test(planSrc), "he gets the sentence that tells her the budget — folded, one tap away");
 
   /* the commute (12 Oct): hands-free, his own sentences, back/skip, offline, never scheduled */
   console.log("\n-- the commute --");
@@ -738,6 +738,27 @@ const bank = D("sentence-bank.json");
   yes(/planEasyDay\(\) \? 6 : 10/.test(planSrc), "…six minutes instead of ten");
   yes(/function planNurtureLine\(/.test(planSrc) && /Yesterday went to life/.test(planSrc), "a missed day gets no guilt on the door");
   yes(/sweetShift/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "…and the engine asks for easier sentences on a heavy day");
+}
+
+/* ---------- the calm site (12 Oct) ---------- */
+{
+  const css = fs.readFileSync(path.join(ROOT, "css/style.css"), "utf8");
+  yes(/h1 \+ \.sub \{ display: none; \}/.test(css), "calm: page taglines are gone everywhere");
+  yes(/\.stat-strip \{ display: none !important; \}/.test(css), "calm: no numbers on a screen at the top of practice pages");
+  yes(/details\.more > summary/.test(css) && /\.sym-group\.open \.sym-hid/.test(css), "calm: one ⋯ pattern for toolbars and for rows");
+  const ix = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/class="sym-badge sym-more"/.test(ix) && /<span class="sym-hid">/.test(ix), "calm: Daily Reader rows show 🔊 🎯 verdicts ⋯ — the rest behind ⋯");
+  yes(/closest\("\.s-ar-side"\)[^\n]*toggleDayEn/.test(ix), "calm: tapping the Arabic shows the English");
+  yes(/<details class="card ai-box calm-sec">/.test(ix), "calm: Speak with AI folds to its heading");
+  yes(!/Jump to Line/.test(ix) && !/Play All \(Ar \+ En\)/.test(ix), "calm: shorter button labels");
+  for (const p of ["sentences.html", "words.html"]) {
+    const h = fs.readFileSync(p, "utf8");
+    yes(/<div class="calm-row">\s*<button[^>]*TryIt\.all\(\)/.test(h) && /<details class="more"><summary>⋯<\/summary>/.test(h), p + ": Try them all first, everything else behind ⋯");
+    for (const id of ["btnPlayAll", "btnPlayPauses", "spNorm", "spSlow", "filterChips", "dirEnFirst", "btnPause", "btnStop"]) yes(h.includes('id="' + id + '"'), p + ": " + id + " still exists for the engine");
+  }
+  const cl = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  yes(/details\.sec"\)\.forEach\(\(d, i\) => \{ if \(i > 0\) d\.open = false; \}\)/.test(cl), "calm: Lessons opens one section, the rest are headings");
+  yes(!/Select Lesson:/.test(cl), "calm: no 'Select Lesson:' label");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

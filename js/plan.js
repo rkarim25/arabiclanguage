@@ -852,8 +852,8 @@ function planPaintDoor() { const el = document.getElementById("planDoor"); if (e
       const card = document.createElement("div");
       card.id = "planScriptCard"; card.className = "plan-door";
       card.innerHTML = `<div class="pd-head"><span class="pd-today">Your two minutes with her</span></div>${planScriptHTML(12)}
-        <div class="pd-muted" style="margin-top:8px">Questions she may ask: مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟ — answer with any line above. Imperfect is fine; being understood is the win.</div>
-        <div class="pd-budget"><strong>Tell her your budget, in Arabic:</strong> <span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">عِنْدِي عَشْرُ دَقَائِقَ فِي الصَّبَاحِ، أَرْبَعَةَ أَيَّامٍ فِي الأُسْبُوعِ. مِنْ فَضْلِكِ: خَمْسُ كَلِمَاتٍ وَجُمْلَةٌ وَاحِدَةٌ كُلَّ أُسْبُوعٍ.</span><br><span class="pd-muted">“I have ten minutes in the morning, four days a week. Please: five words and one sentence a week.” <em>ʿindī ʿashru daqāʾiqa fī ṣ-ṣabāḥ, arbaʿata ayyāmin fī l-usbūʿ. min faḍliki: khamsu kalimātin wa-jumlatun wāḥidatun kulla usbūʿ.</em> Say it once; a good teacher adjusts.</span></div>`;
+        <div class="pd-muted" style="margin-top:8px">She may ask: <span class="arabic" dir="rtl">مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟</span> — any line above answers.</div>
+        <details class="more block" style="margin-top:8px"><summary>Tell her your budget</summary><div class="more-body pd-budget"><span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">عِنْدِي عَشْرُ دَقَائِقَ فِي الصَّبَاحِ، أَرْبَعَةَ أَيَّامٍ فِي الأُسْبُوعِ. مِنْ فَضْلِكِ: خَمْسُ كَلِمَاتٍ وَجُمْلَةٌ وَاحِدَةٌ كُلَّ أُسْبُوعٍ.</span><br><span class="pd-muted">“I have ten minutes in the morning, four days a week. Please: five words and one sentence a week.” <em>ʿindī ʿashru daqāʾiqa fī ṣ-ṣabāḥ, arbaʿata ayyāmin fī l-usbūʿ. min faḍliki: khamsu kalimātin wa-jumlatun wāḥidatun kulla usbūʿ.</em></span></div></details>`;
       hw.parentNode.insertBefore(card, hw);
     }
   };

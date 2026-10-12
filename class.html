@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv50hwnk">
-  <link rel="stylesheet" href="css/style.css?v=mv50hwnk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
+  <link rel="stylesheet" href="css/style.css?v=mv51246b">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -137,7 +137,6 @@
 
   <!-- LESSON SELECTOR SWITCHER -->
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
-    <span style="font-size:12.5px;color:var(--muted);font-weight:600">Select Lesson:</span>
     <span id="lessonSwitcher" style="display:contents"></span>
   </div>
 
@@ -153,9 +152,11 @@
       </div>
       <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
     </div>
-    <p id="lessonCoveredDesc" style="font-size:14.5px;line-height:1.6;margin:8px 0 16px">
+    <details class="more block" style="margin:6px 0 14px"><summary>About this lesson</summary>
+    <p id="lessonCoveredDesc" class="more-body" style="font-size:14.5px;line-height:1.6;margin:8px 0 4px">
       From your Preply teacher: Daily work routines and days off (waking early vs late, hours of the day, chores, helping parents, eating breakfast, travel); and <b>Surah Al-Falaq &amp; Surah An-Nas</b> focusing on <b>deep protection concepts</b> rather than flat English words.
     </p>
+    </details>
 
     <!-- 1. The Reading Passage -->
     <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
@@ -398,7 +399,6 @@
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <span>📇 Class Vocabulary</span>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" onclick="event.stopPropagation()">
-          <span style="font-size:12px;color:var(--muted);margin-right:2px">Practice Mode:</span>
           <button type="button" class="book-toggle-pill active" id="btnVocabModeAll" onclick="setVocabPracticeMode('all')" title="Show both Arabic and English">All</button>
           <button type="button" class="book-toggle-pill" id="btnVocabModeAr" onclick="setVocabPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnVocabModeEn" onclick="setVocabPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
@@ -413,7 +413,6 @@
       <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <span>💬 Sentences Drilled in Class</span>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" onclick="event.stopPropagation()">
-          <span style="font-size:12px;color:var(--muted);margin-right:2px">Practice Mode:</span>
           <button type="button" class="book-toggle-pill active" id="btnClsSentModeAll" onclick="setClsSentPracticeMode('all')" title="Show both Arabic and English">All</button>
           <button type="button" class="book-toggle-pill" id="btnClsSentModeAr" onclick="setClsSentPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnClsSentModeEn" onclick="setClsSentPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
@@ -496,12 +495,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv50hwnk"></script>
-<script src="js/curriculum.js?v=mv50hwnk"></script>
-<script src="js/srs.js?v=mv50hwnk"></script>
-<script src="js/app.js?v=mv50hwnk"></script>
-<script src="js/tracker.js?v=mv50hwnk"></script>
-<script src="js/plan.js?v=mv50hwnk"></script>
+<script src="js/progress-model.js?v=mv51246b"></script>
+<script src="js/curriculum.js?v=mv51246b"></script>
+<script src="js/srs.js?v=mv51246b"></script>
+<script src="js/app.js?v=mv51246b"></script>
+<script src="js/tracker.js?v=mv51246b"></script>
+<script src="js/plan.js?v=mv51246b"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -702,9 +701,8 @@ function renderPassage() {
   const container = document.getElementById("passageContainer");
   container.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span style="font-size:12.5px;font-weight:600;color:var(--muted)">📖 Passage View (${STORY_DATA.sentences.length} sentences)</span>
+      <span></span>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
         <button type="button" class="book-toggle-pill" id="btnToggleAllEn" onclick="toggleAllPassageEn()" title="Show/hide English translation">🌐 Translation</button>
         <button type="button" class="book-toggle-pill" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()" title="Show/hide word-by-word breakdown">🧩 Words</button>
         <button type="button" class="book-toggle-pill" id="btnToggleAllTr" onclick="toggleAllPassageTr()" title="Show/hide transliteration">🔤 Translit</button>
@@ -1012,7 +1010,6 @@ function renderClassSentences() {
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <button type="button" class="book-toggle-pill ${clsSentSortWeakest ? 'active' : ''}" id="btnClsSentSortWeakestInner" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
-        <span style="font-size:11.5px;color:var(--muted);margin-left:4px;margin-right:2px">Toggle all:</span>
         <button type="button" class="book-toggle-pill ${allClsSentEnVisible ? 'active' : ''}" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation">🌐 Translation</button>
         <button type="button" class="book-toggle-pill ${allClsTrVisible ? 'active' : ''}" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration">🔤 Translit</button>
         ${clsSentPracticeMode !== 'all' ? `
@@ -1563,6 +1560,11 @@ function renderClassAiReportHistory() {
     }).join("")}
   `;
 }
+
+/* the calm page (12 Oct): one section open — the passage; the rest are headings until tapped */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("details.sec").forEach((d, i) => { if (i > 0) d.open = false; });
+});
 
 function scrollToTest() {
   document.getElementById("testBox").scrollIntoView({ behavior: "smooth" });

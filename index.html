@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv50hwnk">
-  <link rel="stylesheet" href="css/style.css?v=mv50hwnk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
+  <link rel="stylesheet" href="css/style.css?v=mv51246b">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -112,8 +112,8 @@
         <div class="resume-sub" id="resumeSub"></div>
       </div>
       <div class="resume-actions">
-        <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Jump to Line <span id="lblResumeLineNum">1</span></button>
-        <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from Line <span id="lblResumeAudioNum">1</span></button>
+        <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
+        <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
       </div>
     </div>
     <div class="chapter-dots-track" id="chapterDotsTrack" aria-label="10-Chapter Curriculum Progress Track"></div>
@@ -134,22 +134,23 @@
     </div>
   </details>
 
-  <!-- Audio Controls -->
-  <div class="audio-bar">
-    <span style="font-size:13px;font-weight:700">🎧 Audio Mode:</span>
-    <div class="audio-lang-switch" id="audioLangSwitch">
-      <button type="button" class="audio-mode-pill active" id="btnAudioArEn" onclick="setAudioVoiceMode('ar-en')" title="Learn mode: Plays Arabic, then English translation right after">🌐 Arabic + English</button>
-      <button type="button" class="audio-mode-pill" id="btnAudioRecall" onclick="setAudioVoiceMode('recall')" title="Recall mode: Plays Arabic, pauses 3s for you to recall, then says English to check">⏳ Ar ➔ Pause ➔ En</button>
-      <button type="button" class="audio-mode-pill" id="btnAudioArOnly" onclick="setAudioVoiceMode('ar-only')" title="Immersion mode: Plays Arabic pronunciation only">🇸🇦 Arabic Only</button>
-    </div>
-    <button type="button" id="btnPlayAll">▶ Play All (Ar + En)</button>
+  <!-- Audio: one button; modes and speed behind ⋯ -->
+  <div class="calm-row" id="audioRow">
+    <button type="button" id="btnPlayAll">▶ Play all</button>
     <button type="button" id="btnPlayPauses" style="display:none" title="Plays Arabic, pauses 3.5s for you to recall, then says English">⏸ Play with Pauses</button>
     <button type="button" id="btnPauseAudio" style="display:none" onclick="togglePauseAudio()" title="Pause audio playback">⏸ Pause</button>
     <button type="button" id="btnStopAudio" style="display:none">⏹ Stop</button>
-    <span class="speed-sw" style="display:inline-flex;gap:4px;margin-left:auto">
-      <button type="button" class="small" id="spNormal">🔊 Normal</button>
-      <button type="button" class="small" id="spSlow">🐢 Slow</button>
-    </span>
+    <details class="more"><summary>🎧 listening</summary><div class="more-body">
+      <div class="audio-lang-switch" id="audioLangSwitch">
+        <button type="button" class="audio-mode-pill active" id="btnAudioArEn" onclick="setAudioVoiceMode('ar-en')" title="Learn mode: Plays Arabic, then English translation right after">🌐 Arabic + English</button>
+        <button type="button" class="audio-mode-pill" id="btnAudioRecall" onclick="setAudioVoiceMode('recall')" title="Recall mode: Plays Arabic, pauses 3s for you to recall, then says English to check">⏳ Ar ➔ Pause ➔ En</button>
+        <button type="button" class="audio-mode-pill" id="btnAudioArOnly" onclick="setAudioVoiceMode('ar-only')" title="Immersion mode: Plays Arabic pronunciation only">🇸🇦 Arabic Only</button>
+      </div>
+      <span class="speed-sw" style="display:inline-flex;gap:4px">
+        <button type="button" class="small" id="spNormal">🔊 Normal</button>
+        <button type="button" class="small" id="spSlow">🐢 Slow</button>
+      </span>
+    </div></details>
   </div>
 
   <!-- SECTION 1: 10 HIGH-FREQUENCY SENTENCES & CHAPTER VOCABULARY -->
@@ -195,10 +196,11 @@
   </div>
 
   <!-- SECTION 4: AI CONVERSATION PARTNER -->
-  <div class="card ai-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+  <details class="card ai-box calm-sec">
+    <summary><span>4. 🗣 Speak with AI</span><span class="pd-muted">optional ▾</span></summary>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px">
       <div style="display:flex;align-items:center;gap:8px">
-        <h2 style="margin:0;font-size:15px">4. 🗣 Speak with AI (ChatGPT / Claude Voice)</h2>
+        <h2 style="margin:0;font-size:13.5px;color:var(--muted);font-weight:600">ChatGPT / Claude voice</h2>
         <a href="SPEAK_WITH_AI.md" target="_blank" class="small" style="font-size:11.5px;color:var(--accent);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:2px 8px">📘 Guide</a>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -231,14 +233,13 @@
       </div>
       <div id="aiReportHistory" style="margin-top:10px"></div>
     </div>
-  </div>
+  </details>
 
   <!-- SECTION 5: 5-MINUTE CHAPTER TEST -->
   <div class="test-box" id="testBox">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div>
-        <h2 style="margin:0;font-size:17px">5. 📝 Chapter Test (5 Mins)</h2>
-        <p class="sub" style="margin:2px 0 0">Test your comprehension of today's sentences and ayats. Pass at 80%+ to clear this chapter.</p>
+        <h2 style="margin:0;font-size:17px">5. 📝 Chapter test · 5 min</h2>
       </div>
       <span id="testScorePill" class="status-pill" style="font-size:13px">Untested</span>
     </div>
@@ -249,13 +250,13 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv50hwnk"></script>
-<script src="js/curriculum.js?v=mv50hwnk"></script>
-<script src="js/srs.js?v=mv50hwnk"></script>
-<script src="js/app.js?v=mv50hwnk"></script>
-<script src="js/tracker.js?v=mv50hwnk"></script>
-<script src="js/plan.js?v=mv50hwnk"></script>
-<script src="js/account.js?v=mv50hwnk"></script>
+<script src="js/progress-model.js?v=mv51246b"></script>
+<script src="js/curriculum.js?v=mv51246b"></script>
+<script src="js/srs.js?v=mv51246b"></script>
+<script src="js/app.js?v=mv51246b"></script>
+<script src="js/tracker.js?v=mv51246b"></script>
+<script src="js/plan.js?v=mv51246b"></script>
+<script src="js/account.js?v=mv51246b"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3362,7 +3363,7 @@ function updateChapterDotsTrack() {
   if (!track) return;
   const masteredCount = CHAPTERS.filter(c => isChapterMastered(c.id)).length;
   track.innerHTML = `
-    <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:4px">
+    <div class="chap-dots-head" style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:4px">
       <span style="font-size:11.5px;font-weight:600;color:var(--muted)">
         Curriculum Progress: <b style="color:var(--ink)">${masteredCount} of 10 Chapters Mastered</b> (${Math.round((masteredCount / 10) * 100)}%)
       </span>
@@ -3432,13 +3433,13 @@ function updateAudioModeButtons() {
 
   if (btnPlayAll) {
     if (audioVoiceMode === "ar-en") {
-      btnPlayAll.textContent = "▶ Play All (Ar + En)";
+      btnPlayAll.textContent = "▶ Play all";
       btnPlayAll.title = "Plays Arabic followed immediately by English translation";
     } else if (audioVoiceMode === "recall") {
-      btnPlayAll.textContent = "▶ Play All (Recall)";
+      btnPlayAll.textContent = "▶ Play all · recall";
       btnPlayAll.title = "Plays Arabic, pauses 3s for you to recall, then says English to verify";
     } else {
-      btnPlayAll.textContent = "▶ Play All (Arabic)";
+      btnPlayAll.textContent = "▶ Play all · Arabic";
       btnPlayAll.title = "Plays Arabic pronunciation only";
     }
   }
@@ -3448,7 +3449,7 @@ function updateAudioModeButtons() {
   const lineNum = lineNumEl ? lineNumEl.textContent : "1";
   if (btnResumeAudio) {
     const modeTag = audioVoiceMode === "ar-en" ? "Ar + En" : (audioVoiceMode === "recall" ? "Recall" : "Ar");
-    btnResumeAudio.innerHTML = `▶ Play from Line <span id="lblResumeAudioNum">${lineNum}</span> (${modeTag})`;
+    btnResumeAudio.innerHTML = `▶ Play from <span id="lblResumeAudioNum">${lineNum}</span>`;
   }
 }
 
@@ -3534,6 +3535,8 @@ function playVocabWord(encodedAr, encodedEn) {
 function handleSentenceRowClick(event, origIdx) {
   if (event.target.closest("button") || event.target.closest("input") || event.target.closest(".wbw-chip") || event.target.closest(".vocab-reveal-btn")) return;
   if (curChap && typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
+  // calm rows (12 Oct): the 🌐 lives behind ⋯, so tapping the sentence itself shows the English
+  if (dayPracticeMode === "all" && event.target.closest(".s-ar-side") && typeof origIdx === "number") toggleDayEn(origIdx);
 }
 
 /* Initialise page */
@@ -3867,22 +3870,19 @@ function renderQuranSection(surahId) {
   document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
 
   qDiv.innerHTML = `
-    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+    <div class="calm-row" style="justify-content:flex-end">
+      <details class="more"><summary>⋯</summary><div class="more-body">
         <button type="button" class="book-toggle-pill ${quranPracticeMode === 'all' ? 'active' : ''}" id="btnQuranModeAll" onclick="setQuranPracticeMode('all')" title="Show both Arabic and English">All</button>
-        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'ar-only' ? 'active' : ''}" id="btnQuranModeAr" onclick="setQuranPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
-        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'en-only' ? 'active' : ''}" id="btnQuranModeEn" onclick="setQuranPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'ar-only' ? 'active' : ''}" id="btnQuranModeAr" onclick="setQuranPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic prompt</button>
+        <button type="button" class="book-toggle-pill ${quranPracticeMode === 'en-only' ? 'active' : ''}" id="btnQuranModeEn" onclick="setQuranPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English prompt</button>
+        <span style="width:1px;height:18px;background:var(--border)"></span>
         <button type="button" class="book-toggle-pill ${allQuranEnVisible ? 'active' : ''}" id="btnToggleAllQuranEn" onclick="toggleAllQuranEn()" title="Show/hide English translation across all verses">🌐 Translation</button>
         <button type="button" class="book-toggle-pill ${allQuranWbwVisible ? 'active' : ''}" id="btnToggleAllQuranWbw" onclick="toggleAllQuranWbw()" title="Show/hide word breakdown across all verses">🧩 Words</button>
         ${quranPracticeMode !== 'all' ? `
-          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(true)" style="font-size:11.5px;padding:2px 8px" title="Reveal all hidden prompts">👁️ Reveal All</button>
-          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(false)" style="font-size:11.5px;padding:2px 8px" title="Hide all revealed prompts">🙈 Hide All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(true)" title="Reveal all hidden prompts">👁️ Reveal all</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllQuranReveal(false)" title="Hide all revealed prompts">🙈 Hide all</button>
         ` : ''}
-      </div>
+      </div></details>
     </div>
     ${surah.verses.slice(0, 5).map((v, vIdx) => {
       const isRevealed = quranPracticeMode === "all" || quranRevealed[vIdx];
@@ -4116,26 +4116,23 @@ function renderDailySentences() {
   }
 
   sList.innerHTML = `
-    <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Practice Mode:</span>
+    <div class="calm-row">
+      ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
+      <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
+      <details class="more"><summary>⋯</summary><div class="more-body">
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'all' ? 'active' : ''}" id="btnDayModeAll" onclick="setDayPracticeMode('all')" title="Show both Arabic and English">All</button>
-        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
-        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
-        <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest First</button>
-        ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
-        <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Toggle all:</span>
+        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic prompt</button>
+        <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English prompt</button>
+        <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest first</button>
+        <span style="width:1px;height:18px;background:var(--border)"></span>
         <button type="button" class="book-toggle-pill ${allDayEnVisible ? 'active' : ''}" id="btnToggleAllDayEn" onclick="toggleAllDayEn()" title="Show/hide English translation across all sentences">🌐 Translation</button>
         <button type="button" class="book-toggle-pill ${allDayWbwVisible ? 'active' : ''}" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()" title="Show/hide word-by-word breakdown across all sentences">🧩 Words</button>
         <button type="button" class="book-toggle-pill ${allDayTrVisible ? 'active' : ''}" id="btnToggleAllDayTr" onclick="toggleAllDayTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
         ${dayPracticeMode !== 'all' ? `
-          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(true)" style="font-size:11.5px;padding:2px 8px" title="Reveal all hidden prompts">👁️ Reveal All</button>
-          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(false)" style="font-size:11.5px;padding:2px 8px" title="Hide all revealed prompts">🙈 Hide All</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(true)" title="Reveal all hidden prompts">👁️ Reveal all</button>
+          <button type="button" class="book-toggle-pill" onclick="toggleAllDayReveal(false)" title="Hide all revealed prompts">🙈 Hide all</button>
         ` : ''}
-      </div>
+      </div></details>
     </div>
     ${items.map(({ s, origIdx }) => {
       const isRevealed = dayPracticeMode === "all" || dayRevealed[origIdx];
@@ -4149,7 +4146,7 @@ function renderDailySentences() {
       if (dayPracticeMode === "en-only" && !isRevealed) {
         arContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
       } else {
-        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>`;
+        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block;cursor:pointer" title="Tap for the English">${s.ar}</span>`;
       }
 
       let enContent;
@@ -4174,15 +4171,18 @@ function renderDailySentences() {
               <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
               <div class="sym-group">
                 <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="${audioTitle}" aria-label="Listen">🔊</button>
-                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-                ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Try it — a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Try it">🎯</button>` : ''}
-                <div class="vote-badge-group">
-                  <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
-                  <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
-                </div>
                 ${SRS.rateBarHtml(sKey, "rateDaySentence", [origIdx], { compact: true, retire: false })}
+                <button type="button" class="sym-badge sym-more" onclick="this.closest('.sym-group').classList.toggle('open')" title="More — translation, words, transliteration, weak/solid" aria-label="More">⋯</button>
+                <span class="sym-hid">
+                  <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                  ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                  <div class="vote-badge-group">
+                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
+                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
+                  </div>
+                </span>
               </div>
             </div>
             <div class="s-content-wrap">

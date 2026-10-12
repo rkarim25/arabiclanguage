@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv50hwnk">
-  <link rel="stylesheet" href="css/style.css?v=mv50hwnk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
+  <link rel="stylesheet" href="css/style.css?v=mv51246b">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,12 +49,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mv50hwnk"></script>
-<script src="js/frames.js?v=mv50hwnk"></script>
-<script src="js/freetry.js?v=mv50hwnk"></script>
-<script src="js/app.js?v=mv50hwnk"></script>
-<script src="js/tracker.js?v=mv50hwnk"></script>
-<script src="js/plan.js?v=mv50hwnk"></script>
+<script src="js/srs.js?v=mv51246b"></script>
+<script src="js/frames.js?v=mv51246b"></script>
+<script src="js/freetry.js?v=mv51246b"></script>
+<script src="js/app.js?v=mv51246b"></script>
+<script src="js/tracker.js?v=mv51246b"></script>
+<script src="js/plan.js?v=mv51246b"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -337,9 +337,9 @@ function render(state) {
     <!-- the commute is where "slower, please" is most often the whole ask -->
     <div class="ac-controls" style="margin-top:10px">${speedToggleHtml()}</div>
     <div class="ac-meta"><span id="acCount"></span></div>
-    <p class="ac-meta" style="margin-top:16px">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
+    <details class="more block" style="margin-top:14px"><summary>How it works</summary><p class="ac-meta more-body" style="margin:8px 0 0">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
     Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.
-    Phone in your pocket? The <b>lock-screen buttons work too</b>: <b>⏭ = I had it</b>, <b>⏮ = didn't — bring it back</b>.</p>
+    Phone in your pocket? The <b>lock-screen buttons work too</b>: <b>⏭ = I had it</b>, <b>⏮ = didn't — bring it back</b>.</p></details>
     <div id="acRecap"></div>
   `;
   const yes = document.getElementById("acYes"), no = document.getElementById("acNo");

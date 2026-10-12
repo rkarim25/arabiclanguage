@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv50hwnk">
-  <link rel="stylesheet" href="css/style.css?v=mv50hwnk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
+  <link rel="stylesheet" href="css/style.css?v=mv51246b">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -186,9 +186,13 @@
 
   <!-- PRACTICE VIEW -->
   <div id="viewPractice">
-    <!-- Streamlined Unified Toolbar -->
-    <div class="practice-toolbar">
-      <div class="pt-group">
+    <!-- the calm toolbar (12 Oct): what matters, then ⋯ -->
+    <div class="calm-row">
+      <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
+      <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
+      <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
+      <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
+      <details class="more"><summary>⋯</summary><div class="more-body">
         <div class="dir-toggle">
           <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
           <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
@@ -203,27 +207,21 @@
           <button type="button" class="chip" data-filter="quran">Qur'an</button>
           <button type="button" class="chip" data-filter="everyday">Everyday</button>
         </div>
-      </div>
-      <div class="pt-group">
         <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
         <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
-        <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
-        <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
         <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
           <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
           <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
         </span>
-        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal All</button>
-        <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
-        <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
-      </div>
+        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal all</button>
+      </div></details>
     </div>
 
     <!-- Session Progress & List -->
     <div class="card" style="padding:16px 18px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <div>
-          <h2 style="margin:0;font-size:15.5px" id="sessionTitle">Batch of 10 Sentences</h2>
+          <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="✗ no · ≈ maybe · ✓ yes · ★ solid · ⊘ don't repeat — the site sets the next date">Batch of 10 Sentences</h2>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
         <span style="display:inline-flex;align-items:center;gap:8px">
@@ -284,15 +282,15 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv50hwnk"></script>
-<script src="js/curriculum.js?v=mv50hwnk"></script>
-<script src="js/srs.js?v=mv50hwnk"></script>
-<script src="js/frames.js?v=mv50hwnk"></script>
-<script src="js/freetry.js?v=mv50hwnk"></script>
-<script src="js/tryit.js?v=mv50hwnk"></script>
-<script src="js/app.js?v=mv50hwnk"></script>
-<script src="js/tracker.js?v=mv50hwnk"></script>
-<script src="js/plan.js?v=mv50hwnk"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mv51246b"></script>
+<script src="js/curriculum.js?v=mv51246b"></script>
+<script src="js/srs.js?v=mv51246b"></script>
+<script src="js/frames.js?v=mv51246b"></script>
+<script src="js/freetry.js?v=mv51246b"></script>
+<script src="js/tryit.js?v=mv51246b"></script>
+<script src="js/app.js?v=mv51246b"></script>
+<script src="js/tracker.js?v=mv51246b"></script>
+<script src="js/plan.js?v=mv51246b"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -526,7 +524,7 @@ function render10Cards() {
         ${!isRevealed ? `
           <div class="s-action-bar">
             <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Check ${isEnFirst ? 'Arabic sentence & vocabulary' : 'English translation & vocabulary'} ▾
+              👁️ Check ${isEnFirst ? 'Arabic' : 'English'} ▾
             </div>
             <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
           </div>
