@@ -444,7 +444,19 @@ function planBuild(date, noBoost) {
   // a banked block yesterday shrinks today (never below 2)
   if (store.get(PLAN_BANK_KEY, null) === date && blocks.length > 2) blocks.pop();
   // only the core counts for "the day is done"; the teacher's pre-lesson check is the one exception
-  blocks.forEach(b => { if (!b.core) b.optional = !(b.type === "homework" && hw && !hw.past && hw.daysLeft <= 1.5); });
+  /* his budget (12 Oct): "10 minutes 4 days a week before work … maybe 15 minutes in the
+     evening … homework which no matter what she sets is too much". So her homework is
+     NEVER a second required block: her words already ride inside the morning sentences
+     (Free try puts homework words first); the homework itself is the evening option. */
+  blocks.forEach(b => { if (!b.core) b.optional = true; });
+  if (hw && !hw.past && hw.readiness < 100 && !blocks.some(b => b.type === "homework")) {
+    const hb = planMakeBlock("homework", date, dueN);
+    hb.optional = true; hb.evening = true;
+    hb.title = "Her homework — only if you have energy (evening is fine)";
+    hb.sub = `${hw.shakyN} word${hw.shakyN === 1 ? "" : "s"} not yet solid${hw.tasksLeft ? ` · ${hw.tasksLeft} task${hw.tasksLeft > 1 ? "s" : ""}` : ""} — the mornings already carry her words; this is extra, never owed.`;
+    blocks.splice(1, 0, hb);
+    if (blocks.length > 4) blocks.pop();
+  }
   const plan = { date, blocks, completedAt: null, banked: false };
 
   // ⚡ boost day arrived (announced in the days before): attach the extra section
@@ -782,7 +794,7 @@ function planDoorHTML(p) {
   const strip = required.map((b, i) => `<span class="pd-step ${b.done ? "done" : (b === cur ? "cur" : "")}" title="${b.title}"><span class="pd-dot">${b.done ? "✓" : i + 1}</span><span class="pd-t">${b.icon} ${b.title}</span></span>`).join("");
   const week = planWeekDays();
   const weekN = week.filter(d => d.on).length;
-  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} of 7 days · Mon–Fri build the script · Sat rehearse · Sun say it to her</span>`;
+  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} morning${weekN === 1 ? "" : "s"} this week${weekN >= 4 ? " — four is a full week" : weekN === 3 ? " — one more makes the week" : ""} · Mon–Fri build the script · Sat rehearse · Sun say it to her</span>`;
   const hour = new Date().getHours();
   const evening = hour >= 20 || hour < 4;
   const nurture = planNurtureLine(p);
@@ -814,7 +826,7 @@ function planDoorHTML(p) {
       <div class="pd-next">${cur.icon} <strong>${cur.title}</strong> <span class="pd-muted">— ${cur.sub || ""}</span></div>`;
   }
   const opt = planOptional(p);
-  const optHtml = opt.length ? `<div class="pd-opt"><span class="pd-muted">If you feel like it:</span> ${opt.map(b => `<a href="${b.url}" class="pd-link">${b.icon} ${b.title}</a>`).join(" ")}</div>` : "";
+  const optHtml = opt.length ? `<div class="pd-opt"><span class="pd-muted">If you have energy (15 min, evening is fine — never owed):</span> ${opt.map(b => `<a href="${b.url}" class="pd-link${b.evening ? " pd-link-hw" : ""}">${b.icon} ${b.title}</a>`).join(" ")}</div>` : "";
   return `
     <div class="pd-head"><span class="pd-today">Today</span><span class="pd-strip">${strip}</span></div>
     ${nurture ? `<div class="pd-nurture">${nurture}</div>` : ""}
@@ -848,7 +860,8 @@ function planPaintDoor() { const el = document.getElementById("planDoor"); if (e
       const card = document.createElement("div");
       card.id = "planScriptCard"; card.className = "plan-door";
       card.innerHTML = `<div class="pd-head"><span class="pd-today">Your two minutes with her</span></div>${planScriptHTML(12)}
-        <div class="pd-muted" style="margin-top:8px">Questions she may ask: مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟ — answer with any line above. Imperfect is fine; being understood is the win.</div>`;
+        <div class="pd-muted" style="margin-top:8px">Questions she may ask: مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟ — answer with any line above. Imperfect is fine; being understood is the win.</div>
+        <div class="pd-budget"><strong>Tell her your budget, in Arabic:</strong> <span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">عِنْدِي عَشْرُ دَقَائِقَ فِي الصَّبَاحِ، أَرْبَعَةَ أَيَّامٍ فِي الأُسْبُوعِ. مِنْ فَضْلِكِ: خَمْسُ كَلِمَاتٍ وَجُمْلَةٌ وَاحِدَةٌ كُلَّ أُسْبُوعٍ.</span><br><span class="pd-muted">“I have ten minutes in the morning, four days a week. Please: five words and one sentence a week.” <em>ʿindī ʿashru daqāʾiqa fī ṣ-ṣabāḥ, arbaʿata ayyāmin fī l-usbūʿ. min faḍliki: khamsu kalimātin wa-jumlatun wāḥidatun kulla usbūʿ.</em> Say it once; a good teacher adjusts.</span></div>`;
       hw.parentNode.insertBefore(card, hw);
     }
   };

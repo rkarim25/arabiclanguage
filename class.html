@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4zenyv">
-  <link rel="stylesheet" href="css/style.css?v=mv4zenyv">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4zuf1w">
+  <link rel="stylesheet" href="css/style.css?v=mv4zuf1w">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -496,12 +496,12 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4zenyv"></script>
-<script src="js/curriculum.js?v=mv4zenyv"></script>
-<script src="js/srs.js?v=mv4zenyv"></script>
-<script src="js/app.js?v=mv4zenyv"></script>
-<script src="js/tracker.js?v=mv4zenyv"></script>
-<script src="js/plan.js?v=mv4zenyv"></script>
+<script src="js/progress-model.js?v=mv4zuf1w"></script>
+<script src="js/curriculum.js?v=mv4zuf1w"></script>
+<script src="js/srs.js?v=mv4zuf1w"></script>
+<script src="js/app.js?v=mv4zuf1w"></script>
+<script src="js/tracker.js?v=mv4zuf1w"></script>
+<script src="js/plan.js?v=mv4zuf1w"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -672,6 +672,7 @@ function playSurahRecitation(surahNum, totalAyahs) {
 
 function renderHomeworkCard() {
   if (typeof planHomework !== "function") return;
+  const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   try {
     const hw = planHomework();
     if (!hw || hw.past) return;
