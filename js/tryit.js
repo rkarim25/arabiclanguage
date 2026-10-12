@@ -31,6 +31,7 @@
 
   function setup(cfg) {
     T.cfg = cfg;
+    if (cfg.pool) loadFreq();                 // Free try needs word frequencies — warm them now
     if (!T.drills) {
       T.drills = {};
       fetch("data/chapter-drills.json").then(r => r.json()).then(d => { T.drills = (d && d.chapters) || {}; }).catch(() => {});
@@ -292,13 +293,38 @@
     scored.sort((a, b) => b.score - a.score);
     return { list: scored.slice(0, size).map(x => x.s), level: L, candidates: scored.length };
   }
-  function free() {
+  let _freq = null, _freqLoading = null;
+  function loadFreq() {
+    if (_freq) return Promise.resolve(_freq);
+    if (!_freqLoading) _freqLoading = fetch("data/frequency.json").then(r => r.json()).then(d => { _freq = (d && d.words) || {}; return _freq; }).catch(() => (_freq = {}));
+    return _freqLoading;
+  }
+  async function free() {
     if (!T.cfg || !T.cfg.pool) return;
-    const { list, level: L, candidates } = freeBatch(T.cfg.pool(), T.cfg.size || 10);
+    const pool = T.cfg.pool();
+    let list, meta;
+    if (root.FreeTry && typeof root.FreeTry.plan === "function") {
+      const freq = await loadFreq();
+      const hw = (typeof store !== "undefined" && store.get("ats-homework", null)) || null;
+      const ctx = {
+        now: Date.now(),
+        srs: (typeof getSrs === "function") ? getSrs() : {},
+        log: (typeof store !== "undefined" && store.get("ats-log", [])) || [],
+        freq,
+        homework: new Set((hw && hw.keys) || []),
+        size: T.cfg.size || 10,
+        wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+      };
+      const p = root.FreeTry.plan(pool, ctx);
+      list = p.list; meta = p;
+    } else {
+      const fb = freeBatch(pool, T.cfg.size || 10);
+      list = fb.list; meta = { theta: fb.level, tries: 0, candidates: fb.candidates, mix: { retry: 0, stretch: 0, consolidate: 0 } };
+    }
     if (!list.length) { alert("Nothing is ready for a free try yet — rate a few more words and sentences first."); return; }
     T.freeOn = true;
-    if (typeof logEvent === "function") logEvent({ e: "tryit-free", level: L, candidates, n: list.length, t: Date.now() });
-    if (T.cfg.onFree) T.cfg.onFree(list, L, candidates);
+    if (typeof logEvent === "function") logEvent({ e: "tryit-free", level: meta.theta, tries: meta.tries, candidates: meta.candidates, relaxed: meta.relaxed, mix: meta.mix, n: list.length, t: Date.now() });
+    if (T.cfg.onFree) T.cfg.onFree(list, meta);
     T.st = {}; T.round = true; T.open = null;
     toggle(0);
   }

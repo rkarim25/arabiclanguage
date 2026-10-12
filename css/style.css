@@ -1468,3 +1468,5 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 .srs-legend .leg { display: inline-flex; gap: 4px; align-items: center; }
 .srs-legend .leg.muted { opacity: 0.8; }
 .srs-btn.mini { width: 17px; height: 17px; font-size: 9.5px; cursor: default; pointer-events: none; }
+
+.tryit-why { font-size: 11px; color: var(--muted); margin-left: 8px; padding: 1px 7px; border: 1px dashed var(--border); border-radius: 999px; white-space: nowrap; }

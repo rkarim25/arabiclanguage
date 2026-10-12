@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4uiy82">
-  <link rel="stylesheet" href="css/style.css?v=mv4uiy82">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4v8xmy">
+  <link rel="stylesheet" href="css/style.css?v=mv4v8xmy">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -284,12 +284,13 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4uiy82"></script>
-<script src="js/curriculum.js?v=mv4uiy82"></script>
-<script src="js/srs.js?v=mv4uiy82"></script>
-<script src="js/tryit.js?v=mv4uiy82"></script>
-<script src="js/app.js?v=mv4uiy82"></script>
-<script src="js/tracker.js?v=mv4uiy82"></script>
+<script src="js/progress-model.js?v=mv4v8xmy"></script>
+<script src="js/curriculum.js?v=mv4v8xmy"></script>
+<script src="js/srs.js?v=mv4v8xmy"></script>
+<script src="js/freetry.js?v=mv4v8xmy"></script>
+<script src="js/tryit.js?v=mv4v8xmy"></script>
+<script src="js/app.js?v=mv4v8xmy"></script>
+<script src="js/tracker.js?v=mv4v8xmy"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -336,12 +337,12 @@ const BATCH_SIZE = 10;
     DATA = senRes;
 
     const seen = new Set();
-    const add = (key, ar, en, tr, hint, words, src, track, note) => {
+    const add = (key, ar, en, tr, hint, words, src, track, note, extra) => {
       if (!ar || !en) return;
       const n = normalizeAr(ar);
       if (seen.has(n)) return;
       seen.add(n);
-      MASTER_SENTENCES.push({
+      MASTER_SENTENCES.push(Object.assign({
         key: key || ("s:" + n.slice(0, 16)),
         ar,
         en,
@@ -351,7 +352,7 @@ const BATCH_SIZE = 10;
         src: src || "bank",
         track: track || "everyday",
         note: note || ""
-      });
+      }, extra || {}));   // extra: wk (word keys per word), pattern, use — what Free try plans with
     };
 
     // 1. Chapters 1-10 sentences (Reza's daily units)
@@ -371,7 +372,8 @@ const BATCH_SIZE = 10;
     // 3. Sentence Bank (1,106 sentences)
     (bRes.sentences || []).forEach(s => {
       const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
-      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}` : s.pattern || "");
+      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}` : s.pattern || "",
+        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), pattern: s.pattern || "-", use: s.use || 0 });
     });
 
     updateOverallStats();
@@ -384,13 +386,18 @@ const BATCH_SIZE = 10;
       pool: () => MASTER_SENTENCES,
       size: BATCH_SIZE,
       onVerdict: (it, g, idx) => rateSentence(it.key, g, idx),
-      onFree: (list, L) => {
+      onFree: (list, meta) => {
         stopAudio();
         REVEALED.clear();
         ACTIVE_SENTENCES = list;
         LAST_BATCH_KEYS = list.map(x => x.key);
         const t = document.getElementById("sessionTitle");
-        if (t) t.textContent = `Free try — built from what you hold (about ${L} words a sentence)`;
+        if (t) t.textContent = `✨ Free try — level ${meta.theta}`;
+        const lg = document.getElementById("srsLegend");
+        const gf = meta.grammar && meta.grammar.focus ? meta.grammar.focus : null;
+        const gp = gf && meta.grammar.profile[gf];
+        const gTxt = gf ? (gp && gp.unseen ? `new grammar this time: ${gf}` : `grammar focus: ${gf}${gp && gp.passRate != null ? ` (you pass ${gp.passRate}%)` : ""}`) : "";
+        if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">built from what you hold · aimed at about 3 in 4 right${gTxt ? " · " + gTxt : ""} · ${meta.mix.retry ? meta.mix.retry + " retry · " : ""}${meta.mix.grammar || 0} grammar · ${meta.mix.stretch} stretch · ${meta.mix.consolidate} consolidate · ${meta.candidates} qualified${meta.tries ? " · level from " + meta.tries + " of your tries" : " · first session: starting level"}</span></span>`;
         render10Cards();
       },
     });
@@ -436,6 +443,7 @@ function updateOverallStats() {
 function load10Sentences() {
   stopAudio();
   if (window.TryIt) TryIt.endFree();
+  { const lg = document.getElementById("srsLegend"); if (lg && window.SRS) lg.innerHTML = SRS.legendHtml(); }
   REVEALED.clear();
   const srs = getSrs();
   const now = Date.now();
@@ -493,7 +501,7 @@ function render10Cards() {
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
           <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}
+            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${s._try ? `<span class="tryit-why" title="why the coach chose this one · how likely you are to get it">${s._try.why} · ${s._try.p}%</span>` : ""}
             <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
               ${isEnFirst ? s.en : s.ar}
             </span>
