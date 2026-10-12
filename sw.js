@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mv51246b";
+const CACHE = "ats-mv56pg7f";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -38,6 +38,8 @@ const CORE = [
   "data/classes.json",                // the class repository
   "data/chapter-drills.json",         // 🎯 variation drills on every Daily Reader line
   "data/myday.json",                  // Say your day — the commute's spine, offline
+  "data/chapters.json",               // the Daily Reader's sentences (sentences.html fetches it)
+  "js/match.js",                      // the one grader for spoken answers
   "class.html", "words.html",
 ];
 
@@ -66,8 +68,10 @@ self.addEventListener("fetch", e => {
       const hit = await caches.match(e.request);
       if (hit) return hit;
       try {
-        const res = await fetch(e.request);
-        if (res.ok || res.type === "opaque") { const copy = res.clone(); caches.open(cacheName).then(c => c.put(e.request, copy)); }
+        // media elements ask for byte ranges; a 206 cannot be cached — fetch the whole clip once and keep it
+        const ranged = isAudio && e.request.headers.has("range");
+        const res = await fetch(ranged ? new Request(e.request.url, { mode: e.request.mode === "navigate" ? "cors" : e.request.mode, credentials: e.request.credentials }) : e.request);
+        if (res.ok || res.type === "opaque") { const copy = res.clone(); caches.open(cacheName).then(c => c.put(ranged ? e.request.url : e.request, copy)); }
         return res;
       } catch (err) {
         // offline first-sight of a stamped asset: any older stamp beats nothing

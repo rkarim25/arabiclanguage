@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
-  <link rel="stylesheet" href="css/style.css?v=mv51246b">
+  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -495,12 +495,13 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv51246b"></script>
-<script src="js/curriculum.js?v=mv51246b"></script>
-<script src="js/srs.js?v=mv51246b"></script>
-<script src="js/app.js?v=mv51246b"></script>
-<script src="js/tracker.js?v=mv51246b"></script>
-<script src="js/plan.js?v=mv51246b"></script>
+<script src="js/progress-model.js?v=mv56pg7f"></script>
+<script src="js/curriculum.js?v=mv56pg7f"></script>
+<script src="js/srs.js?v=mv56pg7f"></script>
+<script src="js/app.js?v=mv56pg7f"></script>
+<script src="js/tracker.js?v=mv56pg7f"></script>
+<script src="js/plan.js?v=mv56pg7f"></script>
+<script src="js/account.js?v=mv56pg7f"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1905,26 +1906,34 @@ async function submitPreplyLesson() {
   const text = document.getElementById("pasteText").value.trim();
   const fileInput = document.getElementById("pasteImages");
   const fb = document.getElementById("pasteFeedback");
-  if (!text && (!fileInput.files || !fileInput.files.length)) {
+  const files = fileInput && fileInput.files ? [...fileInput.files] : [];
+  if (!text && !files.length) {
     fb.textContent = "Please enter some notes or select image files.";
     fb.style.color = "var(--red)";
     return;
   }
-  fb.textContent = "Saving lesson to your coach queue…";
+  fb.textContent = files.length ? `Sending ${files.length} photo${files.length > 1 ? "s" : ""} to your coach…` : "Saving lesson to your coach queue…";
   fb.style.color = "var(--accent)";
-
-  logEvent({
-    e: "preply-paste",
-    text,
-    imageCount: fileInput.files ? fileInput.files.length : 0,
-    t: Date.now()
-  });
-
-  setTimeout(() => {
-    fb.textContent = "✓ Preply lesson captured! Coach will build your next chapter.";
-    document.getElementById("pasteText").value = "";
-    fileInput.value = "";
-  }, 1200);
+  /* the photos really go to the coach now (12 Oct audit: only a count was logged) — the same
+     route as a ✏️ pen-note photo, so the nightly finds them where it already looks */
+  const imgs = [];
+  try {
+    for (const file of files) {
+      const blob = typeof shrinkImage === "function" ? await shrinkImage(file) : file;
+      imgs.push(await uploadNoteImage(blob));
+    }
+  } catch (e) {
+    fb.textContent = "The photos did not upload — sign in (☁) and check your connection, then press Save again. Nothing you typed is lost.";
+    fb.style.color = "var(--red)";
+    return;
+  }
+  const who = typeof whoami === "function" ? whoami() : null;
+  logEvent({ e: "preply-paste", text, imageCount: files.length, imgs, t: Date.now() });
+  logEvent({ e: "note", text: ("[Preply lesson] " + text).slice(0, 2000), ctx: { page: "class", kind: "preply-paste" }, user: who ? who.name : undefined, ...(imgs.length ? { imgs } : {}) });
+  if (typeof autoSync === "function") { try { autoSync(true); } catch (e) {} }
+  fb.textContent = `✓ Lesson saved${imgs.length ? ` with ${imgs.length} photo${imgs.length > 1 ? "s" : ""}` : ""} — your coach reads it tonight and builds the next chapter from it.`;
+  document.getElementById("pasteText").value = "";
+  if (fileInput) fileInput.value = "";
 }
 </script>
 </body>

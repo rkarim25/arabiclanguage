@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
-  <link rel="stylesheet" href="css/style.css?v=mv51246b">
+  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,12 +49,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mv51246b"></script>
-<script src="js/frames.js?v=mv51246b"></script>
-<script src="js/freetry.js?v=mv51246b"></script>
-<script src="js/app.js?v=mv51246b"></script>
-<script src="js/tracker.js?v=mv51246b"></script>
-<script src="js/plan.js?v=mv51246b"></script>
+<script src="js/srs.js?v=mv56pg7f"></script>
+<script src="js/frames.js?v=mv56pg7f"></script>
+<script src="js/freetry.js?v=mv56pg7f"></script>
+<script src="js/app.js?v=mv56pg7f"></script>
+<script src="js/tracker.js?v=mv56pg7f"></script>
+<script src="js/plan.js?v=mv56pg7f"></script>
+<script src="js/account.js?v=mv56pg7f"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -114,16 +115,18 @@ async function buildWords() {
 async function buildSentences() {
   try {
     if (typeof FreeTry !== "undefined" && FreeTry && FreeTry.plan) {
-      const [md, bank] = await Promise.all([
+      const [md, bank, fq] = await Promise.all([
         fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
         fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+        fetch("data/frequency.json").then(r => r.json()).then(d => (d && d.words) || {}).catch(() => ({})),   // rarity, not "everything is rare"
       ]);
-      const mine = (md.sentences || []).filter(s => s.who === "me").map(s => ({ key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", words: s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).map(w => [w, ""]), src: "myday", track: "everyday", use: 3,
+      const fem = typeof planProfile === "function" && planProfile().gender === "f";
+      const mine = (md.sentences || []).filter(s => s.who === "me").map(s0 => (fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0)).map(s => ({ key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", words: s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).map(w => [w, ""]), src: "myday", track: "everyday", use: 3,
         pattern: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).pattern : null, frames: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).frames : [] }));
       const everyday = (bank.sentences || []).filter(s => s.track !== "quran").map(s => Object.assign({}, s, { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))) }));
       const script = new Set((typeof planScript === "function" ? planScript() : []).map(x => String(x.en).trim().toLowerCase()));
       const hw = store.get("ats-homework", null);
-      const ctx = { now: Date.now(), srs: getSrs(), log: store.get("ats-log", []), freq: {}, homework: new Set((hw && hw.keys) || []), size: 14, relaxFrom: 4,
+      const ctx = { now: Date.now(), srs: getSrs(), log: store.get("ats-log", []), freq: fq, homework: new Set((hw && hw.keys) || []), size: 14, relaxFrom: 4,
         boost: key => (/^md:/.test(key) ? 2 : 0), wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null };
       const plan = FreeTry.plan(mine.concat(everyday), ctx);
       // the script he has already proved comes back first — the commute is where it settles by ear
@@ -368,7 +371,7 @@ function checkDueLine() {
     const since = Date.now() - last.t;
     const done = lg.some(e => e.e === "commute-check-done" && e.forT === last.t);
     if (!done && since >= 8 * 3600e3 && since <= 7 * 86400e3)
-      return `<a href="index.html" style="flex-basis:100%;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px dashed var(--accent);border-radius:12px;padding:10px 14px">🧪 First: your 90-second check from the last commute is waiting on the dashboard — that's the measurement →</a>`;
+      return `<a href="sentences.html?myday=1" style="flex-basis:100%;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px dashed var(--accent);border-radius:12px;padding:10px 14px">🗣 Your last commute's sentences are waiting in Say your day →</a>`;
   } catch (e) {}
   return "";
 }
@@ -445,9 +448,23 @@ function buildCommuteQueue() {
   words.slice(wi).forEach(c => q.push({ kind: "word", c }));
   return q;
 }
+/* the commute's OWN clips, cached before the signal goes (the old warm-up fetched a different list) */
+async function prefetchQueue(q) {
+  if (!navigator.onLine || typeof _audioFileFor !== "function") return;
+  try { if (typeof _audioManLoading !== "undefined" && _audioManLoading) await _audioManLoading; } catch (e) {}
+  const urls = new Set(["audio/ui/gap3.wav", "audio/ui/gap5.wav"]);
+  const addT = t => { const f = t && _audioFileFor(t); if (f && !f.real) urls.add(f.src); };
+  addT("Commute session. Hands free. Say each one back in the gap.");
+  addT("That's your commute session done. Every word counted. Well done.");
+  q.forEach(it => { if (it.kind === "word") { addT(it.c.v.ar); addT(it.c.v.en); } else if (it.s) { addT(it.s.ar); addT(it.s.en); } });
+  const deadline = Date.now() + 8000;
+  for (const u of urls) { if (Date.now() > deadline || !S || S.stop) break; try { await fetch(u); } catch (e) {} }
+}
 async function runCommute() {
-  await speakP("Commute session. Hands free. Say each one back in the gap.", 1);
   S.queue = buildCommuteQueue(); S.hist = []; S.heardSents = [];
+  setStatus("Caching your clips…"); await prefetchQueue(S.queue);
+  if (!S || S.stop) return;
+  await speakP("Commute session. Hands free. Say each one back in the gap.", 1);
   while (S && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
     if (commuteElapsedMs() > COMMUTE_MIN * 60000) break;                 // the 13-minute promise
@@ -653,7 +670,7 @@ function stop() {
     // the trained set: what tomorrow's dashboard check measures against matched controls
     logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
                sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean), sentEns: (S.heardSents || []).map(x => x.en),
-               min: Math.round(commuteElapsedMs() / 60000) });
+               min: Math.round(commuteElapsedMs() / 6000) / 10, partial: !!S.partial || undefined });
     document.body.classList.remove("commute");
   } else {
     logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known });
@@ -662,12 +679,13 @@ function stop() {
   const t = S.taught, r = S.sents, k = S.known;
   render("ready");
   setStatus(wasCommute
-    ? `🚗 Commute done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} sentence${r === 1 ? "" : "s"}` : ""}. Tomorrow the dashboard checks what stuck.`
+    ? `🚗 Commute done — ${t} word${t === 1 ? "" : "s"} by ear${r ? `, ${r} sentence${r === 1 ? "" : "s"}` : ""}. Tomorrow's Say your day starts with these.`
     : (t || k ? `Done — ${t} word${t === 1 ? "" : "s"} by ear${k ? `, ${k} marked known` : ""}${r ? `, ${r} sentence${r === 1 ? "" : "s"} rebuilt` : ""}. Well done. 🎧` : "Stopped."));
   S = null;
   renderRecap();
 }
-window.addEventListener("pagehide", () => { if (S) { S.stop = true; stopAllAudio(); releaseWake(); } });
+// the tab closed from the pocket: the session still gets its record (commute-done, partial)
+window.addEventListener("pagehide", () => { if (S) { S.partial = true; stop(); } });
 
 /* warm the audio cache while on Wi-Fi so a commute works with no signal —
    the service worker keeps every /audio/ fetch in its persistent audio cache */
@@ -685,7 +703,7 @@ async function prefetchClips() {
     // asking for it here would spend the prefetch on something that still needs
     // the network. Qur'an sentences fall back to their generated clip offline.
     const addT = t => { const f = typeof _audioFileFor === "function" ? _audioFileFor(t) : null; if (f && !f.real) urls.add(f.src); };
-    addT("Commute session. Hands free. Recall each meaning in the gap, before I say it.");
+    addT("Commute session. Hands free. Say each one back in the gap.");
     addT("That's your commute session done. Every word counted. Well done.");
     addT("Audio coach. Listen, and recall the meaning before I say it.");
     w.forEach(c => { addT(c.v.ar); addT(c.v.en); });

@@ -55,6 +55,15 @@ const CASES = [
   ["فِي البَيْتِ أَرْبَعُ غُرَفٍ", "nominal", ["nominal", "plurals"]],
   ["أَخۡرَجَ مِنۡهَا مَآءَهَا", "prep-pron", ["prep-pron", "tenses"]],
   ["وَجَآءَ رَبُّكَ", "tenses", ["tenses", "pronouns"]],
+  /* the 12 Oct audit's mislabels, now pinned */
+  ["اليَوْمُ الاثْنَيْنِ", "nominal", ["nominal"]],
+  ["لَمْ أَنَمْ جَيِّدًا", "negation", ["negation", "tenses"]],
+  ["مَاذَا فَعَلْتَ أَمْسِ؟", "questions", ["questions", "tenses"]],
+  ["كَيْفَ أَصِلُ إِلَى المَسْجِدِ؟", "questions", ["questions", "tenses"]],
+  ["أَيْنَ أَلْبَسُ هَذَا؟", "questions", ["questions", "tenses", "demonstratives"]],
+  ["اِمْشِ مَعِي", "imperative", ["imperative"]],
+  ["مَا عِنْدِي", "negation", ["negation", "have"]],
+  ["الشَّقَّةُ فِيهَا غُرْفَتَانِ", "dual", ["dual", "prep-pron"]],
 ];
 console.log("\n-- the one label --");
 let labelOk = 0;
@@ -70,6 +79,11 @@ yes(!F.detect("مَاذَا تُرِيدُ؟").frames.includes("negation"), "a q
 yes(!F.detect("أَنَا طَالِبٌ").frames.includes("tenses"), "a pronoun is not a present-tense verb");
 yes(!F.detect("فِي البَيْتِ").frames.includes("idafa"), "preposition + noun is not an iḍāfa");
 yes(!F.detect("الَّذِينَ آمَنُوا").frames.includes("dual"), "الذين is not a dual");
+yes(!F.detect("اليَوْمُ الاثْنَيْنِ").frames.includes("dual"), "Monday is not a dual");
+yes(!F.detect("لِأَنِّي تَعْبَانُ").frames.includes("tenses"), "لِأَنِّي is not a present-tense verb");
+yes(!F.detect("إِنَّنِي جَائِعٌ").frames.includes("tenses"), "إِنَّنِي is not a present-tense verb");
+yes(!F.detect("لِأُمِّي بَيْتٌ").frames.includes("tenses"), "لِأُمِّي is not a verb");
+yes(!F.detect("لَمْ أَنَمْ جَيِّدًا").frames.includes("nominal"), "a sentence with a verb is not nominal");
 yes(F.detect("").pattern === null, "an empty string has no label");
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

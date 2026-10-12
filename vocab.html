@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
-  <link rel="stylesheet" href="css/style.css?v=mv51246b">
+  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,10 +52,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mv51246b"></script>
-<script src="js/app.js?v=mv51246b"></script>
-<script src="js/tracker.js?v=mv51246b"></script>
-<script src="js/plan.js?v=mv51246b"></script>
+<script src="js/srs.js?v=mv56pg7f"></script>
+<script src="js/app.js?v=mv56pg7f"></script>
+<script src="js/tracker.js?v=mv56pg7f"></script>
+<script src="js/plan.js?v=mv56pg7f"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -84,6 +84,7 @@ Promise.all([
   if (fam) renderGroup(fam, params.get("mode") || "study", "fam-");
   else if (ev) renderGroup(ev, params.get("mode") || "study", "ev-");
   else if (ph) renderGroup(ph, params.get("mode") || "study", "ph-");
+  else if (params.get("sheet")) renderList("learn");   // the plan's "A few new words" link
   else if (params.get("today")) startToday(0);
   else renderList(params.get("view") || "learn");
 });
@@ -631,7 +632,7 @@ async function renderBrowseView(body) {
       <div class="vocab-table-wrap" style="max-height:420px;overflow-y:auto">
         <table class="vocab-table"><tbody id="browseBody"></tbody></table>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ 30d · ↻ 1d · ⏳ 7d · 🚫 Retire</p>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✗ no · ≈ maybe · ✓ yes · ★ solid — the site sets the next date</p>
     </div>`;
   if (!catalog) catalog = await buildCatalog();
   const chips = document.getElementById("bucketChips");
@@ -739,7 +740,7 @@ function renderGroupStudy(obj, prefix) {
           <tbody id="vtBody"></tbody>
         </table>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✓ know — drops out of Learn (30d check) · ↻ repeat soon · ⏳ much later · ✗ don't repeat</p>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">✗ missed · ≈ hesitant · ✓ knew it · ★ instant · ⊘ don't repeat</p>
     </div>
     ${obj.quran ? `
     <div class="card">

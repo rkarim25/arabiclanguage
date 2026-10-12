@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
-  <link rel="stylesheet" href="css/style.css?v=mv51246b">
+  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,13 +250,14 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv51246b"></script>
-<script src="js/curriculum.js?v=mv51246b"></script>
-<script src="js/srs.js?v=mv51246b"></script>
-<script src="js/app.js?v=mv51246b"></script>
-<script src="js/tracker.js?v=mv51246b"></script>
-<script src="js/plan.js?v=mv51246b"></script>
-<script src="js/account.js?v=mv51246b"></script>
+<script src="js/progress-model.js?v=mv56pg7f"></script>
+<script src="js/curriculum.js?v=mv56pg7f"></script>
+<script src="js/srs.js?v=mv56pg7f"></script>
+<script src="js/match.js?v=mv56pg7f"></script>
+<script src="js/app.js?v=mv56pg7f"></script>
+<script src="js/tracker.js?v=mv56pg7f"></script>
+<script src="js/plan.js?v=mv56pg7f"></script>
+<script src="js/account.js?v=mv56pg7f"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -4272,7 +4273,7 @@ function drillRungDone(idx) {
   if (!curChap) return 0;
   let best = 0;
   drillLog().forEach(x => {
-    if (x.e === "sent-drill" && x.chap === curChap.id && x.idx === idx && x.ok && x.rung > best) best = x.rung;
+    if (x.e === "sent-drill" && x.ok && (x.rung || 1) > best && ((x.chap === curChap.id && x.idx === idx) || x.key === `chap:${curChap.num}:${idx}`)) best = x.rung || 1;
   });
   return best;
 }
@@ -4413,7 +4414,7 @@ function renderDayDrillHtml(idx) {
           <button type="button" class="book-toggle-pill" onclick="drillSelf(${idx}, true)">✓ Yes, I said it</button>
           <button type="button" class="book-toggle-pill" onclick="drillSelf(${idx}, false)">✗ Missed</button>` : ""}
         ${st.result && !passed ? `<button type="button" class="book-toggle-pill" onclick="drillRetry(${idx})">↺ Try again</button>` : ""}
-        ${passed ? `<button type="button" class="book-toggle-pill active" onclick="drillNext(${idx})">${nextLabel}</button>` : ""}
+        ${st.result ? `<button type="button" class="book-toggle-pill${passed ? " active" : ""}" onclick="drillNext(${idx})" title="${passed ? "" : "An honest miss moves on too — it comes back tomorrow"}">${passed ? nextLabel : (dayDrillRound && nextDrillIdx(idx) >= 0 ? "Next anyway →" : "Finish ✓")}</button>` : ""}
         ${st.result ? `<button type="button" class="book-toggle-pill" onclick="drillRetry(${idx})" title="Say this one once more">🔁 Once more</button>` : ""}
       </div>`;
   }
@@ -4425,7 +4426,8 @@ function drillRecord(idx, ok, how, extra) {
   const st = drillState(idx);
   const item = drillItem(idx);
   if (!curChap || !item) return;
-  logEvent(Object.assign({ e: "sent-drill", chap: curChap.id, idx, rung: st.rung, ok: !!ok, how, en: item.en, t: Date.now() }, extra || {}));
+  // key as well as chap/idx: the two Try it engines share one rung ladder per sentence
+  logEvent(Object.assign({ e: "sent-drill", key: `chap:${curChap.num}:${idx}`, chap: curChap.id, idx, rung: st.rung, ok: !!ok, how, en: item.en, src: "reader", t: Date.now() }, extra || {}));
   // the drill is evidence about the base sentence: a clean pass is ★/✓, a miss is ✗
   if (typeof SRS === "object" && SRS && SRS.rate) {
     const strong = ok && extra && (extra.tier === "perfect" || (typeof extra.score === "number" && extra.score >= 0.8));
@@ -4455,7 +4457,7 @@ function drillRetry(idx) {
 }
 function drillNext(idx) {
   const st = drillState(idx);
-  if (st.rung < 3) { setDrillRung(idx, st.rung + 1); return; }
+  if (st.result && st.result.ok && st.rung < 3) { setDrillRung(idx, st.rung + 1); return; }   // a miss does not climb
   if (dayDrillRound) {
     const n = nextDrillIdx(idx);
     if (n >= 0) { toggleDayDrill(n); return; }
@@ -4507,7 +4509,7 @@ async function drillMic(idx) {
     const h = document.getElementById("drill-heard-" + idx);
     if (h) h.innerHTML = `🔴 listening… <span class="arabic" dir="rtl">${drillEsc(txt)}</span> <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="drillMicDone(${idx})">✓ I'm done</button>`;
     if (quiet) clearTimeout(quiet);
-    quiet = setTimeout(() => { if (ctl.stop) ctl.stop(); }, 2500);   // 2.5 s of silence after speech = finished
+    quiet = setTimeout(() => { if (ctl.stop) ctl.stop(); }, 4000);   // 4 s of silence after speech = finished (he said he would be slow)
   }, ctl);
   if (quiet) clearTimeout(quiet);
   st.micCtl = null;
@@ -4520,16 +4522,14 @@ async function drillMic(idx) {
     return;
   }
   st.heard = r.heard || "";
-  /* graded exactly like speaking.html's prompts: share of model words heard */
-  const target = normalizeAr(item.ar).split(" ").filter(Boolean);
-  const heardW = new Set(normalizeAr(st.heard).split(" "));
-  const hit = target.filter(w => heardW.has(w)).length;
-  const score = target.length ? Math.round((hit / target.length) * 100) / 100 : 0;
-  const ok = st.heard ? (arMatch(st.heard, item.ar) || score >= 0.5) : false;
+  /* one grader for both Try it engines (js/match.js): order-aware, same folding as typing */
+  const m = st.heard && window.Match ? Match.spoken(st.heard, item.ar) : { score: 0, ok: false, exact: false };
+  const exact = m.exact || (st.heard ? arMatch(st.heard, item.ar) : false);
+  const ok = !!st.heard && (exact || m.ok);
   st.revealed = true;
-  st.result = { how: "mic", ok, score: ok && arMatch(st.heard, item.ar) ? 1 : score };
+  st.result = { how: "mic", ok, score: exact ? 1 : m.score };
   drillRecord(idx, ok, "mic", { heard: st.heard, score: st.result.score });
-  if (st.heard) logEvent({ e: "prompt", en: item.en, heard: st.heard, score: st.result.score, src: "sent-drill", t: Date.now() });
+  if (st.heard) logEvent({ e: "prompt", en: item.en, heard: st.heard, score: st.result.score, src: "sent-drill", via: "tryit", t: Date.now() });
   renderDayDrillPanel(idx);
   if (!ok) speak(item.ar, 0.8);
 }

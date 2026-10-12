@@ -68,6 +68,7 @@
   const LEGACY_BUCKET = { solid: "strong", yes: "medium", maybe: "weak", no: "learning", retire: "never" };
 
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const dayKey = t => { const d = new Date(t); return d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate(); };   // a LOCAL calendar day
   function boxFromS(s, n) {
     let box = 0;
     for (let i = 5; i >= 1; i--) if (s >= BOX_DAYS[i]) { box = i; break; }
@@ -113,6 +114,7 @@
     const R = fresh ? 0 : retrievability(c, now);
     const oldBox = c ? (c.box || 0) : 0;
     const ok = grade === "yes" || grade === "solid";
+    const repeatToday = !fresh && !!ls && dayKey(ls) === dayKey(now);   // already passed today: a repeat proves nothing new
     if (fresh) {
       s = P.s0[grade]; d = P.d0[grade];
     } else {
@@ -123,6 +125,11 @@
       } else if (grade === "maybe") {
         s = Math.min(s * (1.2 + 0.4 * (1 - R)), bandTop(oldBox));   // a stumble never promotes
         d = clamp(d + 0.4, 1, 10);
+      } else if (repeatToday) {
+        // same-day ✓/★ cannot compound (five ★ taps in five minutes used to push a new card out 30 days)
+        if (grade === "solid") d = clamp(d - 0.2, 1, 10);
+        if (grade === "yes" && s < 1) s = 1;
+        if (grade === "solid" && s < 3) s = 3;
       } else {
         let grow = 1 + P.G * (11 - d) * Math.pow(Math.max(s, 0.1), -0.1) * (Math.exp(P.C * (1 - R)) - 1);
         grow = clamp(grow, P.growMin, P.growMax);
@@ -134,7 +141,7 @@
       }
     }
     if (grade === "no") l += 1;
-    if (ok && (!ls || now - ls >= P.newDayGap)) n += 1;
+    if (ok && (!ls || dayKey(ls) !== dayKey(now))) n += 1;   // distinct LOCAL days, not 12-hour gaps
     if (ok) ls = now;
     s = clamp(s, P.sMin, P.sMax);
     const box = grade === "no" ? 0 : boxFromS(s, n);
@@ -221,7 +228,7 @@
     else if (opts.mode === "new") chosen = fresh.slice(0, size);
     else {
       const nDue = Math.min(Math.ceil(size * 0.7), D.length);
-      const nNew = Math.min(size - nDue, fresh.length);
+      const nNew = Math.min(size - nDue, fresh.length, D.length > 20 ? 1 : size);   // a backlog throttles new cards to one
       chosen = D.slice(0, nDue).concat(fresh.slice(0, nNew));
       if (chosen.length < size) chosen = chosen.concat(D.slice(nDue, nDue + size - chosen.length));
       if (chosen.length < size) chosen = chosen.concat(fresh.slice(nNew, nNew + size - chosen.length));

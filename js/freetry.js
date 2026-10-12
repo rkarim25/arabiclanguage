@@ -43,7 +43,7 @@
   "use strict";
   const DAY = 86400000;
   const P = {
-    known: 0.6,              // recall-right-now at which a word counts as held for a sentence
+    known: 0.75,             // recall-right-now at which a word counts as held for a sentence (below it: due — reviewed inside a sentence)
     sweet: 1.1,              // d = θ − sweet → P(pass) ≈ 0.75
     ceiling: 0.4,            // never harder than θ − ceiling (P ≈ 0.6)
     theta0: 3.5,             // a learner we know nothing about: 3-word everyday sentences at ~75%
@@ -78,7 +78,13 @@
   }
   /* rarity of a word in real Arabic, 0 (very common) … 1 (rare / unseen) */
   function rarity(tok, freq) {
-    const f = Math.max(freq[tok] || 0, tok.length >= 3 ? (freq[tok.replace(/^ال/, "")] || 0) : 0);
+    // attached forms (بِالقِطَارِ، لِلْعَائِلَةِ، وَأَنَا) are looked up by their bare word too
+    const cands = [tok];
+    let t = tok;
+    if (/^[وف]/.test(t) && t.length > 3) { t = t.slice(1); cands.push(t); }
+    if (/^[بلك]/.test(t) && t.length > 3) { cands.push(t.slice(1)); if (/^لل/.test(t)) cands.push("ال" + t.slice(2)); t = t.slice(1); }
+    if (/^ال/.test(t) && t.length > 3) cands.push(t.slice(2));
+    const f = Math.max(...cands.map(c => (c.length >= 2 ? (freq[c] || 0) : 0)));
     return clamp(1 - Math.log10(1 + f) / Math.log10(51), 0, 1);   // 50 per 10k → 0
   }
 
@@ -118,7 +124,7 @@
       if (x.e === "sent-drill") {
         const key = x.key || (x.chap != null && x.idx != null ? "chap:" + String(x.chap).replace(/^chap-/, "") + ":" + x.idx : null);
         if (key && byKey.has(key)) out.push({ key, ok: !!x.ok, how: x.how || "self", t: x.t });
-      } else if (x.e === "prompt" && typeof x.score === "number" && x.en) {
+      } else if (x.e === "prompt" && typeof x.score === "number" && x.en && !x.via) {   // via: a Try it prompt — its sent-drill is already counted
         const key = byEn.get(String(x.en).trim().toLowerCase());
         if (key) out.push({ key, ok: x.score >= 0.5, how: "mic", t: x.t });
       }
@@ -191,7 +197,7 @@
     const seen = Object.entries(out).filter(([, v]) => !v.unseen && v.evidence >= 3).sort((a, b) => b[1].weakness - a[1].weakness);
     const unseen = ESSENTIAL.filter(p => out[p] && out[p].unseen);
     const focus = seen.length && seen[0][1].weakness >= 0.3 ? seen[0][0] : (unseen[0] || (seen.length ? seen[0][0] : null));
-    return { profile: out, focus, introduce: unseen[0] || null };
+    return { profile: out, focus, introduce: unseen.find(p => p !== focus) || null };   // the new-grammar slot is never the focus again
   }
 
   /* ---------- the plan ---------- */
@@ -203,6 +209,8 @@
     const lastTry = new Map();
     triesOf(pool, ctx).forEach(x => { if (x.t > weekAgo) { const prev = lastTry.get(x.key); if (!prev || x.t > prev.t) lastTry.set(x.key, x); } });
     const hw = ctx.homework instanceof Set ? ctx.homework : new Set(ctx.homework || []);
+    // a caller's priority (the morning after a commute, his own day's lines): a function or a map, per key
+    const bst = typeof ctx.boost === "function" ? ctx.boost : (ctx.boost && typeof ctx.boost === "object") ? (k => ctx.boost[k] || 0) : (() => 0);
 
     const rows = [];
     pool.forEach(s => {
@@ -211,7 +219,7 @@
       if (c && c.b === "never") return;
       const f = features(s, ctx);
       const last = lastTry.get(s.key);
-      if (last && last.ok && last.t > dayAgo) return;                 // passed today → not again today
+      if (!ctx.includeRecent && last && last.ok && last.t > dayAgo) return;   // passed today → not again today (a rehearse asks for them)
       const retry = !!(last && !last.ok && last.t > dayAgo);
       const hwHit = (s.wk || []).some(keys => keys.some(k => hw.has(k))) || hw.has(s.key);
       const useful = Math.log(1 + (s.use || 0));
@@ -228,7 +236,7 @@
       const p = pat(r);
       return -dist + (r.hwHit ? 1.5 : 0) + (r.f.due > 0 ? 0.8 : 0) + (r.f.fresh === 1 ? 0.6 : 0) + 0.4 * r.useful
         + 1.2 * gw(r) + (exercises(r, G.focus) ? 0.8 : 0) + (exercises(r, G.introduce) ? 0.6 : 0)
-        - (r.recentPass ? 1.0 : 0) + (r.retry ? 3 : 0) + Math.random() * 0.3;
+        - (r.recentPass ? 1.0 : 0) + (r.retry ? 3 : 0) + (Number(bst(r.s.key)) || 0) + Math.random() * 0.3;
     };
     // the gates, relaxed step by step so a batch is never empty
     const gates = [

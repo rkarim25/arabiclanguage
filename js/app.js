@@ -223,7 +223,7 @@ function isRetired(key) { return (getSrs()[key] || {}).b === "never"; }
 function toggleRetire(key) {
   if (isRetired(key)) {
     const srs = getSrs();
-    srs[key] = { box: Math.max(1, (srs[key].box || 0) - 1), due: Date.now(), u: Date.now() };
+    { const c = Object.assign({}, srs[key]); delete c.b; if (c.g === "retire") delete c.g; c.box = Math.max(1, (c.box || 0) - 1); c.due = Date.now(); c.u = Date.now(); srs[key] = c; }   // history (s, d, n, l) survives an un-retire
     store.set("ats-srs", srs);
     logEvent({ e: "unretire", key });
     return false;
@@ -1319,7 +1319,7 @@ function seedCards(keys) {
   const srs = getSrs();
   let added = 0;
   keys.forEach(k => {
-    if (!srs[k]) { srs[k] = { box: 1, due: Date.now() + DAY }; added++; }
+    if (!srs[k]) { srs[k] = { box: 1, due: Date.now() + DAY, u: Date.now() }; added++; }   // stamped: a real verdict elsewhere beats this seed on merge
   });
   store.set("ats-srs", srs);
   return added;
@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv51246b";
+const DATA_V = "mv56pg7f";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2680,12 +2680,9 @@ function wireNavSync(a) {
     else { a.textContent = "☁ Sign in"; a.style.color = "var(--accent)"; a.style.fontWeight = "600"; a.title = "Sign in so your progress syncs and the 🎤 hears you"; }
   };
   setTimeout(paint, 0);   // after tracker.js has loaded
-  a.onclick = ev => {
-    if (!signedIn() || typeof syncNow !== "function") return;   // not signed in: follow the link to the card
-    ev.preventDefault();
-    a.textContent = "☁ …";
-    syncNow().then(n => { a.textContent = `✓ synced${typeof n === "number" ? " · " + n : ""}`; setTimeout(paint, 2500); })
-      .catch(e => { a.textContent = "☁ retry"; a.title = (e && e.message) || "sync failed"; setTimeout(paint, 4000); });
+  a.onclick = () => {
+    // signed in: sync on the way — and STILL open the hub (12 Oct: more / map / learn were unreachable while signed in)
+    if (signedIn() && typeof autoSync === "function") { try { autoSync(true); } catch (e) {} }
   };
 }
 
@@ -4069,11 +4066,12 @@ function generateLearnerDossierMarkdown(currentContext) {
   const masteredChapTests = log.filter(x => x.e === "chap-test" && x.pass).length;
   const masteredClasses = log.filter(x => (x.e === "preply-test" || x.e === "preply-mastery") && x.pass).length;
 
-  let md = `# Learner Context & Pedagogical Dossier — Reza Karim\n\n`;
+  const me = (typeof whoami === "function" && whoami()) || { name: "Reza", full: "Reza Karim", email: "rkarim88@gmail.com" };
+  let md = `# Learner Context & Pedagogical Dossier — ${me.full || me.name}\n\n`;
   md += `> **Instruction for AI Tutors (ChatGPT, Claude, Voice Mode & Custom GPTs):**\n`;
-  md += `> You are Reza's personal Arabic conversation tutor. Keep your voice replies strictly to 1–2 short sentences in clear Modern Standard Arabic (MSA) with full vowels (tashkeel). Never monologue or lecture. Prompt him to speak, and drill natural variations of target sentences.\n\n`;
+  md += `> You are ${me.name}'s personal Arabic conversation tutor. Keep your voice replies strictly to 1–2 short sentences in clear Modern Standard Arabic (MSA) with full vowels (tashkeel). Never monologue or lecture. Prompt him to speak, and drill natural variations of target sentences.\n\n`;
   md += `## 1. Learner Profile & Real-Time Stats\n`;
-  md += `- **Learner:** Reza Karim (rkarim88@gmail.com) — Time-poor senior investment manager\n`;
+  md += `- **Learner:** ${me.full || me.name}${me.email ? ` (${me.email})` : ""} — ${me.email === "rkarim88@gmail.com" ? "Time-poor senior investment manager" : "beginner, learning alongside family"}\n`;
   md += `- **Ranked Goals:** (1) Understand Qur'an by ear (Qari: Mishary Rashid Alafasy), (2) Spoken MSA conversation\n`;
   md += `- **Active Course:** Live Preply teacher on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
   md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3 / Know), ${learningCount} active learning, ${weakCount} need review (${totalTracked} total tracked)\n`;

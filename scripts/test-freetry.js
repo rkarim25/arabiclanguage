@@ -108,7 +108,7 @@ console.log("\n-- grammar: weak frames get more, unmet essential frames get one,
   const byPat = list => list.reduce((a, s) => { a[s.pattern] = (a[s.pattern] || 0) + 1; return a; }, {});
   yes(Object.values(byPat(base.list)).every(n => n <= 4), `no frame takes more than 4 of 10 (${JSON.stringify(byPat(base.list))})`);
   const unseenFirst = F.grammarProfile(big, c);
-  yes(unseenFirst.introduce === "nominal" && unseenFirst.focus === "nominal", "with no evidence the first essential frame is introduced");
+  yes(unseenFirst.focus === "nominal" && unseenFirst.introduce && unseenFirst.introduce !== "nominal", "with no evidence the first essential frame is the focus and the NEXT one is introduced — the two slots never collide (12 Oct)");
   // he keeps missing negation, passes tenses
   const log = [];
   for (let i = 0; i < 6; i++) log.push({ e: "sent-drill", key: `negation-${i}`, ok: i === 0, how: "typed", t: NOW - (i + 1) * 3600000 * 30 });
@@ -140,5 +140,21 @@ console.log("\n-- the content: every essential frame has short sentences to prac
   yes(chapters.every(s => s.frames && s.frames.length), "every chapter sentence carries frames");
 }
 
+
+console.log("\n-- the 12 Oct audit: the caller's boost is read, a rehearse keeps today's passes, a Try it prompt is not counted twice --");
+{
+  const boosted = F.plan(pool, ctx({ boost: { s3: 50 } }));
+  yes(boosted.list.length && boosted.list[0].key === "s3", `a boosted key leads the batch (got ${boosted.list[0] && boosted.list[0].key})`);
+  const asFn = F.plan(pool, ctx({ boost: k => (k === "s2" ? 50 : 0) }));
+  yes(asFn.list.length && asFn.list[0].key === "s2", "…as a function too");
+  const passedAll = pool.slice(0, 3).map(s => ({ e: "sent-drill", key: s.key, ok: true, how: "mic", t: NOW - 3600000 }));
+  const strict = F.plan(pool.slice(0, 3), ctx({ log: passedAll }));
+  const rehearse = F.plan(pool.slice(0, 3), ctx({ log: passedAll, includeRecent: true }));
+  yes(strict.list.length === 0 && rehearse.list.length === 3, `passed today: a Free try skips them (${strict.list.length}), a rehearse asks for them (${rehearse.list.length})`);
+  const one = [{ e: "sent-drill", key: "s1", ok: true, how: "mic", en: "s1", t: NOW - 7200000 }, { e: "prompt", en: "s1", score: 1, via: "tryit", t: NOW - 7200000 + 10 }];
+  yes(F.tries(pool, ctx({ log: one })).length === 1, "a Try it mic pass is one try, not two (the prompt carries via)");
+  const plain = [{ e: "prompt", en: "s1", score: 1, t: NOW - 7200000 }];
+  yes(F.tries(pool, ctx({ log: plain })).length === 1, "…a speaking-page prompt (no via) still counts");
+}
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

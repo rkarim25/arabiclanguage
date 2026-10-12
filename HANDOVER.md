@@ -100,32 +100,20 @@ When updating `coach:<email>`:
 
 ## 5. Generator Pipeline Execution Sequence
 
-When content is added or modified in `data/*.json` or `data/story-*.json`, execute the build pipeline in this exact order:
+When content is added or modified in `data/*.json` or `data/story-*.json`, run the build pipeline in this order (the ONE order — the nightly SKILL.md and the run-arabic-coach skill say the same; 12 Oct):
 
 ```bash
-# 1. Compile class view from metadata
-node scripts/gen-classes.js
+node scripts/gen-frames.js      # grammar frames on chapters/prompts/stories (+ regenerates index.html CHAPTERS from chapters.json)
+node scripts/gen-sentences.js   # the sentence bank
+node scripts/gen-curriculum.js  # the milestone ladder (gen-classes reads curriculum.json — so this comes first)
+node scripts/gen-classes.js     # the class repository
+node scripts/gen-lexicon.js     # the dictionary
+PYTHONUTF8=1 python scripts/gen-audio.py   # neural clips for new text (PYTHONUTF8=1: the cp1252 console crashes otherwise)
 
-# 2. Recompile curriculum milestone ladder
-node scripts/gen-curriculum.js
+# then: every suite (13 suites: test-srs, test-freetry, test-frames, test-match, test-audio-coverage, test-curriculum, test-drill-grade, test-progress-model, test-sentence-diag, test-sentences, test-shell, test-typing, test-chapter-drills) and every page's inline script must parse
+for t in srs freetry frames match audio-coverage curriculum drill-grade progress-model sentence-diag sentences shell typing chapter-drills; do node scripts/test-$t.js; done
 
-# 3. Compile sentence bank & cross-references
-node scripts/gen-sentences.js
-
-# 4. Rebuild dictionary / lexicon lookup
-node scripts/gen-lexicon.js
-
-# 5. Generate neural audio clips for new text
-# Note: On Windows PowerShell, ensure UTF-8 encoding: $env:PYTHONIOENCODING="utf-8"
-python scripts/gen-audio.py
-
-# 6. Run all test suites
-node scripts/test-curriculum.js
-node scripts/test-sentences.js
-node scripts/test-shell.js
-node scripts/test-audio-coverage.js
-
-# 7. Bump cache version (?v= tokens and sw.js)
+# then the cache stamp
 node scripts/bump-version.js
 ```
 

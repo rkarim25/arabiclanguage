@@ -110,5 +110,24 @@ console.log("\n-- bounds & labels --");
   yes(/✗/.test(html) && /★/.test(html) && /rateWord\('ev-x:1', 'solid', 3\)/.test(html) && /⊘/.test(html), "the inline bar carries the four symbols + ⊘ and the handler call");
 }
 
+
+console.log("\n-- the 12 Oct audit: no compounding, local days, a backlog throttles new cards --");
+{
+  const local = (y, m, d, h) => new Date(y, m - 1, d, h, 0, 0).getTime();
+  let c = SRS.next(null, "solid", local(2026, 10, 1, 9));
+  for (let i = 1; i <= 5; i++) c = SRS.next(c, "solid", local(2026, 10, 1, 9) + i * 60000);
+  yes(c.s <= 7 && (c.due - local(2026, 10, 1, 9)) / DAY <= 7.5, `five ★ in five minutes on a new card stay within a week (s=${c.s}, due in ${Math.round((c.due - local(2026, 10, 1, 9)) / DAY)} d)`);
+  yes(c.box <= 1 && c.n === 1, "…and it is still one day's proof, box ≤ 1");
+  const a = SRS.next(SRS.next(null, "yes", local(2026, 10, 2, 6)), "yes", local(2026, 10, 2, 18));
+  yes(a.n === 1, "06:00 and 18:30 the same day are ONE day of proof (not two 12-hour halves)");
+  const b = SRS.next(SRS.next(null, "yes", local(2026, 10, 2, 22)), "yes", local(2026, 10, 3, 8));
+  yes(b.n === 2, "22:00 and 08:00 the next morning are TWO days of proof");
+  const srs = {}, pool = [];
+  const now = local(2026, 10, 5, 9);
+  for (let i = 0; i < 25; i++) { pool.push({ key: "d" + i }); srs["d" + i] = { s: 1, u: now - 5 * DAY, box: 1, n: 1, g: "yes", due: now - DAY }; }
+  for (let i = 0; i < 10; i++) pool.push({ key: "n" + i });
+  const batch = SRS.buildBatch(pool, { size: 10, srs, now });
+  yes(batch.filter(x => /^n/.test(x.key)).length === 1, `with 25 due, a batch carries ONE new card, not three (${batch.filter(x => /^n/.test(x.key)).length})`);
+}
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

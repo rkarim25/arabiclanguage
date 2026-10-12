@@ -46,7 +46,7 @@
     imperative: new Set(["قل", "اقرا", "اذهب", "اذهبي", "استووا", "تقدموا", "انظر", "انظري", "اسمع", "اسمعي", "تفضل", "تفضلي", "تفضلوا",
       "خذ", "خذي", "خذني", "خذنا", "توقف", "توقفي", "انتظر", "انتظري", "تعال", "تعالي", "اجلس", "اجلسي", "قم", "قومي", "اعطني", "اعطيني",
       "ساعدني", "ساعديني", "اتبع", "ادخل", "اخرج", "كل", "كلي", "اشرب", "اشربي", "اكتب", "اكتبي", "افتح", "افتحي", "اغلق", "انتبه", "اتقوا",
-      "هيا", "نزل", "نزلي", "اتصل", "ارجع", "ادع", "اذكر", "اعبد", "اعبدوا", "صل", "صلوا", "قولوا", "اسجد"]),
+      "هيا", "نزل", "نزلي", "اتصل", "ارجع", "ادع", "اذكر", "اعبد", "اعبدوا", "صل", "صلوا", "قولوا", "اسجد", "امش", "امشي", "اذهبوا", "اسكت", "اسكتي", "انتظروا"]),
     ordinal: new Set(["اول", "الاول", "اولى", "الاولى", "ثان", "ثاني", "الثاني", "ثانية", "الثانية", "ثالث", "الثالث", "ثالثة", "الثالثة",
       "رابع", "الرابع", "رابعة", "الرابعة", "خامس", "الخامس", "خامسة", "الخامسة", "سادس", "السادس", "سادسة", "السادسة",
       "سابع", "السابع", "سابعة", "السابعة", "ثامن", "الثامن", "ثامنة", "الثامنة", "تاسع", "التاسع", "تاسعة", "التاسعة", "عاشر", "العاشر", "عاشرة", "العاشرة",
@@ -64,7 +64,8 @@
       "تلميذ", "تذكرة", "نهار", "نور", "نار", "نفس", "نفسي", "ناس", "نهاية", "نوم", "نعم", "نخل", "نخيل", "نصر", "امتعة", "امتعتي", "امتعتك", "ام", "امي", "امك", "امه",
       "اب", "ابي", "ابوك", "ابوه", "اخ", "اخي", "اخوك", "اخت", "اختي", "اختك", "اخته", "اسم", "اسمي", "اسمك", "اسمه", "ارض", "اسبوع", "امس", "اسرة", "اسرتي", "اصدقاء",
       "اصدقائي", "اصدقائه", "اطباق", "اعناب", "ايمان", "انسان", "اذان", "اذن", "اكل", "ابواب", "اثاث", "ايضا", "الان", "احد", "الله", "اللهم",
-      "اربع", "اربعة", "تسع", "تسعة", "ثمان", "ثماني", "ثمانية", "اثنان", "اثنين", "اثنتان", "اول", "اولى", "اخر", "اخرى", "ايام", "اسماء", "ابناء", "اخوة", "اخوات"]),
+      "اربع", "اربعة", "تسع", "تسعة", "ثمان", "ثماني", "ثمانية", "اثنان", "اثنين", "اثنتان", "اول", "اولى", "اخر", "اخرى", "ايام", "اسماء", "ابناء", "اخوة", "اخوات",
+      "الاثنين", "الثلاثاء", "الاربعاء", "الخميس", "الجمعة", "السبت", "الاحد", "ارائك", "اريكة", "تعبان", "تعبانة", "تمام", "تقريبا"]),
     particles: new Set(["في", "من", "الى", "على", "عن", "مع", "هل", "لا", "ما", "ثم", "و", "ان", "اذا", "يا", "كم", "اين", "متى", "كيف", "لماذا",
       "ماذا", "بعد", "قبل", "عند", "تحت", "فوق", "امام", "خلف", "بين", "حول", "كل", "بعض", "غير", "الا", "لم", "لن", "ليس", "قد", "لقد", "سوف",
       "او", "لكن", "ولكن", "لان", "حتى", "منذ", "ايضا", "جدا", "فقط", "هنا", "هناك", "الان", "اليوم", "غدا", "امس", "صباحا", "مساء", "ليلا",
@@ -78,7 +79,7 @@
   /* a past-tense verb by its SHAPE (vowels tell): فَعَلَ / فَعِلَ, قَالَ, أَفْعَلَ, تَفَعَّلَ, اِسْتَفْعَلَ, اِفْتَعَلَ,
      with he / she / they endings — never a noun with tanwīn, never a word we know is a noun */
   const C = "[\\u0621-\\u064A]";
-  const END = "(َ|َتْ|ُوا|ُواْ|َى|ْنَا)";
+  const END = "(َ|َتْ|ُوا|ُواْ|َى|ْنَا|ْتَ|ْتِ|ْتُمْ)";   // he / she / they / we / you (m, f, pl)
   const PAST_SHAPES = [
     new RegExp(`^(وَ|فَ)?${C}َ${C}[َِ]${C}${END}$`),           // ذَهَبَ، شَرِبَ، خَلَقَ، عَلَمَ (shadda stripped)
     new RegExp(`^(وَ|فَ)?${C}َ[اآ]${C}${END}$`),                // قَالَ، زَارَ، جَاءَ (جَآءَ)، كَانَ
@@ -98,7 +99,15 @@
   function detect(ar) {
     const raw = toks(ar);
     const b = raw.map(unv);
-    const bs = b.map(dropWF);                     // with a leading و / ف stripped
+    // a leading و / ف is a prefix only when what remains is a word we recognise (فِيهَا, فَطُور keep their ف)
+    const bs = b.map((u, i) => {
+      if (!(/^[وف]/.test(u) && u.length > 3)) return u;
+      const r = u.slice(1);
+      const known = SETS.pastVerb.has(r) || SETS.kana.has(r) || SETS.particles.has(r) || SETS.question.has(r) || SETS.imperative.has(r) || SETS.neg.has(r)
+        || SETS.pron.has(r) || SETS.demo.has(r) || SETS.connector.has(r) || SETS.wujud.has(r) || SETS.alladhina.has(r) || /^(عند|لد)/.test(r)
+        || PRESENT.test(raw[i].slice(2)) || isPastShape(raw[i].slice(2), r);
+      return known ? r : u;
+    });
     const inSet = (set, i) => set.has(b[i]) || set.has(bs[i]);
     const any = set => b.some((t, i) => inSet(set, i));
     const frames = new Set();
@@ -107,11 +116,12 @@
 
     /* a present-tense verb: prefix + vowel, long enough, and not a word we know is not one */
     const isPresent = (t, i) => {
-      const u = unv(t), us = dropWF(u);
-      if (!PRESENT.test(t) && !PRESENT.test(t.slice(2))) return false;
-      if (us.length < 4) return false;                                   // prefix + a three-letter root at least
+      const u = unv(t), us = dropWF(u), uh = t.replace(/[ً-ْ]/g, "");   // uh keeps the hamza: أَلْبَسُ is not الـ
+      if (!PRESENT.test(t) && !(/^(وَ|فَ)/.test(t) && PRESENT.test(t.slice(2)))) return false;   // the و/ف path only after a real و/ف (not لِأَنِّي)
+      // prefix + a three-letter root at least — except a short jussive after لم/لن/لا/ما (لَمْ أَنَمْ) or a hollow verb ending in ـُ (أَصِلُ)
+      if (us.length < 4 && !(us.length === 3 && !SETS.nouns.has(us) && (/ُ$/.test(t) || (i > 0 && ["لم", "لن", "لا", "ما", "ان", "سوف"].includes(bs[i - 1]))))) return false;
       if (SETS.pron.has(u) || SETS.particles.has(u) || SETS.question.has(u) || SETS.demo.has(u) || SETS.nouns.has(u) || SETS.nouns.has(us)) return false;
-      if (/^ال/.test(u) || /[ًٌٍ]$/.test(t) || /ة[ً-ْ]*$/.test(t)) return false;   // definite, tanwīn or ة = a noun
+      if (/^ال/.test(uh) || /[ًٌٍ]$/.test(t) || /ة[ً-ْ]*$/.test(t)) return false;   // definite, tanwīn or ة = a noun
       if (/(َاتٍ|َاتٌ|َاتِ|َاتُ|تِي)$/.test(t)) return false;                                            // feminine plural, "my …"
       // اِشْرَبْ (drink!) vs أَشْرَبُ (I drink): the imperative starts with a plain alif or ends in sukūn
       if (SETS.imperative.has(u) && (/^ا/.test(t) || /ْ$/.test(t) || !/[ً-ْ]/.test(t))) return false;
@@ -124,14 +134,14 @@
     const nounTu = /(بيت|وقت|بنت|اخت|موت|صوت|زيت|ست|نعت|سمت)$/;
     if (raw.some((t, i) => PAST_TU.test(t) && t.length > 4 && !/^(و|ف)?ال/.test(b[i]) && !SETS.nouns.has(bs[i]) && !nounTu.test(bs[i]))) frames.add("past-tu");
     if (any(SETS.kana)) frames.add("kana");
-    if (raw.some((t, i) => DUAL_END.test(t) && t.length > 5 && !SETS.particles.has(b[i]) && !/^(الذ|اللذ|اللت)/.test(b[i]))) frames.add("dual");
+    if (raw.some((t, i) => DUAL_END.test(t) && t.length > 5 && !SETS.particles.has(b[i]) && !SETS.nouns.has(b[i]) && !/^(الذ|اللذ|اللت)/.test(b[i]))) frames.add("dual");   // الاثْنَيْنِ is Monday
     if (any(SETS.alladhina)) frames.add("alladhina");
     if (raw.some(t => /^(وَ|فَ)?(إِنَّ|إِنِّي|إِنَّا|إِنَّهُ|إِنَّكَ|إِنَّكُمْ|إِنَّنِي|أَنَّ|أَنَّهُ|أَنَّهَا|أَنِّي|لَكِنَّ|لِأَنَّ|لِأَنِّي|لِأَنَّهُ|لِأَنَّنِي|لِأَنَّهَا|لَعَلَّ|كَأَنَّ)/.test(t))) frames.add("inna");
     if (any(SETS.wujud)) frames.add("wujud");
     {
       // an imperative ends in sukūn (قُلْ، تَفَضَّلْ), or ِي / ُوا for her / them, or carries a pronoun (خُذْنِي);
       // the same root's past tense ends in a fatha (أَخْرَجَ) — the vowels decide; unvowelled text is trusted
-      const impShape = t => !/[ً-ْ]/.test(t) || /ْ$/.test(t) || /(ِي|ُوا|ُواْ|نِي|نَا)$/.test(t) || /^(هَيَّا|تَفَضَّل)/.test(t);
+      const impShape = t => !/[ً-ْ]/.test(t) || /ْ$/.test(t) || /ِ$/.test(t) || /(ِي|ُوا|ُواْ|نِي|نَا)$/.test(t) || /^(هَيَّا|تَفَضَّل)/.test(t);   // اِمْشِ ends in a kasra
       const f0 = bs[0] || "";
       const impOk = (f0 === "كل" ? /ْ$/.test(raw[0]) || raw[0] === "كل" : true) && impShape(raw[0] || "");
       if ((SETS.imperative.has(f0) && impOk) || (b.length > 1 && (first === "يا" || first === "لو") && SETS.imperative.has(bs[1]) && impShape(raw[1]))) frames.add("imperative");
@@ -144,7 +154,7 @@
         if (!SETS.neg.has(t)) return false;
         if (t !== "ما") return true;
         if (bs[i + 1] === "شاء") return false;                       // مَا شَاءَ اللهُ — "what Allah willed", not a negation
-        if (i === 0) return !(hasQ || SETS.pron.has(b[1] || "") || SETS.demo.has(b[1] || "")) && (SETS.pastVerb.has(bs[1] || "") || b.length >= 3);
+        if (i === 0) return !(hasQ || SETS.pron.has(b[1] || "") || SETS.demo.has(b[1] || "")) && (SETS.pastVerb.has(bs[1] || "") || /^(عند|لد|مع)/.test(bs[1] || "") || b.length >= 3);   // مَا عِنْدِي
         return !SETS.pron.has(b[i + 1] || "") && !SETS.demo.has(b[i + 1] || "");
       };
       if (bs.some((t, i) => negAt(t, i))) frames.add("negation");

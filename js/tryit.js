@@ -131,7 +131,7 @@
           <button type="button" class="book-toggle-pill" onclick="TryIt.self(${idx}, true)">✓ Yes, I had it</button>
           <button type="button" class="book-toggle-pill" onclick="TryIt.self(${idx}, false)">✗ Missed</button>` : ""}
         ${st.result && !passed ? `<button type="button" class="book-toggle-pill" onclick="TryIt.retry(${idx})">↺ Try again</button>` : ""}
-        ${passed ? `<button type="button" class="book-toggle-pill active" onclick="TryIt.next(${idx})">${nextLabel}</button>` : ""}
+        ${st.result ? `<button type="button" class="book-toggle-pill${passed ? " active" : ""}" onclick="TryIt.next(${idx})" title="${passed ? "" : "An honest miss moves on too — it comes back tomorrow"}">${passed ? nextLabel : (T.round && nextIdx(idx) >= 0 ? "Next anyway →" : "Finish ✓")}</button>` : ""}
         ${st.result ? `<button type="button" class="book-toggle-pill" onclick="TryIt.retry(${idx})" title="Once more">🔁 Once more</button>` : ""}
       </div>`;
     }
@@ -180,7 +180,7 @@
     return -1;
   }
   function all() {
-    T.st = {}; T.round = true;
+    T.st = {}; T.round = true; T.freeOn = false; T.freeOpts = null;   // Try them all is not a Free try
     const first = items().length ? 0 : -1;
     if (first < 0) return;
     if (typeof logEvent === "function") logEvent({ e: "tryit-round", src: T.cfg.src, n: items().length, t: Date.now() });
@@ -188,12 +188,14 @@
   }
   function next(idx) {
     const st = state(idx);
-    if (variants(item(idx)).length && st.rung < 3) { setRung(idx, st.rung + 1); return; }
+    if (st.result && st.result.ok && variants(item(idx)).length && st.rung < 3) { setRung(idx, st.rung + 1); return; }   // a miss does not climb
     if (T.round) { const n = nextIdx(idx); if (n >= 0) { toggle(n); return; } }
     if (T.round && T.freeOn) {
       // the session is finished: that is the plan's "done" for Say your day / Rehearse
-      const okN = Object.values(T.st).filter(s => s.result && s.result.ok).length;
-      if (typeof logEvent === "function") logEvent({ e: "tryit-free-done", kind: (T.freeOpts && T.freeOpts.kind) || "free", n: items().length, ok: okN, t: Date.now() });
+      // what counts as "got right": said or written (self-grades are honest but unproven — plan.js keeps them out of the script too)
+      const okN = Object.values(T.st).filter(s => s.result && s.result.ok && s.result.how !== "self").length;
+      const okAll = Object.values(T.st).filter(s => s.result && s.result.ok).length;
+      if (typeof logEvent === "function") logEvent({ e: "tryit-free-done", kind: (T.freeOpts && T.freeOpts.kind) || "free", n: items().length, ok: okN, okAll, t: Date.now() });
       if (T.cfg.onFreeDone) T.cfg.onFreeDone(okN, items().length);
     }
     T.open = null; T.round = false; paint(idx);
@@ -209,7 +211,7 @@
     if (typeof logEvent === "function") logEvent(Object.assign({ e: "sent-drill", key: it.key, rung: v.length ? st.rung : 1, ok: !!ok, how, en: tg.en, src: T.cfg.src, free: T.freeOn || undefined, t: Date.now() }, extra || {}));
     const strong = ok && extra && (extra.tier === "perfect" || (typeof extra.score === "number" && extra.score >= 0.8));
     const g = ok ? (strong ? "solid" : "yes") : "no";
-    if (T.cfg.onVerdict) T.cfg.onVerdict(it, g, idx, how);
+    if (T.cfg.onVerdict) T.cfg.onVerdict(it, g, idx, how, { rung: v.length ? st.rung : 1, variant: v.length > 0 });
   }
   function self(idx, ok) { const st = state(idx); st.result = { how: "self", ok: !!ok }; record(idx, ok, "self"); paint(idx); }
   function check(idx) {
@@ -243,7 +245,7 @@
       const h = document.getElementById("tryit-heard-" + idx);
       if (h) h.innerHTML = `🔴 listening… <span class="arabic" dir="rtl">${esc(txt)}</span> <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="TryIt.micDone(${idx})">✓ I'm done</button>`;
       if (quiet) clearTimeout(quiet);
-      quiet = setTimeout(() => { if (ctl.stop) ctl.stop(); }, 2500);
+      quiet = setTimeout(() => { if (ctl.stop) ctl.stop(); }, 4000);   // 4 s of silence = finished (he said he would be slow)
     }, ctl);
     if (quiet) clearTimeout(quiet);
     st.micCtl = null; st.listening = false;
@@ -254,15 +256,13 @@
       return;
     }
     st.heard = r.heard || "";
-    const tw = normalizeAr(tg.ar).split(" ").filter(Boolean);
-    const hw = new Set(normalizeAr(st.heard).split(" "));
-    const hit = tw.filter(w => hw.has(w)).length;
-    const score = tw.length ? Math.round((hit / tw.length) * 100) / 100 : 0;
-    const exact = st.heard ? arMatch(st.heard, tg.ar) : false;
-    const ok = st.heard ? (exact || score >= 0.5) : false;
-    st.revealed = true; st.result = { how: "mic", ok, score: exact ? 1 : score };
+    const m = st.heard && root.Match ? root.Match.spoken(st.heard, tg.ar) : { score: 0, ok: false, exact: false };
+    const exact = m.exact || (st.heard ? arMatch(st.heard, tg.ar) : false);
+    const ok = !!st.heard && (exact || m.ok);
+    const score = exact ? 1 : m.score;
+    st.revealed = true; st.result = { how: "mic", ok, score };
     record(idx, ok, "mic", { heard: st.heard, score: st.result.score });
-    if (st.heard && typeof logEvent === "function") logEvent({ e: "prompt", en: tg.en, heard: st.heard, score: st.result.score, src: "tryit-" + T.cfg.src, t: Date.now() });
+    if (st.heard && typeof logEvent === "function") logEvent({ e: "prompt", en: tg.en, heard: st.heard, score: st.result.score, src: "tryit-" + T.cfg.src, via: "tryit", t: Date.now() });   // via: the sent-drill already counts this try
     paint(idx);
     if (!ok && typeof speak === "function") speak(tg.ar, 0.8);
   }
@@ -317,12 +317,14 @@
     if (root.FreeTry && typeof root.FreeTry.plan === "function") {
       const freq = await loadFreq();
       const hw = (typeof store !== "undefined" && store.get("ats-homework", null)) || null;
+      const hwPast = !!(hw && hw.lessonAt && new Date(hw.lessonAt).getTime() + 2 * 3600000 < Date.now());
       const ctx = {
+        includeRecent: !!opts.includeRecent,   // a rehearse says today's proven lines again
         now: Date.now(),
         srs: (typeof getSrs === "function") ? getSrs() : {},
         log: (typeof store !== "undefined" && store.get("ats-log", [])) || [],
         freq,
-        homework: new Set((hw && hw.keys) || []),
+        homework: new Set((hw && !hwPast && hw.keys) || []),
         size: opts.size || T.cfg.size || 10,
         relaxFrom: opts.loose ? 4 : 0,        // "say your day": his own sentences are the point, not the lexical gate
         boost: opts.boost || null,

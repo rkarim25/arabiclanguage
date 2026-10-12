@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv51246b">
-  <link rel="stylesheet" href="css/style.css?v=mv51246b">
+  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -282,15 +282,17 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv51246b"></script>
-<script src="js/curriculum.js?v=mv51246b"></script>
-<script src="js/srs.js?v=mv51246b"></script>
-<script src="js/frames.js?v=mv51246b"></script>
-<script src="js/freetry.js?v=mv51246b"></script>
-<script src="js/tryit.js?v=mv51246b"></script>
-<script src="js/app.js?v=mv51246b"></script>
-<script src="js/tracker.js?v=mv51246b"></script>
-<script src="js/plan.js?v=mv51246b"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mv56pg7f"></script>
+<script src="js/curriculum.js?v=mv56pg7f"></script>
+<script src="js/srs.js?v=mv56pg7f"></script>
+<script src="js/frames.js?v=mv56pg7f"></script>
+<script src="js/freetry.js?v=mv56pg7f"></script>
+<script src="js/match.js?v=mv56pg7f"></script>
+<script src="js/tryit.js?v=mv56pg7f"></script>
+<script src="js/app.js?v=mv56pg7f"></script>
+<script src="js/tracker.js?v=mv56pg7f"></script>
+<script src="js/plan.js?v=mv56pg7f"></script>
+<script src="js/account.js?v=mv56pg7f"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -385,12 +387,14 @@ const BATCH_SIZE = 10;
       rowId: idx => "scard-" + idx,
       pool: () => MASTER_SENTENCES,
       size: BATCH_SIZE,
-      onVerdict: (it, g, idx) => rateSentence(it.key, g, idx),
+      onVerdict: (it, g, idx, how, meta) => rateSentence(it.key, g, idx, how, meta),
       onFreeDone: (okN, n) => {
+        // the commute's sentences count as checked only now — when the round actually ended
+        if (window._pendingCommuteCheck) { const c = window._pendingCommuteCheck; window._pendingCommuteCheck = null; logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() }); }
         let t = document.getElementById("freeDone");
         if (!t) { t = document.createElement("div"); t.id = "freeDone"; const d = document.getElementById("doneArea"); if (d && d.parentNode) d.parentNode.insertBefore(t, d); else document.body.appendChild(t); }
         t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? "🎉 That's today." : "✓ That's today."}</h3>
-          <p style="margin:0 0 10px;font-size:14px">${okN} of ${n} said or written and got right — they are in your Sunday script now.</p>
+          <p style="margin:0 0 10px;font-size:14px">${okN ? `${okN} of ${n} said or written and got right — ${okN === 1 ? "it is" : "they are"} in your script now.` : `${n} tried — nothing proved by mic or writing this time, and that is still a morning done.`}</p>
           ${typeof planMoodHTML === "function" ? planMoodHTML() : ""}
           <p style="margin:8px 0 0;font-size:13px"><a href="index.html">Back to the door →</a></p></div>`;
         if (t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -415,6 +419,7 @@ const BATCH_SIZE = 10;
     /* the plan's core block: ?myday=1 → Say your day; &rehearse=1 → only what he proved this week */
     const q = new URLSearchParams(location.search);
     if (q.get("myday")) await startMyDay(!!q.get("rehearse"));
+    if (q.get("view") === "list" || q.get("view") === "master") switchView("master");   // the "full bank" links
   } catch (e) {
     console.error("Failed to load sentence bank", e);
   }
@@ -484,6 +489,7 @@ let LAST_BATCH_KEYS = [];
 function redoBatch() {
   if (!LAST_BATCH_KEYS.length) { load10Sentences(); return; }
   stopAudio();
+  if (window.TryIt) TryIt.endFree();   // a Redo is not the morning round
   REVEALED.clear();
   const chosen = SRS.buildBatch(MASTER_SENTENCES, { size: BATCH_SIZE, mode: "redo", redoKeys: LAST_BATCH_KEYS });
   const titleEl = document.getElementById("sessionTitle");
@@ -619,7 +625,9 @@ let MYDAY = null;
 async function loadMyDay() {
   if (MYDAY) return MYDAY;
   const d = await fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] }));
-  MYDAY = (d.sentences || []).map(s => {
+  const fem = typeof planProfile === "function" && planProfile().gender === "f";   // Saba: her own forms
+  MYDAY = (d.sentences || []).map(s0 => {
+    const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
     const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
     const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
     return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: s.moment, pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
@@ -637,7 +645,7 @@ async function startMyDay(rehearse) {
     const proven = new Set((typeof planScript === "function" ? planScript() : []).map(x => x.en.toLowerCase()));
     let pool = MASTER_SENTENCES.filter(s => proven.has(String(s.en).trim().toLowerCase()));
     if (pool.length < 5) pool = pool.concat(mine.filter(s => !pool.includes(s)).slice(0, 8 - pool.length));
-    await TryIt.free({ pool, loose: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
+    await TryIt.free({ pool, loose: true, includeRecent: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
   } else {
     const easy = (typeof planEasyDay === "function") && planEasyDay();
     /* the commute feeds the morning: sentences he heard hands-free in the last 36 h, not yet
@@ -649,7 +657,7 @@ async function startMyDay(rehearse) {
     const pool = mine.concat(routine);
     if (heard.size) {
       MASTER_SENTENCES.forEach(s => { if (heard.has(String(s.en).trim().toLowerCase()) && !pool.includes(s)) pool.push(s); });
-      logEvent({ e: "commute-check-done", forT: cd.t, n: heard.size, t: Date.now() });
+      window._pendingCommuteCheck = { forT: cd.t, n: heard.size };   // logged when the round ENDS (sentences.html onFreeDone)
     }
     const byEn = new Map(pool.map(s => [s.key, String(s.en).trim().toLowerCase()]));
     await TryIt.free({ pool, loose: true, easy, size: easy ? 6 : 8, kind: "myday",
@@ -660,16 +668,22 @@ async function startMyDay(rehearse) {
 
 /* a sentence verdict also grades the words inside it — they were met in context */
 function wordGradeFor(g) { return g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"; }
-function rateSentence(key, g, cardIdx) {
+function rateSentence(key, g, cardIdx, how, meta) {
   const nc = SRS.rate(key, g);                 // ✗ ≈ ✓ ★ → stability → next date
   SESSION_COOLDOWN.add(key);
   const s = ACTIVE_SENTENCES[cardIdx];
   if (s) {
-    if (g !== "retire") (s.words || []).forEach(w => {
-      const norm = normalizeAr(w[0]).replace(/^ال/, "");
-      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
-      if (wid) SRS.rate(wid, wordGradeFor(g));
-    });
+    /* a sentence he got RIGHT credits its words (met in context); a miss or a stumble says
+       nothing certain about any one word, a rung variant did not produce the base words,
+       and a retired word stays retired (12 Oct audit) */
+    if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
+      const srsNow = getSrs();
+      (s.words || []).forEach(w => {
+        const norm = normalizeAr(w[0]).replace(/^ال/, "");
+        const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
+        if (wid && !(srsNow[wid] && srsNow[wid].b === "never")) SRS.rate(wid, "yes");
+      });
+    }
     logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
     autoSync();
   }

@@ -115,7 +115,8 @@ export default {
     }
 
     if (url.pathname === "/coach" && req.method === "GET") {
-      const coach = (await env.ARABIC_SYNC.get("coach:" + email)) || (await env.ARABIC_SYNC.get("coach"));
+      // the legacy un-keyed note is Reza's — never another account's fallback
+      const coach = (await env.ARABIC_SYNC.get("coach:" + email)) || (email === env.ALLOWED_EMAIL ? await env.ARABIC_SYNC.get("coach") : null);
       return coach
         ? new Response(coach, { status: 200, headers: cors(env) })
         : json(env, 200, { note: null });

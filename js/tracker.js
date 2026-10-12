@@ -42,8 +42,9 @@ function flushTime() {
   _activeSec = 0;
 }
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) { flushTime(); autoSync(); }
+  if (document.hidden) { flushTime(); autoSync(true); }
 });
+window.addEventListener("online", () => { try { autoSync(true); } catch (e) {} });   // back on signal: push what the pocket collected
 window.addEventListener("pagehide", flushTime);
 
 /* ---------- credentials ---------- */
@@ -94,7 +95,7 @@ function _mergeRemoteState(remote) {
     /* scheduler cards (js/srs.js) carry stability/difficulty/history: the newer
        write is the truth, on whichever device it happened. The box rule below
        only arbitrates between two pre-stamp legacy cards. */
-    if (r.u && l.u && (typeof r.s === "number" || typeof l.s === "number")) { if (r.u > l.u) srs[k] = r; return; }
+    if (r.u || l.u) { if ((r.u || 0) > (l.u || 0)) srs[k] = r; return; }   // the newer stamped write wins; a stamped verdict beats an unstamped seed
     if (l.b) return; // explicit local mark (know/repeat/later) = latest intent on this device
     if (r.box > l.box || (r.box === l.box && r.due > l.due)) srs[k] = r;
   });
@@ -129,10 +130,35 @@ function _mergeRemoteState(remote) {
   }
   if (remote.chapLines && typeof remote.chapLines === "object") {
     Object.entries(remote.chapLines).forEach(([cid, line]) => {
-      if (store.get("ats-chap-line-" + cid) === null) {
+      if (store.get("ats-chap-line-" + cid) == null) {
         store.set("ats-chap-line-" + cid, line);
       }
     });
+  }
+  /* the day plan and the homework ticks travel too (12 Oct): same day → union of done
+     blocks; a newer day wins outright; ticks and history are unions */
+  if (remote.plan && remote.plan.date && Array.isArray(remote.plan.blocks)) {
+    const lp = store.get("ats-plan", null);
+    if (!lp || !lp.date || remote.plan.date > lp.date) store.set("ats-plan", remote.plan);
+    else if (remote.plan.date === lp.date && Array.isArray(lp.blocks)) {
+      remote.plan.blocks.forEach(rb => {
+        const lb = lp.blocks.find(b => b.type === rb.type && (b.content || null) === (rb.content || null));
+        if (lb && rb.done && !lb.done) { lb.done = true; lb.doneT = rb.doneT || Date.now(); }
+      });
+      if (!lp.completedAt && remote.plan.completedAt && !lp.blocks.some(b => !b.done && !b.optional)) lp.completedAt = remote.plan.completedAt;
+      store.set("ats-plan", lp);
+    }
+  }
+  if (remote.hwDone && typeof remote.hwDone === "object") {
+    const d = store.get("ats-hw-done", {});
+    Object.keys(remote.hwDone).forEach(k => { if (remote.hwDone[k] && !d[k]) d[k] = remote.hwDone[k]; });
+    store.set("ats-hw-done", d);
+  }
+  if (Array.isArray(remote.planHist)) {
+    const h = store.get("ats-plan-hist", []);
+    remote.planHist.forEach(x => { if (x && x.date && !h.some(y => y && y.date === x.date)) h.push(x); });
+    h.sort((a, b) => (a.date < b.date ? -1 : 1));
+    store.set("ats-plan-hist", h.slice(-5));
   }
 }
 
@@ -151,6 +177,9 @@ function _payload(log) {
     tapwords: store.get("ats-tapwords", {}),
     chapLines,
     currentChapId: curChapId,
+    plan: store.get("ats-plan", null),
+    planHist: store.get("ats-plan-hist", []),
+    hwDone: store.get("ats-hw-done", {}),
     log,
     savedAt: Date.now()
   };
@@ -170,6 +199,7 @@ async function workerSync() {
   const r = await wReq("/data");
   if (r.status === 200) remote = await r.json();
   else if (r.status === 401) { setSession(null); throw new Error("session-expired"); }
+  else if (r.status !== 404) throw new Error("cloud-read-" + r.status);   // never push over a cloud copy we could not read (404 = a new account, fine)
   _mergeRemoteState(remote);
   const log = _mergeRemoteLog(remote);
   const put = await wReq("/sync", {
@@ -231,10 +261,10 @@ async function syncNow() {
 }
 
 let _syncing = false;
-async function autoSync() {
+async function autoSync(force) {
   if (!syncMethod() || _syncing) return;
   const last = store.get(SYNC_KEY, 0);
-  if (Date.now() - last < 3 * 60 * 1000) return; // at most every 3 min
+  if (!force && Date.now() - last < 60 * 1000) return; // at most every minute; a hide / reconnect / block-done forces it
   _syncing = true;
   try { await syncNow(); } catch (e) { /* silent for auto */ }
   _syncing = false;
@@ -287,6 +317,17 @@ async function getGoogleClientId() {
   return store.get(GCLIENT_KEY, "958505787875-g5nfbudjoembmlfves8c794mvb3udqdr.apps.googleusercontent.com");
 }
 
+/* a browser belongs to one account: when another signs in, the first one's learning
+   state is cleared here (it is safe in the cloud) rather than merged into the new account */
+function claimLocal(email) {
+  const owner = store.get("ats-owner", null);
+  if (owner && owner !== email) {
+    ["ats-srs", "ats-log", "ats-progress", "ats-plan", "ats-plan-hist", "ats-plan-bank", "ats-hw-done", "ats-homework",
+     "ats-item-votes", "ats-tapwords", "ats-current-chap-id", SYNC_KEY].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    for (let i = 1; i <= 10; i++) { try { localStorage.removeItem("ats-chap-line-chap-" + i); } catch (e) {} }
+  }
+  store.set("ats-owner", email);
+}
 async function codeLogin(email, password) {
   const r = await fetch(WORKER_URL + "/login-pw", {
     method: "POST",
@@ -300,6 +341,7 @@ async function codeLogin(email, password) {
   const { session, email: em } = await r.json();
   setSession(session);
   store.set("ats-email", (em || email).toLowerCase().trim());
+  claimLocal((em || email).toLowerCase().trim());
   return session;
 }
 
@@ -315,7 +357,7 @@ async function googleLogin(credential) {
   }
   const { session, email: em } = await r.json();
   setSession(session);
-  if (em) store.set("ats-email", em.toLowerCase().trim());
+  if (em) { store.set("ats-email", em.toLowerCase().trim()); claimLocal(em.toLowerCase().trim()); }
   return session;
 }
 

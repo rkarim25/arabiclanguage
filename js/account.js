@@ -101,7 +101,7 @@ async function initGoogleSignin() {
             loadCoach();
           } catch (e) {
             alert(e.message === "email-not-allowed"
-              ? "That Google account isn't allowed — please sign in as rkarim88@gmail.com."
+              ? "That Google account isn't enabled on this site — ask your coach in chat to add it."
               : "Google sign-in failed: " + e.message);
             refreshSyncUI();
             initGoogleSignin();
@@ -140,21 +140,24 @@ async function initGoogleSignin() {
 /* coach notes */
 async function loadCoach() {
   const card = document.getElementById("coachCard");
-  if (!card) return;
 
   let c = null;
   if (syncMethod()) {
     try { c = await fetchCoach(); } catch (e) {}
   }
+  /* the homework contract refreshes on EVERY page that loads this (12 Oct: it used to be
+     copied only on the home page, so Lessons and the plan ran on a stale copy) */
+  if (c) {
+    if (c.homework && c.homework.lessonAt) store.set("ats-homework", c.homework);
+    else if (!c.homework) store.set("ats-homework", null);
+    if (typeof planPaintDoor === "function") { try { planPaintDoor(); } catch (e) {} }
+    if (typeof planPaintBar === "function") { try { planPaintBar(); } catch (e) {} }
+    if (typeof renderHomeworkCard === "function") { try { renderHomeworkCard(); } catch (e) {} }
+  }
+  if (!card) return;
 
   // 1. If remote coach note exists, display it
   if (c && c.note) {
-    if (c.homework && c.homework.lessonAt) {
-      store.set("ats-homework", c.homework);
-      const pc = document.getElementById("planCard");
-      if (pc && typeof planRenderCard === "function") planRenderCard(pc);
-    } else if (!c.homework) store.set("ats-homework", null);
-    
     const who = whoami();
     if (who) card.querySelector("h2").firstChild.textContent = `🧑‍🏫 Coach's notes for ${who.name} `;
     card.style.display = "block";

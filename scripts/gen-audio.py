@@ -114,6 +114,7 @@ for u in bank.get("sentences", []):
 # fixed spoken UI lines (audio.html)
 add("en", "Audio coach. Listen, and recall the meaning before I say it.")
 add("en", "Commute session. Hands free. Recall each meaning in the gap, before I say it.")
+add("en", "Commute session. Hands free. Say each one back in the gap.")
 add("en", "That's your commute session done. Every word counted. Well done.")
 
 sen = json.load(open(os.path.join(DATA, "sentences.json"), encoding="utf-8"))
@@ -175,6 +176,7 @@ except Exception as e:
 try:
     for s in loadd("myday.json").get("sentences", []):
         if s.get("ar"): add("ar", s["ar"])
+        if s.get("arf"): add("ar", s["arf"])   # Saba's forms
 except Exception as e:
     print("Warning: could not parse myday.json", e)
 

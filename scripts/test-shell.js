@@ -541,7 +541,7 @@ const bank = D("sentence-bank.json");
   yes(/href="index\.html">(?:📖\s*)?Home<\/a>\s*<a class="link" id="navSync" href="more\.html#syncCard"/.test(app), "the ☁ pill sits right after Home in the nav");
   yes(/wireNavSync\(el\.querySelector\("#navSync"\)\)/.test(app) && /function wireNavSync\(/.test(app), "…and is wired on every page that renders the nav");
   yes(/a\.textContent = "☁ Sign in"/.test(app) && /a\.textContent = "☁ Sync"/.test(app), "…reading Sign in when signed out and Sync when signed in");
-  yes(/syncNow\(\)\.then\(n =>/.test(app), "…and a tap syncs on the spot when signed in");
+  yes(/autoSync\(true\)/.test(app.slice(app.indexOf("function wireNavSync"), app.indexOf("function wireNavSync") + 1500)) && !/ev\.preventDefault\(\)/.test(app.slice(app.indexOf("function wireNavSync"), app.indexOf("function wireNavSync") + 1500)), "…and a tap syncs on the way AND still opens the hub (12 Oct: more/map/learn were unreachable while signed in)");
 }
 
 /* ---------- 18. THE PLAN BAR STAYS OFF THE READING PAGES ----------
@@ -699,7 +699,7 @@ const bank = D("sentence-bank.json");
   /* the week that builds towards Sunday (his interview, 12 Oct) */
   console.log("\n-- the week that builds towards Sunday --");
   yes(/myday:\s*\{/.test(planSrc) && /rehearse:\s*\{/.test(planSrc) && /withher:\s*\{/.test(planSrc), "three new blocks: say your day · rehearse · tell her");
-  yes(/dow === 0 \? "withher" : dow === 6 \? "rehearse" : "myday"/.test(planSrc), "Mon–Fri say your day, Saturday rehearse, Sunday tell her — the core block comes first");
+  yes(/prof\.isReza && dow === 0 \? "withher" : prof\.isReza && dow === 6 \? "rehearse" : "myday"/.test(planSrc), "Mon–Fri say your day, Saturday rehearse, Sunday tell her — the core block comes first (for him; Saba gets Say your day every day)");
   yes(/if \(!b\.core\) b\.optional = true;/.test(planSrc) && /find\(b => !b\.done && !b\.optional\)/.test(planSrc), "everything else is optional: the day is done when the core is done");
   yes(/hb\.optional = true; hb\.evening = true;/.test(planSrc) && /never owed/.test(planSrc), "her homework is the evening option, never a required block (his budget, 12 Oct)");
   yes(/four is a full week/.test(planSrc), "four mornings is a full week");
@@ -759,6 +759,95 @@ const bank = D("sentence-bank.json");
   const cl = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
   yes(/details\.sec"\)\.forEach\(\(d, i\) => \{ if \(i > 0\) d\.open = false; \}\)/.test(cl), "calm: Lessons opens one section, the rest are headings");
   yes(!/Select Lesson:/.test(cl), "calm: no 'Select Lesson:' label");
+}
+
+/* ---------- the 12 Oct audit, fixed and pinned ---------- */
+{
+  console.log("\n-- the journey, end to end --");
+  const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8").replace(/\r\n/g, "\n");   // the slicer below works on LF
+  const tryitSrc = fs.readFileSync(path.join(ROOT, "js", "tryit.js"), "utf8");
+  const trackerSrc = fs.readFileSync(path.join(ROOT, "js", "tracker.js"), "utf8");
+  const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const sentSrc = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
+  const audioSrc = fs.readFileSync(path.join(ROOT, "audio.html"), "utf8");
+  // planObserve, run for real on a stub store
+  const grab = name => { const a = planSrc.indexOf("function " + name + "("); const b = planSrc.indexOf("\n}\n", a); return planSrc.slice(a, b + 2); };
+  const blocksA = planSrc.indexOf("const PLAN_BLOCKS = {"), blocksB = planSrc.indexOf("\n};\n", blocksA);
+  const body = planSrc.slice(blocksA, blocksB + 4) + ["planSave", "planCurrent", "planOptional", "planObserve", "planFinishBlock"].map(grab).join("\n")
+    + "; return { observe: planObserve, get: () => store.get(PLAN_KEY), events };";
+  const mkPlan = today => {
+    const mem = { "ats-plan": { date: today, blocks: [
+      { type: "myday", core: true, title: "Say your day", mins: 10 }, { type: "withher", core: true, title: "Tell her" },
+      { type: "speakdrill", optional: true, title: "Speak" }, { type: "review", optional: true, title: "Review" } ], completedAt: null } };
+    const events = [];
+    const api = new Function("store", "PLAN_KEY", "planToday", "logEvent", "autoSync", "planPaintBar", "planGet", "events", body)(
+      { get: (k, d) => (k in mem ? mem[k] : d), set: (k, v) => { mem[k] = v; } }, "ats-plan", () => today, e => events.push(e), () => {}, () => {}, () => { throw new Error("no rebuild in test"); }, events);
+    return api;
+  };
+  const today = "2026-10-12";
+  let api = mkPlan(today);
+  api.observe({ e: "tryit-free-done", kind: "free" });
+  yes(!api.get().blocks[0].done, "a plain ✨ Free try does NOT tick Say your day");
+  api.observe({ e: "tryit-free-done", kind: "myday" });
+  yes(api.get().blocks[0].done, "a Say-your-day round does");
+  api.observe({ e: "prompt", score: 0.3 });
+  yes(!api.get().blocks[2].done, "a missed spoken prompt does not tick the speak round");
+  api.observe({ e: "prompt", score: 0.8 });
+  yes(api.get().blocks[2].done, "a passed one does — optional blocks complete from events too");
+  api.observe({ e: "review-done" });
+  yes(api.get().blocks[3].done, "the Review pill ticks on review-done");
+  yes(!api.get().completedAt, "the day is not complete while a core block (Sunday) is open");
+  api.observe({ e: "withher-done" });
+  yes(api.get().blocks[1].done && !!api.get().completedAt, "withher-done completes Sunday — the day is done");
+  yes(/function planToldHer\(/.test(planSrc) && /e: "withher-done"/.test(planSrc), "…and the Lessons page has the ✓ that logs it");
+  // every completing event is logged somewhere on the site
+  const doneNames = new Set();
+  (planSrc.slice(blocksA, blocksB).match(/done: \[([^\]]*)\]/g) || []).forEach(m => (m.match(/"([^"]+)"/g) || []).forEach(s => doneNames.add(s.slice(1, -1))));
+  const corpus = fs.readdirSync(ROOT).filter(x => x.endsWith(".html")).map(x => fs.readFileSync(path.join(ROOT, x), "utf8")).join("\n")
+    + fs.readdirSync(path.join(ROOT, "js")).map(x => fs.readFileSync(path.join(ROOT, "js", x), "utf8")).join("\n");
+  const orphan = [...doneNames].filter(n => !new RegExp('e: "' + n + '"').test(corpus));
+  yes(!orphan.length, orphan.length ? "completing events nothing ever logs: " + orphan.join(", ") : `all ${doneNames.size} completing events are logged somewhere`);
+  yes(!/"spract-done"/.test(planSrc) && !/commute-check"/.test(planSrc), "the dead events (spract-done, commute-check) are gone from the plan");
+  // Try it: a miss moves on; self-grades are not 'got right'; the mic uses the one grader
+  yes(/Next anyway →/.test(tryitSrc) && /st\.result && st\.result\.ok && variants/.test(tryitSrc), "Try it: an honest miss has a Next (it comes back tomorrow) and never climbs a rung");
+  yes(/s\.result\.how !== "self"/.test(tryitSrc), "the round's 'got right' count excludes self-grades");
+  yes(/Match\.spoken/.test(tryitSrc) && /Match\.spoken/.test(indexSrc), "both Try it engines grade speech with js/match.js");
+  yes(/via: "tryit"/.test(tryitSrc) && /via: "tryit"/.test(indexSrc), "…and mark their prompt events so the level counts each try once");
+  yes(/Next anyway →/.test(indexSrc) && /key: \`chap:\$\{curChap\.num\}:\$\{idx\}\`/.test(indexSrc), "the Daily Reader engine: Next after a miss, and a shared rung ladder by key");
+  yes(/}, 4000\);/.test(tryitSrc) && /}, 4000\);/.test(indexSrc), "four seconds of silence before the mic closes (he said he would be slow)");
+  // the morning after a commute
+  yes(/window\._pendingCommuteCheck = \{ forT: cd\.t/.test(sentSrc) && /e: "commute-check-done", forT: c\.forT/.test(sentSrc), "the commute check is logged when the round ENDS, not when it starts");
+  yes(/const bst = typeof ctx\.boost/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "the engine reads the caller's boost");
+  yes(/pagehide", \(\) => \{ if \(S\) \{ S\.partial = true; stop\(\); \} \}/.test(audioSrc), "a commute closed from the pocket still logs commute-done");
+  yes(/async function prefetchQueue/.test(audioSrc) && /await prefetchQueue\(S\.queue\)/.test(audioSrc), "the commute caches ITS OWN clips before it starts");
+  yes(/freq: fq/.test(audioSrc), "…and knows word frequency");
+  // sync
+  yes(/cloud-read-/.test(trackerSrc), "a failed cloud read never lets this device overwrite the cloud");
+  yes(/plan: store\.get\("ats-plan"/.test(trackerSrc) && /hwDone: store\.get\("ats-hw-done"/.test(trackerSrc) && /remote\.plan && remote\.plan\.date/.test(trackerSrc), "the day plan and the homework ticks sync and merge");
+  yes(/if \(r\.u \|\| l\.u\) \{ if \(\(r\.u \|\| 0\) > \(l\.u \|\| 0\)\) srs\[k\] = r; return; \}/.test(trackerSrc), "a stamped verdict beats an unstamped seed on merge");
+  yes(/autoSync\(true\)/.test(trackerSrc) && /addEventListener\("online"/.test(trackerSrc), "hiding the page and coming back online force a sync");
+  yes(/function claimLocal\(/.test(trackerSrc), "a second account in the same browser does not inherit the first one's cards");
+  yes(/due: Date\.now\(\) \+ DAY, u: Date\.now\(\)/.test(fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8")), "seed cards are stamped");
+  // offline: every data file a core page fetches is precached
+  const core = (swSrc.match(/const CORE = \[([\s\S]*?)\];/) || [])[1] || "";
+  const fetched = new Set();
+  ["index.html", "sentences.html", "words.html", "class.html", "audio.html", "review.html", "grammar.html"].forEach(p => {
+    (fs.readFileSync(path.join(ROOT, p), "utf8").match(/fetch\("(data\/[^"?]+)"/g) || []).forEach(m => fetched.add(m.slice(7, -1)));
+  });
+  ["app.js", "tryit.js", "plan.js", "freetry.js", "curriculum.js", "progress-model.js"].forEach(j => {
+    (fs.readFileSync(path.join(ROOT, "js", j), "utf8").match(/fetch\("(data\/[^"?]+)"/g) || []).forEach(m => fetched.add(m.slice(7, -1)));
+  });
+  const notCached = [...fetched].filter(x => !core.includes('"' + x + '"'));
+  yes(!notCached.length, notCached.length ? "fetched by a core page but NOT precached: " + notCached.join(", ") : `every data file a core page fetches is precached (${fetched.size})`);
+  yes(/"js\/match\.js"/.test(core), "js/match.js is precached");
+  yes(/headers\.has\("range"\)/.test(swSrc), "a ranged audio request is fetched whole so the clip can be cached");
+  // pages and scripts
+  const wordsSrc = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
+  yes(wordsSrc.indexOf("js/tracker.js") < wordsSrc.indexOf("js/plan.js"), "words.html loads the plan after the tracker");
+  ["sentences.html", "class.html", "audio.html", "words.html"].forEach(p => yes(/js\/account\.js/.test(fs.readFileSync(path.join(ROOT, p), "utf8")), p + " refreshes the homework contract (account.js)"));
+  yes(/if \(!card\) return;\r?\n\r?\n  \/\/ 1\. If remote coach note exists/.test(fs.readFileSync(path.join(ROOT, "js", "account.js"), "utf8")), "the contract is stored BEFORE the note card is looked for");
+  yes(/function planProfile\(/.test(planSrc) && /sabatarif\.15@gmail\.com/.test(planSrc), "the plan knows who it is talking to (Saba gets her own wording)");
+  yes(/"preply-paste", text, imageCount: files\.length, imgs/.test(fs.readFileSync(path.join(ROOT, "class.html"), "utf8")), "a pasted lesson uploads its photos and reaches the coach as a note");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

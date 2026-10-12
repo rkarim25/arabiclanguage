@@ -23,6 +23,16 @@ const PLAN_KEY = "ats-plan";
 const PLAN_HIST_KEY = "ats-plan-hist";   // last few days: [{date, types:[], content:[]}]
 const PLAN_BANK_KEY = "ats-plan-bank";   // date whose plan owes a block (was banked)
 const PLAN_BLOCK_MIN = 5;
+/* the site has two learners; the plan speaks to each in their own terms */
+const PLAN_USERS = {
+  "rkarim88@gmail.com":    { isReza: true,  teacher: "her",          lessonDay: 0,    budget: true,  gender: "m", when: "before the commute" },
+  "sabatarif.15@gmail.com": { isReza: false, teacher: "your teacher", lessonDay: null, budget: false, gender: "f", when: "in the morning" },
+};
+function planProfile() {
+  const em = (typeof store !== "undefined" && store.get("ats-email", null)) || null;
+  // signed out = his (the site is his first; Saba is always signed in to get her own wording)
+  return Object.assign({}, PLAN_USERS["rkarim88@gmail.com"], (em && PLAN_USERS[em]) || {});
+}
 const PLAN_TARGET_SHARE = 0.5;           // the higher-line assumption: half of practice in the weak modality
 
 /* deterministic per-day randomness — same plan all day, different tomorrow */
@@ -37,7 +47,7 @@ function planMix() {
     if (!e || !e.t || e.t < cutoff) continue;
     if (e.e === "sheet") { graded++; if (e.mode === "ears") ear++; if (e.mode === "produce") out++; }
     else if (e.e === "review" || e.e === "qfill") graded++;
-    else if (e.e === "alisten-grade" || e.e === "commute-check") { graded++; ear++; }
+    else if (e.e === "alisten-grade") { graded++; ear++; }
     else if (e.e === "speak-self" || e.e === "vspeak" || e.e === "vspeak-self" || e.e === "spract" || e.e === "trans" || e.e === "prompt") { graded++; out++; }
   }
   return { earShare: graded ? ear / graded : 0, outShare: graded ? out / graded : 0, graded };
@@ -62,8 +72,8 @@ const PLAN_BLOCKS = {
   newwords:  { icon: "📝", title: () => "A few new words", sub: "Frequency-first — fill the column, check, stop.", url: "vocab.html?sheet=1", page: "vocab", done: ["sheet-done"] },
   audio:     { icon: "🎧", title: () => "Audio Coach round", sub: "Ears only — every word you name by sound is certified by ear and lifts the listening line. On the move? The 🚗 commute session counts fully.", url: "audio.html", page: "audio", done: ["alisten-done", "commute-done"] },
   salah:     { icon: "📖", title: c => `Surah ${c} — word by word`, sub: "The salah basket: meaning mapped onto sound you already recite.", url: c => `quran.html?s=${c}`, page: "quran", done: ["qtest-part", "qtest-done", "qlisten-test"] },
-  speakdrill:{ icon: "🎤", title: () => "Speak round — mic on", sub: "Say them out loud. Spoken practice is the only thing that moves the speaking line.", url: "speaking.html", page: "speaking", done: ["drill-done", "prompt", "sent-drill"] },
-  sentences: { icon: "✍️", title: () => "Build 5 sentences", sub: "Conjugate and produce — I/we/they across the tenses.", url: "sentences.html", page: "sentences", done: ["spract-done"] },
+  speakdrill:{ icon: "🎤", title: () => "Speak round — mic on", sub: "Say them out loud. Spoken practice is the only thing that moves the speaking line.", url: "speaking.html", page: "speaking", done: ["drill-done", "prompt", "sent-drill"],
+               when: ev => ev.e === "drill-done" || !!ev.ok || (typeof ev.score === "number" && ev.score >= 0.5) },   // a miss is not a round
   phrases:   { icon: "💬", title: c => "Phrases out loud — " + c, sub: "Whole sentences you'll actually say. Read each ALOUD before revealing.", url: c => `vocab.html?ph=${c}&mode=drill`, page: "vocab", done: ["drill-done", "fill-done"] },
   story:     { icon: "📖", title: c => `${c.title} · ${c.stepEn}`, sub: c => c.sub, url: c => `story.html?id=${c.id}&step=${c.step}`, page: "story", done: ["story-step"] },
   ptest:     { icon: "🎯", title: () => "5-minute listening test", sub: "A measurement, not a drill — it anchors your chart and corrects the forecast.", url: "placement.html", page: "placement", done: ["ptest-listen"] },
@@ -72,9 +82,9 @@ const PLAN_BLOCKS = {
      demotivating is my Preply class when I can't have a simple conversation. If I
      could just talk about my day …" and "do it in a way I could get ready before my
      Sunday Preply class but also not just the day before." */
-  myday:     { icon: "🗣", title: n => `Say your day${n ? ` — ${n} in your Sunday script` : ""}`, sub: "Ten minutes before the commute: say or write sentences about your own day. Every one you get right goes into Sunday's two minutes with her.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"] },
-  rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"] },
-  withher:   { icon: "✅", title: () => "Tell her about your week — then tick this", sub: "Your script is on the Lessons page. Two minutes about your day, in Arabic; imperfect is fine. Tick when done; pen-note anything she corrected.", url: "class.html", page: "classes", done: [] },
+  myday:     { icon: "🗣", title: n => `Say your day${n ? ` — ${n} in your Sunday script` : ""}`, sub: "Ten minutes before the commute: say or write sentences about your own day. Every one you get right goes into Sunday's two minutes with her.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
+  rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "rehearse" },
+  withher:   { icon: "✅", title: () => "Tell her about your week — then tick this", sub: "Your script is on the Lessons page. Two minutes about your day, in Arabic; imperfect is fine. Tick when done; pen-note anything she corrected.", url: "class.html", page: "class", done: ["withher-done"] },   // the ✓ on the Lessons page script card
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
 };
 
@@ -135,7 +145,7 @@ function planHomework() {
   const lessonT = new Date(hw.lessonAt).getTime();
   if (isNaN(lessonT)) return null;
   const daysLeft = (lessonT - Date.now()) / 86400000;
-  if (daysLeft < -0.5) return { ...hw, past: true, daysLeft };
+  if (daysLeft < -2 / 24) return { ...hw, past: true, daysLeft };   // two hours after the lesson it is over
   const srs = getSrs();
   const keys = hw.keys || [];
   const isSolid = k => { const e = srs[k]; return !!(e && (e.box >= 2 || e.b === "know")); };
@@ -273,6 +283,7 @@ function planMoods(days) {
   const since = Date.now() - (days || 7) * 86400000;
   return store.get("ats-log", []).filter(x => x && x.e === "mood" && x.t >= since).sort((a, b) => a.t - b.t);
 }
+function planMoodsToday() { const t0 = new Date(); t0.setHours(0, 0, 0, 0); return planMoods(2).filter(x => x.t >= t0.getTime()); }
 function planEasyDay() {
   const m = planMoods(4);
   if (m.length < 2) return false;
@@ -280,7 +291,7 @@ function planEasyDay() {
   return last.every(x => x.mood === "heavy");
 }
 function planMoodHTML() {
-  const today = planMoods(1).slice(-1)[0];
+  const today = planMoodsToday().slice(-1)[0];
   if (today) return `<div class="pd-mood done">Thanks — noted ${today.mood === "heavy" ? "😮‍💨 heavy" : today.mood === "good" ? "⚡ good" : "🙂 fine"}. ${today.mood === "heavy" ? "Tomorrow's block will be lighter." : today.mood === "good" ? "Tomorrow builds on it." : "Same again tomorrow."}</div>`;
   return `<div class="pd-mood"><span class="pd-muted">How did that feel?</span>
     <button type="button" class="book-toggle-pill" onclick="planMood('heavy', this)">😮‍💨 heavy</button>
@@ -400,7 +411,8 @@ function planBuild(date, noBoost) {
 
   // THE CORE — one block is the day. Mon–Fri say your day, Sat rehearse, Sun tell her.
   const dow = new Date(date + "T12:00:00").getDay();
-  blocks.push(Object.assign(planMakeBlock(dow === 0 ? "withher" : dow === 6 ? "rehearse" : "myday", date, dueN), { core: true }));
+  const prof = planProfile();
+  blocks.push(Object.assign(planMakeBlock(prof.isReza && dow === 0 ? "withher" : prof.isReza && dow === 6 ? "rehearse" : "myday", date, dueN), { core: true }));
 
   // block 1 of the old plan: protect the base (now optional — "if you feel like it")
   blocks.push(planMakeBlock(dueN >= 4 ? "review" : "newwords", date, dueN));
@@ -422,7 +434,6 @@ function planBuild(date, noBoost) {
     { type: "salah", w: listenGap * 0.85 },
     { type: "speakdrill", w: speakGap * 1.2 },      // the mic beats typing for the speaking line
     { type: "phrases", w: speakGap * 1.0 },
-    { type: "sentences", w: speakGap * 0.8 },
     { type: "newwords", w: dueN >= 4 ? 0.15 : 0 },  // only worth a slot when reviews didn't take block 1
   ];
   // stories: the site's spine — one step at a time, and the longer since the last
@@ -505,7 +516,8 @@ function planOptional(p) { return p.blocks.filter(b => b.optional && !b.done); }
 
 /* ---- completion: observe events + accrue focused time on the block's page ---- */
 function planObserve(ev) {
-  const p = store.get(PLAN_KEY, null);
+  let p = store.get(PLAN_KEY, null);
+  if (p && p.date && p.date !== planToday() && ev.e !== "plan-gen") { try { p = planGet(); } catch (e) { return; } }   // a tab left open across midnight
   if (!p || p.date !== planToday()) return;
   if (!p.completedAt) {
     // 🚗 a FULL commute session (≥10 min hands-free) delivers the whole day —
@@ -516,13 +528,17 @@ function planObserve(ev) {
       p.blocks.filter(b => !b.done).forEach(b => planFinishBlock(p, b, "commute"));
       return;
     }
-    const cur = planCurrent(p);
-    if (!cur) return;
-    // a block may carry its own completion events (the homework block's do depend
-    // on WHICH part of the lesson it routed to — a story vocab round finishes on
-    // story-step/review, an everyday group on fill-done)
-    const doneEvs = cur.doneEvs || PLAN_BLOCKS[cur.type].done;
-    if (doneEvs.includes(ev.e)) planFinishBlock(p, cur, "event");
+    // EVERY undone block listens — core and optional alike (a Review done in the evening
+    // ticks its pill). A block may carry its own completion events (the homework block's
+    // depend on WHICH part of the lesson it routed to), and a type may add a test on the
+    // event itself (the day is done by a myday round, not by any Free try).
+    p.blocks.filter(b => !b.done).forEach(b => {
+      const def = PLAN_BLOCKS[b.type] || {};
+      const doneEvs = b.doneEvs || def.done || [];
+      if (!doneEvs.includes(ev.e)) return;
+      if (def.when && !def.when(ev)) return;
+      planFinishBlock(p, b, "event");
+    });
     return;
   }
   // day complete — ⚡ boost blocks (extra, opt-in) still listen for their events
@@ -549,7 +565,9 @@ function planFinishBlock(p, block, how) {
 /* time fallback: while THIS page is a block's page and visible, accrue seconds */
 function planTick() {
   if (document.hidden) return;
-  const p = store.get(PLAN_KEY, null);
+  if (typeof _lastActivity !== "undefined" && Date.now() - _lastActivity > 90000) return;   // an idle tab is not studying
+  let p = store.get(PLAN_KEY, null);
+  if (p && p.date && p.date !== planToday()) { try { p = planGet(); planPaintBar(); } catch (e) { return; } }
   if (!p || p.completedAt || p.date !== planToday()) return;
   const cur = planCurrent(p);
   if (!cur) return;
@@ -580,6 +598,10 @@ function planBank() {
 function planBarHTML(p) {
   const cur = planCurrent(p);
   const boxes = p.blocks.map(b => `<span class="pb-box ${b.done ? "on" : ""}"></span>`).join("");
+  if (!cur && p.handover && Date.now() - p.handover.t < 90000) {
+    const nxt = planOptional(p)[0];
+    if (nxt) return `<span class="pb-today">Today</span> ${boxes} <span class="pb-label pb-hand">✓ that's enough there — if you have energy: ${nxt.icon} ${nxt.title.split(" — ")[0]}</span> <a href="${nxt.url}" class="pb-next pb-go">go →</a>`;
+  }
   if (!cur) return `<span class="pb-today">Today</span> <span class="pb-done">✅ complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">see the chart →</a>`;
   const here = (location.pathname.split("/").pop() || "index.html").startsWith(cur.page);
   // "start" only when nothing is done yet — his 08-13 note: "shouldnt it say
@@ -689,7 +711,7 @@ function planRenderCard(el) {
     <a class="plan-row" href="audio.html?commute=1" style="border:1px dashed var(--accent);background:transparent">
       <div class="pl-num">🚗</div>
       <div><div class="pl-t">…or do today hands-free</div>
-      <div class="pl-s">On the move? One full commute session (~13 min, just listening) counts as the whole day — tomorrow's 90-second check verifies what stuck.</div></div>
+      <div class="pl-s">On the move? One full commute session (~13 min, just listening) counts as the whole day — tomorrow's Say your day starts with what you heard.</div></div>
       <div class="pl-go">Start →</div>
     </a>`;
   // ⚡ boost: the advance notice (1-3 days out), and the extra section on the day
@@ -789,7 +811,8 @@ function planScriptHTML(limit, full) {
   const when = dow === 0 ? "today" : dow === 6 ? "tomorrow" : "Sunday";
   if (!s.length) return `<div class="pd-script"><span class="pd-muted">Your script is empty — this morning adds the first line.</span></div>`;
   const items = s.slice(0, limit || 5).map(x => `<li>${x.how === "mic" ? "🎤" : "✍️"} ${x.en}${x.heard ? ` <span class="arabic pd-ar" dir="rtl">${x.heard}</span>` : ""}</li>`).join("");
-  return `<div class="pd-script"><div class="pd-script-h"><strong>${s.length} thing${s.length > 1 ? "s" : ""} you can say</strong> <span class="pd-muted">· ${when}: three of them to her</span></div>
+  const prof = planProfile();
+  return `<div class="pd-script"><div class="pd-script-h"><strong>${s.length} thing${s.length > 1 ? "s" : ""} you can say</strong> <span class="pd-muted">· ${prof.isReza ? when + ": three of them to her" : "say three of them to someone"}</span></div>
     <ul class="pd-list">${items}</ul>${s.length > (limit || 5) ? `<a href="class.html" class="pd-muted" style="text-decoration:none">…all ${s.length} →</a>` : ""}</div>`;
 }
 /* THE DOOR — the button, the script, a quiet row of extras. Nothing to read. */
@@ -813,7 +836,7 @@ function planDoorHTML(p) {
       <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>`;
   } else {
     const short = cur.type === "myday" ? "Say your day" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
-    const when = evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : "before the commute";
+    const when = evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : planProfile().when;
     main = `<a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:1})}catch(e){}">▶ ${short} · ${cur.mins || 5} min</a>
       <div class="pd-when">${dayName} · ${when}${evening ? " · evenings are yours" : ""}</div>`;
   }
@@ -839,6 +862,12 @@ function planMountDoor(el) {
   if (!_planSeries) fetch("data/progress-series.json").then(r => r.json()).then(d => { _planSeries = d; paint(); }).catch(() => {});
   el.dataset.mounted = "1";
 }
+/* Sunday's tick: he told her about his week */
+function planToldHer(btn) {
+  logEvent({ e: "withher-done", t: Date.now() });
+  if (btn) { btn.textContent = "✓ Done — that was the point of the week"; btn.disabled = true; }
+  if (typeof autoSync === "function") { try { autoSync(true); } catch (e) {} }
+}
 function planPaintDoor() { const el = document.getElementById("planDoor"); if (el) planMountDoor(el); }
 
 /* wire in: observe every logged event; tick the clock; mount the door / the bar */
@@ -851,9 +880,13 @@ function planPaintDoor() { const el = document.getElementById("planDoor"); if (e
     if (hw && !document.getElementById("planScriptCard")) {
       const card = document.createElement("div");
       card.id = "planScriptCard"; card.className = "plan-door";
-      card.innerHTML = `<div class="pd-head"><span class="pd-today">Your two minutes with her</span></div>${planScriptHTML(12)}
+      const prof = planProfile();
+      card.innerHTML = prof.isReza
+        ? `<div class="pd-head"><span class="pd-today">Your two minutes with her</span></div>${planScriptHTML(12)}
         <div class="pd-muted" style="margin-top:8px">She may ask: <span class="arabic" dir="rtl">مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟</span> — any line above answers.</div>
-        <details class="more block" style="margin-top:8px"><summary>Tell her your budget</summary><div class="more-body pd-budget"><span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">عِنْدِي عَشْرُ دَقَائِقَ فِي الصَّبَاحِ، أَرْبَعَةَ أَيَّامٍ فِي الأُسْبُوعِ. مِنْ فَضْلِكِ: خَمْسُ كَلِمَاتٍ وَجُمْلَةٌ وَاحِدَةٌ كُلَّ أُسْبُوعٍ.</span><br><span class="pd-muted">“I have ten minutes in the morning, four days a week. Please: five words and one sentence a week.” <em>ʿindī ʿashru daqāʾiqa fī ṣ-ṣabāḥ, arbaʿata ayyāmin fī l-usbūʿ. min faḍliki: khamsu kalimātin wa-jumlatun wāḥidatun kulla usbūʿ.</em></span></div></details>`;
+        <div style="margin-top:10px"><button type="button" class="book-toggle-pill" onclick="planToldHer(this)" title="Tick this after you have told her about your week — it completes Sunday">✓ I told her about my week</button></div>
+        <details class="more block" style="margin-top:8px"><summary>Tell her your budget</summary><div class="more-body pd-budget"><span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">عِنْدِي عَشْرُ دَقَائِقَ فِي الصَّبَاحِ، أَرْبَعَةَ أَيَّامٍ فِي الأُسْبُوعِ. مِنْ فَضْلِكِ: خَمْسُ كَلِمَاتٍ وَجُمْلَةٌ وَاحِدَةٌ كُلَّ أُسْبُوعٍ.</span><br><span class="pd-muted">“I have ten minutes in the morning, four days a week. Please: five words and one sentence a week.” <em>ʿindī ʿashru daqāʾiqa fī ṣ-ṣabāḥ, arbaʿata ayyāmin fī l-usbūʿ. min faḍliki: khamsu kalimātin wa-jumlatun wāḥidatun kulla usbūʿ.</em></span></div></details>`
+        : `<div class="pd-head"><span class="pd-today">What you can say</span></div>${planScriptHTML(12)}`;
       hw.parentNode.insertBefore(card, hw);
     }
   };
