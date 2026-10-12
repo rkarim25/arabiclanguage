@@ -850,5 +850,33 @@ const bank = D("sentence-bank.json");
   yes(/"preply-paste", text, imageCount: files\.length, imgs/.test(fs.readFileSync(path.join(ROOT, "class.html"), "utf8")), "a pasted lesson uploads its photos and reaches the coach as a note");
 }
 
+/* ---------- the coach loop, built (12 Oct, "fix it all") ---------- */
+{
+  console.log("\n-- the coach loop: ledger, ear, brief, aliases, cap --");
+  const tryitSrc = fs.readFileSync(path.join(ROOT, "js", "tryit.js"), "utf8");
+  const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const classSrc = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  const srsSrc = fs.readFileSync(path.join(ROOT, "js", "srs.js"), "utf8");
+  yes(/Errors\.classify\(model, typed, "typed"\)/.test(tryitSrc) && /Errors\.classify\(tg\.ar, st\.heard, "mic"\)/.test(tryitSrc) && /Errors\.classify\(item\.ar, st\.heard, "mic"\)/.test(indexSrc), "every miss is classified where it happens (both engines) and the event carries err");
+  yes(/function earGrade\(/.test(tryitSrc) && /e: "alisten-grade", key: it\.key, ok: !!ok, src: "tryit-ear"/.test(tryitSrc) && /🎧 Hear it first/.test(tryitSrc), "hear-first Try it: the Arabic plays, the verdict is listening evidence");
+  yes(/hear: true, kind: 'ear'/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "…and a whole round by ear is one tap on the Sentences page");
+  yes(/frames, t: Date\.now\(\)/.test(tryitSrc) && /x\.frames \|\| framesOf\(s\)/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "a rung variant's own frames are the grammar evidence (rung labels)");
+  yes(/async function renderTeacherBrief/.test(classSrc) && /e: "teacher-brief"/.test(classSrc) && /Ask me about my day/.test(classSrc), "the brief for her: five lines, copyable, logged");
+  const al = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "aliases.json"), "utf8"));
+  const groups = Object.values(al.groups);
+  const all = groups.flat();
+  yes(groups.length > 100 && groups.every(g => g.length >= 2) && new Set(all).size === all.length, `aliases.json: ${groups.length} groups, every key in exactly one`);
+  yes(/function setAliases\(/.test(srsSrc) && /\(ALIAS\[key\] \|\| \[\]\)\.forEach\(k => \{ if \(k !== key\) srs\[k\] = nc; \}\)/.test(srsSrc) && /counted\.has\(g\)/.test(srsSrc), "one word, one card: a verdict reaches every key, the count sees one");
+  yes(/data\/aliases\.json/.test(fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8")) && /"data\/aliases\.json"/.test(swSrc), "…loaded on every page and precached");
+  yes(!/cur\.b === "never" && g !== "no" && g !== "retire"\) return cur/.test(srsSrc), "✓ on a retired card is a verdict, not a silent no-op");
+  yes(/const AUDIO_MAX = 3000/.test(swSrc) && /trimAudio\(c\)/.test(swSrc), "the audio cache keeps the newest 3000 clips");
+  yes(!/✗ missed/.test(fs.readFileSync(path.join(ROOT, "review.html"), "utf8")), "the review page has one verdict control, not two");
+  yes(/planHwTaskDone\("say3"\)/.test(fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8")), "telling her ticks the contract's task too");
+  yes(/function planBestHour\(/.test(fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8")), "the door knows his best hour");
+  for (const s of ["refit-progress.js", "intervention-check.js", "gen-aliases.js"]) yes(fs.existsSync(path.join(ROOT, "scripts", s)), "scripts/" + s + " exists");
+  const iv = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "interventions.json"), "utf8"));
+  yes(Array.isArray(iv.items) && iv.items.every(i => i.date && i.kind && Array.isArray(i.keys) && i.what), "the intervention ledger has a shape the check script reads");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

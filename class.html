@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
-  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/fonts.css?v=mv5bwrpu">
+  <link rel="stylesheet" href="css/style.css?v=mv5bwrpu">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -142,6 +142,8 @@
 
   <!-- UPCOMING SUNDAY PREPARATION / HOMEWORK CARD -->
   <div id="hwPrepCard"></div>
+  <!-- the brief for her (COACH-LOOP gap C): five lines she can read in 30 seconds -->
+  <div id="teacherBrief"></div>
 
   <!-- ACTIVE LESSON CONTAINER -->
   <div class="card" id="lessonCard" style="border-top: 4px solid var(--accent)">
@@ -495,13 +497,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv56pg7f"></script>
-<script src="js/curriculum.js?v=mv56pg7f"></script>
-<script src="js/srs.js?v=mv56pg7f"></script>
-<script src="js/app.js?v=mv56pg7f"></script>
-<script src="js/tracker.js?v=mv56pg7f"></script>
-<script src="js/plan.js?v=mv56pg7f"></script>
-<script src="js/account.js?v=mv56pg7f"></script>
+<script src="js/progress-model.js?v=mv5bwrpu"></script>
+<script src="js/curriculum.js?v=mv5bwrpu"></script>
+<script src="js/srs.js?v=mv5bwrpu"></script>
+<script src="js/app.js?v=mv5bwrpu"></script>
+<script src="js/tracker.js?v=mv5bwrpu"></script>
+<script src="js/frames.js?v=mv5bwrpu"></script>
+<script src="js/freetry.js?v=mv5bwrpu"></script>
+<script src="js/errors.js?v=mv5bwrpu"></script>
+<script src="js/plan.js?v=mv5bwrpu"></script>
+<script src="js/account.js?v=mv5bwrpu"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -696,6 +701,53 @@ function renderHomeworkCard() {
     console.error("Failed to render homework card", e);
   }
 }
+
+/* 📋 THE BRIEF FOR HER — the loop was one-way (her lesson → the site); now the site tells her
+   what it knows: ask me about, I keep missing, drill aloud, my weak grammar, the budget. */
+async function renderTeacherBrief() {
+  const el = document.getElementById("teacherBrief");
+  if (!el) return;
+  try {
+    const prof = typeof planProfile === "function" ? planProfile() : { teacher: "your teacher", isReza: true };
+    const log = store.get("ats-log", []);
+    const script = (typeof planScript === "function" ? planScript() : []).slice(0, 3);
+    const led = (typeof Errors === "object" && Errors) ? Errors.ledger(log, 60) : { pairs: [], sounds: [], cats: {} };
+    // the weakest grammar frame, from the engine's own profile over the bank
+    let gram = null;
+    try {
+      if (typeof FreeTry === "object" && FreeTry && FreeTry.grammarProfile) {
+        const bank = await fetch("data/sentence-bank.json").then(r => r.json());
+        const pool = (bank.sentences || []).filter(s => s.track !== "quran");
+        const G = FreeTry.grammarProfile(pool, { now: Date.now(), srs: getSrs(), log, freq: {}, homework: new Set() });
+        const p = G.focus && G.profile[G.focus];
+        if (G.focus && p && !p.unseen) gram = { frame: G.focus, passRate: p.passRate };
+      }
+    } catch (e) {}
+    // the five words most overdue, named
+    const srs = getSrs();
+    const dueKeys = Object.entries(srs).filter(([k, c]) => c && c.u && c.b !== "never" && (c.due || 0) < Date.now() && !/^(s:|md:|chap:)/.test(k)).sort((a, b) => (a[1].due || 0) - (b[1].due || 0)).slice(0, 5).map(([k]) => k);
+    let dueWords = [];
+    try { dueWords = (typeof resolveCards === "function" && dueKeys.length) ? (await resolveCards(dueKeys)).filter(c => c && c.ar).slice(0, 5) : []; } catch (e) {}
+    const lines = [];
+    if (script.length) lines.push(`1. Ask me about my day — I can say: ${script.map(s => `"${s.en}"`).join(", ")}.`);
+    else lines.push("1. Ask me about my day — I am building sentences about it this week.");
+    const miss = led.pairs.slice(0, 2).map(p => `${p.model} / ${p.got}`);
+    const snd = led.sounds.slice(0, 1).map(s => `the ${s.name} (${s.sound})`);
+    lines.push(`2. I keep mixing up: ${miss.length ? miss.join(", ") : "nothing recorded yet"}${snd.length ? `; my ${snd[0]} comes out weak` : ""}.`);
+    lines.push(`3. Drill aloud with me: ${dueWords.length ? dueWords.map(c => c.ar + (c.en ? ` (${c.en})` : "")).join(", ") : "my due words — the site will name them next week"}.`);
+    lines.push(`4. My weak grammar: ${gram ? `${gram.frame}${gram.passRate != null ? ` (I pass ${gram.passRate}%)` : ""}` : "not enough evidence yet — ask me to make sentences with كان and لم"}.`);
+    if (prof.budget !== false) lines.push("5. My budget: ten minutes on four mornings. Please: five words and one sentence a week.");
+    const text = `Brief for ${prof.isReza ? "my teacher" : "my teacher"} — ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}\n` + lines.join("\n");
+    el.innerHTML = `<details class="more block" style="margin:0 0 16px"><summary>📋 Brief for ${prof.teacher === "her" ? "her" : "your teacher"} — 30 seconds</summary>
+      <div class="more-body" style="font-size:13.5px;line-height:1.55">
+        ${lines.map(l => `<div style="margin:4px 0">${l.replace(/</g, "&lt;")}</div>`).join("")}
+        <div style="margin-top:8px"><button type="button" class="book-toggle-pill" id="briefCopy">📋 Copy</button> <span class="pd-muted" style="font-size:12px">Send it before Sunday, or read it to her at the start.</span></div>
+      </div></details>`;
+    const b = document.getElementById("briefCopy");
+    if (b) b.onclick = async () => { try { await navigator.clipboard.writeText(text); b.textContent = "✓ Copied"; } catch (e) { b.textContent = "Select and copy"; } logEvent({ e: "teacher-brief", lines: lines.length, t: Date.now() }); if (typeof autoSync === "function") { try { autoSync(true); } catch (e2) {} } };
+  } catch (e) { console.error("brief", e); }
+}
+document.addEventListener("DOMContentLoaded", () => { setTimeout(renderTeacherBrief, 400); });
 
 function renderPassage() {
   if (!STORY_DATA) return;

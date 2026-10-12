@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "note": "SLOT FRAMES (COACH-LOOP gap B, 12 Oct): hand-vetted frames with fillers that carry their own case ending and gender, so agreement cannot go wrong. scripts/gen-slots.js expands them into data/generated-sentences.json; gen-sentences.js folds those into the bank (src 'gen'). Keep every result ≤ 7 words. A frame is a template with {slots}; each slot lists fillers {ar, en}; 'pairs' frames list agreeing (subject, predicate) sets instead.",
+  "frames": [
+    {
+      "id": "urid-an", "ar": "أُرِيدُ أَنْ {v}", "en": "I want to {v}", "theme": "my day",
+      "slots": { "v": [
+        { "ar": "أَشْرَبَ القَهْوَةَ", "en": "drink coffee" }, { "ar": "آكُلَ الفَطُورَ", "en": "eat breakfast" }, { "ar": "أَنَامَ مُبَكِّرًا", "en": "sleep early" },
+        { "ar": "أَذْهَبَ إِلَى المَسْجِدِ", "en": "go to the mosque" }, { "ar": "أَقْرَأَ القُرْآنَ", "en": "read the Qur'an" }, { "ar": "أَتَعَلَّمَ العَرَبِيَّةَ", "en": "learn Arabic" },
+        { "ar": "أَتَكَلَّمَ مَعَكَ", "en": "talk with you" }, { "ar": "أَرْجِعَ إِلَى البَيْتِ", "en": "go back home" }
+      ] }
+    },
+    {
+      "id": "indi-fi", "ar": "عِنْدِي {n} فِي {p}", "en": "I have {n} {p}", "theme": "my day",
+      "slots": {
+        "n": [ { "ar": "اجْتِمَاعٌ", "en": "a meeting" }, { "ar": "دَرْسٌ", "en": "a lesson" }, { "ar": "عَمَلٌ كَثِيرٌ", "en": "a lot of work" }, { "ar": "وَقْتٌ", "en": "time" } ],
+        "p": [ { "ar": "المَكْتَبِ", "en": "at the office" }, { "ar": "البَيْتِ", "en": "at home" }, { "ar": "الصَّبَاحِ", "en": "in the morning" }, { "ar": "المَسَاءِ", "en": "in the evening" } ]
+      }
+    },
+    {
+      "id": "dhahabtu-ila", "ar": "ذَهَبْتُ إِلَى {p} {t}", "en": "I went to {p} {t}", "theme": "yesterday",
+      "slots": {
+        "p": [ { "ar": "المَسْجِدِ", "en": "the mosque" }, { "ar": "المَكْتَبِ", "en": "the office" }, { "ar": "السُّوقِ", "en": "the market" }, { "ar": "المَطْعَمِ", "en": "the restaurant" }, { "ar": "المَدْرَسَةِ", "en": "the school" } ],
+        "t": [ { "ar": "أَمْسِ", "en": "yesterday" }, { "ar": "صَبَاحًا", "en": "in the morning" }, { "ar": "بَعْدَ العَمَلِ", "en": "after work" } ]
+      }
+    },
+    {
+      "id": "adhhabu-bi", "ar": "أَذْهَبُ إِلَى {p} {v}", "en": "I go to {p} {v}", "theme": "my day",
+      "slots": {
+        "p": [ { "ar": "العَمَلِ", "en": "work" }, { "ar": "المَسْجِدِ", "en": "the mosque" }, { "ar": "السُّوقِ", "en": "the market" } ],
+        "v": [ { "ar": "بِالقِطَارِ", "en": "by train" }, { "ar": "بِالسَّيَّارَةِ", "en": "by car" }, { "ar": "بِالحَافِلَةِ", "en": "by bus" }, { "ar": "مَشْيًا", "en": "on foot" } ]
+      }
+    },
+    {
+      "id": "kana-m", "ar": "كَانَ {s} {a}", "en": "{s} was {a}", "theme": "yesterday",
+      "pairs": [
+        { "s": { "ar": "الطَّعَامُ", "en": "the food" }, "a": [ { "ar": "لَذِيذًا", "en": "delicious" }, { "ar": "بَارِدًا", "en": "cold" }, { "ar": "كَثِيرًا", "en": "plentiful" } ] },
+        { "s": { "ar": "اليَوْمُ", "en": "the day" }, "a": [ { "ar": "طَوِيلًا", "en": "long" }, { "ar": "جَمِيلًا", "en": "beautiful" }, { "ar": "صَعْبًا", "en": "hard" } ] },
+        { "s": { "ar": "الجَوُّ", "en": "the weather" }, "a": [ { "ar": "بَارِدًا", "en": "cold" }, { "ar": "حَارًّا", "en": "hot" }, { "ar": "جَمِيلًا", "en": "beautiful" } ] },
+        { "s": { "ar": "الدَّرْسُ", "en": "the lesson" }, "a": [ { "ar": "سَهْلًا", "en": "easy" }, { "ar": "صَعْبًا", "en": "hard" }, { "ar": "قَصِيرًا", "en": "short" } ] }
+      ]
+    },
+    {
+      "id": "kanat-f", "ar": "كَانَتِ {s} {a}", "en": "{s} was {a}", "theme": "yesterday",
+      "pairs": [
+        { "s": { "ar": "الرِّحْلَةُ", "en": "the trip" }, "a": [ { "ar": "جَمِيلَةً", "en": "beautiful" }, { "ar": "طَوِيلَةً", "en": "long" } ] },
+        { "s": { "ar": "القَهْوَةُ", "en": "the coffee" }, "a": [ { "ar": "حَارَّةً", "en": "hot" }, { "ar": "لَذِيذَةً", "en": "delicious" }, { "ar": "بَارِدَةً", "en": "cold" } ] },
+        { "s": { "ar": "الحَافِلَةُ", "en": "the bus" }, "a": [ { "ar": "مُتَأَخِّرَةً", "en": "late" }, { "ar": "مُزْدَحِمَةً", "en": "crowded" } ] },
+        { "s": { "ar": "الغُرْفَةُ", "en": "the room" }, "a": [ { "ar": "نَظِيفَةً", "en": "clean" }, { "ar": "بَارِدَةً", "en": "cold" } ] }
+      ]
+    },
+    {
+      "id": "lam-1s", "ar": "لَمْ {v}", "en": "I did not {v}", "theme": "yesterday",
+      "slots": { "v": [
+        { "ar": "أَنَمْ جَيِّدًا", "en": "sleep well" }, { "ar": "أَذْهَبْ إِلَى العَمَلِ", "en": "go to work" }, { "ar": "أَشْرَبْ قَهْوَةً", "en": "drink coffee" },
+        { "ar": "أَقْرَأْ شَيْئًا", "en": "read anything" }, { "ar": "أَفْهَمِ الدَّرْسَ", "en": "understand the lesson" }, { "ar": "أَرَ صَدِيقِي", "en": "see my friend" }
+      ] }
+    },
+    {
+      "id": "fi-time", "ar": "فِي {t} {v}", "en": "{t} I {v}", "theme": "my day",
+      "slots": {
+        "t": [ { "ar": "الصَّبَاحِ", "en": "In the morning" }, { "ar": "المَسَاءِ", "en": "In the evening" }, { "ar": "العُطْلَةِ", "en": "On the holiday" } ],
+        "v": [ { "ar": "أَشْرَبُ القَهْوَةَ", "en": "drink coffee" }, { "ar": "أَقْرَأُ القُرْآنَ", "en": "read the Qur'an" }, { "ar": "أَنَامُ مُبَكِّرًا", "en": "sleep early" }, { "ar": "أَعْمَلُ فِي البَيْتِ", "en": "work at home" }, { "ar": "أَلْعَبُ مَعَ الأَوْلَادِ", "en": "play with the children" } ]
+      }
+    },
+    {
+      "id": "ana-m", "ar": "أَنَا {a} {d}", "en": "I am {d} {a}", "theme": "how I feel", "gender": "m",
+      "slots": {
+        "a": [ { "ar": "مَشْغُولٌ", "en": "busy" }, { "ar": "سَعِيدٌ", "en": "happy" }, { "ar": "جَائِعٌ", "en": "hungry" }, { "ar": "مَرِيضٌ", "en": "ill" }, { "ar": "تَعْبَانُ", "en": "tired" } ],
+        "d": [ { "ar": "جِدًّا", "en": "very" }, { "ar": "قَلِيلًا", "en": "a little" }, { "ar": "اليَوْمَ", "en": "today" } ]
+      }
+    },
+    {
+      "id": "ana-f", "ar": "أَنَا {a} {d}", "en": "I am {d} {a}", "theme": "how I feel", "gender": "f",
+      "slots": {
+        "a": [ { "ar": "مَشْغُولَةٌ", "en": "busy" }, { "ar": "سَعِيدَةٌ", "en": "happy" }, { "ar": "جَائِعَةٌ", "en": "hungry" }, { "ar": "مَرِيضَةٌ", "en": "ill" }, { "ar": "تَعْبَانَةٌ", "en": "tired" } ],
+        "d": [ { "ar": "جِدًّا", "en": "very" }, { "ar": "قَلِيلًا", "en": "a little" }, { "ar": "اليَوْمَ", "en": "today" } ]
+      }
+    },
+    {
+      "id": "fam-m", "ar": "{s} {v}", "en": "{s} {v}", "theme": "my family",
+      "pairs": [
+        { "s": { "ar": "ابْنِي", "en": "My son" }, "a": [ { "ar": "يَدْرُسُ العَرَبِيَّةَ", "en": "studies Arabic" }, { "ar": "يَنَامُ مُبَكِّرًا", "en": "sleeps early" }, { "ar": "يُحِبُّ الفَطُورَ", "en": "loves breakfast" } ] },
+        { "s": { "ar": "أَخِي", "en": "My brother" }, "a": [ { "ar": "يَعْمَلُ فِي لَنْدَن", "en": "works in London" }, { "ar": "يُحِبُّ القَهْوَةَ", "en": "loves coffee" } ] },
+        { "s": { "ar": "أَبِي", "en": "My father" }, "a": [ { "ar": "يَقْرَأُ القُرْآنَ", "en": "reads the Qur'an" }, { "ar": "يُصَلِّي فِي المَسْجِدِ", "en": "prays in the mosque" } ] }
+      ]
+    },
+    {
+      "id": "fam-f", "ar": "{s} {v}", "en": "{s} {v}", "theme": "my family",
+      "pairs": [
+        { "s": { "ar": "ابْنَتِي", "en": "My daughter" }, "a": [ { "ar": "تَدْرُسُ العَرَبِيَّةَ", "en": "studies Arabic" }, { "ar": "تَنَامُ مُبَكِّرًا", "en": "sleeps early" }, { "ar": "تُحِبُّ الشَّايَ", "en": "loves tea" } ] },
+        { "s": { "ar": "أُمِّي", "en": "My mother" }, "a": [ { "ar": "تَقْرَأُ القُرْآنَ", "en": "reads the Qur'an" }, { "ar": "تَعْمَلُ فِي البَيْتِ", "en": "works at home" } ] },
+        { "s": { "ar": "أُخْتِي", "en": "My sister" }, "a": [ { "ar": "تَعْمَلُ فِي لَنْدَن", "en": "works in London" }, { "ar": "تُحِبُّ القَهْوَةَ", "en": "loves coffee" } ] }
+      ]
+    },
+    {
+      "id": "hal", "ar": "هَلْ {q}؟", "en": "{q}?", "theme": "asking",
+      "slots": { "q": [
+        { "ar": "أَنْتَ مَشْغُولٌ اليَوْمَ", "en": "Are you busy today" }, { "ar": "عِنْدَكَ وَقْتٌ", "en": "Do you have time" }, { "ar": "تَشْرَبُ القَهْوَةَ", "en": "Do you drink coffee" },
+        { "ar": "تَسْكُنُ فِي لَنْدَن", "en": "Do you live in London" }, { "ar": "فَهِمْتَ الدَّرْسَ", "en": "Did you understand the lesson" }, { "ar": "نِمْتَ جَيِّدًا", "en": "Did you sleep well" }
+      ] }
+    },
+    {
+      "id": "hadha", "ar": "{d} {n} {a}", "en": "This is {a} {n}", "theme": "pointing",
+      "pairs": [
+        { "s": { "ar": "هَذَا كِتَابٌ", "en": "a book" }, "a": [ { "ar": "جَدِيدٌ", "en": "new" }, { "ar": "جَمِيلٌ", "en": "beautiful" }, { "ar": "صَعْبٌ", "en": "hard" } ] },
+        { "s": { "ar": "هَذَا بَيْتٌ", "en": "a house" }, "a": [ { "ar": "كَبِيرٌ", "en": "big" }, { "ar": "قَدِيمٌ", "en": "old" } ] },
+        { "s": { "ar": "هَذِهِ شَقَّةٌ", "en": "a flat" }, "a": [ { "ar": "جَمِيلَةٌ", "en": "beautiful" }, { "ar": "صَغِيرَةٌ", "en": "small" } ] },
+        { "s": { "ar": "هَذِهِ قَهْوَةٌ", "en": "coffee" }, "a": [ { "ar": "لَذِيذَةٌ", "en": "delicious" }, { "ar": "حَارَّةٌ", "en": "hot" } ] }
+      ]
+    }
+  ]
+}

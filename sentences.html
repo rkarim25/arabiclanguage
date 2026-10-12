@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
-  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/fonts.css?v=mv5bwrpu">
+  <link rel="stylesheet" href="css/style.css?v=mv5bwrpu">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -190,6 +190,7 @@
     <div class="calm-row">
       <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
       <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
+      <button type="button" class="pt-btn" onclick="TryIt.free({ hear: true, kind: 'ear' })" title="The same batch, by ear: the Arabic plays, you give the meaning or say it back — your listening line">🎧 By ear</button>
       <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
       <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
       <details class="more"><summary>⋯</summary><div class="more-body">
@@ -282,17 +283,18 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv56pg7f"></script>
-<script src="js/curriculum.js?v=mv56pg7f"></script>
-<script src="js/srs.js?v=mv56pg7f"></script>
-<script src="js/frames.js?v=mv56pg7f"></script>
-<script src="js/freetry.js?v=mv56pg7f"></script>
-<script src="js/match.js?v=mv56pg7f"></script>
-<script src="js/tryit.js?v=mv56pg7f"></script>
-<script src="js/app.js?v=mv56pg7f"></script>
-<script src="js/tracker.js?v=mv56pg7f"></script>
-<script src="js/plan.js?v=mv56pg7f"></script>
-<script src="js/account.js?v=mv56pg7f"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mv5bwrpu"></script>
+<script src="js/curriculum.js?v=mv5bwrpu"></script>
+<script src="js/srs.js?v=mv5bwrpu"></script>
+<script src="js/frames.js?v=mv5bwrpu"></script>
+<script src="js/freetry.js?v=mv5bwrpu"></script>
+<script src="js/match.js?v=mv5bwrpu"></script>
+<script src="js/errors.js?v=mv5bwrpu"></script>
+<script src="js/tryit.js?v=mv5bwrpu"></script>
+<script src="js/app.js?v=mv5bwrpu"></script>
+<script src="js/tracker.js?v=mv5bwrpu"></script>
+<script src="js/plan.js?v=mv5bwrpu"></script>
+<script src="js/account.js?v=mv5bwrpu"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");

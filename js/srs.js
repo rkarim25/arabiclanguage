@@ -56,6 +56,23 @@
     fuzz: 0.05,                     // ±5% on long intervals so reviews don't pile on one day
   };
   const SYMBOL = { no: "✗", maybe: "≈", yes: "✓", solid: "★", retire: "⊘" };
+  /* one word, one card (data/aliases.json): every key of a word or a duplicated sentence */
+  let ALIAS = {};
+  function setAliases(groups) { ALIAS = {}; Object.values(groups || {}).forEach(g => { if (Array.isArray(g)) g.forEach(k => { ALIAS[k] = g; }); }); }
+  const aliasOf = key => ALIAS[key] || null;
+  /* on load: the strongest existing card of a group becomes the whole group's card */
+  function adoptAliases(srs) {
+    let n = 0;
+    const seen = new Set();
+    Object.values(ALIAS).forEach(g => {
+      if (seen.has(g)) return; seen.add(g);
+      const have = g.map(k => srs[k]).filter(Boolean);
+      if (!have.length) return;
+      const best = have.sort((a, b) => (b.b === "never") - (a.b === "never") || (b.u || 0) - (a.u || 0) || (b.box || 0) - (a.box || 0))[0];
+      g.forEach(k => { if (srs[k] !== best && JSON.stringify(srs[k] || null) !== JSON.stringify(best)) { srs[k] = best; n++; } });
+    });
+    return n;
+  }
   const TITLE = {
     no: "No — didn't know it", maybe: "Maybe — hesitant or partly", yes: "Yes — knew it",
     solid: "Solid — instant, no effort", retire: "Don't repeat — I know this for good",
@@ -164,10 +181,11 @@
     const srs = (typeof getSrs === "function") ? getSrs() : (opts.srs || {});
     const cur = srs[key];
     const g = FROM_LEGACY[grade] || grade;
-    // a retired card stays retired unless he actually MISSES it (site rule)
-    if (cur && cur.b === "never" && g !== "no" && g !== "retire") return cur;
+    // a retired card: a verdict on it is a verdict (12 Oct — the ✓ used to be a silent no-op); ≈ alone leaves it retired
+    if (cur && cur.b === "never" && g === "maybe") return cur;
     const nc = next(cur, g, now);
     srs[key] = nc;
+    (ALIAS[key] || []).forEach(k => { if (k !== key) srs[k] = nc; });   // every key of that word
     if (typeof store !== "undefined" && store.set) store.set("ats-srs", srs);
     return nc;
   }
@@ -239,7 +257,10 @@
   function stats(srs, now) {
     now = now || Date.now();
     const o = { total: 0, due: 0, fresh: 0, retired: 0, solid: 0, learning: 0, byGrade: { no: 0, maybe: 0, yes: 0, solid: 0 } };
-    Object.values(srs || {}).forEach(c => {
+    const counted = new Set();
+    Object.entries(srs || {}).forEach(([k, c]) => {
+      const g = ALIAS[k];
+      if (g) { if (counted.has(g)) return; counted.add(g); }   // a word is counted once, whatever its keys
       o.total++;
       if (c.b === "never") { o.retired++; return; }
       if (!c.u) { o.fresh++; return; }
@@ -325,5 +346,5 @@
 
   return { DAY, BOX_DAYS, NEVER_DUE, GRADES, P, SYMBOL, TITLE, FROM_LEGACY, TO_LEGACY, LEGACY_BUCKET,
     migrate, retrievability, next, rate, legacyGrade, boxFromS, weakness, weakestFirst, nextLabel,
-    buildBatch, stats, rateBarHtml, mountRateBar, paintBar, legendHtml };
+    buildBatch, stats, rateBarHtml, mountRateBar, paintBar, legendHtml, setAliases, aliasOf, adoptAliases };
 });

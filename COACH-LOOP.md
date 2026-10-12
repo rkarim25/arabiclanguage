@@ -87,3 +87,21 @@ Every content move is logged in the journal, but no run asks "did the mnemonic f
 6. Fatigue-aware plan (F), rung frame labels (G), automatic refit (H), intervention ledger (I).
 
 Each is additive, testable, and leaves Saba's experience untouched.
+
+---
+
+## Status — 12 Oct 2026, evening ("fix it all")
+
+| Gap | State | Where |
+|---|---|---|
+| A. error ledger | **built** — every Try it miss classified at the moment it happens (spelling / morphology / lexical / phonology / missing / order), shown as one phrase, carried on the event; `Errors.ledger` mines confusion pairs and slipping sounds | js/errors.js, js/tryit.js, index.html, scripts/test-errors.js |
+| B. built sentences | **built** — 14 vetted slot frames × case-marked fillers → 146 sentences in the bank (src gen); the lexical gate decides when he is ready for each | data/slot-frames.json, scripts/gen-slots.js, gen-sentences.js |
+| C. teacher brief | **built** — five lines on the Lessons page (ask me about, I keep mixing up, drill aloud, my weak grammar, the budget), copyable, logged as teacher-brief | class.html renderTeacherBrief |
+| D. hear-first | **built** — 🎧 Hear it first on every Try it card, 🎧 By ear round on the Sentences page; verdicts are listening evidence (alisten-grade) | js/tryit.js ear / earGrade |
+| E. knowledge merge | **built** — data/aliases.json (475 groups, 1,929 keys, 31 duplicated sentences); a verdict reaches every key, counts see one, existing twins adopted on load | scripts/gen-aliases.js, js/srs.js, js/app.js |
+| F. time of day | **built (first step)** — the door names his best hour from 30 days of passes; the 20:00 rule and the heavy-day easing stay | js/plan.js planBestHour |
+| G. rung labels | **built** — a rung try logs the frames its own target exercises; the grammar profile uses them | js/tryit.js, index.html, js/freetry.js |
+| H. auto refit | **built (propose-only)** — scripts/refit-progress.js scores CAL against a grid on his re-encounters; the nightly runs it monthly and proposes, never writes | scripts/refit-progress.js |
+| I. intervention ledger | **built** — data/interventions.json + scripts/intervention-check.js (miss rate before/after per key); the nightly appends and checks weekly | data/interventions.json |
+
+Chapter drills now exist for chapters 1–10 (300 rung lines). The audio cache keeps its newest 3,000 clips. Still open: the slot frames are 14 — add one only with fillers you are sure of.

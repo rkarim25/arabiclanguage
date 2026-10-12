@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mv56pg7f";
+const CACHE = "ats-mv5bwrpu";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -40,6 +40,8 @@ const CORE = [
   "data/myday.json",                  // Say your day — the commute's spine, offline
   "data/chapters.json",               // the Daily Reader's sentences (sentences.html fetches it)
   "js/match.js",                      // the one grader for spoken answers
+  "js/errors.js",                     // the error ledger
+  "data/aliases.json",                // one word, one card
   "class.html", "words.html",
 ];
 
@@ -55,6 +57,14 @@ self.addEventListener("activate", e => {
   );
 });
 
+/* the audio cache keeps the newest AUDIO_MAX clips — it used to grow without end */
+const AUDIO_MAX = 3000;
+let _trimming = false;
+async function trimAudio(c) {
+  if (_trimming) return; _trimming = true;
+  try { const ks = await c.keys(); if (ks.length > AUDIO_MAX) for (const k of ks.slice(0, ks.length - AUDIO_MAX)) await c.delete(k); } catch (err) {}
+  _trimming = false;
+}
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   const isRemoteQuranAudio = url.hostname === "everyayah.com" || url.hostname === "audio.qurancdn.com";
@@ -71,7 +81,7 @@ self.addEventListener("fetch", e => {
         // media elements ask for byte ranges; a 206 cannot be cached — fetch the whole clip once and keep it
         const ranged = isAudio && e.request.headers.has("range");
         const res = await fetch(ranged ? new Request(e.request.url, { mode: e.request.mode === "navigate" ? "cors" : e.request.mode, credentials: e.request.credentials }) : e.request);
-        if (res.ok || res.type === "opaque") { const copy = res.clone(); caches.open(cacheName).then(c => c.put(ranged ? e.request.url : e.request, copy)); }
+        if (res.ok || res.type === "opaque") { const copy = res.clone(); caches.open(cacheName).then(async c => { await c.put(ranged ? e.request.url : e.request, copy); if (isAudio) trimAudio(c); }); }
         return res;
       } catch (err) {
         // offline first-sight of a stamped asset: any older stamp beats nothing

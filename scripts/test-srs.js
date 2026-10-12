@@ -52,7 +52,9 @@ console.log("\n-- ✗ and ≈ --");
   const s3 = { box: 2, due: T0 + 5 * DAY, u: T0, s: 5, d: 5, n: 2, r: 3, l: 0, g: "yes", ls: T0 };
   yes(SRS.next(s3, "maybe", T0 + 5 * DAY).box === 2, "≈ at the top of a band stays in the band");
   const retired = SRS.rate("k", "yes", { srs: { k: { box: 5, due: SRS.NEVER_DUE, b: "never", u: T0 } } });
-  yes(retired.b === "never", "a ⊘ word stays retired on ✓ (only a real ✗ un-retires)");
+  yes(!retired.b && retired.g === "yes", "a ✓ on a ⊘ word is a verdict again — it un-retires (12 Oct: the tap used to be a silent no-op)");
+  const stillRet = SRS.rate("k", "maybe", { srs: { k: { box: 5, due: SRS.NEVER_DUE, b: "never", u: T0 } } });
+  yes(stillRet.b === "never", "…a ≈ alone leaves it retired");
   const unret = SRS.next({ box: 5, due: SRS.NEVER_DUE, b: "never", u: T0 }, "no", T0 + DAY);
   yes(!unret.b && unret.box === 0, "…and a ✗ un-retires it");
 }

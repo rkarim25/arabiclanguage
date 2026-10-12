@@ -104,14 +104,16 @@ When content is added or modified in `data/*.json` or `data/story-*.json`, run t
 
 ```bash
 node scripts/gen-frames.js      # grammar frames on chapters/prompts/stories (+ regenerates index.html CHAPTERS from chapters.json)
-node scripts/gen-sentences.js   # the sentence bank
+node scripts/gen-slots.js       # built sentences from data/slot-frames.json (vetted frames × case-marked fillers)
+node scripts/gen-sentences.js   # the sentence bank (folds the built sentences in)
+node scripts/gen-aliases.js     # one word, one card — data/aliases.json
 node scripts/gen-curriculum.js  # the milestone ladder (gen-classes reads curriculum.json — so this comes first)
 node scripts/gen-classes.js     # the class repository
 node scripts/gen-lexicon.js     # the dictionary
 PYTHONUTF8=1 python scripts/gen-audio.py   # neural clips for new text (PYTHONUTF8=1: the cp1252 console crashes otherwise)
 
-# then: every suite (13 suites: test-srs, test-freetry, test-frames, test-match, test-audio-coverage, test-curriculum, test-drill-grade, test-progress-model, test-sentence-diag, test-sentences, test-shell, test-typing, test-chapter-drills) and every page's inline script must parse
-for t in srs freetry frames match audio-coverage curriculum drill-grade progress-model sentence-diag sentences shell typing chapter-drills; do node scripts/test-$t.js; done
+# then: every suite (14 suites: test-srs, test-freetry, test-frames, test-match, test-errors, test-audio-coverage, test-curriculum, test-drill-grade, test-progress-model, test-sentence-diag, test-sentences, test-shell, test-typing, test-chapter-drills) and every page's inline script must parse
+for t in srs freetry frames match errors audio-coverage curriculum drill-grade progress-model sentence-diag sentences shell typing chapter-drills; do node scripts/test-$t.js; done
 
 # then the cache stamp
 node scripts/bump-version.js

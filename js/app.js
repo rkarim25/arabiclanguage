@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv56pg7f";
+const DATA_V = "mv5bwrpu";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3115,6 +3115,14 @@ function whoami() {
    fallback covers phrases. */
 let MNEM = {};
 fetch("data/mnemonics.json").then(r => r.json()).then(d => { MNEM = d; }).catch(() => {});
+/* one word, one card: the alias map, and the strongest card adopted across each group */
+fetch("data/aliases.json").then(r => r.json()).then(d => {
+  if (!(typeof SRS === "object" && SRS && SRS.setAliases)) return;
+  SRS.setAliases((d && d.groups) || {});
+  const srs = getSrs();
+  const n = SRS.adoptAliases(srs);
+  if (n) { store.set("ats-srs", srs); if (typeof logEvent === "function") logEvent({ e: "alias-adopt", n }); }
+}).catch(() => {});
 function mnemFor(ar) {
   if (!ar) return null;
   const bare = stripTashkeel(ar).replace(/[^؀-ۿ\s]/g, "").replace(/^ال/, "").trim();

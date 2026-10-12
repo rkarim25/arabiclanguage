@@ -1,0 +1,2002 @@
+{
+ "version": 1,
+ "built": "2026-10-12",
+ "note": "built by scripts/gen-slots.js from data/slot-frames.json — do not hand-edit",
+ "sentences": [
+  {
+   "id": "gen:urid-an:0",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَشْرَبَ القَهْوَةَ",
+   "en": "I want to drink coffee.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:1",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ آكُلَ الفَطُورَ",
+   "en": "I want to eat breakfast.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:2",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَنَامَ مُبَكِّرًا",
+   "en": "I want to sleep early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:3",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَذْهَبَ إِلَى المَسْجِدِ",
+   "en": "I want to go to the mosque.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:4",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَقْرَأَ القُرْآنَ",
+   "en": "I want to read the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:5",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَتَعَلَّمَ العَرَبِيَّةَ",
+   "en": "I want to learn Arabic.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:6",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَتَكَلَّمَ مَعَكَ",
+   "en": "I want to talk with you.",
+   "tr": "",
+   "pattern": "prep-pron",
+   "frames": [
+    "prep-pron",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:urid-an:7",
+   "frameId": "urid-an",
+   "ar": "أُرِيدُ أَنْ أَرْجِعَ إِلَى البَيْتِ",
+   "en": "I want to go back home.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:8",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي اجْتِمَاعٌ فِي المَكْتَبِ",
+   "en": "I have a meeting at the office.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:9",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي اجْتِمَاعٌ فِي البَيْتِ",
+   "en": "I have a meeting at home.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:10",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي اجْتِمَاعٌ فِي المَسَاءِ",
+   "en": "I have a meeting in the evening.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:11",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي دَرْسٌ فِي المَكْتَبِ",
+   "en": "I have a lesson at the office.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:12",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي دَرْسٌ فِي البَيْتِ",
+   "en": "I have a lesson at home.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:13",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي دَرْسٌ فِي الصَّبَاحِ",
+   "en": "I have a lesson in the morning.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:14",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي دَرْسٌ فِي المَسَاءِ",
+   "en": "I have a lesson in the evening.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:15",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي عَمَلٌ كَثِيرٌ فِي المَكْتَبِ",
+   "en": "I have a lot of work at the office.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:16",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي عَمَلٌ كَثِيرٌ فِي البَيْتِ",
+   "en": "I have a lot of work at home.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:17",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي عَمَلٌ كَثِيرٌ فِي الصَّبَاحِ",
+   "en": "I have a lot of work in the morning.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:18",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي عَمَلٌ كَثِيرٌ فِي المَسَاءِ",
+   "en": "I have a lot of work in the evening.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:19",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي وَقْتٌ فِي المَكْتَبِ",
+   "en": "I have time at the office.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:20",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي وَقْتٌ فِي البَيْتِ",
+   "en": "I have time at home.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:21",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي وَقْتٌ فِي الصَّبَاحِ",
+   "en": "I have time in the morning.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:indi-fi:22",
+   "frameId": "indi-fi",
+   "ar": "عِنْدِي وَقْتٌ فِي المَسَاءِ",
+   "en": "I have time in the evening.",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "nominal"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:23",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَسْجِدِ أَمْسِ",
+   "en": "I went to the mosque yesterday.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:24",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَسْجِدِ صَبَاحًا",
+   "en": "I went to the mosque in the morning.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:25",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَسْجِدِ بَعْدَ العَمَلِ",
+   "en": "I went to the mosque after work.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:26",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَكْتَبِ أَمْسِ",
+   "en": "I went to the office yesterday.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:27",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَكْتَبِ صَبَاحًا",
+   "en": "I went to the office in the morning.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:28",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَكْتَبِ بَعْدَ العَمَلِ",
+   "en": "I went to the office after work.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:29",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى السُّوقِ أَمْسِ",
+   "en": "I went to the market yesterday.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:30",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى السُّوقِ صَبَاحًا",
+   "en": "I went to the market in the morning.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:31",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى السُّوقِ بَعْدَ العَمَلِ",
+   "en": "I went to the market after work.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:32",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَطْعَمِ أَمْسِ",
+   "en": "I went to the restaurant yesterday.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:33",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَطْعَمِ صَبَاحًا",
+   "en": "I went to the restaurant in the morning.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:34",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَطْعَمِ بَعْدَ العَمَلِ",
+   "en": "I went to the restaurant after work.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:35",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَدْرَسَةِ أَمْسِ",
+   "en": "I went to the school yesterday.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:36",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَدْرَسَةِ صَبَاحًا",
+   "en": "I went to the school in the morning.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:dhahabtu-ila:37",
+   "frameId": "dhahabtu-ila",
+   "ar": "ذَهَبْتُ إِلَى المَدْرَسَةِ بَعْدَ العَمَلِ",
+   "en": "I went to the school after work.",
+   "tr": "",
+   "pattern": "past-tu",
+   "frames": [
+    "past-tu",
+    "tenses",
+    "connectors"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:38",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى العَمَلِ بِالحَافِلَةِ",
+   "en": "I go to work by bus.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:39",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى العَمَلِ مَشْيًا",
+   "en": "I go to work on foot.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:40",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ بِالقِطَارِ",
+   "en": "I go to the mosque by train.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:41",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ بِالسَّيَّارَةِ",
+   "en": "I go to the mosque by car.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:42",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ بِالحَافِلَةِ",
+   "en": "I go to the mosque by bus.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:43",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى المَسْجِدِ مَشْيًا",
+   "en": "I go to the mosque on foot.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:44",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى السُّوقِ بِالقِطَارِ",
+   "en": "I go to the market by train.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:45",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى السُّوقِ بِالسَّيَّارَةِ",
+   "en": "I go to the market by car.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:46",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى السُّوقِ بِالحَافِلَةِ",
+   "en": "I go to the market by bus.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:adhhabu-bi:47",
+   "frameId": "adhhabu-bi",
+   "ar": "أَذْهَبُ إِلَى السُّوقِ مَشْيًا",
+   "en": "I go to the market on foot.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:48",
+   "frameId": "kana-m",
+   "ar": "كَانَ الطَّعَامُ لَذِيذًا",
+   "en": "The food was delicious.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:49",
+   "frameId": "kana-m",
+   "ar": "كَانَ الطَّعَامُ بَارِدًا",
+   "en": "The food was cold.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:50",
+   "frameId": "kana-m",
+   "ar": "كَانَ الطَّعَامُ كَثِيرًا",
+   "en": "The food was plentiful.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:51",
+   "frameId": "kana-m",
+   "ar": "كَانَ اليَوْمُ طَوِيلًا",
+   "en": "The day was long.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:52",
+   "frameId": "kana-m",
+   "ar": "كَانَ اليَوْمُ جَمِيلًا",
+   "en": "The day was beautiful.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:53",
+   "frameId": "kana-m",
+   "ar": "كَانَ اليَوْمُ صَعْبًا",
+   "en": "The day was hard.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:54",
+   "frameId": "kana-m",
+   "ar": "كَانَ الجَوُّ بَارِدًا",
+   "en": "The weather was cold.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:55",
+   "frameId": "kana-m",
+   "ar": "كَانَ الجَوُّ حَارًّا",
+   "en": "The weather was hot.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:56",
+   "frameId": "kana-m",
+   "ar": "كَانَ الجَوُّ جَمِيلًا",
+   "en": "The weather was beautiful.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:57",
+   "frameId": "kana-m",
+   "ar": "كَانَ الدَّرْسُ سَهْلًا",
+   "en": "The lesson was easy.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:58",
+   "frameId": "kana-m",
+   "ar": "كَانَ الدَّرْسُ صَعْبًا",
+   "en": "The lesson was hard.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kana-m:59",
+   "frameId": "kana-m",
+   "ar": "كَانَ الدَّرْسُ قَصِيرًا",
+   "en": "The lesson was short.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:60",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الرِّحْلَةُ جَمِيلَةً",
+   "en": "The trip was beautiful.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:61",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الرِّحْلَةُ طَوِيلَةً",
+   "en": "The trip was long.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:62",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ القَهْوَةُ حَارَّةً",
+   "en": "The coffee was hot.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:63",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ القَهْوَةُ لَذِيذَةً",
+   "en": "The coffee was delicious.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:64",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ القَهْوَةُ بَارِدَةً",
+   "en": "The coffee was cold.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:65",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الحَافِلَةُ مُتَأَخِّرَةً",
+   "en": "The bus was late.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:66",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الحَافِلَةُ مُزْدَحِمَةً",
+   "en": "The bus was crowded.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:67",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الغُرْفَةُ نَظِيفَةً",
+   "en": "The room was clean.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:kanat-f:68",
+   "frameId": "kanat-f",
+   "ar": "كَانَتِ الغُرْفَةُ بَارِدَةً",
+   "en": "The room was cold.",
+   "tr": "",
+   "pattern": "kana",
+   "frames": [
+    "kana",
+    "gender"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:lam-1s:69",
+   "frameId": "lam-1s",
+   "ar": "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+   "en": "I did not go to work.",
+   "tr": "",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "nominal"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:lam-1s:70",
+   "frameId": "lam-1s",
+   "ar": "لَمْ أَشْرَبْ قَهْوَةً",
+   "en": "I did not drink coffee.",
+   "tr": "",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "nominal"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:lam-1s:71",
+   "frameId": "lam-1s",
+   "ar": "لَمْ أَقْرَأْ شَيْئًا",
+   "en": "I did not read anything.",
+   "tr": "",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "nominal"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:lam-1s:72",
+   "frameId": "lam-1s",
+   "ar": "لَمْ أَفْهَمِ الدَّرْسَ",
+   "en": "I did not understand the lesson.",
+   "tr": "",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "tenses"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:lam-1s:73",
+   "frameId": "lam-1s",
+   "ar": "لَمْ أَرَ صَدِيقِي",
+   "en": "I did not see my friend.",
+   "tr": "",
+   "pattern": "negation",
+   "frames": [
+    "negation",
+    "pronouns",
+    "nominal"
+   ],
+   "theme": "yesterday",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:74",
+   "frameId": "fi-time",
+   "ar": "فِي الصَّبَاحِ أَشْرَبُ القَهْوَةَ",
+   "en": "In the morning I drink coffee.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:75",
+   "frameId": "fi-time",
+   "ar": "فِي الصَّبَاحِ أَقْرَأُ القُرْآنَ",
+   "en": "In the morning I read the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:76",
+   "frameId": "fi-time",
+   "ar": "فِي الصَّبَاحِ أَنَامُ مُبَكِّرًا",
+   "en": "In the morning I sleep early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:77",
+   "frameId": "fi-time",
+   "ar": "فِي الصَّبَاحِ أَعْمَلُ فِي البَيْتِ",
+   "en": "In the morning I work at home.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:78",
+   "frameId": "fi-time",
+   "ar": "فِي الصَّبَاحِ أَلْعَبُ مَعَ الأَوْلَادِ",
+   "en": "In the morning I play with the children.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:79",
+   "frameId": "fi-time",
+   "ar": "فِي المَسَاءِ أَشْرَبُ القَهْوَةَ",
+   "en": "In the evening I drink coffee.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:80",
+   "frameId": "fi-time",
+   "ar": "فِي المَسَاءِ أَقْرَأُ القُرْآنَ",
+   "en": "In the evening I read the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:81",
+   "frameId": "fi-time",
+   "ar": "فِي المَسَاءِ أَنَامُ مُبَكِّرًا",
+   "en": "In the evening I sleep early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:82",
+   "frameId": "fi-time",
+   "ar": "فِي المَسَاءِ أَعْمَلُ فِي البَيْتِ",
+   "en": "In the evening I work at home.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:83",
+   "frameId": "fi-time",
+   "ar": "فِي المَسَاءِ أَلْعَبُ مَعَ الأَوْلَادِ",
+   "en": "In the evening I play with the children.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:84",
+   "frameId": "fi-time",
+   "ar": "فِي العُطْلَةِ أَشْرَبُ القَهْوَةَ",
+   "en": "On the holiday I drink coffee.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:85",
+   "frameId": "fi-time",
+   "ar": "فِي العُطْلَةِ أَقْرَأُ القُرْآنَ",
+   "en": "On the holiday I read the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:86",
+   "frameId": "fi-time",
+   "ar": "فِي العُطْلَةِ أَنَامُ مُبَكِّرًا",
+   "en": "On the holiday I sleep early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:87",
+   "frameId": "fi-time",
+   "ar": "فِي العُطْلَةِ أَعْمَلُ فِي البَيْتِ",
+   "en": "On the holiday I work at home.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:fi-time:88",
+   "frameId": "fi-time",
+   "ar": "فِي العُطْلَةِ أَلْعَبُ مَعَ الأَوْلَادِ",
+   "en": "On the holiday I play with the children.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses"
+   ],
+   "theme": "my day",
+   "gender": null
+  },
+  {
+   "id": "gen:ana-m:89",
+   "frameId": "ana-m",
+   "ar": "أَنَا مَشْغُولٌ قَلِيلًا",
+   "en": "I am a little busy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:90",
+   "frameId": "ana-m",
+   "ar": "أَنَا مَشْغُولٌ اليَوْمَ",
+   "en": "I am today busy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:91",
+   "frameId": "ana-m",
+   "ar": "أَنَا سَعِيدٌ جِدًّا",
+   "en": "I am very happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:92",
+   "frameId": "ana-m",
+   "ar": "أَنَا سَعِيدٌ قَلِيلًا",
+   "en": "I am a little happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:93",
+   "frameId": "ana-m",
+   "ar": "أَنَا سَعِيدٌ اليَوْمَ",
+   "en": "I am today happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:94",
+   "frameId": "ana-m",
+   "ar": "أَنَا جَائِعٌ جِدًّا",
+   "en": "I am very hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:95",
+   "frameId": "ana-m",
+   "ar": "أَنَا جَائِعٌ قَلِيلًا",
+   "en": "I am a little hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:96",
+   "frameId": "ana-m",
+   "ar": "أَنَا جَائِعٌ اليَوْمَ",
+   "en": "I am today hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:97",
+   "frameId": "ana-m",
+   "ar": "أَنَا مَرِيضٌ جِدًّا",
+   "en": "I am very ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:98",
+   "frameId": "ana-m",
+   "ar": "أَنَا مَرِيضٌ قَلِيلًا",
+   "en": "I am a little ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:99",
+   "frameId": "ana-m",
+   "ar": "أَنَا مَرِيضٌ اليَوْمَ",
+   "en": "I am today ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:100",
+   "frameId": "ana-m",
+   "ar": "أَنَا تَعْبَانُ جِدًّا",
+   "en": "I am very tired.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-m:101",
+   "frameId": "ana-m",
+   "ar": "أَنَا تَعْبَانُ اليَوْمَ",
+   "en": "I am today tired.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "m"
+  },
+  {
+   "id": "gen:ana-f:102",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَشْغُولَةٌ جِدًّا",
+   "en": "I am very busy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:103",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَشْغُولَةٌ قَلِيلًا",
+   "en": "I am a little busy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:104",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَشْغُولَةٌ اليَوْمَ",
+   "en": "I am today busy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:105",
+   "frameId": "ana-f",
+   "ar": "أَنَا سَعِيدَةٌ جِدًّا",
+   "en": "I am very happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:106",
+   "frameId": "ana-f",
+   "ar": "أَنَا سَعِيدَةٌ قَلِيلًا",
+   "en": "I am a little happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:107",
+   "frameId": "ana-f",
+   "ar": "أَنَا سَعِيدَةٌ اليَوْمَ",
+   "en": "I am today happy.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:108",
+   "frameId": "ana-f",
+   "ar": "أَنَا جَائِعَةٌ جِدًّا",
+   "en": "I am very hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:109",
+   "frameId": "ana-f",
+   "ar": "أَنَا جَائِعَةٌ قَلِيلًا",
+   "en": "I am a little hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:110",
+   "frameId": "ana-f",
+   "ar": "أَنَا جَائِعَةٌ اليَوْمَ",
+   "en": "I am today hungry.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:111",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَرِيضَةٌ جِدًّا",
+   "en": "I am very ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:112",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَرِيضَةٌ قَلِيلًا",
+   "en": "I am a little ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:113",
+   "frameId": "ana-f",
+   "ar": "أَنَا مَرِيضَةٌ اليَوْمَ",
+   "en": "I am today ill.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:114",
+   "frameId": "ana-f",
+   "ar": "أَنَا تَعْبَانَةٌ جِدًّا",
+   "en": "I am very tired.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:115",
+   "frameId": "ana-f",
+   "ar": "أَنَا تَعْبَانَةٌ قَلِيلًا",
+   "en": "I am a little tired.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:ana-f:116",
+   "frameId": "ana-f",
+   "ar": "أَنَا تَعْبَانَةٌ اليَوْمَ",
+   "en": "I am today tired.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "nominal"
+   ],
+   "theme": "how I feel",
+   "gender": "f"
+  },
+  {
+   "id": "gen:fam-m:117",
+   "frameId": "fam-m",
+   "ar": "ابْنِي يَدْرُسُ العَرَبِيَّةَ",
+   "en": "My son studies Arabic.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:118",
+   "frameId": "fam-m",
+   "ar": "ابْنِي يَنَامُ مُبَكِّرًا",
+   "en": "My son sleeps early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:119",
+   "frameId": "fam-m",
+   "ar": "ابْنِي يُحِبُّ الفَطُورَ",
+   "en": "My son loves breakfast.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:120",
+   "frameId": "fam-m",
+   "ar": "أَخِي يَعْمَلُ فِي لَنْدَن",
+   "en": "My brother works in London.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:121",
+   "frameId": "fam-m",
+   "ar": "أَخِي يُحِبُّ القَهْوَةَ",
+   "en": "My brother loves coffee.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:122",
+   "frameId": "fam-m",
+   "ar": "أَبِي يَقْرَأُ القُرْآنَ",
+   "en": "My father reads the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-m:123",
+   "frameId": "fam-m",
+   "ar": "أَبِي يُصَلِّي فِي المَسْجِدِ",
+   "en": "My father prays in the mosque.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:124",
+   "frameId": "fam-f",
+   "ar": "ابْنَتِي تَدْرُسُ العَرَبِيَّةَ",
+   "en": "My daughter studies Arabic.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:125",
+   "frameId": "fam-f",
+   "ar": "ابْنَتِي تَنَامُ مُبَكِّرًا",
+   "en": "My daughter sleeps early.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:126",
+   "frameId": "fam-f",
+   "ar": "ابْنَتِي تُحِبُّ الشَّايَ",
+   "en": "My daughter loves tea.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:127",
+   "frameId": "fam-f",
+   "ar": "أُمِّي تَقْرَأُ القُرْآنَ",
+   "en": "My mother reads the Qur'an.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:128",
+   "frameId": "fam-f",
+   "ar": "أُمِّي تَعْمَلُ فِي البَيْتِ",
+   "en": "My mother works at home.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:129",
+   "frameId": "fam-f",
+   "ar": "أُخْتِي تَعْمَلُ فِي لَنْدَن",
+   "en": "My sister works in London.",
+   "tr": "",
+   "pattern": "tenses",
+   "frames": [
+    "tenses",
+    "pronouns"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:fam-f:130",
+   "frameId": "fam-f",
+   "ar": "أُخْتِي تُحِبُّ القَهْوَةَ",
+   "en": "My sister loves coffee.",
+   "tr": "",
+   "pattern": "nominal",
+   "frames": [
+    "pronouns",
+    "nominal"
+   ],
+   "theme": "my family",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:131",
+   "frameId": "hal",
+   "ar": "هَلْ أَنْتَ مَشْغُولٌ اليَوْمَ؟",
+   "en": "Are you busy today?",
+   "tr": "",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:132",
+   "frameId": "hal",
+   "ar": "هَلْ عِنْدَكَ وَقْتٌ؟",
+   "en": "Do you have time?",
+   "tr": "",
+   "pattern": "have",
+   "frames": [
+    "have",
+    "questions",
+    "nominal"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:133",
+   "frameId": "hal",
+   "ar": "هَلْ تَشْرَبُ القَهْوَةَ؟",
+   "en": "Do you drink coffee?",
+   "tr": "",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:134",
+   "frameId": "hal",
+   "ar": "هَلْ تَسْكُنُ فِي لَنْدَن؟",
+   "en": "Do you live in London?",
+   "tr": "",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:135",
+   "frameId": "hal",
+   "ar": "هَلْ فَهِمْتَ الدَّرْسَ؟",
+   "en": "Did you understand the lesson?",
+   "tr": "",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "tenses"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hal:136",
+   "frameId": "hal",
+   "ar": "هَلْ نِمْتَ جَيِّدًا؟",
+   "en": "Did you sleep well?",
+   "tr": "",
+   "pattern": "questions",
+   "frames": [
+    "questions",
+    "nominal"
+   ],
+   "theme": "asking",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:137",
+   "frameId": "hadha",
+   "ar": "هَذَا كِتَابٌ جَدِيدٌ",
+   "en": "This is a new book.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:138",
+   "frameId": "hadha",
+   "ar": "هَذَا كِتَابٌ جَمِيلٌ",
+   "en": "This is a beautiful book.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:139",
+   "frameId": "hadha",
+   "ar": "هَذَا كِتَابٌ صَعْبٌ",
+   "en": "This is a hard book.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:140",
+   "frameId": "hadha",
+   "ar": "هَذَا بَيْتٌ كَبِيرٌ",
+   "en": "This is a big house.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:141",
+   "frameId": "hadha",
+   "ar": "هَذَا بَيْتٌ قَدِيمٌ",
+   "en": "This is an old house.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:142",
+   "frameId": "hadha",
+   "ar": "هَذِهِ شَقَّةٌ جَمِيلَةٌ",
+   "en": "This is a beautiful flat.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:143",
+   "frameId": "hadha",
+   "ar": "هَذِهِ شَقَّةٌ صَغِيرَةٌ",
+   "en": "This is a small flat.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:144",
+   "frameId": "hadha",
+   "ar": "هَذِهِ قَهْوَةٌ لَذِيذَةٌ",
+   "en": "This is delicious coffee.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  },
+  {
+   "id": "gen:hadha:145",
+   "frameId": "hadha",
+   "ar": "هَذِهِ قَهْوَةٌ حَارَّةٌ",
+   "en": "This is hot coffee.",
+   "tr": "",
+   "pattern": "demonstratives",
+   "frames": [
+    "demonstratives",
+    "gender",
+    "nominal"
+   ],
+   "theme": "pointing",
+   "gender": null
+  }
+ ]
+}

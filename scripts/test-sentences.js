@@ -67,6 +67,8 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
   try {
     D("quran-sentences.json").ayahs.forEach(a => sources.add(norm(a.ar)));
   } catch (e) { bad("data/quran-sentences.json is missing — run scripts/import-quran-sentences.js"); }
+  // built sentences: slot frames × hand-vetted fillers (scripts/gen-slots.js) — the frames file is the verified source
+  try { D("generated-sentences.json").sentences.forEach(s => sources.add(norm(s.ar))); } catch (e) {}
 
   const orphans = S.filter(s => !sources.has(norm(s.ar)));
   yes(!orphans.length, `every sentence traces back to a verified source${orphans.length ? " — NOT: " + orphans.slice(0, 3).map(o => o.ar).join(" / ") : ""}`);

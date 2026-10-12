@@ -283,6 +283,21 @@ function planMoods(days) {
   const since = Date.now() - (days || 7) * 86400000;
   return store.get("ats-log", []).filter(x => x && x.e === "mood" && x.t >= since).sort((a, b) => a.t - b.t);
 }
+/* when does he actually get things right? (COACH-LOOP gap F) — the hour of day his passes cluster in, last 30 days */
+function planBestHour() {
+  const since = Date.now() - 30 * 86400000;
+  const hist = new Array(24).fill(0);
+  let n = 0;
+  store.get("ats-log", []).forEach(x => {
+    if (!x || x.t < since) return;
+    const ok = (x.e === "sent-drill" && x.ok) || (x.e === "prompt" && x.score >= 0.5) || ((x.e === "vocab-rate" || x.e === "sentence-rate" || x.e === "bucket") && (x.g === "yes" || x.g === "solid"));
+    if (!ok) return;
+    hist[new Date(x.t).getHours()]++; n++;
+  });
+  if (n < 20) return null;
+  let best = 0; hist.forEach((v, h) => { if (v > hist[best]) best = h; });
+  return { hour: best, share: Math.round(100 * hist[best] / n), n };
+}
 function planMoodsToday() { const t0 = new Date(); t0.setHours(0, 0, 0, 0); return planMoods(2).filter(x => x.t >= t0.getTime()); }
 function planEasyDay() {
   const m = planMoods(4);
@@ -836,7 +851,8 @@ function planDoorHTML(p) {
       <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>`;
   } else {
     const short = cur.type === "myday" ? "Say your day" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
-    const when = evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : planProfile().when;
+    const bh = planBestHour();
+    const when = (evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : planProfile().when) + (bh && bh.share >= 25 && !evening ? ` · your best hour is ${bh.hour}–${bh.hour + 1}` : "");
     main = `<a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:1})}catch(e){}">▶ ${short} · ${cur.mins || 5} min</a>
       <div class="pd-when">${dayName} · ${when}${evening ? " · evenings are yours" : ""}</div>`;
   }
@@ -865,6 +881,8 @@ function planMountDoor(el) {
 /* Sunday's tick: he told her about his week */
 function planToldHer(btn) {
   logEvent({ e: "withher-done", t: Date.now() });
+  // the contract's "say three sentences to her" task is the same act — one tick, not two
+  try { const hw = store.get("ats-homework", null); if (hw && (hw.tasks || []).some(t => t.id === "say3") && typeof planHwTaskDone === "function") planHwTaskDone("say3"); } catch (e) {}
   if (btn) { btn.textContent = "✓ Done — that was the point of the week"; btn.disabled = true; }
   if (typeof autoSync === "function") { try { autoSync(true); } catch (e) {} }
 }

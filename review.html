@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv56pg7f">
-  <link rel="stylesheet" href="css/style.css?v=mv56pg7f">
+  <link rel="stylesheet" href="css/fonts.css?v=mv5bwrpu">
+  <link rel="stylesheet" href="css/style.css?v=mv5bwrpu">
 </head>
 <body>
 <main>
@@ -20,10 +20,10 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mv56pg7f"></script>
-<script src="js/app.js?v=mv56pg7f"></script>
-<script src="js/tracker.js?v=mv56pg7f"></script>
-<script src="js/plan.js?v=mv56pg7f"></script>
+<script src="js/srs.js?v=mv5bwrpu"></script>
+<script src="js/app.js?v=mv5bwrpu"></script>
+<script src="js/tracker.js?v=mv5bwrpu"></script>
+<script src="js/plan.js?v=mv5bwrpu"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -108,7 +108,7 @@ function renderTable(queue) {
     <div class="ex-row" style="margin-top:16px">
       <button class="primary" id="finish">✓ Finish</button>
     </div>
-    <p style="font-size:13px;color:var(--muted)" id="finishHint">Stop whenever you like — <strong>Finish</strong> saves the words you actually went through and leaves the rest due for next time. Tap a row to reveal its English. <strong style="color:var(--red)">✗ missed</strong> = got it wrong this time (it comes back within minutes). Or set a bucket directly: ✓ know · ↻ repeat soon · ⏳ much later · 🚫 retire (never show it again). 💡 = memory hook.</p>
+    <p style="font-size:13px;color:var(--muted)" id="finishHint">Stop whenever you like — <strong>Finish</strong> saves the words you actually went through and leaves the rest due for next time. Tap a row to reveal its English. Give each word its verdict as you go — ✗ no · ≈ maybe · ✓ yes · ★ solid (⊘ never again); the site sets the next date. Words you only looked at count as known when you Finish. 💡 = memory hook.</p>
   `;
   const tbody = document.getElementById("rvBody");
   const missed = new Set();
@@ -144,16 +144,6 @@ function renderTable(queue) {
     const ctr = document.createElement("tr");
     const td = document.createElement("td");
     td.colSpan = 4; td.className = "rv-ctrl";
-    const missBtn = document.createElement("button");
-    missBtn.type = "button"; missBtn.className = "small miss"; missBtn.textContent = "✗ missed";
-    missBtn.onclick = (e) => {
-      e.stopPropagation();
-      enCell.classList.remove("veiled");
-      if (missed.has(key)) { missed.delete(key); missBtn.classList.remove("on"); }
-      else { missed.add(key); missBtn.classList.add("on"); }
-      noteTouch(key);
-    };
-    td.appendChild(missBtn);
     const slot = document.createElement("div");
     slot.className = "bucket-slot";
     td.appendChild(slot);
@@ -162,7 +152,7 @@ function renderTable(queue) {
     const twins = keys || [key];
     mountBucketBar(slot, key, (bid) => {
       twins.forEach(k => { if (k !== key) setBucket(k, bid); }); // a bucket is final for every twin too
-      bucketed.add(key); missed.delete(key); missBtn.classList.remove("on"); noteTouch(key);
+      bucketed.add(key); missed.delete(key); noteTouch(key);
     });
   });
   // 🔁 verbs show past/present/future here too — the English is still veiled, so

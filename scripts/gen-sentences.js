@@ -327,6 +327,25 @@ prompts.prompts.forEach((p, i) => add({
   theme: "something to say",
 }));
 
+/* --- built sentences (scripts/gen-slots.js: vetted slot frames × case-marked fillers) ---
+   COACH-LOOP gap B: Free try could only SELECT; these are built, but from fillers a human
+   vetted, so agreement cannot go wrong. They sit in the bank like any other sentence and
+   the lexical gate decides when he is ready for each. */
+let generated = { sentences: [] };
+try { generated = D("generated-sentences.json"); } catch (e) { console.log("  (no generated-sentences.json — run scripts/gen-slots.js)"); }
+(generated.sentences || []).forEach((g, i) => add({
+  id: `gen:${i}`,
+  key: `s:gen:${i}`,
+  track: "conv",
+  ar: g.ar, en: g.en, tr: g.tr || "",
+  words: words(String(g.ar).replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).map(w => [w])),
+  declaredKeys: [],
+  pattern: g.pattern || patternFor(g.ar),
+  frames: g.frames || undefined,
+  src: "gen",
+  theme: g.theme || "built for you",
+}));
+
 /* --- grammar examples: a pattern shown in a real sentence ---
    Each one exists to demonstrate its rule, so it is tagged with that rule and
    will pull the explanation up with it the first time it appears. */

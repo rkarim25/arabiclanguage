@@ -123,7 +123,7 @@
       if (!x || x.t < since) return;
       if (x.e === "sent-drill") {
         const key = x.key || (x.chap != null && x.idx != null ? "chap:" + String(x.chap).replace(/^chap-/, "") + ":" + x.idx : null);
-        if (key && byKey.has(key)) out.push({ key, ok: !!x.ok, how: x.how || "self", t: x.t });
+        if (key && byKey.has(key)) out.push({ key, ok: !!x.ok, how: x.how || "self", t: x.t, frames: Array.isArray(x.frames) && x.frames.length ? x.frames : null });
       } else if (x.e === "prompt" && typeof x.score === "number" && x.en && !x.via) {   // via: a Try it prompt — its sent-drill is already counted
         const key = byEn.get(String(x.en).trim().toLowerCase());
         if (key) out.push({ key, ok: x.score >= 0.5, how: "mic", t: x.t });
@@ -170,10 +170,12 @@
     const touch = p => (prof[p] = prof[p] || { tries: 0, passes: 0, w: 0, wPass: 0, tests: 0, testScore: 0 });
     triesOf(pool, ctx).forEach(x => {
       const s = byKey.get(x.key);
-      const prim = primaryOf(s);
+      // a rung variant carries its OWN frames (change who / ask / build on it) — the event says which
+      const fr = x.frames || framesOf(s);
+      const prim = x.frames ? x.frames[0] : primaryOf(s);
       const w0 = 0.5 + 0.5 * (x.t - since) / (ctx.now - since);   // recent tries weigh up to 2× old ones
       // a try is evidence for EVERY frame the sentence exercises: the label at full weight, the rest at half
-      framesOf(s).forEach(p => {
+      fr.forEach(p => {
         const w = p === prim ? w0 : w0 * 0.5;
         const r = touch(p);
         r.tries += p === prim ? 1 : 0.5; r.w += w; if (x.ok) { r.passes += p === prim ? 1 : 0.5; r.wPass += w; }

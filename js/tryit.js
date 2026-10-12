@@ -47,7 +47,7 @@
     return (c && c[+m[2]]) || [];
   }
   function state(idx) {
-    if (!T.st[idx]) T.st[idx] = { rung: 1, revealed: false, heard: "", result: null, listening: false, micCtl: null };
+    if (!T.st[idx]) T.st[idx] = { rung: 1, revealed: false, heard: "", result: null, listening: false, micCtl: null, ear: !!(T.freeOpts && T.freeOpts.hear) };
     return T.st[idx];
   }
   function target(idx) {        // what he is asked to produce right now
@@ -90,8 +90,15 @@
     }
     let body;
     if (!st.revealed) {
-      body = `
-      <div class="drill-prompt">Say in Arabic: <b>${esc(tg.en)}</b></div>
+      body = st.ear ? `
+      <div class="drill-prompt">🎧 Listen — what does it mean? <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(tg.ar)}', 0.8)" title="Hear it again" aria-label="Hear again">🔊</button></div>
+      ${st.listening ? `<div class="drill-heard" id="tryit-heard-${idx}">🔴 listening… say it back <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="TryIt.micDone(${idx})">✓ I'm done</button></div>` : ""}
+      <div class="drill-row">
+        <button type="button" class="book-toggle-pill" onclick="TryIt.earGrade(${idx}, true)" title="You caught the meaning — honest counts">💬 I understood it</button>
+        <button type="button" class="book-toggle-pill" onclick="TryIt.earGrade(${idx}, false)" title="Show me">❓ Didn't catch it</button>
+        ${hasMic ? `<button type="button" class="book-toggle-pill${st.listening ? " active" : ""}" onclick="TryIt.mic(${idx})" title="Say it back — graded against the model" ${st.listening ? "disabled" : ""}>🎤 Say it back</button>` : ""}
+      </div>` : `
+      <div class="drill-prompt">Say in Arabic: <b>${esc(tg.en)}</b> ${(typeof speak === "function") ? `<button type="button" class="book-toggle-pill" style="font-size:11.5px;padding:1px 8px" onclick="TryIt.ear(${idx})" title="Hear it first, give the meaning — an ear test">🎧 Hear it first</button>` : ""}</div>
       ${tg.swap ? `<div class="drill-swap">Change: ${esc(tg.swap)}</div>` : ""}
       ${st.listening ? `<div class="drill-heard" id="tryit-heard-${idx}">🔴 listening… take your time — it closes by itself after you stop <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="TryIt.micDone(${idx})">✓ I'm done</button></div>` : ""}
       <div class="drill-row">
@@ -114,7 +121,10 @@
           : `<span style="color:var(--red,#dc2626);font-weight:700">✗ not yet</span> <span style="color:var(--muted)">— compare, then try again</span>`;
       } else if (res.how === "self") {
         verdict = res.ok ? `<span style="color:var(--accent);font-weight:700">✓ you said it</span>` : `<span style="color:var(--red,#dc2626);font-weight:700">✗ missed</span> <span style="color:var(--muted)">— listen, say it, try again</span>`;
+      } else if (res.how === "ear") {
+        verdict = res.ok ? `<span style="color:var(--accent);font-weight:700">✓ understood by ear</span>` : `<span style="color:var(--red,#dc2626);font-weight:700">✗ not yet by ear</span> <span style="color:var(--muted)">— read it, hear it again</span>`;
       }
+      if (res.err && root.Errors) verdict += `<div class="drill-why" style="font-size:12.5px;color:var(--muted);margin-top:3px">↳ ${esc(root.Errors.describe(res.err))}</div>`;
       const passed = !!res.ok;
       const more = v.length && st.rung < 3;
       const nextLabel = more ? "Next rung →" : (T.round && nextIdx(idx) >= 0 ? "Next →" : "Done ✓");
@@ -208,12 +218,23 @@
     const it = item(idx), st = state(idx), tg = target(idx);
     if (!it) return;
     const v = variants(it);
-    if (typeof logEvent === "function") logEvent(Object.assign({ e: "sent-drill", key: it.key, rung: v.length ? st.rung : 1, ok: !!ok, how, en: tg.en, src: T.cfg.src, free: T.freeOn || undefined, t: Date.now() }, extra || {}));
+    const frames = (root.Frames && tg && tg.ar) ? root.Frames.detect(tg.ar).frames : undefined;
+    if (typeof logEvent === "function") logEvent(Object.assign({ e: "sent-drill", key: it.key, rung: v.length ? st.rung : 1, ok: !!ok, how, en: tg.en, src: T.cfg.src, free: T.freeOn || undefined, frames, t: Date.now() }, extra || {}));
     const strong = ok && extra && (extra.tier === "perfect" || (typeof extra.score === "number" && extra.score >= 0.8));
     const g = ok ? (strong ? "solid" : "yes") : "no";
     if (T.cfg.onVerdict) T.cfg.onVerdict(it, g, idx, how, { rung: v.length ? st.rung : 1, variant: v.length > 0 });
   }
   function self(idx, ok) { const st = state(idx); st.result = { how: "self", ok: !!ok }; record(idx, ok, "self"); paint(idx); }
+  /* hear-first (COACH-LOOP gap D): the Arabic plays, the English stays hidden; he gives the meaning
+     or says it back. A verdict here is LISTENING evidence (alisten-grade) as well as a try. */
+  function ear(idx) { const st = state(idx); st.ear = true; st.revealed = false; st.result = null; paint(idx); const tg = target(idx); if (tg && typeof speak === "function") speak(tg.ar, 0.85); }
+  function earGrade(idx, ok) {
+    const st = state(idx), it = item(idx);
+    st.revealed = true; st.result = { how: "ear", ok: !!ok };
+    record(idx, ok, "ear");
+    if (it && typeof logEvent === "function") logEvent({ e: "alisten-grade", key: it.key, ok: !!ok, src: "tryit-ear", t: Date.now() });
+    paint(idx);
+  }
   function check(idx) {
     const inp = document.getElementById("tryit-inp-" + idx), tg = target(idx);
     if (!inp || !tg) return;
@@ -224,15 +245,16 @@
     const gm = exact ? null : writeMatchAr(typed, model);
     const ok = exact || (gm && gm.ok);
     const tier = exact ? "perfect" : ok ? "sound" : (gm && gm.right > 0) ? "part" : "miss";
+    const err = (!exact && root.Errors) ? root.Errors.classify(model, typed, "typed") : null;   // the ledger: WHY
     const st = state(idx);
-    st.revealed = true; st.result = { how: "typed", ok: !!ok, tier, right: gm ? gm.right : null, total: gm ? gm.total : null };
-    record(idx, ok, "typed", { typed, tier });
+    st.revealed = true; st.result = { how: "typed", ok: !!ok, tier, right: gm ? gm.right : null, total: gm ? gm.total : null, err };
+    record(idx, ok, "typed", { typed, tier, err: err || undefined });
     paint(idx);
     if (!ok && typeof speak === "function") speak(tg.ar, 0.8);
   }
   function micDone(idx) { const st = state(idx); if (st.micCtl && st.micCtl.stop) st.micCtl.stop(); }
   async function mic(idx) {
-    const tg = target(idx), st = state(idx);
+    const tg = target(idx), st = state(idx), it = item(idx);
     if (!tg || st.listening) return;
     if (typeof stopAllAudio === "function") stopAllAudio(); else if (typeof stopSpeak === "function") stopSpeak();
     st.listening = true; st.heard = "";
@@ -260,8 +282,10 @@
     const exact = m.exact || (st.heard ? arMatch(st.heard, tg.ar) : false);
     const ok = !!st.heard && (exact || m.ok);
     const score = exact ? 1 : m.score;
-    st.revealed = true; st.result = { how: "mic", ok, score };
-    record(idx, ok, "mic", { heard: st.heard, score: st.result.score });
+    const err = (!ok && st.heard && root.Errors) ? root.Errors.classify(tg.ar, st.heard, "mic") : null;
+    st.revealed = true; st.result = { how: "mic", ok, score, err };
+    record(idx, ok, "mic", { heard: st.heard, score: st.result.score, err: err || undefined });
+    if (st.ear && it && typeof logEvent === "function") logEvent({ e: "alisten-grade", key: it.key, ok, src: "tryit-ear-mic", t: Date.now() });
     if (st.heard && typeof logEvent === "function") logEvent({ e: "prompt", en: tg.en, heard: st.heard, score: st.result.score, src: "tryit-" + T.cfg.src, via: "tryit", t: Date.now() });   // via: the sent-drill already counts this try
     paint(idx);
     if (!ok && typeof speak === "function") speak(tg.ar, 0.8);
@@ -350,5 +374,5 @@
   /* the page re-rendered its rows (a verdict, a reveal): put the open panel back */
   function rewire() { if (T.open !== null) paint(T.open); }
 
-  root.TryIt = { setup, badgeHtml, slotHtml, toggle, setRung, all, next, reveal, retry, self, check, mic, micDone, free, endFree, freeBatch, variants, rewire, state: () => T };
+  root.TryIt = { setup, badgeHtml, slotHtml, toggle, setRung, all, next, reveal, retry, self, ear, earGrade, check, mic, micDone, free, endFree, freeBatch, variants, rewire, state: () => T };
 })(typeof self !== "undefined" ? self : this);
