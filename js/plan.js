@@ -440,6 +440,7 @@ function planObserve(ev) {
 function planFinishBlock(p, block, how) {
   if (block.done) return;
   block.done = true; block.doneT = Date.now();
+  if (how === "time") p.handover = { t: Date.now(), from: block.title };   // the bar says "that's enough here → next"
   logEvent({ e: "plan-block-done", type: block.type, how });
   const left = p.blocks.filter(b => !b.done).length;
   if (!left) { p.completedAt = Date.now(); logEvent({ e: "plan-done", banked: !!p.banked }); autoSync(); }
@@ -457,7 +458,7 @@ function planTick() {
   if (!path.startsWith(cur.page)) return;
   cur.sec = (cur.sec || 0) + 15;
   if (cur.sec >= cur.mins * 60 * 0.8) planFinishBlock(p, cur, "time");
-  else planSave(p);
+  else { planSave(p); planPaintBar(); }
 }
 
 /* ---- banking: one block from tomorrow, never more ---- */
@@ -485,6 +486,12 @@ function planBarHTML(p) {
   // "start" only when nothing is done yet — his 08-13 note: "shouldnt it say
   // continue rather than start, i already started"
   const go = p.blocks.some(b => b.done) ? "continue →" : "start →";
+  /* his 12 Oct ask: "if I spend too much time on one it should direct me to another section" —
+     a block that ran out its time hands over, visibly, for a minute */
+  if (p.handover && Date.now() - p.handover.t < 90000 && !here) {
+    return `<span class="pb-today">Today</span> ${boxes} <span class="pb-label pb-hand">✓ that's enough there — next: ${cur.icon} ${cur.title}</span>
+      <a href="${cur.url}" class="pb-next pb-go">go →</a>`;
+  }
   return `<span class="pb-today" title="today's plan — three short blocks">Today</span> ${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
     ${here ? `<button class="pb-tick" title="mark this block done">✓ done</button>`
            : `<a href="${cur.url}" class="pb-next">${go}</a>`}
@@ -500,6 +507,7 @@ function planPaintBar() {
   if (tick) tick.onclick = () => { const pp = planGet(); const cur = planCurrent(pp); if (cur) planFinishBlock(pp, cur, "manual"); };
   // card view (dashboard) repaints too
   if (document.getElementById("planCard")) planRenderCard(document.getElementById("planCard"));
+  planPaintDoor();
 }
 const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html"];
 function planMountBar() {
@@ -645,8 +653,94 @@ function planRenderCard(el) {
   });
 }
 
-/* wire in: observe every logged event; tick the clock */
+/* ---------- the ONE DOOR (index.html) ----------
+   Reza, 12 Oct: "a single start … direct me to a part of the site … I like being
+   able to see how what I am doing is finishing part of a bigger picture and where
+   I am in relation to that." The door is one button that NAVIGATES to today's
+   current block, the three blocks as a strip he can see himself crossing, and
+   three honest lines of the bigger picture: this week, the teacher's lesson, and
+   the two goal lines from the chart. When the day is done it says so and stops. */
+function planTodayWins() {
+  const log = store.get("ats-log", []);
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const today = log.filter(x => x && x.t >= t0.getTime());
+  const verdicts = today.filter(x => (x.e === "vocab-rate" || x.e === "sentence-rate" || x.e === "bucket") && (x.g === "yes" || x.g === "solid" || x.bucket === "strong" || x.bucket === "medium")).length;
+  const tried = today.filter(x => x.e === "sent-drill" && x.ok).length;
+  const spoken = today.filter(x => x.e === "prompt" && x.score >= 0.5).length;
+  const ear = today.filter(x => (x.e === "alisten-grade" && x.ok) || (x.e === "qlisten-test" && x.pass)).length;
+  const mins = Math.round(today.filter(x => x.e === "time" && x.sec).reduce((a, x) => a + Math.min(x.sec, 600), 0) / 60);
+  return { verdicts, tried, spoken, ear, mins };
+}
+function planWeekDays() {
+  const log = store.get("ats-log", []);
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
+    const a = d.getTime(), b = a + 86400000;
+    const secs = log.filter(x => x && x.t >= a && x.t < b && x.e === "time" && x.sec).reduce((s, x) => s + Math.min(x.sec, 600), 0);
+    const done = log.some(x => x && x.t >= a && x.t < b && x.e === "plan-done");
+    days.push({ d, label: d.toLocaleDateString(undefined, { weekday: "narrow" }), on: secs >= 120 || done, done, today: i === 0 });
+  }
+  return days;
+}
+let _planSeries = null;
+function planDoorHTML(p) {
+  const cur = planCurrent(p);
+  const doneN = p.blocks.filter(b => b.done).length, n = p.blocks.length;
+  const strip = p.blocks.map((b, i) => `<span class="pd-step ${b.done ? "done" : (b === cur ? "cur" : "")}" title="${b.title}"><span class="pd-dot">${b.done ? "✓" : i + 1}</span><span class="pd-t">${b.icon} ${b.title}</span></span>`).join("");
+  const week = planWeekDays();
+  const weekN = week.filter(d => d.on).length;
+  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} of 7 days this week${weekN >= 5 ? " — that's the rhythm" : weekN >= 3 ? " — on course" : ""}</span>`;
+  const hw = planHomework();
+  const lessonHtml = hw && !hw.past ? `📚 ${hw.label || "Teacher lesson"} — <strong>${hw.readiness}% ready</strong> <span class="pd-muted">· lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</span>` : "";
+  let goals = "";
+  if (_planSeries && _planSeries.tracks) {
+    const q = _planSeries.tracks.quran, c = _planSeries.tracks.conv;
+    const pct = x => Math.round(100 * (x && typeof x.todaySkill === "number" ? x.todaySkill : (x && x.reality && x.reality.length ? x.reality[x.reality.length - 1].skill : 0)));
+    const eta = x => { const s = x && x.scenarios && x.scenarios.find(z => z.id === "current"); return s && s.completion ? new Date(s.completion).toLocaleDateString(undefined, { month: "short", year: "numeric" }) : null; };
+    goals = `🎧 Salah by ear <strong>${pct(q)}%</strong>${eta(q) ? ` <span class="pd-muted">· on course for ${eta(q)}</span>` : ""} &nbsp;·&nbsp; 🗣 Speaking <strong>${pct(c)}%</strong>`;
+  }
+  let main;
+  if (!cur) {
+    const w = planTodayWins();
+    const bits = [];
+    if (w.verdicts) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""} ✓/★`);
+    if (w.tried) bits.push(`${w.tried} sentence${w.tried > 1 ? "s" : ""} tried right`);
+    if (w.spoken) bits.push(`${w.spoken} spoken and proven`);
+    if (w.ear) bits.push(`${w.ear} caught by ear`);
+    main = `<div class="pd-done">✅ Today is done — أَحْسَنْت.</div>
+      <div class="pd-win">${bits.length ? bits.join(" · ") : "Three blocks finished"}${w.mins ? ` · ${w.mins} min` : ""}. That's enough. Tomorrow's first block will show what stuck.</div>
+      <div class="pd-opt"><a href="sentences.html" class="pd-link">✨ Free try (optional)</a> <a href="review.html" class="pd-link">🔁 Review (optional)</a></div>`;
+  } else {
+    const label = doneN ? `Continue · block ${doneN + 1} of ${n}` : `Start · ${cur.mins || 5} minutes`;
+    main = `<a href="${cur.url}" class="pd-start" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:${doneN + 1}})}catch(e){}">▶ ${label}</a>
+      <div class="pd-next">${cur.icon} <strong>${cur.title}</strong> <span class="pd-muted">— ${cur.sub || ""}</span></div>`;
+  }
+  return `
+    <div class="pd-head"><span class="pd-today">Today</span><span class="pd-strip">${strip}</span></div>
+    ${main}
+    <div class="pd-picture">
+      <div>${weekHtml}</div>
+      ${lessonHtml ? `<div>${lessonHtml}</div>` : ""}
+      ${goals ? `<div>${goals}</div>` : ""}
+    </div>`;
+}
+function planMountDoor(el) {
+  if (!el) return;
+  const paint = () => { try { el.innerHTML = planDoorHTML(planGet()); } catch (e) { console.error("door", e); } };
+  paint();
+  if (!_planSeries) fetch("data/progress-series.json").then(r => r.json()).then(d => { _planSeries = d; paint(); }).catch(() => {});
+  el.dataset.mounted = "1";
+}
+function planPaintDoor() { const el = document.getElementById("planDoor"); if (el) planMountDoor(el); }
+
+/* wire in: observe every logged event; tick the clock; mount the door / the bar */
 (function () {
+  const mount = () => {
+    const door = document.getElementById("planDoor");
+    if (door) planMountDoor(door); else planMountBar();
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount); else mount();
   if (typeof logEvent === "function") {
     const orig = logEvent;
     // eslint-disable-next-line no-global-assign

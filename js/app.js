@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv4wnvra";
+const DATA_V = "mv4yd5ff";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3037,7 +3037,7 @@ async function resolveCards(keys) {
        and the page fetched data/s.json and data/w.json on every load, 404ing
        twice and silently dropping those keys. Caught in the network trace on
        2026-08-30 while checking the week briefing. */
-    else if (sid === "s" || sid === "w") { /* sentence-level keys: not word cards */ }
+    else if (sid === "s" || sid === "w" || sid === "qs") { /* sentence-level keys (and qs: Qur'an-sentence word keys): not story cards — a qs: key used to fall through and 404 data/qs.json */ }
     else if (sid === "chap") needChapters = true;
     else if (sid.startsWith("fam-")) needFams = true;
     else if (sid.startsWith("ev-")) needEv = true;

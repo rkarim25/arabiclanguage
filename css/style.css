@@ -1470,3 +1470,31 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 .srs-btn.mini { width: 17px; height: 17px; font-size: 9.5px; cursor: default; pointer-events: none; }
 
 .tryit-why { font-size: 11px; color: var(--muted); margin-left: 8px; padding: 1px 7px; border: 1px dashed var(--border); border-radius: 999px; white-space: nowrap; }
+
+
+/* ---------- the one door (index.html) ---------- */
+.plan-door { border: 1.5px solid var(--accent); border-radius: 14px; padding: 14px 16px; margin: 10px 0 14px; background: var(--card); box-shadow: var(--shadow); }
+.plan-door .pd-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.plan-door .pd-today { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.plan-door .pd-strip { display: flex; gap: 6px; flex-wrap: wrap; }
+.plan-door .pd-step { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--muted); padding: 3px 9px 3px 4px; border: 1px solid var(--border); border-radius: 999px; background: transparent; }
+.plan-door .pd-step .pd-dot { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 1.5px solid var(--border); color: var(--muted); }
+.plan-door .pd-step.cur { border-color: var(--accent); color: var(--ink); }
+.plan-door .pd-step.cur .pd-dot { border-color: var(--accent); color: var(--accent); }
+.plan-door .pd-step.done { opacity: .75; }
+.plan-door .pd-step.done .pd-dot { background: var(--accent); border-color: var(--accent); color: #fff; }
+.plan-door .pd-start { display: block; text-align: center; background: var(--accent); color: #fff; font-size: 20px; font-weight: 800; padding: 16px 18px; border-radius: 12px; text-decoration: none; letter-spacing: .01em; }
+.plan-door .pd-start:hover { background: #0a614c; }
+.plan-door .pd-next { margin-top: 8px; font-size: 13.5px; color: var(--ink); }
+.plan-door .pd-muted { color: var(--muted); font-weight: 500; }
+.plan-door .pd-done { font-size: 19px; font-weight: 800; color: var(--accent); }
+.plan-door .pd-win { margin-top: 4px; font-size: 13.5px; color: var(--ink); }
+.plan-door .pd-opt { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; }
+.plan-door .pd-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border: 1px dashed var(--border); border-radius: 999px; padding: 3px 10px; }
+.plan-door .pd-picture { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 5px; font-size: 12.5px; color: var(--ink); }
+.plan-door .pd-week { display: inline-flex; gap: 4px; margin-right: 6px; vertical-align: middle; }
+.plan-door .pd-day { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--muted); }
+.plan-door .pd-day.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.plan-door .pd-day.today { box-shadow: 0 0 0 2px var(--accent-soft); }
+#planBar .pb-hand { color: var(--accent); }
+#planBar .pb-go { background: var(--accent); color: #fff; border-radius: 999px; padding: 6px 14px; text-decoration: none; }

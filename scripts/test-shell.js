@@ -681,5 +681,21 @@ const bank = D("sentence-bank.json");
   yes(/_wordKeyFor\(norm\)/.test(appSrc), "the 3-tap seed (noteWordTap) consults the registry too");
 }
 
+/* -- the one door (12 Oct): one button that navigates, a visible hand-over, the bigger picture --
+   The day plan's card had been orphaned (no #planCard anywhere) and the bar never mounted. */
+{
+  console.log("\n-- the one door --");
+  const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/id="planDoor"/.test(indexSrc), "index.html has the door");
+  yes(/<div class="plan-door" id="planDoor">[\s\S]*id="resumeBanner"/.test(indexSrc), "…and it comes BEFORE the resume banner — the first thing he sees");
+  yes(/function planMountDoor\(/.test(planSrc) && /function planDoorHTML\(/.test(planSrc), "plan.js builds the door");
+  yes(/if \(door\) planMountDoor\(door\); else planMountBar\(\);/.test(planSrc), "plan.js mounts the door on the home page and the bar everywhere else (the bar had no caller before)");
+  yes(/p\.handover = \{ t: Date\.now\(\), from: block\.title \}/.test(planSrc) && /pb-hand/.test(planSrc), "a block that runs out its time hands over to the next in the bar");
+  yes(/class="pd-start"/.test(planSrc) && /href="\$\{cur\.url\}"/.test(planSrc), "the Start button NAVIGATES to the current block's page");
+  yes(/function planTodayWins\(/.test(planSrc) && /Today is done/.test(planSrc), "when the day is done the door says so and stops");
+  yes(/function planWeekDays\(/.test(planSrc) && /Salah by ear/.test(planSrc), "the bigger picture: the week, the lesson, the two goal lines");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);
