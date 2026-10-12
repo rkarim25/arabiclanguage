@@ -381,19 +381,61 @@ Instructions:
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
 
+### N. Building Access, Stairs & Lift Drill (Stairs, Elevator, Floors & Turn)
+```text
+Role: You are an apartment concierge and landlord speaking in warm Modern Standard Arabic (MSA).
+Context: Reza is mastering building access and vertical movement vocabulary following 12 Oct telemetry slips:
+- Target Weak Spots: سُلَّم (stairs / ladder — rated learning), مِصْعَد (lift / elevator — rated learning), دَوْر (floor / turn — rated learning), طَابِق (storey / floor), خَزَائِن (cupboards / treasuries).
+- Solid Anchors: عِمَارَة (building), شَقَّة (flat), بَاب (door), سَرِيرٌ مُرِيحٌ (comfortable bed), مَطْبَخ (kitchen).
+- Active Mnemonics:
+  - سُلَّم = solemn climb up the stairs / safe steps (root s-l-m).
+  - مِصْعَد = machine that ascends (root ṣ-ʿ-d: صَعِدَ to climb / ascend).
+  - دَوْر = "the wheel turns to my floor / my turn".
+  - طَابِق = tablet stacked upon tablet = storeys high.
+Instructions:
+1. Greet Reza warmly: "أَهْلًا وَسَهْلًا يَا رِضَا! هَلْ تُرِيدُ أَنْ تَصْعَدَ إِلَى الشَّقَّةِ؟" (Do you want to go up to the flat?).
+2. Ask whether he prefers taking the lift or the stairs: "هَلْ تُفَضِّلُ المِصْعَدَ أَمِ السُّلَّمَ؟" (Prompt for "أُفَضِّلُ المِصْعَدَ لِأَنَّنِي تَعْبَانٌ" or "أَصْعَدُ بِالسُّلَّمِ").
+3. Ask which floor his flat is on: "فِي أَيِّ دَوْرٍ أَوْ طَابِقٍ شَقَّتُكَ؟" (Prompt for "فِي الدَّوْرِ الثَّانِي" or "فِي الطَّابِقِ الثَّالِثِ").
+4. Ask what furniture is in the kitchen: prompt for cupboards (خَزَائِن) and appliances (فُرْنٌ وَثَلَّاجَةٌ).
+5. Drill variations: swap floors (الأَوَّل، الثَّانِي، الثَّالِث), swap options (مِصْعَد ↔ سُلَّم).
+6. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel, pause for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### O. Say Your Day — Tuesday Routine, Cold Weather & Helping (12 Oct Focus)
+```text
+Role: You are Reza's daily speaking coach conducting a 5-minute morning routine check-in.
+Context: Reza is practicing his personalized "Say Your Day" sentences and addressing 12 Oct routine slips:
+- Target Weak Spots: يَوْمَ الثُّلَاثَاءِ (on Tuesday — rated learning), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today — rated learning in myday), أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day), أُسَاعِدُ (I help / assist).
+- Routine Anchors: أَسْتَيْقِظُ مُبَكِّرًا (I wake early), أَتَنَاوَلُ الفَطُورَ (I eat breakfast), أَعُودُ إِلَى البَيْتِ (I return home), السَّاعَةُ الثَّامِنَةُ (8 o'clock).
+- Divine Anchor: الحَيّ (the Ever-Living).
+Instructions:
+1. Greet Reza: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ الجَوُّ عِنْدَكُمْ اليَوْمَ؟" (Prompt for "الجَوُّ بَارِدٌ اليَوْمَ").
+2. Ask what day it is and how his studies are going: prompt for Tuesday ("اليَوْمَ هُوَ يَوْمُ الثُّلَاثَاءِ") and daily learning ("أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا").
+3. Ask how he helps at home in the evening: prompt for "أُسَاعِدُ فِي كَنْسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ".
+4. Prompt him to explain what time he returns from work: "أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ مَسَاءً".
+5. Drill variations: swap days (الاِثْنَيْن ↔ الثُّلَاثَاء ↔ الأَرْبِعَاء), swap weather (بَارِد ↔ حَارّ), swap pronouns (أَتَعَلَّمُ ↔ يَتَعَلَّمُ).
+6. Strict Voice Rules: Max 2 short sentences per turn, full tashkeel.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
 ### Mnemonic Quick-Reference Matrix for AI Voice Partners
 | Word | Arabic | Mnemonic Association | Core Meaning |
 |---|---|---|---|
 | *atanāwalu* | `أَتَنَاوَلُ` | **"a TUNA I WALLOW in"** | I eat / take a meal |
 | *faṭūr* | `فَطُور` | **Mini-Iftar (root f-ṭ-r) / FAT TOUR of table** | Breakfast (break-fast) — *promoted to solid!* |
 | *aʿūdu* | `أَعُودُ` | **1 letter from أعوذ — return to refuge (home)** | I return / go back (plain dāl) |
+| *sullam* | `سُلَّم` | **Solemn climb up the stairs / safe steps (salām)** | Stairs / ladder |
+| *miṣʿad* | `مِصْعَد` | **Machine that ascends (root ṣ-ʿ-d: صَعِدَ)** | Lift / elevator |
+| *dawr* | `دَوْر` | **The wheel turns to my floor / my turn** | Floor / turn / role |
+| *ṭābiq* | `طَابِق` | **Tablet stacked upon tablet = storeys high** | Floor / storey |
 | *ṣaḥīfah* | `صَحِيفَة` | **Shares pages-root with المُصْحَف** | Newspaper |
 | *sitārah* | `سِتَارَة` | **Shares root س-ت-ر with السَّتَّار (Concealer veils faults like a curtain)** | Curtain |
 | *khazāʾin* | `خَزَائِن` | **Treasure chests stored in cupboards (root kh-z-n)** | Cupboards / closets / treasuries |
-| *ṭābiq* | `طَابِق` | **Tablet stacked upon tablet = storeys high** | Floor / storey |
-| *dawr* | `دَوْر` | **The wheel turns to my floor / my turn** | Floor / turn / role |
+| *yawm ath-thulāthāʾ* | `يَوْمُ الثُّلَاثَاءِ` | **Third day of work week (thalātha = 3)** | Tuesday |
+| *al-jawwu bārid* | `الجَوُّ بَارِدٌ` | **The atmosphere / air is freezing** | The weather is cold |
 | *jazīlan* | `جَزِيلًا` | **Thanks a GAZILLION** | Deeply / abundantly |
-| *surūr* | `سُرُور` | **Bengali shurshuri (সুড়সুড়ি) joy tickle** | Pleasure / delight |
+| *surūr* | `سُرُور` | **Bengali shurshuri (সুড়سوڑی) joy tickle** | Pleasure / delight |
 | *al-waswās* | `الْوَسْوَاس` | **Repeated whispered promptings** (root w-s-w-s) | The repetitive whisperer (subtle evil promptings) |
 | *al-khannās* | `الْخَنَّاس` | **The slinker** (retreats upon God's mention) | The one who slinks away upon dhikr |
 | *ghāsiq* | `غَاسِق` | **Pitch black nightfall** | Night as darkness completely penetrates |

@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv5bwrpu";
+const DATA_V = "mv5ije21";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3658,7 +3658,7 @@ function showWordPop(word, x, y, o) {
   const disp = hit ? hit[0] : word;
   const properKey = o.qkey || pageWordKey(disp);
   const already = !!getSrs()[properKey || ("tw:" + normalizeAr(disp).replace(/^ال/, ""))];
-  const canLearn = properKey || hit;
+  const canLearn = true;
   const pop = document.createElement("div");
   pop.id = "wordPop";
   pop.style.cssText = "position:fixed;z-index:95;background:var(--card,#fff);color:var(--ink,#222);border:1px solid var(--border,#ddd);border-radius:14px;padding:12px 16px;box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:250px;font-family:var(--font-ui,sans-serif);font-size:14px;text-align:center";
@@ -3668,7 +3668,7 @@ function showWordPop(word, x, y, o) {
     ${o.hideMeaning
       ? `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">meaning hidden — you're mid-test 🤫</div>`
       : hit ? `<div style="font-weight:600;margin-top:4px">${hit[2]}</div>`
-            : `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">not in the site's word lists yet</div>`}
+            : `<div style="color:var(--muted,#888);font-size:12.5px;margin-top:4px">Tap ＋ Learn to add this word to your review deck</div>`}
     ${!o.hideMeaning && o.mnem ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888);text-align:left">💡 ${o.mnem}</div>` : ""}
     ${!o.hideMeaning && o.fam ? `<div style="border-top:1px dashed var(--border,#ddd);margin-top:8px;padding-top:7px;font-size:12.5px;color:var(--muted,#888)">
       🌿 root <b dir="rtl" class="arabic" style="font-size:14px">${o.fam.root.split("(")[0].trim()}</b> —
@@ -3721,7 +3721,9 @@ function showWordPop(word, x, y, o) {
       id = "tw:" + norm;
       const words = store.get("ats-tapwords", {});
       if (!words[norm]) {
-        words[norm] = { ar: disp, en: hit[2], tr: hit[1] || "", note: "you chose to learn this" };
+        const enVal = hit ? hit[2] : disp;
+        const trVal = (hit && hit[1]) || (typeof translitAr === "function" ? translitAr(disp) : "");
+        words[norm] = { ar: disp, en: enVal, tr: trVal, note: "you chose to learn this" };
         store.set("ats-tapwords", words);
       }
     }
@@ -4103,17 +4105,21 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
 
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Variation Misses (11 Oct):**\n`;
-  md += `  - *خَزَائِن* (cupboards / treasuries) — rated weak in 11 Oct pre-class review\n`;
-  md += `  - *طَابِق* (floor, storey) — rated learning (box 0); *سِتَارَة* (curtain) rated medium; *دَوْر* (floor / turn)\n`;
+  md += `- **Active Telemetry Slips & Variation Misses (12 Oct):**\n`;
+  md += `  - *سُلَّم* (stairs, ladder — rated learning; mnemonic: solemn climb up the stairs / safe steps)\n`;
+  md += `  - *مِصْعَد* (lift, elevator — rated learning; root ṣ-ʿ-d: machine that ascends)\n`;
+  md += `  - *دَوْر* (floor / turn — rated learning; "my turn on this floor"); *طَابِق* (floor / storey); *خَزَائِن* (cupboards)\n`;
+  md += `  - *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning in week routine)\n`;
+  md += `  - *الجَوُّ بَارِدٌ اليَوْمَ* (The weather is cold today — rated learning in myday)\n`;
+  md += `  - *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day — rated learning in myday)\n`;
+  md += `  - *أُسَاعِدُ* (I help — rated learning in routine)\n`;
+  md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;
   md += `  - *Verb Tense Distinction (Chapter 4):* past ـتُ (*قَرَأْتُ / صَلَّيْتُ*) vs present أَـ (*أَقْرَأُ / أُصَلِّي*) vs future سَـ (*سَأَذْهَبُ*)\n`;
   md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
-  md += `  - *الْوَسْوَاس* (the repetitive whisperer) — subtle evil promptings; rated weak in recent review\n`;
-  md += `  - *عُقَد* (knots), *حَاسِد* (envier), *الْخَنَّاس* (the slinker), *غَاسِق* (intense nightfall) — active learning in protection cluster\n`;
-  md += `  - *أُرَتِّبُ* (I tidy/arrange), *أَنَامُ* (I sleep), *أَعُودُ* (I return [plain d]), *صَحِيفَة* (newspaper) — active routine items\n`;
+  md += `  - *الْوَسْوَاس* (the repetitive whisperer), *عُقَد* (knots), *حَاسِد* (envier), *الْخَنَّاس* (the slinker)\n`;
   md += `  - *الفَطُور* (breakfast) — **celebrated win!** Promoted to solid via the mini-iftar / FAT TOUR mnemonic\n`;
   md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
-  md += `- Mnemonics in Use: a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), return to refuge (أَعُودُ), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور)\n`;
+  md += `- Mnemonics in Use: a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), return to refuge (أَعُودُ), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور), solemn stairs (سُلَّم), ascending machine (مِصْعَد)\n`;
   md += `- Surah An-Nas Protection Concepts: King/Sovereign (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), chests (صُدُور)\n`;
   md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
   md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;

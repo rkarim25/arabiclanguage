@@ -15,14 +15,14 @@
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
   - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (11 Oct 2026):** 3,195 recorded practice events; 763 cards in SRS (**305 solid/strong** in Box 3–5: 245 Box 5, 25 Box 4, 35 Box 3); 381 active learning (338 Box 1, 43 Box 2); 77 need review (Box 0); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); Chapter 4 progressive sentence variation drills (30 lines covering past ـتُ vs present أَـ vs future سَـ) deployed.
+  - **Live Telemetry (12 Oct 2026):** 3,334 recorded practice events; 776 cards in SRS (**306 solid/strong** in Box 3–5: 245 Box 5, 25 Box 4, 36 Box 3); 393 active learning (350 Box 1, 43 Box 2); 77 need review (Box 0); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); Chapter drills 1–10 (300 progressive lines with neural audio) deployed.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
     - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
   - **Recent Activity & Diagnostic Wins:**
-    - Preply Sunday 11 Oct 07:00 UK lesson preceded by morning review of housing vocabulary: identified weak spots in *خَزَائِن* (cupboards / treasuries) and *طَابِق* (floor / storey).
-    - Mnemonic additions: **سِتَارَة** (curtain) connected to the Divine Name *السَّتَّار* (The Concealer veils faults like a curtain veils a room); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
-    - Active Sentence Variation Drill: Handcrafted 3-rung variation drills deployed across Chapters 1 to 4 (120 total lines with neural audio); targeting tense confusion (*قَرَأْتُ* vs *أَقْرَأُ* vs *سَأَقْرَأُ*).
+    - 12 Oct practice session: practiced sentences in Say Your Day (`myday:1`) and reviewed vocabulary.
+    - Slipped items identified in 12 Oct telemetry: *سُلَّم* (stairs, ladder — rated learning), *مِصْعَد* (lift, elevator — rated learning), *دَوْر* (floor, storey, turn — rated learning), *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning), *الجَوُّ بَارِدٌ اليَوْمَ* (the weather is cold today), *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day), *أُسَاعِدُ* (I help).
+    - Mnemonic additions: **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 
 
@@ -108,9 +108,18 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 
 ### D. Current Diagnostic Focus & Review Vocabulary
 The following words were identified in recent telemetry and test diagnostics as requiring reinforcement:
-- **Active Telemetry Slips & Variation Misses (10 Oct):**
+- **Active Telemetry Slips & Variation Misses (12 Oct):**
+  - **سُلَّم** (*sullam*) — stairs, ladder (rated `learning` in everyday housing; mnemonic: solemn climb up the stairs / safe steps *salām*)
+  - **مِصْعَد** (*miṣʿad*) — lift, elevator (rated `learning` in everyday housing; root *ṣ-ʿ-d*: machine that ascends)
+  - **دَوْر** (*dawr*) — floor, storey, turn (rated `learning`; "the wheel turns to my floor / my turn")
+  - **طَابِق** (*ṭābiq*) — floor, storey (rated `learning`; tablets stacked = storeys)
+  - **يَوْمَ الثُّلَاثَاءِ** (*yawma th-thulāthāʾ*) — on Tuesday (rated `learning` in routine)
+  - **الجَوُّ بَارِدٌ اليَوْمَ** (*al-jawwu bāridun al-yawm*) — The weather is cold today (rated `learning` in Say Your Day)
+  - **أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا** (*ataʿallamu kulla yawmin qalīlan*) — I learn a little every day (rated `learning` in Say Your Day)
+  - **أُسَاعِدُ** (*usāʿidu*) — I help (rated `learning` in routine)
+  - **الحَيّ** (*al-Ḥayy*) — the Ever-Living (Divine Name, rated `learning`)
   - **أُرِيدُ أَنْ أَشْرَبَ شَيْئًا** (*urīdu an ashraba shayʾan*) — I want to drink something (verb substitution slip on Chapter 2, Sentence 1 variation drill!)
-  - **الْوَسْوَاس** (*al-waswās*) — the repetitive whisperer (subtle, continuous evil promptings; rated `weak` in 09 Oct review)
+  - **الْوَسْوَاس** (*al-waswās*) — the repetitive whisperer (subtle, continuous evil promptings; rated `weak` in recent review)
   - **عُقَد** (*ʿuqad*) — knots (rated `learning`)
   - **حَاسِد** (*ḥāsid*) — envier (rated `learning`)
   - **الْخَنَّاس** (*al-khannās*) — the slinker (retreating upon dhikr; rated `learning`)
