@@ -171,6 +171,13 @@ try:
 except Exception as e:
     print("Warning: could not parse chapter-drills.json", e)
 
+# Say your day (data/myday.json) — his own day, said back to him
+try:
+    for s in loadd("myday.json").get("sentences", []):
+        if s.get("ar"): add("ar", s["ar"])
+except Exception as e:
+    print("Warning: could not parse myday.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 

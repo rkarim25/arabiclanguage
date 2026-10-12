@@ -198,7 +198,7 @@
   function plan(pool, ctx) {
     ctx = Object.assign({ now: Date.now(), srs: {}, log: [], freq: {}, homework: new Set(), size: 10 }, ctx || {});
     const { theta, tries } = ability(pool, ctx);
-    const sweet = theta - P.sweet, ceiling = theta - P.ceiling;
+    const sweet = theta - P.sweet - (ctx.sweetShift || 0), ceiling = theta - P.ceiling - (ctx.sweetShift || 0);
     const dayAgo = ctx.now - DAY, weekAgo = ctx.now - 7 * DAY;
     const lastTry = new Map();
     triesOf(pool, ctx).forEach(x => { if (x.t > weekAgo) { const prev = lastTry.get(x.key); if (!prev || x.t > prev.t) lastTry.set(x.key, x); } });
@@ -239,7 +239,7 @@
       r => r.f.knownShare >= 0.34,
       r => true,
     ];
-    let ok = [], level = 0;
+    let ok = [], level = Math.min(gates.length - 1, ctx.relaxFrom || 0);   // a caller may start from a looser gate
     for (; level < gates.length; level++) { ok = rows.filter(gates[level]); if (ok.length >= ctx.size) break; }
     ok.forEach(r => { r.score = score(r); });
     ok.sort((a, b) => b.score - a.score);

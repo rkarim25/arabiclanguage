@@ -692,9 +692,35 @@ const bank = D("sentence-bank.json");
   yes(/function planMountDoor\(/.test(planSrc) && /function planDoorHTML\(/.test(planSrc), "plan.js builds the door");
   yes(/if \(door\) planMountDoor\(door\); else planMountBar\(\);/.test(planSrc), "plan.js mounts the door on the home page and the bar everywhere else (the bar had no caller before)");
   yes(/p\.handover = \{ t: Date\.now\(\), from: block\.title \}/.test(planSrc) && /pb-hand/.test(planSrc), "a block that runs out its time hands over to the next in the bar");
-  yes(/class="pd-start"/.test(planSrc) && /href="\$\{cur\.url\}"/.test(planSrc), "the Start button NAVIGATES to the current block's page");
+  yes(/class="pd-start/.test(planSrc) && /href="\$\{cur\.url\}"/.test(planSrc), "the Start button NAVIGATES to the current block's page");
   yes(/function planTodayWins\(/.test(planSrc) && /Today is done/.test(planSrc), "when the day is done the door says so and stops");
   yes(/function planWeekDays\(/.test(planSrc) && /Salah by ear/.test(planSrc), "the bigger picture: the week, the lesson, the two goal lines");
+
+  /* the week that builds towards Sunday (his interview, 12 Oct) */
+  console.log("\n-- the week that builds towards Sunday --");
+  yes(/myday:\s*\{/.test(planSrc) && /rehearse:\s*\{/.test(planSrc) && /withher:\s*\{/.test(planSrc), "three new blocks: say your day · rehearse · tell her");
+  yes(/dow === 0 \? "withher" : dow === 6 \? "rehearse" : "myday"/.test(planSrc), "Mon–Fri say your day, Saturday rehearse, Sunday tell her — the core block comes first");
+  yes(/b\.optional = !\(b\.type === "homework"/.test(planSrc) && /find\(b => !b\.done && !b\.optional\)/.test(planSrc), "everything else is optional: the day is done when the core is done");
+  yes(/function planScript\(/.test(planSrc) && /Sunday script/.test(planSrc), "the Sunday script: what he said or wrote and got right this week, on the door");
+  yes(/Evenings are yours/.test(planSrc), "after 20:00 the door protects his evening instead of nudging");
+  yes(/type === "myday" \? \(planEasyDay\(\) \? 6 : 10\)/.test(planSrc), "say your day has a ten-minute budget — his real slot (six on a lighter day)");
+  const md = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "myday.json"), "utf8")).sentences;
+  yes(md.length >= 50, `myday.json carries ${md.length} sentences about his day`);
+  yes(md.every(s => s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).length <= 7), "…every one is seven words or fewer");
+  yes(md.every(s => s.en && s.tr && s.moment && s.who), "…each with meaning, transliteration, moment of the day and who says it");
+  yes(md.filter(s => s.who === "her").length >= 5, "…and the questions she is likely to ask");
+  const sentSrc = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
+  yes(/q\.get\("myday"\)/.test(sentSrc) && /async function startMyDay/.test(sentSrc), "sentences.html opens Say your day / Rehearse from the plan's link");
+  const tryitSrc = fs.readFileSync(path.join(ROOT, "js", "tryit.js"), "utf8");
+  yes(/e: "tryit-free-done"/.test(tryitSrc), "finishing the session logs the event the plan counts as done");
+
+  /* motivation, wired in (12 Oct) */
+  console.log("\n-- motivation, measured and nurtured --");
+  yes(/function planMood\(/.test(planSrc) && /e: "mood"/.test(planSrc), "a mood tap after the session logs a mood event");
+  yes(/function planEasyDay\(/.test(planSrc) && /every\(x => x\.mood === "heavy"\)/.test(planSrc), "two heavy days in a row make the next day lighter");
+  yes(/planEasyDay\(\) \? 6 : 10/.test(planSrc), "…six minutes instead of ten");
+  yes(/function planNurtureLine\(/.test(planSrc) && /Yesterday went to life/.test(planSrc), "a missed day gets no guilt on the door");
+  yes(/sweetShift/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "…and the engine asks for easier sentences on a heavy day");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

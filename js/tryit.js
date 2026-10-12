@@ -171,9 +171,12 @@
     }
   }
   function setRung(idx, r) { const st = state(idx); st.rung = r; st.revealed = false; st.result = null; st.heard = ""; st.listening = false; paint(idx); }
+  /* an item is finished for the round once it was ATTEMPTED (a miss ends it too — he can
+     retry by hand); a chapter sentence with rungs is finished when rung 3 was passed or missed */
+  const finished = i => { const s = T.st[i]; if (!s || !s.result) return false; if (!variants(item(i)).length) return true; return !s.result.ok || s.rung >= 3; };
   function nextIdx(after) {
     const n = items().length;
-    for (let k = 1; k <= n; k++) { const i = (after + k) % n; if (!T.st[i] || !(T.st[i].result && T.st[i].result.ok && (!variants(item(i)).length || T.st[i].rung >= 3))) return i; }
+    for (let k = 1; k <= n; k++) { const i = (after + k) % n; if (!finished(i)) return i; }
     return -1;
   }
   function all() {
@@ -187,6 +190,12 @@
     const st = state(idx);
     if (variants(item(idx)).length && st.rung < 3) { setRung(idx, st.rung + 1); return; }
     if (T.round) { const n = nextIdx(idx); if (n >= 0) { toggle(n); return; } }
+    if (T.round && T.freeOn) {
+      // the session is finished: that is the plan's "done" for Say your day / Rehearse
+      const okN = Object.values(T.st).filter(s => s.result && s.result.ok).length;
+      if (typeof logEvent === "function") logEvent({ e: "tryit-free-done", kind: (T.freeOpts && T.freeOpts.kind) || "free", n: items().length, ok: okN, t: Date.now() });
+      if (T.cfg.onFreeDone) T.cfg.onFreeDone(okN, items().length);
+    }
     T.open = null; T.round = false; paint(idx);
   }
   function reveal(idx) { const st = state(idx); st.revealed = true; st.result = null; paint(idx); const tg = target(idx); if (tg && typeof speak === "function") speak(tg.ar, 0.8); }
@@ -299,9 +308,11 @@
     if (!_freqLoading) _freqLoading = fetch("data/frequency.json").then(r => r.json()).then(d => { _freq = (d && d.words) || {}; return _freq; }).catch(() => (_freq = {}));
     return _freqLoading;
   }
-  async function free() {
-    if (!T.cfg || !T.cfg.pool) return;
-    const pool = T.cfg.pool();
+  async function free(opts) {
+    opts = opts || {};
+    if (!T.cfg || (!T.cfg.pool && !opts.pool)) return;
+    const pool = opts.pool || T.cfg.pool();
+    T.freeOpts = opts;
     let list, meta;
     if (root.FreeTry && typeof root.FreeTry.plan === "function") {
       const freq = await loadFreq();
@@ -312,18 +323,23 @@
         log: (typeof store !== "undefined" && store.get("ats-log", [])) || [],
         freq,
         homework: new Set((hw && hw.keys) || []),
-        size: T.cfg.size || 10,
+        size: opts.size || T.cfg.size || 10,
+        relaxFrom: opts.loose ? 4 : 0,        // "say your day": his own sentences are the point, not the lexical gate
+        boost: opts.boost || null,
+        sweetShift: opts.easy ? 0.6 : 0,      // a heavy day asks for easier sentences
         wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
       };
       const p = root.FreeTry.plan(pool, ctx);
       list = p.list; meta = p;
+      if (opts.title) meta.title = opts.title;
+      if (opts.kind) meta.kind = opts.kind;
     } else {
       const fb = freeBatch(pool, T.cfg.size || 10);
       list = fb.list; meta = { theta: fb.level, tries: 0, candidates: fb.candidates, mix: { retry: 0, stretch: 0, consolidate: 0 } };
     }
     if (!list.length) { alert("Nothing is ready for a free try yet — rate a few more words and sentences first."); return; }
     T.freeOn = true;
-    if (typeof logEvent === "function") logEvent({ e: "tryit-free", level: meta.theta, tries: meta.tries, candidates: meta.candidates, relaxed: meta.relaxed, mix: meta.mix, n: list.length, t: Date.now() });
+    if (typeof logEvent === "function") logEvent({ e: "tryit-free", kind: opts.kind || "free", level: meta.theta, tries: meta.tries, candidates: meta.candidates, relaxed: meta.relaxed, mix: meta.mix, n: list.length, t: Date.now() });
     if (T.cfg.onFree) T.cfg.onFree(list, meta);
     T.st = {}; T.round = true; T.open = null;
     toggle(0);

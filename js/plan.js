@@ -68,6 +68,13 @@ const PLAN_BLOCKS = {
   story:     { icon: "📖", title: c => `${c.title} · ${c.stepEn}`, sub: c => c.sub, url: c => `story.html?id=${c.id}&step=${c.step}`, page: "story", done: ["story-step"] },
   ptest:     { icon: "🎯", title: () => "5-minute listening test", sub: "A measurement, not a drill — it anchors your chart and corrects the forecast.", url: "placement.html", page: "placement", done: ["ptest-listen"] },
   homework:  { icon: "📚", title: () => "Teacher homework", sub: "", url: "vocab.html?view=lessons", page: "vocab", done: ["fill-done", "drill-done", "sheet-done"] }, // display fields overridden in planMakeBlock
+  /* THE WEEK THAT BUILDS TOWARDS SUNDAY (his interview, 12 Oct): "the biggest
+     demotivating is my Preply class when I can't have a simple conversation. If I
+     could just talk about my day …" and "do it in a way I could get ready before my
+     Sunday Preply class but also not just the day before." */
+  myday:     { icon: "🗣", title: n => `Say your day${n ? ` — ${n} in your Sunday script` : ""}`, sub: "Ten minutes before the commute: say or write sentences about your own day. Every one you get right goes into Sunday's two minutes with her.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"] },
+  rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"] },
+  withher:   { icon: "✅", title: () => "Tell her about your week — then tick this", sub: "Your script is on the Lessons page. Two minutes about your day, in Arabic; imperfect is fine. Tick when done; pen-note anything she corrected.", url: "class.html", page: "classes", done: [] },
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
 };
 
@@ -235,6 +242,73 @@ function planBoostDay() {
 }
 
 function planHist() { return store.get(PLAN_HIST_KEY, []); }
+/* ---- his Sunday script: sentences he said (mic) or wrote and got right in the last 7 days ---- */
+function planScript(days) {
+  const since = Date.now() - (days || 7) * 86400000;
+  const log = store.get("ats-log", []);
+  const seen = new Map();
+  log.forEach(x => {
+    if (!x || x.t < since || !x.en) return;
+    const okMic = x.e === "prompt" && typeof x.score === "number" && x.score >= 0.5;
+    const okTry = x.e === "sent-drill" && x.ok && (x.how === "mic" || x.how === "typed");
+    if (!okMic && !okTry) return;
+    const k = String(x.en).trim().toLowerCase();
+    const prev = seen.get(k);
+    const how = okMic || x.how === "mic" ? "mic" : "typed";
+    if (!prev || (how === "mic" && prev.how !== "mic") || x.t > prev.t) seen.set(k, { en: String(x.en).trim(), heard: x.heard || prev && prev.heard || "", how, t: x.t });
+  });
+  return [...seen.values()].sort((a, b) => b.t - a.t);
+}
+/* ---------- motivation, measured and nurtured (his ask, 12 Oct) ----------
+   "A big part of learning is checking, growing and nurturing my motivation —
+   essentially a therapy session built into the programme." Three threads:
+   · a MOOD TAP after every session (heavy / fine / good) → `mood` events;
+   · the next day's plan LISTENS: two heavy taps in a row → a lighter block,
+     easier sentences, and the door says so;
+   · the door NURTURES: a missed day gets no guilt, a heavy day gets a shorter
+     ask, a good day gets the sentence he proved read back to him;
+   · Sundays: the check-in (arabic-weekly-checkin) turns the week into one
+     honest paragraph and one question — the answer goes into his profile. */
+function planMoods(days) {
+  const since = Date.now() - (days || 7) * 86400000;
+  return store.get("ats-log", []).filter(x => x && x.e === "mood" && x.t >= since).sort((a, b) => a.t - b.t);
+}
+function planEasyDay() {
+  const m = planMoods(4);
+  if (m.length < 2) return false;
+  const last = m.slice(-2);
+  return last.every(x => x.mood === "heavy");
+}
+function planMoodHTML() {
+  const today = planMoods(1).slice(-1)[0];
+  if (today) return `<div class="pd-mood done">Thanks — noted ${today.mood === "heavy" ? "😮‍💨 heavy" : today.mood === "good" ? "⚡ good" : "🙂 fine"}. ${today.mood === "heavy" ? "Tomorrow's block will be lighter." : today.mood === "good" ? "Tomorrow builds on it." : "Same again tomorrow."}</div>`;
+  return `<div class="pd-mood"><span class="pd-muted">How did that feel?</span>
+    <button type="button" class="book-toggle-pill" onclick="planMood('heavy', this)">😮‍💨 heavy</button>
+    <button type="button" class="book-toggle-pill" onclick="planMood('fine', this)">🙂 fine</button>
+    <button type="button" class="book-toggle-pill" onclick="planMood('good', this)">⚡ good</button></div>`;
+}
+function planMood(mood, btn) {
+  logEvent({ e: "mood", mood, t: Date.now() });
+  if (typeof autoSync === "function") { try { autoSync(); } catch (e) {} }
+  const box = btn && btn.closest(".pd-mood");
+  if (box) box.outerHTML = planMoodHTML();
+  planPaintDoor();
+}
+/* the line on the door that looks after him */
+function planNurtureLine(p) {
+  const week = planWeekDays();
+  const yesterday = week[week.length - 2];
+  const moods = planMoods(3);
+  const lastMood = moods.slice(-1)[0];
+  const script = planScript();
+  const dow = new Date().getDay();
+  if (planEasyDay()) return "Two heavy days in a row — today is deliberately lighter: six sentences, easier ones. That is the programme working, not you slipping.";
+  if (yesterday && !yesterday.on && dow !== 1) return "Yesterday went to life. No catching up to do — ten minutes this morning simply continues.";
+  if (lastMood && lastMood.mood === "good" && script.length) return `Last time felt good and you proved “${script[0].en}” — today adds to it.`;
+  if (dow === 6 && script.length) return `${script.length} sentence${script.length > 1 ? "s" : ""} ready for her tomorrow. Rehearse once; don't add.`;
+  if (dow === 0) return "Today is the point of the week: two minutes about your day, in Arabic, imperfect is fine.";
+  return "";
+}
 function planRecentTypes() { return planHist().slice(-2).flatMap(h => h.types || []); }
 function planRecentContent() { return planHist().slice(-3).flatMap(h => h.content || []); }
 
@@ -296,6 +370,7 @@ function planMakeBlock(type, date, dueN) {
   }
   const def = PLAN_BLOCKS[type];
   let content = null;
+  if (type === "myday" || type === "rehearse") content = planScript().length;
   if (type === "phrases") content = planPickContent(PHRASE_GIDS, date);
   if (type === "salah") content = planPickContent(PLAN_SURAHS, date);
   if (type === "story") content = planNextStory();
@@ -306,7 +381,7 @@ function planMakeBlock(type, date, dueN) {
     sub: typeof def.sub === "function" ? def.sub(content) : def.sub,
     url: typeof def.url === "function" ? def.url(content) : def.url,
     page: def.page,
-    mins: PLAN_BLOCK_MIN,
+    mins: type === "myday" ? (planEasyDay() ? 6 : 10) : type === "rehearse" ? 6 : PLAN_BLOCK_MIN,
     done: false, sec: 0,
   };
 }
@@ -318,7 +393,11 @@ function planBuild(date, noBoost) {
   const recent = planRecentTypes();
   const blocks = [];
 
-  // block 1: protect the base
+  // THE CORE — one block is the day. Mon–Fri say your day, Sat rehearse, Sun tell her.
+  const dow = new Date(date + "T12:00:00").getDay();
+  blocks.push(Object.assign(planMakeBlock(dow === 0 ? "withher" : dow === 6 ? "rehearse" : "myday", date, dueN), { core: true }));
+
+  // block 1 of the old plan: protect the base (now optional — "if you feel like it")
   blocks.push(planMakeBlock(dueN >= 4 ? "review" : "newwords", date, dueN));
 
   // teacher homework: scheduled BACKWARDS from the lesson. Urgency grows as
@@ -364,6 +443,8 @@ function planBuild(date, noBoost) {
 
   // a banked block yesterday shrinks today (never below 2)
   if (store.get(PLAN_BANK_KEY, null) === date && blocks.length > 2) blocks.pop();
+  // only the core counts for "the day is done"; the teacher's pre-lesson check is the one exception
+  blocks.forEach(b => { if (!b.core) b.optional = !(b.type === "homework" && hw && !hw.past && hw.daysLeft <= 1.5); });
   const plan = { date, blocks, completedAt: null, banked: false };
 
   // ⚡ boost day arrived (announced in the days before): attach the extra section
@@ -402,7 +483,8 @@ function planGet() {
   return p;
 }
 function planSave(p) { store.set(PLAN_KEY, p); }
-function planCurrent(p) { return p.blocks.find(b => !b.done) || null; }
+function planCurrent(p) { return p.blocks.find(b => !b.done && !b.optional) || null; }
+function planOptional(p) { return p.blocks.filter(b => b.optional && !b.done); }
 
 /* ---- completion: observe events + accrue focused time on the block's page ---- */
 function planObserve(ev) {
@@ -442,7 +524,7 @@ function planFinishBlock(p, block, how) {
   block.done = true; block.doneT = Date.now();
   if (how === "time") p.handover = { t: Date.now(), from: block.title };   // the bar says "that's enough here → next"
   logEvent({ e: "plan-block-done", type: block.type, how });
-  const left = p.blocks.filter(b => !b.done).length;
+  const left = p.blocks.filter(b => !b.done && !b.optional).length;
   if (!left) { p.completedAt = Date.now(); logEvent({ e: "plan-done", banked: !!p.banked }); autoSync(); }
   planSave(p);
   planPaintBar();
@@ -684,13 +766,26 @@ function planWeekDays() {
   return days;
 }
 let _planSeries = null;
+function planScriptHTML(limit) {
+  const s = planScript();
+  const dow = new Date().getDay();
+  const sunday = dow === 0 ? "today" : dow === 6 ? "tomorrow" : "on Sunday";
+  if (!s.length) return `<div class="pd-script"><strong>Your Sunday script is empty.</strong> <span class="pd-muted">This morning's ten minutes adds the first line — one sentence about your day, said or written and got right.</span></div>`;
+  const items = s.slice(0, limit || 5).map(x => `<li>${x.how === "mic" ? "🎤" : "✍️"} ${x.en}${x.heard ? ` <span class="arabic pd-ar" dir="rtl">${x.heard}</span>` : ""}</li>`).join("");
+  return `<div class="pd-script"><strong>You can say ${s.length} thing${s.length > 1 ? "s" : ""} about your day this week.</strong> <span class="pd-muted">${sunday === "today" ? "Say three of them to her today." : `Say three of them to her ${sunday}.`}</span>
+    <ul class="pd-list">${items}</ul>${s.length > (limit || 5) ? `<span class="pd-muted">…and ${s.length - (limit || 5)} more</span>` : ""}</div>`;
+}
 function planDoorHTML(p) {
   const cur = planCurrent(p);
-  const doneN = p.blocks.filter(b => b.done).length, n = p.blocks.length;
-  const strip = p.blocks.map((b, i) => `<span class="pd-step ${b.done ? "done" : (b === cur ? "cur" : "")}" title="${b.title}"><span class="pd-dot">${b.done ? "✓" : i + 1}</span><span class="pd-t">${b.icon} ${b.title}</span></span>`).join("");
+  const required = p.blocks.filter(b => !b.optional);
+  const doneN = required.filter(b => b.done).length, n = required.length;
+  const strip = required.map((b, i) => `<span class="pd-step ${b.done ? "done" : (b === cur ? "cur" : "")}" title="${b.title}"><span class="pd-dot">${b.done ? "✓" : i + 1}</span><span class="pd-t">${b.icon} ${b.title}</span></span>`).join("");
   const week = planWeekDays();
   const weekN = week.filter(d => d.on).length;
-  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} of 7 days this week${weekN >= 5 ? " — that's the rhythm" : weekN >= 3 ? " — on course" : ""}</span>`;
+  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} of 7 days · Mon–Fri build the script · Sat rehearse · Sun say it to her</span>`;
+  const hour = new Date().getHours();
+  const evening = hour >= 20 || hour < 4;
+  const nurture = planNurtureLine(p);
   const hw = planHomework();
   const lessonHtml = hw && !hw.past ? `📚 ${hw.label || "Teacher lesson"} — <strong>${hw.readiness}% ready</strong> <span class="pd-muted">· lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</span>` : "";
   let goals = "";
@@ -710,15 +805,23 @@ function planDoorHTML(p) {
     if (w.ear) bits.push(`${w.ear} caught by ear`);
     main = `<div class="pd-done">✅ Today is done — أَحْسَنْت.</div>
       <div class="pd-win">${bits.length ? bits.join(" · ") : "Three blocks finished"}${w.mins ? ` · ${w.mins} min` : ""}. That's enough. Tomorrow's first block will show what stuck.</div>
-      <div class="pd-opt"><a href="sentences.html" class="pd-link">✨ Free try (optional)</a> <a href="review.html" class="pd-link">🔁 Review (optional)</a></div>`;
+`;
   } else {
-    const label = doneN ? `Continue · block ${doneN + 1} of ${n}` : `Start · ${cur.mins || 5} minutes`;
-    main = `<a href="${cur.url}" class="pd-start" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:${doneN + 1}})}catch(e){}">▶ ${label}</a>
+    const label = doneN ? `Continue · ${cur.mins || 5} minutes` : `Start · ${cur.mins || 5} minutes`;
+    const anchor = cur.type === "withher" ? "After the lesson" : cur.type === "rehearse" ? "Saturday — once through, with the mic" : "This morning, before the commute";
+    main = `${evening ? `<div class="pd-evening">🌙 Evenings are yours. Tomorrow, before the commute: ${cur.icon} ${cur.title}.</div>` : `<div class="pd-anchor">${anchor}</div>`}
+      <a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:${doneN + 1}})}catch(e){}">▶ ${label}</a>
       <div class="pd-next">${cur.icon} <strong>${cur.title}</strong> <span class="pd-muted">— ${cur.sub || ""}</span></div>`;
   }
+  const opt = planOptional(p);
+  const optHtml = opt.length ? `<div class="pd-opt"><span class="pd-muted">If you feel like it:</span> ${opt.map(b => `<a href="${b.url}" class="pd-link">${b.icon} ${b.title}</a>`).join(" ")}</div>` : "";
   return `
     <div class="pd-head"><span class="pd-today">Today</span><span class="pd-strip">${strip}</span></div>
+    ${nurture ? `<div class="pd-nurture">${nurture}</div>` : ""}
     ${main}
+    ${!cur ? planMoodHTML() : ""}
+    ${planScriptHTML(5)}
+    ${optHtml}
     <div class="pd-picture">
       <div>${weekHtml}</div>
       ${lessonHtml ? `<div>${lessonHtml}</div>` : ""}
@@ -739,6 +842,15 @@ function planPaintDoor() { const el = document.getElementById("planDoor"); if (e
   const mount = () => {
     const door = document.getElementById("planDoor");
     if (door) planMountDoor(door); else planMountBar();
+    // the Lessons page: his two minutes with her, ready to read
+    const hw = document.getElementById("hwPrepCard");
+    if (hw && !document.getElementById("planScriptCard")) {
+      const card = document.createElement("div");
+      card.id = "planScriptCard"; card.className = "plan-door";
+      card.innerHTML = `<div class="pd-head"><span class="pd-today">Your two minutes with her</span></div>${planScriptHTML(12)}
+        <div class="pd-muted" style="margin-top:8px">Questions she may ask: مَاذَا فَعَلْتَ أَمْسِ؟ · كَيْفَ كَانَ أُسْبُوعُكَ؟ · مَتَى تَسْتَيْقِظُ؟ — answer with any line above. Imperfect is fine; being understood is the win.</div>`;
+      hw.parentNode.insertBefore(card, hw);
+    }
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount); else mount();
   if (typeof logEvent === "function") {

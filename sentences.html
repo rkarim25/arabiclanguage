@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4yd5ff">
-  <link rel="stylesheet" href="css/style.css?v=mv4yd5ff">
+  <link rel="stylesheet" href="css/fonts.css?v=mv4zenyv">
+  <link rel="stylesheet" href="css/style.css?v=mv4zenyv">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -284,14 +284,15 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv4yd5ff"></script>
-<script src="js/curriculum.js?v=mv4yd5ff"></script>
-<script src="js/srs.js?v=mv4yd5ff"></script>
-<script src="js/frames.js?v=mv4yd5ff"></script>
-<script src="js/freetry.js?v=mv4yd5ff"></script>
-<script src="js/tryit.js?v=mv4yd5ff"></script>
-<script src="js/app.js?v=mv4yd5ff"></script>
-<script src="js/tracker.js?v=mv4yd5ff"></script>
+<script src="js/progress-model.js?v=mv4zenyv"></script>
+<script src="js/curriculum.js?v=mv4zenyv"></script>
+<script src="js/srs.js?v=mv4zenyv"></script>
+<script src="js/frames.js?v=mv4zenyv"></script>
+<script src="js/freetry.js?v=mv4zenyv"></script>
+<script src="js/tryit.js?v=mv4zenyv"></script>
+<script src="js/app.js?v=mv4zenyv"></script>
+<script src="js/tracker.js?v=mv4zenyv"></script>
+<script src="js/plan.js?v=mv4zenyv"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -387,13 +388,22 @@ const BATCH_SIZE = 10;
       pool: () => MASTER_SENTENCES,
       size: BATCH_SIZE,
       onVerdict: (it, g, idx) => rateSentence(it.key, g, idx),
+      onFreeDone: (okN, n) => {
+        let t = document.getElementById("freeDone");
+        if (!t) { t = document.createElement("div"); t.id = "freeDone"; const d = document.getElementById("doneArea"); if (d && d.parentNode) d.parentNode.insertBefore(t, d); else document.body.appendChild(t); }
+        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? "🎉 That's today." : "✓ That's today."}</h3>
+          <p style="margin:0 0 10px;font-size:14px">${okN} of ${n} said or written and got right — they are in your Sunday script now.</p>
+          ${typeof planMoodHTML === "function" ? planMoodHTML() : ""}
+          <p style="margin:8px 0 0;font-size:13px"><a href="index.html">Back to the door →</a></p></div>`;
+        if (t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "center" });
+      },
       onFree: (list, meta) => {
         stopAudio();
         REVEALED.clear();
         ACTIVE_SENTENCES = list;
         LAST_BATCH_KEYS = list.map(x => x.key);
         const t = document.getElementById("sessionTitle");
-        if (t) t.textContent = `✨ Free try — level ${meta.theta}`;
+        if (t) t.textContent = meta.title || `✨ Free try — level ${meta.theta}`;
         const lg = document.getElementById("srsLegend");
         const gf = meta.grammar && meta.grammar.focus ? meta.grammar.focus : null;
         const gp = gf && meta.grammar.profile[gf];
@@ -404,6 +414,9 @@ const BATCH_SIZE = 10;
     });
     load10Sentences();
     setupAudioSpeed();
+    /* the plan's core block: ?myday=1 → Say your day; &rehearse=1 → only what he proved this week */
+    const q = new URLSearchParams(location.search);
+    if (q.get("myday")) await startMyDay(!!q.get("rehearse"));
   } catch (e) {
     console.error("Failed to load sentence bank", e);
   }
@@ -601,6 +614,37 @@ function setDirection(dir) {
   document.getElementById("dirEnFirst").classList.toggle("active", dir === "en-first");
   document.getElementById("dirArFirst").classList.toggle("active", dir === "ar-first");
   render10Cards();
+}
+
+/* ---- Say your day / Rehearse (the week that builds towards Sunday) ---- */
+let MYDAY = null;
+async function loadMyDay() {
+  if (MYDAY) return MYDAY;
+  const d = await fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] }));
+  MYDAY = (d.sentences || []).map(s => {
+    const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
+    const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
+    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: s.moment, pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
+  });
+  // they join the master list so verdicts and the Sunday script resolve them
+  MYDAY.forEach(s => { if (!MASTER_SENTENCES.some(x => x.key === s.key)) MASTER_SENTENCES.push(s); });
+  return MYDAY;
+}
+async function startMyDay(rehearse) {
+  const md = await loadMyDay();
+  const mine = md.filter(s => s.who === "me");
+  // his day in the bank too: the first-person routine sentences he already has
+  const routine = MASTER_SENTENCES.filter(s => (s.src === "story-01" || /27 Sep: a working day/.test(s.note || "") || s.key === "chap:4:2" || s.key === "chap:4:4" || s.key === "chap:4:5") && !/^md:/.test(s.key));
+  if (rehearse) {
+    const proven = new Set((typeof planScript === "function" ? planScript() : []).map(x => x.en.toLowerCase()));
+    let pool = MASTER_SENTENCES.filter(s => proven.has(String(s.en).trim().toLowerCase()));
+    if (pool.length < 5) pool = pool.concat(mine.filter(s => !pool.includes(s)).slice(0, 8 - pool.length));
+    await TryIt.free({ pool, loose: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
+  } else {
+    const easy = (typeof planEasyDay === "function") && planEasyDay();
+    await TryIt.free({ pool: mine.concat(routine), loose: true, easy, size: easy ? 6 : 8, kind: "myday", title: easy ? "🗣 Say your day — a lighter one today" : "🗣 Say your day — ten minutes",
+      boost: key => (/^md:/.test(key) ? 2.5 : 0) });
+  }
 }
 
 /* a sentence verdict also grades the words inside it — they were met in context */
