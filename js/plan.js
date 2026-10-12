@@ -783,69 +783,54 @@ function planWeekDays() {
   return days;
 }
 let _planSeries = null;
-function planScriptHTML(limit) {
+function planScriptHTML(limit, full) {
   const s = planScript();
   const dow = new Date().getDay();
-  const sunday = dow === 0 ? "today" : dow === 6 ? "tomorrow" : "on Sunday";
-  if (!s.length) return `<div class="pd-script"><strong>Your Sunday script is empty.</strong> <span class="pd-muted">This morning's ten minutes adds the first line — one sentence about your day, said or written and got right.</span></div>`;
+  const when = dow === 0 ? "today" : dow === 6 ? "tomorrow" : "Sunday";
+  if (!s.length) return `<div class="pd-script"><span class="pd-muted">Your script is empty — this morning adds the first line.</span></div>`;
   const items = s.slice(0, limit || 5).map(x => `<li>${x.how === "mic" ? "🎤" : "✍️"} ${x.en}${x.heard ? ` <span class="arabic pd-ar" dir="rtl">${x.heard}</span>` : ""}</li>`).join("");
-  return `<div class="pd-script"><strong>You can say ${s.length} thing${s.length > 1 ? "s" : ""} about your day this week.</strong> <span class="pd-muted">${sunday === "today" ? "Say three of them to her today." : `Say three of them to her ${sunday}.`}</span>
-    <ul class="pd-list">${items}</ul>${s.length > (limit || 5) ? `<span class="pd-muted">…and ${s.length - (limit || 5)} more</span>` : ""}</div>`;
+  return `<div class="pd-script"><div class="pd-script-h"><strong>${s.length} thing${s.length > 1 ? "s" : ""} you can say</strong> <span class="pd-muted">· ${when}: three of them to her</span></div>
+    <ul class="pd-list">${items}</ul>${s.length > (limit || 5) ? `<a href="class.html" class="pd-muted" style="text-decoration:none">…all ${s.length} →</a>` : ""}</div>`;
 }
+/* THE DOOR — the button, the script, a quiet row of extras. Nothing to read. */
 function planDoorHTML(p) {
   const cur = planCurrent(p);
-  const required = p.blocks.filter(b => !b.optional);
-  const doneN = required.filter(b => b.done).length, n = required.length;
-  const strip = required.map((b, i) => `<span class="pd-step ${b.done ? "done" : (b === cur ? "cur" : "")}" title="${b.title}"><span class="pd-dot">${b.done ? "✓" : i + 1}</span><span class="pd-t">${b.icon} ${b.title}</span></span>`).join("");
   const week = planWeekDays();
   const weekN = week.filter(d => d.on).length;
-  const weekHtml = `<span class="pd-week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.d.toLocaleDateString()}">${d.label}</span>`).join("")}</span> <span class="pd-muted">${weekN} morning${weekN === 1 ? "" : "s"} this week${weekN >= 4 ? " — four is a full week" : weekN === 3 ? " — one more makes the week" : ""} · Mon–Fri build the script · Sat rehearse · Sun say it to her</span>`;
   const hour = new Date().getHours();
   const evening = hour >= 20 || hour < 4;
   const nurture = planNurtureLine(p);
-  const hw = planHomework();
-  const lessonHtml = hw && !hw.past ? `📚 ${hw.label || "Teacher lesson"} — <strong>${hw.readiness}% ready</strong> <span class="pd-muted">· lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</span>` : "";
-  let goals = "";
-  if (_planSeries && _planSeries.tracks) {
-    const q = _planSeries.tracks.quran, c = _planSeries.tracks.conv;
-    const pct = x => Math.round(100 * (x && typeof x.todaySkill === "number" ? x.todaySkill : (x && x.reality && x.reality.length ? x.reality[x.reality.length - 1].skill : 0)));
-    const eta = x => { const s = x && x.scenarios && x.scenarios.find(z => z.id === "current"); return s && s.completion ? new Date(s.completion).toLocaleDateString(undefined, { month: "short", year: "numeric" }) : null; };
-    goals = `🎧 Salah by ear <strong>${pct(q)}%</strong>${eta(q) ? ` <span class="pd-muted">· on course for ${eta(q)}</span>` : ""} &nbsp;·&nbsp; 🗣 Speaking <strong>${pct(c)}%</strong>`;
-  }
+  const dayName = new Date().toLocaleDateString(undefined, { weekday: "short" });
   let main;
   if (!cur) {
     const w = planTodayWins();
     const bits = [];
-    if (w.verdicts) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""} ✓/★`);
-    if (w.tried) bits.push(`${w.tried} sentence${w.tried > 1 ? "s" : ""} tried right`);
-    if (w.spoken) bits.push(`${w.spoken} spoken and proven`);
-    if (w.ear) bits.push(`${w.ear} caught by ear`);
-    main = `<div class="pd-done">✅ Today is done — أَحْسَنْت.</div>
-      <div class="pd-win">${bits.length ? bits.join(" · ") : "Three blocks finished"}${w.mins ? ` · ${w.mins} min` : ""}. That's enough. Tomorrow's first block will show what stuck.</div>
-`;
+    if (w.tried) bits.push(`${w.tried} sentence${w.tried > 1 ? "s" : ""} right`);
+    if (w.spoken) bits.push(`${w.spoken} spoken`);
+    if (w.verdicts && !w.tried) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""}`);
+    if (w.ear) bits.push(`${w.ear} by ear`);
+    main = `<div class="pd-done">✅ Done for today</div>
+      <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>`;
   } else {
-    const label = doneN ? `Continue · ${cur.mins || 5} minutes` : `Start · ${cur.mins || 5} minutes`;
-    const anchor = cur.type === "withher" ? "After the lesson" : cur.type === "rehearse" ? "Saturday — once through, with the mic" : "This morning, before the commute";
-    main = `${evening ? `<div class="pd-evening">🌙 Evenings are yours. Tomorrow, before the commute: ${cur.icon} ${cur.title}.</div>` : `<div class="pd-anchor">${anchor}</div>`}
-      <a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:${doneN + 1}})}catch(e){}">▶ ${label}</a>
-      <div class="pd-next">${cur.icon} <strong>${cur.title}</strong> <span class="pd-muted">— ${cur.sub || ""}</span></div>`;
+    const short = cur.type === "myday" ? "Say your day" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
+    const when = evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : "before the commute";
+    main = `<a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:1})}catch(e){}">▶ ${short} · ${cur.mins || 5} min</a>
+      <div class="pd-when">${dayName} · ${when}${evening ? " · evenings are yours" : ""}</div>`;
   }
+  const hw = planHomework();
   const opt = planOptional(p);
-  const optHtml = `<div class="pd-opt"><span class="pd-muted">If you have energy (15 min, evening is fine — never owed):</span>
-    <a href="audio.html?commute=1" class="pd-link pd-link-car" title="Hands-free: your own sentences and due words by ear, with gaps to say them back. Pause, back, skip, stop — on the lock screen too. Works offline after one visit on Wi-Fi. Ten minutes or more counts as the whole day; nothing is planned around it.">🚗 Commute — hands-free, your sentences by ear</a>
-    ${opt.map(b => `<a href="${b.url}" class="pd-link${b.evening ? " pd-link-hw" : ""}">${b.icon} ${b.title}</a>`).join(" ")}</div>`;
+  const extras = [
+    `<a href="audio.html?commute=1" class="pd-x pd-x-car" title="Commute — hands-free, your sentences by ear. Pause, back, skip, stop on the lock screen. Works offline. 10+ min counts as the day.">🚗 Commute</a>`,
+    hw && !hw.past ? `<a href="class.html" class="pd-x" title="Her lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })} — ${hw.readiness}% ready. Her words ride inside your mornings; this is extra, never owed.">📚 ${hw.readiness}%</a>` : "",
+    ...opt.filter(b => b.type !== "homework").slice(0, 2).map(b => `<a href="${b.url}" class="pd-x" title="${b.title} — if you have energy, never owed">${b.icon} ${b.type === "review" ? "Review" : b.type === "ptest" ? "Listening test" : b.type === "audio" ? "Audio" : b.type === "salah" ? "Surah" : b.type === "newwords" ? "New words" : b.type === "story" ? "Story" : b.type === "phrases" ? "Phrases" : b.type === "speakdrill" ? "Speak" : b.type === "exam" ? "Oral exam" : b.title.split(" — ")[0]}</a>`),
+  ].filter(Boolean).join("");
+  const weekHtml = `<span class="pd-week" title="${weekN} morning${weekN === 1 ? "" : "s"} this week — four is a full week">${week.map(d => `<span class="pd-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.label}</span>`).join("")}</span>`;
   return `
-    <div class="pd-head"><span class="pd-today">Today</span><span class="pd-strip">${strip}</span></div>
-    ${nurture ? `<div class="pd-nurture">${nurture}</div>` : ""}
     ${main}
+    ${nurture ? `<div class="pd-nurture">${nurture}</div>` : ""}
     ${!cur ? planMoodHTML() : ""}
-    ${planScriptHTML(5)}
-    ${optHtml}
-    <div class="pd-picture">
-      <div>${weekHtml}</div>
-      ${lessonHtml ? `<div>${lessonHtml}</div>` : ""}
-      ${goals ? `<div>${goals}</div>` : ""}
-    </div>`;
+    ${planScriptHTML(4)}
+    <div class="pd-extras">${extras}${weekHtml}</div>`;
 }
 function planMountDoor(el) {
   if (!el) return;

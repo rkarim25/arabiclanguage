@@ -693,8 +693,8 @@ const bank = D("sentence-bank.json");
   yes(/if \(door\) planMountDoor\(door\); else planMountBar\(\);/.test(planSrc), "plan.js mounts the door on the home page and the bar everywhere else (the bar had no caller before)");
   yes(/p\.handover = \{ t: Date\.now\(\), from: block\.title \}/.test(planSrc) && /pb-hand/.test(planSrc), "a block that runs out its time hands over to the next in the bar");
   yes(/class="pd-start/.test(planSrc) && /href="\$\{cur\.url\}"/.test(planSrc), "the Start button NAVIGATES to the current block's page");
-  yes(/function planTodayWins\(/.test(planSrc) && /Today is done/.test(planSrc), "when the day is done the door says so and stops");
-  yes(/function planWeekDays\(/.test(planSrc) && /Salah by ear/.test(planSrc), "the bigger picture: the week, the lesson, the two goal lines");
+  yes(/function planTodayWins\(/.test(planSrc) && /Done for today/.test(planSrc), "when the day is done the door says so and stops");
+  yes(/function planWeekDays\(/.test(planSrc) && /pd-extras/.test(planSrc) && !/Salah by ear/.test(planSrc), "the bigger picture is one quiet row: the week, the lesson, the extras — no numbers on the door (12 Oct)");
 
   /* the week that builds towards Sunday (his interview, 12 Oct) */
   console.log("\n-- the week that builds towards Sunday --");
@@ -712,14 +712,14 @@ const bank = D("sentence-bank.json");
   yes(/function back\(\)/.test(audioSrc) && /id="acBack"/.test(audioSrc) && /"previoustrack", \(\) => back\(\)/.test(audioSrc), "⏮ back on screen and on the lock screen");
   yes(/async function sentenceRound\(/.test(audioSrc) && /S\.commute \? 2 : WORDS_PER_SENT/.test(audioSrc), "a whole sentence every two words on the commute");
   yes(/e: "commute-done"/.test(audioSrc) && /ev\.e === "commute-done" && \(ev\.min \|\| 0\) >= 10/.test(planSrc), "ten minutes or more hands-free counts as the whole day (nothing is planned around it)");
-  yes(/audio\.html\?commute=1/.test(planSrc) && /pd-link-car/.test(planSrc), "the 🚗 is on the door as an option, never a block");
+  yes(/audio\.html\?commute=1/.test(planSrc) && /pd-x-car/.test(planSrc), "the 🚗 is on the door as an option, never a block");
   yes(/"data\/myday\.json"/.test(fs.readFileSync(path.join(ROOT, "sw.js"), "utf8")) && /async function prefetchClips/.test(audioSrc), "offline: the sentences and their clips are cached ahead");
   yes(/async function runCommute\(/.test(audioSrc) && /function buildCommuteQueue\(/.test(audioSrc) && /kind: "script"/.test(audioSrc) && /kind: "say"/.test(audioSrc), "the programme: your script → say your day → due words, one queue, no clicks");
   yes(/async function sayRound\(/.test(audioSrc) && /speakP\(sent\.en, 1\)[\s\S]{0,200}gapP\(5\)/.test(audioSrc), "say your day by ear: English first, a gap to produce, then the model");
   yes(/body\.commute \.ac-ar \{ font-size: 44px/.test(audioSrc) && /document\.body\.classList\.toggle\("commute"/.test(audioSrc), "one layout — big type if he looks, nothing if he doesn't");
   yes(/sentEns: \(S\.heardSents/.test(audioSrc) && /commute-check-done/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "the next morning's Say your day starts with what he heard");
-  yes(/function planScript\(/.test(planSrc) && /Sunday script/.test(planSrc), "the Sunday script: what he said or wrote and got right this week, on the door");
-  yes(/Evenings are yours/.test(planSrc), "after 20:00 the door protects his evening instead of nudging");
+  yes(/function planScript\(/.test(planSrc) && /you can say/.test(planSrc), "the script: what he said or wrote and got right this week, on the door");
+  yes(/evenings are yours/i.test(planSrc), "after 20:00 the door protects his evening instead of nudging");
   yes(/type === "myday" \? \(planEasyDay\(\) \? 6 : 10\)/.test(planSrc), "say your day has a ten-minute budget — his real slot (six on a lighter day)");
   const md = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "myday.json"), "utf8")).sentences;
   yes(md.length >= 50, `myday.json carries ${md.length} sentences about his day`);
