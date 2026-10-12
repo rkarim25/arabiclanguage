@@ -704,6 +704,20 @@ const bank = D("sentence-bank.json");
   yes(/hb\.optional = true; hb\.evening = true;/.test(planSrc) && /never owed/.test(planSrc), "her homework is the evening option, never a required block (his budget, 12 Oct)");
   yes(/four is a full week/.test(planSrc), "four mornings is a full week");
   yes(/Tell her your budget, in Arabic/.test(planSrc), "he gets the sentence that tells her the budget");
+
+  /* the commute (12 Oct): hands-free, his own sentences, back/skip, offline, never scheduled */
+  console.log("\n-- the commute --");
+  const audioSrc = fs.readFileSync(path.join(ROOT, "audio.html"), "utf8");
+  yes(/FreeTry\.plan\(mine\.concat\(everyday\), ctx\)/.test(audioSrc), "commute sentences are his own day, chosen by the engine at his level");
+  yes(/function back\(\)/.test(audioSrc) && /id="acBack"/.test(audioSrc) && /"previoustrack", \(\) => back\(\)/.test(audioSrc), "⏮ back on screen and on the lock screen");
+  yes(/async function sentenceRound\(/.test(audioSrc) && /S\.commute \? 2 : WORDS_PER_SENT/.test(audioSrc), "a whole sentence every two words on the commute");
+  yes(/e: "commute-done"/.test(audioSrc) && /ev\.e === "commute-done" && \(ev\.min \|\| 0\) >= 10/.test(planSrc), "ten minutes or more hands-free counts as the whole day (nothing is planned around it)");
+  yes(/audio\.html\?commute=1/.test(planSrc) && /pd-link-car/.test(planSrc), "the 🚗 is on the door as an option, never a block");
+  yes(/"data\/myday\.json"/.test(fs.readFileSync(path.join(ROOT, "sw.js"), "utf8")) && /async function prefetchClips/.test(audioSrc), "offline: the sentences and their clips are cached ahead");
+  yes(/async function runCommute\(/.test(audioSrc) && /function buildCommuteQueue\(/.test(audioSrc) && /kind: "script"/.test(audioSrc) && /kind: "say"/.test(audioSrc), "the programme: your script → say your day → due words, one queue, no clicks");
+  yes(/async function sayRound\(/.test(audioSrc) && /speakP\(sent\.en, 1\)[\s\S]{0,200}gapP\(5\)/.test(audioSrc), "say your day by ear: English first, a gap to produce, then the model");
+  yes(/body\.commute \.ac-ar \{ font-size: 44px/.test(audioSrc) && /document\.body\.classList\.toggle\("commute"/.test(audioSrc), "one layout — big type if he looks, nothing if he doesn't");
+  yes(/sentEns: \(S\.heardSents/.test(audioSrc) && /commute-check-done/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "the next morning's Say your day starts with what he heard");
   yes(/function planScript\(/.test(planSrc) && /Sunday script/.test(planSrc), "the Sunday script: what he said or wrote and got right this week, on the door");
   yes(/Evenings are yours/.test(planSrc), "after 20:00 the door protects his evening instead of nudging");
   yes(/type === "myday" \? \(planEasyDay\(\) \? 6 : 10\)/.test(planSrc), "say your day has a ten-minute budget — his real slot (six on a lighter day)");

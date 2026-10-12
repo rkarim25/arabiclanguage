@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv4zuf1w">
-  <link rel="stylesheet" href="css/style.css?v=mv4zuf1w">
+  <link rel="stylesheet" href="css/fonts.css?v=mv503xsf">
+  <link rel="stylesheet" href="css/style.css?v=mv503xsf">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -32,16 +32,29 @@
     .ac-meta { font-size: 13px; color: var(--muted); text-align: center; margin-top: 12px; }
     .ac-pill { display:inline-block; background: rgba(255,255,255,.16); border-radius: 999px; padding: 3px 12px; font-size: 12.5px; font-family: var(--font-ui); }
   </style>
+
+<style>
+  /* the commute layout — one way whether the phone is in the pocket or in the hand */
+  body.commute h1, body.commute p.sub, body.commute #acGrade { display: none !important; }
+  body.commute .ac-stage { min-height: 46vh; display: flex; flex-direction: column; justify-content: center; }
+  body.commute .ac-ar { font-size: 44px; line-height: 1.5; }
+  body.commute .ac-en { font-size: 22px; }
+  body.commute .ac-status { font-size: 15px; }
+  body.commute #acControls .ac-btn { min-height: 60px; font-size: 19px; flex: 1 1 40%; }
+  body.commute #acControls { position: sticky; bottom: 12px; gap: 10px; flex-wrap: wrap; }
+</style>
 </head>
 <body>
 <main>
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mv4zuf1w"></script>
-<script src="js/app.js?v=mv4zuf1w"></script>
-<script src="js/tracker.js?v=mv4zuf1w"></script>
-<script src="js/plan.js?v=mv4zuf1w"></script>
+<script src="js/srs.js?v=mv503xsf"></script>
+<script src="js/frames.js?v=mv503xsf"></script>
+<script src="js/freetry.js?v=mv503xsf"></script>
+<script src="js/app.js?v=mv503xsf"></script>
+<script src="js/tracker.js?v=mv503xsf"></script>
+<script src="js/plan.js?v=mv503xsf"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -94,9 +107,32 @@ async function buildWords() {
     .slice(0, 40);
 }
 
-/* whole sentences from Sentence Practice — real conjugations he's drilling */
+/* whole sentences: HIS OWN DAY first (the Sunday script + the Say-your-day pool, chosen by
+   the Free-try engine at his level), then the bank; the conjugation frames remain the
+   fallback when the engine or the data is not there. 12 Oct: "a live user-adjusted
+   learning plan that complements my learning". */
 async function buildSentences() {
   try {
+    if (typeof FreeTry !== "undefined" && FreeTry && FreeTry.plan) {
+      const [md, bank] = await Promise.all([
+        fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+        fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+      ]);
+      const mine = (md.sentences || []).filter(s => s.who === "me").map(s => ({ key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", words: s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).map(w => [w, ""]), src: "myday", track: "everyday", use: 3,
+        pattern: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).pattern : null, frames: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).frames : [] }));
+      const everyday = (bank.sentences || []).filter(s => s.track !== "quran").map(s => Object.assign({}, s, { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))) }));
+      const script = new Set((typeof planScript === "function" ? planScript() : []).map(x => String(x.en).trim().toLowerCase()));
+      const hw = store.get("ats-homework", null);
+      const ctx = { now: Date.now(), srs: getSrs(), log: store.get("ats-log", []), freq: {}, homework: new Set((hw && hw.keys) || []), size: 14, relaxFrom: 4,
+        boost: key => (/^md:/.test(key) ? 2 : 0), wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null };
+      const plan = FreeTry.plan(mine.concat(everyday), ctx);
+      // the script he has already proved comes back first — the commute is where it settles by ear
+      const proven = mine.concat(everyday).filter(s => script.has(String(s.en).trim().toLowerCase())).slice(0, 6);
+      const seen = new Set();
+      const out = proven.concat(plan.list).filter(s => { if (seen.has(s.key)) return false; seen.add(s.key); return true; })
+        .map(s => ({ ar: s.ar, en: s.en, tr: s.tr || "", key: s.key, verb: s.pattern || "", person: s.src || "", tense: s._try ? s._try.why : "" }));
+      if (out.length >= 6) return out;
+    }
     const d = await fetch("data/sentences.json").then(r => r.json());
     const out = [];
     d.verbs.forEach(v => d.persons.forEach(p => d.tenses.forEach(t => {
@@ -172,7 +208,7 @@ function setMediaSession() {
   try {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: S && S.commute ? "🚗 Arabic commute — recall in the gaps" : "🎧 Audio Coach",
-      artist: "⏭ = I had it · ⏮ = didn't, bring it back",
+      artist: "⏭ = I had it, next · ⏮ = hear it again",
     });
     navigator.mediaSession.setActionHandler("pause", () => pause());
     navigator.mediaSession.setActionHandler("play", () => resume());
@@ -182,9 +218,7 @@ function setMediaSession() {
     navigator.mediaSession.setActionHandler("nexttrack", () => {
       if (S && S.current && !S.graded) gradeWord(true); else skip();
     });
-    navigator.mediaSession.setActionHandler("previoustrack", () => {
-      if (S && S.current && !S.graded) gradeWord(false);
-    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => back());   // ⏮ = hear it again (12 Oct)
     navigator.mediaSession.playbackState = "playing";
   } catch (e) {}
 }
@@ -353,19 +387,23 @@ function renderControls(state) {
     prefetchClips();
   } else if (state === "playing") {
     c.innerHTML = `
-      <button class="ac-btn ghost" id="acSkip">⏭ Skip</button>
+      <button class="ac-btn ghost" id="acBack" title="hear the previous one again">⏮ Back</button>
       <button class="ac-btn primary" id="acPause">⏸ Pause</button>
+      <button class="ac-btn ghost" id="acSkip">⏭ Skip</button>
       <button class="ac-btn ghost" id="acStop">⏹ Stop</button>`;
     document.getElementById("acPause").onclick = pause;
     document.getElementById("acSkip").onclick = skip;
+    document.getElementById("acBack").onclick = back;
     document.getElementById("acStop").onclick = stop;
   } else if (state === "paused") {
     c.innerHTML = `
-      <button class="ac-btn ghost" id="acSkip">⏭ Skip</button>
+      <button class="ac-btn ghost" id="acBack" title="hear the previous one again">⏮ Back</button>
       <button class="ac-btn primary" id="acResume">▶ Resume</button>
+      <button class="ac-btn ghost" id="acSkip">⏭ Skip</button>
       <button class="ac-btn ghost" id="acStop">⏹ Stop</button>`;
     document.getElementById("acResume").onclick = resume;
     document.getElementById("acSkip").onclick = skip;
+    document.getElementById("acBack").onclick = back;
     document.getElementById("acStop").onclick = stop;
   }
 }
@@ -383,7 +421,100 @@ async function start(commute) {
   acquireWake();
   setMediaSession();
   render("playing");
-  runLoop();
+  document.body.classList.toggle("commute", !!commute);   // one layout: big type, four thumb-sized controls
+  if (commute) runCommute(); else runLoop();
+}
+
+/* ---------- THE COMMUTE PROGRAMME (12 Oct) ----------
+   "phone in my pocket learning and trying to recall, or possibly listen and look at the
+   screen … lots of clicks is not possible … it needs to be just one way."
+   Three parts, no clicks: YOUR SCRIPT (what he proved this week — Arabic, a gap to say
+   it back, English, Arabic), SAY YOUR DAY (the morning method flipped to audio — English
+   first, a gap to PRODUCE the Arabic, then the model twice), DUE WORDS (Arabic, gap,
+   English, Arabic). A word is slipped in after every two sentences. Thirteen minutes,
+   then it says done and stops; stopping early still counts. The next morning's Say
+   your day starts with what he heard here (sentences.html reads commute-done). */
+function buildCommuteQueue() {
+  const script = new Set((typeof planScript === "function" ? planScript() : []).map(x => String(x.en).trim().toLowerCase()));
+  const sentScript = sents.filter(s => script.has(String(s.en).trim().toLowerCase())).slice(0, 6);
+  const sentSay = sents.filter(s => !sentScript.includes(s)).slice(0, 14);
+  const q = [];
+  sentScript.forEach(s => q.push({ kind: "script", s }));
+  let wi = 0;
+  sentSay.forEach((s, i) => { q.push({ kind: "say", s }); if (i % 2 === 1 && words.length) q.push({ kind: "word", c: words[wi++ % words.length] }); });
+  words.slice(wi).forEach(c => q.push({ kind: "word", c }));
+  return q;
+}
+async function runCommute() {
+  await speakP("Commute session. Hands free. Say each one back in the gap.", 1);
+  S.queue = buildCommuteQueue(); S.hist = []; S.heardSents = [];
+  while (S && !S.stop) {
+    if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
+    if (commuteElapsedMs() > COMMUTE_MIN * 60000) break;                 // the 13-minute promise
+    const item = S.queue.shift();
+    if (!item) break;
+    S.skip = false; S.backTo = null;
+    await playItem(item);
+    if (!S) break;
+    if (S.backTo) { S.queue.unshift(item); S.queue.unshift(S.backTo); S.backTo = null; continue; }   // ⏮
+    S.hist.push(item);
+  }
+  if (S && S.commute && !S.stop) {
+    setStatus("Session complete");
+    await speakP("That's your commute session done. Every word counted. Well done.", 1);
+    stop();
+  }
+}
+async function playItem(it) {
+  if (!S) return;
+  if (it.kind === "word") { S.lastKind = "word"; await wordBeat(it.c); return; }
+  S.lastKind = "sent";
+  S.current = null; showGrade(false);
+  if (it.kind === "script") { await sentenceRound(it.s); }
+  else { await sayRound(it.s); }
+  if (S && !S.skip && !S.paused) S.heardSents.push({ key: it.s.key || null, en: it.s.en, kind: it.kind });
+}
+/* the morning method by ear: English → produce it in the gap → the model, twice */
+async function sayRound(sent) {
+  if (!S || !sent) return;
+  setWord({ ar: "", en: sent.en, tr: "" }, true);
+  setStatus("Say it in Arabic — in the gap");
+  document.getElementById("acNote").textContent = "your own day — try it out loud";
+  await beat(() => speakP(sent.en, 1));
+  if (guard()) return;
+  await beat(() => gapP(5));
+  if (guard()) return;
+  setStatus("The model:"); setWord({ ar: sent.ar, en: sent.en, tr: sent.tr || "" }, true);
+  document.getElementById("acNote").textContent = "";
+  await beat(() => speakP(sent.ar, 0.7));
+  if (guard()) return;
+  await beat(() => gapP(3));
+  if (guard()) return;
+  await beat(() => speakP(sent.ar, 0.7));
+  if (S && !S.paused && !S.skip) {
+    S.sents++; setCounter();
+    logEvent({ e: "alisten-sent", kind: "say", key: sent.key || null, en: sent.en });
+  }
+}
+/* one word, as the open-ended loop does it: Arabic → gap → English → Arabic */
+async function wordBeat(card) {
+  if (!S || !card) return;
+  S.current = card; S.graded = false; showGrade(true);
+  const prev = heardLog.find(h => h.key === card.key);
+  if (prev) { heardLog.splice(heardLog.indexOf(prev), 1); heardLog.push(prev); }
+  else heardLog.push({ key: card.key, v: card.v, g: null });
+  setWord(card.v, false);
+  setStatus("Listen…"); document.getElementById("acNote").textContent = "";
+  await beat(() => speakP(card.v.ar, 0.7));
+  if (guard()) return;
+  setStatus("…what does it mean?"); document.getElementById("acNote").textContent = "recall it now";
+  await beat(() => gapP(3));
+  if (guard()) return;
+  setStatus("It means:"); setWord(card.v, true); document.getElementById("acNote").textContent = "";
+  await beat(() => speakP(card.v.en, 1));
+  if (guard()) return;
+  await beat(() => speakP(card.v.ar, 0.7));
+  if (S && !S.paused && !S.skip) { S.taught++; setCounter(); logEvent({ e: "alisten", key: card.key }); }
 }
 
 function nextWord() { const w = words[S.wIdx % words.length]; S.wIdx++; return w; }
@@ -397,7 +528,15 @@ async function runLoop() {
   while (S && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
     if (S.commute && commuteElapsedMs() > COMMUTE_MIN * 60000) break;   // the 15-min promise
+    // ⏮ during a sentence: play that sentence again before anything else
+    if (S.replaySent && sents.length) {
+      S.replaySent = false; S.skip = false;
+      await sentenceRound(nextSent());
+      if (!S) break;
+      continue;
+    }
     // a word beat
+    S.lastKind = "word";
     const card = nextWord();
     if (!S || S.stop) break;   // stop() may have nulled S while the last await settled
     // reset here, not only at loop bottom: a skip/✓ lands via `continue`, which
@@ -426,28 +565,10 @@ async function runLoop() {
 
     if (!S) break;
     // a whole-sentence round every few words — real conjugations, extra time
-    if (S.taught && S.taught % WORDS_PER_SENT === 0 && !S.skip && sents.length) {
+    if (S.taught && S.taught % (S.commute ? 2 : WORDS_PER_SENT) === 0 && !S.skip && sents.length) {
       if (S.stop) break;
       S.current = null; showGrade(false);   // sentences aren't SRS cards — no grading
-      const sent = nextSent();
-      setWord({ ar: sent.ar, en: sent.en, tr: "" }, false);
-      setStatus("Now a whole sentence — listen");
-      await beat(() => speakP(sent.ar, 0.7));
-      if (!guard()) {
-        setStatus("…take your time. Who is doing it, and when?");
-        document.getElementById("acNote").textContent = "whole meaning — person and tense too";
-        await beat(() => S.commute ? gapP(5) : sleepP(SENT_RECALL_MS));
-        if (!guard()) {
-          setStatus("It means:"); setWord({ ar: sent.ar, en: sent.en, tr: "" }, true);
-          document.getElementById("acNote").textContent = "";
-          await beat(() => speakP(sent.en, 1));
-          if (!guard()) await beat(() => speakP(sent.ar, 0.7));
-          if (!S.paused && !S.skip) {
-            S.sents++; setCounter();
-            logEvent({ e: "alisten-sent", verb: sent.verb, person: sent.person, tense: sent.tense });
-          }
-        }
-      }
+      await sentenceRound(nextSent());
       if (S && !S.commute) await beat(() => sleepP(400));
     }
     if (!S) break;
@@ -461,6 +582,28 @@ async function runLoop() {
   }
 }
 
+/* one whole-sentence round: Arabic → the gap (say it, or recall it) → English → Arabic again */
+async function sentenceRound(sent) {
+  if (!S || !sent) return;
+  S.lastKind = "sent";
+  setWord({ ar: sent.ar, en: sent.en, tr: sent.tr || "" }, false);
+  setStatus(S.commute ? "A whole sentence — say it back in the gap" : "Now a whole sentence — listen");
+  await beat(() => speakP(sent.ar, 0.7));
+  if (guard()) return;
+  setStatus("…take your time. Say it, or recall what it means.");
+  document.getElementById("acNote").textContent = sent.tense ? String(sent.tense) : "whole meaning — person and tense too";
+  await beat(() => S.commute ? gapP(5) : sleepP(SENT_RECALL_MS));
+  if (guard()) return;
+  setStatus("It means:"); setWord({ ar: sent.ar, en: sent.en, tr: sent.tr || "" }, true);
+  document.getElementById("acNote").textContent = "";
+  await beat(() => speakP(sent.en, 1));
+  if (guard()) return;
+  await beat(() => speakP(sent.ar, 0.7));
+  if (S && !S.paused && !S.skip) {
+    S.sents++; setCounter();
+    logEvent({ e: "alisten-sent", key: sent.key || null, en: sent.en, verb: sent.verb, person: sent.person, tense: sent.tense });
+  }
+}
 // run one cancelable step; swallow skip/pause cancellation
 function beat(fn) { return fn(); }
 // after a step, decide whether to restart the current word (pause) — returns true if the loop should `continue`
@@ -490,6 +633,16 @@ function resume() {
   if (S.onResume) { const r = S.onResume; S.onResume = null; r(); }
 }
 function skip() { if (!S) return; S.skip = true; if (S.cancel) S.cancel(); stopAllAudio(); setStatus("Skipping…"); }
+/* ⏮ back — hear the previous item again (his 12 Oct ask: "skip forward backward").
+   The playlists are cursors, so stepping back is moving the cursor: during a word, two
+   steps (the current one was already taken); during a sentence, replay that sentence. */
+function back() {
+  if (!S) return;
+  if (S.commute && S.hist) { S.backTo = S.hist.pop() || null; if (!S.backTo) return; }
+  else if (S.lastKind === "sent") { S.sIdx = Math.max(0, S.sIdx - 1); S.replaySent = true; }
+  else { S.wIdx = Math.max(0, S.wIdx - 2); }
+  S.skip = true; if (S.cancel) S.cancel(); stopAllAudio(); setStatus("Back…");
+}
 function stop() {
   if (!S) return;
   S.stop = true; S.playing = false; if (S.cancel) S.cancel();
@@ -499,7 +652,9 @@ function stop() {
   if (wasCommute) {
     // the trained set: what tomorrow's dashboard check measures against matched controls
     logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
+               sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean), sentEns: (S.heardSents || []).map(x => x.en),
                min: Math.round(commuteElapsedMs() / 60000) });
+    document.body.classList.remove("commute");
   } else {
     logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known });
   }
@@ -534,7 +689,7 @@ async function prefetchClips() {
     addT("That's your commute session done. Every word counted. Well done.");
     addT("Audio coach. Listen, and recall the meaning before I say it.");
     w.forEach(c => { addT(c.v.ar); addT(c.v.en); });
-    s.slice(0, 12).forEach(x => { addT(x.ar); addT(x.en); });
+    s.slice(0, 16).forEach(x => { addT(x.ar); addT(x.en); });
     let n = 0;
     for (const u of urls) { try { const r = await fetch(u); if (r.ok) n++; } catch (e) {} }
     if (el()) el().textContent = `✓ ${n} clips cached — commute works offline`;

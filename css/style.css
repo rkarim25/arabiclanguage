@@ -1512,3 +1512,5 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 
 .plan-door .pd-budget { margin-top: 10px; padding: 8px 10px; border: 1px dashed var(--accent); border-radius: 10px; font-size: 13px; line-height: 1.7; }
 .plan-door .pd-link-hw { border-style: solid; }
+
+.plan-door .pd-link-car { border-style: solid; border-color: var(--accent); color: var(--accent); }

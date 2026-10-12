@@ -303,6 +303,11 @@ function planNurtureLine(p) {
   const script = planScript();
   const dow = new Date().getDay();
   if (planEasyDay()) return "Two heavy days in a row — today is deliberately lighter: six sentences, easier ones. That is the programme working, not you slipping.";
+  {
+    const log = store.get("ats-log", []);
+    const cd = [...log].reverse().find(e => e.e === "commute-done" && e.sentEns && e.sentEns.length && Date.now() - e.t < 36 * 3600000);
+    if (cd && !log.some(e => e.e === "commute-check-done" && e.forT === cd.t)) return `You heard ${cd.sentEns.length} sentence${cd.sentEns.length > 1 ? "s" : ""} on the commute — this morning's ten minutes starts with them.`;
+  }
   if (yesterday && !yesterday.on && dow !== 1) return "Yesterday went to life. No catching up to do — ten minutes this morning simply continues.";
   if (lastMood && lastMood.mood === "good" && script.length) return `Last time felt good and you proved “${script[0].en}” — today adds to it.`;
   if (dow === 6 && script.length) return `${script.length} sentence${script.length > 1 ? "s" : ""} ready for her tomorrow. Rehearse once; don't add.`;
@@ -826,7 +831,9 @@ function planDoorHTML(p) {
       <div class="pd-next">${cur.icon} <strong>${cur.title}</strong> <span class="pd-muted">— ${cur.sub || ""}</span></div>`;
   }
   const opt = planOptional(p);
-  const optHtml = opt.length ? `<div class="pd-opt"><span class="pd-muted">If you have energy (15 min, evening is fine — never owed):</span> ${opt.map(b => `<a href="${b.url}" class="pd-link${b.evening ? " pd-link-hw" : ""}">${b.icon} ${b.title}</a>`).join(" ")}</div>` : "";
+  const optHtml = `<div class="pd-opt"><span class="pd-muted">If you have energy (15 min, evening is fine — never owed):</span>
+    <a href="audio.html?commute=1" class="pd-link pd-link-car" title="Hands-free: your own sentences and due words by ear, with gaps to say them back. Pause, back, skip, stop — on the lock screen too. Works offline after one visit on Wi-Fi. Ten minutes or more counts as the whole day; nothing is planned around it.">🚗 Commute — hands-free, your sentences by ear</a>
+    ${opt.map(b => `<a href="${b.url}" class="pd-link${b.evening ? " pd-link-hw" : ""}">${b.icon} ${b.title}</a>`).join(" ")}</div>`;
   return `
     <div class="pd-head"><span class="pd-today">Today</span><span class="pd-strip">${strip}</span></div>
     ${nurture ? `<div class="pd-nurture">${nurture}</div>` : ""}
