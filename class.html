@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv6005hk">
-  <link rel="stylesheet" href="css/style.css?v=mv6005hk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv6ydqg4">
+  <link rel="stylesheet" href="css/style.css?v=mv6ydqg4">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -437,8 +437,8 @@
         </div>
       </summary>
       <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px;flex-wrap:wrap;gap:6px">
-        <p style="font-size:12.5px;color:var(--muted);margin:0">
-          Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (daily routine, times, chores, and Mu'awwidhatayn concepts).
+        <p style="font-size:12.5px;color:var(--muted);margin:0" id="classAiPromptSub">
+          Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson.
         </p>
         <span style="font-size:11.5px;color:var(--muted)">💡 1. Copy Prompt → 2. Open App → 3. Tap 🎧 Voice Mode</span>
       </div>
@@ -497,16 +497,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mv6005hk"></script>
-<script src="js/curriculum.js?v=mv6005hk"></script>
-<script src="js/srs.js?v=mv6005hk"></script>
-<script src="js/app.js?v=mv6005hk"></script>
-<script src="js/tracker.js?v=mv6005hk"></script>
-<script src="js/frames.js?v=mv6005hk"></script>
-<script src="js/freetry.js?v=mv6005hk"></script>
-<script src="js/errors.js?v=mv6005hk"></script>
-<script src="js/plan.js?v=mv6005hk"></script>
-<script src="js/account.js?v=mv6005hk"></script>
+<script src="js/progress-model.js?v=mv6ydqg4"></script>
+<script src="js/curriculum.js?v=mv6ydqg4"></script>
+<script src="js/srs.js?v=mv6ydqg4"></script>
+<script src="js/app.js?v=mv6ydqg4"></script>
+<script src="js/tracker.js?v=mv6ydqg4"></script>
+<script src="js/frames.js?v=mv6ydqg4"></script>
+<script src="js/freetry.js?v=mv6ydqg4"></script>
+<script src="js/errors.js?v=mv6ydqg4"></script>
+<script src="js/plan.js?v=mv6ydqg4"></script>
+<script src="js/account.js?v=mv6ydqg4"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1419,6 +1419,16 @@ function renderVocabAndSentences() {
   const classPrompt = buildClassAiPrompt(cls);
   const promptEl = document.getElementById("classAiPromptText");
   if (promptEl) promptEl.textContent = classPrompt;
+  const promptSub = document.getElementById("classAiPromptSub");
+  if (promptSub) {
+    if (cls.id === "c-2026-10-11") {
+      promptSub.textContent = "Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (Ahmad's trip to the village, breakfast foods, market shopping, past tense -tu narration, and ordinals).";
+    } else if (cls.id === "c-2026-09-27") {
+      promptSub.textContent = "Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (daily routine, times, chores, and Mu'awwidhatayn concepts).";
+    } else {
+      promptSub.textContent = "Paste into ChatGPT/Claude voice mode on your phone to roleplay this Sunday's lesson (Samer looking for a flat, furniture, and days of the week).";
+    }
+  }
   const btnPrompt = document.getElementById("btnClassCopyPrompt");
   if (btnPrompt) {
     btnPrompt.onclick = () => {

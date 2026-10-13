@@ -48,7 +48,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 | Page | Feature | What It Drills | Best For |
 |---|---|---|---|
 | **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the day + variations | Daily 5-minute fluency habit |
-| **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
+| **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | A Trip to the Village & Breakfast Foods (11 Oct), Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
 | **Speaking Lab (`speaking.html`)** | Mic Drill & AI Tutor Bridge | Pronunciation self-check, shadow sentences + 1-click Learner Dossier copy | Pronunciation calibration & hands-free prep |
 | **End-of-Week Review (`converse.html`)** | Spoken Review & Oral Exam | All sentences of the current week + 8 real-life Umrah scenarios | Weekly oral check & progress benchmarking |
 
@@ -419,6 +419,44 @@ Instructions:
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
 
+### P. Sunday 11 Oct Lesson — A Trip to the Village, Breakfast Foods & Past Tense (-tu) Narration
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting a 5-minute spoken workout on his Sunday 11 Oct Preply class.
+Context: Sunday 11 Oct lesson covered Ahmad's trip to the village (Story 9), breakfast foods, market shopping, and first-person past tense narration (-tu):
+- Breakfast Foods: بَيْض (eggs), تَمْر (dates), جَوْز (walnuts), كُوبُ حَلِيبٍ (glass of milk), خُبْز (bread), جُبْن (cheese).
+- Shopping & Lunch: دَجَاج (chicken), سَمَك (fish), سَلَطَة (salad), سَمْن (ghee), سُكَّر (sugar), وَجْبَة (meal), بُقُولِيَّات (legumes).
+- Clock & Ordinals: السَّاعَةُ السَّادِسَةُ (6 o'clock), السَّاعَةُ الثَّامِنَةُ (8 o'clock), الأَوَّل (first), الثَّانِي (second), الثَّالِث (third).
+- Past Tense Narration (-tu): قَرَأْتُ (I read), صَلَّيْتُ (I prayed), أَكَلْتُ (I ate), شَرِبْتُ (I drank), ذَهَبْتُ (I went), عُدْتُ (I returned), سَاعَدْتُ (I helped).
+- Qur'anic Pairs: عِقَاب / عَذَاب (punishment), أَوَّل / آخِر (first/last), فَوْز / نَصْر (triumph), and 90:14 إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ (feeding on a day of severe hunger).
+Instructions:
+1. Greet Reza warmly: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! صَبَاحُ الخَيْرِ. هَلْ أَكَلْتَ الفَطُورَ اليَوْمَ؟"
+2. Ask what he ate for breakfast in the village scenario: prompt for "أَكَلْتُ بَيْضًا وَخُبْزًا وَجُبْنًا، وَشَرِبْتُ كُوبَ حَلِيبٍ".
+3. Transition to past tense narration: ask what he did on Friday ("مَاذَا فَعَلْتَ يَوْمَ الجُمُعَةِ؟") — prompt him to produce past tense forms: "صَلَّيْتُ الفَجْرَ، ثُمَّ قَرَأْتُ القُرْآنَ، وَذَهَبْتُ إِلَى القَرْيَةِ فِي السَّاعَةِ السَّادِسَةِ".
+4. Ask what he bought on the way: prompt for "اشْتَرَيْتُ دَجَاجًا وَسَمَكًا وَسَلَطَةً".
+5. Drill ordinals & clock variations: swap the hours (السَّادِسَة ↔ السَّابِعَة ↔ الثَّامِنَة) and ordinals (الدَّوْر الأَوَّل ↔ الثَّانِي ↔ الثَّالِث).
+6. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel, pause for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Q. Commute By-Ear Reinforcement (Emergency Door, Tired, Near/Far & Entering)
+```text
+Role: You are Reza's spoken Arabic drill partner reinforcing sentences and words from his 13 Oct commute audio session.
+Context: Reza completed a 9.6-minute hands-free commute session listening to these sentences and vocabulary:
+- Target Phrases:
+  1. هَذَا بَابُ الطَّوَارِئ (This is the emergency door — s:pr:191)
+  2. أَنَا تَعْبَانٌ قَلِيلًا (I am a little tired — md:15)
+  3. هَلْ هُوَ بَعِيدٌ؟ (Is it far? — ph-dir:2) ↔ هَلْ هُوَ قَرِيبٌ؟ (Is it near? — ph-dir:1)
+  4. أَهْلُ البَيْتِ (The people of the house — s:gx:idafa:2)
+  5. مَدْخَل / دُخُول (Entrance / Entering — root d-kh-l)
+Instructions:
+1. Greet Reza warmly: "أَهْلًا يَا رِضَا! كَيْفَ حَالُكَ اليَوْمَ؟" (Prompt for "أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي بِخَيْرٍ").
+2. Point out an emergency exit or entrance: prompt him to say "هَذَا بَابُ الطَّوَارِئ" and "أَيْنَ مَدْخَلُ العِمَارَةِ؟".
+3. Ask about distances: "هَلِ المَسْجِدُ بَعِيدٌ عَنْ هُنَا؟" (Prompt for "لَا، هُوَ قَرِيبٌ" or "نَعَمْ، هُوَ بَعِيدٌ").
+4. Drill variations: swap adjectives (قَرِيب ↔ بَعِيد, تَعْبَان ↔ مَشْغُول), drill question form with هَلْ and أَيْنَ.
+5. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel.
+6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
 ### Mnemonic Quick-Reference Matrix for AI Voice Partners
 | Word | Arabic | Mnemonic Association | Core Meaning |
 |---|---|---|---|
@@ -435,7 +473,14 @@ Instructions:
 | *yawm ath-thulāthāʾ* | `يَوْمُ الثُّلَاثَاءِ` | **Third day of work week (thalātha = 3)** | Tuesday |
 | *al-jawwu bārid* | `الجَوُّ بَارِدٌ` | **The atmosphere / air is freezing** | The weather is cold |
 | *jazīlan* | `جَزِيلًا` | **Thanks a GAZILLION** | Deeply / abundantly |
-| *surūr* | `سُرُور` | **Bengali shurshuri (সুড়سوڑی) joy tickle** | Pleasure / delight |
+| *surūr* | `سُرُور` | **Bengali shurshuri (সুড়সুড়ি) joy tickle** | Pleasure / delight |
+| *bāb aṭ-ṭawāriʾ* | `بَابُ الطَّوَارِئ` | **Emergency door / exit** | Emergency door |
+| *taʿbān qalīlan* | `تَعْبَانُ قَلِيلًا` | **A little tired** | A little tired |
+| *qarīb / baʿīd* | `قَرِيب / بَعِيد` | **Near / Far** | Near / Far |
+| *madkhal / dukhūl* | `مَدْخَل / دُخُول` | **Root d-kh-l: enter** | Entrance / Entering |
+| *bayḍ / tamr / jawz* | `بَيْض / تَمْر / جَوْز` | **Village breakfast plate** | Eggs / Dates / Walnuts |
+| *masghabah* | `مَسْغَبَة` | **Severe famine / extreme hunger (90:14)** | Severe hunger |
+| *buqūliyyāt* | `بُقُولِيَّات` | **Beans & lentils** | Legumes |
 | *al-waswās* | `الْوَسْوَاس` | **Repeated whispered promptings** (root w-s-w-s) | The repetitive whisperer (subtle evil promptings) |
 | *al-khannās* | `الْخَنَّاس` | **The slinker** (retreats upon God's mention) | The one who slinks away upon dhikr |
 | *ghāsiq* | `غَاسِق` | **Pitch black nightfall** | Night as darkness completely penetrates |

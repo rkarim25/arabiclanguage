@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv6005hk";
+const DATA_V = "mv6ydqg4";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4089,13 +4089,13 @@ function generateLearnerDossierMarkdown(currentContext) {
 
   md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;
   md += `- **Preply Unit 1 & Sunday Lessons:**\n`;
-  md += `  - *Housing & The Flat:* flat (شَقَّة), building (عِمَارَة), floor (طَابِق), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
+  md += `  - *Trip to the Village (11 Oct):* breakfast foods (eggs بَيْض, dates تَمْر, walnuts جَوْز, glass of milk كُوب حَلِيب, bread خُبْز, cheese جُبْن), shopping on the way (chicken دَجَاج, fish سَمَك, salad سَلَطَة, ghee سَمْن, sugar سُكَّر), meal (وَجْبَة), legumes (بُقُولِيَّات), ordinals (first الأَوَّل, second الثَّانِي, third الثَّالِث), clock (6 o'clock السَّادِسَة, 8 o'clock الثَّامِنَة), past tense board sentences (-tu: قَرَأْتُ، صَلَّيْتُ، أَكَلْتُ، شَرِبْتُ، ذَهَبْتُ، عُدْتُ، سَاعَدْتُ), Qur'anic pairs (punishment عِقَاب / عَذَاب, first/last أَوَّل / آخِر, triumph فَوْز / نَصْر, famine day 90:14 إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ)\n`;
+  md += `  - *Housing & The Flat:* flat (شَقَّة), building (عِمَارَة), floor (طَابِق / دَوْر), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), cupboards (خَزَائِن), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
   md += `  - *Daily Routine & Chores (27 Sep):* work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), newspaper (صَحِيفَة), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), tidy (أُرَتِّبُ), party (حَفْلَة), trip (رِحْلَة), sleep (أَنَامُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
   md += `  - *Protection Concepts (Falaq & Nas, 27 Sep):* refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), King (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), slinker (الْخَنَّاس), chests (صُدُور)\n`;
   md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange)\n`;
   md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى* / *فِي السَّاعَةِ*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
   md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
-
   md += `## 3. Strict Rules for AI Voice Sessions\n`;
   md += `1. **Max 2 Sentences:** Never exceed 2 short sentences per turn in voice mode.\n`;
   md += `2. **Modern Standard Arabic (الفصحى):** Use clear MSA with full vowels (tashkeel). No slang/regional dialects.\n`;
@@ -4103,9 +4103,8 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns, turn statements into questions with hal/ayna/mata/kam).\n`;
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
-
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Variation Misses (12 Oct):**\n`;
+  md += `- **Active Telemetry Slips & Variation Misses (12–13 Oct):**\n`;
   md += `  - *سُلَّم* (stairs, ladder — rated learning; mnemonic: solemn climb up the stairs / safe steps)\n`;
   md += `  - *مِصْعَد* (lift, elevator — rated learning; root ṣ-ʿ-d: machine that ascends)\n`;
   md += `  - *دَوْر* (floor / turn — rated learning; "my turn on this floor"); *طَابِق* (floor / storey); *خَزَائِن* (cupboards)\n`;
@@ -4116,6 +4115,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;
   md += `  - *Verb Tense Distinction (Chapter 4):* past ـتُ (*قَرَأْتُ / صَلَّيْتُ*) vs present أَـ (*أَقْرَأُ / أُصَلِّي*) vs future سَـ (*سَأَذْهَبُ*)\n`;
   md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
+  md += `  - *Commute by Ear Anchors (13 Oct):* emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering (دُخُول / مَدْخَل)\n`;
   md += `  - *الْوَسْوَاس* (the repetitive whisperer), *عُقَد* (knots), *حَاسِد* (envier), *الْخَنَّاس* (the slinker)\n`;
   md += `  - *الفَطُور* (breakfast) — **celebrated win!** Promoted to solid via the mini-iftar / FAT TOUR mnemonic\n`;
   md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;

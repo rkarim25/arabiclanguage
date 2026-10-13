@@ -14,14 +14,14 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - Daily 5-minute interactive reader across 10 high-frequency chapters (100 core sentences) and 10 short surahs by ear.
-  - **Live Telemetry (12 Oct 2026):** 3,334 recorded practice events; 776 cards in SRS (**306 solid/strong** in Box 3–5: 245 Box 5, 25 Box 4, 36 Box 3); 393 active learning (350 Box 1, 43 Box 2); 77 need review (Box 0); passed Sunday Preply Class Mastery Test at 100% (8/8); passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); Chapter drills 1–10 (300 progressive lines with neural audio) deployed.
+  - **Live Telemetry (13 Oct 2026):** 3,388 recorded practice events; 1,176 cards in SRS (**662 solid/strong** in Box 3–5: 588 Box 5, 26 Box 4, 48 Box 3); 421 active learning (369 Box 1, 52 Box 2); 93 need review (Box 0); passed Sunday Preply Class 11 Oct reading passage & vocabulary; passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); completed Tuesday 13 Oct commute audio session (9.6 min, 27 words by ear, 11 sentences); Chapter drills 1–10 (300 progressive lines with neural audio) active.
   - **Curriculum Standings:**
-    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score).
-    - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score).
+    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score; 14.1% salah coverage).
+    - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score; deployable score ~1.7).
   - **Recent Activity & Diagnostic Wins:**
-    - 12 Oct practice session: practiced sentences in Say Your Day (`myday:1`) and reviewed vocabulary.
-    - Slipped items identified in 12 Oct telemetry: *سُلَّم* (stairs, ladder — rated learning), *مِصْعَد* (lift, elevator — rated learning), *دَوْر* (floor, storey, turn — rated learning), *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning), *الجَوُّ بَارِدٌ اليَوْمَ* (the weather is cold today), *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day), *أُسَاعِدُ* (I help).
+    - 13 Oct commute audio session: 9.6 min completed hands-free (*بَابُ الطَّوَارِئ*, *تَعْبَانُ قَلِيلًا*, *بَعِيد / قَرِيب*, *دُخُول / مَدْخَل*).
+    - 12–13 Oct practice sessions: practiced Say Your Day sentences (`myday:1`) and reviewed housing vocabulary.
+    - Slipped items under reinforcement: *سُلَّم* (stairs, ladder — rated learning), *مِصْعَد* (lift, elevator — rated learning), *دَوْر* (floor, storey, turn — rated learning), *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning), *الجَوُّ بَارِدٌ اليَوْمَ* (the weather is cold today), *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day), *أُسَاعِدُ* (I help).
     - Mnemonic additions: **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 
@@ -64,11 +64,13 @@ Reza's active vocabulary is drawn from the following verified curriculum cluster
 - **The Seven Days of the Week:** السَّبْت (Saturday), الأَحَد (Sunday), الاِثْنَيْن (Monday), الثُّلَاثَاء (Tuesday), الأَرْبِعَاء (Wednesday), الخَمِيس (Thursday), الجُمُعَة (Friday).
 - **Family & Relatives (Maternal):** خَال (maternal uncle), خَالَة (maternal aunt), خَالَانِ (two maternal uncles), خَالَتَانِ (two maternal aunts), أَخ (brother), أُخْت (sister).
 - **Daily Routines & The Working Day (27 Sep):** يَوْمُ العَمَلِ (work day), يَوْمُ العُطْلَةِ (day off), أَسْتَيْقِظُ (I wake up), مُبَكِّرًا (early), مُتَأَخِّرًا (late), السَّاعَةُ السَّابِعَةُ (7 o'clock), السَّاعَةُ الثَّامِنَةُ (8 o'clock), السَّاعَةُ الثَّانِيَةَ عَشْرَةَ (12 o'clock), أَغْسِلُ (I wash), أَلْبَسُ (I wear), مَلَابِس (clothes), أَعُودُ (I return), أَتَنَاوَلُ (I eat/have meal), الفَطُور (breakfast), صَحِيفَة (newspaper), التِّلْفَاز (television), أُسَاعِدُ (I help), كَنَس (sweeping), أَطْبَاق (dishes), حَفْلَة (party), رِحْلَة (trip/journey), أُرَتِّبُ (I arrange/tidy), أَنَامُ (I sleep).
+- **A Trip to the Village & Breakfast Foods (11 Oct):** بَيْض (eggs), تَمْر (dates), جَوْز (walnuts), كُوبُ حَلِيبٍ (glass of milk), خُبْز (bread), جُبْن (cheese), دَجَاج (chicken), سَمَك (fish), سَلَطَة (salad), سَمْن (ghee), سُكَّر (sugar), وَجْبَة (meal), بُقُولِيَّات (legumes), السَّادِسَة (6 o'clock), الثَّامِنَة (8 o'clock), الأَوَّل (first), الثَّانِي (second), الثَّالِث (third). Board past tense narration (-tu): قَرَأْتُ، صَلَّيْتُ، أَكَلْتُ، شَرِبْتُ، ذَهَبْتُ، عُدْتُ، سَاعَدْتُ. Qur'anic pairs: عِقَاب / عَذَاب, أَوَّل / آخِر, فَوْز / نَصْر, 90:14 إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ.
 - **Deep Protection Concepts — Mu'awwidhatayn (Falaq & Nas, 27 Sep):** أَعُوذُ (I seek refuge), الْفَلَق (the daybreak/cleaving), غَاسِق (intense nightfall), وَقَبَ (penetrating darkness), النَّفَّاثَات (blowers upon knots), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور (chests), مَلِك (Sovereign King), النَّاس (humankind).
-- **Key Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives/resides), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (I forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange), أَنَامُ (I sleep).
+- **Key Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives/resides), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (I forgot), يَشْرَبُ / أَشْرَبُ / شَرِبْتُ (drinks/drank), يَقْرَأُ / قَرَأْتُ (reads/read), يَذْهَبُ / سَأَذْهَبُ / ذَهَبْتُ (goes/went), أَسْتَيْقِظُ (I wake up), أَعُودُ / عُدْتُ (I return/returned), أُسَاعِدُ / سَاعَدْتُ (I help/helped), أُرَتِّبُ (I arrange), أَنَامُ (I sleep), أَكَلْتُ (I ate).
 - **Dialogue Anchors:**
   1. *Samer looking for a flat* (*سَامِر يَبْحَثُ عَنْ شَقَّةٍ*).
   2. *A Working Day & The Day Off* (*يَوْمُ العَمَلِ وَالعُطْلَةِ*).
+  3. *A Trip to the Village* (*رِحْلَةٌ إِلَى القَرْيَةِ* — Ahmad's day trip, village breakfast, market shopping).
 
 ### B. High-Frequency Everyday Sentence Frames (10 Chapters)
 
@@ -449,6 +451,44 @@ Instructions:
 5. If he mixes up the past suffix (-tu) and present prefix (a-), gently correct immediately: "Remember: -tu is behind you (past), a- is right now (present), sa- is ahead (future)."
 6. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel.
 7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Prompt 14: Sunday 11 Oct Lesson — A Trip to the Village, Breakfast Foods & Past Tense Narration (-tu)
+```text
+Role: You are Reza's personal A1 Arabic speaking tutor conducting a 5-minute spoken workout on his Sunday 11 Oct Preply class.
+Context: Sunday 11 Oct lesson covered Ahmad's trip to the village (Story 9), breakfast foods, market shopping, and first-person past tense narration (-tu):
+- Breakfast Foods: بَيْض (eggs), تَمْر (dates), جَوْز (walnuts), كُوبُ حَلِيبٍ (glass of milk), خُبْز (bread), جُبْن (cheese).
+- Shopping & Lunch: دَجَاج (chicken), سَمَك (fish), سَلَطَة (salad), سَمْن (ghee), سُكَّر (sugar), وَجْبَة (meal), بُقُولِيَّات (legumes).
+- Clock & Ordinals: السَّاعَةُ السَّادِسَةُ (6 o'clock), السَّاعَةُ الثَّامِنَةُ (8 o'clock), الأَوَّل (first), الثَّانِي (second), الثَّالِث (third).
+- Past Tense Narration (-tu): قَرَأْتُ (I read), صَلَّيْتُ (I prayed), أَكَلْتُ (I ate), شَرِبْتُ (I drank), ذَهَبْتُ (I went), عُدْتُ (I returned), سَاعَدْتُ (I helped).
+- Qur'anic Pairs: عِقَاب / عَذَاب (punishment), أَوَّل / آخِر (first/last), فَوْز / نَصْر (triumph), and 90:14 إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ (feeding on a day of severe hunger).
+Instructions:
+1. Greet Reza warmly: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! صَبَاحُ الخَيْرِ. هَلْ أَكَلْتَ الفَطُورَ اليَوْمَ؟"
+2. Ask what he ate for breakfast in the village scenario: prompt for "أَكَلْتُ بَيْضًا وَخُبْزًا وَجُبْنًا، وَشَرِبْتُ كُوبَ حَلِيبٍ".
+3. Transition to past tense narration: ask what he did on Friday ("مَاذَا فَعَلْتَ يَوْمَ الجُمُعَةِ؟") — prompt him to produce past tense forms: "صَلَّيْتُ الفَجْرَ، ثُمَّ قَرَأْتُ القُرْآنَ، وَذَهَبْتُ إِلَى القَرْيَةِ فِي السَّاعَةِ السَّادِسَةِ".
+4. Ask what he bought on the way: prompt for "اشْتَرَيْتُ دَجَاجًا وَسَمَكًا وَسَلَطَةً".
+5. Drill ordinals & clock variations: swap the hours (السَّادِسَة ↔ السَّابِعَة ↔ الثَّامِنَة) and ordinals (الدَّوْر الأَوَّل ↔ الثَّانِي ↔ الثَّالِث).
+6. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel, pause for his answer.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Prompt 15: Commute By-Ear Reinforcement (Emergency Door, Tired, Near/Far & Entering)
+```text
+Role: You are Reza's spoken Arabic drill partner reinforcing sentences and words from his 13 Oct commute audio session.
+Context: Reza completed a 9.6-minute hands-free commute session listening to these sentences and vocabulary:
+- Target Phrases:
+  1. هَذَا بَابُ الطَّوَارِئ (This is the emergency door — s:pr:191)
+  2. أَنَا تَعْبَانٌ قَلِيلًا (I am a little tired — md:15)
+  3. هَلْ هُوَ بَعِيدٌ؟ (Is it far? — ph-dir:2) ↔ هَلْ هُوَ قَرِيبٌ؟ (Is it near? — ph-dir:1)
+  4. أَهْلُ البَيْتِ (The people of the house — s:gx:idafa:2)
+  5. مَدْخَل / دُخُول (Entrance / Entering — root d-kh-l)
+Instructions:
+1. Greet Reza warmly: "أَهْلًا يَا رِضَا! كَيْفَ حَالُكَ اليَوْمَ؟" (Prompt for "أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي بِخَيْرٍ").
+2. Point out an emergency exit or entrance: prompt him to say "هَذَا بَابُ الطَّوَارِئ" and "أَيْنَ مَدْخَلُ العِمَارَةِ؟".
+3. Ask about distances: "هَلِ المَسْجِدُ بَعِيدٌ عَنْ هُنَا؟" (Prompt for "لَا، هُوَ قَرِيبٌ" or "نَعَمْ، هُوَ بَعِيدٌ").
+4. Drill variations: swap adjectives (قَرِيب ↔ بَعِيد, تَعْبَان ↔ مَشْغُول), drill question form with هَلْ and أَيْنَ.
+5. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel.
+6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
 ```
 
 

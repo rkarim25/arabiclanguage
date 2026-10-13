@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv6005hk">
-  <link rel="stylesheet" href="css/style.css?v=mv6005hk">
+  <link rel="stylesheet" href="css/fonts.css?v=mv6ydqg4">
+  <link rel="stylesheet" href="css/style.css?v=mv6ydqg4">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,13 +49,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mv6005hk"></script>
-<script src="js/frames.js?v=mv6005hk"></script>
-<script src="js/freetry.js?v=mv6005hk"></script>
-<script src="js/app.js?v=mv6005hk"></script>
-<script src="js/tracker.js?v=mv6005hk"></script>
-<script src="js/plan.js?v=mv6005hk"></script>
-<script src="js/account.js?v=mv6005hk"></script>
+<script src="js/srs.js?v=mv6ydqg4"></script>
+<script src="js/frames.js?v=mv6ydqg4"></script>
+<script src="js/freetry.js?v=mv6ydqg4"></script>
+<script src="js/app.js?v=mv6ydqg4"></script>
+<script src="js/tracker.js?v=mv6ydqg4"></script>
+<script src="js/plan.js?v=mv6ydqg4"></script>
+<script src="js/account.js?v=mv6ydqg4"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -169,7 +169,7 @@ function speakP(text, rate) {
     const step = () => {
       if (done) return;
       waited += 500;
-      if (waited >= 20000) { fin(); return; }              // stuck audio: give up
+      if (waited >= 8000) { fin(); return; }              // stuck audio: advance cleanly
       if (waited >= soft && !speakBusy()) { fin(); return; }
       setTimeout(step, 500);
     };
@@ -191,7 +191,8 @@ function gapP(sec) {
     const fin = () => { if (!done) { done = true; resolve(); } };
     S.cancel = () => { stopSpeak(); fin(); };
     try {
-      stopSpeak();
+      _speakWait++;
+      if (window.speechSynthesis) speechSynthesis.cancel();
       const a = _getSpeakEl();
       a.onended = () => { a.onended = null; a.onerror = null; fin(); };
       a.onerror = () => { a.onended = null; a.onerror = null; setTimeout(fin, sec * 1000); };
@@ -457,8 +458,11 @@ async function prefetchQueue(q) {
   addT("Commute session. Hands free. Say each one back in the gap.");
   addT("That's your commute session done. Every word counted. Well done.");
   q.forEach(it => { if (it.kind === "word") { addT(it.c.v.ar); addT(it.c.v.en); } else if (it.s) { addT(it.s.ar); addT(it.s.en); } });
-  const deadline = Date.now() + 8000;
-  for (const u of urls) { if (Date.now() > deadline || !S || S.stop) break; try { await fetch(u); } catch (e) {} }
+  const list = [...urls];
+  for (let i = 0; i < list.length; i += 6) {
+    if (!S || S.stop) break;
+    try { await Promise.all(list.slice(i, i + 6).map(u => fetch(u).catch(() => {}))); } catch (e) {}
+  }
 }
 async function runCommute() {
   S.queue = buildCommuteQueue(); S.hist = []; S.heardSents = [];
@@ -708,8 +712,14 @@ async function prefetchClips() {
     addT("Audio coach. Listen, and recall the meaning before I say it.");
     w.forEach(c => { addT(c.v.ar); addT(c.v.en); });
     s.slice(0, 16).forEach(x => { addT(x.ar); addT(x.en); });
+    const list = [...urls];
     let n = 0;
-    for (const u of urls) { try { const r = await fetch(u); if (r.ok) n++; } catch (e) {} }
+    for (let i = 0; i < list.length; i += 6) {
+      try {
+        const batch = await Promise.all(list.slice(i, i + 6).map(u => fetch(u).then(r => r.ok ? 1 : 0).catch(() => 0)));
+        n += batch.reduce((a, b) => a + b, 0);
+      } catch (e) {}
+    }
     if (el()) el().textContent = `✓ ${n} clips cached — commute works offline`;
   } catch (e) { _prefetched = false; }
 }
