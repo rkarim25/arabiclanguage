@@ -2434,7 +2434,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv7fcvah";
+const DATA_V = "mv8dw2l8";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4104,22 +4104,24 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Variation Misses (12–13 Oct):**\n`;
+  md += `- **Active Telemetry Slips & Variation Misses (13–14 Oct):**\n`;
+  md += `  - *حَجْز* (reservation / booking — rated learning/tap-learn; mnemonic: like Hajj, booked years ahead; frame: عِنْدِي حَجْزٌ)\n`;
+  md += `  - *أُسَاعِدُ* (I help — rated learning; mnemonic: hear the AID inside u-sa-AID-u)\n`;
+  md += `  - *الْخَنَّاس* (the slinker / retreats upon dhikr — rated learning/tap-learn; mnemonic: the con-artist of an-Nas)\n`;
   md += `  - *سُلَّم* (stairs, ladder — rated learning; mnemonic: solemn climb up the stairs / safe steps)\n`;
   md += `  - *مِصْعَد* (lift, elevator — rated learning; root ṣ-ʿ-d: machine that ascends)\n`;
   md += `  - *دَوْر* (floor / turn — rated learning; "my turn on this floor"); *طَابِق* (floor / storey); *خَزَائِن* (cupboards)\n`;
   md += `  - *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning in week routine)\n`;
   md += `  - *الجَوُّ بَارِدٌ اليَوْمَ* (The weather is cold today — rated learning in myday)\n`;
   md += `  - *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day — rated learning in myday)\n`;
-  md += `  - *أُسَاعِدُ* (I help — rated learning in routine)\n`;
   md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;
   md += `  - *Verb Tense Distinction (Chapter 4):* past ـتُ (*قَرَأْتُ / صَلَّيْتُ*) vs present أَـ (*أَقْرَأُ / أُصَلِّي*) vs future سَـ (*سَأَذْهَبُ*)\n`;
   md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
   md += `  - *Commute by Ear Anchors (13 Oct):* emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering (دُخُول / مَدْخَل)\n`;
-  md += `  - *الْوَسْوَاس* (the repetitive whisperer), *عُقَد* (knots), *حَاسِد* (envier), *الْخَنَّاس* (the slinker)\n`;
+  md += `  - *الْوَسْوَاس* (the repetitive whisperer), *عُقَد* (knots), *حَاسِد* (envier)\n`;
   md += `  - *الفَطُور* (breakfast) — **celebrated win!** Promoted to solid via the mini-iftar / FAT TOUR mnemonic\n`;
   md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
-  md += `- Mnemonics in Use: a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), return to refuge (أَعُودُ), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور), solemn stairs (سُلَّم), ascending machine (مِصْعَد)\n`;
+  md += `- Mnemonics in Use: a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), return to refuge (أَعُودُ), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور), solemn stairs (سُلَّم), ascending machine (مِصْعَد), Hajj-booking (حَجْز), con-artist of an-Nas (الخَنَّاس), hear AID inside u-sa-AID-u (أُسَاعِدُ)\n`;
   md += `- Surah An-Nas Protection Concepts: King/Sovereign (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), chests (صُدُور)\n`;
   md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
   md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;

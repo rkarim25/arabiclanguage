@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv7fcvah">
-  <link rel="stylesheet" href="css/style.css?v=mv7fcvah">
+  <link rel="stylesheet" href="css/fonts.css?v=mv8dw2l8">
+  <link rel="stylesheet" href="css/style.css?v=mv8dw2l8">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mv7fcvah"></script>
-<script src="js/curriculum.js?v=mv7fcvah"></script>
-<script src="js/srs.js?v=mv7fcvah"></script>
-<script src="js/match.js?v=mv7fcvah"></script>
-<script src="js/errors.js?v=mv7fcvah"></script>
-<script src="js/frames.js?v=mv7fcvah"></script>
-<script src="js/app.js?v=mv7fcvah"></script>
-<script src="js/tracker.js?v=mv7fcvah"></script>
-<script src="js/plan.js?v=mv7fcvah"></script>
-<script src="js/account.js?v=mv7fcvah"></script>
+<script src="js/progress-model.js?v=mv8dw2l8"></script>
+<script src="js/curriculum.js?v=mv8dw2l8"></script>
+<script src="js/srs.js?v=mv8dw2l8"></script>
+<script src="js/match.js?v=mv8dw2l8"></script>
+<script src="js/errors.js?v=mv8dw2l8"></script>
+<script src="js/frames.js?v=mv8dw2l8"></script>
+<script src="js/app.js?v=mv8dw2l8"></script>
+<script src="js/tracker.js?v=mv8dw2l8"></script>
+<script src="js/plan.js?v=mv8dw2l8"></script>
+<script src="js/account.js?v=mv8dw2l8"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3666,8 +3666,10 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
+  p += `     * 14 Oct new hooks: حَجْز (reservation / booking — like Hajj, booked years ahead; weave into café/hotel requests "عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ"), أُسَاعِدُ (I help — hear the AID inside u-sa-AID-u), الْخَنَّاس (the con-artist slinker of an-Nas who retreats upon dhikr)\n`;
+  p += `     * Commute by-ear anchors (13 Oct): emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering / entrance (دُخُول / مَدْخَل)\n`;
   p += `     * Building access & vertical movement (12 Oct slips): سُلَّم (stairs / ladder — rated learning; mnemonic: solemn climb / safe steps), مِصْعَد (lift / elevator — rated learning; root ṣ-ʿ-d: machine that ascends), دَوْر (floor / turn — rated learning; 'my turn on this floor'), طَابِق (floor / storey), خَزَائِن (cupboards / treasuries)\n`;
-  p += `     * Day & Routine slips (12 Oct): يَوْمَ الثُّلَاثَاءِ (on Tuesday — rated learning), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today), أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day), أُسَاعِدُ (I help)\n`;
+  p += `     * Day & Routine slips: يَوْمَ الثُّلَاثَاءِ (on Tuesday — rated learning), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today), أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day), أُسَاعِدُ (I help)\n`;
   p += `     * أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — verb swap slip on Sentence 1!)\n`;
   p += `     * الْوَسْوَاس (the repetitive whisperer — subtle evil promptings, rated weak), عُقَد (knots), حَاسِد (envier), الْخَنَّاس (the slinker), غَاسِق (intense nightfall)\n`;
   p += `     * Routine anchors: أَعُودُ (I return [plain d, return to refuge]), أَقْرَأُ الصَّحِيفَةَ (newspaper [pages-root with al-muṣḥaf]), أُرَتِّبُ (I arrange), أَنَامُ (I sleep)\n`;

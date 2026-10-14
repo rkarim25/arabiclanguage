@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mv7fcvah">
-  <link rel="stylesheet" href="css/style.css?v=mv7fcvah">
+  <link rel="stylesheet" href="css/fonts.css?v=mv8dw2l8">
+  <link rel="stylesheet" href="css/style.css?v=mv8dw2l8">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,13 +49,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mv7fcvah"></script>
-<script src="js/frames.js?v=mv7fcvah"></script>
-<script src="js/freetry.js?v=mv7fcvah"></script>
-<script src="js/app.js?v=mv7fcvah"></script>
-<script src="js/tracker.js?v=mv7fcvah"></script>
-<script src="js/plan.js?v=mv7fcvah"></script>
-<script src="js/account.js?v=mv7fcvah"></script>
+<script src="js/srs.js?v=mv8dw2l8"></script>
+<script src="js/frames.js?v=mv8dw2l8"></script>
+<script src="js/freetry.js?v=mv8dw2l8"></script>
+<script src="js/app.js?v=mv8dw2l8"></script>
+<script src="js/tracker.js?v=mv8dw2l8"></script>
+<script src="js/plan.js?v=mv8dw2l8"></script>
+<script src="js/account.js?v=mv8dw2l8"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -472,8 +472,15 @@ async function runCommute() {
   while (S && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
     if (commuteElapsedMs() > COMMUTE_MIN * 60000) break;                 // the 13-minute promise
-    const item = S.queue.shift();
-    if (!item) break;
+    let item = S.queue.shift();
+    if (!item) {
+      if (commuteElapsedMs() < (COMMUTE_MIN - 1) * 60000 && S.hist.length) {
+        // Replenish from queue so session doesn't abruptly stop when initial batch is done
+        S.queue = buildCommuteQueue();
+        item = S.queue.shift();
+      }
+      if (!item) break;
+    }
     S.skip = false; S.backTo = null;
     await playItem(item);
     if (!S) break;
