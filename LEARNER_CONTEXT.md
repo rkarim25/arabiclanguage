@@ -14,16 +14,16 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (14 Oct 2026):** 3,388 recorded practice events; 1,176 cards in SRS (**662 solid/strong** in Box 3–5: 588 Box 5, 26 Box 4, 48 Box 3); 421 active learning (369 Box 1, 52 Box 2); 93 need review (Box 0); passed Sunday Preply Class 11 Oct reading passage & vocabulary; passed Chapter 1 test at 100% (5/5); cleared Chapter 2 test at 100% (5/5); completed Tuesday 13 Oct commute audio session (9.6 min, 27 words by ear, 11 sentences); Chapter drills 1–10 (300 progressive lines with neural audio) active.
+  - **Live Telemetry (15 Oct 2026):** 3,388 recorded practice events; 1,176 cards in SRS (**556 solid/strong** in Box 3–5: 482 Box 5, 26 Box 4, 48 Box 3); 421 active learning (369 Box 1, 52 Box 2); 93 need review (Box 0); 106 retired; Sunday 18 Oct class contract active with 80 keys; Sunday script standing at 3 sentences (Line 1: *عِنْدِي حَجْزٌ فِي المَطْعَمِ* — proven letter-perfect!, Line 2: *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, Line 3: *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*); passed Chapter 1 & 2 tests at 100% (5/5); completed Tuesday 13 Oct commute audio session (9.6 min, 27 words by ear, 11 sentences); Chapter drills 1–10 (300 progressive lines with neural audio) active.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score; 14.5% salah coverage).
-    - 🗣 **Conversation:** Not yet A1 → A1 at **73%** (5/26 cards solid in core dialogue; 83 minutes spoken out loud; 78% average exam score; deployable score ~1.8).
+    - 🗣 **Conversation:** Cleared **A1** (conv-a1 cleared with 9/8 solid cards, 86 minutes spoken, 78% avg exam); approaching **A2** (conv-a2 sits at 7/8 cards in directions/shopping/food/time, 86 min spoken, 86% avg of last 4 exams).
   - **Recent Activity & Diagnostic Wins:**
+    - 15 Oct slips under reinforcement: **مِفْتَاحُ الغُرْفَةِ** (room key — Chapter 3 drill slip; mnemonic: root *f-t-ḥ* / *al-Fātiḥah* — tool that opens), **أَحْتَاجُ إِلَى** (I need — Chapter 3 drill slip), **مَشْغُولٌ** (busy / occupied — root *sh-gh-l*), **عِنْدِي حَجْزٌ** (I have a reservation).
     - 14 Oct deployed mnemonic hooks: **حَجْز** (like Hajj — the booking/reservation you make years ahead; ties to *عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ*); **خَنَّاس** (the con-artist of an-Nās who slinks away upon God's dhikr); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u* — I help/assist).
     - 13 Oct commute audio session: 9.6 min completed hands-free (*بَابُ الطَّوَارِئ*, *تَعْبَانُ قَلِيلًا*, *بَعِيد / قَرِيب*, *دُخُول / مَدْخَل*).
-    - 12–13 Oct practice sessions: practiced Say Your Day sentences (`myday:1`) and reviewed housing vocabulary.
-    - Slipped items under reinforcement: *سُلَّم* (stairs, ladder — rated learning), *مِصْعَد* (lift, elevator — rated learning), *دَوْر* (floor, storey, turn — rated learning), *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning), *الجَوُّ بَارِدٌ اليَوْمَ* (the weather is cold today), *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day), *أُسَاعِدُ* (I help), *حَجْز* (reservation), *خَنَّاس* (slinker).
-    - Mnemonic additions: **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
+    - Slipped items under reinforcement: *مِفْتَاحُ الغُرْفَةِ* (room key), *أَحْتَاجُ إِلَى* (I need), *مَشْغُولٌ* (busy), *سُلَّم* (stairs, ladder — rated learning), *مِصْعَد* (lift, elevator — rated learning), *دَوْر* (floor, storey, turn — rated learning), *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning), *الجَوُّ بَارِدٌ اليَوْمَ* (the weather is cold today), *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day), *أُسَاعِدُ* (I help), *حَجْز* (reservation), *خَنَّاس* (slinker).
+    - Mnemonic additions: **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 
 
@@ -144,6 +144,8 @@ The following words were identified in recent telemetry and test diagnostics as 
   - **التِّلْفَاز** (*at-tilfāz*) — television
   - **السَّاعَةُ الثَّانِيَةَ عَشْرَةَ** (*as-sāʿatu ath-thāniyata ʿashrah*) — 12 o'clock
 - **Active Mnemonic Associations:**
+  - **مِفْتَاح** (*miftāḥ*) = **Root f-t-ḥ (like Al-Fātiḥah / The Opener) — the tool that OPENS the room** (key; frame: *هَذَا مِفْتَاحُ الغُرْفَةِ*, *أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ*).
+  - **مَشْغُول** (*mashghūl*) = **Occupied / busy with work (root sh-gh-l)** — (busy / occupied; frame: *أَنَا مَشْغُولٌ فِي الصَّبَاحِ*).
   - **حَجْز** (*ḥajz*) = **Like Hajj — the booking you make years ahead** — (reservation / booking; frame: *عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ*).
   - **الْخَنَّاس** (*al-khannās*) = **The con-artist of an-Nās** — slinks and retreats the moment dhikr is mentioned.
   - **أُسَاعِدُ** (*usāʿidu*) = **Hear the AID inside *u-sa-AID-u*** — I help / provide aid.
@@ -522,5 +524,48 @@ Instructions:
 5. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel, pause for his answer.
 6. When he says "I'm done", output the structured 3-line AI Voice Session Report.
 ```
+
+### Prompt 17: Say Your Day — Sunday Script 4-Sentence Rehearsal & Commute Synthesis
+```text
+Role: You are Reza's personal Arabic speaking coach preparing him for his Sunday Preply class (07:00 UK).
+Context: Reza's Sunday speaking script currently stands at three solid sentences, and he is synthesizing line four from his Tuesday commute audio:
+- Script Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)
+- Script Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day)
+- Script Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ (I help at home in the evening)
+- Commute Bridge (Line 4 Candidates):
+  1. أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ (I am a little tired, but I return home at 8 o'clock)
+  2. هَذَا بَابُ الطَّوَارِئ، وَالمَسْجِدُ قَرِيبٌ مِنْ هُنَا (This is the emergency door, and the mosque is near here)
+Instructions:
+1. Greet Reza warmly: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ كَانَ يَوْمُكَ؟"
+2. Ask him to recite his complete Sunday narrative (prompt for all 3 script sentences in sequence).
+3. Elicit line four using his commute exposure: ask how he feels after work and what time he returns (prompt for "أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ").
+4. Drill variations: swap times (السَّاعَةُ الثَّامِنَةُ ↔ السَّادِسَةُ ↔ السَّابِعَةُ), swap chores (كَنْسُ البَيْتِ ↔ غَسْلُ الأَطْبَاقِ), swap places (المَطْعَم ↔ الفُنْدُق).
+5. Strict Voice Rules: Strictly 1–2 short sentences per turn, full tashkeel, pause for his answer.
+6. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
+### Prompt 18: Hotel & Room Key Mastery Drill (miftāḥ al-ghurfah, aḥtāju ilā & reservation)
+```text
+Role: You are a helpful hotel front desk receptionist speaking Modern Standard Arabic (MSA).
+Context: Reza is reinforcing recent Chapter 3 hotel and room key slips from his diagnostic telemetry:
+- Target Weak Spots:
+  1. هَذَا مِفْتَاحُ الغُرْفَةِ (This is the room key)
+  2. أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ (I need the room key, please)
+  3. هَلْ عِنْدَكَ حَجْزٌ؟ (Do you have a reservation?)
+  4. أَنَا مَشْغُولٌ فِي الصَّبَاحِ (I am busy in the morning)
+- Mnemonic Hooks:
+  * مِفْتَاح (miftāḥ): From root f-t-ḥ (فَتَحَ / Al-Fātiḥah) — the key is the instrument that OPENS!
+  * مَشْغُول (mashghūl): Occupied / busy with work (root sh-gh-l)
+  * حَجْز (ḥajz): Like Hajj — the booking made years ahead
+Instructions:
+1. Welcome Reza at the hotel reception: "أَهْلًا وَسَهْلًا بِكَ فِي الفُنْدُقِ! هَلْ عِنْدَكَ حَجْزٌ؟" (Prompt for "نَعَمْ، عِنْدِي حَجْزٌ بِاسْمِ رِضَا").
+2. Hand him the room key: "تَفَضَّلْ، هَذَا مِفْتَاحُ الغُرْفَةِ رَقْمُ ثَلَاثَةٍ" and prompt him to confirm receipt ("شُكْرًا جَزِيلًا، أَيْنَ الغُرْفَةُ؟").
+3. Scenario challenge: simulate he misplaced his key. Prompt him to ask for it: "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ".
+4. Ask if he is free or busy: "هَلْ أَنْتَ مَشْغُولٌ الآنَ؟" (Prompt for "أَنَا مَشْغُولٌ فِي الصَّبَاحِ، لَكِنِّي قَادِمٌ فِي المَسَاءِ").
+5. Drill variations: swap room numbers (ثَلَاثَة ↔ خَمْسَة ↔ سَبْعَة), swap keys (مِفْتَاحُ الشَّقَّةِ ↔ مِفْتَاحُ الغُرْفَةِ ↔ مِفْتَاحُ السَّيَّارَةِ).
+6. Strict Voice Rules: Under 2 short sentences per turn, full tashkeel.
+7. When he says "I'm done", provide the structured 3-line AI Voice Session Report.
+```
+
 
 

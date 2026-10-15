@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-08.** Read this first in any new session. It defines the live site status, today's deployed lesson batch, multi-AI coordination protocols, test suite audit results, and deferred operations.
+**Updated 2026-10-15.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 
@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `06a954c` (remote `origin/main` clean, cache `v=muvqnvdi`).
+- **Current Deployed Commit:** `67aa525e` (remote `origin/main` clean, cache `v=mv8dw2l8`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -75,14 +75,13 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-08` and verified active in Cloudflare KV. Acknowledges 294 solid cards milestone, 4 newly deployed memory hooks (أتناول "tuna wallow", فطور "mini-iftar", أعود "return to refuge", صحيفة "pages-root"), and prompts for 5-min listening placement test before Sunday 07:00 UK.
-- **Telemetry Verified (08 Oct 2026):** 3,053 logged events; 745 cards in SRS: **294 solid/strong** in Box 3–5 (235 Box 5, 25 Box 4, 34 Box 3 — up from 255!), 381 active learning (338 Box 1, 43 Box 2), 70 Box 0 (need review), 27 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation at 73%.
-- **Speak with AI Enhancements (08 Oct):**
-  - Updated `SPEAK_WITH_AI.md` with **Prompt H** (The Breakfast Mnemonic Drill & Routine Mastery) and added Mnemonic Quick-Reference Matrix for AI Voice Partners.
-  - Added Speaking Lab (`speaking.html`) to practice table, and equipped `speaking.html` with direct 1-click **📄 Copy Learner Dossier** and **📘 AI Voice Guide** buttons.
-  - Updated `LEARNER_CONTEXT.md` Section 1, Section 3.D, and Section 7 with **Prompt 8** and all 6 active mnemonics.
-  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with all 6 mnemonics and latest telemetry.
-  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to explicitly cue the AI on the 4 breakfast memory hooks.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-15` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, Tuesday's 11 commute sentences in his ear, and prep for Sunday 18 Oct Preply class.
+- **Telemetry Verified (15 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **556 solid/strong** in Box 3–5 (482 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review), 106 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
+- **Speak with AI Enhancements (15 Oct):**
+  - Updated `SPEAK_WITH_AI.md` with **Prompt S** (Say Your Day — Sunday Script 4-Sentence Rehearsal & Commute Synthesis) and **Prompt T** (Hotel & Room Key Mastery Drill: *مِفْتَاحُ الغُرْفَةِ*, *أَحْتَاجُ إِلَى*, *مَشْغُولٌ*), and added new mnemonics (*مِفْتَاح* opener key, *مَشْغُول* busy/occupied) to the Mnemonic Quick-Reference Matrix.
+  - Updated `LEARNER_CONTEXT.md` Section 1, Section 3.D, and Section 7 with **Prompt 17** & **Prompt 18**, latest telemetry, and 15 Oct slips.
+  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with 15 Oct slips and new mnemonics.
+  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to explicitly weave in room key requests and Sunday script rehearsal.
   - Verified all prompt builders and 1-click copy buttons across `index.html`, `class.html`, `converse.html`, `words.html`, and `speaking.html`.
 
 ### Strict KV Read-Modify-Write Protocol:
