@@ -69,7 +69,7 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 | `node scripts/test-sentence-diag.js` | Verb tense/pronoun error diagnosis | **PASS (exit 0)** | 11 assertions pass |
 | `node scripts/test-sentences.js` | Sentence bank integrity, grammar patterns | **PASS (exit 0)** | 45 assertions pass |
 | `node scripts/test-shell.js` | App integration, homework parts, speed switch | **PASS (exit 0)** | 93 assertions pass |
-| `node scripts/test-typing.js` | Transliteration dock, typing acceptance | **PASS (exit 0)** | 52 assertions pass (floor 92%) |
+| `node scripts/test-typing.js` | Transliteration dock, typing acceptance | **PASS (exit 0)** | 52 assertions pass (99.0%, floor 96%) |
 
 ---
 

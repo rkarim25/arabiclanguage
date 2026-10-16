@@ -382,8 +382,12 @@ function sugScore(wn, probe) {
 
    normalizeAr is deliberately left alone: it builds SRS card keys, and loosening
    it would silently merge cards and orphan his review history. */
+const _TANWIN_RE = /[ًٌٍ\u0656\u0657\u065E\u06E2\u08F0-\u08F2]/;
 function typedFold(s) {
-  return normalizeAr(String(s).replace(/ى/g, "ا"))   // final long ā: ى ≡ ا
+  const str = String(s)
+    .replace(/([^\u0627\u0649])\u0670(?![\u0627\u0649])/g, "$1ا") // Uthmani dagger alif stands for long ā
+    .replace(/ى/g, "ا");                                          // final long ā: ى ≡ ا
+  return normalizeAr(str)
     .replace(/[ءؤئ]/g, "ا")                          // hamza seats (normalizeAr already did أإآ)
     .replace(/ة/g, "ه")
     .replace(/وا(?= |$)/g, "و");                     // the plural's silent alif
@@ -399,15 +403,17 @@ function arMatch(typed, target) {
   if (raws.some(r => normalizeAr(r) === t)) return true;
   const tf0 = typedFold(typed), raw = String(typed).trim();
   return raws.some(r => {
-    const cf = typedFold(r);
+    const cf = typedFold(r), nr = normalizeAr(r);
     let tf = tf0;
     // ة is the feminine marker he must produce, but romanized "-a" arrives as a
     // trailing fatha — count that as the ة it spells (the fold made ة into ه)
-    if (/ة$/.test(r) && !/ه$/.test(tf) && /[َاةه]$/.test(raw)) tf += "ه";
+    if (/ة$/.test(nr) && !/ه$/.test(tf) && /[َاةه]$/.test(raw)) tf += "ه";
+    if (/ة$/.test(nr) && /تن$/.test(tf) && _TANWIN_RE.test(r)) tf = tf.replace(/تن$/, "ه");
+    if (/ة$/.test(nr) && /ت$/.test(tf) && /[َُِ]/.test(r)) tf = tf.replace(/ت$/, "ه");
     if (cf === tf || cf.replace(/ /g, "") === tf.replace(/ /g, "")) return true; // exact, or same but for spacing
     // tanwin target (شُكْرًا, هُدًى, غَالٍ جِدًّا): typed "shukran"/"jiddan" writes the n out
-    if (/[ًٌٍ]/.test(r) && r.split(/\s+/).map(w =>
-      /[ًٌٍ]/.test(w) ? typedFold(w).replace(/[اه]$/, "") + "ن" : typedFold(w)).join(" ") === tf) return true;
+    if (_TANWIN_RE.test(r) && r.split(/\s+/).map(w =>
+      _TANWIN_RE.test(w) ? typedFold(w).replace(/[اه]$/, "") + "ن" : typedFold(w)).join(" ") === tf) return true;
     return Math.max(cf.length, tf.length) >= 5 && editDist(cf, tf) <= 1; // one slip in a longer word
   });
 }
@@ -2434,7 +2440,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mv9t2smd";
+const DATA_V = "mvawegck";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2470,7 +2476,11 @@ const LATIN_TO_AR = {
 const _SUN = "sh|th|dh|[tdrzsSDTZnl]";          // sun-letter romanizations (l included → covers plain al-)
 const _PRE = "bi|li|ka|wa|fa|la|ta|sa";         // prepositions the article fuses onto
 function expandArticles(raw) {
-  return raw
+  return String(raw)
+    // collapse 3+ identical vowels from maddah transliterations (yashaaa -> yashaa)
+    .replace(/a{3,}/g, "aa").replace(/u{3,}/g, "uu").replace(/i{3,}/g, "ii")
+    // C'C (consonant + apostrophe + consonant) is a sukun separator in Quranic tr, never a hamza
+    .replace(/([bcdfghjklmnpqrstvwxyz37HSTDZ])'(?=[bcdfghjklmnpqrstvwxyz37HSTDZ])/gi, "$1")
     // hyphen form (optional preposition/space, optional elided 'a'): al- as- bial- bis- wal- "bi as-"
     .replace(new RegExp(`(^|\\s|${_PRE})a?(?:${_SUN})-`, "g"), "$1Al")
     // fused, no hyphen, plain article after a preposition: bialkitab walkitab
@@ -2485,6 +2495,9 @@ function expandArticles(raw) {
     // written (al-ujra → الأجرة, al-insan → الإنسان), but romanization only carries
     // the vowel, so put the carrier back — otherwise the article eats it
     .replace(/Al(?=[aiueo])/g, "AlA")
+    // hyphen before a vowel marks a syllable-initial hamza/alif carrier (wa-innahu, bi-anna, quri-a)
+    .replace(/-(?=(?:aa|uu|ii|oo|ee|ou))/g, "A")
+    .replace(/-[aiueo]/g, "A")
     // any leftover hyphen is a silent joiner in romanized Arabic, not a kashida
     .replace(/-/g, "");
 }
@@ -2524,9 +2537,14 @@ const _ORTHO = {
    ordinary letter-by-letter conversion. */
 function _orthoWord(w) {
   if (!w) return null;
-  if (_ORTHO[w]) return _ORTHO[w];
-  const m = /^(?:al-|Al-|al|Al)(.+)$/.exec(w);
-  return m && _ORTHO[m[1]] ? "ال" + _ORTHO[m[1]] : null;
+  const lw = w.toLowerCase();
+  if (_ORTHO[w] || _ORTHO[lw]) return _ORTHO[w] || _ORTHO[lw];
+  const m = /^(?:al-|Al-|l-|al|Al)(.+)$/.exec(w);
+  if (m) {
+    const k = m[1], lk = k.toLowerCase();
+    if (_ORTHO[k] || _ORTHO[lk]) return "ال" + (_ORTHO[k] || _ORTHO[lk]);
+  }
+  return null;
 }
 function latinToArabic(text) {
   text = String(text).split(/(\s+)/).map(t => _orthoWord(t) || t).join("");
@@ -2542,7 +2560,7 @@ function latinToArabic(text) {
         i += len;
         // a word may START with a long vowel (أُومِنُ "uuminu", أُوحِي "uuHii"): the
         // carrier alif is still written, so emit it before the long letter too
-        if (atStart && /^(aa|uu|ii|oo|ee|ou)$/.test(part)) out += "ا" + ch;
+        if (atStart && /^(aa|uu|ii|oo|ee|ou)$/.test(part)) out += (ch === "ا" ? "ا" : "ا" + ch);
         else if (atStart && /^[aiueo]$/.test(part)) out += "ا";
         else if (consonant(ch) && text.slice(i, i + len) === part) { out += ch + "ّ"; i += len; }
         else out += ch;
