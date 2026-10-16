@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-15.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
+**Updated 2026-10-16.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 
@@ -75,14 +75,15 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-15` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, Tuesday's 11 commute sentences in his ear, and prep for Sunday 18 Oct Preply class.
-- **Telemetry Verified (15 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **556 solid/strong** in Box 3–5 (482 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review), 106 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
-- **Speak with AI Enhancements (15 Oct):**
-  - Updated `SPEAK_WITH_AI.md` with **Prompt S** (Say Your Day — Sunday Script 4-Sentence Rehearsal & Commute Synthesis) and **Prompt T** (Hotel & Room Key Mastery Drill: *مِفْتَاحُ الغُرْفَةِ*, *أَحْتَاجُ إِلَى*, *مَشْغُولٌ*), and added new mnemonics (*مِفْتَاح* opener key, *مَشْغُول* busy/occupied) to the Mnemonic Quick-Reference Matrix.
-  - Updated `LEARNER_CONTEXT.md` Section 1, Section 3.D, and Section 7 with **Prompt 17** & **Prompt 18**, latest telemetry, and 15 Oct slips.
-  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with 15 Oct slips and new mnemonics.
-  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to explicitly weave in room key requests and Sunday script rehearsal.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-16` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, Tuesday's 11 commute sentences in his ear, and prep for Sunday 18 Oct Preply class (<36h away).
+- **Telemetry Verified (16 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **556 solid/strong** in Box 3–5 (482 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review), 106 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
+- **Speak with AI Enhancements (16 Oct):**
+  - Updated `SPEAK_WITH_AI.md` with **Prompt U** (Final Preply Class 18 Oct Dress Rehearsal & 4-Sentence Connected Script Polish: Say Your Day 4-sentence connected flow + Class 11 Oct past-tense `-tu` board narration + room key requests).
+  - Updated `LEARNER_CONTEXT.md` Section 1 and Section 7 with **Prompt 19** (Class 18 Oct Final Dress Rehearsal), latest 16 Oct telemetry, and Sunday script status.
+  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with 16 Oct telemetry, Class 11 Oct past-tense narration, and 4-sentence script.
+  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to include the connected 4-sentence narrative, Class 11 Oct past-tense narration, and room key requests.
   - Verified all prompt builders and 1-click copy buttons across `index.html`, `class.html`, `converse.html`, `words.html`, and `speaking.html`.
+  - Audited all 14 test suites: 100% pass (audio-coverage, curriculum, drill-grade, progress-model, sentence-diag, sentences, shell, typing, chapter-drills, srs, freetry, frames, match, errors).
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:

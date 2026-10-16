@@ -2440,7 +2440,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mvawegck";
+const DATA_V = "mvb8cyh2";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4122,7 +4122,9 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Variation Misses (13–15 Oct):**\n`;
+  md += `- **Active Telemetry Slips & Variation Misses (13–16 Oct):**\n`;
+  md += `  - *Preply Sunday Dress Rehearsal (<36h away!):* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
+  md += `  - *Class 11 Oct Past-Tense Board Narration (-tu):* سَافَرْتُ إِلَى القَرْيَةِ، تَنَاوَلْتُ الفَطُورَ، اشْتَرَيْتُ فِي السُّوقِ، سَاعَدْتُ فِي البَيْتِ، عُدْتُ فِي السَّاعَةِ السَّادِسَةِ\n`;
   md += `  - *مِفْتَاحُ الغُرْفَةِ* (room key — Chapter 3 drill slip; mnemonic: root f-t-ḥ / opener like al-Fātiḥah; frame: هَذَا مِفْتَاحُ الغُرْفَةِ)\n`;
   md += `  - *أَحْتَاجُ إِلَى* (I need — Chapter 3 drill slip; frame: أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ)\n`;
   md += `  - *مَشْغُولٌ* (busy / occupied — root sh-gh-l; frame: أَنَا مَشْغُولٌ جِدًّا / فِي الصَّبَاحِ)\n`;
@@ -4136,7 +4138,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `  - *الجَوُّ بَارِدٌ اليَوْمَ* (The weather is cold today — rated learning in myday)\n`;
   md += `  - *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day — rated learning in myday)\n`;
   md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;
-  md += `  - *Sunday Script Lines:* Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ\n`;
+  md += `  - *Sunday Script Lines:* Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, Line 4 candidate: أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ\n`;
   md += `  - *Verb Tense Distinction (Chapter 4):* past ـتُ (*قَرَأْتُ / صَلَّيْتُ*) vs present أَـ (*أَقْرَأُ / أُصَلِّي*) vs future سَـ (*سَأَذْهَبُ*)\n`;
   md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
   md += `  - *Commute by Ear Anchors (13 Oct):* emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering (دُخُول / مَدْخَل)\n`;
