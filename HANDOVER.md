@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-16.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
+**Updated 2026-10-23.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 
@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `67aa525e` (remote `origin/main` clean, cache `v=mv8dw2l8`).
+- **Current Deployed Commit:** `95aba4e5` (remote `origin/main` clean, cache `v=mvb8cyh2`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -75,15 +75,15 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-16` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, Tuesday's 11 commute sentences in his ear, and prep for Sunday 18 Oct Preply class (<36h away).
-- **Telemetry Verified (16 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **556 solid/strong** in Box 3–5 (482 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review), 106 retired. Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
-- **Speak with AI Enhancements (16 Oct):**
-  - Updated `SPEAK_WITH_AI.md` with **Prompt U** (Final Preply Class 18 Oct Dress Rehearsal & 4-Sentence Connected Script Polish: Say Your Day 4-sentence connected flow + Class 11 Oct past-tense `-tu` board narration + room key requests).
-  - Updated `LEARNER_CONTEXT.md` Section 1 and Section 7 with **Prompt 19** (Class 18 Oct Final Dress Rehearsal), latest 16 Oct telemetry, and Sunday script status.
-  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with 16 Oct telemetry, Class 11 Oct past-tense narration, and 4-sentence script.
-  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to include the connected 4-sentence narrative, Class 11 Oct past-tense narration, and room key requests.
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-23` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, and prep for upcoming Sunday 26 Oct Preply class (<60h away).
+- **Telemetry Verified (23 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
+- **Speak with AI Enhancements (23 Oct):**
+  - Updated `SPEAK_WITH_AI.md` with **Prompt V** (Sunday 26 Oct Preply Class Rehearsal & 4-Sentence Script Polish: Say Your Day 4-sentence connected flow + Class 11 Oct past-tense `-tu` board narration + room key/car key requests).
+  - Updated `LEARNER_CONTEXT.md` Section 1 and Section 7 with **Prompt 20** (Class 26 Oct Sunday Rehearsal), latest 23 Oct telemetry (662 solid cards in Box 3–5), and Sunday script status.
+  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with Sunday 26 Oct rehearsal challenge (<60h away).
+  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to target the Sunday 26 Oct class rehearsal and 4-sentence narrative.
   - Verified all prompt builders and 1-click copy buttons across `index.html`, `class.html`, `converse.html`, `words.html`, and `speaking.html`.
-  - Audited all 14 test suites: 100% pass (audio-coverage, curriculum, drill-grade, progress-model, sentence-diag, sentences, shell, typing, chapter-drills, srs, freetry, frames, match, errors).
+  - Audited all 14 test suites: 100% pass (audio-coverage, chapter-drills, curriculum, drill-grade, errors, frames, freetry, match, progress-model, sentence-diag, sentences, shell, srs, typing).
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:
