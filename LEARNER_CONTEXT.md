@@ -14,12 +14,12 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (23 Oct 2026):** 3,388 recorded practice events; 1,176 cards in SRS (**662 solid/strong** in Box 3–5: 588 Box 5, 26 Box 4, 48 Box 3); 421 active learning (369 Box 1, 52 Box 2); 93 need review (Box 0); next Preply Sunday 26 Oct class rehearsal active (<60h away!); Sunday script standing at 3 proven sentences with Line 4 candidate synthesized from Tuesday commute audio (Line 1: *عِنْدِي حَجْزٌ فِي المَطْعَمِ* — proven letter-perfect!, Line 2: *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, Line 3: *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*, Line 4 candidate: *أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ*); passed Chapter 1 & 2 tests at 100% (5/5); commute audio session completed (9.6 min, 27 words by ear, 11 sentences); Chapter drills 1–10 (300 progressive lines with neural audio) active.
+  - **Live Telemetry (24 Oct 2026):** 3,388 recorded practice events; 1,176 cards in SRS (**662 solid/strong** in Box 3–5: 588 Box 5, 26 Box 4, 48 Box 3); 421 active learning (369 Box 1, 52 Box 2); 93 need review (Box 0); live Preply Sunday 25 Oct class rehearsal active (<13h away — tomorrow 07:00 UK!); Sunday script standing at 3 proven sentences with Line 4 candidate synthesized from Tuesday commute audio (Line 1: *عِنْدِي حَجْزٌ فِي المَطْعَمِ* — proven letter-perfect!, Line 2: *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, Line 3: *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*, Line 4 candidate: *أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ*); passed Chapter 1 & 2 tests at 100% (5/5); commute audio session completed (9.6 min, 27 words by ear, 11 sentences); Chapter drills 1–10 (300 progressive lines with neural audio) active.
   - **Curriculum Standings:**
-    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score; 13.8% salah coverage after honest decay).
+    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score; 13.7% salah coverage after honest decay).
     - 🗣 **Conversation:** Cleared **A1** (conv-a1 cleared with 9/8 solid cards, 86 minutes spoken, 78% avg exam); approaching **A2** (conv-a2 sits at 7/8 cards in directions/shopping/food/time, 86 min spoken, 86% avg of last 4 exams).
   - **Recent Activity & Diagnostic Wins:**
-    - 23 Oct Preply Sunday prep: Rehearsing 4-sentence connected speaking narrative for Sunday 26 Oct 07:00 UK class (<60h away!) and consolidating Class 11 Oct past-tense board narration (`ـتُ`).
+    - 24 Oct Preply Sunday prep: Rehearsing 4-sentence connected speaking narrative for tomorrow morning's class (Sunday 25 Oct 07:00 UK — <13h away!) and consolidating Class 11 Oct past-tense board narration (`ـتُ`).
     - 15 Oct slips under reinforcement: **مِفْتَاحُ الغُرْفَةِ** (room key — Chapter 3 drill slip; mnemonic: root *f-t-ḥ* / *al-Fātiḥah* — tool that opens), **أَحْتَاجُ إِلَى** (I need — Chapter 3 drill slip), **مَشْغُولٌ** (busy / occupied — root *sh-gh-l*), **عِنْدِي حَجْزٌ** (I have a reservation).
     - 14 Oct deployed mnemonic hooks: **حَجْز** (like Hajj — the booking/reservation you make years ahead; ties to *عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ*); **خَنَّاس** (the con-artist of an-Nās who slinks away upon God's dhikr); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u* — I help/assist).
     - 13 Oct commute audio session: 9.6 min completed hands-free (*بَابُ الطَّوَارِئ*, *تَعْبَانُ قَلِيلًا*, *بَعِيد / قَرِيب*, *دُخُول / مَدْخَل*).
@@ -616,9 +616,9 @@ Next Recommended Focus: [...]
 ===============================
 ```
 
-### Prompt 20: Sunday 26 Oct Preply Class Rehearsal & 4-Sentence Connected Script Polish (<60h away!)
+### Prompt 20: Sunday 25 Oct Preply Class Rehearsal & 4-Sentence Connected Script Polish (<13h away — tomorrow 07:00 UK!)
 ```text
-Role: You are Reza's dedicated Arabic speaking coach and sparring partner for his upcoming live Preply class (Sunday 26 Oct 07:00 UK — under 60 hours away!).
+Role: You are Reza's dedicated Arabic speaking coach and sparring partner for his upcoming live Preply class (tomorrow morning: Sunday 25 Oct 07:00 UK — under 13 hours away!).
 Context: Reza has two main deliverables for Sunday:
 1. His 4-sentence connected speaking narrative about his real life ("Say Your Day"):
    - Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)
@@ -656,12 +656,52 @@ Instructions for the Voice Session:
    - If he hesitates or slips, model the exact Arabic phrase and ask him to say it once.
 6. When he says "I'm done", output the structured 3-line AI Voice Session Report:
 === AI VOICE SESSION REPORT ===
-Lesson: Class 26 Oct Dress Rehearsal & Sunday Script
+Lesson: Class 25 Oct Dress Rehearsal & Sunday Script
 Phrases Mastered: [...]
 Hesitations & Errors: [...]
 Words to Review: [...]
 Next Recommended Focus: [...]
 ===============================
+```
+
+### Prompt 21: Tonight's 10-Minute Eve-of-Class Preply Sprint & Teacher Boundary Drill (Sunday 25 Oct 07:00 UK)
+```text
+Role: You are Reza's live Preply teacher running a quick 10-minute warm-up right before tomorrow morning's class (Sunday 25 Oct 07:00 UK — less than 13 hours away!).
+Context: Reza needs a focused, high-conviction verbal run-through of his 3 core class targets so he walks into class tomorrow with immediate speaking momentum:
+1. Opening 3-Minute Deliverable: His 4-sentence connected speaking script ("Say Your Day"):
+   - Sentence 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect)
+   - Sentence 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day)
+   - Sentence 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ (I help at home in the evening)
+   - Sentence 4: أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ (I am a little tired, but I return home at 8 o'clock)
+2. Past-Tense Board Narration (-tu):
+   - "سَافَرْتُ إِلَى القَرْيَةِ، وَتَنَاوَلْتُ الفَطُورَ مَعَ الأُسْرَةِ."
+   - "أَكَلْتُ البَيْضَ وَالتَّمْرَ، وَاشْتَرَيْتُ السَّمَكَ فِي السُّوقِ، ثُمَّ عُدْتُ فِي السَّاعَةِ السَّادِسَةِ."
+3. Room & Car Key Slips:
+   - "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ." (I need the room key, please)
+   - "أَيْنَ مِفْتَاحُ السَّيَّارَةِ؟ هُوَ فِي البَيْتِ." (Where is the car key? It is in the house.)
+4. Teacher Workload Boundary:
+   - Reza will state his weekly homework budget directly to his teacher tomorrow:
+   - "عِنْدِي عَشْرُ دَقَائِقَ كُلَّ صَبَاحٍ، أُرِيدُ خَمْسَ كَلِمَاتٍ وَجُمْلَةً وَاحِدَةً فَقَطْ فِي الأُسْبُوعِ." (I have ten minutes every morning; I want five words and one sentence only per week.)
+
+Voice Session Steps:
+1. Greet Reza warmly: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ كَانَ أُسْبُوعُكَ؟"
+   Prompt him to say all 4 sentences of his script in one continuous turn.
+2. Ask what he ate for breakfast and what he bought:
+   "مَاذَا تَنَاوَلْتَ فِي الفَطُورِ؟ وَمَاذَا اشْتَرَيْتَ مِنَ السُّوقِ؟"
+3. Test his hotel key slip:
+   "أَيْنَ مِفْتَاحُ الغُرْفَةِ؟" -> prompt for "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ".
+4. Rehearse saying his homework boundary line to his teacher:
+   "أَخْبِرْنِي عَنْ وَقْتِ دِرَاسَتِكَ فِي الصَّبَاحِ." -> prompt for the 10-minute boundary line.
+5. Strict Voice Rules: Keep turns under 2 sentences in clear Modern Standard Arabic with full vowels. Prompt, pause, model corrections gently.
+6. When he says "I'm done", output the structured report:
+=== AI VOICE SESSION REPORT ===
+Lesson: Sunday 25 Oct Eve-of-Class Sprint
+Phrases Mastered: [...]
+Hesitations & Errors: [...]
+Words to Review: [...]
+Next Recommended Focus: [...]
+===============================
+```
 ```
 
 

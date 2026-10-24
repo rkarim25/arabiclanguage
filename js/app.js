@@ -2440,7 +2440,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mvl8f9m4";
+const DATA_V = "mvmnv66p";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4123,7 +4123,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
   md += `- **Active Telemetry Slips & Variation Misses (13–16 Oct):**\n`;
-  md += `  - *Preply Sunday Dress Rehearsal (<60h away! — Sunday 26 Oct 07:00 UK):* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
+  md += `  - *Preply Sunday Dress Rehearsal (<13h away — tomorrow Sunday 25 Oct 07:00 UK!):* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
   md += `  - *Class 11 Oct Past-Tense Board Narration (-tu):* سَافَرْتُ إِلَى القَرْيَةِ، تَنَاوَلْتُ الفَطُورَ، اشْتَرَيْتُ فِي السُّوقِ، سَاعَدْتُ فِي البَيْتِ، عُدْتُ فِي السَّاعَةِ السَّادِسَةِ\n`;
   md += `  - *مِفْتَاحُ الغُرْفَةِ* (room key — Chapter 3 drill slip; mnemonic: root f-t-ḥ / opener like al-Fātiḥah; frame: هَذَا مِفْتَاحُ الغُرْفَةِ)\n`;
   md += `  - *أَحْتَاجُ إِلَى* (I need — Chapter 3 drill slip; frame: أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ)\n`;

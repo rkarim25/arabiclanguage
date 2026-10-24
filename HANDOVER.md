@@ -75,15 +75,13 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-23` and verified active in Cloudflare KV. Acknowledges Sunday script standing at 3 sentences with Line 1 (*عِنْدِي حَجْزٌ فِي المَطْعَمِ*) proven letter-perfect, and prep for upcoming Sunday 26 Oct Preply class (<60h away).
-- **Telemetry Verified (23 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
-- **Speak with AI Enhancements (23 Oct):**
-  - Updated `SPEAK_WITH_AI.md` with **Prompt V** (Sunday 26 Oct Preply Class Rehearsal & 4-Sentence Script Polish: Say Your Day 4-sentence connected flow + Class 11 Oct past-tense `-tu` board narration + room key/car key requests).
-  - Updated `LEARNER_CONTEXT.md` Section 1 and Section 7 with **Prompt 20** (Class 26 Oct Sunday Rehearsal), latest 23 Oct telemetry (662 solid cards in Box 3–5), and Sunday script status.
-  - Enhanced live dossier exporter in `js/app.js` (`generateLearnerDossierMarkdown`) with Sunday 26 Oct rehearsal challenge (<60h away).
-  - Updated voice prompt review challenges in `index.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) to target the Sunday 26 Oct class rehearsal and 4-sentence narrative.
-  - Verified all prompt builders and 1-click copy buttons across `index.html`, `class.html`, `converse.html`, `words.html`, and `speaking.html`.
-  - Audited all 14 test suites: 100% pass (audio-coverage, chapter-drills, curriculum, drill-grade, errors, frames, freetry, match, progress-model, sentence-diag, sentences, shell, srs, typing).
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-24` and verified active in Cloudflare KV via strict Read-Modify-Write (80 homework keys preserved). Corrected Sunday class timing: live Preply class is tomorrow morning, **Sunday 25 Oct 07:00 UK (<13 hours away!)**.
+- **Telemetry Verified (24 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
+- **Speak with AI Enhancements (24 Oct):**
+  - Updated `SPEAK_WITH_AI.md` with **Prompt VI** (Tonight's 10-Minute Eve-of-Class Preply Sprint & Teacher Boundary Drill) and corrected Sunday 25 Oct timing in Prompt V.
+  - Updated `LEARNER_CONTEXT.md` with **Prompt 21** (Tonight's 10-Minute Eve-of-Class Preply Sprint) and updated live telemetry timestamp to 24 Oct 2026.
+  - Enhanced prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`) to target tomorrow morning's Sunday 25 Oct 07:00 UK live class (<13h away).
+  - Verified all prompt copy mechanisms and test suites: 100% pass across all 14 test suites.
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:
