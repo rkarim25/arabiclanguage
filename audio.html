@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvmnv66p">
-  <link rel="stylesheet" href="css/style.css?v=mvmnv66p">
+  <link rel="stylesheet" href="css/fonts.css?v=mvo5kera">
+  <link rel="stylesheet" href="css/style.css?v=mvo5kera">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,13 +49,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mvmnv66p"></script>
-<script src="js/frames.js?v=mvmnv66p"></script>
-<script src="js/freetry.js?v=mvmnv66p"></script>
-<script src="js/app.js?v=mvmnv66p"></script>
-<script src="js/tracker.js?v=mvmnv66p"></script>
-<script src="js/plan.js?v=mvmnv66p"></script>
-<script src="js/account.js?v=mvmnv66p"></script>
+<script src="js/srs.js?v=mvo5kera"></script>
+<script src="js/frames.js?v=mvo5kera"></script>
+<script src="js/freetry.js?v=mvo5kera"></script>
+<script src="js/app.js?v=mvo5kera"></script>
+<script src="js/tracker.js?v=mvo5kera"></script>
+<script src="js/plan.js?v=mvo5kera"></script>
+<script src="js/account.js?v=mvo5kera"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -195,16 +195,37 @@ function gapP(sec) {
       if (window.speechSynthesis) speechSynthesis.cancel();
       const a = _getSpeakEl();
       a.onended = () => { a.onended = null; a.onerror = null; fin(); };
-      a.onerror = () => { a.onended = null; a.onerror = null; setTimeout(fin, sec * 1000); };
+      a.onerror = () => { a.onended = null; a.onerror = null; fin(); };
       a.src = `audio/ui/gap${sec}.wav`;
       a.playbackRate = 1;
       const p = a.play();
-      if (p && p.catch) p.catch(() => setTimeout(fin, sec * 1000));
-      setTimeout(fin, sec * 1000 + 4000); // bound the wait whatever happens
-    } catch (e) { setTimeout(fin, sec * 1000); }
+      if (p && p.catch) p.catch(() => fin());
+      setTimeout(fin, sec * 1000 + 1500); // bound the wait whatever happens
+    } catch (e) { fin(); }
   });
 }
-function stopAllAudio() { stopSpeak(); if (S && S.audio) { try { S.audio.pause(); } catch (e) {} S.audio = null; } }
+let _commuteSilentLoop = null;
+function startCommuteSilentLoop() {
+  try {
+    if (!_commuteSilentLoop) {
+      _commuteSilentLoop = new Audio("audio/ui/gap3.wav");
+      _commuteSilentLoop.loop = true;
+      _commuteSilentLoop.volume = 0.001;
+    }
+    const p = _commuteSilentLoop.play();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) {}
+}
+function stopCommuteSilentLoop() {
+  if (_commuteSilentLoop) {
+    try { _commuteSilentLoop.pause(); } catch (e) {}
+  }
+}
+function stopAllAudio() {
+  stopSpeak();
+  stopCommuteSilentLoop();
+  if (S && S.audio) { try { S.audio.pause(); } catch (e) {} S.audio = null; }
+}
 
 /* lock-screen / headphone / car controls */
 function setMediaSession() {
@@ -232,7 +253,8 @@ function commuteElapsedMs() { return S ? Date.now() - S.t0 - (S.pausedMs || 0) :
 let wakeLock = null;
 async function acquireWake() { try { if ("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); } catch (e) {} }
 function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && S && S.playing && !S.paused) acquireWake(); });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && S && S.playing && !S.paused) acquireWake();
+  if (S && S.commute) startCommuteSilentLoop(); });
 
 /* ---------- UI ---------- */
 function setStatus(t) { const e = document.getElementById("acStatus"); if (e) e.textContent = t; }
@@ -426,7 +448,7 @@ async function start(commute) {
   setMediaSession();
   render("playing");
   document.body.classList.toggle("commute", !!commute);   // one layout: big type, four thumb-sized controls
-  if (commute) runCommute(); else runLoop();
+  if (commute) { startCommuteSilentLoop(); runCommute(); } else runLoop();
 }
 
 /* ---------- THE COMMUTE PROGRAMME (12 Oct) ----------

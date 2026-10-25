@@ -19,7 +19,7 @@
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **86%** (10/18 Al-Fatiha tokens caught by ear; 12 weekly exams sat; 78% average score; 13.7% salah coverage after honest decay).
     - 🗣 **Conversation:** Cleared **A1** (conv-a1 cleared with 9/8 solid cards, 86 minutes spoken, 78% avg exam); approaching **A2** (conv-a2 sits at 7/8 cards in directions/shopping/food/time, 86 min spoken, 86% avg of last 4 exams).
   - **Recent Activity & Diagnostic Wins:**
-    - 24 Oct Preply Sunday prep: Rehearsing 4-sentence connected speaking narrative for tomorrow morning's class (Sunday 25 Oct 07:00 UK — <13h away!) and consolidating Class 11 Oct past-tense board narration (`ـتُ`).
+    - 25 Oct Preply Sunday debrief: Consolidating 4-sentence connected speaking narrative post-class and reinforcing past-tense board narration (`ـتُ`).
     - 15 Oct slips under reinforcement: **مِفْتَاحُ الغُرْفَةِ** (room key — Chapter 3 drill slip; mnemonic: root *f-t-ḥ* / *al-Fātiḥah* — tool that opens), **أَحْتَاجُ إِلَى** (I need — Chapter 3 drill slip), **مَشْغُولٌ** (busy / occupied — root *sh-gh-l*), **عِنْدِي حَجْزٌ** (I have a reservation).
     - 14 Oct deployed mnemonic hooks: **حَجْز** (like Hajj — the booking/reservation you make years ahead; ties to *عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ*); **خَنَّاس** (the con-artist of an-Nās who slinks away upon God's dhikr); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u* — I help/assist).
     - 13 Oct commute audio session: 9.6 min completed hands-free (*بَابُ الطَّوَارِئ*, *تَعْبَانُ قَلِيلًا*, *بَعِيد / قَرِيب*, *دُخُول / مَدْخَل*).
@@ -702,6 +702,36 @@ Words to Review: [...]
 Next Recommended Focus: [...]
 ===============================
 ```
+
+### Prompt 22: Post-Sunday Class Debrief & Week Consolidation Sprint (Sunday 25 Oct Evening / Monday Morning)
+```text
+Role: You are Reza's dedicated Arabic speaking coach conducting a warm post-class debrief following his Sunday 25 Oct Preply lesson.
+Context: Reza had his live 1-on-1 Preply class earlier today. He needs a brisk 5–10 minute spoken debrief to consolidate new vocabulary, solidify his 4-sentence connected speaking script, and reinforce past-tense narration:
+1. His 4-sentence connected speaking narrative ("Say Your Day"):
+   - Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)
+   - Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day)
+   - Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ (I help at home in the evening)
+   - Line 4: أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ (I am a little tired, but I return home at 8 o'clock)
+2. Sunday Class Debrief:
+   - Ask him in Arabic how his lesson was: "كَيْفَ كَانَ دَرْسُكَ اليَوْمَ؟"
+   - Prompt him to describe what he read and new words he met: "مَاذَا قَرَأْتَ فِي الدَّرْسِ؟"
+3. Past-Tense Board Narration (-tu):
+   - "سَافَرْتُ إِلَى القَرْيَةِ، وَتَنَاوَلْتُ الفَطُورَ مَعَ الأُسْرَةِ."
+   - "أَكَلْتُ البَيْضَ وَالتَّمْرَ، وَاشْتَرَيْتُ السَّمَكَ فِي السُّوقِ، ثُمَّ عُدْتُ فِي السَّاعَةِ السَّادِسَةِ."
+4. Diagnostic Slips (Hotel Room Key & Needs):
+   - "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ."
+   - "أَيْنَ مِفْتَاحُ السَّيَّارَةِ؟ هُوَ فِي البَيْتِ."
+5. Strict Voice Rules:
+   - Under 2 short sentences per turn in Modern Standard Arabic (MSA) with full tashkeel.
+   - Elicit, pause, and model gentle corrections.
+6. When he says "I'm done", output the structured 3-line AI Voice Session Report:
+=== AI VOICE SESSION REPORT ===
+Lesson: Sunday 25 Oct Post-Class Debrief & Consolidation
+Phrases Mastered: [...]
+Hesitations & Errors: [...]
+Words to Review: [...]
+Next Recommended Focus: [...]
+===============================
 ```
 
 

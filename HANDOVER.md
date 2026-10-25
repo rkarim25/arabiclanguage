@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `95aba4e5` (remote `origin/main` clean, cache `v=mvb8cyh2`).
+- **Current Deployed Commit:** `ef501d29` (cache `v=mvo5jkij`).
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -75,12 +75,15 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-24` and verified active in Cloudflare KV via strict Read-Modify-Write (80 homework keys preserved). Corrected Sunday class timing: live Preply class is tomorrow morning, **Sunday 25 Oct 07:00 UK (<13 hours away!)**.
-- **Telemetry Verified (24 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
-- **Speak with AI Enhancements (24 Oct):**
-  - Updated `SPEAK_WITH_AI.md` with **Prompt VI** (Tonight's 10-Minute Eve-of-Class Preply Sprint & Teacher Boundary Drill) and corrected Sunday 25 Oct timing in Prompt V.
-  - Updated `LEARNER_CONTEXT.md` with **Prompt 21** (Tonight's 10-Minute Eve-of-Class Preply Sprint) and updated live telemetry timestamp to 24 Oct 2026.
-  - Enhanced prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`) to target tomorrow morning's Sunday 25 Oct 07:00 UK live class (<13h away).
+- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-25` and verified active in Cloudflare KV via strict Read-Modify-Write. Live Sunday 25 Oct 07:00 UK Preply class was held earlier today; post-class consolidation & debrief prompt deployed; awaiting lesson notes/photos if taken.
+- **Telemetry Verified (25 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
+- **Commute Audio Stoppage Fix (25 Oct):**
+  - Resolved Reza's ✏️ pen note (*"The sound of the commute session stopped after a while"*): mobile OS (iOS Safari / mobile Chrome) suspends background WebKit timers and CoreAudio channels during silent gap transitions while the screen is locked in a pocket.
+  - Added `_commuteSilentLoop` continuous background audio element playing looped silence at volume 0.001 during hands-free commute mode in `audio.html`, ensuring CoreAudio never sleeps the page. Made `gapP` catch & error handlers non-blocking.
+- **Speak with AI Enhancements (25 Oct):**
+  - Added **Prompt VII** to `SPEAK_WITH_AI.md` (Post-Class Debrief & Week Consolidation Sprint for Sunday 25 Oct Evening / Monday Morning).
+  - Added **Prompt 22** to `LEARNER_CONTEXT.md` with post-class debrief parameters and 4-sentence connected script polish.
+  - Enhanced prompt generators in `class.html` (`buildClassAiPrompt`) and `js/app.js` (`generateLearnerDossierMarkdown`) for post-class roleplay and week consolidation.
   - Verified all prompt copy mechanisms and test suites: 100% pass across all 14 test suites.
 
 ### Strict KV Read-Modify-Write Protocol:
