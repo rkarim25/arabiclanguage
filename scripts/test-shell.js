@@ -718,6 +718,10 @@ const bank = D("sentence-bank.json");
   yes(/async function sayRound\(/.test(audioSrc) && /speakP\(sent\.en, 1\)[\s\S]{0,200}gapP\(5\)/.test(audioSrc), "say your day by ear: English first, a gap to produce, then the model");
   yes(/body\.commute \.ac-ar \{ font-size: 44px/.test(audioSrc) && /document\.body\.classList\.toggle\("commute"/.test(audioSrc), "one layout — big type if he looks, nothing if he doesn't");
   yes(/sentEns: \(S\.heardSents/.test(audioSrc) && /commute-check-done/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "the next morning's Say your day starts with what he heard");
+  // 26 Oct: "all over the place" — three sequencers from three taps while the words loaded
+  yes(/if \(_starting \|\| \(S && S\.playing\)\) return;/.test(audioSrc) && /\} finally \{ _starting = false; \}/.test(audioSrc), "one sequencer at a time: a second tap while the words load is ignored");
+  yes(/\["acCommute", "acStart"\]\.forEach\(id => \{ const b = document\.getElementById\(id\); if \(b\) \{ b\.disabled = true;/.test(audioSrc), "…and both start buttons go dark the instant the first tap lands");
+  yes((audioSrc.match(/const me = S;/g) || []).length === 2 && /while \(S === me && !S\.stop\)/.test(audioSrc), "…and each loop stops the moment the session is no longer its own");
   yes(/function planScript\(/.test(planSrc) && /you can say/.test(planSrc), "the script: what he said or wrote and got right this week, on the door");
   yes(/evenings are yours/i.test(planSrc), "after 20:00 the door protects his evening instead of nudging");
   yes(/type === "myday" \? \(planEasyDay\(\) \? 6 : 10\)/.test(planSrc), "say your day has a ten-minute budget — his real slot (six on a lighter day)");

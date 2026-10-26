@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvpkw2mb">
-  <link rel="stylesheet" href="css/style.css?v=mvpkw2mb">
+  <link rel="stylesheet" href="css/fonts.css?v=mvpmdy0h">
+  <link rel="stylesheet" href="css/style.css?v=mvpmdy0h">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -49,13 +49,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mvpkw2mb"></script>
-<script src="js/frames.js?v=mvpkw2mb"></script>
-<script src="js/freetry.js?v=mvpkw2mb"></script>
-<script src="js/app.js?v=mvpkw2mb"></script>
-<script src="js/tracker.js?v=mvpkw2mb"></script>
-<script src="js/plan.js?v=mvpkw2mb"></script>
-<script src="js/account.js?v=mvpkw2mb"></script>
+<script src="js/srs.js?v=mvpmdy0h"></script>
+<script src="js/frames.js?v=mvpmdy0h"></script>
+<script src="js/freetry.js?v=mvpmdy0h"></script>
+<script src="js/app.js?v=mvpmdy0h"></script>
+<script src="js/tracker.js?v=mvpmdy0h"></script>
+<script src="js/plan.js?v=mvpmdy0h"></script>
+<script src="js/account.js?v=mvpmdy0h"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -434,21 +434,34 @@ function renderControls(state) {
   }
 }
 
-/* ---------- the sequencer ---------- */
+/* ---------- the sequencer ----------
+   26 Oct, his note from the car: "all over the place — would say something and then
+   jump to show another. Won't give time." start() awaits the word fetch for seconds
+   while BOTH start buttons stayed live, so his second and third taps each spawned
+   another sequencer driving the one shared S — three loops talking over each other
+   (his log has commute-start, alisten-start, commute-start 30 ms apart; 13 Oct had
+   two). One session, ever: a tap while loading or while a session runs is ignored,
+   the buttons go dark the instant the first tap lands, and every loop owns its S. */
+let _starting = false;
 async function start(commute) {
+  if (_starting || (S && S.playing)) return;    // one sequencer at a time
+  _starting = true;
   primeSpeak();          // synchronously, inside the tap: unlocks mobile audio for the whole loop
   heardLog = [];
   setStatus("Loading your words…");
-  [words, sents] = await Promise.all([buildWords(), buildSentences()]);
-  if (!words.length) { setStatus("No words yet — study a little first, then come back."); return; }
-  S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, known: 0, current: null, graded: true, cancel: null, audio: null, onResume: null,
-        commute: !!commute, t0: Date.now(), pausedMs: 0, pauseAt: 0 };
-  logEvent(commute ? { e: "commute-start", pool: words.length } : { e: "alisten-start", pool: words.length });
-  acquireWake();
-  setMediaSession();
-  render("playing");
-  document.body.classList.toggle("commute", !!commute);   // one layout: big type, four thumb-sized controls
-  if (commute) { startCommuteSilentLoop(); runCommute(); } else runLoop();
+  ["acCommute", "acStart"].forEach(id => { const b = document.getElementById(id); if (b) { b.disabled = true; b.style.opacity = "0.5"; } });
+  try {
+    [words, sents] = await Promise.all([buildWords(), buildSentences()]);
+    if (!words.length) { render("ready"); setStatus("No words yet — study a little first, then come back."); return; }
+    S = { playing: true, paused: false, stop: false, skip: false, i: 0, wIdx: 0, sIdx: 0, taught: 0, sents: 0, known: 0, current: null, graded: true, cancel: null, audio: null, onResume: null,
+          commute: !!commute, t0: Date.now(), pausedMs: 0, pauseAt: 0 };
+    logEvent(commute ? { e: "commute-start", pool: words.length } : { e: "alisten-start", pool: words.length });
+    acquireWake();
+    setMediaSession();
+    render("playing");
+    document.body.classList.toggle("commute", !!commute);   // one layout: big type, four thumb-sized controls
+    if (commute) { startCommuteSilentLoop(); runCommute(); } else runLoop();
+  } finally { _starting = false; }
 }
 
 /* ---------- THE COMMUTE PROGRAMME (12 Oct) ----------
@@ -487,11 +500,12 @@ async function prefetchQueue(q) {
   }
 }
 async function runCommute() {
+  const me = S;                                   // this loop owns THIS session only
   S.queue = buildCommuteQueue(); S.hist = []; S.heardSents = [];
   setStatus("Caching your clips…"); await prefetchQueue(S.queue);
-  if (!S || S.stop) return;
+  if (S !== me || S.stop) return;
   await speakP("Commute session. Hands free. Say each one back in the gap.", 1);
-  while (S && !S.stop) {
+  while (S === me && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
     if (commuteElapsedMs() > COMMUTE_MIN * 60000) break;                 // the 13-minute promise
     let item = S.queue.shift();
@@ -571,11 +585,12 @@ function nextWord() { const w = words[S.wIdx % words.length]; S.wIdx++; return w
 function nextSent() { const x = sents[S.sIdx % sents.length]; S.sIdx++; return x; }
 
 async function runLoop() {
+  const me = S;                                   // this loop owns THIS session only
   // opening line, once
   await speakP(S.commute
     ? "Commute session. Hands free. Recall each meaning in the gap, before I say it."
     : "Audio coach. Listen, and recall the meaning before I say it.", 1);
-  while (S && !S.stop) {
+  while (S === me && !S.stop) {
     if (S.paused) { await new Promise(res => { S.onResume = res; }); continue; }
     if (S.commute && commuteElapsedMs() > COMMUTE_MIN * 60000) break;   // the 15-min promise
     // ⏮ during a sentence: play that sentence again before anything else
