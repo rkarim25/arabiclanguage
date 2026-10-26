@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-23.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
+**Updated 2026-10-26.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 
@@ -133,3 +133,16 @@ Any AI agent (Codex, Antigravity, Claude, ChatGPT) working on this system must o
 - **Untimed Mastery Tests:** Sunday Preply tests test comprehension and vocabulary comprehensively without an artificial countdown clock ($\ge 80\%$ confirms mastery).
 - **Mobile Lock Screen & Audio Playlists:** Mobile web browsers aggressively throttle `setTimeout` timers when the device screen is locked in a pocket. All inter-sentence and Arabic-English recall pauses use `playAudioGap(sec)` silent audio playback (`audio/ui/gap1.wav`, `gap2.wav`, etc.) so the audio engine remains active. Lock screen controls (`nexttrack`, `previoustrack`, `seekforward`, `seekbackward`, `play`, `pause`) are wired through `setAppMediaSession` with tokenized cancellation (`_audioToken++`) to prevent race conditions or overlapping audio.
 
+## 5. Session Update — 26 Oct 2026 (Monday Run)
+
+- **Live URL & Cache Stamp:** `https://rkarim25.github.io/arabiclanguage/` stamped `v=mvpkw2mb`.
+- **Health & Test Integrity:** All 8 automated test suites pass 100% (curriculum, progress model, sentences, typing, drill grade, sentence diagnosis, shell integration, audio coverage with 11,090 manifest entries).
+- **Progress & Telemetry:**
+  - 1,176 cards in SRS (548 Box 5, 25 Box 4, 48 Box 3 = 621 strong/solid; 373 Box 1, 52 Box 2; 130 Box 0).
+  - Qur'an understanding (Salah listening): **13.5%** (honest decay model).
+  - Practical Conversation deployable: **0.7%**.
+  - Slips & struggles identified: `md:23` (*المَسَاءُ لِلْعَائِلَةِ* — "The evening is for the family"), hotel room key slip (*أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ*), car key (*أَيْنَ مِفْتَاحُ السَّيَّارَةِ*).
+- **Speak with AI & Documentation Refresh:**
+  - Added **Prompt VIII** to `SPEAK_WITH_AI.md` (Monday Week-Kickoff Commute & Daily Conversation Drill) and **Prompt 23** to `LEARNER_CONTEXT.md`.
+  - Added *المَسَاءُ لِلْعَائِلَةِ* (*al-masāʾu lil-ʿāʾilah*) to the dynamic dossier generator (`js/app.js`), Preply class prompt (`class.html`), mnemonic quick-reference matrix, and active slips ledger.
+  - Sunday 25 Oct Preply lesson notes/photos check: pending Reza's snap whenever a minute appears.
