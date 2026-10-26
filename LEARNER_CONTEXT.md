@@ -200,6 +200,9 @@ The following words were identified in recent telemetry and test diagnostics as 
    - Present first-person *أَـ* (e.g., *أُرِيدُ*, *أَسْكُنُ*, *أَفْهَمُ*, *أَتَكَلَّمُ*).
    - Future particle *سَـ* (e.g., *سَأَذْهَبُ*, *سَأَنَامُ*).
    - Negation with *لَا* (present) and *لَمْ* (past jussive, e.g. *لَمْ أَفْهَمْ*).
+6. **لِـ — "for / to / belongs to", and لِ + ال = لِلْ (26 Oct):**
+   - *المَسَاءُ لِلْعَائِلَةِ* (the evening is for the family), *الصَّبَاحُ لِلْعَمَلِ* (the morning is for work), *هَذَا الكِتَابُ لِي* (this book is mine), *لِمَنْ هَذَا؟* (whose is this?).
+   - Before ال the alif is swallowed: *لِلْعَائِلَةِ*, *لِلَّهِ* (as in *الحَمْدُ لِلَّهِ*). Before a bare noun it stays *لِ*: *لِدَرْسِ العَرَبِيَّةِ*.
 
 ---
 

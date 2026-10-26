@@ -59,6 +59,7 @@
    "tr": "fī yawmi l-aḥad, arāda sāmir an yabḥatha ʿan baytin jadīdin li-s-sakan.",
    "pattern": "tenses",
    "frames": [
+    "lam-li",
     "tenses",
     "idafa"
    ]
@@ -143,8 +144,8 @@
    "tr": "dhahaba maʿa akhīhi ilā ḥayyi l-jāmiʿah, wa-shāhadā shaqqatan jamīlatan fīhā ghurfatu julūsin wāsiʿatun wa-ghurfatu nawmin murīḥatun wa-maṭbakhun ṣaghīr.",
    "pattern": "tenses",
    "frames": [
+    "prep-pron",
     "tenses",
-    "pronouns",
     "gender"
    ]
   },

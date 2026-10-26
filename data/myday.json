@@ -508,6 +508,61 @@
       "swap": "",
       "arf": "مَاذَا أَكَلْتِ اليَوْمَ؟",
       "trf": "mādhā akalti l-yawm"
+    },
+    {
+      "id": "md:54",
+      "moment": "morning",
+      "who": "me",
+      "ar": "الصَّبَاحُ لِلْعَمَلِ.",
+      "en": "The morning is for work.",
+      "tr": "aṣ-ṣabāḥu li-l-ʿamal",
+      "swap": "work → the train",
+      "source": "teacher",
+      "lesson": "Coach session — 26 Oct"
+    },
+    {
+      "id": "md:55",
+      "moment": "weekend",
+      "who": "me",
+      "ar": "السَّبْتُ لِلْأَوْلَادِ.",
+      "en": "Saturday is for the children.",
+      "tr": "as-sabtu li-l-awlād",
+      "swap": "Saturday → Sunday",
+      "source": "teacher",
+      "lesson": "Coach session — 26 Oct"
+    },
+    {
+      "id": "md:56",
+      "moment": "weekend",
+      "who": "me",
+      "ar": "الأَحَدُ لِدَرْسِ العَرَبِيَّةِ.",
+      "en": "Sunday is for the Arabic lesson.",
+      "tr": "al-aḥadu li-darsi l-ʿarabiyyah",
+      "swap": "the Arabic lesson → the family",
+      "source": "teacher",
+      "lesson": "Coach session — 26 Oct"
+    },
+    {
+      "id": "md:57",
+      "moment": "smalltalk",
+      "who": "me",
+      "ar": "هَذَا الكِتَابُ لِي.",
+      "en": "This book is mine.",
+      "tr": "hādhā l-kitābu lī",
+      "swap": "the book → the bag",
+      "source": "teacher",
+      "lesson": "Coach session — 26 Oct"
+    },
+    {
+      "id": "md:58",
+      "moment": "her",
+      "who": "her",
+      "ar": "لِمَنْ هَذَا الكِتَابُ؟",
+      "en": "Whose book is this?",
+      "tr": "li-man hādhā l-kitāb?",
+      "swap": "",
+      "source": "teacher",
+      "lesson": "Coach session — 26 Oct"
     }
   ],
   "note2": "arf/trf/enf (12 Oct): the feminine / her-side form, used when the signed-in learner is Saba (plan.js planProfile). Audio: gen-audio.py reads arf too."

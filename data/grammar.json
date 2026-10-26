@@ -334,6 +334,63 @@
    ]
   },
   {
+   "id": "lam-li",
+   "ar": "لِـ / لِلْ",
+   "name": "لِـ — 'for', 'to', 'belongs to' (and how it swallows ال)",
+   "what": "A single letter, لِ (li-), glued to the front of a word means FOR / TO / BELONGS TO. You say it every evening: المَسَاءُ لِلْعَائِلَةِ — the evening is FOR the family.\n\nThe one trick: when لِ meets ال, the alif disappears and the two lams sit together — لِ + العَائِلَة = لِلْعَائِلَةِ (li-l-ʿāʾilah), لِ + العَمَل = لِلْعَمَلِ. Listen for that double L at the start of a word, 'lil…', and you have heard 'for the …'.\n\nThe most famous case of all: الحَمْدُ لِلَّهِ — لِ + الله = لِلَّهِ, 'praise belongs TO Allah'. The same shape opens al-Baqarah: هُدًى لِّلْمُتَّقِينَ, a guidance FOR the mindful.\n\nBefore a word with no ال it stays a plain لِ: لِدَرْسِ العَرَبِيَّةِ (for the Arabic lesson), لِرَبِّكَ (to your Lord). With a pronoun it fuses — لِي mine, لَكَ yours, لَهُ his — that is the prep-pron rule you have already met. From his own sentence, 26 Oct.",
+   "examples": [
+    {
+     "ar": "المَسَاءُ لِلْعَائِلَةِ",
+     "en": "The evening is FOR THE family — لِ + ال = لِلْ."
+    },
+    {
+     "ar": "الْحَمْدُ لِلَّهِ",
+     "en": "(All) praise belongs TO Allah. (1:2) — لِ + الله = لِلَّهِ"
+    },
+    {
+     "ar": "هُدًى لِّلْمُتَّقِينَ",
+     "en": "a guidance FOR THE mindful. (2:2)"
+    },
+    {
+     "ar": "إِنَّ لِلْمُتَّقِينَ مَفَازًا",
+     "en": "Indeed FOR THE righteous there is salvation. (78:31)"
+    },
+    {
+     "ar": "فَصَلِّ لِرَبِّكَ",
+     "en": "So pray TO your Lord. (108:2) — no ال, so a plain لِ"
+    }
+   ],
+   "test": [
+    {
+     "prompt": "'for the family'",
+     "ar": "لِلْعَائِلَةِ",
+     "hint": "li-l-ʿāʾilah — the alif of ال is swallowed"
+    },
+    {
+     "prompt": "'the morning is for work'",
+     "ar": "الصَّبَاحُ لِلْعَمَلِ",
+     "hint": "aṣ-ṣabāḥu li-l-ʿamal"
+    },
+    {
+     "prompt": "'praise belongs to Allah'",
+     "ar": "الْحَمْدُ لِلَّهِ",
+     "hint": "al-ḥamdu li-llāh"
+    },
+    {
+     "prompt": "'for the Arabic lesson' (no ال on دَرْس)",
+     "ar": "لِدَرْسِ العَرَبِيَّةِ",
+     "hint": "li-darsi l-ʿarabiyyah — a plain لِ"
+    },
+    {
+     "prompt": "'this book is mine'",
+     "ar": "هَذَا الكِتَابُ لِي",
+     "hint": "hādhā l-kitābu lī"
+    }
+   ],
+   "source": "teacher",
+   "lesson": "Coach session — 26 Oct"
+  },
+  {
    "id": "have",
    "ar": "عِندِي",
    "name": "عِندَ — having, and not having",

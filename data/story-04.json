@@ -79,7 +79,7 @@
    "pattern": "tenses",
    "frames": [
     "tenses",
-    "idafa",
+    "connectors",
     "who-acts"
    ]
   },
@@ -271,6 +271,7 @@
    "frames": [
     "inna",
     "tenses",
+    "pronouns",
     "plurals"
    ]
   },

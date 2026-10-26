@@ -239,7 +239,8 @@
    "pattern": "inna",
    "frames": [
     "inna",
-    "tenses"
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -439,7 +440,7 @@
    "pattern": "questions",
    "frames": [
     "questions",
-    "nominal"
+    "tenses"
    ]
   },
   {
@@ -789,6 +790,7 @@
    "pattern": "have",
    "frames": [
     "have",
+    "negation",
     "nominal"
    ]
   },
@@ -900,6 +902,7 @@
    "pattern": "have",
    "frames": [
     "have",
+    "lam-li",
     "pronouns",
     "nominal"
    ]
@@ -960,7 +963,7 @@
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
    "frames": [
-    "pronouns",
+    "prep-pron",
     "nominal"
    ]
   },
@@ -1007,8 +1010,8 @@
    "pattern": "have",
    "frames": [
     "have",
-    "tenses",
-    "pronouns"
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -1132,7 +1135,6 @@
    "lesson": "Class — 30 Aug: the flat, the week, the family",
    "pattern": "nominal",
    "frames": [
-    "dual",
     "nominal"
    ]
   },
@@ -1563,7 +1565,7 @@
    "pattern": "questions",
    "frames": [
     "questions",
-    "nominal"
+    "tenses"
    ]
   },
   {
@@ -2466,7 +2468,8 @@
    "frame": "demonstratives",
    "frames": [
     "demonstratives",
-    "tenses"
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -2548,8 +2551,7 @@
    "pattern": "imperative",
    "frame": "imperative",
    "frames": [
-    "imperative",
-    "nominal"
+    "imperative"
    ]
   },
   {
@@ -3068,7 +3070,8 @@
     "inna",
     "tenses",
     "connectors",
-    "idafa"
+    "idafa",
+    "pronouns"
    ]
   },
   {
@@ -3348,8 +3351,7 @@
    "pattern": "tenses",
    "frame": "tenses",
    "frames": [
-    "tenses",
-    "connectors"
+    "tenses"
    ]
   },
   {
@@ -3429,8 +3431,8 @@
    "frames": [
     "negation",
     "prep-pron",
-    "connectors",
-    "nominal"
+    "tenses",
+    "connectors"
    ]
   },
   {
@@ -3641,7 +3643,8 @@
    "frame": "inna",
    "frames": [
     "inna",
-    "tenses"
+    "pronouns",
+    "nominal"
    ]
   },
   {
@@ -3678,7 +3681,8 @@
    "frames": [
     "inna",
     "tenses",
-    "connectors"
+    "connectors",
+    "pronouns"
    ]
   },
   {

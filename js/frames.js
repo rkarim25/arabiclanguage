@@ -164,6 +164,9 @@
     }
     if (any(SETS.demo)) frames.add("demonstratives");
     if (bs.some(t => PREP_PRON.test(t) && !/^(عند|لد)/.test(t))) frames.add("prep-pron");
+    // لِ + ال = لِلْ (لِلْعَائِلَةِ، لِلَّهِ، لِّلْمُتَّقِينَ): no Arabic root begins with two lams, so a
+    // word opening لل- is always the preposition swallowing the article (26 Oct, his own md:23)
+    if (bs.some(t => /^لل./.test(t))) frames.add("lam-li");
     const present = raw.some((t, i) => isPresent(t, i));
     const past = any(SETS.pastVerb) || frames.has("past-tu") || raw.some((t, i) => isPastShape(t, bs[i]));
     if (present || past) frames.add("tenses");
@@ -191,7 +194,7 @@
     if (!present && !past && !frames.has("kana") && !frames.has("imperative") && !frames.has("wujud") && b.length >= 2) frames.add("nominal");
 
     // ---- the one label: most specific unmistakable marker first ----
-    const ORDER = ["past-tu", "kana", "dual", "alladhina", "inna", "wujud", "imperative", "ordinals", "negation", "have", "questions", "demonstratives", "prep-pron", "tenses", "nominal"];
+    const ORDER = ["past-tu", "kana", "dual", "alladhina", "inna", "wujud", "imperative", "ordinals", "negation", "have", "questions", "demonstratives", "lam-li", "prep-pron", "tenses", "nominal"];
     const pattern = ORDER.find(p => frames.has(p)) || null;
     return { pattern, frames: [...frames] };
   }

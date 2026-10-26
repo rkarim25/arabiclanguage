@@ -64,6 +64,12 @@ const CASES = [
   ["اِمْشِ مَعِي", "imperative", ["imperative"]],
   ["مَا عِنْدِي", "negation", ["negation", "have"]],
   ["الشَّقَّةُ فِيهَا غُرْفَتَانِ", "dual", ["dual", "prep-pron"]],
+  /* 26 Oct: لِ + ال → لِلْ, his own sentence and the Qur'an's most frequent case */
+  ["المَسَاءُ لِلْعَائِلَةِ", "lam-li", ["lam-li", "nominal"]],
+  ["الصَّبَاحُ لِلْعَمَلِ", "lam-li", ["lam-li", "nominal"]],
+  ["هُدًى لِّلْمُتَّقِينَ", "lam-li", ["lam-li"]],
+  ["ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ", "lam-li", ["lam-li", "nominal"]],
+  ["إِنَّ لِلۡمُتَّقِينَ مَفَازًا", "inna", ["inna", "lam-li"]],
 ];
 console.log("\n-- the one label --");
 let labelOk = 0;
@@ -84,6 +90,8 @@ yes(!F.detect("لِأَنِّي تَعْبَانُ").frames.includes("tenses"), 
 yes(!F.detect("إِنَّنِي جَائِعٌ").frames.includes("tenses"), "إِنَّنِي is not a present-tense verb");
 yes(!F.detect("لِأُمِّي بَيْتٌ").frames.includes("tenses"), "لِأُمِّي is not a verb");
 yes(!F.detect("لَمْ أَنَمْ جَيِّدًا").frames.includes("nominal"), "a sentence with a verb is not nominal");
+yes(!F.detect("لَهُ مُلْكُ السَّمَاوَاتِ").frames.includes("lam-li"), "لَهُ is a fused pronoun, not لِ + ال");
+yes(!F.detect("لِدَرْسِ العَرَبِيَّةِ").frames.includes("lam-li"), "a plain لِ before a bare noun is not the swallowed article");
 yes(F.detect("").pattern === null, "an empty string has no label");
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

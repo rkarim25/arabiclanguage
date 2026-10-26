@@ -51,7 +51,7 @@
     lookbackDays: 60,
     maxNew: 1, maxDue: 2, minKnown: 0.6,
     frame: { "-": 0.5, nominal: 0.3, demonstratives: 0.4, have: 0.6, wujud: 0.6, questions: 0.7, idafa: 0.8, connectors: 0.8,
-      pronouns: 0.9, imperative: 0.9, "prep-pron": 1.0, negation: 1.0, tenses: 1.1, "past-tu": 1.1, ordinals: 1.0, gender: 0.8,
+      pronouns: 0.9, imperative: 0.9, "prep-pron": 1.0, "lam-li": 0.6, negation: 1.0, tenses: 1.1, "past-tu": 1.1, ordinals: 1.0, gender: 0.8,
       kana: 1.2, dual: 1.2, plurals: 1.3, inna: 1.3, "who-acts": 1.3, alladhina: 1.6 },
   };
   const sig = x => 1 / (1 + Math.exp(-x));
@@ -154,7 +154,7 @@
      miss rate; a frame with no evidence is an UNKNOWN worth one sentence per
      batch, in the order a learner needs them. */
   const ESSENTIAL = ["nominal", "idafa", "have", "questions", "demonstratives", "negation", "pronouns", "tenses", "prep-pron",
-    "connectors", "past-tu", "kana", "ordinals", "plurals", "imperative", "gender", "inna", "dual", "wujud", "who-acts", "alladhina"];
+    "lam-li", "connectors", "past-tu", "kana", "ordinals", "plurals", "imperative", "gender", "inna", "dual", "wujud", "who-acts", "alladhina"];
   /* every frame a sentence exercises: stamped by the pipeline (frames), else its label, else tagged on the spot */
   const framesOf = s => {
     if (s.frames && s.frames.length) return s.frames;

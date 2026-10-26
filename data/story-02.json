@@ -396,9 +396,9 @@
    "pattern": "inna",
    "frames": [
     "inna",
-    "tenses",
     "connectors",
-    "pronouns"
+    "pronouns",
+    "nominal"
    ]
   }
  ],

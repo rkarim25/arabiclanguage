@@ -1001,7 +1001,8 @@
      "pattern": "past-tu",
      "frames": [
       "past-tu",
-      "tenses"
+      "tenses",
+      "pronouns"
      ]
     },
     {
@@ -1026,8 +1027,7 @@
      "pattern": "questions",
      "frames": [
       "questions",
-      "idafa",
-      "nominal"
+      "tenses"
      ]
     },
     {
@@ -1278,6 +1278,7 @@
      ],
      "pattern": "nominal",
      "frames": [
+      "lam-li",
       "pronouns",
       "nominal"
      ]
@@ -2385,6 +2386,7 @@
      "frames": [
       "dual",
       "questions",
+      "lam-li",
       "tenses"
      ]
     },
@@ -2520,6 +2522,7 @@
      ],
      "pattern": "tenses",
      "frames": [
+      "lam-li",
       "tenses"
      ]
     },
@@ -2868,8 +2871,7 @@
      "pattern": "questions",
      "frames": [
       "questions",
-      "idafa",
-      "nominal"
+      "tenses"
      ]
     },
     {

@@ -1650,6 +1650,7 @@ function suggestNext() {
     ["negation", "لا / ما / لم / لن — saying 'not'"],
     ["connectors", "وَ / فَـ / ثُمَّ — and, so, then"],
     ["prep-pron", "لَهُ / فِيهِ — fused prepositions"],
+    ["lam-li", "لِـ / لِلْ — for, to, belongs to"],
     ["verbears", "🎧 who's acting? — verb endings by ear"],
     ["past-tu", "ـتُ — ‘I did it’: the past for yourself"],
     ["ordinals", "first, second, third — and the clock"],
@@ -2440,7 +2441,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mvpmdy0h";
+const DATA_V = "mvpojam8";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

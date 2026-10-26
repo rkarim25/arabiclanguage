@@ -321,6 +321,7 @@
    ],
    "pattern": "nominal",
    "frames": [
+    "lam-li",
     "pronouns",
     "nominal"
    ]
@@ -385,7 +386,8 @@
    "pattern": "tenses",
    "frames": [
     "tenses",
-    "plurals"
+    "plurals",
+    "nominal"
    ]
   }
  ],
