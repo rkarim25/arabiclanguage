@@ -1,62 +1,72 @@
 {
-  "version": 1,
-  "note": "the intervention ledger (COACH-LOOP gap I, 12 Oct): what was added for which card and when. scripts/intervention-check.js <payload> joins each item to that key's later verdicts. The nightly appends one item per targeted content move.",
-  "items": [
-    {
-      "date": "2026-10-12",
-      "kind": "mnemonic",
-      "keys": [
-        "ev-lesson-village:0",
-        "ev-lesson-home:22"
-      ],
-      "what": "💡 خزائن = khazana, طابق = stacked plates (nightly 12 Oct)"
-    },
-    {
-      "date": "2026-10-12",
-      "kind": "note",
-      "keys": [
-        "chap:3:4",
-        "chap:3:5"
-      ],
-      "what": "chap-3 📐 note extended: iḍāfa without ال + هذا/هذه, grounded in his failed drill sentence (nightly 12 Oct)"
-    },
-    {
-      "date": "2026-10-11",
-      "kind": "drill",
-      "keys": [
-        "chap:4:0",
-        "chap:4:1",
-        "chap:4:2",
-        "chap:4:3",
-        "chap:4:4",
-        "chap:4:5",
-        "chap:4:6",
-        "chap:4:7",
-        "chap:4:8",
-        "chap:4:9"
-      ],
-      "what": "🎯 chapter 4 variation drills — past ـتُ / present أَ / future سَـ (his tense confusion)"
-    },
-    {
-      "date": "2026-10-13",
-      "kind": "mnemonic",
-      "keys": [
-        "ev-lesson-home:21",
-        "ev-lesson-home:24",
-        "ev-lesson-home:25",
-        "ev-lesson-week:9"
-      ],
-      "what": "💡 hooks for Mon 12 Oct slips: مصعد (miss-Saad + Fāṭir 10 root), سلم (ladder of salāms + aṭ-Ṭūr 38), دور (revolving door = turn/storey), and an exact-phrase key so يوم الثلاثاء shows the day-three hook instead of falling through to the يوم/yawn hook"
-    },
-    {
-      "date": "2026-10-14",
-      "kind": "mnemonic",
-      "keys": [
-        "ev-lesson-routine:18",
-        "tw:حجز",
-        "tw:خناس"
-      ],
-      "what": "💡 hooks: أُسَاعِدُ (AID inside usāʿidu; he slipped it 12 Oct), حَجْز (Hajj-booking; his own tap-learn word, core of his 3-sentence script), خَنَّاس (con-artist of an-nās + an-Nās 4; his own tap-learn word)"
-    }
-  ]
+ "version": 1,
+ "note": "the intervention ledger (COACH-LOOP gap I, 12 Oct): what was added for which card and when. scripts/intervention-check.js <payload> joins each item to that key's later verdicts. The nightly appends one item per targeted content move.",
+ "items": [
+  {
+   "date": "2026-10-12",
+   "kind": "mnemonic",
+   "keys": [
+    "ev-lesson-village:0",
+    "ev-lesson-home:22"
+   ],
+   "what": "💡 خزائن = khazana, طابق = stacked plates (nightly 12 Oct)"
+  },
+  {
+   "date": "2026-10-12",
+   "kind": "note",
+   "keys": [
+    "chap:3:4",
+    "chap:3:5"
+   ],
+   "what": "chap-3 📐 note extended: iḍāfa without ال + هذا/هذه, grounded in his failed drill sentence (nightly 12 Oct)"
+  },
+  {
+   "date": "2026-10-11",
+   "kind": "drill",
+   "keys": [
+    "chap:4:0",
+    "chap:4:1",
+    "chap:4:2",
+    "chap:4:3",
+    "chap:4:4",
+    "chap:4:5",
+    "chap:4:6",
+    "chap:4:7",
+    "chap:4:8",
+    "chap:4:9"
+   ],
+   "what": "🎯 chapter 4 variation drills — past ـتُ / present أَ / future سَـ (his tense confusion)"
+  },
+  {
+   "date": "2026-10-13",
+   "kind": "mnemonic",
+   "keys": [
+    "ev-lesson-home:21",
+    "ev-lesson-home:24",
+    "ev-lesson-home:25",
+    "ev-lesson-week:9"
+   ],
+   "what": "💡 hooks for Mon 12 Oct slips: مصعد (miss-Saad + Fāṭir 10 root), سلم (ladder of salāms + aṭ-Ṭūr 38), دور (revolving door = turn/storey), and an exact-phrase key so يوم الثلاثاء shows the day-three hook instead of falling through to the يوم/yawn hook"
+  },
+  {
+   "date": "2026-10-14",
+   "kind": "mnemonic",
+   "keys": [
+    "ev-lesson-routine:18",
+    "tw:حجز",
+    "tw:خناس"
+   ],
+   "what": "💡 hooks: أُسَاعِدُ (AID inside usāʿidu; he slipped it 12 Oct), حَجْز (Hajj-booking; his own tap-learn word, core of his 3-sentence script), خَنَّاس (con-artist of an-nās + an-Nās 4; his own tap-learn word)"
+  },
+  {
+   "date": "2026-10-27",
+   "kind": "mnemonic",
+   "keys": [
+    "chap:2:7",
+    "يمكنك",
+    "مساعدتي"
+   ],
+   "what": "He rated chap:2:7 (هل يمكنك مساعدتي؟) 'no' and tapped مساعدتي on 26 Oct evening — added mumkin (Bengali মুমকিন cognate) + musāʿadatī (AID-noun, linked to existing أساعد hook) 💡s."
+  }
+ ]
 }
