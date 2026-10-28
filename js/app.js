@@ -2441,7 +2441,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mvrhgjo7";
+const DATA_V = "mvshez0j";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4124,7 +4124,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
   md += `- **Active Telemetry Slips & Variation Misses (26–27 Oct):**\n`;
-  md += `  - *Chapter 2 Requests & Assistance Slips (26–27 Oct):* هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah)\n  - *Thirsty / Wants Drinks:* أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill beverage swaps: مَاء / قَهْوَة)\n  - *Paying & Money:* تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)\n  - *Need Items:* أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح / جَوَاز سَفَر)\n  - *Closing Orders:* شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else)\n  - *Hotel Directions:* خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel, please — Chapter 3 travel slip)\n  - *Evening Routine:* المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ preposition attachment)\n  - *Preply Sunday Class Debrief & Week Consolidation:* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
+  md += `  - *Chapter 2 Requests, Travel & Assistance Slips (28 Oct):* هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah)\n  - *Thirsty / Wants Drinks:* أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill beverage swaps: مَاء / قَهْوَة)\n  - *Paying & Money:* تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)\n  - *Need Items:* أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح / جَوَاز سَفَر)\n  - *Closing Orders:* شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else)\n  - *Hotel Directions:* خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel, please — Chapter 3 travel slip)\n  - *Evening Routine:* المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ preposition attachment)\n  - *Preply Sunday Class Debrief & Week Consolidation:* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
   md += `  - *المَسَاءُ لِلْعَائِلَةِ* (The evening is for the family — recent telemetry struggle in myday; frame: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ، المَسَاءُ لِلْعَائِلَةِ)\n`;
   md += `  - *Class 11 Oct Past-Tense Board Narration (-tu):* سَافَرْتُ إِلَى القَرْيَةِ، تَنَاوَلْتُ الفَطُورَ، اشْتَرَيْتُ فِي السُّوقِ، سَاعَدْتُ فِي البَيْتِ، عُدْتُ فِي السَّاعَةِ السَّادِسَةِ\n`;
   md += `  - *مِفْتَاحُ الغُرْفَةِ* (room key — Chapter 3 drill slip; mnemonic: root f-t-ḥ / opener like al-Fātiḥah; frame: هَذَا مِفْتَاحُ الغُرْفَةِ)\n`;
@@ -4137,6 +4137,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `  - *مِصْعَد* (lift, elevator — rated learning; root ṣ-ʿ-d: machine that ascends)\n`;
   md += `  - *دَوْر* (floor / turn — rated learning; "my turn on this floor"); *طَابِق* (floor / storey); *خَزَائِن* (cupboards)\n`;
   md += `  - *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning in week routine)\n`;
+  md += `  - *يَوْمَ الأَرْبِعَاءِ* (on Wednesday — 4th day of work week, root r-b-ʿ / arbaʿah)\n`;
   md += `  - *الجَوُّ بَارِدٌ اليَوْمَ* (The weather is cold today — rated learning in myday)\n`;
   md += `  - *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day — rated learning in myday)\n`;
   md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;

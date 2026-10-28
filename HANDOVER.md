@@ -1,6 +1,6 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-26.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
+**Updated 2026-10-28.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 
@@ -8,7 +8,7 @@
 
 A private Arabic-learning platform for **Reza Karim** (`rkarim88@gmail.com`) and his wife **Saba Khan** (`sabatarif.15@gmail.com`).
 - **Live URL:** `https://rkarim25.github.io/arabiclanguage/`
-- **Current Deployed Commit:** `ef501d29` (cache `v=mvo5jkij`).
+- **Current Deployed Commit:** `5b073f6a` (live cache stamp `v=mvrhgjo7`). All 18 HTML pages verified 200 OK.
 - **Primary Goal (Rank 1):** Understand the Qur'an **by ear** as it is recited (Reza has memorized the text; auditory decoding at speed is the barrier; favourite Qari: **Mishary Rashid Alafasy**).
 - **Secondary Goal (Rank 2):** Hold practical conversation in Modern Standard Arabic (MSA / الفصحى).
 - **Learner Constraint:** Senior investment manager + young family. Low energy at night. Needs 5–10 minute zero-friction, decision-free sittings.
@@ -75,16 +75,16 @@ There are **8 automated test suites** in `scripts/`. Always run them from `arabi
 
 ## 4. Cloudflare KV, Telemetry & Speak with AI Status
 
-- **`coach:rkarim88@gmail.com` in KV:** Stamped `2026-10-25` and verified active in Cloudflare KV via strict Read-Modify-Write. Live Sunday 25 Oct 07:00 UK Preply class was held earlier today; post-class consolidation & debrief prompt deployed; awaiting lesson notes/photos if taken.
-- **Telemetry Verified (25 Oct 2026):** 3,388 logged events; 1,176 cards in SRS: **662 solid/strong** in Box 3–5 (588 Box 5, 26 Box 4, 48 Box 3), 421 active learning (369 Box 1, 52 Box 2), 93 Box 0 (need review). Active Reader: Chapter 2 ("Wants & Requests") line 5/10. Qur'an A1 sits at 86%, Conversation cleared A1 (conv-a1 met, conv-a2 sits at 7/8 cards).
-- **Commute Audio Stoppage Fix (25 Oct):**
-  - Resolved Reza's ✏️ pen note (*"The sound of the commute session stopped after a while"*): mobile OS (iOS Safari / mobile Chrome) suspends background WebKit timers and CoreAudio channels during silent gap transitions while the screen is locked in a pocket.
-  - Added `_commuteSilentLoop` continuous background audio element playing looped silence at volume 0.001 during hands-free commute mode in `audio.html`, ensuring CoreAudio never sleeps the page. Made `gapP` catch & error handlers non-blocking.
-- **Speak with AI Enhancements (25 Oct):**
-  - Added **Prompt VII** to `SPEAK_WITH_AI.md` (Post-Class Debrief & Week Consolidation Sprint for Sunday 25 Oct Evening / Monday Morning).
-  - Added **Prompt 22** to `LEARNER_CONTEXT.md` with post-class debrief parameters and 4-sentence connected script polish.
-  - Enhanced prompt generators in `class.html` (`buildClassAiPrompt`) and `js/app.js` (`generateLearnerDossierMarkdown`) for post-class roleplay and week consolidation.
-  - Verified all prompt copy mechanisms and test suites: 100% pass across all 14 test suites.
+- **`coach:rkarim88@gmail.com` in KV & Data Snapshots:** Stamped `2026-10-28`. Sunday 25 Oct 07:00 UK Preply class passed; photo/notes dump pending; next class is Sunday 1 Nov 07:00 UK.
+- **Telemetry Verified (28 Oct 2026):** 3,459 logged events; 1,185 cards in SRS: **517 solid/strong** in Box 3–5 (444 Box 5, 25 Box 4, 48 Box 3; plus 104 retired mastered), 429 active learning (377 Box 1, 52 Box 2), 135 Box 0 (need review). Passed Chapter 1 & 2 tests at 100% (5/5). Sunday 27 Sep exam `ms-class-0927-l1` sat at 78% (7/9, ear section 100%). Salah words caught by ear at 15.7% (biggest single-day rise recorded).
+- **Commute Re-Entrancy & Sequencer Fix (26–28 Oct):**
+  - Resolved Reza's 26 Oct ✏️ pen note (*"Tried the commute session and it was all over the place. Would say something and then jump to show another. Won't give time etc. check the whole thing"*): three overlapping sequencers ran from rapid taps while words fetched.
+  - Deployed re-entrancy guard, button darkening on initial tap, single loop ownership, verified in browser and covered by 3 `test-shell` assertions.
+- **Speak with AI Enhancements (28 Oct):**
+  - Added **Prompt X** to `SPEAK_WITH_AI.md` (Wednesday Precision Listening, Travel & Routine Consolidation Drill for 28 Oct).
+  - Added **Prompt 24** to `LEARNER_CONTEXT.md` with Wednesday 28 Oct drill parameters and full diagnostic slip coverage (`هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟` with Bengali *mumkin* + AID hook, `تَفَضَّلْ، هَذَا مَالُكَ` with *Bayt al-Māl* wealth hook, `أَنَا عَطْشَانُ، أُرِيدُ شَايًا`, `أَحْتَاجُ إِلَى هَذَا الْكِتَابِ`, `خُذْنِي إِلَى الْفُنْدُقِ مِنْ فَضْلِكَ.`, and `المَسَاءُ لِلْعَائِلَةِ` with attached `لِـ / لِلْ`).
+  - Updated prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`) for 28 Oct Wednesday precision workout and day vocabulary (`يَوْمُ الأَرْبِعَاءِ`).
+  - Verified 100% pass across all 14 test suites and clean syntax checks across all JS/JSON files.
 
 ### Strict KV Read-Modify-Write Protocol:
 When updating `coach:<email>`:

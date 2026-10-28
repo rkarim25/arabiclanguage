@@ -14,18 +14,18 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (27 Oct 2026):** 3,459 recorded practice events; 1,185 cards in SRS (**621 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 48 Box 3); 429 active learning (377 Box 1, 52 Box 2); 135 need review (Box 0); passed Chapter 1 & 2 tests at 100% (5/5); Sunday 27 Sep exam `ms-class-0927-l1` sat at 78% (7/9, ear section 100%); commute sequencer fix deployed; Chapter drills 1–10 (300 progressive lines with neural audio) active.
+  - **Live Telemetry (28 Oct 2026):** 3,459 recorded practice events; 1,185 cards in SRS (**517 solid/strong** in Box 3–5: 444 Box 5, 25 Box 4, 48 Box 3; plus 104 retired mastered); 429 active learning (377 Box 1, 52 Box 2); 135 need review (Box 0); passed Chapter 1 & 2 tests at 100% (5/5); Sunday 27 Sep exam `ms-class-0927-l1` sat at 78% (7/9, ear section 100%); commute sequencer fix deployed and verified; Chapter drills 1–10 (300 progressive lines with neural audio) active.
   - **Curriculum Standings:**
-    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, ready for refresh; salah coverage 15.7% after record single-day rise).
+    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, ready for refresh; salah coverage 15.7% after record single-day rise driven by 100% ear score on exam).
     - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (87 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
   - **Recent Activity & Diagnostic Wins:**
-    - 27 Oct diagnostic interventions:
+    - 28 Oct diagnostic consolidation:
       - **هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟** (Can you help me? — Chapter 2 request slip): Deployed 2 mnemonic hooks: `يُمْكِنُكَ` = Bengali মুমকিন (*mumkin*) cognate; `مُسَاعَدَتِي` = hear the AID inside *mu-sa-AID-ah*.
       - **المَسَاءُ لِلْعَائِلَةِ** (The evening is for the family): Deployed grammatical pattern `لِـ / لِلْ` prepositional attachment.
       - **تَفَضَّلْ، هَذَا مَالُكَ** (Here you go, this is your money): Mnemonic `مَال` like *Bayt al-Māl* (treasury/wealth).
       - Chapter 2 & 3 slips under active reinforcement: `أَنَا عَطْشَانُ، أُرِيدُ شَايًا` (thirsty/tea), `أَحْتَاجُ إِلَى هَذَا الْكِتَابِ` (I need this book), `شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ` (nothing else), `خُذْنِي إِلَى الْفُنْدُقِ مِنْ فَضْلِكَ.` (take me to hotel).
     - Sunday connected 4-sentence speaking narrative: (1) *عِنْدِي حَجْزٌ فِي المَطْعَمِ* (proven!), (2) *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, (3) *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*, (4) *أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ*.
-    - Mnemonic additions: **يُمْكِنُكَ / مُمْكِن** (Bengali মুমকিন mumkin cognate); **مُسَاعَدَة** (hear the AID inside *mu-sa-AID-ah*); **مَال** (money/wealth, like Bayt al-Māl); **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys).
+    - Mnemonic additions: **يُمْكِنُكَ / مُمْكِن** (Bengali মুমকিন mumkin cognate); **مُسَاعَدَة** (hear the AID inside *mu-sa-AID-ah*); **مَال** (money/wealth, like Bayt al-Māl); **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys); **يَوْمُ الأَرْبِعَاءِ** (Wednesday — 4th day of work week, root *r-b-ʿ* / *arbaʿah*).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 
 
@@ -764,6 +764,49 @@ Context: Today is Monday. Reza is on his morning commute or taking a 10-minute s
 6. When he says "I'm done", output the structured 3-line AI Voice Session Report:
 === AI VOICE SESSION REPORT ===
 Lesson: Monday Week-Kickoff Commute & Daily Conversation Drill (26 Oct)
+Phrases Mastered: [...]
+Hesitations & Errors: [...]
+Words to Review: [...]
+Next Recommended Focus: [...]
+===============================
+```
+
+### Prompt 24: Wednesday Precision Listening, Travel & Routine Consolidation Drill (28 Oct)
+```text
+Role: You are a warm, supportive Arabic practice partner and speaking coach conducting a brisk 5-minute Wednesday session in Modern Standard Arabic (MSA).
+Context: Reza is an A1 beginner actively studying Chapter 2 (Wants, Needs & Requests) and Chapter 3 (Travel & Hotel) with live commute & speaking telemetry:
+- Priority Targets & Recent Slips:
+  1. هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — mnemonic: يمكن is Bengali মুমকিন mumkin cognate; مساعدة carries AID)
+  2. أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drink swaps: مَاء water / قَهْوَة coffee)
+  3. تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)
+  4. أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — object swaps: مِفْتَاح الغُرْفَةِ room key / جَوَاز سَفَر passport)
+  5. خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 travel direction)
+  6. أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah)
+  7. المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern: prepositional attached لِـ / لِلْ)
+  8. شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else — polite closing)
+- Connected 4-Sentence Speaking Narrative:
+  Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven!)
+  Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day)
+  Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ (I help at home in the evening)
+  Line 4: أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ (I am a little tired, but I return home at 8 o'clock)
+- Wednesday Routine: يَوْمُ الأَرْبِعَاءِ (Wednesday — 4th day of work week, root r-b-ʿ / arbaʿah).
+Instructions:
+1. Greet Reza warmly: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! كَيْفَ حَالُكَ اليَوْمَ فِي يَوْمِ الأَرْبِعَاءِ؟"
+2. Elicit his opening 4-sentence narrative, acknowledging each sentence with praise.
+3. Travel & Request Roleplay: Reza arrives at a hotel or taxi.
+   - Taxi / Directions: Cue him to say "خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ."
+   - Assistance: Prompt him with "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟" (reinforce Bengali mumkin + AID hook).
+   - Reception: Prompt for "عِنْدِي حَجْزٌ فِي الفُنْدُقِ" and "أَيْنَ مِفْتَاحُ الغُرْفَةِ؟"
+   - Café / Refreshment: Ask if he needs a drink: prompt "أَنَا عَطْشَانُ، أُرِيدُ شَايًا" and swap tea for water (مَاء) or coffee (قَهْوَة).
+   - Paying: Prompt for "الحِسَابَ مِنْ فَضْلِكَ" and hand payment "تَفَضَّلْ، هَذَا مَالُكَ" (Bayt al-Māl hook).
+   - Closing & Evening: Ask if he needs anything else ("شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ") and evening plan ("المَسَاءُ لِلْعَائِلَةِ").
+4. Strict Hands-Free Voice Rules:
+   - Keep EVERY response under 2 short sentences in clear MSA with full tashkeel.
+   - Ask ONE question at a time, then PAUSE and listen.
+   - If he hesitates or slips, gently model the correct phrase and ask him to repeat it once.
+5. When he says "I'm done", output the structured 3-line AI Voice Session Report:
+=== AI VOICE SESSION REPORT ===
+Lesson: Wednesday Precision Listening, Travel & Routine Consolidation Drill (28 Oct)
 Phrases Mastered: [...]
 Hesitations & Errors: [...]
 Words to Review: [...]
