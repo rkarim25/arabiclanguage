@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvshez0j">
-  <link rel="stylesheet" href="css/style.css?v=mvshez0j">
+  <link rel="stylesheet" href="css/fonts.css?v=mvtvfa80">
+  <link rel="stylesheet" href="css/style.css?v=mvtvfa80">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvshez0j"></script>
-<script src="js/curriculum.js?v=mvshez0j"></script>
-<script src="js/srs.js?v=mvshez0j"></script>
-<script src="js/match.js?v=mvshez0j"></script>
-<script src="js/errors.js?v=mvshez0j"></script>
-<script src="js/frames.js?v=mvshez0j"></script>
-<script src="js/app.js?v=mvshez0j"></script>
-<script src="js/tracker.js?v=mvshez0j"></script>
-<script src="js/plan.js?v=mvshez0j"></script>
-<script src="js/account.js?v=mvshez0j"></script>
+<script src="js/progress-model.js?v=mvtvfa80"></script>
+<script src="js/curriculum.js?v=mvtvfa80"></script>
+<script src="js/srs.js?v=mvtvfa80"></script>
+<script src="js/match.js?v=mvtvfa80"></script>
+<script src="js/errors.js?v=mvtvfa80"></script>
+<script src="js/frames.js?v=mvtvfa80"></script>
+<script src="js/app.js?v=mvtvfa80"></script>
+<script src="js/tracker.js?v=mvtvfa80"></script>
+<script src="js/plan.js?v=mvtvfa80"></script>
+<script src="js/account.js?v=mvtvfa80"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3668,7 +3668,7 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Wednesday Precision Listening, Travel & Routine Workout (28 Oct): Focus on Chapter 2 requests, travel directions & assistance slips:
+  p += `     * Thursday & Friday Pre-Weekend Spoken Workout & Rehearsal (29–30 Oct): Focus on Chapter 2 requests, travel directions, days of week & assistance slips:
        - هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah!)
        - أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill drinks swap: مَاء water / قَهْوَة coffee)
        - تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl)
@@ -3677,6 +3677,7 @@ function buildChapterAiPrompt(chap) {
        - خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 hotel/travel slip)
        - أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah)
        - المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ attached to family)
+       - Days & Weather: يَوْمُ الخَمِيسِ (Thursday — 5th day), يَوْمُ الجُمُعَةِ (Friday — prayer day), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today)
      * Connected 4-Sentence Speaking Narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
   p += `     * 15 Oct room key & reservation slips: مِفْتَاحُ الغُرْفَةِ (room key — root f-t-ḥ / opener like al-Fātiḥah), أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ (I need the room key, please), مَشْغُول (busy / occupied — root sh-gh-l), هَلْ عِنْدَكَ حَجْزٌ؟ (Do you have a reservation?)\n`;
   p += `     * 14 Oct new hooks: حَجْز (reservation / booking — like Hajj, booked years ahead; weave into café/hotel requests "عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ"), أُسَاعِدُ (I help — hear the AID inside u-sa-AID-u), الْخَنَّاس (the con-artist slinker of an-Nas who retreats upon dhikr)\n`;
