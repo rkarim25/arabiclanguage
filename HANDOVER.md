@@ -155,3 +155,27 @@ Any AI agent (Codex, Antigravity, Claude, ChatGPT) working on this system must o
 - **Pipeline note:** `gen-audio.py` failed every clip with a 403 from the Bing speech endpoint on edge-tts 7.2.8; `pip install -U edge-tts` (→ 7.3.1) fixed it. If the nightly's audio step starts failing, upgrade first.
 - **Lesson check:** Sunday 25 Oct class still uncaptured (asked 25 Oct, 26 Oct, and in tonight's note). No new pen-note images (newest 12 Oct).
 - **Live stamp:** `v=mvpojam8`. 14 suites pass, every page parses.
+
+## 6. Session Update — 30 Oct 2026 (Friday Evening Run, 18:20 UK)
+
+- **Live URL & Cache Stamp:** `https://rkarim25.github.io/arabiclanguage/` stamped `v=mvvapzpc`.
+- **Health & Test Integrity:** All 14 automated test suites pass 100% (srs, freetry, frames, match, errors, audio coverage with 11,098 manifest entries, curriculum, drill grade, progress model, sentence diagnosis, sentences, shell integration, transliteration typing with 99.0% acceptance, and chapter drills). Syntax check on all JS, JSON, and inline scripts passes cleanly.
+- **Progress & Telemetry:**
+  - 3,473 total logged events in KV (`data:rkarim88@gmail.com`).
+  - 1,185 total cards in SRS: **517 solid/strong** in Box 3–5 (plus 104 retired), 429 active learning (377 Box 1, 52 Box 2), 135 Box 0.
+  - Chapter 1 & 2 tests passed at 100% (5/5). Chapter 3 (*Hotels, Taxis & Travel*) is actively in flight (`currentChapId: "chap-3"`).
+  - Wednesday 28 Oct session telemetry: `chap:3:1` drill typed perfect (*هَذَا مِفْتَاحُ الغُرْفَةِ*), `أَيْنَ مِفْتَاحُ الغُرْفَةِ؟` rated medium (Box 1), `خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ` rated weak (Box 0).
+  - Qur'an understanding (Salah listening by ear): **13.5%** (decay model; Al-Fatiha certification lapsed past 45 days, ready for refresh).
+  - Practical Conversation deployable: **0.7%**.
+- **Pen Notes & Image Status:**
+  - 54 total pen notes reviewed. Newest note from 26 Oct (commute sequencer overlap) was fully resolved and verified in `audio.html`.
+  - No new pen notes or uploaded images since (newest image remains `12-Oct`).
+- **Sunday Preply Class Status:**
+  - Sunday 25 Oct lesson passed without photo dump.
+  - Next live Preply class is **Sunday 1 Nov 07:00 UK** (~36 hours away).
+- **Speak with AI & Documentation Refresh:**
+  - Added **Prompt Z** to `SPEAK_WITH_AI.md` (Saturday & Sunday Weekend Spoken Sprint & Preply Pre-Class Warmup for 31 Oct – 1 Nov 07:00 UK).
+  - Added **Prompt 26** to `LEARNER_CONTEXT.md` with full weekend drill parameters, Chapter 3 travel directions (*خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ*), room key requests (*أَيْنَ مِفْتَاحُ الغُرْفَةِ؟*), assistance slips (*هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟*), paying (*تَفَضَّلْ، هَذَا مَالُكَ*), weekend days (*يَوْمُ السَّبْتِ* and *يَوْمُ الأَحَدِ*), village breakfast foods (*قَرْيَة*, *بَيْض*, *تَمْر*, *جَوْز*), and the 4-sentence connected speaking narrative.
+  - Updated prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`).
+  - Stamped and deployed `v=mvvapzpc`. All 14 test suites passing 100%.
+

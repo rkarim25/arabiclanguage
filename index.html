@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvtvfa80">
-  <link rel="stylesheet" href="css/style.css?v=mvtvfa80">
+  <link rel="stylesheet" href="css/fonts.css?v=mvvapzpc">
+  <link rel="stylesheet" href="css/style.css?v=mvvapzpc">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvtvfa80"></script>
-<script src="js/curriculum.js?v=mvtvfa80"></script>
-<script src="js/srs.js?v=mvtvfa80"></script>
-<script src="js/match.js?v=mvtvfa80"></script>
-<script src="js/errors.js?v=mvtvfa80"></script>
-<script src="js/frames.js?v=mvtvfa80"></script>
-<script src="js/app.js?v=mvtvfa80"></script>
-<script src="js/tracker.js?v=mvtvfa80"></script>
-<script src="js/plan.js?v=mvtvfa80"></script>
-<script src="js/account.js?v=mvtvfa80"></script>
+<script src="js/progress-model.js?v=mvvapzpc"></script>
+<script src="js/curriculum.js?v=mvvapzpc"></script>
+<script src="js/srs.js?v=mvvapzpc"></script>
+<script src="js/match.js?v=mvvapzpc"></script>
+<script src="js/errors.js?v=mvvapzpc"></script>
+<script src="js/frames.js?v=mvvapzpc"></script>
+<script src="js/app.js?v=mvvapzpc"></script>
+<script src="js/tracker.js?v=mvvapzpc"></script>
+<script src="js/plan.js?v=mvvapzpc"></script>
+<script src="js/account.js?v=mvvapzpc"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3668,6 +3668,18 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
+  p += `     * Saturday & Sunday Weekend Spoken Sprint & Preply Pre-Class Warmup (31 Oct – 1 Nov 07:00 UK):
+       - خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 travel direction; rated weak/box 0 on 28 Oct)
+       - أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah; rated medium/box 1)
+       - هَذَا مِفْتَاحُ الغُرْفَةِ (This is the room key — typed perfect in 28 Oct chapter drill!)
+       - هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah!)
+       - تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)
+       - أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — beverage swaps: مَاء water / قَهْوَة coffee)
+       - أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح key / جَوَاز سَفَر passport)
+       - شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else — polite closing)
+       - المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ attached to family)
+       - Days & Routine: يَوْمُ السَّبْتِ (Saturday — day 7), يَوْمُ الأَحَدِ (Sunday — day 1 / live class at 07:00 UK!), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts)
+     * Connected 4-Sentence Speaking Narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
   p += `     * Thursday & Friday Pre-Weekend Spoken Workout & Rehearsal (29–30 Oct): Focus on Chapter 2 requests, travel directions, days of week & assistance slips:
        - هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah!)
        - أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill drinks swap: مَاء water / قَهْوَة coffee)

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvtvfa80">
-  <link rel="stylesheet" href="css/style.css?v=mvtvfa80">
+  <link rel="stylesheet" href="css/fonts.css?v=mvvapzpc">
+  <link rel="stylesheet" href="css/style.css?v=mvvapzpc">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,16 +497,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mvtvfa80"></script>
-<script src="js/curriculum.js?v=mvtvfa80"></script>
-<script src="js/srs.js?v=mvtvfa80"></script>
-<script src="js/app.js?v=mvtvfa80"></script>
-<script src="js/tracker.js?v=mvtvfa80"></script>
-<script src="js/frames.js?v=mvtvfa80"></script>
-<script src="js/freetry.js?v=mvtvfa80"></script>
-<script src="js/errors.js?v=mvtvfa80"></script>
-<script src="js/plan.js?v=mvtvfa80"></script>
-<script src="js/account.js?v=mvtvfa80"></script>
+<script src="js/progress-model.js?v=mvvapzpc"></script>
+<script src="js/curriculum.js?v=mvvapzpc"></script>
+<script src="js/srs.js?v=mvvapzpc"></script>
+<script src="js/app.js?v=mvvapzpc"></script>
+<script src="js/tracker.js?v=mvvapzpc"></script>
+<script src="js/frames.js?v=mvvapzpc"></script>
+<script src="js/freetry.js?v=mvvapzpc"></script>
+<script src="js/errors.js?v=mvvapzpc"></script>
+<script src="js/plan.js?v=mvvapzpc"></script>
+<script src="js/account.js?v=mvvapzpc"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1504,13 +1504,14 @@ function buildClassAiPrompt(cls) {
     p += `\nGoal & Voice Mode Instructions:\n`;
     p += `1. Roleplay the situations in the reading with me (ordering food, a trip, shopping on the way), then ask me to narrate MY OWN day in the first-person past tense (ـتُ: سَافَرْتُ، تَنَاوَلْتُ، اشْتَرَيْتُ، سَاعَدْتُ، عُدْتُ).\n`;
     p += `2. Drill variations: swap the food, the time on the clock (السَّاعَةُ السَّادِسَةُ → السَّابِعَةُ), first/second/third, I → we → they, and turn statements into questions with هَلْ / مَتَى / مَاذَا / لِمَاذَا.\n`;
-    p += `3. Sunday Post-Class Debrief & Thursday/Friday Pre-Weekend Workout (29–30 Oct): Elicit my connected 4-sentence speaking narrative in sequence and ask me in Arabic about my class:\n`;
+    p += `3. Weekend Spoken Sprint & Sunday 1 Nov Pre-Class Warmup (31 Oct – 1 Nov 07:00 UK): Elicit my connected 4-sentence speaking narrative in sequence and ask me in Arabic about my class:\n`;
     p += `   - Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)\n`;
     p += `   - Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day)\n`;
-    p += `   - Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ (I help at home in the evening)\n`;
-    p += `   - Line 4 (Commute Bridge): أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ (I am a little tired, but I return home at 8 o'clock)\n`;
+    p += `   - Line 3: أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ (I help at home on the day off)\n`;
+    p += `   - Line 4: يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا (On Sunday I have an Arabic lesson at 7 o'clock in the morning)\n`;
     p += `   - Can You Help Me: هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah).\n`;
-    p += `   - Days & Weather: يَوْمُ الخَمِيسِ (Thursday), يَوْمُ الجُمُعَةِ (Friday), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today).\n`;
+    p += `   - Hotel Direction & Key: خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel, please — 28 Oct slip; Box 0), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?).\n`;
+    p += `   - Weekend Days & Village: يَوْمُ السَّبْتِ (Saturday), يَوْمُ الأَحَدِ (Sunday), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts).\n`;
     p += `4. Routine & Key Slips Reinforcement:\n`;
     p += `   - Evening for Family: المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — recent telemetry slip).\n`;
     p += `   - Keys & Busy status: أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ (room key slip, root f-t-ḥ), أَيْنَ مِفْتَاحُ السَّيَّارَةِ؟ (car key), أَنَا مَشْغُولٌ فِي الصَّبَاحِ (busy morning).\n`;
