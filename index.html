@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvvapzpc">
-  <link rel="stylesheet" href="css/style.css?v=mvvapzpc">
+  <link rel="stylesheet" href="css/fonts.css?v=mvvc7bsa">
+  <link rel="stylesheet" href="css/style.css?v=mvvc7bsa">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvvapzpc"></script>
-<script src="js/curriculum.js?v=mvvapzpc"></script>
-<script src="js/srs.js?v=mvvapzpc"></script>
-<script src="js/match.js?v=mvvapzpc"></script>
-<script src="js/errors.js?v=mvvapzpc"></script>
-<script src="js/frames.js?v=mvvapzpc"></script>
-<script src="js/app.js?v=mvvapzpc"></script>
-<script src="js/tracker.js?v=mvvapzpc"></script>
-<script src="js/plan.js?v=mvvapzpc"></script>
-<script src="js/account.js?v=mvvapzpc"></script>
+<script src="js/progress-model.js?v=mvvc7bsa"></script>
+<script src="js/curriculum.js?v=mvvc7bsa"></script>
+<script src="js/srs.js?v=mvvc7bsa"></script>
+<script src="js/match.js?v=mvvc7bsa"></script>
+<script src="js/errors.js?v=mvvc7bsa"></script>
+<script src="js/frames.js?v=mvvc7bsa"></script>
+<script src="js/app.js?v=mvvc7bsa"></script>
+<script src="js/tracker.js?v=mvvc7bsa"></script>
+<script src="js/plan.js?v=mvvc7bsa"></script>
+<script src="js/account.js?v=mvvc7bsa"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3542,6 +3542,8 @@ function handleSentenceRowClick(event, origIdx) {
   if (curChap && typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
   // calm rows (12 Oct): the 🌐 lives behind ⋯, so tapping the sentence itself shows the English
   if (dayPracticeMode === "all" && event.target.closest(".s-ar-side") && typeof origIdx === "number") toggleDayEn(origIdx);
+  // 🔁 English → Arabic (30 Oct): the whole line is the reveal target, not just the small 👁️ pill
+  if (dayPracticeMode !== "all" && !dayRevealed[origIdx] && typeof origIdx === "number") revealDaySentence(origIdx);
 }
 
 /* Initialise page */
@@ -3999,7 +4001,7 @@ function switchChapView(view) {
   }
 }
 
-let dayPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let dayPracticeMode = (() => { try { const m = localStorage.getItem("dayPracticeMode"); return (m === "ar-only" || m === "en-only") ? m : "all"; } catch (_) { return "all"; } })(); // 'all' | 'ar-only' | 'en-only' — remembered per browser
 let daySortWeakest = false;
 let dayRevealed = {};
 let dayEnVisible = {};
@@ -4010,7 +4012,15 @@ let allDayTrVisible = false;
 function setDayPracticeMode(mode) {
   dayPracticeMode = mode;
   dayRevealed = {};
+  try { localStorage.setItem("dayPracticeMode", mode); } catch (_) {}
   renderDailySentences();
+}
+
+/* 🔁 one tap: English on, Arabic hidden — produce the Arabic from the English, tap the line to check */
+function swapDayEnglish() {
+  const to = dayPracticeMode === "en-only" ? "all" : "en-only";
+  logEvent({ e: "day-swap-en", to, chap: curChap ? curChap.id : null, t: Date.now() });
+  setDayPracticeMode(to);
 }
 
 function toggleDaySortWeakest() {
@@ -4151,6 +4161,7 @@ function renderDailySentences() {
     <div class="calm-row">
       ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
       <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
+      <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDaySwapEn" onclick="swapDayEnglish()" title="${dayPracticeMode === 'en-only' ? 'Back to Arabic — show the Arabic sentences again' : 'Swap: show the English, hide the Arabic — say the Arabic, then tap a line to check'}">${dayPracticeMode === 'en-only' ? '🔁 Show Arabic' : '🔁 English → Arabic'}</button>
       <details class="more"><summary>⋯</summary><div class="more-body">
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'all' ? 'active' : ''}" id="btnDayModeAll" onclick="setDayPracticeMode('all')" title="Show both Arabic and English">All</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic prompt</button>
