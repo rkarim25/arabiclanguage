@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvvc7bsa">
-  <link rel="stylesheet" href="css/style.css?v=mvvc7bsa">
+  <link rel="stylesheet" href="css/fonts.css?v=mvw8in4a">
+  <link rel="stylesheet" href="css/style.css?v=mvw8in4a">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvvc7bsa"></script>
-<script src="js/curriculum.js?v=mvvc7bsa"></script>
-<script src="js/srs.js?v=mvvc7bsa"></script>
-<script src="js/match.js?v=mvvc7bsa"></script>
-<script src="js/errors.js?v=mvvc7bsa"></script>
-<script src="js/frames.js?v=mvvc7bsa"></script>
-<script src="js/app.js?v=mvvc7bsa"></script>
-<script src="js/tracker.js?v=mvvc7bsa"></script>
-<script src="js/plan.js?v=mvvc7bsa"></script>
-<script src="js/account.js?v=mvvc7bsa"></script>
+<script src="js/progress-model.js?v=mvw8in4a"></script>
+<script src="js/curriculum.js?v=mvw8in4a"></script>
+<script src="js/srs.js?v=mvw8in4a"></script>
+<script src="js/match.js?v=mvw8in4a"></script>
+<script src="js/errors.js?v=mvw8in4a"></script>
+<script src="js/frames.js?v=mvw8in4a"></script>
+<script src="js/app.js?v=mvw8in4a"></script>
+<script src="js/tracker.js?v=mvw8in4a"></script>
+<script src="js/plan.js?v=mvw8in4a"></script>
+<script src="js/account.js?v=mvw8in4a"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3543,7 +3543,11 @@ function handleSentenceRowClick(event, origIdx) {
   // calm rows (12 Oct): the 🌐 lives behind ⋯, so tapping the sentence itself shows the English
   if (dayPracticeMode === "all" && event.target.closest(".s-ar-side") && typeof origIdx === "number") toggleDayEn(origIdx);
   // 🔁 English → Arabic (30 Oct): the whole line is the reveal target, not just the small 👁️ pill
-  if (dayPracticeMode !== "all" && !dayRevealed[origIdx] && typeof origIdx === "number") revealDaySentence(origIdx);
+  // 31 Oct pen note: tap the revealed line again to hide it — same in English→Arabic and Arabic→English
+  if (dayPracticeMode !== "all" && typeof origIdx === "number") {
+    if (dayRevealed[origIdx]) { dayRevealed[origIdx] = false; renderDailySentences(); }
+    else revealDaySentence(origIdx);
+  }
 }
 
 /* Initialise page */
@@ -4189,7 +4193,7 @@ function renderDailySentences() {
       if (dayPracticeMode === "en-only" && !isRevealed) {
         arContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
       } else {
-        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block;cursor:pointer" title="Tap for the English">${s.ar}</span>`;
+        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block;cursor:pointer" title="${dayPracticeMode === 'all' ? 'Tap for the English' : 'Tap again to hide'}">${s.ar}</span>`;
       }
 
       let enContent;
