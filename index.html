@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvw8in4a">
-  <link rel="stylesheet" href="css/style.css?v=mvw8in4a">
+  <link rel="stylesheet" href="css/fonts.css?v=mvxi54i4">
+  <link rel="stylesheet" href="css/style.css?v=mvxi54i4">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvw8in4a"></script>
-<script src="js/curriculum.js?v=mvw8in4a"></script>
-<script src="js/srs.js?v=mvw8in4a"></script>
-<script src="js/match.js?v=mvw8in4a"></script>
-<script src="js/errors.js?v=mvw8in4a"></script>
-<script src="js/frames.js?v=mvw8in4a"></script>
-<script src="js/app.js?v=mvw8in4a"></script>
-<script src="js/tracker.js?v=mvw8in4a"></script>
-<script src="js/plan.js?v=mvw8in4a"></script>
-<script src="js/account.js?v=mvw8in4a"></script>
+<script src="js/progress-model.js?v=mvxi54i4"></script>
+<script src="js/curriculum.js?v=mvxi54i4"></script>
+<script src="js/srs.js?v=mvxi54i4"></script>
+<script src="js/match.js?v=mvxi54i4"></script>
+<script src="js/errors.js?v=mvxi54i4"></script>
+<script src="js/frames.js?v=mvxi54i4"></script>
+<script src="js/app.js?v=mvxi54i4"></script>
+<script src="js/tracker.js?v=mvxi54i4"></script>
+<script src="js/plan.js?v=mvxi54i4"></script>
+<script src="js/account.js?v=mvxi54i4"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -4442,6 +4442,7 @@ function renderDayDrillHtml(idx) {
         : res.tier === "sound" ? `<span style="color:var(--warn,#d97706);font-weight:700">✓ right by sound</span> <span style="color:var(--muted)">— check the spelling below</span>`
         : res.tier === "part" ? `<span style="color:var(--red,#dc2626);font-weight:700">${res.right} of ${res.total} words</span> <span style="color:var(--muted)">— compare, then try again</span>`
         : `<span style="color:var(--red,#dc2626);font-weight:700">✗ not yet</span> <span style="color:var(--muted)">— compare, then try again</span>`;
+      if (res.err && window.Errors) verdict += `<div style="font-size:12.5px;color:var(--muted);margin-top:3px">↳ ${drillEsc(Errors.describe(res.err))}</div>`;
     } else if (res.how === "self") {
       verdict = res.ok ? `<span style="color:var(--accent);font-weight:700">✓ you said it</span>` : `<span style="color:var(--red,#dc2626);font-weight:700">✗ missed</span> <span style="color:var(--muted)">— listen, say it, try again</span>`;
     }
@@ -4524,10 +4525,11 @@ function drillCheckTyped(idx) {
   const g = exact ? null : writeMatchAr(typed, target);
   const ok = exact || (g && g.ok);
   const tier = exact ? "perfect" : ok ? "sound" : (g && g.right > 0) ? "part" : "miss";
+  const err = (!exact && window.Errors) ? Errors.classify(target, typed, "typed") : null;
   const st = drillState(idx);
   st.revealed = true;
-  st.result = { how: "typed", ok: !!ok, tier, right: g ? g.right : null, total: g ? g.total : null };
-  drillRecord(idx, ok, "typed", { typed, tier });
+  st.result = { how: "typed", ok: !!ok, tier, right: g ? g.right : null, total: g ? g.total : null, err };
+  drillRecord(idx, ok, "typed", { typed, tier, err: err || undefined });
   renderDayDrillPanel(idx);
   if (!ok) speak(item.ar, 0.8);
 }

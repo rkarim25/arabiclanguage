@@ -1826,7 +1826,7 @@
    "name": "Hotels, taxis and getting help",
    "can": "handle a hotel, a taxi, and ask for help when something goes wrong",
    "why": "The Umrah logistics that happen whether or not you have the words.",
-   "items": 21,
+   "items": 22,
    "plannedMin": 28,
    "plannedWeek": 17,
    "lessons": [
@@ -1850,7 +1850,8 @@
       "ev-hotel-taxi:7",
       "ev-hotel-taxi:8",
       "ev-hotel-taxi:9",
-      "ev-hotel-taxi:10"
+      "ev-hotel-taxi:10",
+      "ev-hotel-taxi:11"
      ]
     },
     {
