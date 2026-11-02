@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvxi54i4">
-  <link rel="stylesheet" href="css/style.css?v=mvxi54i4">
+  <link rel="stylesheet" href="css/fonts.css?v=mvymqvwn">
+  <link rel="stylesheet" href="css/style.css?v=mvymqvwn">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mvxi54i4"></script>
-<script src="js/curriculum.js?v=mvxi54i4"></script>
-<script src="js/srs.js?v=mvxi54i4"></script>
-<script src="js/match.js?v=mvxi54i4"></script>
-<script src="js/errors.js?v=mvxi54i4"></script>
-<script src="js/frames.js?v=mvxi54i4"></script>
-<script src="js/app.js?v=mvxi54i4"></script>
-<script src="js/tracker.js?v=mvxi54i4"></script>
-<script src="js/plan.js?v=mvxi54i4"></script>
-<script src="js/account.js?v=mvxi54i4"></script>
+<script src="js/progress-model.js?v=mvymqvwn"></script>
+<script src="js/curriculum.js?v=mvymqvwn"></script>
+<script src="js/srs.js?v=mvymqvwn"></script>
+<script src="js/match.js?v=mvymqvwn"></script>
+<script src="js/errors.js?v=mvymqvwn"></script>
+<script src="js/frames.js?v=mvymqvwn"></script>
+<script src="js/app.js?v=mvymqvwn"></script>
+<script src="js/tracker.js?v=mvymqvwn"></script>
+<script src="js/plan.js?v=mvymqvwn"></script>
+<script src="js/account.js?v=mvymqvwn"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3501,16 +3501,9 @@ function startAudioQueueFromLine(startIdx) {
   playNextInQueue(audioVoiceMode);
 }
 
-function playEnglishOnly(encodedEn, lineIdx) {
-  stopAllAudio();
-  const text = decodeURIComponent(encodedEn);
-  if (curChap && typeof lineIdx === "number") {
-    saveChapterLine(curChap.id, lineIdx);
-  }
-  speak(text, 1.0);
-  logEvent({ e: "audio-play", text, type: "english", t: Date.now() });
-}
-
+/* 1 Nov pen note: the "🔊 En" English-only badge bypassed the one audio-mode
+   switch (and English-only audio is pointless when the English text is on
+   screen) — removed; every 🔊 now obeys Arabic+English / Recall / Arabic Only. */
 function playVocabWord(encodedAr, encodedEn) {
   stopAllAudio();
   const ar = decodeURIComponent(encodedAr);
@@ -4203,7 +4196,6 @@ function renderDailySentences() {
         enContent = `
           <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">
             ${s.en}
-            <button type="button" class="en-audio-badge" onclick="event.stopPropagation(); playEnglishOnly('${encodeURIComponent(s.en)}', ${origIdx})" title="Listen to English translation only">🔊 En</button>
           </div>
           ${s.tr ? `<div class="s-tr" id="day-tr-${origIdx}" style="display:${allDayTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
         `;
@@ -4809,7 +4801,6 @@ function renderChapterVocab() {
             enContent = `
               <div>
                 <span style="font-size:14.5px;color:var(--ink);font-weight:500">${v.en}</span>
-                ${v.en ? `<button type="button" class="en-audio-badge" onclick="event.stopPropagation(); playEnglishOnly('${encodeURIComponent(v.en)}')" title="Listen to English translation only">🔊 En</button>` : ''}
                 ${fam ? `<span class="wbw-rf-badge" style="margin-left:6px;font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
                 ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid (+${vote.score || 1})</div>` : ''}
               </div>

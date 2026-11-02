@@ -1208,29 +1208,6 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
   font-weight: 700;
 }
 
-.en-audio-badge {
-  border: 1px solid var(--border);
-  background: transparent;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 2px 6px;
-  margin-left: 6px;
-  transition: all 0.15s;
-  vertical-align: middle;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.en-audio-badge:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-soft);
-}
-
 .audio-bar {
   display: flex;
   align-items: center;
