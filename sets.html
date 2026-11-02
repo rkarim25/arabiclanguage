@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Sets — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mvywvq8u">
+  <link rel="stylesheet" href="css/style.css?v=mvywvq8u">
+  <style>
+    /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
+       week, numbers, directions. For sets like this can you create a tab where the
+       logical way of organising things are grouped together so that I can revise and
+       learn from there. You can put in others and make grammar a sub page there."
+       Book-like: section headings, one row per set, the table opens in place. */
+    .set-section { margin: 18px 0 6px; }
+    .set-section h2 { font-size: 15px; margin: 0 0 6px; color: var(--muted); font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+    .set-row { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+    .set-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; user-select: none; }
+    .set-head:hover { background: var(--accent-soft, rgba(13,122,95,.06)); }
+    .set-head .ic { font-size: 18px; width: 26px; text-align: center; }
+    .set-head .ttl { font-weight: 600; font-size: 15px; flex: 1; }
+    .set-head .ttl small { display: block; font-weight: 400; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+    .set-head .ar { font-family: var(--font-ar); font-size: 21px; color: var(--accent); direction: rtl; }
+    .set-head .cnt { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .set-head .chev { color: var(--muted); font-size: 12px; transition: transform .15s; }
+    .set-row.open .set-head .chev { transform: rotate(90deg); }
+    .set-body { display: none; border-top: 1px dashed var(--border); padding: 6px 10px 12px; }
+    .set-row.open .set-body { display: block; }
+    .set-body .vocab-table { font-size: 14.5px; }
+    .set-body .vocab-table td.ar-cell { font-size: 23px; }
+    .set-body .vocab-table td { padding: 6px 8px; }
+    .set-body .note-cell { font-size: 12px; color: var(--muted); }
+    .set-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+    .set-links a { font-size: 13px; color: var(--accent); text-decoration: none; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; background: var(--bg); }
+    .set-links a:hover { border-color: var(--accent); }
+    .g-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 14px; padding: 6px 4px 2px; }
+    .g-list a { text-decoration: none; color: inherit; font-size: 13.5px; display: flex; gap: 8px; align-items: baseline; padding: 4px 2px; border-bottom: 1px dotted var(--border); }
+    .g-list a .ar { font-family: var(--font-ar); font-size: 18px; color: var(--accent); direction: rtl; min-width: 60px; text-align: right; }
+    .g-list a .ok { color: var(--accent); font-size: 12px; margin-inline-start: auto; }
+    .row-speak { cursor: pointer; }
+    @media (max-width: 700px) {
+      .set-head { padding: 10px 11px; }
+      .set-head .ar { font-size: 19px; }
+      .set-body .vocab-table td.ar-cell { font-size: 21px; }
+      .set-body .tr-cell { font-size: 12.5px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Sets <span class="arabic" style="color:var(--accent);font-size:26px" dir="rtl">المَجْمُوعَات</span></h1>
+  <p class="sub">The lists worth knowing as lists — days, numbers, directions, time, question words — grouped the way you'd look them up, to revise from. Tap a set to open it here; 🔊 says it; the ✗ ≈ ✓ ★ on each row is the same verdict as everywhere else, so what you mark here comes back in Review. Grammar sits underneath, as its own page.</p>
+  <div id="content">Loading…</div>
+  <div id="kbDock"></div>
+</main>
+
+<script src="js/srs.js?v=mvywvq8u"></script>
+<script src="js/app.js?v=mvywvq8u"></script>
+<script src="js/tracker.js?v=mvywvq8u"></script>
+<script src="js/plan.js?v=mvywvq8u"></script>
+<script>
+renderNav("sets");
+trackPage("sets");
+
+const content = document.getElementById("content");
+
+/* the logical order — a set is an everyday cluster (data/everyday.json) shown as a table.
+   Anything not named here still lives in the Vocab Lab; this page is the shelf, not the warehouse. */
+const SECTIONS = [
+  { h: "Counting & time", sets: [
+    { id: "lesson-week", ic: "📅", en: "Days of the week" },
+    { id: "numbers", ic: "🔢", en: "Numbers 1–10" },
+    { id: "numbers-big", ic: "🔢", en: "Numbers 11–1000" },
+    { id: "time", ic: "⏰", en: "Time words" },
+    { id: "lesson-weather", ic: "🌦", en: "Weather" },
+  ]},
+  { h: "Finding your way", sets: [
+    { id: "directions", ic: "🧭", en: "Directions" },
+    { id: "hotel-taxi", ic: "🚕", en: "Hotel & transport" },
+    { id: "haram", ic: "🕋", en: "In the Haram" },
+    { id: "help", ic: "🆘", en: "Asking for help" },
+  ]},
+  { h: "The small words that run a conversation", sets: [
+    { id: "questions", ic: "❓", en: "Question words" },
+    { id: "people", ic: "👥", en: "Pronouns & people" },
+    { id: "glue", ic: "🔗", en: "Glue words — yes, no, but, because" },
+    { id: "want-need", ic: "🙋", en: "Want & need" },
+    { id: "commands", ic: "📣", en: "Everyday commands" },
+    { id: "opposites", ic: "↔️", en: "Opposites" },
+    { id: "greetings", ic: "🤝", en: "Greetings & politeness" },
+  ]},
+  { h: "People, places, things", sets: [
+    { id: "family", ic: "👪", en: "Family" },
+    { id: "home", ic: "🏠", en: "Home & things" },
+    { id: "lesson-home", ic: "🛋", en: "The flat & furniture" },
+    { id: "food", ic: "🍽", en: "Food & drink" },
+    { id: "shopping", ic: "🛍", en: "Shopping" },
+    { id: "medical", ic: "💊", en: "Health & pharmacy" },
+    { id: "worship", ic: "🕌", en: "Daily worship" },
+    { id: "masjid", ic: "🕌", en: "In the masjid" },
+  ]},
+];
+
+let EV = null, PATTERNS = null;
+
+Promise.all([
+  fetch("data/everyday.json").then(r => r.json()),
+  fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
+]).then(([e, g]) => {
+  EV = e.groups;
+  PATTERNS = g.patterns || [];
+  render();
+  const want = (location.hash || "").replace(/^#/, "") || new URLSearchParams(location.search).get("set");
+  if (want) openSet(want, true);
+});
+
+function held(id) {
+  const g = EV.find(x => x.id === id); if (!g) return { n: 0, k: 0 };
+  const srs = getSrs();
+  let k = 0;
+  g.members.forEach((m, i) => { const c = srs[`ev-${id}:${i}`]; if (c && c.box >= 3 && c.b !== "never") k++; });
+  return { n: g.members.length, k };
+}
+
+function render() {
+  let html = "";
+  SECTIONS.forEach(sec => {
+    const rows = sec.sets.filter(s => EV.some(g => g.id === s.id));
+    if (!rows.length) return;
+    html += `<div class="set-section"><h2>${sec.h}</h2>`;
+    rows.forEach(s => {
+      const g = EV.find(x => x.id === s.id);
+      const h = held(s.id);
+      html += `
+        <div class="set-row" id="set-${s.id}">
+          <div class="set-head" onclick="toggleSet('${s.id}')">
+            <span class="ic">${s.ic}</span>
+            <span class="ttl">${s.en}<small>${g.theme}</small></span>
+            <span class="ar">${g.title || ""}</span>
+            <span class="cnt">${h.k ? `${h.k} of ${h.n} held` : `${h.n} words`}</span>
+            <span class="chev">▶</span>
+          </div>
+          <div class="set-body" id="setbody-${s.id}"></div>
+        </div>`;
+    });
+    html += `</div>`;
+  });
+  // 📐 Grammar — the sub page. Every pattern the site teaches, each a link into the Grammar page.
+  html += `<div class="set-section"><h2>Grammar</h2>
+    <div class="set-row" id="set-grammar">
+      <div class="set-head" onclick="toggleSet('grammar')">
+        <span class="ic">📐</span>
+        <span class="ttl">Grammar — the patterns<small>Each rule taught through sentences you know. Tap one to open it.</small></span>
+        <span class="ar">القَوَاعِد</span>
+        <span class="cnt">${PATTERNS.length} patterns</span>
+        <span class="chev">▶</span>
+      </div>
+      <div class="set-body" id="setbody-grammar">
+        <div class="g-list">
+          ${PATTERNS.map(p => `<a href="grammar.html?g=${p.id}"><span class="ar">${p.ar || ""}</span><span>${p.name || p.id}</span>${(typeof stepsDone === "function" && stepsDone("gr-" + p.id).test) ? `<span class="ok">✓</span>` : ""}</a>`).join("")}
+        </div>
+        <div class="set-links"><a href="grammar.html">Open the Grammar page →</a></div>
+      </div>
+    </div>
+  </div>`;
+  content.innerHTML = html;
+}
+
+function toggleSet(id) {
+  const row = document.getElementById("set-" + id);
+  if (!row) return;
+  if (row.classList.contains("open")) { row.classList.remove("open"); if (location.hash === "#" + id) history.replaceState({}, "", location.pathname); return; }
+  openSet(id, false);
+}
+
+function openSet(id, scroll) {
+  const row = document.getElementById("set-" + id);
+  if (!row) return;
+  row.classList.add("open");
+  history.replaceState({}, "", "#" + id);
+  if (id !== "grammar" && !row.dataset.built) { buildTable(id); row.dataset.built = "1"; }
+  if (scroll && row.scrollIntoView) setTimeout(() => row.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+  if (id !== "grammar") logEvent({ e: "set-open", id, t: Date.now() });
+}
+
+/* the table: English | Arabic 🔊 | transliteration | his verdict — the same row the cluster page uses */
+function buildTable(id) {
+  const g = EV.find(x => x.id === id), body = document.getElementById("setbody-" + id);
+  if (!g || !body) return;
+  try { if (typeof offlinePack === "function") offlinePack(g.members.flatMap(m => [m.ar, m.en])); } catch (e) {}
+  body.innerHTML = `
+    <div class="vocab-table-wrap">
+      <table class="vocab-table">
+        <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>know?</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="set-links">
+      <a href="vocab.html?ev=${id}&mode=drill">Drill me on these →</a>
+      <a href="vocab.html?ev=${id}&mode=fill">Fill the sheet</a>
+      <span style="font-size:12px;color:var(--muted)">✗ missed · ≈ hesitant · ✓ knew it · ★ instant · ⊘ don't repeat</span>
+    </div>`;
+  const tbody = body.querySelector("tbody");
+  g.members.forEach((m, mi) => {
+    const tr = document.createElement("tr");
+    const mn = typeof mnemFor === "function" ? mnemFor(m.ar) : null;
+    tr.innerHTML = `
+      <td class="en-cell">${m.en}${m.note ? `<div class="note-cell">${m.note}</div>` : ""}</td>
+      <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
+      <td><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
+      <td class="tr-cell">${m.tr || ""}</td>
+      <td><div class="bucket-slot"></div></td>`;
+    tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
+    mountBucketBar(tr.querySelector(".bucket-slot"), `ev-${id}:${mi}`);
+    tbody.appendChild(tr);
+    if (mn) {
+      const mrow = document.createElement("tr"); mrow.style.display = "none";
+      const cell = document.createElement("td"); cell.colSpan = 5;
+      const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
+      cell.appendChild(box); mrow.appendChild(cell); tbody.appendChild(mrow);
+      tr.querySelector(".mnem-btn").onclick = () => { mrow.style.display = mrow.style.display === "none" ? "table-row" : "none"; };
+    }
+  });
+}
+</script>
+</body>
+</html>

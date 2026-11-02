@@ -1,6 +1,8 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-10-28.** Read this first in any new session. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
+**Updated 2026-11-02.** Read this first in any new session.
+
+> **2 Nov 2026 (interactive, "fix all notes on site")** — his four Say-your-day pen notes shipped: (1) 🗂 **Sets** tab (`sets.html`) replaces Grammar in the nav — days, numbers, directions, time, question words… as in-place tables with 🔊 and the ✗≈✓★ verdicts, Grammar is its first sub-section (every pattern links into `grammar.html?g=`); (2) new everyday cluster `numbers-big` (0, 11–19, tens, 100, 1000, 25) with neural clips; (3) the 💡 "weekend/smalltalk" moment tag no longer shows on Say-your-day cards (`note: ""` in `loadMyDay`); (4) **Check Arabic** swaps only that card in place (`cardHtml` + `revealCard` in `sentences.html`) — no more jump to the top. `test-sentences.js` pins the nav as index · class · sentences · words · sets. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
 ---
 

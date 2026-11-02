@@ -645,7 +645,7 @@ function planPaintBar() {
   if (document.getElementById("planCard")) planRenderCard(document.getElementById("planCard"));
   planPaintDoor();
 }
-const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html"];
+const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html", "sets.html"];
 function planMountBar() {
   if (document.getElementById("planBar")) return;
   const p = planGet();

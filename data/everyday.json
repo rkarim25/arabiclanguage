@@ -361,6 +361,123 @@
    ]
   },
   {
+   "id": "numbers-big",
+   "title": "الأَرْقَام ١١–١٠٠٠",
+   "theme": "Numbers 11–1000 — eleven to nineteen, the tens, a hundred, a thousand",
+   "members": [
+    {
+     "ar": "صِفْر",
+     "tr": "ṣifr",
+     "en": "zero",
+     "note": "'cipher' and 'zero' both come from this word"
+    },
+    {
+     "ar": "أَحَدَ عَشَرَ",
+     "tr": "aḥada ʿashar",
+     "en": "eleven",
+     "note": "أَحَد one + عَشَر ten — 11 to 19 are 'one-ten, two-ten…'"
+    },
+    {
+     "ar": "اِثْنَا عَشَرَ",
+     "tr": "ithnā ʿashar",
+     "en": "twelve"
+    },
+    {
+     "ar": "ثَلَاثَةَ عَشَرَ",
+     "tr": "thalāthata ʿashar",
+     "en": "thirteen"
+    },
+    {
+     "ar": "أَرْبَعَةَ عَشَرَ",
+     "tr": "arbaʿata ʿashar",
+     "en": "fourteen"
+    },
+    {
+     "ar": "خَمْسَةَ عَشَرَ",
+     "tr": "khamsata ʿashar",
+     "en": "fifteen"
+    },
+    {
+     "ar": "سِتَّةَ عَشَرَ",
+     "tr": "sittata ʿashar",
+     "en": "sixteen"
+    },
+    {
+     "ar": "سَبْعَةَ عَشَرَ",
+     "tr": "sabʿata ʿashar",
+     "en": "seventeen"
+    },
+    {
+     "ar": "ثَمَانِيَةَ عَشَرَ",
+     "tr": "thamāniyata ʿashar",
+     "en": "eighteen"
+    },
+    {
+     "ar": "تِسْعَةَ عَشَرَ",
+     "tr": "tisʿata ʿashar",
+     "en": "nineteen"
+    },
+    {
+     "ar": "عِشْرُونَ",
+     "tr": "ʿishrūn",
+     "en": "twenty",
+     "note": "the tens all end in ـُونَ — twenty, thirty … ninety"
+    },
+    {
+     "ar": "ثَلَاثُونَ",
+     "tr": "thalāthūn",
+     "en": "thirty"
+    },
+    {
+     "ar": "أَرْبَعُونَ",
+     "tr": "arbaʿūn",
+     "en": "forty"
+    },
+    {
+     "ar": "خَمْسُونَ",
+     "tr": "khamsūn",
+     "en": "fifty"
+    },
+    {
+     "ar": "سِتُّونَ",
+     "tr": "sittūn",
+     "en": "sixty"
+    },
+    {
+     "ar": "سَبْعُونَ",
+     "tr": "sabʿūn",
+     "en": "seventy"
+    },
+    {
+     "ar": "ثَمَانُونَ",
+     "tr": "thamānūn",
+     "en": "eighty"
+    },
+    {
+     "ar": "تِسْعُونَ",
+     "tr": "tisʿūn",
+     "en": "ninety"
+    },
+    {
+     "ar": "مِئَة",
+     "tr": "miʾa",
+     "en": "a hundred",
+     "note": "often spelt مِائَة, with a silent alif"
+    },
+    {
+     "ar": "أَلْف",
+     "tr": "alf",
+     "en": "a thousand"
+    },
+    {
+     "ar": "خَمْسَةٌ وَعِشْرُونَ",
+     "tr": "khamsatun wa-ʿishrūn",
+     "en": "twenty-five",
+     "note": "units first, then 'and' the tens — five-and-twenty"
+    }
+   ]
+  },
+  {
    "id": "time",
    "title": "كَلِمَات الوَقْت",
    "theme": "Time words — now, today, tomorrow",

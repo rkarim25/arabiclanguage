@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mvymqvwn">
-  <link rel="stylesheet" href="css/style.css?v=mvymqvwn">
+  <link rel="stylesheet" href="css/fonts.css?v=mvywvq8u">
+  <link rel="stylesheet" href="css/style.css?v=mvywvq8u">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -283,18 +283,18 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mvymqvwn"></script>
-<script src="js/curriculum.js?v=mvymqvwn"></script>
-<script src="js/srs.js?v=mvymqvwn"></script>
-<script src="js/frames.js?v=mvymqvwn"></script>
-<script src="js/freetry.js?v=mvymqvwn"></script>
-<script src="js/match.js?v=mvymqvwn"></script>
-<script src="js/errors.js?v=mvymqvwn"></script>
-<script src="js/tryit.js?v=mvymqvwn"></script>
-<script src="js/app.js?v=mvymqvwn"></script>
-<script src="js/tracker.js?v=mvymqvwn"></script>
-<script src="js/plan.js?v=mvymqvwn"></script>
-<script src="js/account.js?v=mvymqvwn"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mvywvq8u"></script>
+<script src="js/curriculum.js?v=mvywvq8u"></script>
+<script src="js/srs.js?v=mvywvq8u"></script>
+<script src="js/frames.js?v=mvywvq8u"></script>
+<script src="js/freetry.js?v=mvywvq8u"></script>
+<script src="js/match.js?v=mvywvq8u"></script>
+<script src="js/errors.js?v=mvywvq8u"></script>
+<script src="js/tryit.js?v=mvywvq8u"></script>
+<script src="js/app.js?v=mvywvq8u"></script>
+<script src="js/tracker.js?v=mvywvq8u"></script>
+<script src="js/plan.js?v=mvywvq8u"></script>
+<script src="js/account.js?v=mvywvq8u"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -505,11 +505,19 @@ function redoBatch() {
 }
 
 function render10Cards() {
-  const srs = getSrs();
   const container = document.getElementById("sentenceList");
-  const isEnFirst = promptDirection === "en-first";
+  container.innerHTML = ACTIVE_SENTENCES.map(cardHtml).join("");
+  if (window.TryIt) TryIt.rewire();
 
-  container.innerHTML = ACTIVE_SENTENCES.map((s, idx) => {
+  updateSessionProgress();
+}
+
+/* one card's HTML. revealCard swaps ONLY this card in place — re-rendering the
+   whole list emptied the page for a frame and the phone jumped to the top
+   (his 2 Nov note: "when I click check arabic … it snaps to the top"). */
+function cardHtml(s, idx) {
+  const srs = getSrs();
+  const isEnFirst = promptDirection === "en-first";
     const item = srs[s.key] || {};
     const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
     const exp = getExposure(s.key);
@@ -590,10 +598,6 @@ function render10Cards() {
         ${TryIt.slotHtml(idx)}
       </div>
     `;
-  }).join("");
-  if (window.TryIt) TryIt.rewire();
-
-  updateSessionProgress();
 }
 
 function handleCardClick(idx, e) {
@@ -606,7 +610,16 @@ function handleCardClick(idx, e) {
 function revealCard(idx) {
   REVEALED.add(idx);
   const s = ACTIVE_SENTENCES[idx];
-  render10Cards();
+  const old = document.getElementById("scard-" + idx);
+  if (old && s) {
+    const y = window.scrollY;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = cardHtml(s, idx);
+    old.replaceWith(tmp.firstElementChild);
+    if (window.TryIt) TryIt.rewire();
+    updateSessionProgress();
+    if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
+  } else render10Cards();
   if (s) playSingle(encodeURIComponent(s.ar));
 }
 
@@ -632,7 +645,7 @@ async function loadMyDay() {
     const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
     const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
     const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
-    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: s.moment, pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
+    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: "", pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
   });
   // they join the master list so verdicts and the Sunday script resolve them
   MYDAY.forEach(s => { if (!MASTER_SENTENCES.some(x => x.key === s.key)) MASTER_SENTENCES.push(s); });

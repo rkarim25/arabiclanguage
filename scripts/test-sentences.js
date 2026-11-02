@@ -241,8 +241,11 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
      The old assertion pinned three links to stop the eleven-tab sprawl coming
      back; the rule it was protecting is "no destination nobody asked for", not
      "three". So it now pins the EXACT set he named — which still fails the moment
-     anything creeps in that he did not. */
-  const NAV = ["index.html", "class.html", "sentences.html", "words.html", "grammar.html"];
+     anything creeps in that he did not.
+     2026-11-02, his pen note: "create a tab for [days, numbers, directions] …
+     make grammar a sub page there" — the Grammar slot is now 🗂 Sets (sets.html),
+     and grammar.html is reached from inside it. Still five, still all his. */
+  const NAV = ["index.html", "class.html", "sentences.html", "words.html", "sets.html"];
   const links = [...app.matchAll(/class="link \$\{[^}]*\}"\s+href="([^"]+)"/g)].map(m => m[1]);
   yes(links.length === NAV.length && NAV.every(h => links.includes(h)),
     `the nav is exactly the ${NAV.length} destinations he asked for (${links.join(", ")})`);

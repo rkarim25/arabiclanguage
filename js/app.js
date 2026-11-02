@@ -2441,7 +2441,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mvymqvwn";
+const DATA_V = "mvywvq8u";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2666,7 +2666,13 @@ async function curCtx() {
 
    This deliberately breaks the no-new-destination rule that has held since the
    eleven-tab sprawl, because the sprawl was pages nobody asked for; these five
-   are the five things he says he works on. Anything else stays behind ⋯ More. */
+   are the five things he says he works on. Anything else stays behind ⋯ More.
+
+   2026-11-02, his pen note from Say your day: "I want to learn days of the week,
+   numbers, directions … create a tab for that where the logical way of organising
+   things are grouped together so that I can revise and learn from there … make
+   grammar a sub page there." So the Grammar slot became 🗂 Sets (sets.html), and
+   Grammar is its first section. */
 function renderNav(active) {
   const el = document.createElement("nav");
   el.innerHTML = `
@@ -2677,7 +2683,7 @@ function renderNav(active) {
     <a class="link ${active === "classes" ? "active" : ""}" href="class.html">🧑‍🏫 Lessons</a>
     <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">✍️ Sentences</a>
     <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
-    <a class="link ${active === "grammar" ? "active" : ""}" href="grammar.html">📐 Grammar</a>
+    <a class="link ${active === "sets" || active === "grammar" ? "active" : ""}" href="sets.html">🗂 Sets</a>
   `;
   document.body.prepend(el);
   wireNavSync(el.querySelector("#navSync"));
