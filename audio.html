@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw2x2ot4">
-  <link rel="stylesheet" href="css/style.css?v=mw2x2ot4">
+  <link rel="stylesheet" href="css/fonts.css?v=mw4cq3er">
+  <link rel="stylesheet" href="css/style.css?v=mw4cq3er">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -34,14 +34,17 @@
   </style>
 
 <style>
-  /* the commute layout — one way whether the phone is in the pocket or in the hand */
-  body.commute h1, body.commute p.sub, body.commute #acGrade { display: none !important; }
-  body.commute .ac-stage { min-height: 46vh; display: flex; flex-direction: column; justify-content: center; }
+  /* the commute layout — one way whether the phone is in the pocket or in the hand.
+     His 5 Nov ✏️: the marking buttons must be LIVE here too — so #acGrade and
+     #acSentGrade stay visible, thumb-sized, and never block the audio. */
+  body.commute h1, body.commute p.sub { display: none !important; }
+  body.commute .ac-stage { min-height: 42vh; display: flex; flex-direction: column; justify-content: center; }
   body.commute .ac-ar { font-size: 44px; line-height: 1.5; }
   body.commute .ac-en { font-size: 22px; }
   body.commute .ac-status { font-size: 15px; }
   body.commute #acControls .ac-btn { min-height: 60px; font-size: 19px; flex: 1 1 40%; }
   body.commute #acControls { position: sticky; bottom: 12px; gap: 10px; flex-wrap: wrap; }
+  body.commute #acGrade .ac-btn, body.commute #acSentGrade .ac-btn { min-height: 56px; font-size: 18px; }
 </style>
 </head>
 <body>
@@ -49,13 +52,13 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mw2x2ot4"></script>
-<script src="js/frames.js?v=mw2x2ot4"></script>
-<script src="js/freetry.js?v=mw2x2ot4"></script>
-<script src="js/app.js?v=mw2x2ot4"></script>
-<script src="js/tracker.js?v=mw2x2ot4"></script>
-<script src="js/plan.js?v=mw2x2ot4"></script>
-<script src="js/account.js?v=mw2x2ot4"></script>
+<script src="js/srs.js?v=mw4cq3er"></script>
+<script src="js/frames.js?v=mw4cq3er"></script>
+<script src="js/freetry.js?v=mw4cq3er"></script>
+<script src="js/app.js?v=mw4cq3er"></script>
+<script src="js/tracker.js?v=mw4cq3er"></script>
+<script src="js/plan.js?v=mw4cq3er"></script>
+<script src="js/account.js?v=mw4cq3er"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -241,13 +244,31 @@ function setMediaSession() {
     // (falls back to a plain skip during sentences / after grading); ⏮ marks it
     // missed so it comes back a couple of beats later. No tap = ungraded listening.
     navigator.mediaSession.setActionHandler("nexttrack", () => {
-      if (S && S.current && !S.graded) gradeWord(true); else skip();
+      if (S && S.current && !S.graded) gradeWord(true);
+      else if (S && S.curSent && S.curSent.key && !S.sentGraded) { gradeSent("yes"); skip(); }   // lock-screen ⏭ on a sentence = got it (his 5 Nov ✏️)
+      else skip();
     });
     navigator.mediaSession.setActionHandler("previoustrack", () => back());   // ⏮ = hear it again (12 Oct)
     navigator.mediaSession.playbackState = "playing";
   } catch (e) {}
 }
 function commuteElapsedMs() { return S ? Date.now() - S.t0 - (S.pausedMs || 0) : 0; }
+
+/* the session's running record, persisted after every finished item: mobile
+   kills a pocketed tab WITHOUT firing pagehide, which is how his 5 Nov 14-minute
+   drive lost its commute-done and the day never counted. js/tracker.js recovers
+   an orphaned record on the next page open. stop() clears it. */
+function saveCommuteLive() {
+  if (!S || !S.commute) return;
+  try {
+    store.set("ats-commute-live", {
+      t0: S.t0, last: Date.now(), pausedMs: S.pausedMs || 0,
+      keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
+      sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean),
+      sentEns: (S.heardSents || []).map(x => x.en),
+    });
+  } catch (e) {}
+}
 
 /* ---------- wake lock: keep the screen awake on the move ---------- */
 let wakeLock = null;
@@ -299,6 +320,27 @@ function gradeWord(ok) {
     if (n) n.textContent = "no problem — it'll come back around";
   }
   showGrade(false);
+}
+
+/* ---- live sentence marking (his 5 Nov ✏️): the usual ✗ ≈ ✓ on the sentence
+   that is playing, same SRS as Say your day, and NOTHING stops if it can't
+   mark — a tap never pauses, skips, or interrupts the audio chain. */
+function showSentGrade(on) {
+  const g = document.getElementById("acSentGrade");
+  if (g) g.style.display = on ? "flex" : "none";
+}
+function gradeSent(g) {
+  try {
+    if (!S || !S.curSent || !S.curSent.key || S.sentGraded) return;
+    S.sentGraded = true;
+    const s = S.curSent, key = s.key;
+    const nc = (typeof SRS === "object" && SRS && SRS.rate) ? SRS.rate(key, g) : { s: 0, box: 0 };
+    logEvent({ e: "sentence-rate", key, bucket: (SRS.LEGACY_BUCKET && SRS.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "commute" });
+    autoSync();
+    const n = document.getElementById("acNote");
+    if (n) n.textContent = g === "yes" ? "✓ marked — it counts like Say your day" : g === "maybe" ? "≈ marked — it'll come back" : "✗ marked — it'll come back sooner";
+    showSentGrade(false);
+  } catch (e) { /* marking must never stop the session */ }
 }
 
 /* ---- pause/stop recap: mark what you had, live ----
@@ -359,18 +401,27 @@ function render(state) {
       <button class="ac-btn ghost" id="acNo" style="flex:1;max-width:220px">✗ didn't have it</button>
       <button class="ac-btn primary" id="acYes" style="flex:1;max-width:220px">✓ I had it</button>
     </div>
+    <div class="ac-controls" id="acSentGrade" style="display:none">
+      <button class="ac-btn ghost" id="acSNo" style="flex:1;max-width:150px">✗</button>
+      <button class="ac-btn ghost" id="acSMaybe" style="flex:1;max-width:150px">≈ maybe</button>
+      <button class="ac-btn primary" id="acSYes" style="flex:1;max-width:150px">✓ got it</button>
+    </div>
     <div class="ac-controls" id="acControls"></div>
     <!-- the commute is where "slower, please" is most often the whole ask -->
     <div class="ac-controls" style="margin-top:10px">${speedToggleHtml()}</div>
     <div class="ac-meta"><span id="acCount"></span></div>
     <details class="more block" style="margin-top:14px"><summary>How it works</summary><p class="ac-meta more-body" style="margin:8px 0 0">Drawn from <b>your</b> weakest and due words first, in a natural recorded voice. Best with earphones.
-    Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. No tap = just listening.
-    Phone in your pocket? The <b>lock-screen buttons work too</b>: <b>⏭ = I had it</b>, <b>⏮ = didn't — bring it back</b>.</p></details>
+    Tap <b>✓ / ✗</b> when you know your verdict — it grades the word like a Review, so known words stop coming back. Sentences get the usual <b>✗ ≈ ✓</b> too, live while they play — it counts like Say your day. No tap = just listening, and nothing ever stops because you didn't mark.
+    Phone in your pocket? The <b>lock-screen buttons work too</b>: <b>⏭ = I had it</b> (word or sentence), <b>⏮ = hear it again</b>.</p></details>
     <div id="acRecap"></div>
   `;
   const yes = document.getElementById("acYes"), no = document.getElementById("acNo");
   if (yes) yes.onclick = () => gradeWord(true);
   if (no) no.onclick = () => gradeWord(false);
+  const sy = document.getElementById("acSYes"), sm = document.getElementById("acSMaybe"), sn = document.getElementById("acSNo");
+  if (sy) sy.onclick = () => gradeSent("yes");
+  if (sm) sm.onclick = () => gradeSent("maybe");
+  if (sn) sn.onclick = () => gradeSent("no");
   renderControls(state);
 }
 
@@ -517,11 +568,15 @@ async function runCommute() {
       }
       if (!item) break;
     }
-    S.skip = false; S.backTo = null;
+    S.skip = false; S.backTo = null; S.itemDone = false;
     await playItem(item);
     if (!S) break;
     if (S.backTo) { S.queue.unshift(item); S.queue.unshift(S.backTo); S.backTo = null; continue; }   // ⏮
+    // his 5 Nov ✏️ "pause seems to skip": a pause that cut an item short puts it
+    // back at the head of the queue — Resume replays it in full, never jumps past it
+    if (S.paused && !S.itemDone && !S.skip) { S.queue.unshift(item); continue; }
     S.hist.push(item);
+    saveCommuteLive();
   }
   if (S && S.commute && !S.stop) {
     setStatus("Session complete");
@@ -531,9 +586,12 @@ async function runCommute() {
 }
 async function playItem(it) {
   if (!S) return;
-  if (it.kind === "word") { S.lastKind = "word"; await wordBeat(it.c); return; }
+  if (it.kind === "word") { S.lastKind = "word"; S.curSent = null; showSentGrade(false); await wordBeat(it.c); return; }
   S.lastKind = "sent";
   S.current = null; showGrade(false);
+  // the live ✗ ≈ ✓ (his 5 Nov ✏️) binds to THIS sentence for the whole round
+  S.curSent = it.s && it.s.key ? it.s : null; S.sentGraded = false;
+  showSentGrade(!!S.curSent);
   if (it.kind === "script") { await sentenceRound(it.s); }
   else { await sayRound(it.s); }
   if (S && !S.skip && !S.paused) S.heardSents.push({ key: it.s.key || null, en: it.s.en, kind: it.kind });
@@ -556,7 +614,7 @@ async function sayRound(sent) {
   if (guard()) return;
   await beat(() => speakP(sent.ar, 0.7));
   if (S && !S.paused && !S.skip) {
-    S.sents++; setCounter();
+    S.sents++; S.itemDone = true; setCounter();
     logEvent({ e: "alisten-sent", kind: "say", key: sent.key || null, en: sent.en });
   }
 }
@@ -578,7 +636,7 @@ async function wordBeat(card) {
   await beat(() => speakP(card.v.en, 1));
   if (guard()) return;
   await beat(() => speakP(card.v.ar, 0.7));
-  if (S && !S.paused && !S.skip) { S.taught++; setCounter(); logEvent({ e: "alisten", key: card.key }); }
+  if (S && !S.paused && !S.skip) { S.taught++; S.itemDone = true; setCounter(); logEvent({ e: "alisten", key: card.key }); }
 }
 
 function nextWord() { const w = words[S.wIdx % words.length]; S.wIdx++; return w; }
@@ -665,7 +723,7 @@ async function sentenceRound(sent) {
   if (guard()) return;
   await beat(() => speakP(sent.ar, 0.7));
   if (S && !S.paused && !S.skip) {
-    S.sents++; setCounter();
+    S.sents++; S.itemDone = true; setCounter();
     logEvent({ e: "alisten-sent", key: sent.key || null, en: sent.en, verb: sent.verb, person: sent.person, tense: sent.tense });
   }
 }
@@ -719,6 +777,7 @@ function stop() {
     logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
                sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean), sentEns: (S.heardSents || []).map(x => x.en),
                min: Math.round(commuteElapsedMs() / 6000) / 10, partial: !!S.partial || undefined });
+    try { store.set("ats-commute-live", null); } catch (e) {}   // the record is in the log now
     document.body.classList.remove("commute");
   } else {
     logEvent({ e: "alisten-done", taught: S.taught, sents: S.sents, known: S.known });

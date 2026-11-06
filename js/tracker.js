@@ -19,6 +19,31 @@ function logEvent(e) {
   store.set(LOG_KEY, log);
 }
 
+/* ---------- orphaned commute recovery ----------
+   audio.html persists a running commute's record after every item
+   ("ats-commute-live") because mobile kills a pocketed tab without pagehide —
+   his 5 Nov drive listened 14 minutes and the day never counted. On the next
+   page open (any page), an orphaned record ≥5 min old becomes the commute-done
+   it was owed, at its real end time, so the plan still marks that day done. */
+(function recoverOrphanedCommute() {
+  try {
+    const live = store.get("ats-commute-live", null);
+    if (!live || !live.t0 || !live.last) return;
+    if (Date.now() - live.last < 5 * 60e3) return;        // may still be running in another tab
+    const log = store.get(LOG_KEY, []);
+    const dup = log.some(e => e.e === "commute-done" && e.t >= live.t0 - 1000 && e.t <= live.last + 120e3);
+    if (!dup && ((live.taught || 0) + (live.sents || 0) > 0)) {
+      log.push({ e: "commute-done", t: live.last,
+                 keys: live.keys || [], taught: live.taught || 0, sents: live.sents || 0,
+                 sentKeys: live.sentKeys || [], sentEns: live.sentEns || [],
+                 min: Math.max(0, Math.round((live.last - live.t0 - (live.pausedMs || 0)) / 6000) / 10),
+                 partial: true, recovered: true });
+      store.set(LOG_KEY, log);
+    }
+    store.set("ats-commute-live", null);
+  } catch (e) {}
+})();
+
 /* ---------- time-on-task (active time only) ----------
    A tab left open doesn't count as studying. Seconds accrue only while the
    page is visible AND there was interaction in the last 60s (or audio is

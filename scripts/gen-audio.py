@@ -177,6 +177,10 @@ try:
     for s in loadd("myday.json").get("sentences", []):
         if s.get("ar"): add("ar", s["ar"])
         if s.get("arf"): add("ar", s["arf"])   # Saba's forms
+        # the commute's Say-your-day rounds OPEN with the English cue; without a
+        # clip it fell to speechSynthesis, which is silent on a locked phone
+        if s.get("en"): add("en", s["en"])
+        if s.get("enf"): add("en", s["enf"])
 except Exception as e:
     print("Warning: could not parse myday.json", e)
 
