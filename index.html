@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw4cq3er">
-  <link rel="stylesheet" href="css/style.css?v=mw4cq3er">
+  <link rel="stylesheet" href="css/fonts.css?v=mw5akgzx">
+  <link rel="stylesheet" href="css/style.css?v=mw5akgzx">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -250,16 +250,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw4cq3er"></script>
-<script src="js/curriculum.js?v=mw4cq3er"></script>
-<script src="js/srs.js?v=mw4cq3er"></script>
-<script src="js/match.js?v=mw4cq3er"></script>
-<script src="js/errors.js?v=mw4cq3er"></script>
-<script src="js/frames.js?v=mw4cq3er"></script>
-<script src="js/app.js?v=mw4cq3er"></script>
-<script src="js/tracker.js?v=mw4cq3er"></script>
-<script src="js/plan.js?v=mw4cq3er"></script>
-<script src="js/account.js?v=mw4cq3er"></script>
+<script src="js/progress-model.js?v=mw5akgzx"></script>
+<script src="js/curriculum.js?v=mw5akgzx"></script>
+<script src="js/srs.js?v=mw5akgzx"></script>
+<script src="js/match.js?v=mw5akgzx"></script>
+<script src="js/errors.js?v=mw5akgzx"></script>
+<script src="js/frames.js?v=mw5akgzx"></script>
+<script src="js/app.js?v=mw5akgzx"></script>
+<script src="js/tracker.js?v=mw5akgzx"></script>
+<script src="js/plan.js?v=mw5akgzx"></script>
+<script src="js/account.js?v=mw5akgzx"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3667,6 +3667,18 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
+  p += `     * Weekend Spoken Sprint & Preply Pre-Class Warmup (Saturday 7 Nov – Sunday 8 Nov 07:00 UK):
+       - أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home)
+       - أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — rated Box 0 in myday; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)
+       - يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)
+       - الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor!)
+       - هَذَا الكِتَابُ لِي (This book is mine — possessive prepositional لِي)
+       - هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service? — Chapter 3 hotel assistance inquiry, root kh-d-m)
+       - خُذْنِي إِلَى المَطَارِ سَرِيعًا مِنْ فَضْلِكَ (Take me to the airport quickly, please — Chapter 3 rung 3 drill)
+       - Building & Vertical Movement Slips: طَابِق (floor / storey), مِصْعَد (lift / elevator — machine that ascends), سُلَّم (stairs — solemn climb / salām safe steps)
+       - Proven Chapter 3 Hotel Mastery: خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), عِنْدِي حَجْزٌ فِي الفُنْدُقِ (I have a reservation), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?)
+       - Qur'an Ear Anchor: Al-ʿAsr Verse 2 (إِنَّ الْإِنسَانَ لَفِي خُسْرٍ) & Al-Falaq / An-Nas protection concepts
+     * Connected 4-Sentence Speaking Narrative for Sunday Warmup: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
   p += `     * Saturday & Sunday Weekend Spoken Sprint & Preply Pre-Class Warmup (31 Oct – 1 Nov 07:00 UK):
        - خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 travel direction; rated weak/box 0 on 28 Oct)
        - أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah; rated medium/box 1)

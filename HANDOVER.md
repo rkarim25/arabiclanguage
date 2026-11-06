@@ -181,3 +181,24 @@ Any AI agent (Codex, Antigravity, Claude, ChatGPT) working on this system must o
   - Updated prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`).
   - Stamped and deployed `v=mvvapzpc`. All 14 test suites passing 100%.
 
+## 7. Session Update — 6 Nov 2026 (Friday Evening Run, 18:15 UK)
+
+- **Live URL & Cache Stamp:** `https://rkarim25.github.io/arabiclanguage/` stamped `v=mw4cq3er`.
+- **Health & Test Integrity:** All 14 automated test suites pass 100% (srs, freetry, frames, match, errors, audio coverage with 11,194 entries, curriculum, drill grade, progress model, sentence diagnosis, sentences, shell integration, transliteration typing with 99.0% acceptance, and chapter drills). All JS, JSON, and inline scripts pass syntax checks cleanly.
+- **Progress & Telemetry:**
+  - 3,808 total logged events in KV (`data:rkarim88@gmail.com`).
+  - 1,200 total cards in SRS: **518 solid/strong** in Box 3–5 (444 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered), 437 active learning (385 Box 1, 52 Box 2), 141 Box 0.
+  - **Milestone Win:** Chapter 3 test passed at 100% (9/9 correct: hotel reservations, taxi directions, passport, luggage, stopping).
+  - **Commute Breakthrough:** Thursday 14-minute real drive on commute player completed with 10 sentences by ear including «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for the Arabic lesson).
+  - Salah listening by ear: **13.1%** (evidence from Thursday drive).
+- **Pen Notes & Commute Fix Verification:**
+  - 62 total pen notes in log. Both 5 Nov car notes acknowledged and resolved: (1) 57 EN neural clips generated for Say your day lines so locked phones speak English; (2) pause requeues the cut item so Resume replays the same sentence; (3) live ✗ ≈ ✓ sentence marking on player with lock screen ⏭ got-it marking; (4) persistent trip snapshot prevents tab-close loss.
+- **Sunday Preply Class Status:**
+  - Next live class is **Sunday 8 Nov 07:00 UK** (~37 hours away). 1 Nov lesson dump parked for pre-class check-in.
+- **Speak with AI & Documentation Refresh:**
+  - Added **Prompt AA** to `SPEAK_WITH_AI.md` (Weekend Spoken Sprint & Preply Pre-Class Warmup for Saturday 7 Nov – Sunday 8 Nov 07:00 UK).
+  - Added **Prompt 27** to `LEARNER_CONTEXT.md` targeting active telemetry slips (`أَعُودُ` plain dāl return to refuge hook, `أَتَعَلَّمُ` Bengali *ta'lim* cognate, `يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ`, `هَذَا الكِتَابُ لِي`, `طَابِق`, `مِصْعَد`, `سُلَّم`, `هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟`).
+  - Updated prompt generators in `index.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`).
+  - Updated Mnemonic Quick-Reference Matrix in `SPEAK_WITH_AI.md` and `LEARNER_CONTEXT.md`.
+
+
