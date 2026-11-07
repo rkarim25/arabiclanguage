@@ -1,8 +1,27 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-07.** Read this first in any new session.
+**Updated 2026-11-07 (Evening).** Read this first in any new session.
 
-> **7 Nov 2026 (interactive, `/run-arabic-coach`)** — Processed Reza's Saturday morning pen note (#63, `"Create way for me to higlight words with different colours"` on `class.html` while reading *A Trip to the Village* / `story-09` and tapping 12 words):
+> **7 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Pre-Class Preparation & Speak with AI Upgrade (Sunday 8 Nov 07:00 UK Class in <13h):
+> 1. **Speak with AI & Voice Prompts Fully Updated (`index.html`, `class.html`, `js/app.js`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:
+>    - Weaved in Ahmad's Village Trip & Breakfast reading (`story-09` / `class.html` — 79 taps, 65 words reviewed on 7 Nov).
+>    - Added 1st-person spoken swaps: turn 3rd-person reading into active speech: *"أُرِيدُ فَطُورًا لَذِيذًا"* and *"أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً"*, *شَرِبْتُ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ*.
+>    - Reinforced 7 Nov weak rating slip: `بَيْضَة` (*bayḍah* — egg; hook: oval white *أَبْيَض* *abyaḍ*).
+>    - Integrated walnut mirror hook: `جَوْزَة` (*jawzah* — walnut) vs `زَوْجَة` (*zawjah* — wife; `ج` leads walnut snack, `ز` leads wife partner!).
+>    - Embedded new root distinction & price triplet from commit `061f8474`:
+>      - `ثَمَن` (*thaman* — value / Qur'anic price 2:41; Ahmad: *هَذَا ثَمَنُ الفَاكِهَةِ*)
+>      - `سِعْر` (*siʿr* — market price / tag: *كَمِ السِّعْرُ لِهَذَا؟*)
+>      - `أُجْرَة` (*ujrah* — taxi fare / wage / rental fee: *كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟*)
+>    - Added dedicated ready-to-use drill prompt **BB** in `SPEAK_WITH_AI.md` and expanded the Mnemonic Quick-Reference Matrix.
+>    - Cleaned out obsolete mid-October prompt text so the AI Voice Prompt stays focused, sharp, and lightweight.
+> 2. **Telemetry & Dossier Sync (`js/app.js`, `LEARNER_CONTEXT.md`)**:
+>    - Updated stats to 3,928 recorded practice events, 1,207 cards in SRS (**622 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 443 active learning (391 Box 1, 52 Box 2); 142 need review (Box 0).
+>    - 1-click **"📄 Copy Learner Dossier"** exports these updated boundaries to any fresh ChatGPT/Claude session.
+> 3. **Site Health & Build**:
+>    - Cache stamped `v=mw6pxpsx` across 19 files and `sw.js`.
+>    - All 12 test suites passing 100% with 0 failures.
+
+> **7 Nov 2026 (interactive morning, `/run-arabic-coach`)** — Processed Reza's Saturday morning pen note (#63, `"Create way for me to higlight words with different colours"` on `class.html` while reading *A Trip to the Village* / `story-09` and tapping 12 words):
 > 1. **Multi-Colour Word Highlighter (`🖍️`)**:
 >    - **In-Popup Colour Picker (`#wordPop` in `js/app.js`):** Tapping any Arabic word on any page shows 5 book-friendly highlight dots (`yellow`, `green`, `blue`, `pink`, `orange`) + `✕` clear right inside the word popup.
 >    - **1-Tap Highlighter Pen Bar (`renderHlToolbarHtml()` on `class.html` & `index.html`):** Selecting a colour dot in the passage/reader toolbar activates a 1-tap highlighter pen (`window._activeHlPen`) so tapping any Arabic word immediately highlights it in that colour across the page.

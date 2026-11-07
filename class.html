@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw64eex4">
-  <link rel="stylesheet" href="css/style.css?v=mw64eex4">
+  <link rel="stylesheet" href="css/fonts.css?v=mw6pxpsx">
+  <link rel="stylesheet" href="css/style.css?v=mw6pxpsx">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -499,16 +499,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mw64eex4"></script>
-<script src="js/curriculum.js?v=mw64eex4"></script>
-<script src="js/srs.js?v=mw64eex4"></script>
-<script src="js/app.js?v=mw64eex4"></script>
-<script src="js/tracker.js?v=mw64eex4"></script>
-<script src="js/frames.js?v=mw64eex4"></script>
-<script src="js/freetry.js?v=mw64eex4"></script>
-<script src="js/errors.js?v=mw64eex4"></script>
-<script src="js/plan.js?v=mw64eex4"></script>
-<script src="js/account.js?v=mw64eex4"></script>
+<script src="js/progress-model.js?v=mw6pxpsx"></script>
+<script src="js/curriculum.js?v=mw6pxpsx"></script>
+<script src="js/srs.js?v=mw6pxpsx"></script>
+<script src="js/app.js?v=mw6pxpsx"></script>
+<script src="js/tracker.js?v=mw6pxpsx"></script>
+<script src="js/frames.js?v=mw6pxpsx"></script>
+<script src="js/freetry.js?v=mw6pxpsx"></script>
+<script src="js/errors.js?v=mw6pxpsx"></script>
+<script src="js/plan.js?v=mw6pxpsx"></script>
+<script src="js/account.js?v=mw6pxpsx"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1607,7 +1607,10 @@ function buildClassAiPrompt(cls) {
     p += `   - Can You Help Me: هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah).\n`;
     p += `   - Hotel Directions & Service: خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?), هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service?).\n`;
     p += `   - Building Navigation: طَابِق (floor / storey), مِصْعَد (lift / elevator), سُلَّم (stairs / ladder).\n`;
-    p += `   - Saturday Morning Village Breakfast Taps (7 Nov on class.html — 12 words tapped): وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), كَأْسًا (a cup/glass). Drill 1st-person swaps: "أُرِيدُ فَطُورًا لَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً".\n`;
+    p += `   - Saturday Morning Village Breakfast Taps (7 Nov on class.html / story-09 — 79 taps, 65 words): وَأَرَادَ فَطُورًا لَذِيذًا (he wanted delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate 1st, 2nd, and 3rd egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (3 dates and a walnut), كَأْسًا مِنَ الشَّايِ / الحَلِيبِ. Drill 1st-person swaps: "أُرِيدُ فَطُورًا لَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً".\n`;
+    p += `   - Weak Egg Slip Reinforcement (7 Nov): بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ).\n`;
+    p += `   - Walnut vs Wife Mirror Hook: جَوْزَة (jawzah — walnut) vs زَوْجَة (zawjah — wife; ج leads walnut snack, ز leads wife partner!).\n`;
+    p += `   - Price Triplet & Market Vocabulary (Ahmad shopping in village market): ثَمَن (thaman — value/price 2:41; هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market price: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟).\n`;
     p += `   - Weekend Days & Village: يَوْمُ السَّبْتِ (Saturday), يَوْمُ الأَحَدِ (Sunday), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts).\n`;
     p += `4. Routine & Key Slips Reinforcement:\n`;
     p += `   - Evening for Family: المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — recent telemetry slip).\n`;

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw64eex4">
-  <link rel="stylesheet" href="css/style.css?v=mw64eex4">
+  <link rel="stylesheet" href="css/fonts.css?v=mw6pxpsx">
+  <link rel="stylesheet" href="css/style.css?v=mw6pxpsx">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw64eex4"></script>
-<script src="js/curriculum.js?v=mw64eex4"></script>
-<script src="js/srs.js?v=mw64eex4"></script>
-<script src="js/match.js?v=mw64eex4"></script>
-<script src="js/errors.js?v=mw64eex4"></script>
-<script src="js/frames.js?v=mw64eex4"></script>
-<script src="js/app.js?v=mw64eex4"></script>
-<script src="js/tracker.js?v=mw64eex4"></script>
-<script src="js/plan.js?v=mw64eex4"></script>
-<script src="js/account.js?v=mw64eex4"></script>
+<script src="js/progress-model.js?v=mw6pxpsx"></script>
+<script src="js/curriculum.js?v=mw6pxpsx"></script>
+<script src="js/srs.js?v=mw6pxpsx"></script>
+<script src="js/match.js?v=mw6pxpsx"></script>
+<script src="js/errors.js?v=mw6pxpsx"></script>
+<script src="js/frames.js?v=mw6pxpsx"></script>
+<script src="js/app.js?v=mw6pxpsx"></script>
+<script src="js/tracker.js?v=mw6pxpsx"></script>
+<script src="js/plan.js?v=mw6pxpsx"></script>
+<script src="js/account.js?v=mw6pxpsx"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3681,55 +3681,37 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Saturday Morning Village Breakfast & Pre-Class Spoken Sprint (Saturday 7 Nov – Sunday 8 Nov 07:00 UK):
-       - Village Breakfast Story Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 12 words tapped this morning): وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), وَشَرِبَ كَأْسًا مِنَ الشَّايِ (and he drank a cup of tea)
-       - Active First-Person Swap on Village Breakfast: prompt Reza to turn 3rd-person past (أَرَادَ / أَكَلَ) into 1st-person present/past: "أُرِيدُ فَطُورًا لَذِيذًا" (I want a delicious breakfast) and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate an egg, three dates, and a walnut)
-       - Feminine Ordinals Sequence Drill: أُولَى (first), ثَانِيَةً (second), ثَالِثَةً (third) — count items in order
-       - أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home)
-       - أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — rated Box 0 in myday; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)
-       - يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)
-       - الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor!)
-       - هَذَا الكِتَابُ لِي (This book is mine — possessive prepositional لِي)
-       - هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service? — Chapter 3 hotel assistance inquiry, root kh-d-m)
-       - خُذْنِي إِلَى المَطَارِ سَرِيعًا مِنْ فَضْلِكَ (Take me to the airport quickly, please — Chapter 3 rung 3 drill)
-       - Building & Vertical Movement Slips: طَابِق (floor / storey), مِصْعَد (lift / elevator — machine that ascends), سُلَّم (stairs — solemn climb / salām safe steps)
-       - Proven Chapter 3 Hotel Mastery: خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), عِنْدِي حَجْزٌ فِي الفُنْدُقِ (I have a reservation), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?)
-       - Qur'an Ear Anchor: Al-ʿAsr Verse 2 (إِنَّ الْإِنسَانَ لَفِي خُسْرٍ) & Al-Falaq / An-Nas protection concepts
-     * Connected 4-Sentence Speaking Narrative for Sunday Warmup: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
-  p += `     * Saturday & Sunday Weekend Spoken Sprint & Preply Pre-Class Warmup (31 Oct – 1 Nov 07:00 UK):
-       - خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 travel direction; rated weak/box 0 on 28 Oct)
-       - أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah; rated medium/box 1)
-       - هَذَا مِفْتَاحُ الغُرْفَةِ (This is the room key — typed perfect in 28 Oct chapter drill!)
-       - هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah!)
-       - تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)
-       - أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — beverage swaps: مَاء water / قَهْوَة coffee)
-       - أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح key / جَوَاز سَفَر passport)
-       - شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else — polite closing)
-       - المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ attached to family)
-       - Days & Routine: يَوْمُ السَّبْتِ (Saturday — day 7), يَوْمُ الأَحَدِ (Sunday — day 1 / live class at 07:00 UK!), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts)
-     * Connected 4-Sentence Speaking Narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
-  p += `     * Thursday & Friday Pre-Weekend Spoken Workout & Rehearsal (29–30 Oct): Focus on Chapter 2 requests, travel directions, days of week & assistance slips:
-       - هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah!)
-       - أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill drinks swap: مَاء water / قَهْوَة coffee)
-       - تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl)
-       - أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح key / جَوَاز سَفَر passport)
-       - شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else — polite closing)
-       - خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ. (Take me to the hotel, please — Chapter 3 hotel/travel slip)
-       - أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — key opener tool, root f-t-ḥ / like al-Fātiḥah)
-       - المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ attached to family)
-       - Days & Weather: يَوْمُ الخَمِيسِ (Thursday — 5th day), يَوْمُ الجُمُعَةِ (Friday — prayer day), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today)
-     * Connected 4-Sentence Speaking Narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, (4) أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ\n`;
-  p += `     * 15 Oct room key & reservation slips: مِفْتَاحُ الغُرْفَةِ (room key — root f-t-ḥ / opener like al-Fātiḥah), أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ (I need the room key, please), مَشْغُول (busy / occupied — root sh-gh-l), هَلْ عِنْدَكَ حَجْزٌ؟ (Do you have a reservation?)\n`;
-  p += `     * 14 Oct new hooks: حَجْز (reservation / booking — like Hajj, booked years ahead; weave into café/hotel requests "عِنْدِي حَجْزٌ فِي المَطْعَمِ / فِي الفُنْدُقِ"), أُسَاعِدُ (I help — hear the AID inside u-sa-AID-u), الْخَنَّاس (the con-artist slinker of an-Nas who retreats upon dhikr)\n`;
-  p += `     * Commute by-ear anchors (13 Oct): emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering / entrance (دُخُول / مَدْخَل)\n`;
-  p += `     * Building access & vertical movement (12 Oct slips): سُلَّم (stairs / ladder — rated learning; mnemonic: solemn climb / safe steps), مِصْعَد (lift / elevator — rated learning; root ṣ-ʿ-d: machine that ascends), دَوْر (floor / turn — rated learning; 'my turn on this floor'), طَابِق (floor / storey), خَزَائِن (cupboards / treasuries)\n`;
-  p += `     * Day & Routine slips: يَوْمَ الثُّلَاثَاءِ (on Tuesday — rated learning), الجَوُّ بَارِدٌ اليَوْمَ (The weather is cold today), أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day), أُسَاعِدُ (I help)\n`;
-  p += `     * Sunday Script Lines to reinforce: Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ\n`;
-  p += `     * أُرِيدُ أَنْ أَشْرَبَ شَيْئًا (I want to drink something — verb swap slip on Sentence 1!)\n`;
-  p += `     * الْوَسْوَاس (the repetitive whisperer — subtle evil promptings, rated weak), عُقَد (knots), حَاسِد (envier), الْخَنَّاس (the slinker), غَاسِق (intense nightfall)\n`;
-  p += `     * Routine anchors: أَعُودُ (I return [plain d, return to refuge]), أَقْرَأُ الصَّحِيفَةَ (newspaper [pages-root with al-muṣḥaf]), أُرَتِّبُ (I arrange), أَنَامُ (I sleep)\n`;
-  p += `     * Verb tense distinction (Chapter 4): past ـتُ (قَرَأْتُ / صَلَّيْتُ) vs present أَـ (أَقْرَأُ / أُصَلِّي) vs future سَـ (سَأَذْهَبُ)\n`;
-  p += `     * Celebrate win: الفَطُور (breakfast) is now solid thanks to the 'mini-iftar' / 'FAT TOUR' mnemonic!\n\n`;
+  p += `     * Saturday Evening & Sunday 8 Nov Preply Pre-Class Warmup Sprint (07:00 UK):\n`;
+  p += `       - Village Breakfast & Ahmad's Trip Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 79 taps, 65 words reviewed on 7 Nov):\n`;
+  p += `         * Ahmad's breakfast: وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), وَشَرِبَ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ (and drank a cup of tea/milk).\n`;
+  p += `         * Active First-Person Swap: prompt Reza to turn 3rd-person past into 1st-person spoken Arabic: "أُرِيدُ فَطُورًا لَذِيذًا" (I want a delicious breakfast) and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate an egg, three dates, and a walnut).\n`;
+  p += `         * Weak Rating Reinforcement (7 Nov): بَيْضَة (bayḍah — an egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ).\n`;
+  p += `         * Mirror-Letter Hook: جَوْزَة (jawzah — walnut) vs زَوْجَة (zawjah — wife; ج leads the walnut snack, ز leads the wife partner!).\n`;
+  p += `         * Feminine Ordinals Sequence Drill: أُولَى (first), ثَانِيَةً (second), ثَالِثَةً (third) — count items in order.\n`;
+  p += `       - New Root Distinction & Price Triplet (Ahmad at the village market & travel):\n`;
+  p += `         * ثَمَن (thaman — value / Qur'anic price 2:41 ثَمَنًا قَلِيلًا; Ahmad: هَذَا ثَمَنُ الفَاكِهَةِ — this is the price of the fruit).\n`;
+  p += `         * سِعْر (siʿr — market price / tag: كَمِ السِّعْرُ لِهَذَا؟ — what is the price for this?).\n`;
+  p += `         * أُجْرَة (ujrah — taxi fare / wage / rental fee: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟ — what is the fare to there?).\n`;
+  p += `       - Connected 4-Sentence Speaking Narrative for Sunday Warmup:\n`;
+  p += `         1. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)\n`;
+  p += `         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook!)\n`;
+  p += `         3. أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ (I help at home on the day off)\n`;
+  p += `         4. يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا (On Sunday I have an Arabic lesson at 7:00 AM)\n`;
+  p += `       - Daily Routine & Commute Anchors:\n`;
+  p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
+  p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ)\n`;
+  p += `         * يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)\n`;
+  p += `         * هَذَا الكِتَابُ لِي (This book is mine — possessive attached preposition لِي)\n`;
+  p += `         * المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ)\n`;
+  p += `         * هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear the AID in mu-sa-AID-ah)\n`;
+  p += `         * تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)\n`;
+  p += `         * Building & Vertical Movement: طَابِق (floor / storey), مِصْعَد (lift / elevator — machine that ascends), سُلَّم (stairs — solemn climb / salām safe steps)\n`;
+  p += `       - Proven Chapter 3 Hotel Mastery (Tested 100% 9/9!):\n`;
+  p += `         * خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), عِنْدِي حَجْزٌ فِي الفُنْدُقِ (I have a reservation), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?), هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service?), تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ (Stop here, please), هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ (This is my luggage in the car), جَوَازُ سَفَرِي مَفْقُودٌ (My passport is missing)\n`;
+  p += `       - Qur'an Ear Anchors:\n`;
+  p += `         * Surah Al-ʿAsr Verse 2 (إِنَّ الْإِنسَانَ لَفِي خُسْرٍ)\n`;
+  p += `         * Al-Falaq & An-Nas protection concepts: أَعُوذُ (I seek refuge), غَاسِق (intense nightfall), وَقَبَ (penetrating darkness), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور النَّاس (chests of people)\n`;
+  p += `       - Celebrated Win: الفَطُور (breakfast) is solid thanks to the 'mini-iftar' / 'FAT TOUR' mnemonic!\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;
