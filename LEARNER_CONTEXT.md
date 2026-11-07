@@ -14,7 +14,7 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (6 Nov 2026):** 3,808 recorded practice events; 1,200 cards in SRS (**518 solid/strong** in Box 3–5: 444 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 437 active learning (385 Box 1, 52 Box 2); 141 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); commute audio player updated with live ✗ ≈ ✓ scoring, EN neural clips, and persistent trip recovery; Chapter drills 1–10 (300 progressive lines with neural audio) active.
+  - **Live Telemetry (7 Nov 2026):** 3,828 recorded practice events; 1,200 cards in SRS (**518 solid/strong** in Box 3–5: 444 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 437 active learning (385 Box 1, 52 Box 2); 141 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Saturday morning (7 Nov) reading session on *A Trip to the Village* (`story-09`, 12 words tapped); multi-colour word highlighter (`🖍️`) live across all pages.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, ready for refresh; salah coverage 15.7% after record single-day rise driven by 100% ear score on exam).
     - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (87 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
@@ -939,7 +939,8 @@ Context: Reza is an A1 beginner actively studying Chapter 3 (Travel & Hotel) and
 - Celebrated Wins & Proven Masteries:
   - Chapter 3 test passed at 100% (9/9 correct)! Hotel reservations, stop here (تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ), luggage in the car (هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ), and missing passport (جَوَازُ سَفَرِي مَفْقُودٌ) are solid.
   - Commute Player breakthrough: 14-minute real drive on Thursday with 10 sentences by ear including «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for the Arabic lesson).
-- Priority Targets & Active Slips (Nov 6 Telemetry):
+- Priority Targets & Active Slips (Saturday Morning 7 Nov Telemetry — 3,828 events):
+  0. Saturday Morning Village Breakfast Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 12 words tapped on class.html): وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), كَأْسًا (a cup/glass). Drill 1st-person swaps: "أُرِيدُ فَطُورًا لَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً"!
   1. أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ. (I return home in the evening — rated Box 0 in myday; mnemonic: أَعُودُ with plain dāl, 1 letter from أَعُوذُ / return to refuge at home)
   2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — rated Box 0 in myday; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)
   3. يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)

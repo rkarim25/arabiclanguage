@@ -2441,7 +2441,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mw5akgzx";
+const DATA_V = "mw62tlql";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3632,7 +3632,110 @@ function mountConjRows(tbody, colSpan, opts) {
   });
 }
 const _AR_CH = /[؀-ۿ]/;
+const _AR_WORD_SPLIT = /([؀-ۿ]+)/g;
+const HL_COLORS = ["yellow", "green", "blue", "pink", "orange"];
+window._activeHlPen = null;
+
+function getWordHighlights() {
+  return store.get("ats-highlights", {});
+}
+function getWordHighlightColor(word, altWord) {
+  const hls = getWordHighlights();
+  const n1 = normalizeAr(word || "");
+  if (n1 && hls[n1] && hls[n1].color) return hls[n1].color;
+  const n2 = altWord ? normalizeAr(altWord) : "";
+  if (n2 && !/\s/.test(n2) && hls[n2] && hls[n2].color) return hls[n2].color;
+  return "";
+}
+function setWordHighlight(word, color, altWord) {
+  const n1 = normalizeAr(word || "");
+  if (!n1) return "";
+  const hls = getWordHighlights();
+  const cur = getWordHighlightColor(word, altWord);
+  const next = (!color || cur === color) ? "" : color;
+  const now = Date.now();
+  const applyKey = k => {
+    if (!k || /\s/.test(k)) return;
+    if (next) hls[k] = { color: next, ar: word, u: now };
+    else delete hls[k];
+  };
+  applyKey(n1);
+  if (altWord) applyKey(normalizeAr(altWord));
+  store.set("ats-highlights", hls);
+  logEvent({ e: "word-hl", ar: n1, color: next || "none" });
+  applyWordHighlights();
+  return next;
+}
+function toggleHlPen(color) {
+  window._activeHlPen = (window._activeHlPen === color) ? null : (color || null);
+  document.querySelectorAll(".hl-toolbar .hl-dot").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.hlc === (window._activeHlPen || ""));
+  });
+}
+function renderHlToolbarHtml() {
+  const cur = window._activeHlPen || "";
+  return `<span class="hl-toolbar" title="Pick a highlighter colour then tap any Arabic word (or tap any word to colour from its popup)">
+    <span class="hl-label">🖍️ Highlight:</span>
+    ${HL_COLORS.map(c => `<button type="button" class="hl-dot hl-dot-${c}${cur === c ? " active" : ""}" data-hlc="${c}" onclick="toggleHlPen('${c}')" title="Highlight words in ${c}"></button>`).join("")}
+    <button type="button" class="hl-dot hl-dot-clear" data-hlc="" onclick="toggleHlPen(null)" title="Turn off 1-tap highlighter pen">✕</button>
+  </span>`;
+}
+function applyWordHighlights(root) {
+  if (typeof document === "undefined") return;
+  const base = root || document;
+  const hls = getWordHighlights();
+  const containers = base.querySelectorAll
+    ? base.querySelectorAll(".p-ar, .s-ar, .w-ar, .ar-cell")
+    : [];
+  containers.forEach(el => {
+    if (!el.dataset.hlWrapped) {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      const textNodes = [];
+      let tn;
+      while ((tn = walker.nextNode())) {
+        if (tn.parentElement && tn.parentElement.closest(".ar-w,button,a,script,style,.tr-sub,.inline-tr,.cite")) continue;
+        if (_AR_CH.test(tn.nodeValue)) textNodes.push(tn);
+      }
+      textNodes.forEach(node => {
+        const parts = node.nodeValue.split(_AR_WORD_SPLIT);
+        if (parts.length <= 1) return;
+        const frag = document.createDocumentFragment();
+        parts.forEach(part => {
+          if (_AR_CH.test(part) && !/^[؟،؛]+$/.test(part)) {
+            const span = document.createElement("span");
+            const clean = part.replace(/[؟،؛.!,:«»"()[\]]/g, "");
+            const norm = normalizeAr(clean || part);
+            span.className = "ar-w";
+            span.dataset.hlw = norm;
+            span.textContent = part;
+            frag.appendChild(span);
+          } else if (part) {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        if (node.parentNode) node.parentNode.replaceChild(frag, node);
+      });
+      el.dataset.hlWrapped = "1";
+    }
+    el.querySelectorAll(".ar-w").forEach(span => {
+      const norm = span.dataset.hlw || normalizeAr(span.textContent);
+      const entry = hls[norm];
+      const c = entry && entry.color ? entry.color : "";
+      HL_COLORS.forEach(col => span.classList.remove("ar-hl-" + col));
+      if (c && HL_COLORS.includes(c)) {
+        span.classList.add("ar-hl", "ar-hl-" + c);
+      } else {
+        span.classList.remove("ar-hl");
+      }
+    });
+  });
+}
 function wordAtPoint(x, y) {
+  if (document.elementFromPoint) {
+    const el = document.elementFromPoint(x, y);
+    const wEl = el && el.closest && el.closest(".ar-w");
+    if (wEl && _AR_CH.test(wEl.textContent)) return wEl.textContent.replace(/[؟،؛.!,:«»"()[\]]/g, "").trim();
+  }
   let node = null, off = 0;
   if (document.caretRangeFromPoint) {
     const r = document.caretRangeFromPoint(x, y);
@@ -3718,6 +3821,11 @@ function showWordPop(word, x, y, o) {
     <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
       <button type="button" class="wp-say" style="border:1px solid var(--border,#ddd);background:transparent;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:15px">🔊</button>
       ${canLearn ? `<button type="button" class="wp-learn" ${already ? "disabled" : ""} style="border:none;background:var(--accent,#0d7a5f);color:#fff;border-radius:10px;padding:6px 14px;cursor:pointer;font-weight:600">${already ? "✓ in your deck" : "＋ Learn"}</button>` : ""}
+    </div>
+    <div class="wp-hl-row" style="display:flex;gap:7px;justify-content:center;align-items:center;margin-top:9px;padding-top:8px;border-top:1px dashed var(--border,#ddd)">
+      <span style="font-size:11.5px;color:var(--muted,#888);margin-right:2px">🖍️</span>
+      ${HL_COLORS.map(c => `<button type="button" class="hl-dot hl-dot-${c}${getWordHighlightColor(word, disp) === c ? " active" : ""}" data-hlc="${c}" title="Highlight ${c}"></button>`).join("")}
+      <button type="button" class="hl-dot hl-dot-clear" data-hlc="" title="Clear highlight" style="${getWordHighlightColor(word, disp) ? "" : "opacity:.4"}">✕</button>
     </div>`;
   document.body.appendChild(pop);
   const place = () => {
@@ -3727,6 +3835,15 @@ function showWordPop(word, x, y, o) {
   };
   place();
   pop.querySelector(".wp-say").onclick = () => speak(disp, 0.75);
+  pop.querySelectorAll(".wp-hl-row .hl-dot").forEach(btn => {
+    btn.onclick = () => {
+      const next = setWordHighlight(word, btn.dataset.hlc || null, disp);
+      pop.querySelectorAll(".wp-hl-row .hl-dot").forEach(b => {
+        if (b.dataset.hlc) b.classList.toggle("active", b.dataset.hlc === next);
+        else b.style.opacity = next ? "1" : ".4";
+      });
+    };
+  });
   const cj = pop.querySelector(".wp-conj");
   if (cj) cj.onclick = e => {
     e.preventDefault();
@@ -3769,6 +3886,7 @@ function initWordTap() {
     if (!word) { closeWordPop(); return; }
     await Promise.all([loadLexicon(), loadFamIdx(), loadConj()]);
     const hit = lexLookup(word);
+    if (window._activeHlPen) setWordHighlight(word, window._activeHlPen, hit && hit[0]);
     const fam = famLookup(word);
     const conj = conjLookup(word);
     const mnem = mnemFor(word);
@@ -3780,6 +3898,16 @@ function initWordTap() {
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeWordPop(); });
   window.addEventListener("scroll", closeWordPop, { passive: true });
+  applyWordHighlights();
+  if (typeof MutationObserver !== "undefined") {
+    let hlQueued = false;
+    const obs = new MutationObserver(() => {
+      if (hlQueued) return;
+      hlQueued = true;
+      requestAnimationFrame(() => { hlQueued = false; applyWordHighlights(); });
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 }
 
 /* ---------- ✏️ note to coach: floating pen on every page ----------
@@ -4129,7 +4257,8 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Variation Misses (5–6 Nov):**\n`;
+  md += `- **Active Telemetry Slips & Saturday Morning Village Reading (5–7 Nov):**\n`;
+  md += `  - *Saturday Morning Village Breakfast Taps (7 Nov on class.html / story-09 — 12 words tapped):* وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), كَأْسًا (a cup/glass) — drill 1st-person swaps ("أُرِيدُ فَطُورًا لَذِيذًا" / "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً")\n`;
   md += `  - *Weekend Spoken Sprint & Preply Warmup (7–8 Nov 07:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
   md += `  - *Evening Return & Daily Routine Slips:* أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home); أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — rated Box 0; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)\n`;
   md += `  - *Weekend Routines & Commute Anchors:* يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park); الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;

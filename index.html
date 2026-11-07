@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw5akgzx">
-  <link rel="stylesheet" href="css/style.css?v=mw5akgzx">
+  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -163,7 +163,10 @@
           <button type="button" class="view-switch-btn" id="btnViewVocab" onclick="switchChapView('vocab')">🔤 Chapter Vocabulary</button>
         </div>
       </div>
-      <span style="font-size:12px;color:var(--muted)" id="chapSectionSub">Tap any word for instant meaning • Switch tab for 🔤 Chapter Vocabulary</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="hl-toolbar-slot" id="readerHlToolbarSlot"></span>
+        <span style="font-size:12px;color:var(--muted)" id="chapSectionSub">Tap any word for instant meaning • Switch tab for 🔤 Chapter Vocabulary</span>
+      </div>
     </div>
     <div class="sentence-list" id="sentenceList">Loading sentences…</div>
     <div class="vocab-list" id="chapterVocabList" style="display:none;overflow-x:auto">Loading vocabulary…</div>
@@ -250,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw5akgzx"></script>
-<script src="js/curriculum.js?v=mw5akgzx"></script>
-<script src="js/srs.js?v=mw5akgzx"></script>
-<script src="js/match.js?v=mw5akgzx"></script>
-<script src="js/errors.js?v=mw5akgzx"></script>
-<script src="js/frames.js?v=mw5akgzx"></script>
-<script src="js/app.js?v=mw5akgzx"></script>
-<script src="js/tracker.js?v=mw5akgzx"></script>
-<script src="js/plan.js?v=mw5akgzx"></script>
-<script src="js/account.js?v=mw5akgzx"></script>
+<script src="js/progress-model.js?v=mw62tlql"></script>
+<script src="js/curriculum.js?v=mw62tlql"></script>
+<script src="js/srs.js?v=mw62tlql"></script>
+<script src="js/match.js?v=mw62tlql"></script>
+<script src="js/errors.js?v=mw62tlql"></script>
+<script src="js/frames.js?v=mw62tlql"></script>
+<script src="js/app.js?v=mw62tlql"></script>
+<script src="js/tracker.js?v=mw62tlql"></script>
+<script src="js/plan.js?v=mw62tlql"></script>
+<script src="js/account.js?v=mw62tlql"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3283,6 +3286,8 @@ function advanceToNextChapter(nextId) {
 }
 
 function updateChapterSelector() {
+  const hlSlot = document.getElementById("readerHlToolbarSlot");
+  if (hlSlot && typeof renderHlToolbarHtml === "function") hlSlot.innerHTML = renderHlToolbarHtml();
   const sel = document.getElementById("chapSelect");
   if (!sel) return;
   const currentVal = curChap ? curChap.id : (sel.value || CHAPTERS[0].id);
@@ -3302,6 +3307,8 @@ function updateChapterSelector() {
 }
 
 function initChapterSelector() {
+  const hlSlot = document.getElementById("readerHlToolbarSlot");
+  if (hlSlot && typeof renderHlToolbarHtml === "function") hlSlot.innerHTML = renderHlToolbarHtml();
   const sel = document.getElementById("chapSelect");
   if (!sel) return;
   updateChapterSelector();
@@ -3534,7 +3541,7 @@ function handleSentenceRowClick(event, origIdx) {
   if (event.target.closest("button") || event.target.closest("input") || event.target.closest(".wbw-chip") || event.target.closest(".vocab-reveal-btn")) return;
   if (curChap && typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
   // calm rows (12 Oct): the 🌐 lives behind ⋯, so tapping the sentence itself shows the English
-  if (dayPracticeMode === "all" && event.target.closest(".s-ar-side") && typeof origIdx === "number") toggleDayEn(origIdx);
+  if (dayPracticeMode === "all" && !window._activeHlPen && event.target.closest(".s-ar-side") && typeof origIdx === "number") toggleDayEn(origIdx);
   // 🔁 English → Arabic (30 Oct): the whole line is the reveal target, not just the small 👁️ pill
   // 31 Oct pen note: tap the revealed line again to hide it — same in English→Arabic and Arabic→English
   if (dayPracticeMode !== "all" && typeof origIdx === "number") {
@@ -3569,6 +3576,8 @@ function loadChapter(chap, resumeLineIdx) {
   dayRevealed = {};
   dayEnVisible = {};
   if (typeof store !== "undefined") store.set("ats-current-chap-id", chap.id);
+  const hlSlot = document.getElementById("readerHlToolbarSlot");
+  if (hlSlot && typeof renderHlToolbarHtml === "function") hlSlot.innerHTML = renderHlToolbarHtml();
   const sel = document.getElementById("chapSelect");
   if (sel) sel.value = chap.id;
 
@@ -3667,7 +3676,10 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Weekend Spoken Sprint & Preply Pre-Class Warmup (Saturday 7 Nov – Sunday 8 Nov 07:00 UK):
+  p += `     * Saturday Morning Village Breakfast & Pre-Class Spoken Sprint (Saturday 7 Nov – Sunday 8 Nov 07:00 UK):
+       - Village Breakfast Story Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 12 words tapped this morning): وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), وَشَرِبَ كَأْسًا مِنَ الشَّايِ (and he drank a cup of tea)
+       - Active First-Person Swap on Village Breakfast: prompt Reza to turn 3rd-person past (أَرَادَ / أَكَلَ) into 1st-person present/past: "أُرِيدُ فَطُورًا لَذِيذًا" (I want a delicious breakfast) and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate an egg, three dates, and a walnut)
+       - Feminine Ordinals Sequence Drill: أُولَى (first), ثَانِيَةً (second), ثَالِثَةً (third) — count items in order
        - أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home)
        - أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — rated Box 0 in myday; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)
        - يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)

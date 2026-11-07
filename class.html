@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw5akgzx">
-  <link rel="stylesheet" href="css/style.css?v=mw5akgzx">
+  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -497,16 +497,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mw5akgzx"></script>
-<script src="js/curriculum.js?v=mw5akgzx"></script>
-<script src="js/srs.js?v=mw5akgzx"></script>
-<script src="js/app.js?v=mw5akgzx"></script>
-<script src="js/tracker.js?v=mw5akgzx"></script>
-<script src="js/frames.js?v=mw5akgzx"></script>
-<script src="js/freetry.js?v=mw5akgzx"></script>
-<script src="js/errors.js?v=mw5akgzx"></script>
-<script src="js/plan.js?v=mw5akgzx"></script>
-<script src="js/account.js?v=mw5akgzx"></script>
+<script src="js/progress-model.js?v=mw62tlql"></script>
+<script src="js/curriculum.js?v=mw62tlql"></script>
+<script src="js/srs.js?v=mw62tlql"></script>
+<script src="js/app.js?v=mw62tlql"></script>
+<script src="js/tracker.js?v=mw62tlql"></script>
+<script src="js/frames.js?v=mw62tlql"></script>
+<script src="js/freetry.js?v=mw62tlql"></script>
+<script src="js/errors.js?v=mw62tlql"></script>
+<script src="js/plan.js?v=mw62tlql"></script>
+<script src="js/account.js?v=mw62tlql"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -751,10 +751,11 @@ document.addEventListener("DOMContentLoaded", () => { setTimeout(renderTeacherBr
 
 function renderPassage() {
   if (!STORY_DATA) return;
+  if (typeof applyWordHighlights === "function") setTimeout(applyWordHighlights, 0);
   const container = document.getElementById("passageContainer");
   container.innerHTML = `
     <div class="passage-toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:12px">
-      <span></span>
+      <span class="hl-toolbar-slot">${typeof renderHlToolbarHtml === "function" ? renderHlToolbarHtml() : ""}</span>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <button type="button" class="book-toggle-pill" id="btnToggleAllEn" onclick="toggleAllPassageEn()" title="Show/hide English translation">🌐 Translation</button>
         <button type="button" class="book-toggle-pill" id="btnToggleAllWbw" onclick="toggleAllPassageWbw()" title="Show/hide word-by-word breakdown">🧩 Words</button>
@@ -1516,6 +1517,7 @@ function buildClassAiPrompt(cls) {
     p += `   - Can You Help Me: هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah).\n`;
     p += `   - Hotel Directions & Service: خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?), هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service?).\n`;
     p += `   - Building Navigation: طَابِق (floor / storey), مِصْعَد (lift / elevator), سُلَّم (stairs / ladder).\n`;
+    p += `   - Saturday Morning Village Breakfast Taps (7 Nov on class.html — 12 words tapped): وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), كَأْسًا (a cup/glass). Drill 1st-person swaps: "أُرِيدُ فَطُورًا لَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً".\n`;
     p += `   - Weekend Days & Village: يَوْمُ السَّبْتِ (Saturday), يَوْمُ الأَحَدِ (Sunday), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts).\n`;
     p += `4. Routine & Key Slips Reinforcement:\n`;
     p += `   - Evening for Family: المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — recent telemetry slip).\n`;

@@ -148,6 +148,19 @@ function _mergeRemoteState(remote) {
     }
   });
   if (ivChanged) store.set("ats-item-votes", iv);
+  if (remote.highlights && typeof remote.highlights === "object") {
+    const hls = store.get("ats-highlights", {});
+    let hlChanged = false;
+    Object.entries(remote.highlights).forEach(([k, r]) => {
+      if (!r) return;
+      const l = hls[k];
+      if (!l || (r.u || 0) > (l.u || 0)) {
+        hls[k] = r;
+        hlChanged = true;
+      }
+    });
+    if (hlChanged) store.set("ats-highlights", hls);
+  }
 
   // Chapter progression and line resume
   if (remote.currentChapId && !store.get("ats-current-chap-id")) {
@@ -200,6 +213,7 @@ function _payload(log) {
     srs: getSrs(),
     itemVotes: store.get("ats-item-votes", {}),
     tapwords: store.get("ats-tapwords", {}),
+    highlights: store.get("ats-highlights", {}),
     chapLines,
     currentChapId: curChapId,
     plan: store.get("ats-plan", null),
@@ -323,6 +337,7 @@ async function restoreFromCloud() {
   if (remote.srs) store.set("ats-srs", remote.srs);
   if (remote.itemVotes) store.set("ats-item-votes", remote.itemVotes);
   if (remote.tapwords) store.set("ats-tapwords", remote.tapwords);
+  if (remote.highlights) store.set("ats-highlights", remote.highlights);
   if (remote.currentChapId) store.set("ats-current-chap-id", remote.currentChapId);
   if (remote.chapLines && typeof remote.chapLines === "object") {
     Object.entries(remote.chapLines).forEach(([cid, line]) => {
@@ -348,7 +363,7 @@ function claimLocal(email) {
   const owner = store.get("ats-owner", null);
   if (owner && owner !== email) {
     ["ats-srs", "ats-log", "ats-progress", "ats-plan", "ats-plan-hist", "ats-plan-bank", "ats-hw-done", "ats-homework",
-     "ats-item-votes", "ats-tapwords", "ats-current-chap-id", SYNC_KEY].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+     "ats-item-votes", "ats-tapwords", "ats-highlights", "ats-current-chap-id", SYNC_KEY].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
     for (let i = 1; i <= 10; i++) { try { localStorage.removeItem("ats-chap-line-chap-" + i); } catch (e) {} }
   }
   store.set("ats-owner", email);

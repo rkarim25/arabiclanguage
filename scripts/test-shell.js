@@ -882,5 +882,21 @@ const bank = D("sentence-bank.json");
   yes(Array.isArray(iv.items) && iv.items.every(i => i.date && i.kind && Array.isArray(i.keys) && i.what), "the intervention ledger has a shape the check script reads");
 }
 
+/* ---------- multi-colour word highlighter (7 Nov pen note #63) ---------- */
+{
+  console.log("\n-- multi-colour word highlighter --");
+  const appSrcNow = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  const trackerSrcNow = fs.readFileSync(path.join(ROOT, "js", "tracker.js"), "utf8");
+  const cssSrcNow = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
+  const classSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(/const HL_COLORS = \["yellow", "green", "blue", "pink", "orange"\]/.test(appSrcNow), "5 highlighter colours defined in app.js");
+  yes(/function setWordHighlight\(/.test(appSrcNow) && /function applyWordHighlights\(/.test(appSrcNow), "setWordHighlight and applyWordHighlights exist in app.js");
+  yes(/class="wp-hl-row"/.test(appSrcNow), "#wordPop includes the multi-colour highlight dot row");
+  yes(/renderHlToolbarHtml\(\)/.test(classSrcNow) && /renderHlToolbarHtml\(\)/.test(indexSrcNow), "1-tap highlighter pen bar mounted on class.html and index.html");
+  yes(/\.ar-hl-yellow/.test(cssSrcNow) && /\.ar-hl-green/.test(cssSrcNow) && /\.ar-hl-blue/.test(cssSrcNow) && /\.ar-hl-pink/.test(cssSrcNow) && /\.ar-hl-orange/.test(cssSrcNow), "CSS defines all 5 highlight colour classes");
+  yes(/highlights: store\.get\("ats-highlights"/.test(trackerSrcNow) && /remote\.highlights/.test(trackerSrcNow), "tracker.js syncs ats-highlights to and from Cloudflare KV");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

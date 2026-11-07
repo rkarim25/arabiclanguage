@@ -1,6 +1,13 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-02.** Read this first in any new session.
+**Updated 2026-11-07.** Read this first in any new session.
+
+> **7 Nov 2026 (interactive, `/run-arabic-coach`)** — Processed Reza's Saturday morning pen note (#63, `"Create way for me to higlight words with different colours"` on `class.html` while reading *A Trip to the Village* / `story-09` and tapping 12 words):
+> 1. **Multi-Colour Word Highlighter (`🖍️`)**:
+>    - **In-Popup Colour Picker (`#wordPop` in `js/app.js`):** Tapping any Arabic word on any page shows 5 book-friendly highlight dots (`yellow`, `green`, `blue`, `pink`, `orange`) + `✕` clear right inside the word popup.
+>    - **1-Tap Highlighter Pen Bar (`renderHlToolbarHtml()` on `class.html` & `index.html`):** Selecting a colour dot in the passage/reader toolbar activates a 1-tap highlighter pen (`window._activeHlPen`) so tapping any Arabic word immediately highlights it in that colour across the page.
+>    - **Cloud Sync (`js/tracker.js`):** Highlights persist in `ats-highlights` and sync to/from Cloudflare KV (`highlights` key in `data:<email>`, merged by latest timestamp `u`).
+> 2. **Speak with AI & Dossier Refreshed (`index.html`, `class.html`, `js/app.js`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**: Added Saturday morning's 12 tapped Village Breakfast words (`وَأَرَادَ فَطُورًا لَذِيذًا`, `أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً`, `وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً`, `كَأْسًا`) alongside the 2 remaining `1d` struggle words (`أَعُودُ`, `أَتَعَلَّمُ`).
 
 > **2 Nov 2026 (interactive, "fix all notes on site")** — his four Say-your-day pen notes shipped: (1) 🗂 **Sets** tab (`sets.html`) replaces Grammar in the nav — days, numbers, directions, time, question words… as in-place tables with 🔊 and the ✗≈✓★ verdicts, Grammar is its first sub-section (every pattern links into `grammar.html?g=`); (2) new everyday cluster `numbers-big` (0, 11–19, tens, 100, 1000, 25) with neural clips; (3) the 💡 "weekend/smalltalk" moment tag no longer shows on Say-your-day cards (`note: ""` in `loadMyDay`); (4) **Check Arabic** swaps only that card in place (`cardHtml` + `revealCard` in `sentences.html`) — no more jump to the top. `test-sentences.js` pins the nav as index · class · sentences · words · sets. It defines the live site status, latest deployed lesson batch, multi-AI coordination protocols, test suite audit results, and current learner state.
 
