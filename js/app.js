@@ -30,6 +30,9 @@ const FAMILY_LIST = [
   { id: "klm", root: "ك ل م", hint: "to speak — كلمة" },
   { id: "byt", root: "ب ي ت", hint: "house — البيت" },
   { id: "rhm", root: "ر ح م", hint: "mercy — الرحمن والرحيم come from رَحِم, the womb" },
+  { id: "thmn", root: "ث م ن", hint: "price & value — ثَمَن، ثَمِين، ثَمَنًا قَلِيلًا" },
+  { id: "ajr", root: "أ ج ر", hint: "fare, wage & reward — أُجْرَة، أُجُور، أَجْر" },
+  { id: "s3r", root: "س ع ر", hint: "price & flame — سِعْر، أَسْعَار، سَعِير" },
 ];
 
 /* Everyday-Arabic clusters (full data in data/everyday.json) */
@@ -2441,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mw641cuh";
+const DATA_V = "mw64eex4";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))

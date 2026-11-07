@@ -1782,6 +1782,163 @@
           "en": "And untie the knot from my tongue."
         }
       ]
+    },
+    {
+      "id": "thmn",
+      "root": "ث م ن",
+      "rootTr": "th-m-n",
+      "theme": "price, value & eighths — monetary worth and fractional division",
+      "storyRef": {
+        "story": "story-09",
+        "ar": "ثَمَن"
+      },
+      "members": [
+        {
+          "ar": "ثَمَن",
+          "tr": "thaman",
+          "en": "price, cost (amount paid)"
+        },
+        {
+          "ar": "أَثْمَان",
+          "tr": "athmān",
+          "en": "prices, values (plural)"
+        },
+        {
+          "ar": "ثَمِين",
+          "tr": "thamīn",
+          "en": "precious, valuable"
+        },
+        {
+          "ar": "ثَمَّنَ",
+          "tr": "thammana",
+          "en": "to price, appraise, value"
+        },
+        {
+          "ar": "ثَمَانِيَة",
+          "tr": "thamāniya",
+          "en": "eight (8)"
+        },
+        {
+          "ar": "ثَامِن",
+          "tr": "thāmin",
+          "en": "eighth (ordinal)"
+        },
+        {
+          "ar": "ثُمُن",
+          "tr": "thumun",
+          "en": "one-eighth (1/8)"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "2:41",
+          "ar": "وَلَا تَشْتَرُوا بِآيَاتِي ثَمَنًا قَلِيلًا",
+          "en": "And do not exchange My verses for a small price."
+        },
+        {
+          "ref": "12:20",
+          "ar": "وَشَرَوْهُ بِثَمَنٍ بَخْسٍ دَرَاهِمَ مَعْدُودَةٍ",
+          "en": "And they sold him for a miserable price — a few dirhams."
+        }
+      ]
+    },
+    {
+      "id": "ajr",
+      "root": "أ ج ر",
+      "rootTr": "ʾ-j-r",
+      "theme": "fares, wages & divine recompense — payment for service or effort",
+      "storyRef": {
+        "story": "story-09",
+        "ar": "أَجْر"
+      },
+      "members": [
+        {
+          "ar": "أُجْرَة",
+          "tr": "ujrah",
+          "en": "fare, fee, rent"
+        },
+        {
+          "ar": "أُجُور",
+          "tr": "ujūr",
+          "en": "fares, wages, rewards (plural)"
+        },
+        {
+          "ar": "أَجْر",
+          "tr": "ajr",
+          "en": "reward, recompense, wage"
+        },
+        {
+          "ar": "سَيَّارَةُ أُجْرَة",
+          "tr": "sayyāratu ujrah",
+          "en": "taxi (literally: car for hire)"
+        },
+        {
+          "ar": "اسْتَأْجَرَ",
+          "tr": "istaʾjara",
+          "en": "to hire, rent, employ"
+        },
+        {
+          "ar": "أَجِير",
+          "tr": "ajīr",
+          "en": "hired worker, employee"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "28:26",
+          "ar": "يَا أَبَتِ اسْتَأْجِرْهُ إِنَّ خَيْرَ مَنِ اسْتَأْجَرْتَ الْقَوِيُّ الْأَمِينُ",
+          "en": "O my father, hire him! Indeed, the best one you can hire is the strong and trustworthy."
+        },
+        {
+          "ref": "4:40",
+          "ar": "وَإِنْ تَكُ حَسَنَةً يُضَاعِفْهَا وَيُؤْتِ مِنْ لَدُنْهُ أَجْرًا عَظِيمًا",
+          "en": "And if there is a good deed, He doubles it and gives from Himself a great reward."
+        }
+      ]
+    },
+    {
+      "id": "s3r",
+      "root": "س ع ر",
+      "rootTr": "s-ʿ-r",
+      "theme": "market prices, rates & blazing flame — tariffs and setting ablaze",
+      "storyRef": {
+        "story": "story-09",
+        "ar": "السِّعْر"
+      },
+      "members": [
+        {
+          "ar": "سِعْر",
+          "tr": "siʿr",
+          "en": "market price, price tag, rate"
+        },
+        {
+          "ar": "أَسْعَار",
+          "tr": "asʿār",
+          "en": "prices, rates (plural)"
+        },
+        {
+          "ar": "تَسْعِيرَة",
+          "tr": "tasʿīrah",
+          "en": "official price list, tariff"
+        },
+        {
+          "ar": "سَعِير",
+          "tr": "saʿīr",
+          "en": "blazing fire, intense blaze"
+        }
+      ],
+      "quran": [
+        {
+          "ref": "81:12",
+          "ar": "وَإِذَا الْجَحِيمُ سُعِّرَتْ",
+          "en": "And when the Hellfire is set ablaze."
+        },
+        {
+          "ref": "4:10",
+          "ar": "وَسَيَصْلَوْنَ سَعِيرًا",
+          "en": "And they will burn in a blazing fire."
+        }
+      ]
     }
   ]
 }

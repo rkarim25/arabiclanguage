@@ -1456,7 +1456,7 @@
    "name": "Buying and bargaining",
    "can": "buy something, ask what it costs and understand the answer",
    "why": "Numbers are the half of shopping people forget to learn, so they are in here too.",
-   "items": 28,
+   "items": 30,
    "plannedMin": 42,
    "plannedWeek": 14,
    "lessons": [
@@ -1510,18 +1510,20 @@
       "ev-shopping:1",
       "ev-shopping:2",
       "ev-shopping:3",
-      "ev-shopping:4"
+      "ev-shopping:4",
+      "ev-shopping:5"
      ]
     },
     {
      "id": "ms-shop-l6",
      "title": "In the market (2 of 2)",
      "keys": [
-      "ev-shopping:5",
       "ev-shopping:6",
       "ev-shopping:7",
       "ev-shopping:8",
-      "ev-shopping:9"
+      "ev-shopping:9",
+      "ev-shopping:10",
+      "ev-shopping:11"
      ]
     }
    ]
@@ -1819,68 +1821,8 @@
    ]
   },
   {
-   "id": "ms-travel",
-   "order": 17,
-   "track": "conv",
-   "level": "conv-a2",
-   "name": "Hotels, taxis and getting help",
-   "can": "handle a hotel, a taxi, and ask for help when something goes wrong",
-   "why": "The Umrah logistics that happen whether or not you have the words.",
-   "items": 22,
-   "plannedMin": 28,
-   "plannedWeek": 17,
-   "lessons": [
-    {
-     "id": "ms-travel-l1",
-     "title": "Hotel and taxi (1 of 2)",
-     "keys": [
-      "ev-hotel-taxi:0",
-      "ev-hotel-taxi:1",
-      "ev-hotel-taxi:2",
-      "ev-hotel-taxi:3",
-      "ev-hotel-taxi:4",
-      "ev-hotel-taxi:5"
-     ]
-    },
-    {
-     "id": "ms-travel-l2",
-     "title": "Hotel and taxi (2 of 2)",
-     "keys": [
-      "ev-hotel-taxi:6",
-      "ev-hotel-taxi:7",
-      "ev-hotel-taxi:8",
-      "ev-hotel-taxi:9",
-      "ev-hotel-taxi:10",
-      "ev-hotel-taxi:11"
-     ]
-    },
-    {
-     "id": "ms-travel-l3",
-     "title": "Asking for help (1 of 2)",
-     "keys": [
-      "ev-help:0",
-      "ev-help:1",
-      "ev-help:2",
-      "ev-help:3",
-      "ev-help:4"
-     ]
-    },
-    {
-     "id": "ms-travel-l4",
-     "title": "Asking for help (2 of 2)",
-     "keys": [
-      "ev-help:5",
-      "ev-help:6",
-      "ev-help:7",
-      "ev-help:8",
-      "ev-help:9"
-     ]
-    }
-   ]
-  },
-  {
    "id": "ms-time",
-   "order": 18,
+   "order": 17,
    "track": "conv",
    "level": "conv-a2",
    "name": "Time and plans",
@@ -1888,7 +1830,7 @@
    "why": "Arranging anything — a lesson, a meal, a taxi — runs on these.",
    "items": 18,
    "plannedMin": 28,
-   "plannedWeek": 18,
+   "plannedWeek": 17,
    "lessons": [
     {
      "id": "ms-time-l1",
@@ -1930,6 +1872,74 @@
       "ev-time:6",
       "ev-time:7",
       "ev-time:8"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ms-travel",
+   "order": 18,
+   "track": "conv",
+   "level": "conv-a2",
+   "name": "Hotels, taxis and getting help",
+   "can": "handle a hotel, a taxi, and ask for help when something goes wrong",
+   "why": "The Umrah logistics that happen whether or not you have the words.",
+   "items": 24,
+   "plannedMin": 35,
+   "plannedWeek": 18,
+   "lessons": [
+    {
+     "id": "ms-travel-l1",
+     "title": "Hotel and taxi (1 of 3)",
+     "keys": [
+      "ev-hotel-taxi:0",
+      "ev-hotel-taxi:1",
+      "ev-hotel-taxi:2",
+      "ev-hotel-taxi:3",
+      "ev-hotel-taxi:4"
+     ]
+    },
+    {
+     "id": "ms-travel-l2",
+     "title": "Hotel and taxi (2 of 3)",
+     "keys": [
+      "ev-hotel-taxi:5",
+      "ev-hotel-taxi:6",
+      "ev-hotel-taxi:7",
+      "ev-hotel-taxi:8",
+      "ev-hotel-taxi:9"
+     ]
+    },
+    {
+     "id": "ms-travel-l3",
+     "title": "Hotel and taxi (3 of 3)",
+     "keys": [
+      "ev-hotel-taxi:10",
+      "ev-hotel-taxi:11",
+      "ev-hotel-taxi:12",
+      "ev-hotel-taxi:13"
+     ]
+    },
+    {
+     "id": "ms-travel-l4",
+     "title": "Asking for help (1 of 2)",
+     "keys": [
+      "ev-help:0",
+      "ev-help:1",
+      "ev-help:2",
+      "ev-help:3",
+      "ev-help:4"
+     ]
+    },
+    {
+     "id": "ms-travel-l5",
+     "title": "Asking for help (2 of 2)",
+     "keys": [
+      "ev-help:5",
+      "ev-help:6",
+      "ev-help:7",
+      "ev-help:8",
+      "ev-help:9"
      ]
     }
    ]
@@ -2244,7 +2254,7 @@
    "why": "Past this point most verses have only one or two words you have never met.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 22,
+   "plannedWeek": 23,
    "lessons": [
     {
      "id": "ms-core-150-l1",
