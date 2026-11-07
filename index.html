@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
-  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/fonts.css?v=mw63gzpe">
+  <link rel="stylesheet" href="css/style.css?v=mw63gzpe">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw62tlql"></script>
-<script src="js/curriculum.js?v=mw62tlql"></script>
-<script src="js/srs.js?v=mw62tlql"></script>
-<script src="js/match.js?v=mw62tlql"></script>
-<script src="js/errors.js?v=mw62tlql"></script>
-<script src="js/frames.js?v=mw62tlql"></script>
-<script src="js/app.js?v=mw62tlql"></script>
-<script src="js/tracker.js?v=mw62tlql"></script>
-<script src="js/plan.js?v=mw62tlql"></script>
-<script src="js/account.js?v=mw62tlql"></script>
+<script src="js/progress-model.js?v=mw63gzpe"></script>
+<script src="js/curriculum.js?v=mw63gzpe"></script>
+<script src="js/srs.js?v=mw63gzpe"></script>
+<script src="js/match.js?v=mw63gzpe"></script>
+<script src="js/errors.js?v=mw63gzpe"></script>
+<script src="js/frames.js?v=mw63gzpe"></script>
+<script src="js/app.js?v=mw63gzpe"></script>
+<script src="js/tracker.js?v=mw63gzpe"></script>
+<script src="js/plan.js?v=mw63gzpe"></script>
+<script src="js/account.js?v=mw63gzpe"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3487,7 +3487,10 @@ function startAudioQueueFromLine(startIdx) {
   const srs = (typeof getSrs === "function") ? getSrs() : {};
   let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
   if (daySortWeakest) {
-    items.sort((a, b) => {
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+    if (false) items.sort((a, b) => {
       const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
       const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
       if (ra !== rb) return ra - rb;
@@ -3496,7 +3499,9 @@ function startAudioQueueFromLine(startIdx) {
   }
   if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
     // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
-    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
   }
 
   let targetQueueIdx = items.findIndex(it => it.origIdx === startIdx);
@@ -4024,6 +4029,32 @@ function switchChapView(view) {
 
 let dayPracticeMode = (() => { try { const m = localStorage.getItem("dayPracticeMode"); return (m === "ar-only" || m === "en-only") ? m : "all"; } catch (_) { return "all"; } })(); // 'all' | 'ar-only' | 'en-only' — remembered per browser
 let daySortWeakest = false;
+let daySentFrozenOrder = null;
+let daySentFrozenChapId = null;
+
+function computeDaySentOrder() {
+  if (!curChap || !curChap.sentences) return;
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  let list = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
+  if (daySortWeakest) {
+    list.sort((a, b) => {
+      const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
+      const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  } else if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
+    list = SRS.weakestFirst(list.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+  }
+  daySentFrozenOrder = list.map(x => x.origIdx);
+  daySentFrozenChapId = curChap.id;
+}
+
+function resortDaySentences() {
+  if (!daySortWeakest && !dayRedoOrder) daySortWeakest = true;
+  computeDaySentOrder();
+  renderDailySentences();
+}
 let dayRevealed = {};
 let dayEnVisible = {};
 let allDayEnVisible = false;
@@ -4046,6 +4077,8 @@ function swapDayEnglish() {
 
 function toggleDaySortWeakest() {
   daySortWeakest = !daySortWeakest;
+  if (daySortWeakest) computeDaySentOrder();
+  else daySentFrozenOrder = null;
   renderDailySentences();
 }
 
@@ -4166,7 +4199,10 @@ function renderDailySentences() {
   let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
 
   if (daySortWeakest) {
-    items.sort((a, b) => {
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+    if (false) items.sort((a, b) => {
       const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
       const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
       if (ra !== rb) return ra - rb;
@@ -4175,7 +4211,9 @@ function renderDailySentences() {
   }
   if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
     // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
-    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
   }
 
   sList.innerHTML = `
@@ -4188,6 +4226,7 @@ function renderDailySentences() {
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic prompt</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDayModeEn" onclick="setDayPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English prompt</button>
         <button type="button" class="book-toggle-pill ${daySortWeakest ? 'active' : ''}" id="btnDaySortWeakest" onclick="toggleDaySortWeakest()" title="Sort sentences by weakest vocabulary and downvotes first">📉 Weakest first</button>
+        <button type="button" class="book-toggle-pill" id="btnDaySentResort" onclick="resortDaySentences()" title="Re-sort sentences now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         <span style="width:1px;height:18px;background:var(--border)"></span>
         <button type="button" class="book-toggle-pill ${allDayEnVisible ? 'active' : ''}" id="btnToggleAllDayEn" onclick="toggleAllDayEn()" title="Show/hide English translation across all sentences">🌐 Translation</button>
         <button type="button" class="book-toggle-pill ${allDayWbwVisible ? 'active' : ''}" id="btnToggleAllDayWbw" onclick="toggleAllDayWbw()" title="Show/hide word-by-word breakdown across all sentences">🧩 Words</button>
@@ -4301,6 +4340,8 @@ let dayRedoOrder = false;
 function redoDayBatch() {
   dayRedoOrder = true;
   daySortWeakest = false;
+  computeDaySentOrder();
+  daySortWeakest = false;
   dayRevealed = {}; dayEnVisible = {}; allDayEnVisible = false;
   dayDrillOpen = {}; dayDrillRound = false;
   if (dayPracticeMode === "all") dayPracticeMode = "ar-only";   // nothing to recall when both sides show
@@ -4315,6 +4356,7 @@ function redoChapVocab() {
   chapVocabRevealed = {};
   if (chapVocabPracticeMode === "all") chapVocabPracticeMode = "en-only";
   logEvent({ e: "redo-batch", kind: "chapter-vocab", chap: curChap ? curChap.id : null, t: Date.now() });
+  computeChapVocabOrder();
   renderChapterVocab();
   const list = document.getElementById("chapterVocabList");
   if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -4603,12 +4645,52 @@ async function drillMic(idx) {
 /* ==================== CHAPTER VOCABULARY ENGINE ==================== */
 let chapVocabSortMode = (typeof store !== "undefined" && store.get("ats-chap-vocab-sort")) || "weakest"; // 'weakest' | 'strongest' | 'default'
 let chapVocabPracticeMode = "all"; // 'all' | 'ar-only' | 'en-only'
+let chapVocabFrozenOrder = null;
+let chapVocabFrozenChapId = null;
+
+function computeChapVocabOrder() {
+  if (!curChap) return;
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  const arr = getChapterVocabList(curChap);
+  if (chapVocabSortMode === "weakest" /* compute */) {
+    arr.sort((a, b) => {
+      const wa = getVocabItemWeaknessRank(a, srs);
+      const wb = getVocabItemWeaknessRank(b, srs);
+      if (wa.rank !== wb.rank) return wa.rank - wb.rank;
+      if (wb.fails !== wa.fails) return wb.fails - wa.fails;
+      if (wa.box !== wb.box) return wa.box - wb.box;
+      return a.origIdx - b.origIdx;
+    });
+  } else if (chapVocabSortMode === "strongest" /* compute */) {
+    arr.sort((a, b) => {
+      const wa = getVocabItemWeaknessRank(a, srs);
+      const wb = getVocabItemWeaknessRank(b, srs);
+      if (wb.rank !== wa.rank) return wb.rank - wa.rank;
+      if (wb.box !== wa.box) return wb.box - wa.box;
+      if (wa.fails !== wb.fails) return wa.fails - wb.fails;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  chapVocabFrozenOrder = arr.map(x => x.origIdx);
+  chapVocabFrozenChapId = curChap.id;
+}
+
+function resortChapVocab() {
+  if (chapVocabSortMode === "default") {
+    chapVocabSortMode = "weakest";
+    if (typeof store !== "undefined") store.set("ats-chap-vocab-sort", "weakest");
+  }
+  computeChapVocabOrder();
+  renderChapterVocab();
+}
 let chapVocabRevealed = {};
 let chapVocabTrVisible = false;
 
 function setChapVocabSortMode(mode) {
   chapVocabSortMode = mode;
   if (typeof store !== "undefined") store.set("ats-chap-vocab-sort", mode);
+  if (mode === "default") chapVocabFrozenOrder = null;
+  else computeChapVocabOrder();
   renderChapterVocab();
 }
 
@@ -4704,7 +4786,12 @@ function playAllChapVocab() {
   if (!curChap) return;
   const srs = (typeof getSrs === "function") ? getSrs() : {};
   let list = getChapterVocabList(curChap);
-  if (chapVocabSortMode === "weakest") {
+  if (chapVocabSortMode === "weakest" || chapVocabSortMode === "strongest") {
+    if (!chapVocabFrozenOrder || chapVocabFrozenChapId !== curChap.id || chapVocabFrozenOrder.length !== list.length) computeChapVocabOrder();
+    const byIdx = Object.fromEntries(list.map(x => [x.origIdx, x]));
+    list = (chapVocabFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+  }
+  if (false) {
     list.sort((a, b) => {
       const wa = getVocabItemWeaknessRank(a, srs);
       const wb = getVocabItemWeaknessRank(b, srs);
@@ -4739,7 +4826,12 @@ function renderChapterVocab() {
   const bVocab = document.getElementById("btnViewVocab");
   if (bVocab) bVocab.textContent = `🔤 Chapter Vocabulary (${list.length})`;
 
-  if (chapVocabSortMode === "weakest") {
+  if (chapVocabSortMode === "weakest" || chapVocabSortMode === "strongest") {
+    if (!chapVocabFrozenOrder || chapVocabFrozenChapId !== curChap.id || chapVocabFrozenOrder.length !== list.length) computeChapVocabOrder();
+    const byIdx = Object.fromEntries(list.map(x => [x.origIdx, x]));
+    list = (chapVocabFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+  }
+  if (false) {
     list.sort((a, b) => {
       const wa = getVocabItemWeaknessRank(a, srs);
       const wb = getVocabItemWeaknessRank(b, srs);
@@ -4748,7 +4840,7 @@ function renderChapterVocab() {
       if (wa.box !== wb.box) return wa.box - wb.box;
       return a.origIdx - b.origIdx;
     });
-  } else if (chapVocabSortMode === "strongest") {
+  } else if (false) {
     list.sort((a, b) => {
       const wa = getVocabItemWeaknessRank(a, srs);
       const wb = getVocabItemWeaknessRank(b, srs);
@@ -4774,6 +4866,7 @@ function renderChapterVocab() {
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
         <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'weakest' ? 'active' : ''}" onclick="setChapVocabSortMode(chapVocabSortMode === 'weakest' ? 'default' : 'weakest')" title="Sort vocabulary by weakest recall first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill" id="btnChapVocabResort" onclick="resortChapVocab()" title="Re-sort vocabulary now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'strongest' ? 'active' : ''}" onclick="setChapVocabSortMode(chapVocabSortMode === 'strongest' ? 'default' : 'strongest')" title="Sort vocabulary by strongest recall first">📈 Strongest First</button>
         <button type="button" class="book-toggle-pill ${chapVocabSortMode === 'default' ? 'active' : ''}" onclick="setChapVocabSortMode('default')" title="Original chapter order">🔢 Chapter Order</button>
         ${chapVocabPracticeMode !== 'all' ? `
@@ -5026,7 +5119,10 @@ document.getElementById("btnPlayAll").onclick = () => {
   const srs = (typeof getSrs === "function") ? getSrs() : {};
   let items = curChap.sentences.map((s, origIdx) => ({ s, origIdx }));
   if (daySortWeakest) {
-    items.sort((a, b) => {
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+    if (false) items.sort((a, b) => {
       const ra = getDaySentenceWeaknessRank(a.s, srs, a.origIdx);
       const rb = getDaySentenceWeaknessRank(b.s, srs, b.origIdx);
       if (ra !== rb) return ra - rb;
@@ -5035,7 +5131,9 @@ document.getElementById("btnPlayAll").onclick = () => {
   }
   if (dayRedoOrder && typeof SRS === "object" && SRS && SRS.weakestFirst) {
     // ↻ redo: his verdicts (✗ first, then ≈, unrated, ✓, ★) and recall decide the order
-    items = SRS.weakestFirst(items.map(x => ({ key: `chap:${curChap.num}:${x.origIdx}`, s: x.s, origIdx: x.origIdx })), srs);
+    if (!daySentFrozenOrder || daySentFrozenChapId !== curChap.id || daySentFrozenOrder.length !== items.length) computeDaySentOrder();
+    const byIdx = Object.fromEntries(items.map(x => [x.origIdx, x]));
+    items = (daySentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
   }
   const includeEn = audioVoiceMode !== "ar-only";
   audioQueue = items.map(({ s, origIdx }) => ({ ar: s.ar, en: includeEn ? s.en : null, idx: origIdx }));

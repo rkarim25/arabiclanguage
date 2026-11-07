@@ -898,5 +898,19 @@ const bank = D("sentence-bank.json");
   yes(/highlights: store\.get\("ats-highlights"/.test(trackerSrcNow) && /remote\.highlights/.test(trackerSrcNow), "tracker.js syncs ats-highlights to and from Cloudflare KV");
 }
 
+/* ---------- non-live weakest-first sort + explicit Resort button (7 Nov) ---------- */
+{
+  console.log("\n-- non-live weakest-first sort + explicit Resort button --");
+  const classSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const wordsSrcNow = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
+  const sentSrcNow = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
+  yes(/function resortVocabTable\(/.test(classSrcNow) && /vocabFrozenOrder/.test(classSrcNow) && /id="btnVocabResort"/.test(classSrcNow), "class.html Class Vocabulary freezes sort order while reading and exposes ↻ Resort");
+  yes(/function resortClassSentences\(/.test(classSrcNow) && /clsSentFrozenOrder/.test(classSrcNow) && /id="btnClsSentResort"/.test(classSrcNow), "class.html Class Sentences freezes sort order while reading and exposes ↻ Resort");
+  yes(/function resortDaySentences\(/.test(indexSrcNow) && /daySentFrozenOrder/.test(indexSrcNow) && /id="btnDaySentResort"/.test(indexSrcNow), "index.html Chapter Sentences freezes sort order while reading and exposes ↻ Resort");
+  yes(/function resortChapVocab\(/.test(indexSrcNow) && /chapVocabFrozenOrder/.test(indexSrcNow) && /id="btnChapVocabResort"/.test(indexSrcNow), "index.html Chapter Vocabulary freezes sort order while reading and exposes ↻ Resort");
+  yes(/SRS\.paintBar\(document\.getElementById\("masterTableBody"\)/.test(wordsSrcNow) && /SRS\.paintBar\(document\.getElementById\("bankTableBody"\)/.test(sentSrcNow), "master tables on words.html and sentences.html update ratings in place without jumping rows");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

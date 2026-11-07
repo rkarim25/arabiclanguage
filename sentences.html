@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
-  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/fonts.css?v=mw63gzpe">
+  <link rel="stylesheet" href="css/style.css?v=mw63gzpe">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -246,6 +246,7 @@
           <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">Preply Class (74)</button>
           <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">Qur'an (597)</button>
           <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">Due Now</button>
+          <button type="button" class="chip" onclick="renderMasterBank()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
         </div>
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -283,18 +284,18 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mw62tlql"></script>
-<script src="js/curriculum.js?v=mw62tlql"></script>
-<script src="js/srs.js?v=mw62tlql"></script>
-<script src="js/frames.js?v=mw62tlql"></script>
-<script src="js/freetry.js?v=mw62tlql"></script>
-<script src="js/match.js?v=mw62tlql"></script>
-<script src="js/errors.js?v=mw62tlql"></script>
-<script src="js/tryit.js?v=mw62tlql"></script>
-<script src="js/app.js?v=mw62tlql"></script>
-<script src="js/tracker.js?v=mw62tlql"></script>
-<script src="js/plan.js?v=mw62tlql"></script>
-<script src="js/account.js?v=mw62tlql"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mw63gzpe"></script>
+<script src="js/curriculum.js?v=mw63gzpe"></script>
+<script src="js/srs.js?v=mw63gzpe"></script>
+<script src="js/frames.js?v=mw63gzpe"></script>
+<script src="js/freetry.js?v=mw63gzpe"></script>
+<script src="js/match.js?v=mw63gzpe"></script>
+<script src="js/errors.js?v=mw63gzpe"></script>
+<script src="js/tryit.js?v=mw63gzpe"></script>
+<script src="js/app.js?v=mw63gzpe"></script>
+<script src="js/tracker.js?v=mw63gzpe"></script>
+<script src="js/plan.js?v=mw63gzpe"></script>
+<script src="js/account.js?v=mw63gzpe"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -910,6 +911,18 @@ function toggleAllTblTr() {
 function rateMasterSentence(key, g) {
   const nc = SRS.rate(key, g);
   const s = MASTER_SENTENCES.find(x => x.key === key);
+  if (s) {
+    if (g !== "retire") (s.words || []).forEach(w => {
+      const norm = normalizeAr(w[0]).replace(/^ال/, "");
+      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
+      if (wid) SRS.rate(wid, wordGradeFor(g));
+    });
+    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
+  }
+  autoSync();
+  updateOverallStats();
+  SRS.paintBar(document.getElementById("bankTableBody"), key, nc);
+  return;
   if (s) {
     if (g !== "retire") (s.words || []).forEach(w => {
       const norm = normalizeAr(w[0]).replace(/^ال/, "");

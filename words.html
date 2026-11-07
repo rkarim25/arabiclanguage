@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
-  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/fonts.css?v=mw63gzpe">
+  <link rel="stylesheet" href="css/style.css?v=mw63gzpe">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -245,6 +245,7 @@
           <button type="button" class="chip m-filter" data-mfilter="learning" onclick="setMasterFilter('learning', this)">Learning</button>
           <button type="button" class="chip m-filter" data-mfilter="mastered" onclick="setMasterFilter('mastered', this)">Mastered</button>
           <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">Retired</button>
+          <button type="button" class="chip" onclick="renderMasterTable()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
         </div>
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px">
@@ -275,16 +276,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mw62tlql"></script>
-<script src="js/curriculum.js?v=mw62tlql"></script>
-<script src="js/srs.js?v=mw62tlql"></script>
-<script src="js/match.js?v=mw62tlql"></script>
-<script src="js/errors.js?v=mw62tlql"></script>
-<script src="js/tryit.js?v=mw62tlql"></script>
-<script src="js/app.js?v=mw62tlql"></script>
-<script src="js/tracker.js?v=mw62tlql"></script>
-<script src="js/plan.js?v=mw62tlql"></script>
-<script src="js/account.js?v=mw62tlql"></script>
+<script src="js/progress-model.js?v=mw63gzpe"></script>
+<script src="js/curriculum.js?v=mw63gzpe"></script>
+<script src="js/srs.js?v=mw63gzpe"></script>
+<script src="js/match.js?v=mw63gzpe"></script>
+<script src="js/errors.js?v=mw63gzpe"></script>
+<script src="js/tryit.js?v=mw63gzpe"></script>
+<script src="js/app.js?v=mw63gzpe"></script>
+<script src="js/tracker.js?v=mw63gzpe"></script>
+<script src="js/plan.js?v=mw63gzpe"></script>
+<script src="js/account.js?v=mw63gzpe"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -712,6 +713,10 @@ function rateMasterWord(key, g, encodedAr) {
     if (norm && getSrs()["tw:" + norm]) SRS.rate("tw:" + norm, g);   // a tapped-word twin rides along
   }
   logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, src: "master", t: Date.now() });
+  autoSync();
+  updateOverallStats();
+  SRS.paintBar(document.getElementById("masterTableBody"), key, nc);
+  return;
   autoSync();
   updateOverallStats();
   renderMasterTable();

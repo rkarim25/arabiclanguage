@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw62tlql">
-  <link rel="stylesheet" href="css/style.css?v=mw62tlql">
+  <link rel="stylesheet" href="css/fonts.css?v=mw63gzpe">
+  <link rel="stylesheet" href="css/style.css?v=mw63gzpe">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -405,6 +405,7 @@
           <button type="button" class="book-toggle-pill" id="btnVocabModeAr" onclick="setVocabPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnVocabModeEn" onclick="setVocabPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnVocabSortWeakest" onclick="toggleVocabSortWeakest()" title="Sort vocabulary by weakest rating first">📉 Weakest First</button>
+          <button type="button" class="book-toggle-pill" id="btnVocabResort" onclick="resortVocabTable()" title="Re-sort vocabulary now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         </div>
       </summary>
       <div id="vocabContainer" style="overflow-x:auto;margin-top:8px">Loading vocabulary…</div>
@@ -419,6 +420,7 @@
           <button type="button" class="book-toggle-pill" id="btnClsSentModeAr" onclick="setClsSentPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnClsSentModeEn" onclick="setClsSentPracticeMode('en-only')" title="Show English prompt only; tap to reveal Arabic">English Prompt</button>
           <button type="button" class="book-toggle-pill" id="btnClsSentSortWeakest" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+          <button type="button" class="book-toggle-pill" id="btnClsSentResort" onclick="resortClassSentences()" title="Re-sort sentences now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         </div>
       </summary>
       <div id="sentencesContainer">Loading sentences…</div>
@@ -497,16 +499,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mw62tlql"></script>
-<script src="js/curriculum.js?v=mw62tlql"></script>
-<script src="js/srs.js?v=mw62tlql"></script>
-<script src="js/app.js?v=mw62tlql"></script>
-<script src="js/tracker.js?v=mw62tlql"></script>
-<script src="js/frames.js?v=mw62tlql"></script>
-<script src="js/freetry.js?v=mw62tlql"></script>
-<script src="js/errors.js?v=mw62tlql"></script>
-<script src="js/plan.js?v=mw62tlql"></script>
-<script src="js/account.js?v=mw62tlql"></script>
+<script src="js/progress-model.js?v=mw63gzpe"></script>
+<script src="js/curriculum.js?v=mw63gzpe"></script>
+<script src="js/srs.js?v=mw63gzpe"></script>
+<script src="js/app.js?v=mw63gzpe"></script>
+<script src="js/tracker.js?v=mw63gzpe"></script>
+<script src="js/frames.js?v=mw63gzpe"></script>
+<script src="js/freetry.js?v=mw63gzpe"></script>
+<script src="js/errors.js?v=mw63gzpe"></script>
+<script src="js/plan.js?v=mw63gzpe"></script>
+<script src="js/account.js?v=mw63gzpe"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -874,6 +876,37 @@ function toggleAllPassageTr() {
 
 let clsSentPracticeMode = "all";
 let clsSentSortWeakest = false;
+let clsSentFrozenOrder = null;
+let clsSentFrozenClassId = null;
+
+function computeClsSentOrder() {
+  const cls = getCurrentClass();
+  if (!cls) return;
+  const srs = getSrs();
+  const vocabMap = {};
+  (cls.vocabulary || []).forEach(v => {
+    vocabMap[v.ar] = v;
+    const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
+    if (bare) vocabMap[bare] = v;
+  });
+  const list = (cls.sentences || []).slice(0, 10).map((s, origIdx) => ({ s, origIdx }));
+  if (clsSentSortWeakest) {
+    list.sort((a, b) => {
+      const ra = getSentenceWeaknessRank(a.s, srs, vocabMap, a.origIdx);
+      const rb = getSentenceWeaknessRank(b.s, srs, vocabMap, b.origIdx);
+      if (ra !== rb) return ra - rb;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  clsSentFrozenOrder = list.map(x => x.origIdx);
+  clsSentFrozenClassId = cls.id;
+}
+
+function resortClassSentences() {
+  if (!clsSentSortWeakest) clsSentSortWeakest = true;
+  computeClsSentOrder();
+  renderClassSentences();
+}
 let clsSentRevealed = {};
 let clsSentEnVisible = {};
 let allClsSentEnVisible = false;
@@ -893,6 +926,8 @@ function setClsSentPracticeMode(mode) {
 
 function toggleClsSentSortWeakest() {
   clsSentSortWeakest = !clsSentSortWeakest;
+  if (clsSentSortWeakest) computeClsSentOrder();
+  else clsSentFrozenOrder = null;
   const btn = document.getElementById("btnClsSentSortWeakest");
   if (btn) btn.classList.toggle("active", clsSentSortWeakest);
   const btnInner = document.getElementById("btnClsSentSortWeakestInner");
@@ -1045,7 +1080,10 @@ function renderClassSentences() {
 
   let sentences = (cls.sentences || []).slice(0, 10).map((s, origIdx) => ({ s, origIdx }));
   if (clsSentSortWeakest) {
-    sentences.sort((a, b) => {
+    if (!clsSentFrozenOrder || clsSentFrozenClassId !== cls.id || clsSentFrozenOrder.length !== sentences.length) computeClsSentOrder();
+    const byIdx = Object.fromEntries(sentences.map(x => [x.origIdx, x]));
+    sentences = (clsSentFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+    if (false) sentences.sort((a, b) => {
       const ra = getSentenceWeaknessRank(a.s, srs, vocabMap, a.origIdx);
       const rb = getSentenceWeaknessRank(b.s, srs, vocabMap, b.origIdx);
       if (ra !== rb) return ra - rb;
@@ -1064,6 +1102,7 @@ function renderClassSentences() {
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <button type="button" class="book-toggle-pill ${clsSentSortWeakest ? 'active' : ''}" id="btnClsSentSortWeakestInner" onclick="toggleClsSentSortWeakest()" title="Sort sentences by weakest vocabulary first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill" id="btnClsSentResortInner" onclick="resortClassSentences()" title="Re-sort sentences now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         <button type="button" class="book-toggle-pill ${allClsSentEnVisible ? 'active' : ''}" id="btnToggleAllClsEn" onclick="toggleAllClsSentenceEn()" title="Show/hide English translation">🌐 Translation</button>
         <button type="button" class="book-toggle-pill ${allClsTrVisible ? 'active' : ''}" id="btnToggleAllClsTr" onclick="toggleAllClsSentenceTr()" title="Show/hide transliteration">🔤 Translit</button>
         ${clsSentPracticeMode !== 'all' ? `
@@ -1145,6 +1184,46 @@ function getWordBucket(item) {
 let vocabPracticeMode = "all";
 let vocabSortMode = (typeof store !== "undefined" && store.get("ats-class-vocab-sort")) || "default"; // 'default' | 'weakest' | 'strongest'
 let vocabSortWeakest = (vocabSortMode === "weakest");
+let vocabFrozenOrder = null;
+let vocabFrozenClassId = null;
+
+function computeVocabOrder() {
+  const cls = getCurrentClass();
+  if (!cls) return;
+  const srs = getSrs();
+  const list = (cls.vocabulary || []).map((v, origIdx) => ({ v, origIdx }));
+  if (vocabSortMode === "weakest") {
+    list.sort((a, b) => {
+      const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
+      const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
+      if (wa.rank !== wb.rank) return wa.rank - wb.rank;
+      if (wb.fails !== wa.fails) return wb.fails - wa.fails;
+      if (wa.box !== wb.box) return wa.box - wb.box;
+      return a.origIdx - b.origIdx;
+    });
+  } else if (vocabSortMode === "strongest") {
+    list.sort((a, b) => {
+      const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
+      const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
+      if (wb.rank !== wa.rank) return wb.rank - wa.rank;
+      if (wb.box !== wa.box) return wb.box - wa.box;
+      if (wa.fails !== wb.fails) return wa.fails - wb.fails;
+      return a.origIdx - b.origIdx;
+    });
+  }
+  vocabFrozenOrder = list.map(x => x.origIdx);
+  vocabFrozenClassId = cls.id;
+}
+
+function resortVocabTable() {
+  if (vocabSortMode === "default") {
+    vocabSortMode = "weakest";
+    vocabSortWeakest = true;
+    if (typeof store !== "undefined") store.set("ats-class-vocab-sort", "weakest");
+  }
+  computeVocabOrder();
+  renderVocabTable();
+}
 let vocabRevealed = {};
 let vocabTrVisible = {};
 let allVocabTrVisible = false;
@@ -1165,6 +1244,8 @@ function setVocabSortMode(mode) {
   vocabSortMode = mode;
   vocabSortWeakest = (mode === "weakest");
   if (typeof store !== "undefined") store.set("ats-class-vocab-sort", mode);
+  if (mode === "default") vocabFrozenOrder = null;
+  else computeVocabOrder();
   renderVocabTable();
 }
 
@@ -1254,9 +1335,17 @@ function renderVocabTable() {
   const srs = getSrs();
   const vDiv = document.getElementById("vocabContainer");
   if (!vDiv) return;
+  if (vocabSortMode === "weakest" || vocabSortMode === "strongest") {
+    if (!vocabFrozenOrder || vocabFrozenClassId !== cls.id || vocabFrozenOrder.length !== vocab.length) {
+      computeVocabOrder();
+    }
+    const byIdx = Object.fromEntries(vocab.map(x => [x.origIdx, x]));
+    vocab = (vocabFrozenOrder || []).map(i => byIdx[i]).filter(Boolean);
+  }
+  if (!vDiv) return;
 
   if (vocabSortMode === "weakest") {
-    vocab.sort((a, b) => {
+    if (false) vocab.sort((a, b) => {
       const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
       const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
       if (wa.rank !== wb.rank) return wa.rank - wb.rank;
@@ -1265,7 +1354,7 @@ function renderVocabTable() {
       return a.origIdx - b.origIdx;
     });
   } else if (vocabSortMode === "strongest") {
-    vocab.sort((a, b) => {
+    if (false) vocab.sort((a, b) => {
       const wa = getWordWeaknessRank(srs[a.v.key], a.v.key);
       const wb = getWordWeaknessRank(srs[b.v.key], b.v.key);
       if (wb.rank !== wa.rank) return wb.rank - wa.rank;
@@ -1290,6 +1379,7 @@ function renderVocabTable() {
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
         <button type="button" class="book-toggle-pill ${vocabSortMode === 'weakest' ? 'active' : ''}" id="btnVocabSortWeakestInner" onclick="setVocabSortMode(vocabSortMode === 'weakest' ? 'default' : 'weakest')" title="Sort vocabulary by weakest recall first">📉 Weakest First</button>
+        <button type="button" class="book-toggle-pill" id="btnVocabResortInner" onclick="resortVocabTable()" title="Re-sort vocabulary now based on your latest ratings (order stays fixed while you read)">↻ Resort</button>
         <button type="button" class="book-toggle-pill ${vocabSortMode === 'strongest' ? 'active' : ''}" id="btnVocabSortStrongestInner" onclick="setVocabSortMode(vocabSortMode === 'strongest' ? 'default' : 'strongest')" title="Sort vocabulary by strongest recall first">📈 Strongest First</button>
         <button type="button" class="book-toggle-pill ${vocabSortMode === 'default' ? 'active' : ''}" id="btnVocabSortDefaultInner" onclick="setVocabSortMode('default')" title="Original class order">🔢 Lesson Order</button>
         <button type="button" class="book-toggle-pill ${allVocabTrVisible ? 'active' : ''}" id="btnToggleAllVocabTr" onclick="toggleAllWordTr()" title="Show/hide transliteration across all words">🔤 Translit</button>
