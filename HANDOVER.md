@@ -1,6 +1,25 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-07 (Evening).** Read this first in any new session.
+**Updated 2026-11-08 (Sunday Evening).** Read this first in any new session.
+
+> **8 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Sunday Evening Post-Class Audit, Site Verification & Speak with AI Upgrade:
+> 1. **Site Health & Audio Audit**:
+>    - All 8 test suites pass cleanly 100% with zero failures.
+>    - Live site verified: all 18 pages return HTTP 200 OK.
+>    - All 11,194 audio manifest entries map to verified audio files.
+> 2. **Telemetry & Progress Audit (Live from KV `data:rkarim88@gmail.com`)**:
+>    - 3,928 total recorded events; 622 solid/mastered SRS cards in Box 3–5; 443 in active learning; 142 in Box 0.
+>    - All chapter tests (1, 2, 3) passed at 100%!
+>    - Curriculum calibration: Conversation A1 at **78%** (90/20 mins spoken, 73% last 2 exam avg), Qur'an by ear A1 at **67%** (0/18 certified Al-Fatiha ear words due to 45-day window expiry; the single bottleneck gap).
+>    - All 63 pen notes reviewed; no pending notes or images.
+>    - Sunday 8 Nov 07:00 UK class completed — awaiting Reza's lesson dump/notes for capture into the 4 streams.
+> 3. **Speak with AI & Voice Mode Updates (`index.html`, `class.html`, `js/app.js`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:
+>    - Converted pre-class warmup to **Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation** (18:00 UK).
+>    - Added dedicated prompt **CC** in `SPEAK_WITH_AI.md` and updated Mnemonic Quick-Reference Matrix.
+>    - Weaved in Saturday class adjectives: `غَنِيّ` (rich) vs `فَقِير` (poor; 28:24), `كَرِيم` (generous), `صِحِّيّ` (healthy food: `طَعَامٌ صِحِّيّ`), `جَوْعَان` (hungry: `أَنَا جَوْعَان`), `فِكْرَة` (idea: `فِكْرَةٌ جَيِّدَة`).
+>    - Consolidated egg slip `بَيْضَة` (white oval `أَبْيَض`), walnut/wife hook `جَوْزَة / زَوْجَة`, price triplet `ثَمَن / سِعْر / أُجْرَة`, and evening return routine `أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ`.
+>    - Cache stamped `v=mw85dnsv` deployed.
+
 
 > **7 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Pre-Class Preparation & Speak with AI Upgrade (Sunday 8 Nov 07:00 UK Class in <13h):
 > 1. **Speak with AI & Voice Prompts Fully Updated (`index.html`, `class.html`, `js/app.js`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:

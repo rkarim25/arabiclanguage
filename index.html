@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw6pxpsx">
-  <link rel="stylesheet" href="css/style.css?v=mw6pxpsx">
+  <link rel="stylesheet" href="css/fonts.css?v=mw85dnsv">
+  <link rel="stylesheet" href="css/style.css?v=mw85dnsv">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw6pxpsx"></script>
-<script src="js/curriculum.js?v=mw6pxpsx"></script>
-<script src="js/srs.js?v=mw6pxpsx"></script>
-<script src="js/match.js?v=mw6pxpsx"></script>
-<script src="js/errors.js?v=mw6pxpsx"></script>
-<script src="js/frames.js?v=mw6pxpsx"></script>
-<script src="js/app.js?v=mw6pxpsx"></script>
-<script src="js/tracker.js?v=mw6pxpsx"></script>
-<script src="js/plan.js?v=mw6pxpsx"></script>
-<script src="js/account.js?v=mw6pxpsx"></script>
+<script src="js/progress-model.js?v=mw85dnsv"></script>
+<script src="js/curriculum.js?v=mw85dnsv"></script>
+<script src="js/srs.js?v=mw85dnsv"></script>
+<script src="js/match.js?v=mw85dnsv"></script>
+<script src="js/errors.js?v=mw85dnsv"></script>
+<script src="js/frames.js?v=mw85dnsv"></script>
+<script src="js/app.js?v=mw85dnsv"></script>
+<script src="js/tracker.js?v=mw85dnsv"></script>
+<script src="js/plan.js?v=mw85dnsv"></script>
+<script src="js/account.js?v=mw85dnsv"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3681,22 +3681,21 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Saturday Evening & Sunday 8 Nov Preply Pre-Class Warmup Sprint (07:00 UK):\n`;
+  p += `     * Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):\n`;
+  p += `       - Class Adjective Contrasts & Descriptions (drilled in Saturday reading & Preply class):\n`;
+  p += `         * غَنِيّ (ghaniyy — rich/wealthy) vs فَقِير (faqīr — poor/in need; Qur'anic hook 28:24).\n`;
+  p += `         * كَرِيم (karīm — generous/noble; Al-Karīm) vs بَخِيل (bakhīl — stingy).\n`;
+  p += `         * صِحِّيّ (ṣiḥḥiyy — healthy; طَعَامٌ صِحِّيّ — healthy food) vs جَوْعَان (jawʿān — hungry; rhymes with عَطْشَان ʿaṭshān / thirsty).\n`;
+  p += `         * فِكْرَة (fikrah — idea / thought; فِكْرَةٌ جَيِّدَة — good idea!).\n`;
   p += `       - Village Breakfast & Ahmad's Trip Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 79 taps, 65 words reviewed on 7 Nov):\n`;
   p += `         * Ahmad's breakfast: وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), وَشَرِبَ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ (and drank a cup of tea/milk).\n`;
-  p += `         * Active First-Person Swap: prompt Reza to turn 3rd-person past into 1st-person spoken Arabic: "أُرِيدُ فَطُورًا لَذِيذًا" (I want a delicious breakfast) and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate an egg, three dates, and a walnut).\n`;
-  p += `         * Weak Rating Reinforcement (7 Nov): بَيْضَة (bayḍah — an egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ).\n`;
-  p += `         * Mirror-Letter Hook: جَوْزَة (jawzah — walnut) vs زَوْجَة (zawjah — wife; ج leads the walnut snack, ز leads the wife partner!).\n`;
-  p += `         * Feminine Ordinals Sequence Drill: أُولَى (first), ثَانِيَةً (second), ثَالِثَةً (third) — count items in order.\n`;
-  p += `       - New Root Distinction & Price Triplet (Ahmad at the village market & travel):\n`;
-  p += `         * ثَمَن (thaman — value / Qur'anic price 2:41 ثَمَنًا قَلِيلًا; Ahmad: هَذَا ثَمَنُ الفَاكِهَةِ — this is the price of the fruit).\n`;
-  p += `         * سِعْر (siʿr — market price / tag: كَمِ السِّعْرُ لِهَذَا؟ — what is the price for this?).\n`;
-  p += `         * أُجْرَة (ujrah — taxi fare / wage / rental fee: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟ — what is the fare to there?).\n`;
-  p += `       - Connected 4-Sentence Speaking Narrative for Sunday Warmup:\n`;
-  p += `         1. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!)\n`;
-  p += `         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook!)\n`;
-  p += `         3. أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ (I help at home on the day off)\n`;
-  p += `         4. يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا (On Sunday I have an Arabic lesson at 7:00 AM)\n`;
+  p += `         * Active First-Person Swap: prompt Reza to turn 3rd-person past into 1st-person spoken Arabic: "أَنَا جَوْعَان، أُرِيدُ فَطُورًا صِحِّيًّا وَلَذِيذًا" (I am hungry, I want a healthy and delicious breakfast) and "أَكَلْتُ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً، وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate a 1st, 2nd, and 3rd egg, three dates, and a walnut).
+       - Connected 4-Sentence Speaking Narrative & Evening Review:
+         1. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).
+         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook!).
+         3. أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ (I help at home on the day off).
+         4. يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا (On Sunday I have an Arabic lesson at 7:00 AM).
+         5. أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ (I return home in the evening, and the evening is for the family — plain dāl refuge hook!).
   p += `       - Daily Routine & Commute Anchors:\n`;
   p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
   p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ)\n`;

@@ -14,14 +14,20 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (7 Nov 2026 evening):** 3,928 recorded practice events; 1,207 cards in SRS (**622 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 443 active learning (391 Box 1, 52 Box 2); 142 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Saturday morning & afternoon (7 Nov) reading session on *A Trip to the Village* (`story-09`, 79 taps, 65 unique words reviewed); multi-colour word highlighter (`🖍️`) live across all pages.
+  - **Live Telemetry (8 Nov 2026 evening):** 3,928 recorded practice events; 1,207 cards in SRS (**622 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 443 active learning (391 Box 1, 52 Box 2); 142 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Saturday morning & afternoon (7 Nov) reading session on *A Trip to the Village* (`story-09`, 79 taps, 65 unique words reviewed); Sunday 8 Nov 07:00 UK class completed (waiting for lesson notes/dump capture); multi-colour word highlighter (`🖍️`) live across all pages.
   - **Curriculum Standings:**
-    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, ready for refresh; salah coverage 15.7% after record single-day rise driven by 100% ear score on exam).
-    - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (87 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
+    - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, 0/18 active certification words; salah coverage 15.7% after record single-day rise driven by 100% ear score on exam).
+    - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (90 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
   - **Recent Activity & Diagnostic Wins:**
-    - 5–6 Nov commute breakthrough & telemetry reinforcement:
+    - 5–8 Nov commute breakthrough & telemetry reinforcement:
       - **Thursday 14-minute real drive:** 10 sentences completed by ear, including «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for the Arabic lesson) — verified and celebrated.
       - **Chapter 3 test passed 100% (9/9):** Reservations (*عِنْدِي حَجْزٌ*), taxi directions (*خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ*), luggage (*أَمْتِعَتِي*), stopping (*تَوَقَّفْ هُنَا*), missing passport (*جَوَازُ سَفَرِي مَفْقُودٌ*).
+      - **Class Adjective Contrasts & Foods Rated (7–8 Nov):**
+        - `غَنِيّ` (*ghaniyy* — rich/wealthy) vs `فَقِير` (*faqīr* — poor/in need; Qur'an 28:24).
+        - `كَرِيم` (*karīm* — generous/noble) vs `بَخِيل` (*bakhīl* — stingy).
+        - `صِحِّيّ` (*ṣiḥḥiyy* — healthy; *طَعَامٌ صِحِّيّ* — healthy food).
+        - `جَوْعَان` (*jawʿān* — hungry; *أَنَا جَوْعَان* — I am hungry).
+        - `فِكْرَة` (*fikrah* — idea / thought; *فِكْرَةٌ جَيِّدَة* — good idea).
       - **New Mnemonic Hooks & Root Triplets Deployed:**
         - `ثَمَن` (*thaman* — value / Qur'anic price *thamanan qalīlan* 2:41; Ahmad: *هَذَا ثَمَنُ الفَاكِهَةِ*) vs `سِعْر` (*siʿr* — market price / tag: *كَمِ السِّعْرُ لِهَذَا؟*) vs `أُجْرَة` (*ujrah* — taxi fare / wage / rental fee: *كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟*).
         - `جَوْزَة` (*jawzah* — walnut) vs `زَوْجَة` (*zawjah* — wife): mirror-letter hook (`ج` leads the walnut snack, `ز` leads the wife partner!).
@@ -30,7 +36,7 @@
         - `أَعُودُ` (I return): Plain dāl, 1 letter from *أَعُوذُ* — returning to refuge at home.
         - `لِي` (mine / for me): Possessive prepositional attachment (*هَذَا الكِتَابُ لِي*).
         - `خِدْمَة` (service): Root kh-d-m (*هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟*).
-      - Active slips targeted for weekend sprint: `بَيْضَة` (egg), `أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ` (return home), `أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا` (learn little daily), `يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ` (Saturday park trip), `طَابِق` (floor / storey), `مِصْعَد` (lift / elevator), `سُلَّم` (stairs / ladder).
+      - Active slips targeted for post-class consolidation: `بَيْضَة` (egg), `أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ` (return home), `أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا` (learn little daily), `يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ` (Saturday park trip), `طَابِق` (floor / storey), `مِصْعَد` (lift / elevator), `سُلَّم` (stairs / ladder).
     - Sunday connected 4-sentence speaking narrative: (1) *عِنْدِي حَجْزٌ فِي المَطْعَمِ* (proven!), (2) *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, (3) *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*, (4) *أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ*.
     - Mnemonic additions: **يُمْكِنُكَ / مُمْكِن** (Bengali মুমকিন mumkin cognate); **مُسَاعَدَة** (hear the AID inside *mu-sa-AID-ah*); **مَال** (money/wealth, like Bayt al-Māl); **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys); **يَوْمُ الأَرْبِعَاءِ** (Wednesday); **يَوْمُ الخَمِيسِ** (Thursday); **يَوْمُ الجُمُعَةِ** (Friday); **الجَوُّ بَارِدٌ** (weather is cold).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!

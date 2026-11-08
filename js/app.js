@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mw6pxpsx";
+const DATA_V = "mw85dnsv";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4260,9 +4260,13 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Saturday Morning Village Reading (5–7 Nov):**\n`;
-  md += `  - *Saturday Morning Village Breakfast & Ahmad's Trip Taps (7 Nov on class.html / story-09 — 79 taps, 65 words reviewed):* وَأَرَادَ فَطُورًا لَذِيذًا (wanted delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (ate 1st, 2nd, and 3rd egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (3 dates and a walnut), كَأْسًا مِنَ الشَّايِ / الحَلِيبِ — drill 1st-person swaps ("أُرِيدُ فَطُورًا لَذِيذًا" / "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً")\n  - *Weak Egg Slip Reinforcement (7 Nov):* بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ)\n  - *Mirror-Letter Hook:* جَوْزَة (jawzah — walnut) vs زَوْجَة (zawjah — wife; ج leads walnut snack, ز leads wife partner!)\n  - *New Root Distinction & Price Triplet:* ثَمَن (thaman — value/price 2:41; Ahmad: هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market price: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟)\n  - *Feminine Ordinals Sequence:* أُولَى (first), ثَانِيَةً (second), ثَالِثَةً (third) وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), كَأْسًا (a cup/glass) — drill 1st-person swaps ("أُرِيدُ فَطُورًا لَذِيذًا" / "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً")\n`;
-  md += `  - *Weekend Spoken Sprint & Preply Warmup (7–8 Nov 07:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
+  md += `- **Active Telemetry Slips & Sunday 8 Nov Post-Class Spoken Sprint:**\n`;
+  md += `  - *Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا, (5) أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ (plain dāl refuge hook!)\n`;
+  md += `  - *Class Adjective Contrasts (drilled in Saturday reading & Preply class):* غَنِيّ (rich) vs فَقِير (poor; Qur'an 28:24), كَرِيم (generous), صِحِّيّ (healthy food: طَعَامٌ صِحِّيّ), جَوْعَان (hungry: أَنَا جَوْعَان), فِكْرَة (idea: فِكْرَةٌ جَيِّدَة)\n`;
+  md += `  - *Village Breakfast Swaps (story-09):* أَنَا جَوْعَان، أُرِيدُ طَعَامًا صِحِّيًّا / فَطُورًا لَذِيذًا; أَكَلْتُ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً، وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً; شَرِبْتُ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ\n`;
+  md += `  - *Weak Egg Slip Reinforcement:* بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ)\n`;
+  md += `  - *Mirror-Letter Hook:* جَوْزَة (jawzah — walnut snack: ج leads) vs زَوْجَة (zawjah — wife partner: ز leads!)\n`;
+  md += `  - *Price Triplet & Market Vocabulary:* ثَمَن (thaman — value/price 2:41; Ahmad: هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market price: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟)\n`;
   md += `  - *Evening Return & Daily Routine Slips:* أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home); أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — rated Box 0; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)\n`;
   md += `  - *Weekend Routines & Commute Anchors:* يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park); الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
   md += `  - *Possession & Service Inquiries:* هَذَا الكِتَابُ لِي (This book is mine — prepositional لِي); هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service? — Chapter 3 hotel assistance inquiry)\n`;
