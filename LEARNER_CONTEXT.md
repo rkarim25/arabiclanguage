@@ -14,12 +14,17 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (8 Nov 2026 evening):** 3,928 recorded practice events; 1,207 cards in SRS (**622 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 49 Box 3; plus 104 retired mastered); 443 active learning (391 Box 1, 52 Box 2); 142 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Saturday morning & afternoon (7 Nov) reading session on *A Trip to the Village* (`story-09`, 79 taps, 65 unique words reviewed); Sunday 8 Nov 07:00 UK class completed (waiting for lesson notes/dump capture); multi-colour word highlighter (`🖍️`) live across all pages.
+  - **Live Telemetry (9 Nov 2026 evening):** 3,955 recorded practice events; 1,207 cards in SRS (**625 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 52 Box 3); 441 active learning (387 Box 1, 54 Box 2); 141 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Monday 9 Nov daily routine drill completed (8 sentences drilled: 6 held strong/medium, 2 weak slips targeted); multi-colour word highlighter (`🖍️`) live across all pages.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, 0/18 active certification words; salah coverage 15.7% after record single-day rise driven by 100% ear score on exam).
     - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (90 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
   - **Recent Activity & Diagnostic Wins:**
-    - 5–8 Nov commute breakthrough & telemetry reinforcement:
+    - 5–9 Nov commute breakthrough & telemetry reinforcement:
+      - **Monday 9 Nov Routine Practice Session:** 8 sentences drilled in `myday`:
+        - 6 verified strong/medium holds: «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for Arabic lesson — Box 3), «يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ» (On Sunday I have my lesson — Box 3), «أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ» (I learn Arabic 10 minutes — Box 3), «يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ» (Saturday park trip — Box 2), «هَذَا الكِتَابُ لِي» (This book is mine — Box 2), «قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ» (I read Qur'an after Isha — Box 2).
+        - 2 Priority Slips Targeted for Evening Consolidation:
+          1. «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (*aʿūdu ilā l-bayti fī l-masā'i* — I return home in the evening): rated `weak` (Box 0, s=0.204). Mnemonic: Plain dāl — returning to refuge at home (vs *أَعُوذُ* refuge with dhāl).
+          2. «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (*atʿallamu kulla yawmin qalīlan* — I learn a little every day): rated `weak` (Box 0, s=0.187). Mnemonic: Bengali তালিম (*ta'lim*) cognate — steady daily practice.
       - **Thursday 14-minute real drive:** 10 sentences completed by ear, including «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for the Arabic lesson) — verified and celebrated.
       - **Chapter 3 test passed 100% (9/9):** Reservations (*عِنْدِي حَجْزٌ*), taxi directions (*خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ*), luggage (*أَمْتِعَتِي*), stopping (*تَوَقَّفْ هُنَا*), missing passport (*جَوَازُ سَفَرِي مَفْقُودٌ*).
       - **Class Adjective Contrasts & Foods Rated (7–8 Nov):**

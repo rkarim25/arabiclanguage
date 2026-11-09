@@ -30,6 +30,23 @@ let swOk = true, swErr = "";
 try { new Function(swSrc); } catch (e) { swOk = false; swErr = e.message; }
 yes(swOk, swOk ? "sw.js parses" : `sw.js DOES NOT PARSE — ${swErr}`);
 
+/* ---------- 1b. all HTML inline scripts parse cleanly ---------- */
+const htmlFiles = fs.readdirSync(ROOT).filter(f => f.endsWith(".html"));
+let htmlScriptsOk = true, htmlErr = "";
+htmlFiles.forEach(file => {
+  const html = fs.readFileSync(path.join(ROOT, file), "utf8");
+  const scriptMatches = [...html.matchAll(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/gi)];
+  scriptMatches.forEach((m, idx) => {
+    try {
+      new Function(m[1]);
+    } catch (e) {
+      htmlScriptsOk = false;
+      htmlErr += `${file} script ${idx}: ${e.message}; `;
+    }
+  });
+});
+yes(htmlScriptsOk, htmlScriptsOk ? "all HTML inline scripts parse cleanly" : `HTML inline script parse failure: ${htmlErr}`);
+
 /* ---------- 2. everything it promises to cache exists ---------- */
 const m = swSrc.match(/const CORE = \[([\s\S]*?)\];/);
 yes(!!m, "sw.js declares a CORE list");

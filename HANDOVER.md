@@ -2,6 +2,24 @@
 
 **Updated 2026-11-08 (Sunday Evening).** Read this first in any new session.
 
+> **9 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Monday Evening Audit, Critical Site Repair, Telemetry Consolidation & Speak with AI Upgrade:
+> 1. **Critical Site Repair & Test Harness Hardening**:
+>    - **Repaired syntax crash in `index.html`**: Line 3693 in `buildChapterAiPrompt` had an unclosed string literal and bare text from commit `e88972dd` that prevented `index.html` script from parsing and running. Fixed and verified clean execution.
+>    - **Added HTML Inline Script Parse Test to `scripts/test-shell.js`**: Hardened the test suite to automatically syntax-check every inline `<script>` tag across all 18 HTML pages, ensuring no HTML syntax regressions can slip through again.
+>    - All 8 test suites passing 100%.
+> 2. **Telemetry & Progress Audit (Live from KV `data:rkarim88@gmail.com`)**:
+>    - 3,955 recorded events (up from 3,928); 1,207 SRS cards (625 solid/mastered in Box 3–5: 548 Box 5, 25 Box 4, 52 Box 3; 441 in active learning: 387 Box 1, 54 Box 2; 141 in Box 0).
+>    - Monday 9 Nov commute & daily routine practice: 8 sentences drilled in `myday`:
+>      - 6 verified strong/medium holds: «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Box 3), «يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ» (Box 3), «أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ» (Box 3), «يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ» (Box 2), «هَذَا الكِتَابُ لِي» (Box 2), «قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ» (Box 2).
+>      - 2 Priority Telemetry Slips targeted for evening consolidation:
+>        1. «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (I return home in the evening — rated `weak`, Box 0, s=0.204; plain dāl refuge hook vs *أَعُوذُ*).
+>        2. «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (I learn a little every day — rated `weak`, Box 0, s=0.187; Bengali *ta'lim* hook).
+> 3. **Speak with AI & Voice Mode Updates (`index.html`, `class.html`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:
+>    - Added dedicated prompt **DD** in `SPEAK_WITH_AI.md` (*Monday 9 Nov Spoken Sprint: Evening Commute & Daily Routine Consolidation*).
+>    - Refreshed prompt generators in `index.html` and `class.html` with Monday 9 Nov telemetry slips.
+>    - Updated `LEARNER_CONTEXT.md` with latest progress stats, slips, and active boundaries.
+>    - Sunday 8 Nov class captured status: awaiting Reza's photos/notes dump to ingest into the 4 streams.
+
 > **8 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Sunday Evening Post-Class Audit, Site Verification & Speak with AI Upgrade:
 > 1. **Site Health & Audio Audit**:
 >    - All 8 test suites pass cleanly 100% with zero failures.
