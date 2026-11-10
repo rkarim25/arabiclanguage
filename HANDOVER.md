@@ -1,6 +1,23 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-08 (Sunday Evening).** Read this first in any new session.
+**Updated 2026-11-10 (Tuesday Evening).** Read this first in any new session.
+
+> **10 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Tuesday Evening Audit, Telemetry & Progress Calibration, GitHub Pages Rebuild, & Speak with AI Upgrade (Prompt EE):
+> 1. **Site Health & Pages Deployment**:
+>    - Live site verified: HTTP 200 OK across all pages.
+>    - All 8 automated test suites pass 100% cleanly (zero failures, 11,194 audio keys validated).
+>    - GitHub Pages build refreshed and queued cleanly via API.
+> 2. **Telemetry & Progress Audit (Live from KV `data:rkarim88@gmail.com`)**:
+>    - 3,962 total recorded events (up from 3,955); 1,207 SRS cards: 625 solid/strong (Box 3–5: 548 Box 5, 25 Box 4, 52 Box 3); 441 in active learning (387 Box 1, 54 Box 2); 141 in Box 0.
+>    - All 63 pen notes reviewed — 0 new/pending notes or images in KV.
+>    - Progress model: Conversation A1 at **78%** (90 mins spoken, 73% last 2 exam avg), Qur'an by ear A1 at **67%** (salah coverage 12.8%, n=151 evidence points).
+>    - Sunday 8 Nov 07:00 UK class status: awaiting Reza's photos/notes dump to ingest into the 4 streams.
+> 3. **The 1 Bottleneck Gap**:
+>    - Routine verbs & 1st-person active recall: «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (rated weak 3 times, root ع-و-د return to refuge vs ع-و-ذ seek refuge in Qur'an) and «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (rated weak 3 times, root ع-ل-م, Bengali ta'lim hook).
+> 4. **Speak with AI & Voice Mode Updates (`index.html`, `class.html`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:
+>    - Added dedicated prompt **EE** in `SPEAK_WITH_AI.md` (*Tuesday 10 Nov Spoken Sprint: Evening Commute & Daily Routine Fluency*).
+>    - Refreshed prompt generators in `index.html` and `class.html` targeting Prompt EE with routine anchor verbs, food plates, adjective contrasts, and price triplets.
+>    - Updated `LEARNER_CONTEXT.md` with latest 10 Nov telemetry and pedagogical dossier.
 
 > **9 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Monday Evening Audit, Critical Site Repair, Telemetry Consolidation & Speak with AI Upgrade:
 > 1. **Critical Site Repair & Test Harness Hardening**:

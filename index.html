@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mw9ktib1">
-  <link rel="stylesheet" href="css/style.css?v=mw9ktib1">
+  <link rel="stylesheet" href="css/fonts.css?v=mwb0bpab">
+  <link rel="stylesheet" href="css/style.css?v=mwb0bpab">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mw9ktib1"></script>
-<script src="js/curriculum.js?v=mw9ktib1"></script>
-<script src="js/srs.js?v=mw9ktib1"></script>
-<script src="js/match.js?v=mw9ktib1"></script>
-<script src="js/errors.js?v=mw9ktib1"></script>
-<script src="js/frames.js?v=mw9ktib1"></script>
-<script src="js/app.js?v=mw9ktib1"></script>
-<script src="js/tracker.js?v=mw9ktib1"></script>
-<script src="js/plan.js?v=mw9ktib1"></script>
-<script src="js/account.js?v=mw9ktib1"></script>
+<script src="js/progress-model.js?v=mwb0bpab"></script>
+<script src="js/curriculum.js?v=mwb0bpab"></script>
+<script src="js/srs.js?v=mwb0bpab"></script>
+<script src="js/match.js?v=mwb0bpab"></script>
+<script src="js/errors.js?v=mwb0bpab"></script>
+<script src="js/frames.js?v=mwb0bpab"></script>
+<script src="js/app.js?v=mwb0bpab"></script>
+<script src="js/tracker.js?v=mwb0bpab"></script>
+<script src="js/plan.js?v=mwb0bpab"></script>
+<script src="js/account.js?v=mwb0bpab"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3681,24 +3681,26 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):\n`;
-  p += `       - Class Adjective Contrasts & Descriptions (drilled in Saturday reading & Preply class):\n`;
+  p += `     * Tuesday 10 Nov Evening Spoken Sprint & Daily Routine Fluency (Prompt EE):\n`;
+  p += `       - Routine Anchor Verbs & Root Distinctions (Reinforcing 10 Nov Telemetry Slips):\n`;
+  p += `         1. أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ! Telemetry slip on 9 Nov: rated weak).\n`;
+  p += `         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook! Telemetry slip on 9 Nov: rated weak).\n`;
+  p += `         3. الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor, held strong!).\n`;
+  p += `         4. يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ (On Sunday I have my Arabic lesson — practiced!).\n`;
+  p += `         5. يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park).\n`;
+  p += `         6. هَذَا الكِتَابُ لِي (This book is mine — possessive preposition لِي).\n`;
+  p += `         7. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).\n`;
+  p += `         8. أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (I learn Arabic for ten minutes).\n`;
+  p += `       - Class Adjective Contrasts & Descriptions:\n`;
   p += `         * غَنِيّ (ghaniyy — rich/wealthy) vs فَقِير (faqīr — poor/in need; Qur'anic hook 28:24).\n`;
   p += `         * كَرِيم (karīm — generous/noble; Al-Karīm) vs بَخِيل (bakhīl — stingy).\n`;
   p += `         * صِحِّيّ (ṣiḥḥiyy — healthy; طَعَامٌ صِحِّيّ — healthy food) vs جَوْعَان (jawʿān — hungry; rhymes with عَطْشَان ʿaṭshān / thirsty).\n`;
   p += `         * فِكْرَة (fikrah — idea / thought; فِكْرَةٌ جَيِّدَة — good idea!).\n`;
-  p += `       - Village Breakfast & Ahmad's Trip Taps (story-09 / رِحْلَةٌ إِلَى القَرْيَةِ — 79 taps, 65 words reviewed on 7 Nov):\n`;
-  p += `         * Ahmad's breakfast: وَأَرَادَ فَطُورًا لَذِيذًا (and he wanted a delicious breakfast), أَكَلَ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً (he ate a first, second, and third egg), وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً (and three dates and a walnut), وَشَرِبَ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ (and drank a cup of tea/milk).\n`;
-  p += `         * Active First-Person Swap: prompt Reza to turn 3rd-person past into 1st-person spoken Arabic: "أَنَا جَوْعَان، أُرِيدُ فَطُورًا صِحِّيًّا وَلَذِيذًا" (I am hungry, I want a healthy and delicious breakfast) and "أَكَلْتُ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً، وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً" (I ate a 1st, 2nd, and 3rd egg, three dates, and a walnut).\n`;
-  p += `       - Connected Speaking Narrative & Monday Telemetry Review (9 Nov):\n`;
-  p += `         1. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).\n`;
-  p += `         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook! Telemetry slip on 9 Nov: أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا rated weak).\n`;
-  p += `         3. أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ! Telemetry slip on 9 Nov: rated weak).\n`;
-  p += `         4. الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor, held strong today!).\n`;
-  p += `         5. يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ (On Sunday I have my Arabic lesson — practiced today!).\n`;
-  p += `         6. يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park).\n`;
-  p += `         7. هَذَا الكِتَابُ لِي (This book is mine — possessive preposition لِي).\n`;
-  p += `         8. أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (I learn Arabic for ten minutes — practiced today!).\n`;
+  p += `       - Village Breakfast & Food Slips Reinforcement:\n`;
+  p += `         * Weak Egg Slip: بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ).\n`;
+  p += `         * Mirror-Letter Hook: جَوْزَة (jawzah — walnut snack: ج leads) vs زَوْجَة (zawjah — wife partner: ز leads).\n`;
+  p += `         * Price Triplet: ثَمَن (thaman — value/price 2:41; هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market tag: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟).\n`;
+  p += `         * Spoken 1st-Person Narration: "أَنَا جَوْعَان، أُرِيدُ فَطُورًا صِحِّيًّا وَلَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً".\n`;
   p += `       - Daily Routine & Commute Anchors:\n`;
   p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
   p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ)\n`;
