@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwb0bpab";
+const DATA_V = "mwcfodwj";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4260,7 +4260,10 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Sunday 8 Nov Post-Class Spoken Sprint:**\n`;
+  md += `- **Active Telemetry Slips & Wednesday 11 Nov Spoken Sprint (Prompt FF):**\n`;
+  md += `  - *Wednesday 11 Nov Midweek Work & Routine Slips:* (1) عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a morning meeting — rated Box 0; root ج-م-ع / Jumu'ah Friday prayer & assembly), (2) كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; rated Box 0; feminine suffix «ـكِ» vs masculine «ـكَ»), (3) هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — tapped words; Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah), (4) تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — replayed 5 times! Box 0; root ب-ط-ء / with slowness)\n`;
+  md += `  - *Celebrated Verb Promotions out of Box 0 to Box 1 (11 Nov morning wins!):* أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (s: 1.179, Box 1, Bengali ta'lim hook!) and أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (s: 1.632, Box 1, plain dāl refuge hook!)\n`;
+  md += `  - *Solid Routine & Commute Anchors:* الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for Arabic lesson — Box 3), قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ (Box 3), أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (Box 3), هَذَا الكِتَابُ لِي (Box 3), عِنْدِي أَوْلَادٌ صِغَارٌ (Box 1)\n`;
   md += `  - *Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا, (5) أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ (plain dāl refuge hook!)\n`;
   md += `  - *Class Adjective Contrasts (drilled in Saturday reading & Preply class):* غَنِيّ (rich) vs فَقِير (poor; Qur'an 28:24), كَرِيم (generous), صِحِّيّ (healthy food: طَعَامٌ صِحِّيّ), جَوْعَان (hungry: أَنَا جَوْعَان), فِكْرَة (idea: فِكْرَةٌ جَيِّدَة)\n`;
   md += `  - *Village Breakfast Swaps (story-09):* أَنَا جَوْعَان، أُرِيدُ طَعَامًا صِحِّيًّا / فَطُورًا لَذِيذًا; أَكَلْتُ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً، وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً; شَرِبْتُ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ\n`;

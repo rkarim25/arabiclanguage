@@ -14,17 +14,23 @@
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
   - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (10 Nov 2026 evening):** 3,962 recorded practice events; 1,207 cards in SRS (**625 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 52 Box 3); 441 active learning (387 Box 1, 54 Box 2); 141 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Tuesday 10 Nov routine & spoken focus: solidifying the 2 daily routine anchor verbs (`أَعُودُ` return home vs `أَعُوذُ` seek refuge, and `أَتَعَلَّمُ` learn daily); multi-colour word highlighter (`🖍️`) live across all pages.
+  - **Live Telemetry (11 Nov 2026 evening):** 4,000 recorded practice events (+36 logged Wednesday morning 11 Nov); 1,210 cards in SRS (**627 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 54 Box 3); 441 active learning (388 Box 1, 53 Box 2); 142 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Wednesday 11 Nov routine & spoken focus: midweek work routine («عِنْدِي اجْتِمَاعٌ»), family check-in («كَيْفَ كَانَ يَوْمُكِ؟»), and speech pacing repair («تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك»); multi-colour word highlighter (`🖍️`) live across all pages.
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, 0/18 active certification words; salah coverage 12.8% in progress model with n=151 evidence points).
     - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (90 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
   - **Recent Activity & Diagnostic Wins:**
-    - 5–10 Nov commute breakthrough & telemetry reinforcement:
-      - **Monday 9 Nov Routine Practice Session:** 8 sentences drilled in `myday`:
-        - 6 verified strong/medium holds: «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for Arabic lesson — Box 3), «يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ» (On Sunday I have my lesson — Box 3), «أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ» (I learn Arabic 10 minutes — Box 3), «يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ» (Saturday park trip — Box 2), «هَذَا الكِتَابُ لِي» (This book is mine — Box 2), «قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ» (I read Qur'an after Isha — Box 2).
-        - 2 Priority Slips Targeted for Evening Consolidation:
-          1. «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (*aʿūdu ilā l-bayti fī l-masā'i* — I return home in the evening): rated `weak` (Box 0, s=0.204). Mnemonic: Plain dāl — returning to refuge at home (vs *أَعُوذُ* refuge with dhāl).
-          2. «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (*atʿallamu kulla yawmin qalīlan* — I learn a little every day): rated `weak` (Box 0, s=0.187). Mnemonic: Bengali তালিম (*ta'lim*) cognate — steady daily practice.
+    - 5–11 Nov commute breakthrough & telemetry reinforcement:
+      - **Wednesday 11 Nov Morning Practice Session:** Full `myday` plan block completed! (36 events logged).
+        - **Celebrated Verb Promotions out of Box 0 into Box 1:**
+          1. «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (*atʿallamu kulla yawmin qalīlan* — I learn a little every day): promoted to Box 1 (`s: 1.179`, up from 0.187). Bengali তালিম (*ta'lim*) cognate.
+          2. «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (*aʿūdu ilā l-bayti fī l-masā'i* — I return home in the evening): promoted to Box 1 (`s: 1.632`, up from 0.204). Plain dāl refuge hook.
+        - **Solid Holds Verified:** «قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ» (Box 3, s: 7.001), «أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ» (Box 3, s: 11.509), «هَذَا الكِتَابُ لِي» (Box 3, s: 8.403), «عِنْدِي أَوْلَادٌ صِغَارٌ» (Box 1, s: 2.0).
+        - **4 Priority Slips Targeted for Wednesday Evening Consolidation:**
+          1. «عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ» (*ʿindī jtimāʿun fī ṣ-ṣabāḥ* — I have a meeting in the morning): rated `learning` (Box 0, s: 0.15). Mnemonic: root ج-م-ع (assembly / Jumu'ah Friday prayer & masjid jāmiʿ).
+          2. «كَيْفَ كَانَ يَوْمُكِ؟» (*kayfa kāna yawmuki?* — How was your day? [to Saba]): rated `learning` (Box 0, s: 0.15). Mnemonic: feminine suffix `ـكِ` (*-ki*) for her vs masculine `ـكَ` (*-ka*) for him.
+          3. «هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟» (*hal yumkinuka musāʿadatī?* — Can you help me?): rated `learning` (Box 0, s: 0.128, tapped `يمكنك` and `مساعدتي`). Mnemonic: Bengali মুমকিন (*mumkin*) cognate + hear the AID in *mu-sa-AID-ah*.
+          4. «تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك» (*takallam bi-buṭʾin min faḍlik* — Speak slowly, please): played audio 5 times! Rated `learning` (Box 0, s: 0.4). Mnemonic: *bi-buṭʾ* = with slowness / gently.
+      - **Monday 9 Nov Routine Practice Session:** 8 sentences drilled in `myday`: 6 verified strong/medium holds, 2 slips now resolved.
       - **Thursday 14-minute real drive:** 10 sentences completed by ear, including «الأَحَدُ لِدَرْسِ العَرَبِيَّةِ» (Sunday is for the Arabic lesson) — verified and celebrated.
       - **Chapter 3 test passed 100% (9/9):** Reservations (*عِنْدِي حَجْزٌ*), taxi directions (*خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ*), luggage (*أَمْتِعَتِي*), stopping (*تَوَقَّفْ هُنَا*), missing passport (*جَوَازُ سَفَرِي مَفْقُودٌ*).
       - **Class Adjective Contrasts & Foods Rated (7–8 Nov):**
@@ -37,13 +43,16 @@
         - `ثَمَن` (*thaman* — value / Qur'anic price *thamanan qalīlan* 2:41; Ahmad: *هَذَا ثَمَنُ الفَاكِهَةِ*) vs `سِعْر` (*siʿr* — market price / tag: *كَمِ السِّعْرُ لِهَذَا؟*) vs `أُجْرَة` (*ujrah* — taxi fare / wage / rental fee: *كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟*).
         - `جَوْزَة` (*jawzah* — walnut) vs `زَوْجَة` (*zawjah* — wife): mirror-letter hook (`ج` leads the walnut snack, `ز` leads the wife partner!).
         - `بَيْضَة` (*bayḍah* — an egg): rated `weak` on 7 Nov; hook: oval white *أَبْيَض* (*abyaḍ*).
-        - `أَتَعَلَّمُ` (I learn): Bengali তালিম (*ta'lim*) cognate.
-        - `أَعُودُ` (I return): Plain dāl, 1 letter from *أَعُوذُ* — returning to refuge at home.
+        - `أَتَعَلَّمُ` (I learn): Bengali তালিম (*ta'lim*) cognate — **promoted to Box 1 on 11 Nov!**
+        - `أَعُودُ` (I return): Plain dāl, 1 letter from *أَعُوذُ* — returning to refuge at home — **promoted to Box 1 on 11 Nov!**
         - `لِي` (mine / for me): Possessive prepositional attachment (*هَذَا الكِتَابُ لِي*).
         - `خِدْمَة` (service): Root kh-d-m (*هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟*).
-      - Active slips targeted for post-class consolidation: `بَيْضَة` (egg), `أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ` (return home), `أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا` (learn little daily), `يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ` (Saturday park trip), `طَابِق` (floor / storey), `مِصْعَد` (lift / elevator), `سُلَّم` (stairs / ladder).
+        - `اجْتِمَاع` (meeting / assembly): Root ج-م-ع (*Jumu'ah* / Friday assembly & *jāmiʿ* mosque).
+        - `كَيْفَ كَانَ يَوْمُكِ؟` (How was your day?): Feminine suffix `ـكِ` (*-ki*) to wife Saba.
+        - `بِبُطْءٍ` (with slowness / gently): Root ب-ط-ء (*تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك*).
+      - Active slips targeted for post-class consolidation: `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ`, `كَيْفَ كَانَ يَوْمُكِ؟`, `هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟`, `تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك`, `بَيْضَة` (egg), `طَابِق` (floor / storey), `مِصْعَد` (lift / elevator), `سُلَّم` (stairs / ladder).
     - Sunday connected 4-sentence speaking narrative: (1) *عِنْدِي حَجْزٌ فِي المَطْعَمِ* (proven!), (2) *أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا*, (3) *أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ*, (4) *أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ إِلَى البَيْتِ فِي السَّاعَةِ الثَّامِنَةِ*.
-    - Mnemonic additions: **يُمْكِنُكَ / مُمْكِن** (Bengali মুমকিন mumkin cognate); **مُسَاعَدَة** (hear the AID inside *mu-sa-AID-ah*); **مَال** (money/wealth, like Bayt al-Māl); **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys); **يَوْمُ الأَرْبِعَاءِ** (Wednesday); **يَوْمُ الخَمِيسِ** (Thursday); **يَوْمُ الجُمُعَةِ** (Friday); **الجَوُّ بَارِدٌ** (weather is cold).
+    - Mnemonic additions: **اجْتِمَاع** (gathering / assembly, root ج-م-ع); **كَيْفَ كَانَ يَوْمُكِ؟** (feminine suffix -ki); **بِبُطْءٍ** (with slowness / gently); **يُمْكِنُكَ / مُمْكِن** (Bengali মুমকিন mumkin cognate); **مُسَاعَدَة** (hear the AID inside *mu-sa-AID-ah*); **مَال** (money/wealth, like Bayt al-Māl); **مِفْتَاح** (tool that opens, root *f-t-ḥ* / *Al-Fātiḥah*); **مَشْغُول** (occupied / busy, root *sh-gh-l*); **حَجْز** (like Hajj — booked years ahead); **خَنَّاس** (the con-artist of an-Nās); **أُسَاعِدُ** (hear the AID inside *u-sa-AID-u*); **سُلَّم** (solemn climb up the stairs / safe steps *salām*); **مِصْعَد** (machine that ascends, root *ṣ-ʿ-d*); **دَوْر** (the wheel turns to my floor / my turn); **سِتَارَة** (curtain / *as-Sattār*); **خَزَائِن** (treasure cupboards); **طَابِق** (tablets stacked = storeys); **يَوْمُ الأَرْبِعَاءِ** (Wednesday); **يَوْمُ الخَمِيسِ** (Thursday); **يَوْمُ الجُمُعَةِ** (Friday); **الجَوُّ بَارِدٌ** (weather is cold).
     - Mnemonic win: **فَطُور** (*al-faṭūr*) successfully promoted to `strong` following the mini-iftar / FAT TOUR hook!
 
 

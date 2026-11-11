@@ -1,6 +1,33 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-10 (Tuesday Evening).** Read this first in any new session.
+**Updated 2026-11-11 (Wednesday Evening).** Read this first in any new session.
+
+> **11 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Wednesday Evening Audit, Telemetry & Progress Calibration, Plan Block Breakthrough, & Speak with AI Upgrade (Prompt FF):
+> 1. **Site Health & Pages Deployment**:
+>    - Live site verified: HTTP 200 OK across all pages.
+>    - All 8 automated test suites pass 100% cleanly (zero failures, 11,194 audio keys validated).
+>    - Full HTML inline script syntax test in `test-shell.js` passes with zero errors.
+> 2. **Telemetry & Progress Audit (Live from KV `data:rkarim88@gmail.com`)**:
+>    - 4,000 total recorded events (+36 logged Wednesday morning 11 Nov 06:34–06:50 UK); 1,210 SRS cards: 627 solid/strong (Box 3–5: 548 Box 5, 25 Box 4, 54 Box 3); 441 in active learning (388 Box 1, 53 Box 2); 142 in Box 0.
+>    - All 63 pen notes reviewed — 0 new/pending notes or images in KV.
+>    - **Wednesday Morning Plan Block Breakthrough**: Reza completed his full `myday` plan block and successfully promoted both daily routine anchor verbs out of Box 0 into Box 1:
+>      - «أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا» (I learn a little every day — s: 1.179, Box 1, Bengali *ta'lim* cognate).
+>      - «أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ» (I return home in the evening — s: 1.632, Box 1, plain dāl refuge hook).
+>      - Re-drilled holds: «قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ» (Box 3), «أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ» (Box 3), «هَذَا الكِتَابُ لِي» (Box 3), «عِنْدِي أَوْلَادٌ صِغَارٌ» (Box 1).
+>    - Progress model: Conversation A1 at **78%** (90 mins spoken, 73% last 2 exam avg), Qur'an by ear A1 at **67%** (0/18 certified Al-Fatiha ear words due to 45-day window expiry; salah coverage 12.8% in progress model with n=151 evidence points).
+>    - Sunday 8 Nov 07:00 UK class status: awaiting Reza's photos/notes dump to ingest into the 4 streams.
+> 3. **The 1 Bottleneck Gap & Fresh Wednesday Telemetry Slips**:
+>    - Midweek work & politeness slips from Wednesday morning:
+>      1. «عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ» (I have a morning meeting — rated `learning`, Box 0, s: 0.15; root ج-م-ع / Jumu'ah Friday prayer & assembly).
+>      2. «كَيْفَ كَانَ يَوْمُكِ؟» (How was your day? — to Saba; rated `learning`, Box 0, s: 0.15; feminine suffix «ـكِ» vs masculine «ـكَ»).
+>      3. «هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟» (Can you help me? — tapped `يمكنك` and `مساعدتي`, Box 0, s: 0.128; Bengali *mumkin* + hear AID in *musāʿadah*).
+>      4. «تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك» (Speak slowly, please — replayed 5 times! Box 0, s: 0.4; root ب-ط-ء / with slowness).
+>    - The #1 Qur'an by ear bottleneck: 0/18 certified Al-Fatiha ear words due to 45-day window expiry.
+> 4. **Speak with AI & Voice Mode Updates (`index.html`, `class.html`, `js/app.js`, `SPEAK_WITH_AI.md`, `LEARNER_CONTEXT.md`)**:
+>    - Added dedicated prompt **FF** in `SPEAK_WITH_AI.md` (*Wednesday 11 Nov Spoken Sprint: Midweek Work Routine, Family Check-In & Politeness Drill*).
+>    - Refreshed prompt generators in `index.html` and `class.html` targeting Prompt FF with the 4 Wednesday morning slips, celebrated verb promotions, family check-in, and adjective contrasts.
+>    - Updated `LEARNER_CONTEXT.md` with latest 11 Nov telemetry and pedagogical dossier.
+>    - Updated `js/app.js` dossier export.
 
 > **10 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Tuesday Evening Audit, Telemetry & Progress Calibration, GitHub Pages Rebuild, & Speak with AI Upgrade (Prompt EE):
 > 1. **Site Health & Pages Deployment**:

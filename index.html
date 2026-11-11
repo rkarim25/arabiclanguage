@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwb0bpab">
-  <link rel="stylesheet" href="css/style.css?v=mwb0bpab">
+  <link rel="stylesheet" href="css/fonts.css?v=mwcfodwj">
+  <link rel="stylesheet" href="css/style.css?v=mwcfodwj">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwb0bpab"></script>
-<script src="js/curriculum.js?v=mwb0bpab"></script>
-<script src="js/srs.js?v=mwb0bpab"></script>
-<script src="js/match.js?v=mwb0bpab"></script>
-<script src="js/errors.js?v=mwb0bpab"></script>
-<script src="js/frames.js?v=mwb0bpab"></script>
-<script src="js/app.js?v=mwb0bpab"></script>
-<script src="js/tracker.js?v=mwb0bpab"></script>
-<script src="js/plan.js?v=mwb0bpab"></script>
-<script src="js/account.js?v=mwb0bpab"></script>
+<script src="js/progress-model.js?v=mwcfodwj"></script>
+<script src="js/curriculum.js?v=mwcfodwj"></script>
+<script src="js/srs.js?v=mwcfodwj"></script>
+<script src="js/match.js?v=mwcfodwj"></script>
+<script src="js/errors.js?v=mwcfodwj"></script>
+<script src="js/frames.js?v=mwcfodwj"></script>
+<script src="js/app.js?v=mwcfodwj"></script>
+<script src="js/tracker.js?v=mwcfodwj"></script>
+<script src="js/plan.js?v=mwcfodwj"></script>
+<script src="js/account.js?v=mwcfodwj"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3681,16 +3681,23 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Tuesday 10 Nov Evening Spoken Sprint & Daily Routine Fluency (Prompt EE):\n`;
-  p += `       - Routine Anchor Verbs & Root Distinctions (Reinforcing 10 Nov Telemetry Slips):\n`;
-  p += `         1. أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ! Telemetry slip on 9 Nov: rated weak).\n`;
-  p += `         2. أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (I learn a little Arabic every day — Bengali তালিম ta'lim hook! Telemetry slip on 9 Nov: rated weak).\n`;
-  p += `         3. الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor, held strong!).\n`;
-  p += `         4. يَوْمَ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ (On Sunday I have my Arabic lesson — practiced!).\n`;
-  p += `         5. يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park).\n`;
-  p += `         6. هَذَا الكِتَابُ لِي (This book is mine — possessive preposition لِي).\n`;
-  p += `         7. عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).\n`;
-  p += `         8. أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (I learn Arabic for ten minutes).\n`;
+  p += `     * Wednesday 11 Nov Evening Spoken Sprint: Midweek Work Routine, Family Check-In & Politeness Drill (Prompt FF):\n`;
+  p += `       - Fresh Wednesday 11 Nov Morning Telemetry Slips & Target Sentences:\n`;
+  p += `         1. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a meeting in the morning — rated learning, Box 0; root ج-م-ع / Jumu'ah Friday prayer & assembly).\n`;
+  p += `         2. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; rated learning, Box 0; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;
+  p += `         3. هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — tapped words; Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah).\n`;
+  p += `         4. تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — replayed 5 times! Box 0; root ب-ط-ء / with slowness).\n`;
+  p += `       - Celebrated Verb Promotions out of Box 0 into Box 1 (11 Nov morning wins!):\n`;
+  p += `         * أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — s: 1.179, Box 1, Bengali তালিম ta'lim hook!).\n`;
+  p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — s: 1.632, Box 1, plain dāl refuge hook!).\n`;
+  p += `       - Proven Routine & Commute Anchors:\n`;
+  p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor, held strong!).\n`;
+  p += `         * قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ (I read the Qur'an after Isha — Box 3, s: 7.001).\n`;
+  p += `         * أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (I learn Arabic for ten minutes — Box 3, s: 11.509).\n`;
+  p += `         * هَذَا الكِتَابُ لِي (This book is mine — Box 3, s: 8.403; possessive preposition لِي).\n`;
+  p += `         * عِنْدِي أَوْلَادٌ صِغَارٌ (I have young children — Box 1, s: 2.0).\n`;
+  p += `         * يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park).\n`;
+  p += `         * عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).\n`;
   p += `       - Class Adjective Contrasts & Descriptions:\n`;
   p += `         * غَنِيّ (ghaniyy — rich/wealthy) vs فَقِير (faqīr — poor/in need; Qur'anic hook 28:24).\n`;
   p += `         * كَرِيم (karīm — generous/noble; Al-Karīm) vs بَخِيل (bakhīl — stingy).\n`;
