@@ -76,6 +76,15 @@
   function slotHtml(idx) {
     return `<div class="s-drill tryit" id="tryit-${idx}" style="display:${T.open === idx ? "block" : "none"}" onclick="event.stopPropagation()">${T.open === idx ? panelHtml(idx) : ""}</div>`;
   }
+  function playItem(idx, rate) {
+    const it = item(idx), tg = target(idx);
+    if (!tg) return;
+    if (it && it.ref && typeof reciteVerse === "function" && tg.self !== false) {
+      const p = String(it.ref).split(":").map(Number);
+      if (p[0] && p[1]) { reciteVerse(p[0], p[1], tg.ar, rate || 0.85); return; }
+    }
+    if (typeof speak === "function") speak(tg.ar, rate || 0.8);
+  }
   function panelHtml(idx) {
     const it = item(idx), tg = target(idx), st = state(idx);
     if (!it || !tg) return "";
@@ -91,7 +100,7 @@
     let body;
     if (!st.revealed) {
       body = st.ear ? `
-      <div class="drill-prompt">🎧 Listen — what does it mean? <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(tg.ar)}', 0.8)" title="Hear it again" aria-label="Hear again">🔊</button></div>
+      <div class="drill-prompt">🎧 Listen — what does it mean? <button type="button" class="sym-badge" onclick="TryIt.play(${idx}, 0.8)" title="Hear it again" aria-label="Hear again">🔊</button></div>
       ${st.listening ? `<div class="drill-heard" id="tryit-heard-${idx}">🔴 listening… say it back <button type="button" class="book-toggle-pill" style="margin-left:6px;font-size:11.5px;padding:1px 8px" onclick="TryIt.micDone(${idx})">✓ I'm done</button></div>` : ""}
       <div class="drill-row">
         <button type="button" class="book-toggle-pill" onclick="TryIt.earGrade(${idx}, true)" title="You caught the meaning — honest counts">💬 I understood it</button>
@@ -131,8 +140,8 @@
       body = `
       <div class="drill-prompt" style="font-size:14px;color:var(--muted)">${esc(tg.en)}</div>
       <div class="drill-answer">
-        <span class="arabic" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;cursor:pointer" onclick="speak('${encodeURIComponent(tg.ar)}', 0.8)" title="Listen">${tg.ar}</span>
-        <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(tg.ar)}', 0.8)" title="Listen" aria-label="Listen">🔊</button>
+        <span class="arabic" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;cursor:pointer" onclick="TryIt.play(${idx}, 0.8)" title="Listen">${tg.ar}</span>
+        <button type="button" class="sym-badge" onclick="TryIt.play(${idx}, 0.8)" title="Listen" aria-label="Listen">🔊</button>
         ${tg.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic">${esc(tg.tr)}</div>` : ""}
       </div>
       <div style="margin-top:8px;font-size:13.5px">${verdict}</div>
@@ -210,7 +219,7 @@
     }
     T.open = null; T.round = false; paint(idx);
   }
-  function reveal(idx) { const st = state(idx); st.revealed = true; st.result = null; paint(idx); const tg = target(idx); if (tg && typeof speak === "function") speak(tg.ar, 0.8); }
+  function reveal(idx) { const st = state(idx); st.revealed = true; st.result = null; paint(idx); playItem(idx, 0.8); }
   function retry(idx) { const st = state(idx); st.revealed = false; st.result = null; st.heard = ""; st.listening = false; paint(idx); }
 
   /* ---------- verdicts ---------- */
@@ -227,7 +236,7 @@
   function self(idx, ok) { const st = state(idx); st.result = { how: "self", ok: !!ok }; record(idx, ok, "self"); paint(idx); }
   /* hear-first (COACH-LOOP gap D): the Arabic plays, the English stays hidden; he gives the meaning
      or says it back. A verdict here is LISTENING evidence (alisten-grade) as well as a try. */
-  function ear(idx) { const st = state(idx); st.ear = true; st.revealed = false; st.result = null; paint(idx); const tg = target(idx); if (tg && typeof speak === "function") speak(tg.ar, 0.85); }
+  function ear(idx) { const st = state(idx); st.ear = true; st.revealed = false; st.result = null; paint(idx); playItem(idx, 0.85); }
   function earGrade(idx, ok) {
     const st = state(idx), it = item(idx);
     st.revealed = true; st.result = { how: "ear", ok: !!ok };
@@ -250,7 +259,7 @@
     st.revealed = true; st.result = { how: "typed", ok: !!ok, tier, right: gm ? gm.right : null, total: gm ? gm.total : null, err };
     record(idx, ok, "typed", { typed, tier, err: err || undefined });
     paint(idx);
-    if (!ok && typeof speak === "function") speak(tg.ar, 0.8);
+    if (!ok) playItem(idx, 0.8);
   }
   function micDone(idx) { const st = state(idx); if (st.micCtl && st.micCtl.stop) st.micCtl.stop(); }
   async function mic(idx) {
@@ -288,7 +297,7 @@
     if (st.ear && it && typeof logEvent === "function") logEvent({ e: "alisten-grade", key: it.key, ok, src: "tryit-ear-mic", t: Date.now() });
     if (st.heard && typeof logEvent === "function") logEvent({ e: "prompt", en: tg.en, heard: st.heard, score: st.result.score, src: "tryit-" + T.cfg.src, via: "tryit", t: Date.now() });   // via: the sent-drill already counts this try
     paint(idx);
-    if (!ok && typeof speak === "function") speak(tg.ar, 0.8);
+    if (!ok) playItem(idx, 0.8);
   }
 
   /* ---------- Free try: a batch built from what he holds, at his level ---------- */
@@ -374,5 +383,5 @@
   /* the page re-rendered its rows (a verdict, a reveal): put the open panel back */
   function rewire() { if (T.open !== null) paint(T.open); }
 
-  root.TryIt = { setup, badgeHtml, slotHtml, toggle, setRung, all, next, reveal, retry, self, ear, earGrade, check, mic, micDone, free, endFree, freeBatch, variants, rewire, state: () => T };
+  root.TryIt = { setup, badgeHtml, slotHtml, toggle, setRung, all, next, reveal, retry, self, ear, earGrade, check, mic, micDone, play: playItem, free, endFree, freeBatch, variants, rewire, state: () => T };
 })(typeof self !== "undefined" ? self : this);

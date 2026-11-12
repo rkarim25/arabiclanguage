@@ -82,7 +82,7 @@ const PLAN_BLOCKS = {
      demotivating is my Preply class when I can't have a simple conversation. If I
      could just talk about my day …" and "do it in a way I could get ready before my
      Sunday Preply class but also not just the day before." */
-  myday:     { icon: "🗣", title: n => `Say your day${n ? ` — ${n} in your Sunday script` : ""}`, sub: "Ten minutes before the commute: say or write sentences about your own day. Every one you get right goes into Sunday's two minutes with her.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
+  myday:     { icon: "⚡", title: n => `Practice${n ? ` — ${n} in your script` : ""}`, sub: "Adaptive batch (~10-sentence effort): dynamically mixes vocabulary, sentences, grammar, and Qur'an based on your progress and energy, updating every section automatically.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
   rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "rehearse" },
   withher:   { icon: "✅", title: () => "Tell her about your week — then tick this", sub: "Your script is on the Lessons page. Two minutes about your day, in Arabic; imperfect is fine. Tick when done; pen-note anything she corrected.", url: "class.html", page: "class", done: ["withher-done"] },   // the ✓ on the Lessons page script card
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
@@ -850,7 +850,7 @@ function planDoorHTML(p) {
     main = `<div class="pd-done">✅ Done for today</div>
       <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>`;
   } else {
-    const short = cur.type === "myday" ? "Say your day" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
+    const short = cur.type === "myday" ? "Practice" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
     const bh = planBestHour();
     const when = (evening ? "tomorrow morning" : cur.type === "withher" ? "after the lesson" : planProfile().when) + (bh && bh.share >= 25 && !evening ? ` · your best hour is ${bh.hour}–${bh.hour + 1}` : "");
     main = `<a href="${cur.url}" class="pd-start${evening ? " pd-late" : ""}" onclick="try{logEvent({e:'door-start',block:'${cur.type}',n:1})}catch(e){}">▶ ${short} · ${cur.mins || 5} min</a>

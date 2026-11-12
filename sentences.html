@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwcfodwj">
-  <link rel="stylesheet" href="css/style.css?v=mwcfodwj">
+  <link rel="stylesheet" href="css/fonts.css?v=mwda38al">
+  <link rel="stylesheet" href="css/style.css?v=mwda38al">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -180,7 +180,7 @@
 
   <!-- Top View Switcher -->
   <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice (10)</button>
+    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice</button>
     <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master Bank</button>
   </div>
 
@@ -199,7 +199,7 @@
           <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
         </div>
         <div class="filter-chips" id="filterChips">
-          <button type="button" class="chip active" data-filter="balanced">Balanced</button>
+          <button type="button" class="chip active" data-filter="balanced" title="Adaptive Practice mix (10-sentence effort across vocab, sentences, grammar, and Qur'an)">⚡ Adaptive</button>
           <button type="button" class="chip" data-filter="due">Due</button>
           <button type="button" class="chip" data-filter="new">New</button>
           <button type="button" class="chip" data-filter="weakest" title="Prioritize sentences with struggle words">📉 Weakest</button>
@@ -222,15 +222,15 @@
     <div class="card" style="padding:16px 18px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <div>
-          <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="✗ no · ≈ maybe · ✓ yes · ★ solid · ⊘ don't repeat — the site sets the next date">Batch of 10 Sentences</h2>
+          <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="✗ no · ≈ maybe · ✓ yes · ★ solid · ⊘ don't repeat — the site sets the next date">⚡ Practice</h2>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
         <span style="display:inline-flex;align-items:center;gap:8px">
-          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same ten again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
-          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 of 10 rated</span>
+          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
+          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
         </span>
       </div>
-      <div class="sentence-list" id="sentenceList">Loading sentences…</div>
+      <div class="sentence-list" id="sentenceList">Loading practice…</div>
       <div id="doneArea"></div>
     </div>
   </div>
@@ -284,18 +284,19 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwcfodwj"></script>
-<script src="js/curriculum.js?v=mwcfodwj"></script>
-<script src="js/srs.js?v=mwcfodwj"></script>
-<script src="js/frames.js?v=mwcfodwj"></script>
-<script src="js/freetry.js?v=mwcfodwj"></script>
-<script src="js/match.js?v=mwcfodwj"></script>
-<script src="js/errors.js?v=mwcfodwj"></script>
-<script src="js/tryit.js?v=mwcfodwj"></script>
-<script src="js/app.js?v=mwcfodwj"></script>
-<script src="js/tracker.js?v=mwcfodwj"></script>
-<script src="js/plan.js?v=mwcfodwj"></script>
-<script src="js/account.js?v=mwcfodwj"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwda38al"></script>
+<script src="js/curriculum.js?v=mwda38al"></script>
+<script src="js/srs.js?v=mwda38al"></script>
+<script src="js/frames.js?v=mwda38al"></script>
+<script src="js/freetry.js?v=mwda38al"></script>
+<script src="js/practice.js?v=mwda38al"></script>
+<script src="js/match.js?v=mwda38al"></script>
+<script src="js/errors.js?v=mwda38al"></script>
+<script src="js/tryit.js?v=mwda38al"></script>
+<script src="js/app.js?v=mwda38al"></script>
+<script src="js/tracker.js?v=mwda38al"></script>
+<script src="js/plan.js?v=mwda38al"></script>
+<script src="js/account.js?v=mwda38al"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -321,8 +322,14 @@ function diagnoseVerb(typed, it) {
 }
 
 let MASTER_SENTENCES = [];
+let PRACTICE_WORDS = [];
+let PRACTICE_GRAMMAR = [];
+let FREQ_WORDS = {};
 let ACTIVE_SENTENCES = [];
 let REVEALED = new Set();
+let BATCH_RATED = new Set();
+let BATCH_DONE_LOGGED = false;
+let IS_ADAPTIVE_PRACTICE = true;
 let SESSION_COOLDOWN = new Set();
 let currentFilter = "balanced";
 let bankFilter = "all";
@@ -330,16 +337,50 @@ let promptDirection = "en-first";
 let audioIdx = 0;
 const BATCH_SIZE = 10;
 
+function allPracticeItems() {
+  return MASTER_SENTENCES.concat(PRACTICE_GRAMMAR, PRACTICE_WORDS.map(w => ({
+    key: w.key, kind: "word", effort: 0.5, ar: w.ar, en: w.en, tr: w.tr || "",
+    note: w.note || (w.root ? "Root: " + w.root : ""), words: [[w.ar, w.en]],
+    src: "vocab", wordSrc: w.src || "everyday", track: w.src === "quran" ? "quran-word" : "vocab"
+  })));
+}
+
 (async () => {
   try {
-    const [bRes, cRes, clsRes, senRes] = await Promise.all([
+    const [bRes, cRes, clsRes, senRes, qCoreRes, evRes, famRes, gramRes, freqRes] = await Promise.all([
       fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
       fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
       fetch("data/sentences.json").then(r => r.json()).catch(() => null),
+      fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
+      fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
+      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
       loadFamIdx()
     ]);
     DATA = senRes;
+    FREQ_WORDS = (freqRes && freqRes.words) || {};
+
+    // Vocabulary pool with exact SRS keys matching words.html
+    const seenWords = new Set();
+    const addWord = (k, ar, en, tr, note, src, root) => {
+      if (!k || !ar || !en) return;
+      const n = normalizeAr(ar);
+      if (seenWords.has(n)) return;
+      seenWords.add(n);
+      const fam = famLookup(ar);
+      PRACTICE_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: root || (fam ? fam.root : ""), fam });
+    };
+    (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => addWord(v.key, v.ar, v.en, v.tr, v.note, "teacher")));
+    (qCoreRes.words || []).forEach((w, i) => addWord(`qc:${i}`, w.ar, w.en, w.tr, "", "quran"));
+    (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addWord(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday")));
+    (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addWord(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root)));
+
+    // Grammar pool with exact gt:<id>:<i> keys matching grammar.html
+    if (window.Practice && typeof Practice.buildGrammarPool === "function") {
+      PRACTICE_GRAMMAR = Practice.buildGrammarPool(gramRes.patterns || []);
+    }
 
     const seen = new Set();
     const add = (key, ar, en, tr, hint, words, src, track, note, extra) => {
@@ -374,12 +415,14 @@ const BATCH_SIZE = 10;
       });
     });
 
-    // 3. Sentence Bank (1,106 sentences)
+    // 3. Sentence Bank (1,106 sentences, including Qur'an ayats with ref & wordKeys)
     (bRes.sentences || []).forEach(s => {
       const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
-      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}` : s.pattern || "",
-        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
+      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}${s.ref ? " (" + s.ref + ")" : ""}${s.note ? " — " + s.note : ""}` : s.pattern || "",
+        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), ref: s.ref || null, surah: s.surah || null, wordKeys: s.wordKeys || [], pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
     });
+
+    await loadMyDay();
 
     updateOverallStats();
     const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
@@ -394,17 +437,26 @@ const BATCH_SIZE = 10;
       onFreeDone: (okN, n) => {
         // the commute's sentences count as checked only now — when the round actually ended
         if (window._pendingCommuteCheck) { const c = window._pendingCommuteCheck; window._pendingCommuteCheck = null; logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() }); }
+        BATCH_DONE_LOGGED = true;
         let t = document.getElementById("freeDone");
         if (!t) { t = document.createElement("div"); t.id = "freeDone"; const d = document.getElementById("doneArea"); if (d && d.parentNode) d.parentNode.insertBefore(t, d); else document.body.appendChild(t); }
-        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? "🎉 That's today." : "✓ That's today."}</h3>
-          <p style="margin:0 0 10px;font-size:14px">${okN ? `${okN} of ${n} said or written and got right — ${okN === 1 ? "it is" : "they are"} in your script now.` : `${n} tried — nothing proved by mic or writing this time, and that is still a morning done.`}</p>
+        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? "🎉 Practice Complete!" : "✓ Practice Complete!"}</h3>
+          <p style="margin:0 0 10px;font-size:14px">${okN ? `${okN} of ${n} said or written and got right — every section updated automatically.` : `${n} practiced — every verdict updated its home section.`}</p>
           ${typeof planMoodHTML === "function" ? planMoodHTML() : ""}
-          <p style="margin:8px 0 0;font-size:13px"><a href="index.html">Back to the door →</a></p></div>`;
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+            <button type="button" class="primary" onclick="load10Sentences()" style="font-size:14.5px;padding:8px 18px">Next Practice Batch →</button>
+            <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:13.5px;padding:7px 14px">↻ Redo batch</button>
+            <a href="index.html" class="pt-btn" style="font-size:13.5px;padding:7px 14px;text-decoration:none">Back to door →</a>
+          </div></div>`;
         if (t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "center" });
       },
       onFree: (list, meta) => {
         stopAudio();
         REVEALED.clear();
+        BATCH_RATED.clear();
+        BATCH_DONE_LOGGED = false;
+        IS_ADAPTIVE_PRACTICE = false;
+        const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
         ACTIVE_SENTENCES = list;
         LAST_BATCH_KEYS = list.map(x => x.key);
         const t = document.getElementById("sessionTitle");
@@ -417,11 +469,11 @@ const BATCH_SIZE = 10;
         render10Cards();
       },
     });
-    load10Sentences();
     setupAudioSpeed();
-    /* the plan's core block: ?myday=1 → Say your day; &rehearse=1 → only what he proved this week */
+    /* the plan's core block: ?myday=1 → Practice; &rehearse=1 → only what he proved this week */
     const q = new URLSearchParams(location.search);
     if (q.get("myday")) await startMyDay(!!q.get("rehearse"));
+    else load10Sentences();
     if (q.get("view") === "list" || q.get("view") === "master") switchView("master");   // the "full bank" links
   } catch (e) {
     console.error("Failed to load sentence bank", e);
@@ -459,12 +511,60 @@ function updateOverallStats() {
   document.getElementById("statTotal").textContent = MASTER_SENTENCES.length;
 }
 
-/* 70/30 DYNAMIC BATCH ENGINE FOR SENTENCES */
+/* ADAPTIVE PRACTICE + FILTERED SENTENCE BATCH ENGINE */
+function loadPracticeBatch() {
+  stopAudio();
+  if (window.TryIt) TryIt.endFree();
+  REVEALED.clear();
+  BATCH_RATED.clear();
+  BATCH_DONE_LOGGED = false;
+  IS_ADAPTIVE_PRACTICE = true;
+  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
+
+  const hw = store.get("ats-homework", null);
+  const hwPast = !!(hw && hw.lessonAt && new Date(hw.lessonAt).getTime() + 2 * 3600000 < Date.now());
+  const easy = (typeof planEasyDay === "function") && planEasyDay();
+
+  const built = Practice.buildBatch({
+    now: Date.now(),
+    srs: getSrs(),
+    log: store.get("ats-log", []),
+    words: PRACTICE_WORDS,
+    sentences: MASTER_SENTENCES,
+    grammar: PRACTICE_GRAMMAR,
+    freq: FREQ_WORDS,
+    homework: new Set((hw && !hwPast && hw.keys) || []),
+    exclude: SESSION_COOLDOWN,
+    easyDay: easy,
+    FreeTry: window.FreeTry || null,
+    wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null
+  });
+
+  if (built.pendingCommute) { const cd = built.pendingCommute; window._pendingCommuteCheck = { forT: cd.t, n: cd.n }; }
+  const titleEl = document.getElementById("sessionTitle");
+  if (titleEl) titleEl.textContent = built.title;
+  const lg = document.getElementById("srsLegend");
+  if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">${built.summary}</span></span>`;
+
+  ACTIVE_SENTENCES = built.list;
+  LAST_BATCH_KEYS = built.list.map(x => x.key);
+  logEvent({ e: "practice-batch", effort: built.effort, budget: built.budget, counts: built.counts, mode: built.diag.mode, t: Date.now() });
+  render10Cards();
+}
+
 function load10Sentences() {
+  if (currentFilter === "balanced" && window.Practice && typeof Practice.buildBatch === "function") {
+    loadPracticeBatch();
+    return;
+  }
   stopAudio();
   if (window.TryIt) TryIt.endFree();
   { const lg = document.getElementById("srsLegend"); if (lg && window.SRS) lg.innerHTML = SRS.legendHtml(); }
   REVEALED.clear();
+  BATCH_RATED.clear();
+  BATCH_DONE_LOGGED = false;
+  IS_ADAPTIVE_PRACTICE = false;
+  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
   const srs = getSrs();
   const now = Date.now();
 
@@ -474,13 +574,11 @@ function load10Sentences() {
   else if (currentFilter === "quran") pool = MASTER_SENTENCES.filter(s => s.track === "quran");
   else if (currentFilter === "everyday") pool = MASTER_SENTENCES.filter(s => s.track === "everyday");
 
-  /* the scheduler builds the batch (js/srs.js): due = recall below 90%, weakest =
-     his last verdicts + recall, balanced = 7 old + 3 new, never empty */
   const mode = ["weakest", "due", "new"].includes(currentFilter) ? currentFilter : "balanced";
   const chosen = SRS.buildBatch(pool, { size: BATCH_SIZE, mode, exclude: SESSION_COOLDOWN, srs, now });
 
   const titleEl = document.getElementById("sessionTitle");
-  if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Batch of 10 Weakest Sentences" : "Batch of 10 Sentences";
+  if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Weakest Sentences" : "Practice — Sentences";
 
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
@@ -488,18 +586,22 @@ function load10Sentences() {
 }
 
 let LAST_BATCH_KEYS = [];
-/* ↻ the same ten again, weakest first — his verdicts decide the order, not him */
+/* ↻ the same batch again, weakest first — his verdicts decide the order, not him */
 function redoBatch() {
   if (!LAST_BATCH_KEYS.length) { load10Sentences(); return; }
   stopAudio();
-  if (window.TryIt) TryIt.endFree();   // a Redo is not the morning round
+  if (window.TryIt) TryIt.endFree();
   REVEALED.clear();
-  const chosen = SRS.buildBatch(MASTER_SENTENCES, { size: BATCH_SIZE, mode: "redo", redoKeys: LAST_BATCH_KEYS });
+  BATCH_RATED.clear();
+  BATCH_DONE_LOGGED = false;
+  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
+  const fullPool = allPracticeItems();
+  const chosen = SRS.buildBatch(fullPool, { size: Math.max(BATCH_SIZE, LAST_BATCH_KEYS.length), mode: "redo", redoKeys: LAST_BATCH_KEYS });
   const titleEl = document.getElementById("sessionTitle");
   if (titleEl) titleEl.textContent = "Redo — weakest first";
   ACTIVE_SENTENCES = chosen;
   LAST_BATCH_KEYS = chosen.map(x => x.key);
-  logEvent({ e: "redo-batch", kind: "sentences", n: chosen.length, t: Date.now() });
+  logEvent({ e: "redo-batch", kind: IS_ADAPTIVE_PRACTICE ? "practice" : "sentences", n: chosen.length, t: Date.now() });
   render10Cards();
   const list = document.getElementById("sentenceList");
   if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -513,28 +615,57 @@ function render10Cards() {
   updateSessionProgress();
 }
 
-/* one card's HTML. revealCard swaps ONLY this card in place — re-rendering the
-   whole list emptied the page for a frame and the phone jumped to the top
-   (his 2 Nov note: "when I click check arabic … it snaps to the top"). */
-function cardHtml(s, idx) {
-  const srs = getSrs();
-  const isEnFirst = promptDirection === "en-first";
-    const item = srs[s.key] || {};
-    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
-    const exp = getExposure(s.key);
-    const isRevealed = REVEALED.has(idx);
-    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
-    const srcLabel = s.src === 'chapters' ? '📖 Daily Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday';
+function playCardAudio(idx) {
+  const s = ACTIVE_SENTENCES[idx];
+  if (!s) return;
+  stopAudio();
+  if (s.ref && typeof reciteVerse === "function") {
+    const p = String(s.ref).split(":").map(Number);
+    if (p[0] && p[1]) {
+      reciteVerse(p[0], p[1], s.ar, 0.85);
+      logEvent({ e: "audio-play", text: s.ar, ref: s.ref, type: "quran-ayah", t: Date.now() });
+      return;
+    }
+  }
+  speak(s.ar, 0.85);
+  logEvent({ e: "audio-play", text: s.ar, type: s.kind || "sentence", t: Date.now() });
+}
 
-    return `
+function playChipAudio(idx, wIdx, encodedWord) {
+  const s = ACTIVE_SENTENCES[idx];
+  const word = decodeURIComponent(encodedWord);
+  if (s && (s.kind === "quran" || s.track === "quran") && Array.isArray(s.wk) && Array.isArray(s.wk[wIdx]) && typeof speakQuranWord === "function") {
+    const qwKey = s.wk[wIdx].find(k => /^qw:[^:]+:d+:d+$/.test(k));
+    if (qwKey) {
+      const parts = qwKey.split(":");
+      speakQuranWord(parts[1], +parts[2], +parts[3], word, 0.85);
+      return;
+    }
+  }
+  speak(word, 0.85);
+}
+
+/* one card's HTML. revealCard swaps ONLY this card in place */
+function cardHtml(s, idx) {
+  const isEnFirst = promptDirection === "en-first";
+  const isRevealed = REVEALED.has(idx);
+  const kindBadge = s.kind === "word" ? "🔤 Vocab"
+    : s.kind === "grammar" ? `📐 Grammar${s.grammarName ? " · " + s.grammarName : ""}`
+    : (s.kind === "quran" || s.track === "quran") ? `🕌 Qur'an${s.surah ? " · " + s.surah : ""}${s.ref ? " (" + s.ref + ")" : ""}`
+    : s.src === "chapters" ? "📖 Chapter"
+    : s.src === "teacher" ? "🧑‍🏫 Class"
+    : "";
+  const whyTag = s._try && s._try.why ? `${s._try.why}${s._try.p != null ? " · " + s._try.p + "%" : ""}` : "";
+
+  return `
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
           <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${s._try ? `<span class="tryit-why" title="why the coach chose this one · how likely you are to get it">${s._try.why} · ${s._try.p}%</span>` : ""}
+            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${kindBadge ? `<span class="tryit-why" style="font-weight:600">${kindBadge}</span>` : ""}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
             <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
               ${isEnFirst ? s.en : s.ar}
             </span>
-            ${!isEnFirst ? `<button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')">🔊</button>` : ''}
+            ${!isEnFirst ? `<button type="button" class="small icon-btn" onclick="event.stopPropagation(); playCardAudio(${idx})">🔊</button>` : ''}
           </div>
         </div>
 
@@ -551,8 +682,8 @@ function cardHtml(s, idx) {
               <div class="s-ar-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
                 <div class="sym-group">
-                  <button type="button" class="sym-badge" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                  ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                   ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
@@ -561,7 +692,7 @@ function cardHtml(s, idx) {
               <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span>${s.en}</span>
                 <div class="sym-group">
-                  ${s.words && s.words.length ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                   ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
@@ -569,12 +700,12 @@ function cardHtml(s, idx) {
             `}
 
             ${s.words && s.words.length ? `
-              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:none" onclick="event.stopPropagation()">
+              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:${s.kind === 'word' ? 'flex' : 'none'}" onclick="event.stopPropagation()">
                 <div class="wbw-chips-wrap" style="display:flex;gap:5px;flex-wrap:wrap">
                   ${s.words.map((w, wIdx) => {
                     const fam = famLookup(w[0]);
                     return `
-                      <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                      <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="playChipAudio(${idx}, ${wIdx}, '${encodeURIComponent(w[0])}')" title="${w[1]}">
                         <span class="w-ar">${w[0]}</span>
                         <span class="w-en">${w[1]}</span>
                         ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('drill-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
@@ -621,7 +752,7 @@ function revealCard(idx) {
     updateSessionProgress();
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
   } else render10Cards();
-  if (s) playSingle(encodeURIComponent(s.ar));
+  if (s) playCardAudio(idx);
 }
 
 function revealAllCards() {
@@ -636,7 +767,7 @@ function setDirection(dir) {
   render10Cards();
 }
 
-/* ---- Say your day / Rehearse (the week that builds towards Sunday) ---- */
+/* ---- Practice / Rehearse ---- */
 let MYDAY = null;
 async function loadMyDay() {
   if (MYDAY) return MYDAY;
@@ -645,7 +776,7 @@ async function loadMyDay() {
   MYDAY = (d.sentences || []).map(s0 => {
     const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
     const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
-    const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
+    const toks = s.ar.replace(/[.،؟!]/g, "").split(/s+/).filter(Boolean);
     return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: "", pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
   });
   // they join the master list so verdicts and the Sunday script resolve them
@@ -655,52 +786,63 @@ async function loadMyDay() {
 async function startMyDay(rehearse) {
   const md = await loadMyDay();
   const mine = md.filter(s => s.who === "me");
-  // his day in the bank too: the first-person routine sentences he already has
-  const routine = MASTER_SENTENCES.filter(s => (s.src === "story-01" || /27 Sep: a working day/.test(s.note || "") || s.key === "chap:4:2" || s.key === "chap:4:4" || s.key === "chap:4:5") && !/^md:/.test(s.key));
   if (rehearse) {
     const proven = new Set((typeof planScript === "function" ? planScript() : []).map(x => x.en.toLowerCase()));
     let pool = MASTER_SENTENCES.filter(s => proven.has(String(s.en).trim().toLowerCase()));
     if (pool.length < 5) pool = pool.concat(mine.filter(s => !pool.includes(s)).slice(0, 8 - pool.length));
     await TryIt.free({ pool, loose: true, includeRecent: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
   } else {
-    const easy = (typeof planEasyDay === "function") && planEasyDay();
-    /* the commute feeds the morning: sentences he heard hands-free in the last 36 h, not yet
-       checked, come first — exposure becomes verdicts and script lines without a click */
-    const log = store.get("ats-log", []);
-    const cd = [...log].reverse().find(e => e.e === "commute-done" && e.sentEns && e.sentEns.length && Date.now() - e.t < 36 * 3600000);
-    const checked = cd && log.some(e => e.e === "commute-check-done" && e.forT === cd.t);
-    const heard = new Set(cd && !checked ? cd.sentEns.map(s => String(s).trim().toLowerCase()) : []);
-    const pool = mine.concat(routine);
-    if (heard.size) {
-      MASTER_SENTENCES.forEach(s => { if (heard.has(String(s.en).trim().toLowerCase()) && !pool.includes(s)) pool.push(s); });
-      window._pendingCommuteCheck = { forT: cd.t, n: heard.size };   // logged when the round ENDS (sentences.html onFreeDone)
-    }
-    const byEn = new Map(pool.map(s => [s.key, String(s.en).trim().toLowerCase()]));
-    await TryIt.free({ pool, loose: true, easy, size: easy ? 6 : 8, kind: "myday",
-      title: heard.size ? "🗣 Say your day — starting with your commute" : easy ? "🗣 Say your day — a lighter one today" : "🗣 Say your day — ten minutes",
-      boost: key => (heard.has(byEn.get(key)) ? 3 : 0) + (/^md:/.test(key) ? 2.5 : 0) });
+    currentFilter = "balanced";
+    loadPracticeBatch();
   }
 }
 
-/* a sentence verdict also grades the words inside it — they were met in context */
+/* Every verdict inside Practice automatically updates its home section:
+   · word    → words.html / vocab.html / review.html (vocab-rate + tw: twin)
+   · grammar → grammar.html (gt:<id>:<i> + gtest-done when pattern passes)
+   · quran   → quran.html + words.html (sentence-rate + qw:/qc: word keys)
+   · sentence→ sentences.html + chapters + constituent words */
 function wordGradeFor(g) { return g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"; }
 function rateSentence(key, g, cardIdx, how, meta) {
-  const nc = SRS.rate(key, g);                 // ✗ ≈ ✓ ★ → stability → next date
+  const nc = SRS.rate(key, g);
   SESSION_COOLDOWN.add(key);
+  BATCH_RATED.add(key);
   const s = ACTIVE_SENTENCES[cardIdx];
   if (s) {
-    /* a sentence he got RIGHT credits its words (met in context); a miss or a stumble says
-       nothing certain about any one word, a rung variant did not produce the base words,
-       and a retired word stays retired (12 Oct audit) */
-    if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
-      const srsNow = getSrs();
-      (s.words || []).forEach(w => {
-        const norm = normalizeAr(w[0]).replace(/^ال/, "");
-        const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
-        if (wid && !(srsNow[wid] && srsNow[wid].b === "never")) SRS.rate(wid, "yes");
-      });
+    const srsNow = getSrs();
+    if (s.kind === "word") {
+      const norm = normalizeAr(s.ar).replace(/^ال/, "");
+      if (norm && srsNow["tw:" + norm] && !(srsNow["tw:" + norm].b === "never")) SRS.rate("tw:" + norm, g);
+      logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.wordSrc || "practice", via: "practice", t: Date.now() });
+    } else if (s.kind === "grammar") {
+      logEvent({ e: "bucket", key, b: SRS.TO_LEGACY[g], g, s: nc.s, box: nc.box, src: "practice-grammar", t: Date.now() });
+      if ((g === "yes" || g === "solid") && Array.isArray(s.patTestKeys) && s.patTestKeys.length) {
+        const after = getSrs();
+        const passedN = s.patTestKeys.filter(tk => after[tk] && (after[tk].g === "yes" || after[tk].g === "solid" || (after[tk].box || 0) >= 2)).length;
+        if (passedN === s.patTestKeys.length) {
+          logEvent({ e: "gtest-done", id: s.patId, score: passedN, total: s.patTestKeys.length, via: "practice", t: Date.now() });
+        }
+      }
+    } else if (s.kind === "quran" || s.track === "quran") {
+      if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
+        (s.wordKeys || []).forEach(wk => {
+          if ((/^qw:/.test(wk) || /^qc:/.test(wk)) && !(srsNow[wk] && srsNow[wk].b === "never")) SRS.rate(wk, "yes");
+        });
+      }
+      logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "quran", t: Date.now() });
+      if (promptDirection === "ar-first" && g !== "retire") {
+        logEvent({ e: "alisten-grade", key, ok: g === "yes" || g === "solid", src: "practice-quran", t: Date.now() });
+      }
+    } else {
+      if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
+        (s.words || []).forEach(w => {
+          const norm = normalizeAr(w[0]).replace(/^ال/, "");
+          const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
+          if (wid && !(srsNow[wid] && srsNow[wid].b === "never")) SRS.rate(wid, "yes");
+        });
+      }
+      logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
     }
-    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
     autoSync();
   }
   updateOverallStats();
@@ -709,18 +851,39 @@ function rateSentence(key, g, cardIdx, how, meta) {
 }
 
 function updateSessionProgress() {
-  const srs = getSrs();
-  const ratedCount = ACTIVE_SENTENCES.filter(s => !!(srs[s.key] && srs[s.key].u)).length;
-  document.getElementById("sessionCount").textContent = `${ratedCount} of ${ACTIVE_SENTENCES.length} rated`;
+  const total = ACTIVE_SENTENCES.length;
+  const ratedCount = ACTIVE_SENTENCES.filter(s => BATCH_RATED.has(s.key)).length;
+  document.getElementById("sessionCount").textContent = `${ratedCount} of ${total} rated`;
 
   const doneArea = document.getElementById("doneArea");
-  if (ratedCount === ACTIVE_SENTENCES.length && ACTIVE_SENTENCES.length > 0) {
+  if (ratedCount === total && total > 0) {
+    if (IS_ADAPTIVE_PRACTICE && !BATCH_DONE_LOGGED) {
+      BATCH_DONE_LOGGED = true;
+      if (window._pendingCommuteCheck) {
+        const c = window._pendingCommuteCheck;
+        window._pendingCommuteCheck = null;
+        logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
+      }
+      const srsNow = getSrs();
+      const okAll = ACTIVE_SENTENCES.filter(s => srsNow[s.key] && (srsNow[s.key].g === "yes" || srsNow[s.key].g === "solid" || srsNow[s.key].b === "never")).length;
+      logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });
+      autoSync();
+    }
+    const freeDoneEl = document.getElementById("freeDone");
+    if (freeDoneEl && freeDoneEl.innerHTML.trim()) {
+      doneArea.innerHTML = "";
+      return;
+    }
     doneArea.innerHTML = `
       <div class="done-banner">
-        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 10 Sentences Complete!</h3>
-        <p style="margin:0 0 12px;font-size:14px">Each verdict set its own next date — nothing for you to decide. Redo now if you want them again, weakest first.</p>
-        <button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Load Next Batch (10) →</button>
-        <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px;margin-left:8px" title="The same ten again, weakest first">↻ Redo these 10</button>
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 Practice Batch Complete!</h3>
+        <p style="margin:0 0 10px;font-size:14px">Every verdict updated its home section (Vocabulary, Sentences, Grammar, Qur'an) and set its next review date automatically.</p>
+        ${IS_ADAPTIVE_PRACTICE && typeof planMoodHTML === "function" ? planMoodHTML() : ""}
+        <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Next Practice Batch →</button>
+          <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px" title="The same batch again, weakest first">↻ Redo batch</button>
+          <a href="index.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">Back to door →</a>
+        </div>
       </div>
     `;
   } else {
@@ -1093,7 +1256,7 @@ function playStep(withPause) {
     state: isPaused ? "paused" : "playing"
   });
 
-  speak(s.ar, 0.85, () => {
+  const afterArabic = () => {
     if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
     if (withPause) {
       playAudioGap(3, () => {
@@ -1114,7 +1277,15 @@ function playStep(withPause) {
         playStep(withPause);
       });
     }
-  });
+  };
+  if (s.ref && typeof playRecitation === "function") {
+    const p = String(s.ref).split(":").map(Number);
+    if (p[0] && p[1]) {
+      playRecitation([{ n: p[0], ayah: p[1] }], afterArabic, err => { if (err) speak(s.ar, 0.85, afterArabic); });
+      return;
+    }
+  }
+  speak(s.ar, 0.85, afterArabic);
 }
 
 // Topic filter chips

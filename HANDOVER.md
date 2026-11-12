@@ -1,6 +1,14 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-11 (Wednesday Evening).** Read this first in any new session.
+**Updated 2026-11-12 (Thursday Morning).** Read this first in any new session.
+
+> **12 Nov 2026 (interactive morning)** — Adaptive Multi-Stream `Practice` Engine (`js/practice.js` + `sentences.html` + `js/plan.js`):
+> 1. **Unified Adaptive `Practice` Session**:
+>    - Renamed `"Say your day"` / `"Practice (10)"` → **`"Practice"`** on `index.html` (`js/plan.js`) and `sentences.html` (preserving internal `myday` plan key and all commute/Sunday script invariants).
+>    - Added `js/practice.js` (`Practice.diagnose` + `Practice.buildBatch`) with `scripts/test-practice.js` (8 assertions, all 13 test suites passing 100%).
+>    - Dynamically composes each batch to **10.0 sentence-effort units** (or **6.0** review-only after two `heavy` mood taps or a ≥4-day gap): Vocab (`0.5`), Sentence (`1.0`), Grammar (`1.0`), Qur'an Alafasy ayah (`1.5`) with zero fixed quota—driven by live recall decay, word slips, `FreeTry` grammar weaknesses, 7-day ear balance, and mood/gap telemetry.
+>    - Every `✗ ≈ ✓ ★ ⊘` marker inside `Practice` automatically updates its home section (`words.html` via `vocab-rate`, `grammar.html` via `gt:`/`gtest-done`, `quran.html` via `qw:`/`qc:` + Mishary Alafasy `reciteVerse`, and `sentences.html`).
+>    - Pre-generated 140 neural audio clips (`ar-SA-HamedNeural` / `en-GB-RyanNeural`) covering all `grammar.json` examples and test prompts (11,333 verified manifest clips, 0 missing).
 
 > **11 Nov 2026 (interactive evening, `/run-arabic-coach`)** — Wednesday Evening Audit, Telemetry & Progress Calibration, Plan Block Breakthrough, & Speak with AI Upgrade (Prompt FF):
 > 1. **Site Health & Pages Deployment**:

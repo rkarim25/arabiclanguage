@@ -184,6 +184,18 @@ try:
 except Exception as e:
     print("Warning: could not parse myday.json", e)
 
+# Grammar examples & test items (data/grammar.json) — surfaced inside Practice
+try:
+    for p in loadd("grammar.json").get("patterns", []):
+        for ex in p.get("examples", []):
+            if ex.get("ar"): add("ar", ex["ar"])
+            if ex.get("en"): add("en", ex["en"])
+        for t in p.get("test", []):
+            if t.get("ar"): add("ar", t["ar"])
+            if t.get("prompt"): add("en", t["prompt"])
+except Exception as e:
+    print("Warning: could not parse grammar.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 
