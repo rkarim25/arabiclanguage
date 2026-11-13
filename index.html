@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwer3glw">
-  <link rel="stylesheet" href="css/style.css?v=mwer3glw">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfc8qpw">
+  <link rel="stylesheet" href="css/style.css?v=mwfc8qpw">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -254,16 +254,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwer3glw"></script>
-<script src="js/curriculum.js?v=mwer3glw"></script>
-<script src="js/srs.js?v=mwer3glw"></script>
-<script src="js/match.js?v=mwer3glw"></script>
-<script src="js/errors.js?v=mwer3glw"></script>
-<script src="js/frames.js?v=mwer3glw"></script>
-<script src="js/app.js?v=mwer3glw"></script>
-<script src="js/tracker.js?v=mwer3glw"></script>
-<script src="js/plan.js?v=mwer3glw"></script>
-<script src="js/account.js?v=mwer3glw"></script>
+<script src="js/progress-model.js?v=mwfc8qpw"></script>
+<script src="js/curriculum.js?v=mwfc8qpw"></script>
+<script src="js/srs.js?v=mwfc8qpw"></script>
+<script src="js/match.js?v=mwfc8qpw"></script>
+<script src="js/errors.js?v=mwfc8qpw"></script>
+<script src="js/frames.js?v=mwfc8qpw"></script>
+<script src="js/app.js?v=mwfc8qpw"></script>
+<script src="js/tracker.js?v=mwfc8qpw"></script>
+<script src="js/plan.js?v=mwfc8qpw"></script>
+<script src="js/account.js?v=mwfc8qpw"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3757,17 +3757,33 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Friday 13 Nov Jumu'ah Spoken Sprint: Past Negation (لَمْ vs مَا), Chapter 4 Routine & Morning Slips (Prompt HH):\n`;
-  p += `       - Core Negation Grammar Breakthrough (NEVER say "لَا ذَهَبْتُ"!):\n`;
-  p += `         1. لَمْ أَذْهَبْ إِلَى العَمَلِ (I did not go to work — لَمْ + jussive present, standard MSA & Qur'anic like لَمْ يَلِدْ).\n`;
-  p += `         2. مَا ذَهَبْتُ إِلَى العَمَلِ (I did not go to work — مَا + past verb, natural spoken MSA).\n`;
-  p += `         3. Contrast: لَا أَذْهَبُ (I don't go — present) vs لَنْ أَذْهَبَ (I won't go — future) vs لَيْسَ عِنْدِي (I don't have — nominal). Gently correct any "لَا + past" immediately!\n`;
-  p += `       - Friday 13 Nov Morning Batch 1 Slips (drill each in a 1-line exchange):\n`;
-  p += `         1. تَقَبَّلَ اللهُ (May Allah accept — Jumu'ah du'a; Bengali কবুল kobul / qabūl cognate!).\n`;
-  p += `         2. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order).\n`;
-  p += `         3. حَفْلَة (party / celebration — shares root ح-ف-ل with مَحْفِل mahfil!).\n`;
+  p += `     * Friday Eve / Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II):\n`;
+  p += `       - 1. Core Negation Grammar & The 9 Visual Lesson Cards:\n`;
+  p += `         * Past Negation (lc:negation): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
+  p += `           a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present, Qur'anic standard like لَمْ يَلِدْ).\n`;
+  p += `           b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb, natural spoken MSA).\n`;
+  p += `           c) Contrast: لَا أَذْهَبُ (I don't go — present) vs لَنْ أَذْهَبَ (I won't go — future) vs لَيْسَ عِنْدِي (I don't have — nominal).\n`;
+  p += `         * Verb Tenses (lc:verb-tenses): Past puts person on back (ذَهَبْتُ / عَبَدْتُ); Present puts person on front (أَذْهَبُ); Future clips سَـ (سَأَذْهَبُ).\n`;
+  p += `         * Price Triplet (lc:price-triplet): ثَمَن (intrinsic value / 2:41) vs سِعْر (market shop tag) vs أُجْرَة (taxi / transit fare).\n`;
+  p += `         * Pronoun Attachments (lc:pronoun-attachments): -ka to man vs -ki to Saba (كَيْفَ كَانَ يَوْمُكِ؟).\n`;
+  p += `         * Look-Alike Roots (lc:lookalike-roots): أَعُودُ (plain dāl = return home) vs أَعُوذُ (dotted dhāl = seek refuge); جَوْزَة (walnut) vs زَوْجَة (wife).\n`;
+  p += `         * Requests & Modals (lc:requests-and-modals): هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me?) + تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (Speak slowly).\n`;
+  p += `         * Days & Clock (lc:days-and-clock): يَوْمُ السَّبْتِ (Saturday) & يَوْمُ الأَحَدِ (Sunday Preply 07:00 UK warmup).\n`;
+  p += `         * Sadr vs Qalb (lc:sadr-vs-qalb): صُدُور (outer chest courtyard where waswās hovers) vs قُلُوب (inner locked heart).\n`;
+  p += `         * Idafa vs Adjective (lc:idafa-vs-adjective): مِفْتَاحُ الغُرْفَةِ (possession, ال on 2nd) vs الغُرْفَةُ الجَدِيدَةُ (adjective, ال on both).\n`;
+  p += `       - 2. Friday Practice Telemetry Slips (drill each in a crisp 1-line exchange):\n`;
+  p += `         1. عُقَد (ʿuqad — knots, Surah Al-Falaq 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ; rated weak in Friday practice).\n`;
+  p += `         2. حَاسِد (ḥāsid — envier; 113:5 حَاسِدٍ إِذَا حَسَدَ).\n`;
+  p += `         3. غَاسِق (ghāsiq — intense nightfall; 113:3 غَاسِقٍ إِذَا وَقَبَ).\n`;
   p += `         4. عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ).\n`;
-  p += `         5. عُقَد (knots — 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ).\n`;
+  p += `         5. تَقَبَّلَ اللهُ (May Allah accept — Jumu'ah greeting du'a; Bengali kobul / qabūl cognate; reply: مِنَّا وَمِنْكُمْ).\n`;
+  p += `         6. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order).\n`;
+  p += `         7. حَفْلَة (party / gathering — shares root ح-ف-ل with mahfil).\n`;
+  p += `       - 3. Sunday 15 Nov 07:00 UK Preply Class Warmup (Trip to Village & Breakfast):\n`;
+  p += `         * Breakfast items: بَيْضَة (egg — oval white abyaḍ), تَمْر (dates), جَوْز (walnuts), خُبْز (bread), جُبْن (cheese), كُوب حَلِيب (glass of milk).\n`;
+  p += `         * Shopping & provisions: دَجَاج (chicken), سَمَك (fish), سَلَطَة (salad), سَمْن (ghee), سُكَّر (sugar), وَجْبَة (meal), بُقُولِيَّات (legumes).\n`;
+  p += `         * Ordinals: الأَوَّل (1st), الثَّانِي (2nd), الثَّالِث (3rd).\n`;
+  p += `         * Past board verbs (-tu): قَرَأْتُ، صَلَّيْتُ، أَكَلْتُ، شَرِبْتُ، ذَهَبْتُ، عُدْتُ، سَاعَدْتُ.\n`;
   p += `       - Earlier Midweek Work & Politeness Slips:\n`;
   p += `         1. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a meeting in the morning — root ج-م-ع / Jumu'ah assembly).\n`;
   p += `         2. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;

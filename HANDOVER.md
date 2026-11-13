@@ -50,11 +50,13 @@
 
 ---
 
-## 2. Current Verified State (13 Nov 2026)
+## 2. Current Verified State (13 Nov 2026 — Friday Evening)
 
-- **Chapters 1–3:** Mastered at 100% on chapter tests; **Chapter 4 (Daily Routine, Time & Tenses)** is the active weekly Chapter.
+- **Telemetry & SRS Progress:** 4,063 total telemetry events; 1,221 tracked SRS cards (698 cleared: 595 active solid in Box 3–5 + 103 retired/never; 382 active learning, 141 in Box 0).
+- **Chapters 1–3:** Mastered at 100% on chapter tests; **Chapter 4 (Daily Routine, Time & Tenses)** is the active weekly Chapter advancing automatically via Practice.
+- **Speak with AI:** Refreshed with **Prompt II** for Friday Eve / Saturday 14 Nov weekend workout & Sunday 15 Nov 07:00 UK Preply class warmup (9 visual Lesson Cards, past negation `لَمْ` vs `مَا`, Friday practice slips `عُقَد` 113:4, `حَاسِد`, `غَاسِق`, `عَبَدْتُ اللهَ`, `تَقَبَّلَ اللهُ`, `أُرَتِّبُ`, `حَفْلَة`, and village breakfast foods).
 - **Audio Manifest:** `11,377` verified neural clips (`5,611` Arabic `ar-SA-HamedNeural` + `5,766` English `en-GB-RyanNeural`), plus Mishary Rashid Alafasy recitation for all Qur'ān ayahs and word-by-word clips.
-- **Recent Pen Notes Resolved:** Notes #64 & #65 (`لَمْ أَذْهَبْ` vs `مَا ذَهَبْتُ`, never `✗ لَا ذَهَبْتُ`; redundant `#planBar` removed from `sentences.html`).
+- **Recent Pen Notes Resolved:** Notes #64 & #65 (`لَمْ أَذْهَبْ` vs `مَا ذَهَبْتُ`, never `✗ لَا ذَهَبْتُ`; redundant `#planBar` removed from `sentences.html`, multi-batch Practice with per-batch `🗣 Speak Brief`).
 
 ---
 

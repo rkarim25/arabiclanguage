@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwer3glw">
-  <link rel="stylesheet" href="css/style.css?v=mwer3glw">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfc8qpw">
+  <link rel="stylesheet" href="css/style.css?v=mwfc8qpw">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -499,16 +499,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwer3glw"></script>
-<script src="js/curriculum.js?v=mwer3glw"></script>
-<script src="js/srs.js?v=mwer3glw"></script>
-<script src="js/app.js?v=mwer3glw"></script>
-<script src="js/tracker.js?v=mwer3glw"></script>
-<script src="js/frames.js?v=mwer3glw"></script>
-<script src="js/freetry.js?v=mwer3glw"></script>
-<script src="js/errors.js?v=mwer3glw"></script>
-<script src="js/plan.js?v=mwer3glw"></script>
-<script src="js/account.js?v=mwer3glw"></script>
+<script src="js/progress-model.js?v=mwfc8qpw"></script>
+<script src="js/curriculum.js?v=mwfc8qpw"></script>
+<script src="js/srs.js?v=mwfc8qpw"></script>
+<script src="js/app.js?v=mwfc8qpw"></script>
+<script src="js/tracker.js?v=mwfc8qpw"></script>
+<script src="js/frames.js?v=mwfc8qpw"></script>
+<script src="js/freetry.js?v=mwfc8qpw"></script>
+<script src="js/errors.js?v=mwfc8qpw"></script>
+<script src="js/plan.js?v=mwfc8qpw"></script>
+<script src="js/account.js?v=mwfc8qpw"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1595,9 +1595,18 @@ function buildClassAiPrompt(cls) {
     p += `\nGoal & Voice Mode Instructions:\n`;
     p += `1. Roleplay the situations in the reading with me (ordering food, a trip, shopping on the way), then ask me to narrate MY OWN day in the first-person past tense (ـتُ: سَافَرْتُ، تَنَاوَلْتُ، اشْتَرَيْتُ، سَاعَدْتُ، عُدْتُ).\n`;
     p += `2. Drill variations: swap the food, the time on the clock (السَّاعَةُ السَّادِسَةُ → السَّابِعَةُ), first/second/third, I → we → they, and turn statements into questions with هَلْ / مَتَى / مَاذَا / لِمَاذَا.\n`;
-    p += `3. Friday 13 Nov Jumu'ah Spoken Sprint & Telemetry Consolidation (Prompt HH): Ask me in Arabic about my Jumu'ah and drill active conversational roleplay:\n`;
-    p += `   - Past Negation Live Swap (Pen Note #64): Ask "هَلْ ذَهَبْتَ إِلَى المَكْتَبِ أَمْسِ؟" and have me answer "I did not go" BOTH ways: "لَمْ أَذْهَبْ إِلَى المَكْتَبِ" (لَمْ + jussive) AND "مَا ذَهَبْتُ إِلَى المَكْتَبِ" (مَا + past) — never "لَا ذَهَبْتُ"!\n`;
-    p += `   - Friday 13 Nov Morning Batch 1 Slips: تَقَبَّلَ اللهُ (May Allah accept — Bengali কবুল kobul cognate), أُرَتِّبُ البَيْتَ (I tidy the house — tartīb), حَفْلَة (party — mahfil root ح-ف-ل), عَبَدْتُ اللهَ (I worshipped Allah — past -tu of نَعْبُدُ), عُقَد (knots — 113:4).\n`;
+    p += `3. Friday Eve / Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II):\n`;
+    p += `   - The 9 Visual Lesson Cards & Core Negation Rules:\n`;
+    p += `     * Past Negation (lc:negation): NEVER say "✗ لَا ذَهَبْتُ"! Test both valid forms: لَمْ أَذْهَبْ إِلَى العَمَلِ (لَمْ + jussive present) AND مَا ذَهَبْتُ إِلَى العَمَلِ (مَا + past verb) vs present لَا أَذْهَبُ vs future لَنْ أَذْهَبَ vs nominal لَيْسَ عِنْدِي.\n`;
+    p += `     * Verb Tenses (lc:verb-tenses): Past puts person on the back (-tu); Present puts person on front (a-); Future clips sa-.\n`;
+    p += `     * Price Triplet (lc:price-triplet): ثَمَن (intrinsic value / 2:41) vs سِعْر (market shop tag) vs أُجْرَة (taxi / transit fare).\n`;
+    p += `     * Pronoun Attachments (lc:pronoun-attachments): -ka to man vs -ki to Saba (كَيْفَ كَانَ يَوْمُكِ؟).\n`;
+    p += `     * Look-Alike Roots (lc:lookalike-roots): أَعُودُ (plain dāl return home) vs أَعُوذُ (dotted dhāl seek refuge); جَوْزَة (walnut) vs زَوْجَة (wife).\n`;
+    p += `     * Requests & Modals (lc:requests-and-modals): هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me?) + تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (Speak slowly).\n`;
+    p += `     * Days & Clock (lc:days-and-clock): يَوْمُ السَّبْتِ (Saturday) & يَوْمُ الأَحَدِ (Sunday Preply 07:00 UK class).\n`;
+    p += `     * Sadr vs Qalb (lc:sadr-vs-qalb): صُدُور (outer chest courtyard) vs قُلُوب (inner locked heart).\n`;
+    p += `     * Idafa vs Adjective (lc:idafa-vs-adjective): مِفْتَاحُ الغُرْفَةِ (possession) vs الغُرْفَةُ الجَدِيدَةُ (adjective).\n`;
+    p += `   - Friday Telemetry Slips: عُقَد (ʿuqad — knots, 113:4 rated weak in practice), حَاسِد (ḥāsid — envier 113:5), غَاسِق (ghāsiq — intense nightfall 113:3), عَبَدْتُ اللهَ (I worshipped Allah — past -tu), تَقَبَّلَ اللهُ (May Allah accept), أُرَتِّبُ (I tidy/arrange), حَفْلَة (party/gathering).\n`;
     p += `   - Midweek Work & Politeness Slips: "عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ" (morning meeting — root ج-م-ع) and "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك" (Speak slowly, please — root ب-ط-ء).\n`;
     p += `   - Family Check-In & Gender Pronoun Distinction: "كَيْفَ كَانَ يَوْمُكِ؟" (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;
     p += `   - Asking for Help: "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟" (Can you help me? — Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah).\n`;

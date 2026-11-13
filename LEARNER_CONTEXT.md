@@ -14,7 +14,7 @@
 - **Governance (Headmaster Model):**
   - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`Practice` sessions** (`sentences.html` on screen + `audio.html?commute=1` hands-free), auto-syncing Weekly Chapters (`index.html`), Vocabulary (`words.html`), and visual Lesson Cards (`sets.html`).
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
-- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. ~600+ active SRS cards held solid (`Box 3–5`).
+- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,063 total telemetry events; 1,221 SRS cards (698 cleared: 595 active solid in `Box 3–5` + 103 retired/never; 382 active learning, 141 `Box 0`).
 
 ---
 
@@ -52,7 +52,9 @@ Stay within these domains unless teaching 1 requested word at a time:
 - `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order).
 - `حَفْلَة` — *party / celebration* (shares root ح-ف-ل with *mahfil* مَحْفِل).
 - `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`).
-- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`).
+- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`; rated weak in Friday practice).
+- `حَاسِد` — *envier* (Surah Al-Falaq 113:5 `حَاسِدٍ إِذَا حَسَدَ`; rated medium in Friday practice).
+- `غَاسِق` — *intense nightfall* (Surah Al-Falaq 113:3 `غَاسِقٍ إِذَا وَقَبَ`).
 - `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ` — *I have a morning meeting* (root ج-م-ع = *Jumu'ah* gathering).
 - `هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟` — *Can you help me?* (Bengali মুমকিন *mumkin* + hear **AID** inside *mu-sa-AID-ah*).
 - `تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ` — *Speak slowly, please* (`بِبُطْءٍ` = with slowness).
