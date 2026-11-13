@@ -196,9 +196,10 @@ try:
 except Exception as e:
     print("Warning: could not parse grammar.json", e)
 
-# Lesson Cards (data/lesson-cards.json) — visual teaching & spaced-review cards
+# Lesson Cards (data/lesson-cards.json) — visual teaching & spaced-review cards + commute audio cues
 try:
     for c in loadd("lesson-cards.json").get("cards", []):
+        if c.get("audioCue"): add("en", c["audioCue"])
         for r in c.get("rows", []):
             if r.get("ar"): add("ar", r["ar"])
         qc = c.get("quickCheck") or {}

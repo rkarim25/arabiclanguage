@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mweoucqt">
-  <link rel="stylesheet" href="css/style.css?v=mweoucqt">
+  <link rel="stylesheet" href="css/fonts.css?v=mweq1fyc">
+  <link rel="stylesheet" href="css/style.css?v=mweq1fyc">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -130,6 +130,11 @@
     .s-gram-link:hover { text-decoration: underline; }
     .batch-ai-nudge { margin-top: 14px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-align: left; }
     .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
+    .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #ecfdf5; color: var(--accent); border: 1px solid rgba(13,122,95,0.28); }
+    .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; border: 1px solid rgba(29,78,216,0.25); }
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 8px; margin-top: 8px; }
+    .cap-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; }
+    .cap-cell b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
 
     .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
@@ -232,11 +237,14 @@
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
         <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
+          <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards &amp; Qur'an">📊 Capabilities</button>
           <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
           <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
           <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
         </span>
       </div>
+      <div id="capabilityDrawer" style="display:none;margin-bottom:12px"></div>
       <div id="topVoiceBriefDrawer" style="display:none;margin-bottom:12px"></div>
       <div class="sentence-list" id="sentenceList">Loading practice…</div>
       <div id="doneArea"></div>
@@ -292,20 +300,20 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mweoucqt"></script>
-<script src="js/curriculum.js?v=mweoucqt"></script>
-<script src="js/srs.js?v=mweoucqt"></script>
-<script src="js/frames.js?v=mweoucqt"></script>
-<script src="js/freetry.js?v=mweoucqt"></script>
-<script src="js/practice.js?v=mweoucqt"></script>
-<script src="js/lesson-cards.js?v=mweoucqt"></script>
-<script src="js/match.js?v=mweoucqt"></script>
-<script src="js/errors.js?v=mweoucqt"></script>
-<script src="js/tryit.js?v=mweoucqt"></script>
-<script src="js/app.js?v=mweoucqt"></script>
-<script src="js/tracker.js?v=mweoucqt"></script>
-<script src="js/plan.js?v=mweoucqt"></script>
-<script src="js/account.js?v=mweoucqt"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mweq1fyc"></script>
+<script src="js/curriculum.js?v=mweq1fyc"></script>
+<script src="js/srs.js?v=mweq1fyc"></script>
+<script src="js/frames.js?v=mweq1fyc"></script>
+<script src="js/freetry.js?v=mweq1fyc"></script>
+<script src="js/practice.js?v=mweq1fyc"></script>
+<script src="js/lesson-cards.js?v=mweq1fyc"></script>
+<script src="js/match.js?v=mweq1fyc"></script>
+<script src="js/errors.js?v=mweq1fyc"></script>
+<script src="js/tryit.js?v=mweq1fyc"></script>
+<script src="js/app.js?v=mweq1fyc"></script>
+<script src="js/tracker.js?v=mweq1fyc"></script>
+<script src="js/plan.js?v=mweq1fyc"></script>
+<script src="js/account.js?v=mweq1fyc"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -414,6 +422,16 @@ function allPracticeItems() {
     (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addWord(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday")));
     (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addWord(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root)));
 
+    // Register canonical word keys so _wordKeyFor() resolves sentence words & adopts tw: twins automatically
+    if (typeof registerWordKeys === "function" && PRACTICE_WORDS.length) {
+      const wkMap = {};
+      PRACTICE_WORDS.forEach(w => {
+        const n = normalizeAr(w.ar).replace(/^ال/, "");
+        if (n && !wkMap[n]) wkMap[n] = w.key;
+      });
+      registerWordKeys(wkMap);
+    }
+
     // Grammar pool + inline rule lookup map matching grammar.html
     if (window.Practice) {
       if (typeof Practice.buildGrammarPool === "function") PRACTICE_GRAMMAR = Practice.buildGrammarPool(GRAMMAR_PATTERNS);
@@ -477,7 +495,12 @@ function allPracticeItems() {
       onVerdict: (it, g, idx, how, meta) => rateSentence(it.key, g, idx, how, meta),
       onFreeDone: (okN, n) => {
         // the commute's sentences count as checked only now — when the round actually ended
-        if (window._pendingCommuteCheck) { const c = window._pendingCommuteCheck; window._pendingCommuteCheck = null; logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() }); }
+        if (window._pendingCommuteCheck) {
+          const c = window._pendingCommuteCheck;
+          window._pendingCommuteCheck = null;
+          logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
+          (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
+        }
         BATCH_DONE_LOGGED = true;
         const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
         const nextB = curB + 1;
@@ -594,7 +617,8 @@ function loadPracticeBatch(explicitBatchNum) {
   });
 
   CURRENT_BUILT_BATCH = built;
-  if (built.pendingCommute) { const cd = built.pendingCommute; window._pendingCommuteCheck = { forT: cd.t, n: cd.n }; }
+  if (built.capabilities) store.set("ats-capabilities", built.capabilities);
+  if (built.pendingCommute) { const cd = built.pendingCommute; window._pendingCommuteCheck = { forT: cd.t, forTs: cd.forTs || [cd.t], n: cd.n }; }
   const titleEl = document.getElementById("sessionTitle");
   if (titleEl) titleEl.textContent = built.title;
   const lg = document.getElementById("srsLegend");
@@ -607,8 +631,75 @@ function loadPracticeBatch(explicitBatchNum) {
   if (topDrawer && topDrawer.style.display !== "none") {
     topDrawer.innerHTML = renderBatchVoiceBriefHTML("top");
   }
-  logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, t: Date.now() });
+  const capDrawer = document.getElementById("capabilityDrawer");
+  if (capDrawer && capDrawer.style.display !== "none") {
+    capDrawer.innerHTML = renderCapabilityDrawerHTML();
+  }
+  logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, teachCount: built.teachCount, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, commuteDebt: !!built.diag.commuteDebt, t: Date.now() });
   render10Cards();
+}
+
+function renderCapabilityDrawerHTML() {
+  if (!window.Practice || typeof Practice.summarizeCapabilities !== "function") return "";
+  const activeChap = getActiveWeeklyChapter();
+  const cap = Practice.summarizeCapabilities({
+    now: Date.now(),
+    activeChapNum: activeChap ? activeChap.num : null,
+    srs: getSrs(),
+    log: store.get("ats-log", []),
+    words: PRACTICE_WORDS,
+    sentences: MASTER_SENTENCES,
+    grammar: PRACTICE_GRAMMAR,
+    lessonCards: PRACTICE_LESSON_CARDS
+  });
+  store.set("ats-capabilities", cap);
+  return `
+    <div class="batch-ai-nudge" style="margin-top:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="font-size:13px"><b>📊 Live Capability Ledger</b> <span style="color:var(--muted)">— measured from your Practice, Commute &amp; Test verdicts (auto-synced across all sections)</span></div>
+        <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" style="font-size:11.5px;padding:3px 9px">Close ✕</button>
+      </div>
+      <div class="cap-grid">
+        <div class="cap-cell">
+          <b>🔤 Vocabulary</b>
+          <div><b>${cap.vocab.held}</b> solid · <b>${cap.vocab.learning}</b> learning${cap.vocab.slips ? ` · <span style="color:#dc2626;font-weight:600">${cap.vocab.slips} slips</span>` : ""}</div>
+          <div style="color:var(--muted);font-size:11px">Synced with Words &amp; Chapter Vocab</div>
+        </div>
+        <div class="cap-cell">
+          <b>🗣 Sentences &amp; Production</b>
+          <div><b>${cap.sentences.held}</b> held · <b>${cap.sentences.provenActive}</b> spoken/typed</div>
+          <div style="color:var(--muted);font-size:11px">${cap.sentences.activeChapNum ? `Ch ${cap.sentences.activeChapNum}: ${cap.sentences.activeChapSolid}/${cap.sentences.activeChapTotal} solid` : "Synced with Chapters"}</div>
+        </div>
+        <div class="cap-cell">
+          <b>📇 Lesson Cards &amp; Grammar</b>
+          <div><b>${cap.concepts.lessonCardsHeld}/${cap.concepts.lessonCardsTotal}</b> Lesson Cards · <b>${cap.concepts.grammarPatternsHeld}/${cap.concepts.grammarPatternsTotal}</b> rules</div>
+          <div style="color:var(--muted);font-size:11px">Synced with Sets &amp; Grammar</div>
+        </div>
+        <div class="cap-cell">
+          <b>🕌 Qur'an &amp; Commute Balance</b>
+          <div><b>${cap.quran.ayahsHeld}</b> ayahs · <b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
+          <div style="color:var(--muted);font-size:11px">${cap.modality.unverifiedCommuteCount ? `🔄 ${cap.modality.unverifiedCommuteCount} commute item(s) queued for screen check` : "Screen &amp; commute balanced ✓"}</div>
+        </div>
+      </div>
+      ${(cap.canDo.length || cap.gaps.length) ? `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:8px;font-size:12px">
+          ${cap.canDo.length ? `<div><b style="color:var(--accent)">✓ Proven Capabilities:</b><ul style="margin:4px 0 0 16px;padding:0">${cap.canDo.map(x => `<li>${escBriefHtml(x)}</li>`).join("")}</ul></div>` : ""}
+          ${cap.gaps.length ? `<div><b style="color:#b45309">🎯 What Practice Is Targeting Next:</b><ul style="margin:4px 0 0 16px;padding:0">${cap.gaps.map(x => `<li>${escBriefHtml(x)}</li>`).join("")}</ul></div>` : ""}
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function toggleCapabilityDrawer() {
+  const el = document.getElementById("capabilityDrawer");
+  if (!el) return;
+  if (el.style.display === "none") {
+    el.innerHTML = renderCapabilityDrawerHTML();
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
 }
 
 function startNextPracticeBatch(nextB) {
@@ -841,6 +932,13 @@ function cardHtml(s, idx) {
       </div>
     `;
   }
+  const isTeach = s.practiceMode === "teach";
+  const isCommuteVerify = s.practiceMode === "commute-verify";
+  const modePill = isTeach
+    ? `<span class="mode-pill-teach" title="New unseen item — opened upfront so Practice teaches it first before scheduling review">🆕 Teach</span>`
+    : isCommuteVerify
+    ? `<span class="mode-pill-commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning on screen">🚗→📱 Screen Check</span>`
+    : "";
   const kindBadge = s.kind === "word" ? "🔤 Vocab"
     : s.kind === "grammar" ? `📐 Grammar${s.grammarName ? " · " + s.grammarName : ""}`
     : (s.kind === "quran" || s.track === "quran") ? `🕌 Qur'an${s.surah ? " · " + s.surah : ""}${s.ref ? " (" + s.ref + ")" : ""}`
@@ -848,12 +946,14 @@ function cardHtml(s, idx) {
     : s.src === "teacher" ? "🧑‍🏫 Class"
     : "";
   const whyTag = s._try && s._try.why ? `${s._try.why}${s._try.p != null ? " · " + s._try.p + "%" : ""}` : "";
+  const showWbwOpen = s.kind === "word" || isTeach;
+  const showTrOpen = isTeach && !!s.tr;
 
   return `
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
           <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${kindBadge ? `<span class="tryit-why" style="font-weight:600">${kindBadge}</span>` : ""}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
+            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${modePill}${kindBadge ? `<span class="tryit-why" style="font-weight:600">${kindBadge}</span>` : ""}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
             <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
               ${isEnFirst ? s.en : s.ar}
             </span>
@@ -875,24 +975,24 @@ function cardHtml(s, idx) {
                 <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
                 <div class="sym-group">
                   <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
+              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
             ` : `
               <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <span>${s.en}</span>
                 <div class="sym-group">
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 </div>
               </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:none">${s.tr}</div>` : ''}
+              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
             `}
 
             ${s.words && s.words.length ? `
-              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:${s.kind === 'word' ? 'flex' : 'none'}" onclick="event.stopPropagation()">
+              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:${showWbwOpen ? 'flex' : 'none'}" onclick="event.stopPropagation()">
                 <div class="wbw-chips-wrap" style="display:flex;gap:5px;flex-wrap:wrap">
                   ${s.words.map((w, wIdx) => {
                     const fam = famLookup(w[0]);
@@ -916,7 +1016,7 @@ function cardHtml(s, idx) {
           </div>
 
           <div class="s-action-bar" style="margin-top:4px">
-            <span style="font-size:11.5px;color:var(--muted)">Rate recall:</span>
+            <span style="font-size:11.5px;color:var(--muted)">${isTeach ? "🔊 Listen &amp; 🎯 Try it, then rate to schedule review:" : isCommuteVerify ? "Verified on screen? Rate recall:" : "Rate recall:"}</span>
             <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
           </div>
         `}
@@ -1002,48 +1102,37 @@ async function startMyDay(rehearse, explicitBatchNum) {
    · sentence→ sentences.html + chapters + constituent words */
 function wordGradeFor(g) { return g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"; }
 function rateSentence(key, g, cardIdx, how, meta) {
-  const nc = SRS.rate(key, g);
   SESSION_COOLDOWN.add(key);
   BATCH_RATED.add(key);
   const s = ACTIVE_SENTENCES[cardIdx];
-  if (s) {
-    const srsNow = getSrs();
-    if (s.kind === "word") {
-      const norm = normalizeAr(s.ar).replace(/^ال/, "");
-      if (norm && srsNow["tw:" + norm] && !(srsNow["tw:" + norm].b === "never")) SRS.rate("tw:" + norm, g);
-      logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.wordSrc || "practice", via: "practice", t: Date.now() });
-    } else if (s.kind === "lesson-card") {
-      logEvent({ e: "lesson-card-rate", key, lcId: s.lcId, g, s: nc.s, box: nc.box, via: "practice", t: Date.now() });
-    } else if (s.kind === "grammar") {
-      logEvent({ e: "bucket", key, b: SRS.TO_LEGACY[g], g, s: nc.s, box: nc.box, src: "practice-grammar", t: Date.now() });
-      if ((g === "yes" || g === "solid") && Array.isArray(s.patTestKeys) && s.patTestKeys.length) {
-        const after = getSrs();
-        const passedN = s.patTestKeys.filter(tk => after[tk] && (after[tk].g === "yes" || after[tk].g === "solid" || (after[tk].box || 0) >= 2)).length;
-        if (passedN === s.patTestKeys.length) {
-          logEvent({ e: "gtest-done", id: s.patId, score: passedN, total: s.patTestKeys.length, via: "practice", t: Date.now() });
-        }
-      }
-    } else if (s.kind === "quran" || s.track === "quran") {
-      if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
-        (s.wordKeys || []).forEach(wk => {
-          if ((/^qw:/.test(wk) || /^qc:/.test(wk)) && !(srsNow[wk] && srsNow[wk].b === "never")) SRS.rate(wk, "yes");
-        });
-      }
-      logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "quran", t: Date.now() });
-      if (promptDirection === "ar-first" && g !== "retire") {
-        logEvent({ e: "alisten-grade", key, ok: g === "yes" || g === "solid", src: "practice-quran", t: Date.now() });
-      }
-    } else {
-      if ((g === "yes" || g === "solid") && !(meta && meta.variant)) {
-        (s.words || []).forEach(w => {
-          const norm = normalizeAr(w[0]).replace(/^ال/, "");
-          const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
-          if (wid && !(srsNow[wid] && srsNow[wid].b === "never")) SRS.rate(wid, "yes");
-        });
-      }
-      logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
+  let nc = null;
+  if (s && window.Practice && typeof Practice.syncVerdict === "function") {
+    const res = Practice.syncVerdict({
+      item: s,
+      key,
+      grade: g,
+      srsApi: SRS,
+      getSrs,
+      store,
+      logEvent,
+      normalizeAr,
+      wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+      chapters: CHAPTERS_LIST,
+      via: "practice",
+      meta
+    });
+    nc = res ? res.nc : SRS.rate(key, g);
+    if ((s.kind === "quran" || s.track === "quran") && promptDirection === "ar-first" && g !== "retire") {
+      logEvent({ e: "alisten-grade", key, ok: g === "yes" || g === "solid", src: "practice-quran", t: Date.now() });
     }
     autoSync();
+  } else {
+    nc = SRS.rate(key, g);
+    autoSync();
+  }
+  const capDrawer = document.getElementById("capabilityDrawer");
+  if (capDrawer && capDrawer.style.display !== "none") {
+    capDrawer.innerHTML = renderCapabilityDrawerHTML();
   }
   updateOverallStats();
   SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
@@ -1063,9 +1152,18 @@ function updateSessionProgress() {
         const c = window._pendingCommuteCheck;
         window._pendingCommuteCheck = null;
         logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
+        (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
       }
       const srsNow = getSrs();
       const okAll = ACTIVE_SENTENCES.filter(s => srsNow[s.key] && (srsNow[s.key].g === "yes" || srsNow[s.key].g === "solid" || srsNow[s.key].b === "never")).length;
+      if (window.Practice && typeof Practice.summarizeCapabilities === "function") {
+        const activeChapNow = getActiveWeeklyChapter();
+        store.set("ats-capabilities", Practice.summarizeCapabilities({
+          now: Date.now(), activeChapNum: activeChapNow ? activeChapNow.num : null,
+          srs: srsNow, log: store.get("ats-log", []), words: PRACTICE_WORDS,
+          sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
+        }));
+      }
       logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });
       autoSync();
     }
@@ -1294,31 +1392,21 @@ function toggleAllTblTr() {
 }
 
 function rateMasterSentence(key, g) {
-  const nc = SRS.rate(key, g);
   const s = MASTER_SENTENCES.find(x => x.key === key);
-  if (s) {
-    if (g !== "retire") (s.words || []).forEach(w => {
-      const norm = normalizeAr(w[0]).replace(/^ال/, "");
-      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
-      if (wid) SRS.rate(wid, wordGradeFor(g));
+  let nc = null;
+  if (s && window.Practice && typeof Practice.syncVerdict === "function") {
+    const res = Practice.syncVerdict({
+      item: s, key, grade: g, srsApi: SRS, getSrs, store, logEvent, normalizeAr,
+      wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+      chapters: CHAPTERS_LIST, via: "master-bank"
     });
-    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
+    nc = res ? res.nc : SRS.rate(key, g);
+  } else {
+    nc = SRS.rate(key, g);
   }
   autoSync();
   updateOverallStats();
   SRS.paintBar(document.getElementById("bankTableBody"), key, nc);
-  return;
-  if (s) {
-    if (g !== "retire") (s.words || []).forEach(w => {
-      const norm = normalizeAr(w[0]).replace(/^ال/, "");
-      const wid = norm && _wordKeyFor ? _wordKeyFor(norm) : null;
-      if (wid) SRS.rate(wid, wordGradeFor(g));
-    });
-    logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: s.src, t: Date.now() });
-  }
-  autoSync();
-  updateOverallStats();
-  renderMasterBank();
 }
 
 /* Audio Toolbar Handling */

@@ -1,9 +1,8 @@
 /* ============================================================================
    ERRORS — the error ledger (js/errors.js)
 
-   COACH-LOOP.md gap A (12 Oct): "the site stores every wrong typed answer and
-   every mis-heard transcript, and does nothing with them." This classifies a miss
-   the moment it happens (Try it, both engines) so the event carries WHY, shows
+   Error ledger (12 Oct): classifies every wrong typed answer and mis-heard
+   transcript the moment it happens (Try it, both engines) so the event carries WHY, shows
    him the reason in one phrase, and lets the nightly and the teacher brief mine
    the ledger without re-deriving anything.
 

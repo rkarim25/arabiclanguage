@@ -11,14 +11,39 @@
       "diagram": {
         "type": "timeline",
         "nodes": [
-          { "era": "⬅ PAST (\"didn't\")", "ar": "لَمْ + يَفْعَلْ  /  مَا + فَعَلَ", "sub": "Jussive (-ْ) OR Past (-tu)", "tone": "teal" },
-          { "era": "● PRESENT (\"don't\")", "ar": "لَا + يَفْعَلُ", "sub": "Default present (-u)", "tone": "blue" },
-          { "era": "➡ FUTURE (\"won't\")", "ar": "لَنْ + يَفْعَلَ", "sub": "Subjunctive (-a)", "tone": "amber" },
-          { "era": "◻ NOUN (\"is not\")", "ar": "لَيْسَ", "sub": "Nominal sentence (no verb)", "tone": "slate" }
+          {
+            "era": "⬅ PAST (\"didn't\")",
+            "ar": "لَمْ + يَفْعَلْ  /  مَا + فَعَلَ",
+            "sub": "Jussive (-ْ) OR Past (-tu)",
+            "tone": "teal"
+          },
+          {
+            "era": "● PRESENT (\"don't\")",
+            "ar": "لَا + يَفْعَلُ",
+            "sub": "Default present (-u)",
+            "tone": "blue"
+          },
+          {
+            "era": "➡ FUTURE (\"won't\")",
+            "ar": "لَنْ + يَفْعَلَ",
+            "sub": "Subjunctive (-a)",
+            "tone": "amber"
+          },
+          {
+            "era": "◻ NOUN (\"is not\")",
+            "ar": "لَيْسَ",
+            "sub": "Nominal sentence (no verb)",
+            "tone": "slate"
+          }
         ],
         "danger": "✗ لَا + Past (لَا ذَهَبْتُ) = Wish / Curse (e.g. لَا قَدَّرَ اللهُ \"May Allah forbid\"), NEVER factual \"didn't\"!"
       },
-      "columns": ["Meaning", "Particle + Verb Form", "Example (\"go to work\")", "Where You Hear It"],
+      "columns": [
+        "Meaning",
+        "Particle + Verb Form",
+        "Example (\"go to work\")",
+        "Where You Hear It"
+      ],
       "rows": [
         {
           "col1": "<b>Past (\"didn't\") — Form A</b>",
@@ -65,10 +90,21 @@
         "answerEn": "لَمْ + short present OR مَا + past verb (never ✗ لَا + past, which expresses a wish/curse)."
       },
       "triggers": {
-        "patterns": ["negation", "laysa"],
-        "words": ["لَمْ", "لَنْ", "لَيْسَ"],
-        "chapters": [2, 4]
-      }
+        "patterns": [
+          "negation",
+          "laysa"
+        ],
+        "words": [
+          "لَمْ",
+          "لَنْ",
+          "لَيْسَ"
+        ],
+        "chapters": [
+          2,
+          4
+        ]
+      },
+      "audioCue": "Lesson card rule: Past negation uses lam plus short present, or maa plus past verb. Never pair laa with a past verb."
     },
     {
       "id": "verb-tenses",
@@ -81,12 +117,32 @@
       "diagram": {
         "type": "timeline",
         "nodes": [
-          { "era": "⬅ PAST (Suffix at BACK)", "ar": "[ذَهَبْ] + ـتُ", "sub": "dhahab-tu — I went", "tone": "teal" },
-          { "era": "● PRESENT (Prefix at FRONT)", "ar": "أَ + [ذْهَبُ]", "sub": "a-dhhabu — I go", "tone": "blue" },
-          { "era": "➡ FUTURE (سَـ + Present)", "ar": "سَـ + أَ + [ذْهَبُ]", "sub": "sa-adhhabu — I will go", "tone": "amber" }
+          {
+            "era": "⬅ PAST (Suffix at BACK)",
+            "ar": "[ذَهَبْ] + ـتُ",
+            "sub": "dhahab-tu — I went",
+            "tone": "teal"
+          },
+          {
+            "era": "● PRESENT (Prefix at FRONT)",
+            "ar": "أَ + [ذْهَبُ]",
+            "sub": "a-dhhabu — I go",
+            "tone": "blue"
+          },
+          {
+            "era": "➡ FUTURE (سَـ + Present)",
+            "ar": "سَـ + أَ + [ذْهَبُ]",
+            "sub": "sa-adhhabu — I will go",
+            "tone": "amber"
+          }
         ]
       },
-      "columns": ["Person", "Past (suffix on back)", "Present (prefix on front)", "Future (سَـ + present)"],
+      "columns": [
+        "Person",
+        "Past (suffix on back)",
+        "Present (prefix on front)",
+        "Future (سَـ + present)"
+      ],
       "rows": [
         {
           "col1": "<b>I</b> (أَنَا)",
@@ -126,10 +182,21 @@
         "answerEn": "Past = suffix ـتُ (قَرَأْتُ); Present = prefix أَ (أَقْرَأُ); Future = سَـ + present (سَأَقْرَأُ)."
       },
       "triggers": {
-        "patterns": ["tenses", "future"],
-        "words": ["قَرَأْتُ", "أَعُودُ", "أَتَعَلَّمُ", "عَبَدْتُ"],
-        "chapters": [4]
-      }
+        "patterns": [
+          "tenses",
+          "future"
+        ],
+        "words": [
+          "قَرَأْتُ",
+          "أَعُودُ",
+          "أَتَعَلَّمُ",
+          "عَبَدْتُ"
+        ],
+        "chapters": [
+          4
+        ]
+      },
+      "audioCue": "Lesson card rule: Past tense puts the person ending on the back; present puts it on the front; future adds sa to the front of present."
     },
     {
       "id": "price-triplet",
@@ -142,12 +209,29 @@
       "diagram": {
         "type": "lanes",
         "lanes": [
-          { "badge": "💎 ثَمَن (thaman)", "title": "Intrinsic Value / Worth", "desc": "What an item is truly worth or paid for in exchange (Qur'ān & classic prose)." },
-          { "badge": "🏷️ سِعْر (siʿr)", "title": "Market Sticker / Rate", "desc": "The listed shop price, menu rate, or market quote." },
-          { "badge": "🚕 أُجْرَة (ujrah)", "title": "Service Fare / Rent / Wage", "desc": "Payment for transport, labour, or hiring space (never a physical object)." }
+          {
+            "badge": "💎 ثَمَن (thaman)",
+            "title": "Intrinsic Value / Worth",
+            "desc": "What an item is truly worth or paid for in exchange (Qur'ān & classic prose)."
+          },
+          {
+            "badge": "🏷️ سِعْر (siʿr)",
+            "title": "Market Sticker / Rate",
+            "desc": "The listed shop price, menu rate, or market quote."
+          },
+          {
+            "badge": "🚕 أُجْرَة (ujrah)",
+            "title": "Service Fare / Rent / Wage",
+            "desc": "Payment for transport, labour, or hiring space (never a physical object)."
+          }
         ]
       },
-      "columns": ["Word", "Core Nuance", "Natural Spoken / Qur'ānic Frame", "When to Use"],
+      "columns": [
+        "Word",
+        "Core Nuance",
+        "Natural Spoken / Qur'ānic Frame",
+        "When to Use"
+      ],
       "rows": [
         {
           "col1": "<b>ثَمَن</b> (<i>thaman</i>)",
@@ -181,9 +265,17 @@
       },
       "triggers": {
         "patterns": [],
-        "words": ["ثَمَن", "سِعْر", "أُجْرَة"],
-        "chapters": [1, 3]
-      }
+        "words": [
+          "ثَمَن",
+          "سِعْر",
+          "أُجْرَة"
+        ],
+        "chapters": [
+          1,
+          3
+        ]
+      },
+      "audioCue": "Lesson card rule: Use si-ir for a shop price, ujrah for a taxi fare or service fee, and thaman for intrinsic value."
     },
     {
       "id": "pronoun-attachments",
@@ -196,12 +288,29 @@
       "diagram": {
         "type": "lanes",
         "lanes": [
-          { "badge": "ـِي / ـنِي (Me / My)", "title": "1st Person Attachment", "desc": "Noun + ـِي = my (كِتَابِي) · Prep + ـِي = for/with me (لِي / عِنْدِي) · Verb + ـنِي = me (سَاعَدَنِي)" },
-          { "badge": "ـكَ (You — masc.)", "title": "Speaking to a Man", "desc": "Short fatḥah (-a): كَيْفَ حَالُكَ؟ · مَا اسْمُكَ؟ · هَلْ يُمْكِنُكَ؟" },
-          { "badge": "ـكِ (You — fem.)", "title": "Speaking to a Woman (e.g. Saba)", "desc": "Short kasrah (-i): كَيْفَ كَانَ يَوْمُكِ؟ · هَلْ يُمْكِنُكِ؟ (Same spelling, vowel flips!)" }
+          {
+            "badge": "ـِي / ـنِي (Me / My)",
+            "title": "1st Person Attachment",
+            "desc": "Noun + ـِي = my (كِتَابِي) · Prep + ـِي = for/with me (لِي / عِنْدِي) · Verb + ـنِي = me (سَاعَدَنِي)"
+          },
+          {
+            "badge": "ـكَ (You — masc.)",
+            "title": "Speaking to a Man",
+            "desc": "Short fatḥah (-a): كَيْفَ حَالُكَ؟ · مَا اسْمُكَ؟ · هَلْ يُمْكِنُكَ؟"
+          },
+          {
+            "badge": "ـكِ (You — fem.)",
+            "title": "Speaking to a Woman (e.g. Saba)",
+            "desc": "Short kasrah (-i): كَيْفَ كَانَ يَوْمُكِ؟ · هَلْ يُمْكِنُكِ؟ (Same spelling, vowel flips!)"
+          }
         ]
       },
-      "columns": ["Attachment", "Meaning", "Target Sentence", "Key Rule"],
+      "columns": [
+        "Attachment",
+        "Meaning",
+        "Target Sentence",
+        "Key Rule"
+      ],
       "rows": [
         {
           "col1": "Noun + <b>ـِي</b>",
@@ -241,10 +350,24 @@
         "answerEn": "ـكِ (-ki with kasrah) for her; ـكَ (-ka with fatḥah) for him."
       },
       "triggers": {
-        "patterns": ["possessive", "prep-pron", "pronouns"],
-        "words": ["لِي", "يَوْمُكِ", "مُسَاعَدَتِي", "خُذْنِي"],
-        "chapters": [1, 2, 3]
-      }
+        "patterns": [
+          "possessive",
+          "prep-pron",
+          "pronouns"
+        ],
+        "words": [
+          "لِي",
+          "يَوْمُكِ",
+          "مُسَاعَدَتِي",
+          "خُذْنِي"
+        ],
+        "chapters": [
+          1,
+          2,
+          3
+        ]
+      },
+      "audioCue": "Lesson card rule: Attach ee for my, nee after a verb for me, ka when speaking to a man, and ki when speaking to a woman."
     },
     {
       "id": "idafa-vs-adjective",
@@ -257,11 +380,24 @@
       "diagram": {
         "type": "lanes",
         "lanes": [
-          { "badge": "🔑 [No الـ] + [الـ]", "title": "Possession Bridge (إِضَافَة)", "desc": "مِفْتَاحُ الغُرْفَةِ = \"the key OF the room\" (Word 1 is bare; Word 2 takes ـِ kasrah)." },
-          { "badge": "✨ [الـ] + [الـ]", "title": "Noun + Adjective (نَعْت)", "desc": "الغُرْفَةُ الجَدِيدَةُ = \"the new room\" (Adjective comes AFTER noun & mirrors الـ, gender, case)." }
+          {
+            "badge": "🔑 [No الـ] + [الـ]",
+            "title": "Possession Bridge (إِضَافَة)",
+            "desc": "مِفْتَاحُ الغُرْفَةِ = \"the key OF the room\" (Word 1 is bare; Word 2 takes ـِ kasrah)."
+          },
+          {
+            "badge": "✨ [الـ] + [الـ]",
+            "title": "Noun + Adjective (نَعْت)",
+            "desc": "الغُرْفَةُ الجَدِيدَةُ = \"the new room\" (Adjective comes AFTER noun & mirrors الـ, gender, case)."
+          }
         ]
       },
-      "columns": ["Structure", "الـ Pattern", "Arabic Example", "Meaning"],
+      "columns": [
+        "Structure",
+        "الـ Pattern",
+        "Arabic Example",
+        "Meaning"
+      ],
       "rows": [
         {
           "col1": "<b>Possession (إِضَافَة)</b>",
@@ -301,10 +437,20 @@
         "answerEn": "الـ goes ONLY on the second word (الغُرْفَةِ); مِفْتَاحُ stays bare."
       },
       "triggers": {
-        "patterns": ["idafa", "adj"],
-        "words": ["مِفْتَاح", "صِحِّيّ", "فِكْرَة"],
-        "chapters": [3]
-      }
+        "patterns": [
+          "idafa",
+          "adj"
+        ],
+        "words": [
+          "مِفْتَاح",
+          "صِحِّيّ",
+          "فِكْرَة"
+        ],
+        "chapters": [
+          3
+        ]
+      },
+      "audioCue": "Lesson card rule: In possession, only the second word takes al. When an adjective describes a noun, both words match."
     },
     {
       "id": "lookalike-roots",
@@ -317,12 +463,29 @@
       "diagram": {
         "type": "lanes",
         "lanes": [
-          { "badge": "د vs ذ", "title": "أَعُودُ (Return) vs أَعُوذُ (Seek Refuge)", "desc": "Plain د (ع-و-د) = I return home · Dotted ذ (ع-و-ذ) = I seek refuge in Allah (Al-Falaq / An-Nās)." },
-          { "badge": "ج…ز vs ز…ج", "title": "جَوْزَة (Walnut) vs زَوْجَة (Wife)", "desc": "ج leads the crunchy walnut snack (جَوْزَة) · ز leads your spouse/partner (زَوْجَة)!" },
-          { "badge": "ح-ف-ل vs ر-ت-ب", "title": "حَفْلَة (Party) vs أُرَتِّبُ (I Tidy)", "desc": "حَفْلَة shares root with Bengali মাহফিল (mahfil gathering) · أُرَتِّبُ shares root with tartīb (neat order)." }
+          {
+            "badge": "د vs ذ",
+            "title": "أَعُودُ (Return) vs أَعُوذُ (Seek Refuge)",
+            "desc": "Plain د (ع-و-د) = I return home · Dotted ذ (ع-و-ذ) = I seek refuge in Allah (Al-Falaq / An-Nās)."
+          },
+          {
+            "badge": "ج…ز vs ز…ج",
+            "title": "جَوْزَة (Walnut) vs زَوْجَة (Wife)",
+            "desc": "ج leads the crunchy walnut snack (جَوْزَة) · ز leads your spouse/partner (زَوْجَة)!"
+          },
+          {
+            "badge": "ح-ف-ل vs ر-ت-ب",
+            "title": "حَفْلَة (Party) vs أُرَتِّبُ (I Tidy)",
+            "desc": "حَفْلَة shares root with Bengali মাহফিল (mahfil gathering) · أُرَتِّبُ shares root with tartīb (neat order)."
+          }
         ]
       },
-      "columns": ["Word A", "Word B", "Example Sentence", "Memory Hook"],
+      "columns": [
+        "Word A",
+        "Word B",
+        "Example Sentence",
+        "Memory Hook"
+      ],
       "rows": [
         {
           "col1": "<b>أَعُودُ</b> (I return)",
@@ -362,9 +525,19 @@
       },
       "triggers": {
         "patterns": [],
-        "words": ["أَعُودُ", "جَوْزَة", "حَفْلَة", "أُرَتِّبُ", "تَقَبَّلَ الله", "عَبَدْتُ"],
-        "chapters": [4]
-      }
+        "words": [
+          "أَعُودُ",
+          "جَوْزَة",
+          "حَفْلَة",
+          "أُرَتِّبُ",
+          "تَقَبَّلَ الله",
+          "عَبَدْتُ"
+        ],
+        "chapters": [
+          4
+        ]
+      },
+      "audioCue": "Lesson card rule: Plain daal in a-oodu means I return home; dotted dhaal in a-oodhu means I seek refuge in Allah."
     },
     {
       "id": "sadr-vs-qalb",
@@ -380,7 +553,12 @@
         "shield": "🛡️ ذِكْرُ اللهِ (Remembrance of Allah): The instant you remember Allah, الخَنَّاس shrinks back & retreats!",
         "inner": "❤️ القَلْب / الفُؤَاد (al-qalb — Inner Sanctuary / Heart): Seat of īmān — locked to Shayṭān unless the gate is opened."
       },
-      "columns": ["Qur'ānic Term", "Root & Pattern", "Exact Meaning in 113–114", "Spiritual Insight"],
+      "columns": [
+        "Qur'ānic Term",
+        "Root & Pattern",
+        "Exact Meaning in 113–114",
+        "Spiritual Insight"
+      ],
       "rows": [
         {
           "col1": "<b>الْوَسْوَاسِ</b>",
@@ -420,9 +598,20 @@
       },
       "triggers": {
         "patterns": [],
-        "words": ["عُقَد", "غَاسِق", "حَاسِد", "الْخَنَّاس", "الْوَسْوَاس", "صُدُور"],
-        "chapters": [1, 2]
-      }
+        "words": [
+          "عُقَد",
+          "غَاسِق",
+          "حَاسِد",
+          "الْخَنَّاس",
+          "الْوَسْوَاس",
+          "صُدُور"
+        ],
+        "chapters": [
+          1,
+          2
+        ]
+      },
+      "audioCue": "Lesson card rule: In Surah An-Nas, whispers only reach as-sadr, the outer chest, and retreat the moment you remember Allah."
     },
     {
       "id": "requests-and-modals",
@@ -435,13 +624,38 @@
       "diagram": {
         "type": "timeline",
         "nodes": [
-          { "era": "1. Direct Need", "ar": "أَحْتَاجُ إِلَى + [Noun]", "sub": "I need [something]", "tone": "slate" },
-          { "era": "2. Polite Want", "ar": "أُرِيدُ أَنْ + [Verb ـَ]", "sub": "I want to [do]", "tone": "teal" },
-          { "era": "3. Courteous Help", "ar": "هَلْ يُمْكِنُكَ + [Noun]؟", "sub": "Can you / Could you...?", "tone": "blue" },
-          { "era": "4. Pace Control", "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ", "sub": "Speak slowly, please", "tone": "amber" }
+          {
+            "era": "1. Direct Need",
+            "ar": "أَحْتَاجُ إِلَى + [Noun]",
+            "sub": "I need [something]",
+            "tone": "slate"
+          },
+          {
+            "era": "2. Polite Want",
+            "ar": "أُرِيدُ أَنْ + [Verb ـَ]",
+            "sub": "I want to [do]",
+            "tone": "teal"
+          },
+          {
+            "era": "3. Courteous Help",
+            "ar": "هَلْ يُمْكِنُكَ + [Noun]؟",
+            "sub": "Can you / Could you...?",
+            "tone": "blue"
+          },
+          {
+            "era": "4. Pace Control",
+            "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
+            "sub": "Speak slowly, please",
+            "tone": "amber"
+          }
         ]
       },
-      "columns": ["Move", "Frame", "Ready-to-Say Sentence", "Memory Hook"],
+      "columns": [
+        "Move",
+        "Frame",
+        "Ready-to-Say Sentence",
+        "Memory Hook"
+      ],
       "rows": [
         {
           "col1": "<b>State a need</b>",
@@ -480,10 +694,20 @@
         "answerEn": "يُمْكِنُكَ (mumkin) + مُسَاعَدَتِي (my aid); تَكَلَّمْ بِبُطْءٍ (speak with slowness)."
       },
       "triggers": {
-        "patterns": ["an-verb"],
-        "words": ["مُسَاعَدَة", "مُسَاعَدَتِي", "بِبُطْءٍ", "أَحْتَاجُ"],
-        "chapters": [2]
-      }
+        "patterns": [
+          "an-verb"
+        ],
+        "words": [
+          "مُسَاعَدَة",
+          "مُسَاعَدَتِي",
+          "بِبُطْءٍ",
+          "أَحْتَاجُ"
+        ],
+        "chapters": [
+          2
+        ]
+      },
+      "audioCue": "Lesson card rule: Pair ahtaaju with ilaa for I need, ureedu an for I want to, and hal yumkinuka musaa-adatee for can you help me."
     },
     {
       "id": "days-and-clock",
@@ -496,12 +720,32 @@
       "diagram": {
         "type": "timeline",
         "nodes": [
-          { "era": "1 → 5 (Number Roots)", "ar": "الأَحَد (1) · الاِثْنَيْن (2) · الثُّلَاثَاء (3) · الأَرْبِعَاء (4) · الخَمِيس (5)", "sub": "aḥad, ithnān, thalāthah, arbaʿah, khamsah!", "tone": "teal" },
-          { "era": "6. Gathering Day", "ar": "الجُمُعَة (Root ج-م-ع)", "sub": "Same root as اجْتِمَاع (meeting) & مَسْجِد جَامِع", "tone": "blue" },
-          { "era": "7. Rest + Clock Rule", "ar": "السَّبْت · السَّاعَةُ السَّابِعَةُ (7:00)", "sub": "Clock hours match feminine السَّاعَةُ (ordinal -ah)", "tone": "amber" }
+          {
+            "era": "1 → 5 (Number Roots)",
+            "ar": "الأَحَد (1) · الاِثْنَيْن (2) · الثُّلَاثَاء (3) · الأَرْبِعَاء (4) · الخَمِيس (5)",
+            "sub": "aḥad, ithnān, thalāthah, arbaʿah, khamsah!",
+            "tone": "teal"
+          },
+          {
+            "era": "6. Gathering Day",
+            "ar": "الجُمُعَة (Root ج-م-ع)",
+            "sub": "Same root as اجْتِمَاع (meeting) & مَسْجِد جَامِع",
+            "tone": "blue"
+          },
+          {
+            "era": "7. Rest + Clock Rule",
+            "ar": "السَّبْت · السَّاعَةُ السَّابِعَةُ (7:00)",
+            "sub": "Clock hours match feminine السَّاعَةُ (ordinal -ah)",
+            "tone": "amber"
+          }
         ]
       },
-      "columns": ["Day / Time", "Root Connection", "Spoken Sentence", "Meaning"],
+      "columns": [
+        "Day / Time",
+        "Root Connection",
+        "Spoken Sentence",
+        "Meaning"
+      ],
       "rows": [
         {
           "col1": "<b>يَوْمُ الأَحَدِ</b>",
@@ -541,10 +785,22 @@
         "answerEn": "Sunday–Thursday count 1–5 (أحد..خميس); الجُمُعَة = assembly (ج-م-ع); clock hours take feminine ordinals (السَّاعَةِ السَّابِعَةِ)."
       },
       "triggers": {
-        "patterns": ["numbers"],
-        "words": ["الجُمُعَة", "الخَمِيس", "الأَرْبِعَاء", "الثُّلَاثَاء", "السَّابِعَة", "الثَّامِنَة"],
-        "chapters": [4]
-      }
+        "patterns": [
+          "numbers"
+        ],
+        "words": [
+          "الجُمُعَة",
+          "الخَمِيس",
+          "الأَرْبِعَاء",
+          "الثُّلَاثَاء",
+          "السَّابِعَة",
+          "الثَّامِنَة"
+        ],
+        "chapters": [
+          4
+        ]
+      },
+      "audioCue": "Lesson card rule: Sunday to Thursday count one to five, Friday means gathering, and clock hours use feminine ordinal numbers."
     }
   ]
 }

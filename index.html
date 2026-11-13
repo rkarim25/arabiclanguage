@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mweoucqt">
-  <link rel="stylesheet" href="css/style.css?v=mweoucqt">
+  <link rel="stylesheet" href="css/fonts.css?v=mweq1fyc">
+  <link rel="stylesheet" href="css/style.css?v=mweq1fyc">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mweoucqt"></script>
-<script src="js/curriculum.js?v=mweoucqt"></script>
-<script src="js/srs.js?v=mweoucqt"></script>
-<script src="js/match.js?v=mweoucqt"></script>
-<script src="js/errors.js?v=mweoucqt"></script>
-<script src="js/frames.js?v=mweoucqt"></script>
-<script src="js/app.js?v=mweoucqt"></script>
-<script src="js/tracker.js?v=mweoucqt"></script>
-<script src="js/plan.js?v=mweoucqt"></script>
-<script src="js/account.js?v=mweoucqt"></script>
+<script src="js/progress-model.js?v=mweq1fyc"></script>
+<script src="js/curriculum.js?v=mweq1fyc"></script>
+<script src="js/srs.js?v=mweq1fyc"></script>
+<script src="js/match.js?v=mweq1fyc"></script>
+<script src="js/errors.js?v=mweq1fyc"></script>
+<script src="js/frames.js?v=mweq1fyc"></script>
+<script src="js/app.js?v=mweq1fyc"></script>
+<script src="js/tracker.js?v=mweq1fyc"></script>
+<script src="js/plan.js?v=mweq1fyc"></script>
+<script src="js/account.js?v=mweq1fyc"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3228,9 +3228,64 @@ function getChapterBestScore(chapId) {
 }
 
 function getSavedChapterLine(chapId) {
-  const raw = (typeof store !== "undefined" && store.get(`ats-chap-line-${chapId}`)) || localStorage.getItem(`ats-chap-line-${chapId}`);
+  const rawStore = (typeof store !== "undefined") ? store.get(`ats-chap-line-${chapId}`) : null;
+  const raw = (rawStore !== null && rawStore !== undefined) ? rawStore : localStorage.getItem(`ats-chap-line-${chapId}`);
   const num = parseInt(raw, 10);
+  const chapObj = CHAPTERS.find(c => c.id === chapId);
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  if (chapObj && srs) {
+    let anyRated = false;
+    let firstUnheld = -1;
+    const total = (chapObj.sentences && chapObj.sentences.length) || 10;
+    for (let i = 0; i < total; i++) {
+      const ck = `chap:${chapObj.num}:${i}`;
+      const card = srs[ck];
+      if (card && (card.u || card.box != null)) anyRated = true;
+      const held = card && ((card.box || 0) >= 2 || card.b === "never");
+      if (!held && firstUnheld === -1) firstUnheld = i;
+    }
+    if (anyRated) {
+      const srsLine = firstUnheld === -1 ? total - 1 : firstUnheld;
+      if (isNaN(num) || srsLine > num) return srsLine;
+    }
+  }
   return (!isNaN(num) && num >= 0 && num < 10) ? num : 0;
+}
+
+function resolveChapVocabKey(ar) {
+  if (!ar) return ar;
+  return (typeof pageWordKey === "function" && pageWordKey(ar)) || ar;
+}
+
+function lookupChapVocabSrs(ar, srs) {
+  if (!ar || !srs) return null;
+  const canon = resolveChapVocabKey(ar);
+  const cCard = canon ? srs[canon] : null;
+  const rCard = srs[ar] || null;
+  const bare = ar.replace(/[\u064B-\u065F\u0670]/g, "");
+  const bCard = (bare && srs[bare]) ? srs[bare] : null;
+  const candidates = [cCard, rCard, bCard].filter(Boolean);
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => ((b.u || 0) - (a.u || 0)) || ((b.box || 0) - (a.box || 0)));
+  return candidates[0];
+}
+
+function getChapterPracticeSyncStats(chap) {
+  if (!chap || !chap.sentences) return { sentSolid: 0, sentTotal: 10, vocabSolid: 0, vocabTotal: 0 };
+  const srs = (typeof getSrs === "function") ? getSrs() : {};
+  const sentTotal = chap.sentences.length;
+  let sentSolid = 0;
+  for (let i = 0; i < sentTotal; i++) {
+    const c = srs[`chap:${chap.num}:${i}`];
+    if (c && ((c.box || 0) >= 2 || c.b === "never")) sentSolid++;
+  }
+  const vList = typeof getChapterVocabList === "function" ? getChapterVocabList(chap) : [];
+  let vocabSolid = 0;
+  vList.forEach(v => {
+    const c = lookupChapVocabSrs(v.ar, srs);
+    if (c && ((c.box || 0) >= 2 || c.b === "know" || c.b === "strong" || c.b === "never")) vocabSolid++;
+  });
+  return { sentSolid, sentTotal, vocabSolid, vocabTotal: vList.length };
 }
 
 function saveChapterLine(chapId, lineIdx) {
@@ -3340,20 +3395,25 @@ function updateResumeBanner() {
   if (audioNumEl) audioNumEl.textContent = lineIdx + 1;
   updateAudioModeButtons();
 
+  const syncSt = getChapterPracticeSyncStats(curChap);
   if (mastered) {
     if (pillEl) {
       pillEl.innerHTML = "✓ Mastered";
       pillEl.style.background = "#ecfdf5";
       pillEl.style.color = "#059669";
     }
-    if (badgeEl) badgeEl.textContent = `Score: ${bestScore || 100}% · Reviewing Chapter ${curChap.num}`;
+    if (badgeEl) badgeEl.textContent = `Score: ${bestScore || 100}% · ${syncSt.sentSolid}/${syncSt.sentTotal} sentences & ${syncSt.vocabSolid}/${syncSt.vocabTotal} words solid`;
   } else {
     if (pillEl) {
-      pillEl.innerHTML = "🎯 In Progress";
-      pillEl.style.background = "var(--accent-soft)";
-      pillEl.style.color = "var(--accent)";
+      pillEl.innerHTML = syncSt.sentSolid >= 8 ? "🔥 Test Ready" : "🎯 In Progress";
+      pillEl.style.background = syncSt.sentSolid >= 8 ? "#ecfdf5" : "var(--accent-soft)";
+      pillEl.style.color = syncSt.sentSolid >= 8 ? "#059669" : "var(--accent)";
     }
-    if (badgeEl) badgeEl.textContent = `Line ${lineIdx + 1} of 10 · Next: Chapter Test`;
+    if (badgeEl) {
+      badgeEl.textContent = syncSt.sentSolid >= 8
+        ? `${syncSt.sentSolid}/${syncSt.sentTotal} sentences solid via Practice — Ready for Chapter Test!`
+        : `Line ${lineIdx + 1} of 10 · ${syncSt.sentSolid}/${syncSt.sentTotal} sentences & ${syncSt.vocabSolid}/${syncSt.vocabTotal} words solid`;
+    }
   }
 
   if (titleEl) {
@@ -3559,11 +3619,26 @@ function handleSentenceRowClick(event, origIdx) {
 (async () => {
   try {
     loadQuranWordAudio();
-    await Promise.all([
+    const [, , evRes, qcRes, famRes] = await Promise.all([
       fetch("data/verses.json").then(r => r.json()).then(d => { VERSES_DATA = d; }).catch(() => {}),
       fetch("data/chapter-drills.json").then(r => r.json()).then(d => { CHAPTER_DRILLS = (d && d.chapters) || {}; }).catch(() => {}),
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+      fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
       loadFamIdx()
     ]);
+    if (typeof registerWordKeys === "function" && typeof normalizeAr === "function") {
+      const wkMap = {};
+      const addWk = (k, ar) => {
+        if (!k || !ar) return;
+        const n = normalizeAr(ar).replace(/^ال/, "");
+        if (n && !wkMap[n]) wkMap[n] = k;
+      };
+      ((evRes && evRes.groups) || []).forEach(g => (g.members || []).forEach((m, i) => addWk(`ev-${g.id}:${i}`, m.ar)));
+      ((qcRes && qcRes.words) || []).forEach((w, i) => addWk(`qc:${i}`, w.ar));
+      ((famRes && famRes.families) || []).forEach(f => (f.members || []).forEach((m, i) => addWk(`fam-${f.id}:${i}`, m.ar)));
+      registerWordKeys(wkMap);
+    }
   } catch (e) { console.error("Could not load initial data", e); }
 
   const targetChap = getActiveOrNextChapter();
@@ -4105,10 +4180,18 @@ function rateDaySentence(key, g, origIdx) {
   if (typeof origIdx === "number") saveChapterLine(curChap.id, origIdx);
   const nc = SRS.rate(key, g);
   const srsNow = getSrs();
-  (s.words || []).forEach(w => { if (srsNow[w[0]]) SRS.rate(w[0], g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"); });
+  const wg = g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no";
+  (s.words || []).forEach(w => {
+    if (srsNow[w[0]]) SRS.rate(w[0], wg);
+    const canon = resolveChapVocabKey(w[0]);
+    if (canon && canon !== w[0] && (g === "solid" || g === "yes") && !(srsNow[canon] && srsNow[canon].b === "never")) {
+      SRS.rate(canon, "yes");
+    }
+  });
   logEvent({ e: "sentence-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "chapters", t: Date.now() });
   if (typeof autoSync === "function") autoSync();
   SRS.paintBar(document.getElementById("srow-" + origIdx), key, nc);
+  updateResumeBanner();
 }
 
 function voteDaySentence(origIdx, type) {
@@ -4738,11 +4821,7 @@ function getChapterVocabList(chap) {
 
 function getVocabItemWeaknessRank(v, srs) {
   const vote = (typeof getItemVote === "function") ? getItemVote(v.ar) : { vote: 0, score: 0 };
-  let vItem = srs ? srs[v.ar] : null;
-  if (!vItem && srs) {
-    const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
-    if (bare && srs[bare]) vItem = srs[bare];
-  }
+  let vItem = lookupChapVocabSrs(v.ar, srs);
 
   let rank = 2; // unrated default
   if (vote.vote === -1) {
@@ -4774,15 +4853,20 @@ function voteChapVocabWord(encodedAr, type) {
   renderDailySentences();
 }
 
-function gradeChapVocabWord(ar, g) {
-  if (/%[0-9A-Fa-f]{2}/.test(ar)) { try { ar = decodeURIComponent(ar); } catch (e) {} }
-  const nc = SRS.rate(ar, g);                        // ✗ ≈ ✓ ★ → the scheduler sets the date
+function gradeChapVocabWord(keyOrAr, g, rawArOpt) {
+  if (/%[0-9A-Fa-f]{2}/.test(keyOrAr)) { try { keyOrAr = decodeURIComponent(keyOrAr); } catch (e) {} }
+  const rawAr = rawArOpt ? (/%[0-9A-Fa-f]{2}/.test(rawArOpt) ? decodeURIComponent(rawArOpt) : rawArOpt) : keyOrAr;
+  const canonKey = resolveChapVocabKey(rawAr);
+  const nc = SRS.rate(canonKey, g);                  // ✗ ≈ ✓ ★ → syncs canonical word key with Practice & Words!
+  const srsNow = getSrs();
+  if (rawAr !== canonKey && srsNow[rawAr] && !(srsNow[rawAr].b === "never")) SRS.rate(rawAr, g);
   const bucket = SRS.LEGACY_BUCKET[g] || g;
-  logEvent({ e: "vocab-rate", key: ar, bucket, g, s: nc.s, box: nc.box, wordAr: ar, src: "chapter", t: Date.now() });
-  if (typeof syncVoteToBucket === "function") syncVoteToBucket(ar, bucket, { src: "chap-vocab-rate" });
+  logEvent({ e: "vocab-rate", key: canonKey, bucket, g, s: nc.s, box: nc.box, wordAr: rawAr, src: "chapter", t: Date.now() });
+  if (typeof syncVoteToBucket === "function") syncVoteToBucket(rawAr, bucket, { src: "chap-vocab-rate" });
   if (typeof autoSync === "function") autoSync();
   renderChapterVocab();
   renderDailySentences();
+  updateResumeBanner();
 }
 
 function playAllChapVocab() {
@@ -4889,11 +4973,8 @@ function renderChapterVocab() {
       <tbody>
         ${list.map(v => {
           const vote = (typeof getItemVote === "function") ? getItemVote(v.ar) : { vote: 0, score: 0 };
-          let srsItem = srs[v.ar];
-          if (!srsItem) {
-            const bare = v.ar.replace(/[\u064B-\u065F\u0670]/g, "");
-            if (bare && srs[bare]) srsItem = srs[bare];
-          }
+          const canonKey = resolveChapVocabKey(v.ar);
+          let srsItem = lookupChapVocabSrs(v.ar, srs);
           const curBucket = srsItem ? srsItem.b : null;
           const isWeak = vote.vote === -1 || curBucket === "weak" || curBucket === "learning";
           const isStrong = vote.vote === 1 || curBucket === "strong";
@@ -4937,7 +5018,7 @@ function renderChapterVocab() {
                     <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
                     <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
                   </div>
-                  <div class="rate-bar" data-key="${v.ar}">${SRS.rateBarHtml(v.ar, "gradeChapVocabWord", [], { compact: true })}</div>
+                  <div class="rate-bar" data-key="${canonKey}">${SRS.rateBarHtml(canonKey, "gradeChapVocabWord", [encodeURIComponent(v.ar)], { compact: true })}</div>
                 </div>
               </td>
             </tr>

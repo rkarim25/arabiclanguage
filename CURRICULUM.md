@@ -2,8 +2,7 @@
 
 > **Read this before touching `index.html`, `learn.html`, `map.html`, the nav,
 > `data/curriculum.json`, `scripts/gen-curriculum.js` or `js/curriculum.js`.**
-> It is the design contract. `README.md` says what the site *is*; `TEACHER-SYNC.md`
-> says how a live lesson becomes content; this file says how learning is
+> It is the design contract. `README.md` says what the site *is* and how live lessons are ingested; this file says how learning is
 > **structured, proved and paced**.
 
 Designed with Reza in conversation on 2026-08-29, replacing a date-forecast
@@ -79,7 +78,8 @@ Built as a calm **Book Reader** and focused **10-Word Drill** with zero button-c
 | Page | What it is |
 |---|---|
 | `index.html` | **Daily Book Reader & Door.** Single clean spread: 1-click door into today's `Practice` (plus continuation link to `Batch 2 / Batch 3` once daily core is complete), 10 high-frequency chapter sentences, 3–5 Qur'an ayats by ear (Alafasy recitation, root families), conditional grammar, 1-click dynamic AI voice prompt, and 5-min chapter mastery test. |
-| `sentences.html` | **Unified Incremental `Practice` & Master Bank.** Reza's primary one-stop practice workspace (`js/practice.js`). **Batch 1** fulfills the daily core (`10.0` effort units across vocab, sentences, grammar, and Qur'an) AND advances active weekly Chapter sentence lessons. **Batch 2, Batch 3+** continue seamlessly in one place, shifting progressively toward consolidation (~75–85% then ~90–100% review). Every sentence card teaches its underlying grammar rule inline (`cardRule` from `data/grammar.json`), and every batch generates a ready-to-copy **3–5 min AI Speaking Brief (`🗣 Speak Brief`)** tailored to that batch's exact items and slips. |
+| `sentences.html` | **Unified `Practice` Hub & Master Bank.** Reza's primary interface (`js/practice.js`) across all 5 streams (Vocab, Sentences, Qur'an by ear, Grammar, Lesson Cards). Both **teaches unseen items** (`🆕 Teach` mode) and **reviews seen items**, collects live capability data (`📊 Capabilities` / `ats-capabilities`), **auto-syncs bidirectionally** (`Practice.syncVerdict`) with Weekly Chapters (`index.html`), Vocab (`words.html`), and Lesson Cards (`sets.html`), and automatically compensates for audio-only commute sessions (`🚗→📱 Screen Check` + boosted visual Lesson Cards & Grammar). |
+| `audio.html?commute=1` | **Hands-Free Commute `Practice`.** ~13-min eyes-free audio session (`Practice.buildCommuteQueue`) covering proven script, spoken Lesson Card Golden Rules, active Chapter + `myday` sentences (audio Teach-First on unseen lines), Alafasy Qur'an ayahs by ear, and due/weekly vocabulary — capturing live `✓ / ≈ / ✗` and lock-screen `⏭ / ⏮` progress plus crash-safe `ats-commute-live` recovery. |
 | `class.html` | **Supplementary Preply Live Lessons.** Captures Sunday live conversation sessions (Bayna Yadayk Unit 1, Samer flat, Working Day, Trip to the Village) into the master curriculum + **comprehensive untimed mastery test** ($\ge 80\%$) and tailored AI voice prompt. |
 | `words.html` | **10-Word Vocab Drill.** Strict 10-word batch from master vocabulary with audio (continuous/pauses), interval pills (`30d`, `7d`, `2d`, `1d`, `Retire`), `📉 Weakest` filter chip, and 1-click Vocabulary Dossier export. |
 | `sets.html` | **Lesson Cards & Reference Sets.** Houses **Lesson Cards (`بِطَاقَاتُ الدُّرُوسِ` — `data/lesson-cards.json` + `js/lesson-cards.js`)** at the top shelf alongside logical vocabulary sets (days, numbers, directions, family) and the Grammar sub-page. Lesson Cards cover grammar systems, semantic word nuances (`ثَمَن / سِعْر / أُجْرَة`), minimal pairs, conversation systems, and Qur'ān concepts with visual diagrams, clean tables, neural audio, and SRS review bars (`lc:<id>`) — proactively **taught** in `Practice` when unseen and **reviewed from time to time** when due. |

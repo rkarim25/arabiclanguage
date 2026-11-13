@@ -165,4 +165,132 @@ console.log("\n-- Practice: effort equivalence & adaptive behaviour --");
     "buildSpeakingBrief produces a ready-to-paste 3-5 min AI voice brief containing the batch's exact sentences & report block");
 }
 
+// 6. Teach vs Review modes across unseen vs seen items
+{
+  const lcData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "lesson-cards.json"), "utf8"));
+  const LessonCards = require("../js/lesson-cards.js");
+  const lcPool = LessonCards.buildPracticePool(lcData.cards);
+  const srs = {};
+  wordPool.slice(0, 6).forEach(w => { srs[w.key] = { box: 0, s: 0.3, g: "no", u: now - DAY, due: now - 3600000 }; });
+  grammarPool.slice(0, 1).forEach(g => { srs[g.key] = { box: 0, s: 0.4, g: "no", u: now - DAY, due: now - 3600000 }; });
+
+  const b = Practice.buildBatch({
+    now, srs, log: [{ e: "sentence-rate", g: "yes", t: now - DAY }],
+    words: wordPool, sentences: sentencePool, grammar: grammarPool,
+    grammarPatterns: gramData.patterns, lessonCards: lcPool, freq: freqData.words, FreeTry
+  });
+  const newItems = b.list.filter(x => !(srs[x.key] && srs[x.key].u));
+  const revItems = b.list.filter(x => !!(srs[x.key] && srs[x.key].u));
+  yes(newItems.length > 0 && newItems.every(x => x.practiceMode === "teach" && x._autoReveal === true),
+    `unseen Practice items enter in explicit Teach mode (_autoReveal=true across ${newItems.length} unseen items)`);
+  yes(revItems.length > 0 && revItems.every(x => x.practiceMode === "review" && x._autoReveal === false),
+    `seen Practice items enter in Review mode (_autoReveal=false across ${revItems.length} seen items)`);
+}
+
+// 7. Bidirectional Auto-Sync: syncVerdict updates Chapter sentences, line pointer, and canonical + raw vocab keys
+{
+  const chapData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "chapters.json"), "utf8"));
+  const chapPool = [];
+  chapData.chapters.forEach(c => (c.sentences || []).forEach((s, idx) => {
+    chapPool.push({ key: `chap:${c.num}:${idx}`, ar: s.ar, en: s.en, words: s.words || [], src: "chapters", track: "everyday" });
+  }));
+  const memStore = { "ats-srs": { "tw:انا": { box: 0, g: "no", u: now - DAY }, "أَنَا": { box: 0, g: "no", u: now - DAY } } };
+  const mockStore = {
+    get: (k, d) => (k in memStore ? memStore[k] : d),
+    set: (k, v) => { memStore[k] = v; }
+  };
+  const mockRate = (k, g) => {
+    const s = mockStore.get("ats-srs", {});
+    const card = { box: g === "yes" ? 3 : 0, s: g === "yes" ? 7 : 0.2, g, u: now, due: now + (g === "yes" ? 7 * DAY : 600000) };
+    s[k] = card;
+    mockStore.set("ats-srs", s);
+    return card;
+  };
+  const wkMap = { "انا": "ev-people:0" };
+  for (let i = 0; i < 3; i++) {
+    const cs = chapPool.find(x => x.key === `chap:4:${i}`);
+    Practice.syncVerdict({
+      item: { key: `myday:test-${i}`, kind: "sentence", ar: cs.ar, en: cs.en, words: [["أَنَا", "I"]] },
+      grade: "yes",
+      srsApi: { rate: mockRate },
+      getSrs: () => mockStore.get("ats-srs", {}),
+      store: mockStore,
+      chapters: chapData.chapters,
+      wordKeyFor: ar => (ar === "أَنَا" ? wkMap["انا"] : null)
+    });
+  }
+  const srsAfter = mockStore.get("ats-srs", {});
+  yes(srsAfter["chap:4:0"] && srsAfter["chap:4:1"] && srsAfter["chap:4:2"],
+    "syncVerdict cross-syncs practiced sentences onto matching Chapter sentence keys (chap:4:0..2)");
+  yes(mockStore.get("ats-chap-line-chap-4", 0) === 3 && mockStore.get("ats-current-chap-id", "") === "chap-4",
+    "syncVerdict advances active Chapter line pointer (ats-chap-line-chap-4 -> 3)");
+  yes(srsAfter["ev-people:0"] && srsAfter["tw:انا"].box === 3 && srsAfter["أَنَا"].box === 3,
+    "syncVerdict syncs constituent canonical word keys (ev-*), tw:* twins, and Chapter raw-Arabic keys");
+}
+
+// 8. Hands-free Commute Queue + Screen Modality Compensation + Capability Ledger
+{
+  const lcData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "lesson-cards.json"), "utf8"));
+  const LessonCards = require("../js/lesson-cards.js");
+  const lcPool = LessonCards.buildPracticePool(lcData.cards);
+  const chapData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "chapters.json"), "utf8"));
+  const chapPool = [];
+  chapData.chapters.forEach(c => (c.sentences || []).forEach((s, idx) => {
+    chapPool.push({ key: `chap:${c.num}:${idx}`, ar: s.ar, en: s.en, words: s.words || [], src: "chapters", track: "everyday", pattern: s.pattern || "-" });
+  }));
+  const allSents = chapPool.concat(sentencePool);
+  const srs = {};
+  wordPool.slice(0, 6).forEach(w => { srs[w.key] = { box: 1, s: 0.6, g: "maybe", u: now - 2 * DAY, due: now - 3600000 }; });
+
+  const cq = Practice.buildCommuteQueue({
+    now, srs,
+    log: [
+      { e: "chap-test", chap: "chap-1", pass: true, t: now - 10 * DAY },
+      { e: "chap-test", chap: "chap-2", pass: true, t: now - 8 * DAY },
+      { e: "chap-test", chap: "chap-3", pass: true, t: now - 5 * DAY }
+    ],
+    scriptLines: [chapPool[0]],
+    sentences: allSents,
+    freeTrySentences: chapPool.slice(30, 34),
+    lessonCards: lcPool,
+    words: wordPool,
+    homework: new Set([wordPool[8].key])
+  });
+  const cqKinds = new Set(cq.map(x => x.kind));
+  const ruleItem = cq.find(x => x.kind === "rule");
+  yes(cqKinds.has("script") && cqKinds.has("rule") && cqKinds.has("say") && cqKinds.has("quran") && cqKinds.has("word"),
+    `buildCommuteQueue assembles full 5-part hands-free commute (${[...cqKinds].join(", ")})`);
+  yes(ruleItem && ruleItem.enCue && !/[\u0600-\u06FF]/.test(ruleItem.enCue) && ruleItem.arModel,
+    "Commute Lesson Card rule cue uses pure English audioCue (offline neural MP3 safe) + Arabic model");
+
+  // Simulate 3 pocket commute sessions with ungraded pocket-heard words & sentences, 0 screen sessions
+  const unvWord = wordPool[12].key;
+  const unvSent = chapPool[31].key;
+  const commuteHeavyLog = [
+    { e: "chap-test", chap: "chap-1", pass: true, t: now - 12 * DAY },
+    { e: "chap-test", chap: "chap-2", pass: true, t: now - 10 * DAY },
+    { e: "chap-test", chap: "chap-3", pass: true, t: now - 8 * DAY },
+    { e: "commute-done", min: 13, taught: 8, sents: 5, keys: [unvWord], ungradedKeys: [unvWord], sentKeys: [unvSent], ungradedSentKeys: [unvSent], t: now - 3 * DAY },
+    { e: "commute-done", min: 13, taught: 7, sents: 5, keys: [unvWord], ungradedKeys: [unvWord], sentKeys: [unvSent], ungradedSentKeys: [unvSent], t: now - 2 * DAY },
+    { e: "commute-done", min: 13, taught: 9, sents: 6, keys: [unvWord], ungradedKeys: [unvWord], sentKeys: [unvSent], ungradedSentKeys: [unvSent], t: now - 4 * 3600000 }
+  ];
+  const compBatch = Practice.buildBatch({
+    now, srs, log: commuteHeavyLog, words: wordPool, sentences: allSents,
+    grammar: grammarPool, grammarPatterns: gramData.patterns, lessonCards: lcPool, freq: freqData.words, FreeTry
+  });
+  yes(compBatch.diag.commuteHeavy && compBatch.diag.commuteDebt,
+    "diagnose detects heavy commute streak + unverified pocket items (commuteHeavy & commuteDebt = true)");
+  const verifyHits = compBatch.list.filter(x => x.practiceMode === "commute-verify");
+  yes(verifyHits.some(x => x.key === unvWord) && verifyHits.some(x => x.key === unvSent),
+    `Screen Practice automatically pulls pocket-heard commute words & sentences for visual Screen Check (${verifyHits.length} verified)`);
+  yes(compBatch.counts.lessonCard === 1 && compBatch.counts.grammar >= 1,
+    `Screen Practice compensates for audio-only commutes by guaranteeing visual Lesson Card (${compBatch.counts.lessonCard}) & Grammar vowel check (${compBatch.counts.grammar})`);
+
+  const caps = Practice.summarizeCapabilities({
+    now, srs, log: commuteHeavyLog, words: wordPool, sentences: allSents, grammar: grammarPool, lessonCards: lcPool
+  });
+  yes(caps.modality.commuteHeavy && caps.gaps.some(g => /commute/i.test(g)) && caps.concepts.lessonCardsTotal === lcPool.length,
+    "summarizeCapabilities tracks honest capability breakdown & flags unverified commute gaps");
+}
+
 console.log(`\n✓ ${passed} Practice assertions passed.\n`);

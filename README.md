@@ -1,205 +1,77 @@
-# Arabic Through Stories — العربية بالقصص
+# Arabic Learning Platform — `rkarim25/arabiclanguage`
 
-**Live site:** https://rkarim25.github.io/arabiclanguage/
-**Owner:** Reza (rkarim25 / rkarim88@gmail.com) · **Maintainer:** Claude (any chat session)
-**Learners (2026-07-15):** **Reza Karim** (rkarim88@gmail.com, standard) and **Saba Khan** (sabatarif.15@gmail.com, beginner) — separate cloud data, SRS, and personal coach notes; shared site content. `PROFILES` in `js/app.js` maps email → name/level. **Conflict rule:** one user's request must never degrade the other's experience — beginner material for Saba is ADDED (new clusters/levels), never swapped in over existing content.
+**Live Site:** https://rkarim25.github.io/arabiclanguage/  
+**Learners:** **Reza Karim** (`rkarim88@gmail.com`) and **Saba Khan** (`sabatarif.15@gmail.com`) — separate Cloudflare KV stores, SRS histories, and personal coach notes on shared static infrastructure. **Additive-only conflict rule:** changes for one learner never remove, reorder, or degrade content relied on by the other.
 
-**▶ Starting a new session? Read `HANDOVER.md` first** — current state, what changed last, and what to do next.
+> **New session?** Read [`HANDOVER.md`](HANDOVER.md) first for current architecture and live state, and [`CURRICULUM.md`](CURRICULUM.md) before changing milestone/level rules.
 
-This README is the canonical guide. A chat session should be able to operate the whole project from this file, the `/arabic-coach` skill, `TEACHER-SYNC.md` (the lesson-capture loop) and **`CURRICULUM.md`** (milestones, lessons, chunks and proof).
+---
 
-> **⚠️ Read `CURRICULUM.md` before changing the home page, the nav, or anything about milestones, lessons or tests.**
-> Since **2026-08-29** the site is called **Arabic** and is organised around a **milestone ladder**, not a forecast:
-> a MILESTONE is a capability ("you can order food and ask the price"), made of LESSONS (one thing to master, each with
-> its own test section), made of ~5-minute CHUNKS with due reviews folded in. Two tracks (Qur'an by ear, Conversation)
-> each carry a CEFR level. **Nothing is mastered without scoring 80 on its test**, and a test never re-asks what is
-> already proved unless re-verification is due. Words and sentences held are shown as the raw-material inventory.
-> Weeks survive only as a quiet pacing line. Nav is four links; the home page has one Continue button.
-## Mission & hard rules
+## 1. Mission & Design Rules
 
-Reza's dual goal, in the shortest possible time:
-1. **Understand the Quran as it is recited** (primary)
-2. **Converse in Arabic** (MSA)
+**Reza's Ranked Goals:**
+1. **Understand the Qur'ān by ear** (Reciter: **Mishary Rashid Alafasy** — never robotic TTS for Qur'ān).
+2. **Converse naturally in Modern Standard Arabic (MSA).**
 
-Non-negotiable design rules (learned from Reza's feedback — do not violate):
-- **Frequency-first**: never teach words he'll rarely meet. Every new vocab item must be high-frequency (Quranic corpus or daily speech).
-- **Curated root word system**: teach common words from roots carefully, linked in vocabulary and word-by-word via clean popover/drawer (`🌿 root`), avoiding visual clutter.
-- **Book-like reading spread**: minimal symbol badges (`🔊`, `🌐`, `🧩`, `🔤`) with hover tooltips docked on the margin. English and transliteration sit in the same row as Arabic on desktop, wrapping cleanly below on narrow/mobile viewports.
-- **Practice modes with weakest sort**: vocabulary and sentence tables feature Practice Mode (`[All]`, `[Arabic Prompt]`, `[English Prompt]`) and a `[📉 Weakest First]` pill to prioritize struggle items (`1d` / `2d` / recent slips).
-- **Minimal clicking**: tables and fill-a-column checking, not flashcards. Interval rating buttons (`30d`, `7d`, `2d`, `1d`, `Retire`). The words "Strong" and "Medium" are never displayed on the UI.
-- **Practical grammar only**: patterns taught through known verses and known sentence frames with a 1-minute test — no paradigm tables to memorize.
-- **Zero maintenance for Reza**: he studies; Claude generates content, analyzes, deploys. Data flows automatically.
-- **Mobile-friendly**: he studies on his phone; keep pages responsive (media queries in `css/style.css`).
+**Core Design Principles:**
+- **Unified `Practice` as Primary Hub (`sentences.html` + `js/practice.js`):** One adaptive daily workspace that **both teaches unseen material** (`🆕 Teach` mode) and **reviews seen material** across all 5 streams (**Vocabulary, Sentences, Qur'ān by ear, Grammar, and Lesson Cards**), tracks granular capability data (`📊 Capabilities`), and **auto-syncs bidirectionally** with Weekly Chapters (`index.html`), Vocabulary (`words.html`), and Lesson Cards (`sets.html`).
+- **Hands-Free Commute `Practice` + Screen Compensation (`audio.html?commute=1`):** ~13-minute hands-free audio session for drives/walks, paired with automatic **Screen Modality Compensation** on normal `Practice` sessions (`🚗→📱 Screen Check` + boosted visual Lesson Cards & Grammar vowel checks when commute sessions accumulate).
+- **Visual Lesson Cards (`sets.html` + `data/lesson-cards.json`):** Structured mental-map cards with diagrams (`timeline`, `lanes`, `fortress`), neural audio comparison tables, trap warnings, and Quick Checks — shelved on `sets.html`, proactively taught at `#1` in `Practice`, and spaced-reviewed via SRS (`lc:<id>`).
+- **Calm Book-Like Spreads & Zero Backlog Dread:** Minimal margin symbol docks (`🔊`, `🌐`, `🧩`, `🔤`), 10-word vocab batches with exact interval pills (`30d`, `7d`, `2d`, `1d`, `Retire` — never "Strong"/"Medium" labels), curated root families (`🌿 root`), and pre-generated natural neural voices (`ar-SA-HamedNeural` & `en-GB-RyanNeural`).
 
-## Site map
+---
 
-| Page | What it does |
+## 2. Site Map
+
+| Page | Purpose |
 |---|---|
-| `index.html` | **Daily Book Reader.** Single clean spread: 10 high-frequency sentences (with audio, Practice Mode, and `📉 Weakest First`) + 3–5 Qur'an ayats by ear (word-by-word hover, Alafasy recitation) + conditional grammar + 1-click dynamic AI voice prompt + 5-min test. |
-| `class.html` | **Preply Lessons.** Live Sunday teacher classes (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, Class Vocabulary with interval buttons & `📉 Weakest First`, Class Sentences with Practice Mode & `📉 Weakest First`) + **comprehensive untimed mastery test** ($\ge 80\%$). |
-| `words.html` | **10-Word Vocab Drill.** Strict 10-word batch from master vocabulary with audio (continuous/pauses), interval pills (`30d`, `7d`, `2d`, `1d`, `Retire`), `📉 Weakest` filter chip, and 1-click Vocabulary Dossier export. |
-| `sentences.html` | **Sentences Library & Drill.** Full inventory of sentence frames, tense filters (past/present/future), and `📉 Weakest` filter chip prioritizing struggle words. |
-| `grammar.html` | **Grammar Reference.** Ordered list of grammar patterns and structural rules. |
-| `more.html` | Cloud sync card, backup, and legacy utilities. |
+| `sentences.html` | **Unified `Practice` Hub & Master Sentence Bank.** Primary workspace (`Batch 1` Daily Core + Weekly Chapter sentences → `Batch 2` / `Batch 3+` review consolidation), `🆕 Teach` & `🚗→📱 Screen Check` modes, inline grammar rules, `📊 Capabilities` ledger, built-in `🗣 Speak Brief`, and `🚗 Commute` launcher. |
+| `audio.html?commute=1` | **Commute `Practice` & Audio Coach.** ~13-min hands-free session (proven script → spoken Lesson Card rule → active Chapter & `myday` sentences → Alafasy Qur'ān by ear → due/weekly vocab), live `✓ / ≈ / ✗` & lock-screen `⏭ / ⏮` grading, crash-safe `ats-commute-live` recovery. |
+| `index.html` | **Daily Reader & Chapter Spreads.** 1-click door into `Practice` / `Commute`, 10-chapter curriculum spread (auto-synced with `Practice` line pointer & `🔥 Test Ready` status), Qur'ān ayahs by ear, 3-rung `🎯` variation drills, dynamic AI Voice Prompt, and 5-min Chapter Mastery Test (`≥ 80%`). |
+| `sets.html` | **Lesson Cards & Logical Reference Sets.** Top shelf houses visual **Lesson Cards** (`#lc-<id>`) with SRS review bars, followed by logical thematic sets (days, numbers, directions, family) and link to Grammar. |
+| `words.html` | **10-Word Vocab Drill & Master Vocabulary.** Strict 10-word batches, continuous/paused audio, interval rating pills, `📉 Weakest` filter, and live Learner Dossier export. |
+| `class.html` | **Preply Live Lessons.** Captures supplementary Sunday 07:00 UK classes (passages, vocab, sentences) + untimed comprehensive mastery test (`≥ 80%`). |
+| `grammar.html` | **Grammar Spine.** 22 practical grammar patterns with inline rules (`cardRule`) and self-checks. |
+| `more.html` | **Cloud Sync, Diagnostics & Backup.** Cloudflare Worker sign-in/sync, mic sweep, and JSON export. |
 
-**Typing (all writing surfaces):** `mountTranslitDock(getTarget)` in app.js gives every answer box a live Latin→Arabic typing box — type transliteration, Arabic appears in real time (mobile-safe `input` event + `latinToArabic`). Auto-opens on Sentences/Grammar/Milestone tests; Story Write & Vocab Produce use it too. `LATIN_TO_AR` is forgiving: `aa`=ا, Arabizi numerals (2/5/6/7/9), long vowels (ee/ii/oo/uu). **Answer matching is lenient:** `arMatch` forgives tashkeel, ة/ه & hamza-seat slips, spacing, and one typo in words ≥5 letters; `fuzzyEn` accepts English typos and stems. Only Arabic fields (`fill-input`/`dir=rtl`) transliterate — English-meaning fields are untouched.
+---
 
-Shared code: `js/app.js` (manifests, SRS + `gradeCard`, TTS + recitation audio, `latinToArabic` + `mountTranslitDock`, `resolveCards`, `suggestNext`, `arMatch`/`fuzzyEn`/`editDist`, `renderNav`, `PROFILES`/`whoami`, mnemonics `mnemFor`/`mountMnem`, `mountBucketBar`, `noteWordTap` tap-to-review, `mountNotePen`, SW registration), `js/tracker.js` (event log, active-time, cloud sync, `weakSpots`, `activeMinutes`).
+## 3. Data & SRS Key Namespaces
 
-**Tap-to-review (`noteWordTap`)**: any word tapped for help ≥3 times quietly joins the Review deck — story Read + Quiz taps become `tw:<norm>` cards (content in `ats-tapwords`, synced in the payload), Quran word taps seed the exact `qw:` card. Logs `tapseed`.
+Stored in `localStorage` and synced via `js/tracker.js` (`_mergeRemoteState` safe merge — never last-writer-wins) to Cloudflare Worker `https://arabic-sync.rkarim88.workers.dev` (KV namespace `9532d5717021486a92f75efb6d7b8a94`):
 
-**✏️ Note to coach (`mountNotePen`)**: a floating pen on every page opens an open-format note box. Saved as a `note` log event `{text, ctx:{url,title,view,sel}, user}` — ctx captures what the learner was looking at (page, headings, selected text). Synced with everything else; the nightly coach reads every new note, acts on it, and acknowledges it in that user's dashboard coach note. This is the learners' direct channel to the AI.
+- `chap:<num>:<i>` — Weekly Chapter sentences (`data/chapters.json`).
+- `lc:<id>` — Visual Lesson Cards (`data/lesson-cards.json`).
+- `ev-<group>:<i>` — Everyday vocabulary clusters (`data/everyday.json`).
+- `qc:<i>` — Qur'ān Core top frequency lemmas (`data/quran-core.json`, **append-only**).
+- `qw:<surah>:<v>:<w>` / `s:q:<ref>` — Qur'ān word-by-word & ayah units (`data/verses.json`, `data/sentence-bank.json`).
+- `fam-<id>:<i>` — Triconsonantal root family words (`data/families.json`).
+- `ph-<group>:<i>` — Conversational phrase deck (`data/phrases.json`, **append-only**).
+- `story-NN:<i>` — Reading passage vocabulary (`data/story-NN.json`).
+- `gt:<patId>:<i>` — Grammar pattern checks (`data/grammar.json`).
+- `tw:<norm>` — Tap-to-review words adopted onto canonical keys via `registerWordKeys()` + `data/aliases.json`.
+- `ats-capabilities` — Live capability summary written by `Practice.summarizeCapabilities()`.
 
-**📷 Photos on a note** (2026-08-05, his ask): paste, drag, or pick images in the note box — a lesson page, a worksheet, a book. `shrinkImage()` re-encodes to ≤1400px JPEG (~200KB) in a canvas, `uploadNoteImage()` PUTs each to the Worker's `POST /image`, and the note event carries only `imgs:[id,…]`. **The bytes never enter the log blob** — that blob is rewritten on every sync, so an image inside it would make every future sync tens of times heavier. They live at KV `img:<email>:<id>` (metadata `{type,bytes,at}`, 180-day TTL) and only the owning session can read one back (`GET /image?id=`, key namespaced by the session's email). Upload happens *before* the note is logged, so a failure never leaves a note pointing at nothing — the box keeps your text and says to press send again. Max 6 per note; Send waits on any photo still being shrunk. The nightly coach treats them as a TEACHER-SYNC lesson dump.
+---
 
-**🔁 Conjugation strip** (`mountConjRows`, 2026-08-05, his ask — "I still don't see words with conjugations"): every verb row in the Core table, the cluster/family tables and the story word-lists gets a line underneath showing **past · present · future**, with all 8 persons one tap away (logs `conj-open`). Matching is **vowel-exact** (`conjLookupStrict`) — the bare skeleton كتب is both كَتَبَ "he wrote" and كُتُب "books", and a strip that mislabels a noun as a verb teaches an error. On story pages the strips hide while self-test is on, since they carry English.
+## 4. Content Pipelines & Build Commands
 
-**Offline (PWA):** `sw.js` — network-first with cache fallback. **HTML navigations are fetched with `cache:"reload"` to bypass the browser's HTTP cache** (GitHub Pages sets a max-age on HTML; without this a deploy looked stale for a while and pulled stale `?v=` assets — the "I don't see my update" bug, fixed 2026-07-12). Versioned js/css/json cache normally; works offline from the last good copy. `scripts/bump-version.js` stamps the sw cache name every deploy so old caches retire. **After a deploy, an already-open device self-heals within ~2 visits (new SW installs, then a reload gets fresh HTML); a hard refresh forces it immediately.** `manifest.webmanifest` + `icons/` enable "Add to Home Screen".
+### Sunday Preply Lesson Ingestion
+When Reza shares notes/photos from Sunday's live class:
+1. Add vocabulary to `data/everyday.json` (`source: "teacher"`, `lesson: "<label>"`).
+2. Add ≤7-word sentences to `data/prompts.json` / `data/sentence-bank.json` and reading passage to `data/story-NN.json` (plus `STORY_LIST` in `js/app.js` and `CORE` in `sw.js`).
+3. Add any system-level grammar/nuance contrast to `data/lesson-cards.json` (including pure-English `audioCue`).
+4. Run generators in order:
+   ```powershell
+   node scripts/gen-classes.js
+   node scripts/gen-curriculum.js
+   node scripts/gen-sentences.js
+   node scripts/gen-lexicon.js
+   python scripts/gen-audio.py
+   node scripts/bump-version.js
+   ```
+5. Read-Modify-Write `coach:rkarim88@gmail.com` in KV (never drop `week` or `homework`).
 
-## Data model
-
-All localStorage, synced to the cloud (see Infrastructure). Payload: `{progress, srs, tapwords, log, savedAt}`:
-- `ats-progress` — `{ "<unitId>": { steps: { <step>: true } } }`. Unit ids: `story-NN`, `fam-<id>` (step `fill`), `q-<surahId>` (steps `study`/`test`), `gr-<patternId>` (step `test`).
-- `ats-tapwords` / `ats-tapcounts` — tap-to-review: content for `tw:` cards (synced) and local tap counters. `ats-email` — who is signed in (drives `whoami()` personalization).
-- `ats-srs` — Leitner boxes: `{ "<cardKey>": { box: 0-5, due: epochMs, b?: bucket } }`. Intervals: 1d / 2d / 7d / 14d / 30d; `b` is an explicit user bucket mark — `strong` (30d) / `medium` (7d) / `weak` (2d) / `learning` (1d) / `never` (due=year 2100, excluded from rotation). UI buttons display exact intervals (`30d`, `7d`, `2d`, `1d`, `Ret.`) without qualitative label text. Auto-grading advances boxes automatically.
-- `ats-log` — append-only event log (schema in `ANALYSIS.md` in the `rkarim25/arabic-learning-data` repo).
-- `ats-session` / `ats-token` / `ats-gclient` — Google session, GitHub PAT fallback, pasted Google client ID.
-
-**SRS card keys** (resolved to content by `resolveCards()` in app.js):
-- `story-NN:<i>` → `data/story-NN.json` `.vocab[i]`
-- `fam-<id>:<i>` → `data/families.json` family member
-- `ev-<id>:<i>` → `data/everyday.json` everyday-cluster member
-- `qc:<i>` → `data/quran-core.json` `.words[i]` — **append-only: never reorder or delete entries**
-- `qw:<surahId>:<v>:<w>` → `data/verses.json` verse word
-- `gt:<patternId>:<i>` → `data/grammar.json` pattern test item (grammar chunk recognition; seeded on a passed grammar test)
-- `tw:<normalized-ar>` → `ats-tapwords` (local, synced via payload `tapwords`) — seeded by `noteWordTap` when a word is tapped ≥3×
-
-**Non-SRS data:** `data/sentences.json` (Sentence Practice verb bank) and `data/conversations.json` (Converse scenarios) drive practice + logging, not SRS cards. **Lesson tags:** lesson-sourced content carries `source:"teacher"` + a free `lesson:"<label>"` (see `TEACHER-SYNC.md`); the 🎓 Lessons tab groups everyday clusters by that label.
-
-**Sync safety:** `_mergeRemoteState()` in tracker.js merges remote srs/progress into local BEFORE every push (higher box wins; an explicit local bucket mark is kept as latest intent; `never` always wins; progress steps union). This prevents a fresh device or an evicted localStorage from wiping the cloud copy. Never revert sync to last-writer-wins.
-
-## Content pipelines (how Claude adds material)
-
-- **Lesson capture (the main loop):** Reza dumps images of *any* lesson — any book, notes, worksheet; vocab or grammar or dialogue. Claude reads them, routes each part to the right structure below, tags it `source:"teacher"` + `lesson:"<label>"`, deploys. Full spec: **`TEACHER-SYNC.md`**. This is not tied to any one book.
-- **Surah lessons**: `node scripts/gen-surah.js <numbers...>` — generates word-by-word lessons (Arabic, translit, gloss, grammar note, root per word) from Reza's Quran-Project dataset at `C:\Users\Reza Karim\OneDrive\Quran-Project\docs\data` (`ai_wbw/surah_N.json`, `ai_translations/`; all 114 surahs available; override path with env `QURAN_DATA`). Add a `META` entry (id/name/nameEn/why) in the script for each new surah, **and add it to `QURAN_SURAHS` in `js/app.js` — this step was once forgotten (commit 3a5afe4 added 3 surahs to verses.json only), which silently hides them from What-now, milestones, and the listen queue. Treat gen-surah + QURAN_SURAHS as one atomic change.** Done: 1, 97, 103, 105, 106, 108-114 + Ayat al-Kursi (verse ranges like `2:255` work via RANGE_META — id `kursi`). Recommended next: 93, 94, 99-104 (rest of the common short surahs). Memorized-first: Reza knows Fatiha + a few short ones by heart, so surahs already in his memory are the highest-value lessons. The "salah fully understood" long-view bar is PINNED to `SALAH_SURAH_IDS` (7 surahs) — new lessons must never move that goalpost.
-- **Quran core words**: append to `data/quran-core.json` toward the top ~300 lemmas, keeping frequency order among *new* entries (existing indices frozen).
-- **Curated Root Families**: add roots to `data/roots.json` with root letters, English core meaning, and common derivations. Run `node scripts/gen-lexicon.js` to compile into `data/lexicon.json` and `js/lexicon.js` (`famLookup`). Tapping `🌿 root` expands related derivations in-place across word-by-word and vocabulary without cluttering the main reading view.
-- **Everyday clusters** (speaking goal): add to `data/everyday.json` + `EVERYDAY_LIST` in `js/app.js`. Linked groups (theme or root) of high-frequency daily words; Vocab Learn interleaves them 5+5 with new Quran-core words. Members may carry a `hear` field (`"وين؟ — wēn"`) = the Hijazi street form rendered as a 🗣 line in study tables — use sparingly, Umrah-critical phrases only.
-- **Stories**: `data/story-NN.json` (follow story-01 schema exactly — sentences carry per-word gloss arrays `words`; all vocab needs `ar`/`en`/`tr`) + entry in `STORY_LIST` in `js/app.js` + add the file to `CORE` in `sw.js`. Live: 6 L1 stories (01-03 narratives, 04 Friday/masjid, 05 restaurant DIALOGUE, 06 The Teacher Session — weaves lesson vocab). Curriculum decision (2026-07-04): from Level 2 on, roughly half the slots are scenario DIALOGUES (bargaining, pharmacy, directions) and khutbah-style monologues rather than narratives; keep recycling weak vocab and Quranic structures.
-- **Grammar patterns**: `data/grammar.json` + `GRAMMAR_LIST` inside `suggestNext()` in `js/app.js`.
-- **Conjugations**: never hand-write the 16 forms. Add a spec (`past3`, `pres3`, plus `pastC` for hollow/doubled verbs) to `scripts/new-verbs.js`, then `node scripts/gen-conj.js --write`. The rules are proved by `node scripts/gen-conj.js --check`, which regenerates every verb already in the file and must report **0 unexplained mismatches** — run it after any change. Genuinely irregular verbs (weak-lām, hamza-final hollow) carry an explicit table in the spec and are checked by `audit()` instead. 82 verbs live. Diacritic convention in this data: the short vowel is written *before* any shadda, and a hamza takes its seat from the vowel it carries (ؤ before damma, ئ before kasra).
-- **Sentence Practice verbs**: append to `data/sentences.json` `verbs[]` (already frequency-ordered) — each needs `root`/`base`/`past`, an `obj{ar,en}`, and `forms` for ana/nahnu/hum × past/pres/fut. **Verify every conjugation** (reuse the hand-checked set in grammar.html's `VE_VERBS`).
-- **Conversation scenarios**: append to `data/conversations.json` `scenarios[]` — `{id, titleEn, titleAr, clusters[] (existing everyday ids), goal, opener, openerTr, success}`. The briefing pulls the clusters' words as target vocab.
-- **Mnemonics**: add to `data/mnemonics.json`, keyed by normalized/al-stripped Arabic (`mnemFor()` in vocab.html; a first-word fallback covers phrases). The vocab 💡 toggle reveals it. **HARD RULE: only add a mnemonic if it's RIDICULOUS but NOT tenuous** — a strong, obvious sound/meaning hook drawing on Reza's English AND Bengali (Bengali shares many Perso-Arabic loanwords: রসূল, কিতাব, নজর, আজান, রহিম…). **Most words should have NO mnemonic — never force a weak/tenuous one.** Grow the file as his vocabulary grows.
-
-- **Audio & Reciter Engine (`scripts/gen-audio.py`, `js/app.js`):**
-  - **Favourite Qari (Mishary Rashid Alafasy):** All Quran recitation uses Reza's favourite Qari, **Mishary Rashid Alafasy** (full surah/ayah streams from `everyayah.com/data/Alafasy_64kbps/`, word-by-word clips from `audio.qurancdn.com/wbw/` mapped in `data/quran-word-audio.json`). Ayat and Quran words are never synthesized with robotic TTS.
-  - **Natural Everyday Voices:** All high-frequency sentence frames, chapter lessons, and vocabulary are pre-generated using natural neural TTS (`ar-SA-HamedNeural` for clear Saudi MSA; `en-GB-RyanNeural` for British English) via `scripts/gen-audio.py` into `audio/ar/` and `audio/en/` with hashes mapped in `data/audio-manifest.json`. Browser speech synthesis is strictly an offline fallback and automatically ranks natural Saudi MSA neural voices highest.
-
-- **AI Voice Prompts & Learner Context Dossier (`LEARNER_CONTEXT.md`):**
-  - **Variation-First Voice Prompts:** 1-click prompts on `index.html` and `class.html` dynamically list the unit's 10 target sentences (or class dialogue lines) and command ChatGPT / Claude Voice Mode to drill natural variations (swapping nouns, pronouns, numbers, question forms) in short turns (max 2 sentences, full vowels/tashkeel, gentle correction).
-  - **Learner Context Dossier:** A comprehensive, attachable/exportable Markdown document (`LEARNER_CONTEXT.md`) defining Reza's active vocabulary, master progress, and pedagogical boundaries. The site includes 1-click buttons (`📄 Copy Learner Dossier`) that dynamically read live local storage and serialize up-to-the-minute progress into Markdown so AI tutors never drift into unknown vocabulary or colloquial dialects.
-
-- **Interaction Telemetry & Motivation Engine (`js/tracker.js`, `js/account.js`):**
-  - Tracks every rating (`vocab-rate`), test question miss/hit (`test-item`), sentence drill, and audio play into `ats-log`, with instant auto-sync.
-  - On-device engine analyzes streaks, study minutes, and test slips to fast-track missed items into 10-word drills and display dynamic motivational headlines and high-yield next steps in the Coach's Note.
-
-Deploy = **run `node scripts/bump-version.js` first** (stamps `?v=` on js/css includes AND the `sw.js` cache name — prevents fresh-HTML/stale-script cache skew and retires old offline caches), then commit + push to `main`; GitHub Pages publishes in ~1 minute. Verify with `curl -s -o /dev/null -w '%{http_code}' <url>`.
-
-## Infrastructure
-
-- **Site repo**: `rkarim25/arabiclanguage` (this repo) → GitHub Pages from `main`.
-- **Sync Worker**: `arabic-sync` at https://arabic-sync.rkarim88.workers.dev (source: `worker/`; deploy: `cd worker && npx wrangler deploy`). Endpoints: `/config`, `/login-pw` (email + per-user sync code), `/login` (Google ID token → 180-day session), `/data`, `/sync`, `/coach`. **Multi-user:** allowed emails in `worker/wrangler.toml` `ALLOWED_EMAILS` (currently Reza + Saba); each user's code hash at `auth:pwhash:<email>` = sha256("arabic-sync-v1" + code) (legacy `auth:pwhash` still honored for Reza). To add a user: extend ALLOWED_EMAILS + `PROFILES` in js/app.js, hash a code, PUT it, deploy worker. CORS pinned to the Pages origin.
-- **Storage**: Cloudflare KV namespace `9532d5717021486a92f75efb6d7b8a94` (binding `ARABIC_SYNC`). Per-user keys: `data:<email>` (the learning payload `{progress,srs,tapwords,log,savedAt}`), `coach:<email>` (dashboard coach notes `{updated,note,focus[]}` — personally addressed), `coach-state:<email>` (email throttle `{lastEmail,pendingQuestion}`), plus `auth:pwhash:<email>`, `config:clientId`, `session:*`.
-- **Fallback / private data store**: private repo `rkarim25/arabic-learning-data` — `learning-data.json` (GitHub-PAT sync fallback), `coach.json`, `ANALYSIS.md` (event schema + analysis guide), **`learner-profile.md`** (who Reza is as a learner — 37, limited time, tiredness barrier, etc.; the coach reads and evolves it), and `snapshots/`.
-- **Automated coaching + email**: a nightly scheduled task (`arabic-coach-nightly`, on his machine ~02:00) runs the coach loop unattended — reviews goals-vs-usage, optimises his time, refreshes the dashboard note, may add safe content, and **emails him at most weekly, only when it helps** (via Gmail; from/to rkarim88@gmail.com; subject "[Arabic Coach]"). Big/structural changes it proposes by email rather than deploying.
-- **Auth available to Claude sessions**: `gh` CLI (account rkarim25) and `wrangler` (OAuth, account 3554b8ca31b3e9df1709eca7448169aa) are both logged in on Reza's machine.
-- **Reza's one-time setup (may still be pending)**: Google OAuth client ID creation + sign-in on the dashboard. Until done, his data stays in-browser and there is nothing to analyze.
-
-## Analysis honesty notes
-
-- **Minutes**: use interaction-timestamp chaining (what `activeMinutes()` does — gaps ≤3 min chain, isolated events ≈30 s), NOT sums of `time` events. `time` events logged before 2026-07-04 predate idle detection and are inflated (a left-open tab once logged 10+ hours on vocab:list).
-- **Listening**: `rlisten` (a surah fully played in real recitation) and `listen-click` events are the listening record; `sheet` events with `mode:"ears"` are audio-recognition tests — track their accuracy separately from text modes, the gap between text% and ears% is the real "understand as recited" measure.
-
-## The progress model — the bedrock (2026-08-06; SKILL AXIS 2026-08-07)
-
-Reza's own framing, which the site now measures directly: a goal is a basket of
-items whose memory **decays between reviews** — a line that rises when he studies
-and sags when he doesn't. Since 2026-08-07 the charts plot **the skills, not word
-retention** (his ask): the Quran panel is **listening** — salah stage = % of
-recitation words caught by ear (target 90%; he recites the text daily, so
-catching the words ≈ understanding); later stages use the coverage→comprehension
-curve (van Zeeland & Schmitt; target 70%) — and the conversation panel is
-**speaking** — the share of the Umrah set deployable in speech (target 70%).
-Retention is still the engine underneath.
-
-- **`js/progress-model.js`** — the ONE copy of the maths. Per-card recall
-  `p = 2^(−elapsed/halflife(box))`, calibrated from his own answers (constants +
-  fit provenance in the file header). Skill chain on top, every discount
-  conservative and evidence-driven: ear factor (Beta prior, capped), connected-
-  speech factor (grows with by-ear minutes toward a stated ceiling), comprehension
-  non-linearity, productive floor + output-hours gate (DeKeyser). Reality series
-  replay the log with factors-as-of-that-day; `simulateSkill()` runs the forecasts
-  (THREE only: current / one higher / one lower — the higher lever is 15 min/day
-  with half the practice in the skill's own modality; 10 min/day measurably cannot
-  hold the 311-item Umrah basket — the capacity cliff).
-- **Placement tests are the feedback loop** (8× the weight of practice evidence):
-  **`placement.html`** = 12 audio-only questions (6 recited passages, 6 words) →
-  `ptest-listen {score,catch,iso,isolatedCov}`; **Converse → 🎤 Oral exam** =
-  examiner briefing for any AI chat (8 tasks, strict 0–5 rubric, conservative-bias
-  instruction) whose pasted report logs `ptest-speak {score,mode}`. Tests appear
-  as ◆ on chart + email PNG, and `connectedFactorCalibrated()` /
-  `productiveFloorCalibrated()` fold them into the next nightly regeneration —
-  **if his tests diverge from the forecast, the forecast self-corrects.**
-- **`scripts/gen-progress.js <kv-payload.json>`** → `data/progress-series.json`
-  (nightly). **`scripts/gen-progress-chart.py`** → `progress.png` (weekly email).
-- **`scripts/test-progress-model.js <payload.json>`** — known-answer cases,
-  replay-vs-KV validation, fan monotonicity, **conservatism invariants (skills
-  must understate; overshooting is a test failure)**, placement-calibration
-  direction tests. **Must pass before any deploy that touches the model.**
-- **Progress & Capability Ladder (`map.html`):** The consolidated home of progress: CEFR milestone achievements, both skill channels, test CTAs, and conservative estimates. Honesty rules: reality never smoothed, sags shown, targets stated per stage, numbers floored not flattered.
-
-## The coaching loop & multi-AI operability
-
-Any AI agent (Antigravity, Codex, Claude, ChatGPT) can operate this repository. The coaching workflows are documented in `.agents/skills/run-arabic-coach/SKILL.md` (interactive session) and `.agents/skills/arabic-coach/SKILL.md` (technical reference).
-
-The loop runs **per user** (Reza, then Saba):
-1. **Reads data:** Cloudflare KV first (`data:<email>`), GitHub fallback.
-2. **Reads ✏️ pen `note` events first:** Act on every learner request and acknowledge in their coach note.
-3. **Analyzes telemetry:** Weak vocab, listening accuracy, speaking output, conjugation accuracy, grammar mastery, and recent test slips (`test-item`).
-4. **Read-Modify-Write KV payload:** When updating `coach:<email>`, ALWAYS read the current key first, preserve `week` and existing `homework` properties, and write back. Dropping these keys corrupts weekly planning.
-5. **Captures Sunday Preply lessons:** Decomposes class drops into 5 streams (Vocabulary, Sentences, Grammar, Reading, Qur'an/Concepts).
-6. **Additive for Saba:** Never simplify or delete shared material; beginner material for Saba is strictly additive.
-
-Manual KV commands:
-```bash
-npx wrangler kv key get --namespace-id=9532d5717021486a92f75efb6d7b8a94 "data:rkarim88@gmail.com" --remote
-npx wrangler kv key put --namespace-id=9532d5717021486a92f75efb6d7b8a94 "coach:rkarim88@gmail.com" --path coach.json --remote
-```
-
-## Automated Test Suites
-
-There are 8 test suites in `scripts/`. Run them before any deploy:
-```bash
-node scripts/test-audio-coverage.js   # Verifies all 9,831+ manifest keys resolve on disk
-node scripts/test-curriculum.js       # Verifies ladder, chunking, CEFR proof rules
-node scripts/test-drill-grade.js      # Verifies grading tolerance and typos
-node scripts/test-progress-model.js   # Verifies decay math and conservatism invariants
-node scripts/test-sentence-diag.js    # Verifies verb confusion diagnostics
-node scripts/test-sentences.js        # Verifies sentence bank & grammar links
-node scripts/test-shell.js            # Verifies app integration, speed switch, homework parts
-node scripts/test-typing.js           # Verifies transliteration dock & typing acceptance
-```
-*Audit note (commit `f13ab73`):* Suites 1–7 pass cleanly. `test-typing.js` passes 51/52 assertions; 1 assertion fails on 93.4% transliteration round-trip vs 96% floor.
-
-## Local development
-
-```bash
-npx http-server <repo dir> -p 8734 -c-1
-```
-No build step, no dependencies. Syntax check: `node --check js/*.js` and `new Function()` over inline `<script>` blocks. TTS and Google sign-in require the real origin; everything else works locally.
-
-## Related projects
-
-- **Quran reader**: https://rkarim25.github.io/Quran/#/<surah> — surah lessons link here for tafsir. Its dataset (local, OneDrive) powers the surah generator.
-- **Original keyboard**: `rkarim25/Arabic` repo → https://rkarim25.github.io/Arabic/ (predecessor of `keyboard.html`).
+### Automated Verification (16 Test Suites — All Must Pass)
+Run from `arabiclanguage/` before every commit:
+- `test-audio-coverage.js` · `test-chapter-drills.js` · `test-curriculum.js` · `test-drill-grade.js` · `test-errors.js` · `test-frames.js` · `test-freetry.js` · `test-lesson-cards.js` · `test-match.js` · `test-practice.js` · `test-progress-model.js` · `test-sentence-diag.js` · `test-sentences.js` · `test-shell.js` · `test-srs.js` · `test-typing.js`

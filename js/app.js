@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mweoucqt";
+const DATA_V = "mweq1fyc";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4259,66 +4259,30 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns, turn statements into questions with hal/ayna/mata/kam).\n`;
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
-  md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Friday 13 Nov Morning Telemetry & Negation Breakthrough (Prompt HH):**\n`;
-  md += `  - *Past Negation Rule (Pen Note #64):* Say "I didn't go" as **لَمْ أَذْهَبْ** (لَمْ + jussive present, like لَمْ يَلِدْ) OR **مَا ذَهَبْتُ** (مَا + past) — **NEVER ✗ لَا ذَهَبْتُ** (لَا + past expresses a wish/curse, never "didn't"!). Contrast present **لَا أَذْهَبُ** and future **لَنْ أَذْهَبَ**.\n`;
-  md += `  - *Friday 13 Nov Morning Batch 1 Slips:* (1) تَقَبَّلَ اللهُ (May Allah accept — Bengali কবুল kobul cognate), (2) أُرَتِّبُ (I tidy/arrange — tartīb order), (3) حَفْلَة (party — mahfil مَحْفِل root ح-ف-ل), (4) عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ), (5) عُقَد (knots — 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ)\n`;
-  md += `  - *Midweek Work & Politeness Slips:* (1) عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a morning meeting — root ج-م-ع / Jumu'ah Friday prayer & assembly), (2) كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»), (3) هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah), (4) تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — root ب-ط-ء / with slowness)\n`;
-  md += `  - *Celebrated Verb Promotions out of Box 0 to Box 1 (11 Nov morning wins!):* أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (s: 1.179, Box 1, Bengali ta'lim hook!) and أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (s: 1.632, Box 1, plain dāl refuge hook!)\n`;
-  md += `  - *Solid Routine & Commute Anchors:* الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for Arabic lesson — Box 3), قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ (Box 3), أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (Box 3), هَذَا الكِتَابُ لِي (Box 3), عِنْدِي أَوْلَادٌ صِغَارٌ (Box 1)\n`;
-  md += `  - *Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا, (5) أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ (plain dāl refuge hook!)\n`;
-  md += `  - *Class Adjective Contrasts (drilled in Saturday reading & Preply class):* غَنِيّ (rich) vs فَقِير (poor; Qur'an 28:24), كَرِيم (generous), صِحِّيّ (healthy food: طَعَامٌ صِحِّيّ), جَوْعَان (hungry: أَنَا جَوْعَان), فِكْرَة (idea: فِكْرَةٌ جَيِّدَة)\n`;
-  md += `  - *Village Breakfast Swaps (story-09):* أَنَا جَوْعَان، أُرِيدُ طَعَامًا صِحِّيًّا / فَطُورًا لَذِيذًا; أَكَلْتُ بَيْضَةً أُولَى وَثَانِيَةً وَثَالِثَةً، وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً; شَرِبْتُ كَأْسًا مِنَ الشَّايِ / الحَلِيبِ\n`;
-  md += `  - *Weak Egg Slip Reinforcement:* بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ)\n`;
-  md += `  - *Mirror-Letter Hook:* جَوْزَة (jawzah — walnut snack: ج leads) vs زَوْجَة (zawjah — wife partner: ز leads!)\n`;
-  md += `  - *Price Triplet & Market Vocabulary:* ثَمَن (thaman — value/price 2:41; Ahmad: هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market price: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟)\n`;
-  md += `  - *Evening Return & Daily Routine Slips:* أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — rated Box 0 in myday; mnemonic: plain dāl, 1 letter from أَعُوذُ / return to refuge at home); أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — rated Box 0; mnemonic: Bengali তালিম ta'lim cognate with أَتَعَلَّمُ)\n`;
-  md += `  - *Weekend Routines & Commute Anchors:* يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park); الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
-  md += `  - *Possession & Service Inquiries:* هَذَا الكِتَابُ لِي (This book is mine — prepositional لِي); هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service? — Chapter 3 hotel assistance inquiry)\n`;
-  md += `  - *Building Access & Vertical Movement:* طَابِق (floor / storey — rated Box 0); مِصْعَد (lift / elevator — machine that ascends); سُلَّم (stairs / ladder — solemn climb / salām safe steps)\n`;
-  md += `  - *Proven Chapter 3 Hotel Mastery:* خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), عِنْدِي حَجْزٌ فِي الفُنْدُقِ (I have a reservation), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?), تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ (Stop here, please), هَذِهِ أَمْتِعَتِي (This is my luggage), جَوَازُ سَفَرِي مَفْقُودٌ (passport is missing) — tested 100% (9/9)!\n`;
-  md += `  - *Chapter 2 Requests, Travel & Assistance Slips (29–30 Oct):* هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — rated learning/no; mnemonic: يُمْكِنُكَ = Bengali মুমকিন mumkin cognate; مُسَاعَدَتِي = hear the AID inside mu-sa-AID-ah)\n  - *Thirsty / Wants Drinks:* أَنَا عَطْشَانُ، أُرِيدُ شَايًا (I am thirsty, I want tea — drill beverage swaps: مَاء / قَهْوَة)\n  - *Paying & Money:* تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)\n  - *Need Items:* أَحْتَاجُ إِلَى هَذَا الكِتَابِ (I need this book — practice object swaps: مِفْتَاح / جَوَاز سَفَر)\n  - *Closing Orders:* شُكْرًا، لَا أُرِيدُ شَيْئًا آخَرَ (Thank you, I don't want anything else)\n  - *Hotel Directions:* خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel, please — Chapter 3 travel slip)\n  - *Evening Routine:* المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ preposition attachment)\n  - *Weekend Spoken Sprint & Sunday 1 Nov Pre-Class Warmup:* 4-sentence connected speaking narrative: (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا\n`;
-  md += `  - *Chapter 3 Hotel Direction & Slips (28–30 Oct):* خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel, please — rated weak/Box 0), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key? — rated medium/Box 1), هَذَا مِفْتَاحُ الغُرْفَةِ (This is the room key — typed perfect!)\n`;
-  md += `  - *Weekend Days & Village Foods:* يَوْمُ السَّبْتِ (Saturday), يَوْمُ الأَحَدِ (Sunday), قَرْيَة (village), بَيْض (eggs), تَمْر (dates), جَوْز (walnuts)\n`;
-  md += `  - *المَسَاءُ لِلْعَائِلَةِ* (The evening is for the family — recent telemetry struggle in myday; frame: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ، المَسَاءُ لِلْعَائِلَةِ)\n`;
-  md += `  - *Class 11 Oct Past-Tense Board Narration (-tu):* سَافَرْتُ إِلَى القَرْيَةِ، تَنَاوَلْتُ الفَطُورَ، اشْتَرَيْتُ فِي السُّوقِ، سَاعَدْتُ فِي البَيْتِ، عُدْتُ فِي السَّاعَةِ السَّادِسَةِ\n`;
-  md += `  - *مِفْتَاحُ الغُرْفَةِ* (room key — Chapter 3 drill slip; mnemonic: root f-t-ḥ / opener like al-Fātiḥah; frame: هَذَا مِفْتَاحُ الغُرْفَةِ)\n`;
-  md += `  - *أَحْتَاجُ إِلَى* (I need — Chapter 3 drill slip; frame: أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ، مِنْ فَضْلِكَ)\n`;
-  md += `  - *مَشْغُولٌ* (busy / occupied — root sh-gh-l; frame: أَنَا مَشْغُولٌ جِدًّا / فِي الصَّبَاحِ)\n`;
-  md += `  - *حَجْز* (reservation / booking — rated learning/tap-learn; mnemonic: like Hajj, booked years ahead; frame: عِنْدِي حَجْزٌ)\n`;
-  md += `  - *أُسَاعِدُ* (I help — rated learning; mnemonic: hear the AID inside u-sa-AID-u)\n`;
-  md += `  - *الْخَنَّاس* (the slinker / retreats upon dhikr — rated learning/tap-learn; mnemonic: the con-artist of an-Nas)\n`;
-  md += `  - *سُلَّم* (stairs, ladder — rated learning; mnemonic: solemn climb up the stairs / safe steps)\n`;
-  md += `  - *مِصْعَد* (lift, elevator — rated learning; root ṣ-ʿ-d: machine that ascends)\n`;
-  md += `  - *دَوْر* (floor / turn — rated learning; "my turn on this floor"); *طَابِق* (floor / storey); *خَزَائِن* (cupboards)\n`;
-  md += `  - *يَوْمَ الثُّلَاثَاءِ* (on Tuesday — rated learning in week routine)\n`;
-  md += `  - *يَوْمَ الأَرْبِعَاءِ* (on Wednesday — 4th day of work week, root r-b-ʿ / arbaʿah)\n`;
-  md += `  - *يَوْمَ الخَمِيسِ* (on Thursday — 5th day of work week, root kh-m-s / khamsah)\n`;
-  md += `  - *يَوْمَ الجُمُعَةِ* (on Friday — day of assembly / Jumu'ah prayer, root j-m-ʿ)\n`;
-  md += `  - *الجَوُّ بَارِدٌ اليَوْمَ* (The weather is cold today — rated learning in myday)\n`;
-  md += `  - *أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا* (I learn a little every day — rated learning in myday)\n`;
-  md += `  - *الحَيّ* (the Ever-Living — Divine Name, rated learning)\n`;
-  md += `  - *Sunday Script Lines:* Line 1: عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), Line 2: أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا, Line 3: أُسَاعِدُ فِي البَيْتِ فِي المَسَاءِ, Line 4 candidate: أَنَا تَعْبَانٌ قَلِيلًا، لَكِنِّي أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ\n`;
-  md += `  - *Verb Tense Distinction (Chapter 4):* past ـتُ (*قَرَأْتُ / صَلَّيْتُ*) vs present أَـ (*أَقْرَأُ / أُصَلِّي*) vs future سَـ (*سَأَذْهَبُ*)\n`;
-  md += `  - *أُرِيدُ أَنْ أَشْرَبَ شَيْئًا* (I want to drink something) — sentence variation drill slip on Sentence 1\n`;
-  md += `  - *Commute by Ear Anchors (13 Oct):* emergency door (بَابُ الطَّوَارِئ), a little tired (تَعْبَانُ قَلِيلًا), near / far (قَرِيب / بَعِيد), entering (دُخُول / مَدْخَل)\n`;
-  md += `  - *الْوَسْوَاس* (the repetitive whisperer), *عُقَد* (knots), *حَاسِد* (envier)\n`;
-  md += `  - *الفَطُور* (breakfast) — **celebrated win!** Promoted to solid via the mini-iftar / FAT TOUR mnemonic\n`;
-  md += `- Active Chapter 2 (At the Restaurant / Wants & Requests): eat something (أُرِيدُ أَنْ آكُلَ شَيْئًا), halal food (طَعَامٌ حَلَالٌ), bill please (الحِسَابَ مِنْ فَضْلِكَ), thirsty tea (أَنَا عَطْشَانُ، أُرِيدُ شَايًا), bathroom (أَيْنَ الحَمَّامُ؟), coffee (فِنْجَانَ قَهْوَةٍ)\n`;
-  md += `- Mnemonics in Use: price triplet thaman/si'r/ujrah (ثَمَن / سِعْر / أُجْرَة), walnut mirror-letter hook jawzah/zawjah (جَوْزَة / زَوْجَة), white oval egg bayḍah/abyaḍ (بَيْضَة / أَبْيَض), Bengali ta'lim (أَتَعَلَّمُ), return to refuge (أَعُودُ), mine/to me (لِي), Sunday lesson anchor (الأَحَدُ لِدَرْسِ العَرَبِيَّةِ), service (خِدْمَة), room key opener (مِفْتَاح), busy/occupied (مَشْغُول), a TUNA I WALLOW in (أَتَنَاوَلُ), mini-iftar / FAT TOUR (فَطُور), pages of mushaf (صَحِيفَة), thanks a GAZILLION (جَزِيلًا), shurshuri joy tickle (سُرُور), solemn stairs (سُلَّم), ascending machine (مِصْعَد), Hajj-booking (حَجْز), con-artist of an-Nas (الخَنَّاس), hear AID inside u-sa-AID-u (أُسَاعِدُ), Bengali mumkin cognate (يُمْكِنُكَ / مُمْكِن), AID-noun (مُسَاعَدَة), Bayt al-Mal wealth (مَال)\n`;
-  md += `- Surah An-Nas Protection Concepts: King/Sovereign (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), chests (صُدُور)\n`;
-  md += `- Diagnostic Slips to Reinforce: lamp (مِصْبَاح), the Ever-Living (الحَيّ), the Concealer of faults (السَّتَّار), maternal uncle (خَال)\n`;
-  md += `- Housing / Samer Flat (Lesson 10): bed (سَرِير), comfortable (مُرِيح), oven (فُرْن), mirror (مِرْآة), available (مُتَاح), spacious (وَاسِع), relocating (الانْتِقَال)\n`;
+  const caps = store.get("ats-capabilities", null);
+  if (caps && caps.vocab && caps.sentences) {
+    md += `## 4. Live Practice Capability Snapshot\n`;
+    md += `- **Vocabulary:** ${caps.vocab.held} solid, ${caps.vocab.learning} learning, ${caps.vocab.slips} active slips\n`;
+    md += `- **Sentences:** ${caps.sentences.held} solid (${caps.sentences.provenActive} proven spoken/typed), ${caps.sentences.slips} slips\n`;
+    md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 9} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
+    if (caps.gaps && caps.gaps.length) md += `- **Current Priority Gaps:** ${caps.gaps.join(" · ")}\n`;
+    md += `\n`;
+  }
 
+  md += `## 5. Active Focus, Lesson Cards & High-Value Mnemonics\n`;
+  md += `- **Active Chapter 4 (Daily Routine, Time & Tenses):** Advancing weekly sentences automatically via unified Practice & Commute sessions (Chapters 1–3 mastered 100%).\n`;
+  md += `- **5 Negation Pairings (Lesson Card #1):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
+  md += `- **Priority Slips to Weave In:** تَقَبَّلَ اللهُ (May Allah accept — Bengali কবুল kobul cognate), أُرَتِّبُ (I tidy — tartīb order), حَفْلَة (party — mahfil root ح-ف-ل), عَبَدْتُ اللهَ (I worshipped Allah — past -tu of نَعْبُدُ), عُقَد (knots — 113:4), عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (morning meeting — Jumu'ah root ج-م-ع), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mumkin + mu-sa-AID-ah), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
+  md += `- **Look-Alike & Nuance Anchors:** أَعُودُ (plain د = return home) vs أَعُوذُ (dotted ذ = seek refuge); جَوْزَة (ج leads walnut) vs زَوْجَة (ز leads wife); price triplet ثَمَن (value) vs سِعْر (shop tag) vs أُجْرَة (taxi fare); Surah An-Nās صُدُور (outer chest courtyard) vs قُلُوب (locked heart).\n\n`;
   if (currentContext && currentContext.sentences) {
-    md += `\n## 5. Current Target Sentences to Practice\n`;
+    md += `\n## 6. Current Target Sentences to Practice\n`;
     currentContext.sentences.forEach((s, i) => {
       md += `${i + 1}. **${s.ar}** — *${s.en}* (${s.tr || ''})\n`;
     });
   }
 
   if (currentContext && currentContext.aiScenario) {
-    md += `\n## 6. Suggested Roleplay Scenario\n${currentContext.aiScenario}\n`;
+    md += `\n## 7. Suggested Roleplay Scenario\n${currentContext.aiScenario}\n`;
   }
 
   return md;

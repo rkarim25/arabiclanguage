@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mweoucqt">
-  <link rel="stylesheet" href="css/style.css?v=mweoucqt">
+  <link rel="stylesheet" href="css/fonts.css?v=mweq1fyc">
+  <link rel="stylesheet" href="css/style.css?v=mweq1fyc">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -52,13 +52,15 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mweoucqt"></script>
-<script src="js/frames.js?v=mweoucqt"></script>
-<script src="js/freetry.js?v=mweoucqt"></script>
-<script src="js/app.js?v=mweoucqt"></script>
-<script src="js/tracker.js?v=mweoucqt"></script>
-<script src="js/plan.js?v=mweoucqt"></script>
-<script src="js/account.js?v=mweoucqt"></script>
+<script src="js/srs.js?v=mweq1fyc"></script>
+<script src="js/frames.js?v=mweq1fyc"></script>
+<script src="js/freetry.js?v=mweq1fyc"></script>
+<script src="js/practice.js?v=mweq1fyc"></script>
+<script src="js/lesson-cards.js?v=mweq1fyc"></script>
+<script src="js/app.js?v=mweq1fyc"></script>
+<script src="js/tracker.js?v=mweq1fyc"></script>
+<script src="js/plan.js?v=mweq1fyc"></script>
+<script src="js/account.js?v=mweq1fyc"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -70,8 +72,9 @@ const SENT_RECALL_MS = 5000;       // sentences get more time — he asked for i
 const COMMUTE_MIN = 13;            // commute session content budget (~15 min door to door)
 const IS_COMMUTE_LINK = new URLSearchParams(location.search).has("commute");
 
-let words = [];        // [{key, v:{ar,en,tr}}]
-let sents = [];        // conjugated sentences from Sentence Practice
+let words = [];        // [{key, v:{ar,en,tr}, isNew}]
+let sents = [];        // conjugated / Practice sentences
+let COMMUTE_DATA = { chapters: [], allSentences: [], lessonCards: [], practiceWords: [] };
 let S = null;          // running session state
 let heardLog = [];     // this session's words, unique by key — the pause/stop recap
 
@@ -118,25 +121,63 @@ async function buildWords() {
 async function buildSentences() {
   try {
     if (typeof FreeTry !== "undefined" && FreeTry && FreeTry.plan) {
-      const [md, bank, fq] = await Promise.all([
+      const [md, bank, fq, cRes, clsRes, lcRes, evRes, qcRes, famRes] = await Promise.all([
         fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
         fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
         fetch("data/frequency.json").then(r => r.json()).then(d => (d && d.words) || {}).catch(() => ({})),   // rarity, not "everything is rare"
+        fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
+        fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
+        fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
+        fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+        fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+        fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
       ]);
+      // Register canonical word keys so commute ratings auto-sync across Words & Chapter Vocab
+      const pWords = [];
+      const seenWNorm = new Set();
+      const wkMap = {};
+      const addPW = (k, ar, en, tr, src) => {
+        if (!k || !ar || !en) return;
+        const n = normalizeAr(ar).replace(/^ال/, "");
+        if (n && !wkMap[n]) wkMap[n] = k;
+        if (seenWNorm.has(n)) return;
+        seenWNorm.add(n);
+        pWords.push({ key: k, ar, en, tr: tr || "", src });
+      };
+      (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => addPW(v.key, v.ar, v.en, v.tr, "teacher")));
+      (qcRes.words || []).forEach((w, i) => addPW("qc:" + i, w.ar, w.en, w.tr, "quran"));
+      (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addPW("ev-" + g.id + ":" + i, m.ar, m.en, m.tr, "everyday")));
+      (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addPW("fam-" + f.id + ":" + i, m.ar, m.en, "", "root")));
+      if (typeof registerWordKeys === "function" && Object.keys(wkMap).length) registerWordKeys(wkMap);
+
       const fem = typeof planProfile === "function" && planProfile().gender === "f";
       const mine = (md.sentences || []).filter(s => s.who === "me").map(s0 => (fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0)).map(s => ({ key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", words: s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean).map(w => [w, ""]), src: "myday", track: "everyday", use: 3,
         pattern: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).pattern : null, frames: (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar).frames : [] }));
-      const everyday = (bank.sentences || []).filter(s => s.track !== "quran").map(s => Object.assign({}, s, { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))) }));
+      const chapSents = [];
+      (cRes.chapters || []).forEach(c => (c.sentences || []).forEach((cs, idx) => {
+        chapSents.push({ key: "chap:" + c.num + ":" + idx, ar: cs.ar, en: cs.en, tr: cs.tr || "", words: cs.words || [], src: "chapters", track: "everyday", pattern: cs.pattern || null, frames: cs.frames || [] });
+      }));
+      const quranSents = (bank.sentences || []).filter(s => s.track === "quran").map(s => ({
+        key: s.key || s.id, ar: s.ar, en: s.en, tr: s.tr || "", ref: s.ref || null, surah: s.surah || null, wordKeys: s.wordKeys || [], track: "quran", src: "quran"
+      }));
+      const everyday = chapSents.concat((bank.sentences || []).filter(s => s.track !== "quran").map(s => Object.assign({}, s, { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))) })));
+      COMMUTE_DATA = {
+        chapters: cRes.chapters || [],
+        allSentences: chapSents.concat(mine, quranSents),
+        lessonCards: (window.LessonCards && lcRes && Array.isArray(lcRes.cards)) ? LessonCards.buildPracticePool(lcRes.cards) : [],
+        practiceWords: pWords
+      };
       const script = new Set((typeof planScript === "function" ? planScript() : []).map(x => String(x.en).trim().toLowerCase()));
       const hw = store.get("ats-homework", null);
       const ctx = { now: Date.now(), srs: getSrs(), log: store.get("ats-log", []), freq: fq, homework: new Set((hw && hw.keys) || []), size: 14, relaxFrom: 4,
-        boost: key => (/^md:/.test(key) ? 2 : 0), wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null };
+        boost: key => (/^chap:/.test(key) ? 2.5 : /^md:/.test(key) ? 2 : 0), wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null };
       const plan = FreeTry.plan(mine.concat(everyday), ctx);
       // the script he has already proved comes back first — the commute is where it settles by ear
       const proven = mine.concat(everyday).filter(s => script.has(String(s.en).trim().toLowerCase())).slice(0, 6);
       const seen = new Set();
+      const srsNow = getSrs();
       const out = proven.concat(plan.list).filter(s => { if (seen.has(s.key)) return false; seen.add(s.key); return true; })
-        .map(s => ({ ar: s.ar, en: s.en, tr: s.tr || "", key: s.key, verb: s.pattern || "", person: s.src || "", tense: s._try ? s._try.why : "" }));
+        .map(s => ({ ar: s.ar, en: s.en, tr: s.tr || "", key: s.key, words: s.words || [], pattern: s.pattern || "", isNew: !(s.key && srsNow[s.key] && srsNow[s.key].u), verb: s.pattern || "", person: s.src || "", tense: s._try ? s._try.why : "" }));
       if (out.length >= 6) return out;
     }
     const d = await fetch("data/sentences.json").then(r => r.json());
@@ -177,6 +218,26 @@ function speakP(text, rate) {
       setTimeout(step, 500);
     };
     setTimeout(step, 500);
+  });
+}
+/* Play Mishary Rashid Alafasy Qur'an ayah when online/cached; fall back seamlessly to neural Arabic offline */
+function reciteP(ref, fallbackAr) {
+  if (!ref || typeof playRecitation !== "function") return speakP(fallbackAr, 0.78);
+  const parts = String(ref).split(":").map(Number);
+  if (!parts[0] || !parts[1]) return speakP(fallbackAr, 0.78);
+  return new Promise(resolve => {
+    let done = false;
+    const fin = () => { if (!done) { done = true; resolve(); } };
+    S.cancel = () => { if (typeof stopRecitation === "function") stopRecitation(); stopSpeak(); fin(); };
+    try {
+      playRecitation([{ n: parts[0], ayah: parts[1] }], fin, err => {
+        if (err && !done) speakP(fallbackAr, 0.78).then(fin);
+        else fin();
+      });
+      setTimeout(fin, 14000);
+    } catch (e) {
+      speakP(fallbackAr, 0.78).then(fin);
+    }
   });
 }
 function sleepP(ms) {
@@ -261,10 +322,15 @@ function commuteElapsedMs() { return S ? Date.now() - S.t0 - (S.pausedMs || 0) :
 function saveCommuteLive() {
   if (!S || !S.commute) return;
   try {
+    const ungradedKeys = heardLog.filter(h => !h.g).map(h => h.key).filter(Boolean);
+    const gradedSentSet = S.gradedSentKeys || new Set();
+    const ungradedSentKeys = (S.heardSents || []).filter(x => x.key && !gradedSentSet.has(x.key)).map(x => x.key);
     store.set("ats-commute-live", {
       t0: S.t0, last: Date.now(), pausedMs: S.pausedMs || 0,
-      keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
+      keys: heardLog.map(h => h.key), ungradedKeys,
+      taught: S.taught, sents: S.sents,
       sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean),
+      ungradedSentKeys,
       sentEns: (S.heardSents || []).map(x => x.en),
     });
   } catch (e) {}
@@ -306,7 +372,16 @@ function showGrade(on) {
 function gradeWord(ok) {
   if (!S || !S.current || S.graded) return;
   S.graded = true;
-  gradeCard(S.current.key, ok ? "good" : "again");
+  if (window.Practice && typeof Practice.syncVerdict === "function") {
+    Practice.syncVerdict({
+      item: { key: S.current.key, kind: "word", ar: S.current.v.ar, en: S.current.v.en, wordSrc: "commute" },
+      key: S.current.key, grade: ok ? "yes" : "no", srsApi: SRS, getSrs, store, logEvent, normalizeAr,
+      wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+      chapters: COMMUTE_DATA.chapters, via: "commute"
+    });
+  } else {
+    gradeCard(S.current.key, ok ? "good" : "again");
+  }
   logEvent({ e: "alisten-grade", key: S.current.key, ok });
   const h = heardLog.find(x => x.key === S.current.key);
   if (h) h.g = ok ? "good" : "again";
@@ -334,11 +409,21 @@ function gradeSent(g) {
     if (!S || !S.curSent || !S.curSent.key || S.sentGraded) return;
     S.sentGraded = true;
     const s = S.curSent, key = s.key;
-    const nc = (typeof SRS === "object" && SRS && SRS.rate) ? SRS.rate(key, g) : { s: 0, box: 0 };
-    logEvent({ e: "sentence-rate", key, bucket: (SRS.LEGACY_BUCKET && SRS.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "commute" });
+    if (!S.gradedSentKeys) S.gradedSentKeys = new Set();
+    S.gradedSentKeys.add(key);
+    if (window.Practice && typeof Practice.syncVerdict === "function") {
+      Practice.syncVerdict({
+        item: s, key, grade: g, srsApi: SRS, getSrs, store, logEvent, normalizeAr,
+        wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+        chapters: COMMUTE_DATA.chapters, via: "commute"
+      });
+    } else {
+      const nc = (typeof SRS === "object" && SRS && SRS.rate) ? SRS.rate(key, g) : { s: 0, box: 0 };
+      logEvent({ e: "sentence-rate", key, bucket: (SRS.LEGACY_BUCKET && SRS.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: s.ar, en: s.en, src: "commute" });
+    }
     autoSync();
     const n = document.getElementById("acNote");
-    if (n) n.textContent = g === "yes" ? "✓ marked — it counts like Say your day" : g === "maybe" ? "≈ marked — it'll come back" : "✗ marked — it'll come back sooner";
+    if (n) n.textContent = g === "yes" ? "✓ marked & synced across Chapters + Practice" : g === "maybe" ? "≈ marked — it'll come back" : "✗ marked — queued for review";
     showSentGrade(false);
   } catch (e) { /* marking must never stop the session */ }
 }
@@ -526,7 +611,28 @@ async function start(commute) {
    your day starts with what he heard here (sentences.html reads commute-done). */
 function buildCommuteQueue() {
   const script = new Set((typeof planScript === "function" ? planScript() : []).map(x => String(x.en).trim().toLowerCase()));
-  const sentScript = sents.filter(s => script.has(String(s.en).trim().toLowerCase())).slice(0, 6);
+  const sentScript = sents.filter(s => script.has(String(s.en).trim().toLowerCase())).slice(0, 5);
+  if (window.Practice && typeof Practice.buildCommuteQueue === "function" && COMMUTE_DATA.allSentences.length) {
+    const hw = store.get("ats-homework", null);
+    const rawQ = Practice.buildCommuteQueue({
+      now: Date.now(),
+      srs: getSrs(),
+      log: store.get("ats-log", []),
+      scriptLines: sentScript,
+      sentences: COMMUTE_DATA.allSentences,
+      freeTrySentences: sents.filter(s => !sentScript.includes(s)),
+      lessonCards: COMMUTE_DATA.lessonCards,
+      words: COMMUTE_DATA.practiceWords.length ? COMMUTE_DATA.practiceWords : words.map(c => ({ key: c.key, ar: c.v.ar, en: c.v.en, tr: c.v.tr || "", src: "everyday" })),
+      homework: new Set((hw && hw.keys) || [])
+    });
+    return rawQ.map(it => {
+      if (it.kind === "word") return { kind: "word", c: { key: it.word.key, v: { ar: it.word.ar, en: it.word.en, tr: it.word.tr || "" }, isNew: !!it.isNew } };
+      if (it.kind === "rule") return { kind: "rule", rule: it, s: { key: it.key, ar: it.arModel, en: it.enCue, kind: "lesson-card" } };
+      if (it.kind === "quran") return { kind: "quran", s: Object.assign({}, it.sent, { kind: "quran", isNew: !!it.isNew }) };
+      if (it.kind === "sent") return { kind: "script", s: it.sent };
+      return { kind: it.kind, s: Object.assign({}, it.sent, { isNew: !!it.isNew }) };
+    });
+  }
   const sentSay = sents.filter(s => !sentScript.includes(s)).slice(0, 14);
   const q = [];
   sentScript.forEach(s => q.push({ kind: "script", s }));
@@ -589,19 +695,69 @@ async function playItem(it) {
   if (it.kind === "word") { S.lastKind = "word"; S.curSent = null; showSentGrade(false); await wordBeat(it.c); return; }
   S.lastKind = "sent";
   S.current = null; showGrade(false);
-  // the live ✗ ≈ ✓ (his 5 Nov ✏️) binds to THIS sentence for the whole round
   S.curSent = it.s && it.s.key ? it.s : null; S.sentGraded = false;
-  showSentGrade(!!S.curSent);
+  showSentGrade(!!S.curSent && it.kind !== "rule");
+  if (it.kind === "rule") { await ruleRound(it.rule); return; }
+  if (it.kind === "quran") {
+    await quranRound(it.s);
+    if (S && !S.skip && !S.paused) S.heardSents.push({ key: it.s.key || null, en: it.s.en, kind: "quran" });
+    return;
+  }
   if (it.kind === "script") { await sentenceRound(it.s); }
   else { await sayRound(it.s); }
   if (S && !S.skip && !S.paused) S.heardSents.push({ key: it.s.key || null, en: it.s.en, kind: it.kind });
 }
-/* the morning method by ear: English → produce it in the gap → the model, twice */
+/* Spoken Lesson Card Golden Rule cue (12s audio mental anchor; visual diagram stays due for Screen Practice!) */
+async function ruleRound(rule) {
+  if (!S || !rule) return;
+  setWord({ ar: rule.arModel || "", en: rule.enCue || rule.title, tr: "" }, true);
+  setStatus("📇 Lesson Card Rule — " + (rule.title || "Quick Cue"));
+  document.getElementById("acNote").textContent = "audio cue — full visual diagram waits on screen";
+  if (rule.enCue) await beat(() => speakP(rule.enCue, 1));
+  if (guard()) return;
+  if (rule.arModel) {
+    await beat(() => speakP(rule.arModel, 0.75));
+    if (guard()) return;
+    await beat(() => gapP(3));
+  }
+  if (S && !S.paused && !S.skip) { S.itemDone = true; logEvent({ e: "alisten-rule", key: rule.key || null }); }
+}
+/* Qur'an by Ear round: Mishary Rashid Alafasy recitation → 4s meaning gap → English → Alafasy again */
+async function quranRound(sent) {
+  if (!S || !sent) return;
+  setWord({ ar: sent.ar, en: sent.en, tr: "" }, false);
+  setStatus("🕌 Qur'an by ear" + (sent.ref ? " (" + sent.ref + ")" : "") + " — listen");
+  document.getElementById("acNote").textContent = "Mishary Rashid Alafasy — recognise the meaning";
+  await beat(() => reciteP(sent.ref, sent.ar));
+  if (guard()) return;
+  setStatus("…what is Allah saying here?");
+  await beat(() => gapP(5));
+  if (guard()) return;
+  setStatus("Meaning:"); setWord({ ar: sent.ar, en: sent.en, tr: "" }, true);
+  document.getElementById("acNote").textContent = "";
+  await beat(() => speakP(sent.en, 1));
+  if (guard()) return;
+  await beat(() => reciteP(sent.ref, sent.ar));
+  if (S && !S.paused && !S.skip) {
+    S.sents++; S.itemDone = true; setCounter();
+    logEvent({ e: "alisten-sent", kind: "quran", key: sent.key || null, en: sent.en });
+  }
+}
+/* the morning method by ear: Teach-first if unseen; else English → produce it in the gap → the model, twice */
 async function sayRound(sent) {
   if (!S || !sent) return;
-  setWord({ ar: "", en: sent.en, tr: "" }, true);
-  setStatus("Say it in Arabic — in the gap");
-  document.getElementById("acNote").textContent = "your own day — try it out loud";
+  if (sent.isNew) {
+    // Audio Teach Mode: let him hear the new Chapter/Practice sentence BEFORE asking him to produce it!
+    setStatus("🆕 New sentence — listen first");
+    setWord({ ar: sent.ar, en: sent.en, tr: sent.tr || "" }, true);
+    document.getElementById("acNote").textContent = "listen once, then say it in the gap";
+    await beat(() => speakP(sent.ar, 0.75));
+    if (guard()) return;
+  } else {
+    setWord({ ar: "", en: sent.en, tr: "" }, true);
+    setStatus("Say it in Arabic — in the gap");
+    document.getElementById("acNote").textContent = "your own day — try it out loud";
+  }
   await beat(() => speakP(sent.en, 1));
   if (guard()) return;
   await beat(() => gapP(5));
@@ -615,7 +771,7 @@ async function sayRound(sent) {
   await beat(() => speakP(sent.ar, 0.7));
   if (S && !S.paused && !S.skip) {
     S.sents++; S.itemDone = true; setCounter();
-    logEvent({ e: "alisten-sent", kind: "say", key: sent.key || null, en: sent.en });
+    logEvent({ e: "alisten-sent", kind: "say", key: sent.key || null, en: sent.en, taughtNew: !!sent.isNew || undefined });
   }
 }
 /* one word, as the open-ended loop does it: Arabic → gap → English → Arabic */
@@ -625,14 +781,25 @@ async function wordBeat(card) {
   const prev = heardLog.find(h => h.key === card.key);
   if (prev) { heardLog.splice(heardLog.indexOf(prev), 1); heardLog.push(prev); }
   else heardLog.push({ key: card.key, v: card.v, g: null });
-  setWord(card.v, false);
-  setStatus("Listen…"); document.getElementById("acNote").textContent = "";
-  await beat(() => speakP(card.v.ar, 0.7));
-  if (guard()) return;
-  setStatus("…what does it mean?"); document.getElementById("acNote").textContent = "recall it now";
-  await beat(() => gapP(3));
-  if (guard()) return;
-  setStatus("It means:"); setWord(card.v, true); document.getElementById("acNote").textContent = "";
+  if (card.isNew) {
+    setWord(card.v, true);
+    setStatus("🆕 New word — listen & repeat"); document.getElementById("acNote").textContent = "taught first";
+    await beat(() => speakP(card.v.en, 1));
+    if (guard()) return;
+    await beat(() => speakP(card.v.ar, 0.7));
+    if (guard()) return;
+    await beat(() => gapP(3));
+    if (guard()) return;
+  } else {
+    setWord(card.v, false);
+    setStatus("Listen…"); document.getElementById("acNote").textContent = "";
+    await beat(() => speakP(card.v.ar, 0.7));
+    if (guard()) return;
+    setStatus("…what does it mean?"); document.getElementById("acNote").textContent = "recall it now";
+    await beat(() => gapP(3));
+    if (guard()) return;
+    setStatus("It means:"); setWord(card.v, true); document.getElementById("acNote").textContent = "";
+  }
   await beat(() => speakP(card.v.en, 1));
   if (guard()) return;
   await beat(() => speakP(card.v.ar, 0.7));
@@ -774,8 +941,11 @@ function stop() {
   const wasCommute = S.commute;
   if (wasCommute) {
     // the trained set: what tomorrow's dashboard check measures against matched controls
-    logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), taught: S.taught, sents: S.sents,
-               sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean), sentEns: (S.heardSents || []).map(x => x.en),
+    const ungradedKeys = heardLog.filter(h => !h.g).map(h => h.key).filter(Boolean);
+    const gradedSentSet = S.gradedSentKeys || new Set();
+    const ungradedSentKeys = (S.heardSents || []).filter(x => x.key && !gradedSentSet.has(x.key)).map(x => x.key);
+    logEvent({ e: "commute-done", keys: heardLog.map(h => h.key), ungradedKeys, taught: S.taught, sents: S.sents,
+               sentKeys: (S.heardSents || []).map(x => x.key).filter(Boolean), ungradedSentKeys, sentEns: (S.heardSents || []).map(x => x.en),
                min: Math.round(commuteElapsedMs() / 6000) / 10, partial: !!S.partial || undefined });
     try { store.set("ats-commute-live", null); } catch (e) {}   // the record is in the log now
     document.body.classList.remove("commute");

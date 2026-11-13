@@ -36,6 +36,7 @@ function logEvent(e) {
       log.push({ e: "commute-done", t: live.last,
                  keys: live.keys || [], taught: live.taught || 0, sents: live.sents || 0,
                  sentKeys: live.sentKeys || [], sentEns: live.sentEns || [],
+                 ungradedKeys: live.ungradedKeys || [], ungradedSentKeys: live.ungradedSentKeys || [],
                  min: Math.max(0, Math.round((live.last - live.t0 - (live.pausedMs || 0)) / 6000) / 10),
                  partial: true, recovered: true });
       store.set(LOG_KEY, log);

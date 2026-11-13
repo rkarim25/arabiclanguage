@@ -1,23 +1,26 @@
 /* ============================================================================
-   PRACTICE — Incremental multi-batch & multi-stream composer (js/practice.js)
+   PRACTICE — Unified Teach + Review, Capability Telemetry, Cross-Sync & Commute Engine (js/practice.js)
 
-   Organises daily & incremental study into coherent batches in ONE place:
-     · Batch 1 (Primary Daily Core): Completes the daily requirement AND
-       systematically advances the active weekly sentence lessons (Chapter 1–10
-       ladder + Preply homework), balanced with vocabulary, inline grammar
-       explanations, and Qur'an by ear (Mishary Rashid Alafasy).
-     · Batch 2 (Review-Focused Consolidation, ~75% review / ≤25% new): Shifts
-       weight strongly toward due, shaky, and slipped items across all streams
-       with at most 1–2 new weekly items.
-     · Batch 3+ (Deep Review Mix, ~90–100% review): Consolidates due & weakest
-       sentences, words, grammar rules, and Qur'an ayats without bouncing across
-       separate tabs.
-
-   Effort Equivalence (10.0 units steady; 6.0 units on heavy/comeback days):
-     · Vocabulary word (ev-*, qc:*, fam-*)  = 0.5 effort units
-     · Everyday / chapter / class sentence  = 1.0 effort unit
-     · Grammar pattern item (gt:<id>:<i>)   = 1.0 effort unit
-     · Qur'an ayah by ear (Mishary Alafasy) = 1.5 effort units
+   Practice is Reza's primary workspace for learning and reviewing ALL streams:
+     1. Teach + Review across all 5 streams: Vocabulary, Sentences, Lesson Cards,
+        Grammar patterns, and Qur'an by ear (Mishary Rashid Alafasy).
+        · Unseen items enter in TEACH mode (🆕 opened upfront with audio, breakdown,
+          root/mnemonic & inline rule before rating or trying).
+        · Seen items enter in REVIEW mode (active recall prompt → reveal → verdict).
+     2. Granular Capability Telemetry (summarizeCapabilities): tracks what he CAN
+        and CANNOT do across recognition, active spoken/written production, visual
+        Lesson Card / grammar systems, Qur'an by ear, and screen-vs-commute balance.
+     3. Automatic Bidirectional Cross-Sync (syncVerdict): every verdict in Screen
+        Practice or Commute Practice automatically updates Chapters (index.html line
+        pointer + chapter sentences + chapter vocab), Words, Sets, Grammar & Qur'an.
+     4. Hands-Free Commute Twin (buildCommuteQueue) + Modality Compensation:
+        · Commute Practice teaches & reviews active Chapter sentences, spoken Lesson
+          Card rules, Alafasy Qur'an ayahs by ear, and due/weekly vocabulary.
+        · Because commute sessions cannot show Arabic orthography, Lesson Card
+          diagrams/tables, or typed/mic checks (and pocket items go ungraded),
+          normal Screen Practice detects commute debt and automatically compensates:
+          verifying ungraded commute items on screen + boosting visual Lesson Cards,
+          grammar endings, and active production.
    ============================================================================ */
 (function (root, factory) {
   "use strict";
@@ -142,7 +145,105 @@
     return doneToday + 1;
   }
 
-  /* Read telemetry + SRS + motivation + batchNum to diagnose what the learner needs right now */
+  /* Inspect commute vs screen history to detect unverified pocket items & modality gaps */
+  function analyzeCommuteBalance(log, now) {
+    const recent7d = (log || []).filter(x => x && x.t && x.t >= now - 7 * DAY);
+    const commuteEvs7d = recent7d.filter(x => x.e === "commute-done");
+    const screenEvs7d = recent7d.filter(x =>
+      (x.e === "tryit-free-done" && x.kind === "myday") ||
+      x.e === "practice-batch" ||
+      x.e === "chap-test"
+    );
+    // Deduplicate screen sessions within 15 minutes so practice-batch + tryit-free-done count as 1 session
+    const screenSessionTs = [];
+    screenEvs7d.sort((a, b) => a.t - b.t).forEach(ev => {
+      if (!screenSessionTs.length || ev.t - screenSessionTs[screenSessionTs.length - 1] > 15 * 60000) {
+        screenSessionTs.push(ev.t);
+      }
+    });
+
+    // Consecutive commute streak among recent sessions
+    const sessionTimeline = []
+      .concat(commuteEvs7d.map(x => ({ kind: "commute", t: x.t })))
+      .concat(screenSessionTs.map(t => ({ kind: "screen", t })))
+      .sort((a, b) => a.t - b.t);
+    let commuteStreak = 0;
+    for (let i = sessionTimeline.length - 1; i >= 0; i--) {
+      if (sessionTimeline[i].kind === "commute") commuteStreak++;
+      else break;
+    }
+
+    // Collect items heard passively on commutes in last 72h not yet checked on screen
+    const checkedForTs = new Set(
+      (log || []).filter(x => x && x.e === "commute-check-done" && x.forT).map(x => x.forT)
+    );
+    const screenVerdictAfter = new Map();
+    (log || []).forEach(x => {
+      if (!x || !x.t || !x.key) return;
+      const isScreenVerdict =
+        (x.e === "vocab-rate" && x.src !== "audio" && x.via !== "commute") ||
+        (x.e === "sentence-rate" && x.src !== "audio" && x.via !== "commute") ||
+        x.e === "sent-drill" ||
+        x.e === "lesson-card-rate" ||
+        (x.e === "bucket" && x.src !== "audio");
+      if (isScreenVerdict) {
+        const prev = screenVerdictAfter.get(x.key) || 0;
+        if (x.t > prev) screenVerdictAfter.set(x.key, x.t);
+      }
+    });
+
+    const unverifiedWords = new Set();
+    const unverifiedSents = new Set();
+    const unverifiedEns = new Set();
+    const pendingForTs = [];
+
+    (log || []).forEach(cd => {
+      if (!cd || cd.e !== "commute-done" || !cd.t || now - cd.t > 72 * 3600000) return;
+      if (checkedForTs.has(cd.t)) return;
+      let hadAny = false;
+      const wKeys = Array.isArray(cd.ungradedKeys) ? cd.ungradedKeys : (Array.isArray(cd.keys) ? cd.keys : []);
+      wKeys.forEach(k => {
+        if (k && (screenVerdictAfter.get(k) || 0) <= cd.t) {
+          unverifiedWords.add(k);
+          hadAny = true;
+        }
+      });
+      const sKeys = Array.isArray(cd.ungradedSentKeys) ? cd.ungradedSentKeys : (Array.isArray(cd.sentKeys) ? cd.sentKeys : []);
+      sKeys.forEach(k => {
+        if (k && (screenVerdictAfter.get(k) || 0) <= cd.t) {
+          unverifiedSents.add(k);
+          hadAny = true;
+        }
+      });
+      (cd.sentEns || []).forEach(en => {
+        const clean = String(en || "").trim().toLowerCase();
+        if (clean) {
+          unverifiedEns.add(clean);
+          hadAny = true;
+        }
+      });
+      if (hadAny) pendingForTs.push(cd.t);
+    });
+
+    const commuteSessions7d = commuteEvs7d.length;
+    const screenSessions7d = screenSessionTs.length;
+    const commuteHeavy = commuteStreak >= 2 || (commuteSessions7d >= 2 && commuteSessions7d > screenSessions7d);
+    const commuteDebt = commuteHeavy || unverifiedWords.size > 0 || unverifiedSents.size > 0 || unverifiedEns.size > 0;
+
+    return {
+      commuteSessions7d,
+      screenSessions7d,
+      commuteStreak,
+      commuteHeavy,
+      commuteDebt,
+      unverifiedWords,
+      unverifiedSents,
+      unverifiedEns,
+      pendingForTs
+    };
+  }
+
+  /* Read telemetry + SRS + motivation + commute balance + batchNum to diagnose what the learner needs */
   function diagnose(ctx) {
     const now = ctx.now || Date.now();
     const srs = ctx.srs || {};
@@ -153,6 +254,7 @@
     const hwSet = ctx.homework instanceof Set ? ctx.homework : new Set(ctx.homework || []);
     const batchNum = inferBatchNum(ctx, now);
     const activeChapNum = resolveActiveChapterNum(ctx);
+    const cb = analyzeCommuteBalance(log, now);
 
     // 1. Gap days & motivation state
     const studyEvs = log.filter(x => x && x.t && ["vocab-rate", "sentence-rate", "sent-drill", "commute-done", "qtest-done", "qlisten-test", "gtest-done", "bucket", "prompt", "tryit-free-done", "lesson-card-rate"].includes(x.e));
@@ -215,29 +317,35 @@
     const quranPool = sentences.filter(s => s.track === "quran");
     const quranDue = quranPool.filter(s => isDue(srs[s.key], now) || isSlip(srs[s.key], now)).length;
 
-    // 5. Incremental Batch Review Ratio Policy:
-    //    Batch 1: Primary Daily Core + Weekly Sentence Lessons (~40-50% new weekly progression allowed)
-    //    Batch 2: Review-Focused Consolidation (~75-80% review, max 2 new items)
-    //    Batch 3+: Deep Review & Reinforcement (~90-100% review, 0 new items when enough review exists)
+    // 5. Incremental Batch Review Ratio Policy
     const baseAllowNew = !light && recentPassRate >= 0.55 && wordSlips <= 18;
     const allowNew = batchNum >= 3 ? false : baseAllowNew;
     const maxNewItems = !baseAllowNew ? 0 : batchNum === 1 ? 6 : batchNum === 2 ? 2 : 0;
     const reviewTargetShare = light ? 1.0 : batchNum === 1 ? 0.55 : batchNum === 2 ? 0.78 : 0.95;
 
-    const mode = comeback ? "comeback" : easyDay ? "light" : batchNum >= 3 ? "deep-review" : batchNum === 2 ? "review-plus" : (lastMood === "good" && recentPassRate >= 0.8) ? "surge" : "steady";
+    const mode = comeback ? "comeback"
+      : easyDay ? "light"
+      : (cb.commuteHeavy && batchNum === 1) ? "commute-balance"
+      : batchNum >= 3 ? "deep-review"
+      : batchNum === 2 ? "review-plus"
+      : (lastMood === "good" && recentPassRate >= 0.8) ? "surge"
+      : "steady";
 
-    // Compute dynamic target effort units per stream
+    // Compute dynamic target effort units per stream (including commute modality compensation!)
     let vocabUnits = 0;
     if (wordSlips >= 8 || hwWordsShaky >= 4) vocabUnits = light ? 2.0 : 3.5;
-    else if (wordSlips >= 3 || wordDue >= 8 || hwWordsShaky >= 1) vocabUnits = light ? 1.5 : (batchNum >= 2 ? 2.5 : 2.0);
-    else if (wordDue >= 1 || allowNew || batchNum >= 2) vocabUnits = batchNum >= 2 && wordDue >= 3 ? 2.0 : 1.0;
+    else if (wordSlips >= 3 || wordDue >= 8 || hwWordsShaky >= 1 || cb.unverifiedWords.size >= 2) vocabUnits = light ? 1.5 : (batchNum >= 2 ? 2.5 : 2.0);
+    else if (wordDue >= 1 || allowNew || batchNum >= 2 || cb.unverifiedWords.size >= 1) vocabUnits = batchNum >= 2 && wordDue >= 3 ? 2.0 : 1.0;
     else vocabUnits = 0;
 
     let grammarUnits = 0;
     if (light && grammarSlips === 0) {
       grammarUnits = 0;
-    } else if (grammarSlips >= 2 || recentErrors >= 3) {
+    } else if (grammarSlips >= 2 || recentErrors >= 3 || (cb.commuteHeavy && (grammarSlips >= 1 || grammarDue >= 1))) {
       grammarUnits = light ? 1.0 : 2.0;
+    } else if (cb.commuteHeavy && grammar.length) {
+      // Commute cannot show Arabic vowel endings or tables — guarantee visual grammar check on screen!
+      grammarUnits = 1.0;
     } else if (grammarSlips >= 1 || grammarDue >= 1 || weakFrame || (batchNum >= 2 && grammar.some(g => srs[g.key] && (srs[g.key].box || 0) <= 2))) {
       grammarUnits = 1.0;
     } else if (mode === "surge" && grammar.some(g => !srs[g.key])) {
@@ -247,7 +355,7 @@
     let quranUnits = 0;
     if (quranToday >= 3 && quranDue === 0 && batchNum === 1) {
       quranUnits = 0;
-    } else if (!light && earShare7d < 0.12 && quranPool.length >= 2 && budget >= 10 && batchNum === 1) {
+    } else if (!light && earShare7d < 0.12 && !cb.commuteHeavy && quranPool.length >= 2 && budget >= 10 && batchNum === 1) {
       quranUnits = 3.0;
     } else if (quranDue >= 1 || earShare7d < 0.28 || mode === "surge" || batchNum >= 2) {
       quranUnits = quranPool.length ? 1.5 : 0;
@@ -268,6 +376,18 @@
     const weeklyChapSents = chapPrefix ? sentences.filter(s => String(s.key || "").startsWith(chapPrefix)) : [];
     const weeklyChapSolid = weeklyChapSents.filter(s => ((srs[s.key] || {}).box || 0) >= 2 || (srs[s.key] || {}).b === "never").length;
 
+    let commuteNote = "";
+    if (cb.commuteDebt) {
+      const unv = cb.unverifiedWords.size + Math.max(cb.unverifiedSents.size, cb.unverifiedEns.size);
+      if (cb.commuteHeavy && unv > 0) {
+        commuteNote = `Balancing ${cb.commuteStreak || cb.commuteSessions7d} commute session(s): verifying ${unv} pocket-heard item(s) + visual Lesson Card & script check`;
+      } else if (cb.commuteHeavy) {
+        commuteNote = `Balancing ${cb.commuteStreak || cb.commuteSessions7d} commute session(s): catching up on visual Lesson Cards, Arabic script & active Try It`;
+      } else if (unv > 0) {
+        commuteNote = `Checking ${unv} item(s) heard on your commute on screen`;
+      }
+    }
+
     return {
       mode, light, comeback, easyDay, gapDays: Math.round(gapDays * 10) / 10,
       batchNum, activeChapNum,
@@ -278,6 +398,16 @@
       wordSlips, wordDue, hwWordsShaky,
       grammarSlips, grammarDue, recentErrors, weakFrame,
       earShare7d: Math.round(earShare7d * 100), quranDue, quranToday,
+      commuteSessions7d: cb.commuteSessions7d,
+      screenSessions7d: cb.screenSessions7d,
+      commuteStreak: cb.commuteStreak,
+      commuteHeavy: cb.commuteHeavy,
+      commuteDebt: cb.commuteDebt,
+      unverifiedCommuteWords: cb.unverifiedWords,
+      unverifiedCommuteSents: cb.unverifiedSents,
+      unverifiedCommuteEns: cb.unverifiedEns,
+      pendingCommuteForTs: cb.pendingForTs,
+      commuteNote,
       targets: { vocabUnits, grammarUnits, quranUnits, sentenceUnits }
     };
   }
@@ -303,6 +433,305 @@
     return sc;
   }
 
+  /* Compute real capability profile from SRS + telemetry (what Reza CAN and CANNOT do right now) */
+  function summarizeCapabilities(ctx) {
+    const now = ctx.now || Date.now();
+    const srs = ctx.srs || {};
+    const log = ctx.log || [];
+    const words = ctx.words || [];
+    const sentences = ctx.sentences || [];
+    const grammar = ctx.grammar || [];
+    const lessonCards = ctx.lessonCards || [];
+    const activeChapNum = resolveActiveChapterNum(ctx);
+    const cb = analyzeCommuteBalance(log, now);
+
+    // 1. Vocabulary recognition
+    let vocabHeld = 0, vocabLearning = 0, vocabSlips = 0, vocabSeen = 0;
+    words.forEach(w => {
+      const c = srs[w.key];
+      if (!c || (!c.u && !c.box && !c.b)) return;
+      if (c.b === "never") { vocabHeld++; vocabSeen++; return; }
+      vocabSeen++;
+      if ((c.box || 0) >= 3 || c.b === "know" || c.b === "strong") vocabHeld++;
+      else if (isSlip(c, now)) vocabSlips++;
+      else vocabLearning++;
+    });
+
+    // 2. Sentence recall vs proven active production (spoken/typed)
+    const activeProvenKeys = new Set();
+    const activeProvenEns = new Set();
+    log.forEach(x => {
+      if (!x) return;
+      if (x.e === "sent-drill" && x.ok && (x.how === "mic" || x.how === "typed")) {
+        if (x.key) activeProvenKeys.add(x.key);
+        if (x.en) activeProvenEns.add(String(x.en).trim().toLowerCase());
+      } else if (x.e === "prompt" && typeof x.score === "number" && x.score >= 0.7 && x.en) {
+        activeProvenEns.add(String(x.en).trim().toLowerCase());
+      }
+    });
+
+    const everydaySents = sentences.filter(s => s.track !== "quran" && s.kind !== "grammar" && s.kind !== "word");
+    let sentHeld = 0, sentSlips = 0, sentPassiveOnly = 0, sentProvenActive = 0;
+    everydaySents.forEach(s => {
+      const c = srs[s.key];
+      const enLow = String(s.en || "").trim().toLowerCase();
+      const isAct = activeProvenKeys.has(s.key) || (enLow && activeProvenEns.has(enLow));
+      if (isAct) sentProvenActive++;
+      if (!c || (!c.u && !c.box)) return;
+      if (c.b === "never" || (c.box || 0) >= 3) {
+        sentHeld++;
+        if (!isAct && c.b !== "never") sentPassiveOnly++;
+      } else if (isSlip(c, now)) {
+        sentSlips++;
+      }
+    });
+
+    const chapPrefix = activeChapNum ? `chap:${activeChapNum}:` : null;
+    const chapSents = chapPrefix ? everydaySents.filter(s => String(s.key || "").startsWith(chapPrefix)) : [];
+    const chapSolid = chapSents.filter(s => ((srs[s.key] || {}).box || 0) >= 2 || (srs[s.key] || {}).b === "never").length;
+
+    // 3. Lesson Cards & Grammar systems
+    let lcHeld = 0, lcSeen = 0, lcSlips = 0;
+    lessonCards.forEach(lc => {
+      const c = srs[lc.key];
+      if (!c || !c.u) return;
+      lcSeen++;
+      if ((c.box || 0) >= 2 || c.b === "never") lcHeld++;
+      else if (isSlip(c, now)) lcSlips++;
+    });
+
+    const patMap = new Map();
+    grammar.forEach(g => {
+      if (!patMap.has(g.patId)) patMap.set(g.patId, { name: g.grammarName || g.patId, keys: [] });
+      patMap.get(g.patId).keys.push(g.key);
+    });
+    let gramPatHeld = 0;
+    const shakyPatterns = [];
+    patMap.forEach((info) => {
+      const allSolid = info.keys.length > 0 && info.keys.every(k => ((srs[k] || {}).box || 0) >= 2);
+      const anySlip = info.keys.some(k => isSlip(srs[k], now));
+      if (allSolid) gramPatHeld++;
+      else if (anySlip) shakyPatterns.push(info.name);
+    });
+
+    // Top recurring error from error ledger in last 14d
+    const errCounts = {};
+    log.filter(x => x && x.t >= now - 14 * DAY && x.e === "sent-drill" && !x.ok && x.err).forEach(x => {
+      errCounts[x.err] = (errCounts[x.err] || 0) + 1;
+    });
+    const topError = Object.keys(errCounts).sort((a, b) => errCounts[b] - errCounts[a])[0] || null;
+
+    // 4. Qur'an by ear
+    const quranSents = sentences.filter(s => s.track === "quran");
+    const quranHeld = quranSents.filter(s => ((srs[s.key] || {}).box || 0) >= 3 || (srs[s.key] || {}).b === "never").length;
+    const earChecks7d = log.filter(x => x && x.t >= now - 7 * DAY && (x.e === "alisten-grade" || x.e === "qlisten-test" || x.e === "qtest-done")).length;
+
+    // Build honest "Can Do" vs "Focus / Cannot Yet Do" statements
+    const canDo = [];
+    const gaps = [];
+
+    if (vocabHeld > 0) canDo.push(`Recognise ${vocabHeld} vocabulary words reliably (${vocabLearning} in active learning)`);
+    if (sentProvenActive > 0) canDo.push(`Say or write ${sentProvenActive} Arabic sentences from English prompts`);
+    else if (sentHeld > 0) canDo.push(`Recall ${sentHeld} sentences on recognition (${sentProvenActive} proven spoken/typed)`);
+    if (lcHeld > 0) canDo.push(`Hold ${lcHeld}/${lessonCards.length} Lesson Card mental maps`);
+    if (quranHeld > 0) canDo.push(`Recognise ${quranHeld} Qur'an ayahs (${earChecks7d} ear checks in 7d)`);
+
+    if (vocabSlips > 0) gaps.push(`${vocabSlips} word slip(s) need reinforcement`);
+    if (sentSlips > 0) gaps.push(`${sentSlips} sentence slip(s) marked shaky recently`);
+    if (sentPassiveOnly >= 5) gaps.push(`${sentPassiveOnly} held sentences are passive-only — tap 🎯 Try it to prove spoken/written output`);
+    if (lessonCards.length > lcSeen) gaps.push(`${lessonCards.length - lcSeen} Lesson Card(s) not yet taught — Practice queues them as concepts arise`);
+    if (shakyPatterns.length) gaps.push(`Grammar slips in: ${shakyPatterns.slice(0, 3).join(", ")}`);
+    if (cb.commuteDebt) {
+      const unv = cb.unverifiedWords.size + Math.max(cb.unverifiedSents.size, cb.unverifiedEns.size);
+      gaps.push(unv > 0
+        ? `${unv} commute-heard item(s) need screen verification (script & vowels)`
+        : `${cb.commuteStreak || cb.commuteSessions7d} recent commute session(s) — catching up on visual Lesson Cards & script`);
+    }
+
+    return {
+      vocab: { held: vocabHeld, learning: vocabLearning, slips: vocabSlips, seen: vocabSeen, total: words.length },
+      sentences: {
+        held: sentHeld,
+        provenActive: sentProvenActive,
+        passiveOnly: sentPassiveOnly,
+        slips: sentSlips,
+        total: everydaySents.length,
+        activeChapNum,
+        activeChapSolid: chapSolid,
+        activeChapTotal: chapSents.length
+      },
+      concepts: {
+        lessonCardsHeld: lcHeld,
+        lessonCardsSeen: lcSeen,
+        lessonCardsSlips: lcSlips,
+        lessonCardsTotal: lessonCards.length,
+        grammarPatternsHeld: gramPatHeld,
+        grammarPatternsTotal: patMap.size,
+        shakyPatterns,
+        topError
+      },
+      quran: {
+        ayahsHeld: quranHeld,
+        ayahsTotal: quranSents.length,
+        earChecks7d
+      },
+      modality: {
+        commuteSessions7d: cb.commuteSessions7d,
+        screenSessions7d: cb.screenSessions7d,
+        commuteStreak: cb.commuteStreak,
+        commuteHeavy: cb.commuteHeavy,
+        unverifiedCommuteCount: cb.unverifiedWords.size + Math.max(cb.unverifiedSents.size, cb.unverifiedEns.size)
+      },
+      canDo,
+      gaps
+    };
+  }
+
+  /* Automatic Bidirectional Cross-Sync:
+     Every verdict in Screen Practice, Commute Practice, or Master Bank automatically updates:
+       · Primary SRS key (chap:N:i, ev-*, qc:*, lc:*, gt:*, s:q:*)
+       · Matching Chapter sentence key (chap:N:i) + active Chapter line pointer (ats-chap-line-chap-N)
+       · Matching Chapter vocab raw Arabic key (srs[ar]) + tw:<norm> twin + constituent word keys
+       · Grammar pattern completion (gtest-done) & Qur'an word keys (qw:*, qc:*) */
+  function syncVerdict(opts) {
+    const o = opts || {};
+    const srsApi = o.srsApi || (typeof root !== "undefined" && root.SRS) || null;
+    const getSrsFn = o.getSrs || (typeof root !== "undefined" && root.getSrs) || (() => ({}));
+    const storeApi = o.store || (typeof root !== "undefined" && root.store) || null;
+    const logFn = o.logEvent || (typeof root !== "undefined" && root.logEvent) || (() => {});
+    const normFn = o.normalizeAr || (typeof root !== "undefined" && root.normalizeAr) || stripAr;
+    const wordKeyFn = o.wordKeyFor || (typeof root !== "undefined" && root._wordKeyFor ? ar => root._wordKeyFor(normFn(ar).replace(/^ال/, "")) : null);
+    const chapters = o.chapters || [];
+    const item = o.item || {};
+    const key = o.key || item.key;
+    const g = o.grade || "yes";
+    const via = o.via || "practice";
+    const meta = o.meta || {};
+    const now = o.now || Date.now();
+
+    if (!key || !srsApi || typeof srsApi.rate !== "function") return null;
+
+    const nc = o.alreadyRated ? (getSrsFn()[key] || { box: 0, s: 0 }) : srsApi.rate(key, g);
+    const srsNow = getSrsFn();
+    const syncedChapNums = new Set();
+    const syncedWordKeys = [];
+
+    const syncSingleWord = (arText, wGrade, explicitKey) => {
+      if (!arText || wGrade === "retire") return;
+      const norm = normFn(arText).replace(/^ال/, "");
+      const canon = explicitKey || (wordKeyFn ? wordKeyFn(arText) : null);
+      if (canon && canon !== key && !(srsNow[canon] && srsNow[canon].b === "never")) {
+        srsApi.rate(canon, wGrade);
+        syncedWordKeys.push(canon);
+      }
+      if (norm && srsNow["tw:" + norm] && !(srsNow["tw:" + norm].b === "never")) {
+        srsApi.rate("tw:" + norm, wGrade);
+      }
+      // Sync raw Arabic word key if index.html Chapter Vocabulary rated this word directly
+      if (srsNow[arText] && arText !== key && !(srsNow[arText].b === "never")) {
+        srsApi.rate(arText, wGrade);
+      }
+    };
+
+    const kind = item.kind || (
+      /^lc:/.test(key) ? "lesson-card" :
+      /^gt:/.test(key) ? "grammar" :
+      (/^s:q:/.test(key) || item.track === "quran") ? "quran" :
+      (/^(ev-|qc:|fam-|tw:)/.test(key)) ? "word" : "sentence"
+    );
+
+    if (kind === "word") {
+      syncSingleWord(item.ar, g, key);
+      if (!o.skipPrimaryLog) {
+        logFn({ e: "vocab-rate", key, bucket: (srsApi.LEGACY_BUCKET && srsApi.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: item.ar, en: item.en, src: item.wordSrc || via, via, t: now });
+      }
+    } else if (kind === "lesson-card") {
+      if (!o.skipPrimaryLog) {
+        logFn({ e: "lesson-card-rate", key, lcId: item.lcId || String(key).replace(/^lc:/, ""), g, s: nc.s, box: nc.box, via, t: now });
+      }
+    } else if (kind === "grammar") {
+      if (!o.skipPrimaryLog) {
+        logFn({ e: "bucket", key, b: srsApi.TO_LEGACY ? srsApi.TO_LEGACY[g] : g, g, s: nc.s, box: nc.box, src: "practice-grammar", via, t: now });
+      }
+      if ((g === "yes" || g === "solid") && Array.isArray(item.patTestKeys) && item.patTestKeys.length) {
+        const after = getSrsFn();
+        const passedN = item.patTestKeys.filter(tk => after[tk] && (after[tk].g === "yes" || after[tk].g === "solid" || (after[tk].box || 0) >= 2)).length;
+        if (passedN === item.patTestKeys.length) {
+          logFn({ e: "gtest-done", id: item.patId, score: passedN, total: item.patTestKeys.length, via, t: now });
+        }
+      }
+    } else if (kind === "quran") {
+      if ((g === "yes" || g === "solid") && !meta.variant) {
+        (item.wordKeys || []).forEach(wk => {
+          if ((/^qw:/.test(wk) || /^qc:/.test(wk)) && !(srsNow[wk] && srsNow[wk].b === "never")) {
+            srsApi.rate(wk, "yes");
+            syncedWordKeys.push(wk);
+          }
+        });
+      }
+      if (!o.skipPrimaryLog) {
+        logFn({ e: "sentence-rate", key, bucket: (srsApi.LEGACY_BUCKET && srsApi.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: item.ar, en: item.en, src: "quran", via, t: now });
+      }
+    } else {
+      // Everyday / Chapter / Preply / MyDay sentence
+      if ((g === "yes" || g === "solid") && !meta.variant) {
+        (item.words || []).forEach(w => {
+          const wAr = Array.isArray(w) ? w[0] : (w && w.ar);
+          if (wAr) syncSingleWord(wAr, "yes", null);
+        });
+      }
+      // Cross-sync identical Chapter sentence if rated via myday/phrases/commute, or direct chap:N:i
+      const chapMatch = /^chap:(\d+):(\d+)$/.exec(key);
+      if (chapMatch) {
+        syncedChapNums.add(+chapMatch[1]);
+      } else if (item.ar && chapters.length && !meta.variant && g !== "retire") {
+        const targetNorm = stripAr(item.ar);
+        chapters.forEach(c => {
+          (c.sentences || []).forEach((cs, idx) => {
+            if (stripAr(cs.ar) === targetNorm) {
+              const ck = `chap:${c.num}:${idx}`;
+              if (!(srsNow[ck] && srsNow[ck].b === "never")) {
+                srsApi.rate(ck, g);
+                syncedChapNums.add(c.num);
+              }
+            }
+          });
+        });
+      }
+      if (!o.skipPrimaryLog) {
+        logFn({ e: "sentence-rate", key, bucket: (srsApi.LEGACY_BUCKET && srsApi.LEGACY_BUCKET[g]) || g, g, s: nc.s, box: nc.box, ar: item.ar, en: item.en, src: item.src || via, via, t: now });
+      }
+    }
+
+    // Advance Chapter line pointer (`ats-chap-line-chap-<num>`) on store so index.html resumes at exact next unheld line!
+    if (syncedChapNums.size && storeApi && typeof storeApi.set === "function") {
+      const updatedSrs = getSrsFn();
+      const log = typeof storeApi.get === "function" ? (storeApi.get("ats-log", []) || []) : [];
+      syncedChapNums.forEach(cNum => {
+        const chapId = `chap-${cNum}`;
+        const chapObj = chapters.find(c => c.num === cNum);
+        const totalLines = (chapObj && chapObj.sentences && chapObj.sentences.length) || 10;
+        let nextUnheld = totalLines - 1;
+        for (let i = 0; i < totalLines; i++) {
+          const ck = `chap:${cNum}:${i}`;
+          const card = updatedSrs[ck];
+          const held = card && ((card.box || 0) >= 2 || card.b === "never");
+          if (!held) { nextUnheld = i; break; }
+        }
+        storeApi.set(`ats-chap-line-${chapId}`, nextUnheld);
+        const isMastered = log.some(x => x && x.e === "chap-test" && x.chap === chapId && (x.score >= 80 || x.pass === true));
+        if (!isMastered) {
+          const curSaved = typeof storeApi.get === "function" ? storeApi.get("ats-current-chap-id") : null;
+          if (!curSaved || curSaved === chapId) {
+            storeApi.set("ats-current-chap-id", chapId);
+          }
+        }
+      });
+    }
+
+    return { nc, syncedChapNums: [...syncedChapNums], syncedWordKeys };
+  }
+
   function buildBatch(ctx) {
     const now = ctx.now || Date.now();
     const srs = ctx.srs || {};
@@ -313,10 +742,14 @@
     const diag = diagnose(ctx);
     const reviewBias = diag.batchNum >= 3 ? 1.6 : diag.batchNum === 2 ? 1.35 : 1.0;
 
-    // Commute continuity: sentences heard in last 36h not yet checked
-    const cd = [...log].reverse().find(e => e && e.e === "commute-done" && e.sentEns && e.sentEns.length && now - e.t < 36 * 3600000);
-    const checked = cd && log.some(e => e && e.e === "commute-check-done" && e.forT === cd.t);
-    const heardEns = new Set(cd && !checked ? cd.sentEns.map(s => String(s).trim().toLowerCase()) : []);
+    const heardEns = diag.unverifiedCommuteEns;
+    const unvSentKeys = diag.unverifiedCommuteSents;
+    const unvWordKeys = diag.unverifiedCommuteWords;
+
+    // Track passive-only held sentences so heavy commute streaks pull them for active Try It / script check
+    const activeProvenKeys = new Set(
+      log.filter(x => x && x.e === "sent-drill" && x.ok && (x.how === "mic" || x.how === "typed") && x.key).map(x => x.key)
+    );
 
     const chosen = [];
     const usedKeys = new Set(exclude);
@@ -331,16 +764,20 @@
       return newPickedCount < diag.maxNewItems;
     };
 
-    const addItem = (base, kind, why) => {
+    const addItem = (base, kind, why, modeOverride) => {
       const eff = EFFORT[kind] || 1.0;
       const isNewItem = !(srs[base.key] && srs[base.key].u);
       if (isNewItem) newPickedCount++;
       const patRule = (kind === "sentence" && base.pattern && gramMap[base.pattern]) ? gramMap[base.pattern] : (base.grammarRule || null);
+      const practiceMode = modeOverride || (isNewItem ? "teach" : "review");
+      const autoReveal = typeof base._autoReveal === "boolean" ? base._autoReveal : (practiceMode === "teach");
       const copy = Object.assign({}, base, {
         kind,
         effort: eff,
+        practiceMode,
+        _autoReveal: autoReveal,
         grammarRule: patRule,
-        _practice: { kind, effort: eff, why, isNew: isNewItem, batchNum: diag.batchNum }
+        _practice: { kind, effort: eff, why, isNew: isNewItem, practiceMode, batchNum: diag.batchNum }
       });
       if (!copy._try && why) copy._try = { why, p: base._try && base._try.p ? base._try.p : null };
       chosen.push(copy);
@@ -358,11 +795,21 @@
     const nSentTarget = Math.max(1, Math.round(diag.targets.sentenceUnits / EFFORT.sentence));
     const chapPrefix = diag.activeChapNum ? `chap:${diag.activeChapNum}:` : null;
 
-    // 1a. Advance active weekly Chapter sentence lessons systematically!
-    //     Batch 1: up to 2 unseen/shaky active-chapter sentences; Batch 2: up to 1; Batch 3+: review-only (shaky/due chapter sentences still eligible as review!)
+    // 1a. Commute Compensation Step 1: verify up to 2 ungraded commute-heard sentences on screen!
+    if ((unvSentKeys.size || heardEns.size) && !diag.light) {
+      const commuteSents = everydayPool.filter(s =>
+        unvSentKeys.has(s.key) || heardEns.has(String(s.en || "").trim().toLowerCase())
+      );
+      for (const cs of commuteSents.slice(0, Math.min(2, nSentTarget))) {
+        if (usedKeys.has(cs.key)) continue;
+        addItem(cs, "sentence", "commute check — verify on screen", "commute-verify");
+      }
+    }
+
+    // 1b. Advance active weekly Chapter sentence lessons systematically!
     if (chapPrefix) {
       const chapCandidates = everydayPool
-        .filter(s => String(s.key || "").startsWith(chapPrefix))
+        .filter(s => !usedKeys.has(s.key) && String(s.key || "").startsWith(chapPrefix))
         .sort((a, b) => {
           const ia = +(String(a.key).split(":")[2] || 0);
           const ib = +(String(b.key).split(":")[2] || 0);
@@ -372,21 +819,21 @@
           return slipA - slipB || ia - ib;
         });
 
-      const maxChapSlots = diag.light ? 0 : diag.batchNum === 1 ? Math.min(2, Math.max(1, nSentTarget - 1)) : diag.batchNum === 2 ? 1 : 0;
+      const maxChapSlots = diag.light ? 0 : diag.batchNum === 1 ? Math.min(2, Math.max(1, nSentTarget - chosen.filter(x => x.kind === "sentence").length)) : diag.batchNum === 2 ? 1 : 0;
       let chapAdded = 0;
       for (const cs of chapCandidates) {
         if (chapAdded >= maxChapSlots) break;
         const c = srs[cs.key];
         const seen = !!(c && c.u);
-        if (seen && (c.box || 0) >= 3 && !isDue(c, now)) continue; // already held & not due
+        if (seen && (c.box || 0) >= 3 && !isDue(c, now)) continue;
         if (!seen && !canTakeNew(cs)) continue;
-        const why = seen ? `Ch ${diag.activeChapNum} review` : `weekly lesson · Ch ${diag.activeChapNum}`;
+        const why = seen ? `Ch ${diag.activeChapNum} review` : `new lesson · Ch ${diag.activeChapNum}`;
         addItem(cs, "sentence", why);
         chapAdded++;
       }
     }
 
-    // 1b. Fill remaining sentence target via FreeTry + review-weighted fallback
+    // 1c. Fill remaining sentence target via FreeTry + review-weighted fallback
     const remSentTarget = Math.max(0, nSentTarget - chosen.filter(x => x.kind === "sentence").length);
     let pickedSents = [];
 
@@ -401,7 +848,8 @@
         sweetShift: (diag.light || diag.batchNum >= 2) ? 0.65 : 0,
         wordKeyFor: ctx.wordKeyFor || null,
         boost: key =>
-          (heardEns.has(byEn.get(key)) ? 3.5 : 0) +
+          (unvSentKeys.has(key) || heardEns.has(byEn.get(key)) ? 4.5 : 0) +
+          (diag.commuteHeavy && srs[key] && srs[key].u && !activeProvenKeys.has(key) ? 2.2 : 0) +
           (chapPrefix && String(key).startsWith(chapPrefix) ? 2.6 : 0) +
           (/^md:/.test(key) ? 1.8 : 0) +
           (/^cls:/.test(key) ? 1.5 : 0) +
@@ -421,7 +869,8 @@
         .map(s => ({
           s,
           sc: scoreCandidate(s, srs, now, hwSet, diag.allowNew, it =>
-            (heardEns.has(String(it.en || "").trim().toLowerCase()) ? 4 : 0) +
+            (unvSentKeys.has(it.key) || heardEns.has(String(it.en || "").trim().toLowerCase()) ? 5 : 0) +
+            (diag.commuteHeavy && srs[it.key] && srs[it.key].u && !activeProvenKeys.has(it.key) ? 2.2 : 0) +
             (chapPrefix && String(it.key || "").startsWith(chapPrefix) ? 2.5 : 0) +
             (/^md:/.test(it.key) ? 1.8 : 0), reviewBias)
         }))
@@ -431,31 +880,31 @@
       pickedSents = pickedSents.concat(fallback);
     }
 
-    // If review-only mode (e.g. Batch 3+) has fewer seen items than needed on a brand-new profile, allow fallback
     let addedRemSents = 0;
     for (const s of pickedSents) {
       if (addedRemSents >= remSentTarget) break;
       if (usedKeys.has(s.key)) continue;
       const seen = !!(srs[s.key] && srs[s.key].u);
       if (!seen && !canTakeNew(s)) continue;
-      const why = heardEns.has(String(s.en || "").trim().toLowerCase()) ? "from commute"
+      const isCommuteUnv = unvSentKeys.has(s.key) || heardEns.has(String(s.en || "").trim().toLowerCase());
+      const why = isCommuteUnv ? "commute check — verify on screen"
         : isSlip(srs[s.key], now) ? "slip review"
+        : (diag.commuteHeavy && seen && !activeProvenKeys.has(s.key)) ? "script & production check"
         : isDue(srs[s.key], now) ? "due sentence"
         : seen ? "consolidation"
-        : (s._try && s._try.why) ? s._try.why : "spoken core";
-      addItem(s, "sentence", why);
+        : (s._try && s._try.why) ? s._try.why : "new sentence — teach";
+      addItem(s, "sentence", why, isCommuteUnv ? "commute-verify" : undefined);
       addedRemSents++;
     }
-    // Safety fallback if brand-new learner had 0 seen sentences in Batch 2/3
     if (chosen.filter(x => x.kind === "sentence").length < Math.min(2, nSentTarget)) {
       for (const s of everydayPool) {
         if (chosen.filter(x => x.kind === "sentence").length >= nSentTarget) break;
         if (usedKeys.has(s.key)) continue;
-        addItem(s, "sentence", "spoken core");
+        addItem(s, "sentence", (srs[s.key] && srs[s.key].u) ? "consolidation" : "new sentence — teach");
       }
     }
 
-    // 2. Pick Grammar items — preferring patterns exercised by today's chosen sentences!
+    // 2. Pick Grammar items — preferring patterns exercised by today's sentences + boosted after heavy commutes!
     const activeSentPatterns = new Set(chosen.map(x => x.pattern).filter(p => p && p !== "-"));
     const nGramTarget = Math.floor((diag.targets.grammarUnits + 0.01) / EFFORT.grammar);
     if (nGramTarget > 0 && (ctx.grammar || []).length) {
@@ -465,9 +914,10 @@
           g,
           sc: scoreCandidate(
             g, srs, now, hwSet,
-            diag.allowNew || diag.weakFrame === g.patId || activeSentPatterns.has(g.patId),
+            diag.allowNew || diag.commuteHeavy || diag.weakFrame === g.patId || activeSentPatterns.has(g.patId),
             it => (diag.weakFrame && it.patId === diag.weakFrame ? 4.5 : 0) +
-                  (activeSentPatterns.has(it.patId) ? 3.5 : 0),
+                  (activeSentPatterns.has(it.patId) ? 3.5 : 0) +
+                  (diag.commuteHeavy ? 2.5 : 0),
             reviewBias
           )
         }))
@@ -480,6 +930,7 @@
         if (seenPat.has(g.patId) && gramScored.length > nGramTarget) continue;
         seenPat.add(g.patId);
         const why = isSlip(srs[g.key], now) ? "grammar slip"
+          : diag.commuteHeavy ? `script & vowel check: ${g.grammarName}`
           : activeSentPatterns.has(g.patId) ? `rule in today's sentence: ${g.grammarName}`
           : (diag.weakFrame === g.patId ? `focus: ${g.grammarName}` : "grammar check");
         addItem(g, "grammar", why);
@@ -494,6 +945,7 @@
         .map(q => ({
           q,
           sc: scoreCandidate(q, srs, now, hwSet, diag.allowNew || SALAH_RE.test(q.key), it =>
+            (unvSentKeys.has(it.key) ? 5.0 : 0) +
             (SALAH_RE.test(it.key) ? 3.0 : 0) + (it.ref ? 1.0 : 0), reviewBias)
         }))
         .filter(x => x.sc > -500)
@@ -501,14 +953,17 @@
       for (const { q } of qScored) {
         if (chosen.filter(x => x.kind === "quran").length >= nQuranTarget) break;
         if (effort + EFFORT.quran > diag.budget + 0.5) break;
-        const why = isSlip(srs[q.key], now) ? "ayah review" : isDue(srs[q.key], now) ? "due ayah" : (srs[q.key] && srs[q.key].u) ? "ayah consolidation" : "Qur'an by ear";
-        addItem(q, "quran", why);
+        const isCommuteUnv = unvSentKeys.has(q.key);
+        const why = isCommuteUnv ? "heard on commute — ayah check"
+          : isSlip(srs[q.key], now) ? "ayah review"
+          : isDue(srs[q.key], now) ? "due ayah"
+          : (srs[q.key] && srs[q.key].u) ? "ayah consolidation"
+          : "new ayah — Qur'an by ear";
+        addItem(q, "quran", why, isCommuteUnv ? "commute-verify" : undefined);
       }
     }
 
-    // 3b. Lesson Cards (1.0 effort unit, max 1 per batch):
-    //     · Proactive Teaching: unseen Lesson Card matching a grammar pattern, word, or active chapter in this batch
-    //     · Spaced Review: seen Lesson Card whose SRS interval is due or slipped
+    // 3b. Lesson Cards (1.0 effort unit, max 1 per batch — boosted when compensating for heavy commutes!)
     const lcRawPool = (ctx.lessonCards || []).filter(lc =>
       lc && lc.key && !usedKeys.has(lc.key) && !exclude.has(lc.key) && !(srs[lc.key] && srs[lc.key].b === "never")
     );
@@ -530,33 +985,36 @@
 
         if (seen && (isSlip(c, now) || isDue(c, now))) {
           const r = recallNow(c, now);
-          const sc = (isSlip(c, now) ? 24 : 18) + (matchesBatch ? 5 : 0) + (1 - r) * 4;
+          const sc = (isSlip(c, now) ? 24 : 18) + (matchesBatch ? 5 : 0) + (diag.commuteHeavy ? 4 : 0) + (1 - r) * 4;
           lcCandidates.push({ lc, sc, lcMode: "review", autoReveal: false, why: isSlip(c, now) ? "lesson card slip" : "lesson card review" });
-        } else if (!seen && !diag.light && matchesBatch && (diag.batchNum <= 2 || patHit)) {
-          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0);
-          lcCandidates.push({ lc, sc, lcMode: "teach", autoReveal: true, why: "new lesson card — teach" });
-        } else if (seen && diag.batchNum >= 2 && (c.box || 0) <= 1 && matchesBatch && (now - c.u > 2 * 3600000)) {
-          lcCandidates.push({ lc, sc: 12, lcMode: "review", autoReveal: false, why: "lesson card consolidation" });
+        } else if (!seen && !diag.light && (matchesBatch || diag.commuteHeavy) && (diag.batchNum <= 2 || patHit || diag.commuteHeavy)) {
+          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0) + (diag.commuteHeavy ? 5 : 0);
+          const why = diag.commuteHeavy && !matchesBatch ? "visual lesson card — missed on commute" : "new lesson card — teach";
+          lcCandidates.push({ lc, sc, lcMode: "teach", autoReveal: true, why });
+        } else if (seen && (diag.batchNum >= 2 || diag.commuteHeavy) && (c.box || 0) <= 1 && (matchesBatch || diag.commuteHeavy) && (now - c.u > 2 * 3600000)) {
+          lcCandidates.push({ lc, sc: 12 + (diag.commuteHeavy ? 4 : 0), lcMode: "review", autoReveal: false, why: diag.commuteHeavy ? "visual map check after commute" : "lesson card consolidation" });
         }
       });
       lcCandidates.sort((a, b) => b.sc - a.sc);
       if (lcCandidates.length) {
         const best = lcCandidates[0];
         const copy = Object.assign({}, best.lc, { lcMode: best.lcMode, _autoReveal: best.autoReveal });
-        addItem(copy, "lesson-card", best.why);
+        addItem(copy, "lesson-card", best.why, best.lcMode === "teach" ? "teach" : "review");
       }
     }
 
-    // 4. Fill remaining effort budget with Vocabulary words (0.5 each)
+    // 4. Fill remaining effort budget with Vocabulary words (0.5 each — unverified commute words pulled first!)
     const wordPool = (ctx.words || []).filter(w => {
       if (usedKeys.has(w.key)) return false;
+      if (unvWordKeys.has(w.key)) return true; // always allow explicit check of pocket-heard commute word
       const n = stripAr(w.ar).replace(/^ال/, "");
       return !coveredNormWords.has(n);
     });
     const wordScored = wordPool
       .map(w => ({
         w,
-        sc: scoreCandidate(w, srs, now, hwSet, diag.allowNew, it =>
+        sc: scoreCandidate(w, srs, now, hwSet, diag.allowNew || unvWordKeys.has(w.key), it =>
+          (unvWordKeys.has(it.key) ? 8.0 : 0) +
           (it.src === "teacher" ? 1.2 : it.src === "quran" ? 1.0 : 0.6), reviewBias)
       }))
       .filter(x => x.sc > -500)
@@ -567,9 +1025,15 @@
       const w = wordScored[i].w;
       const c = srs[w.key];
       const seen = !!(c && c.u);
-      if (!seen && !canTakeNew(w) && wordScored.slice(i + 1).some(x => srs[x.w.key] && srs[x.w.key].u)) continue;
+      const isCommuteUnv = unvWordKeys.has(w.key);
+      if (!seen && !isCommuteUnv && !canTakeNew(w) && wordScored.slice(i + 1).some(x => srs[x.w.key] && srs[x.w.key].u)) continue;
       if (chosen.filter(x => x.kind === "word").length >= maxWords) break;
-      const why = hwSet.has(w.key) ? "class vocab" : isSlip(c, now) ? "word slip" : isDue(c, now) ? "due word" : seen ? "word review" : "new word";
+      const why = isCommuteUnv ? "heard on commute — screen check"
+        : hwSet.has(w.key) ? (seen ? "class vocab review" : "new class word — teach")
+        : isSlip(c, now) ? "word slip"
+        : isDue(c, now) ? "due word"
+        : seen ? "word review"
+        : "new word — teach";
       addItem({
         key: w.key,
         ar: w.ar,
@@ -580,7 +1044,7 @@
         src: "vocab",
         wordSrc: w.src || "everyday",
         track: w.src === "quran" ? "quran-word" : "vocab"
-      }, "word", why);
+      }, "word", why, isCommuteUnv ? "commute-verify" : undefined);
     }
 
     // 5. Top up if effort is still short of budget
@@ -592,11 +1056,11 @@
       for (const s of extraSents) {
         if (effort + EFFORT.sentence > diag.budget + 0.5) break;
         const seen = !!(srs[s.key] && srs[s.key].u);
-        addItem(s, "sentence", seen ? "consolidation" : "spoken core");
+        addItem(s, "sentence", seen ? "consolidation" : "new sentence — teach");
       }
     }
 
-    // 6. Smooth interleaving (Teach-mode Lesson Cards go first so rule is taught before application!)
+    // 6. Smooth interleaving (Teach-mode Lesson Cards go at #1 so concept is taught before application!)
     const lcTeachPicked = chosen.filter(x => x.kind === "lesson-card" && x.lcMode === "teach");
     const lcReviewPicked = chosen.filter(x => x.kind === "lesson-card" && x.lcMode !== "teach");
     const wordsPicked = chosen.filter(x => x.kind === "word");
@@ -629,7 +1093,8 @@
       lessonCard: ordered.filter(x => x.kind === "lesson-card").length,
       quran: ordered.filter(x => x.kind === "quran").length
     };
-    const reviewCount = ordered.filter(x => x._practice && !x._practice.isNew).length;
+    const teachCount = ordered.filter(x => x.practiceMode === "teach").length;
+    const reviewCount = ordered.length - teachCount;
     const reviewPct = ordered.length ? Math.round((reviewCount / ordered.length) * 100) : 0;
 
     const parts = [];
@@ -640,33 +1105,200 @@
     if (counts.quran) parts.push(`${counts.quran} Qur'an`);
 
     const chapTag = diag.activeChapNum && diag.weeklyChapTotal
-      ? `Ch ${diag.activeChapNum} weekly sentences: ${diag.weeklyChapSolid}/${diag.weeklyChapTotal} solid`
+      ? `Ch ${diag.activeChapNum}: ${diag.weeklyChapSolid}/${diag.weeklyChapTotal} solid`
       : "";
+    const teachReviewTag = teachCount > 0 ? `${teachCount} teach · ${reviewCount} review` : `${reviewCount} review`;
     const batchRole = diag.light ? "lighter review round"
-      : diag.batchNum === 1 ? "Daily Core + Weekly Sentences"
+      : diag.batchNum === 1 ? `Daily Core (${teachReviewTag})`
       : diag.batchNum === 2 ? `Review-Focused Mix (${reviewPct}% review)`
       : `Deep Review (${reviewPct}% review)`;
 
     const title = diag.light
       ? `⚡ Practice · Batch ${diag.batchNum} (Lighter Round)`
+      : diag.commuteHeavy && diag.batchNum === 1
+      ? `⚡ Practice · Batch ${diag.batchNum} — Screen Catch-Up & Daily Core`
       : `⚡ Practice · Batch ${diag.batchNum} — ${diag.batchNum === 1 ? "Daily Core & Weekly Sentences" : diag.batchNum === 2 ? "Review-Focused Mix" : "Deep Review"}`;
+
+    const capabilities = summarizeCapabilities(ctx);
 
     return {
       list: ordered,
       effort,
       budget: diag.budget,
       batchNum: diag.batchNum,
+      teachCount,
       reviewCount,
       reviewPct,
       counts,
       diag,
-      pendingCommute: cd && !checked && heardEns.size ? { t: cd.t, n: heardEns.size } : null,
+      capabilities,
+      pendingCommute: diag.pendingCommuteForTs.length
+        ? { t: diag.pendingCommuteForTs[diag.pendingCommuteForTs.length - 1], forTs: diag.pendingCommuteForTs, n: ordered.filter(x => x.practiceMode === "commute-verify").length || 1 }
+        : null,
       title,
-      summary: `${parts.join(" · ")} (= ${effort} units) · ${batchRole}${chapTag ? " · " + chapTag : ""}`
+      summary: `${parts.join(" · ")} (= ${effort} units) · ${batchRole}${chapTag ? " · " + chapTag : ""}${diag.commuteNote ? " · 🔄 " + diag.commuteNote : ""}`
     };
   }
 
-  /* Build a ready-to-paste 3–5 min AI Voice Session Brief tailored to the exact items practiced in this batch! */
+  /* Build the hands-free Commute Practice queue (audio.html?commute=1):
+     1. Proven Sunday script warm-up (kind: "script")
+     2. 1 Spoken Lesson Card Golden Rule cue (kind: "rule") when relevant
+     3. Active weekly Chapter sentences + Say-your-day sentences (kind: "say", tagged isNew for audio teach-first!)
+     4. 1–2 Qur'an by Ear ayahs with Mishary Rashid Alafasy audio (kind: "quran")
+     5. Due/weakest + up to 2 new weekly vocabulary words interleaved with sentences (kind: "word") */
+  function buildCommuteQueue(ctx) {
+    const now = ctx.now || Date.now();
+    const srs = ctx.srs || {};
+    const scriptLines = ctx.scriptLines || [];
+    const activeChapNum = resolveActiveChapterNum(ctx);
+    const chapPrefix = activeChapNum ? `chap:${activeChapNum}:` : null;
+    const allSentences = ctx.sentences || [];
+    const freeTrySents = ctx.freeTrySentences || [];
+    const lessonCards = ctx.lessonCards || [];
+    const words = ctx.words || [];
+    const hwSet = ctx.homework instanceof Set ? ctx.homework : new Set(ctx.homework || []);
+
+    const q = [];
+    const usedSentKeys = new Set();
+    const usedAr = new Set();
+
+    // Part 1: Proven script warm-up
+    scriptLines.forEach(s => {
+      if (!s || !s.ar) return;
+      usedAr.add(stripAr(s.ar));
+      q.push({ kind: "script", key: s.key || null, sent: s, isNew: false });
+    });
+
+    // Gather active weekly Chapter sentences (up to 3: 1-2 review + 1-2 teach)
+    const chapPicked = [];
+    if (chapPrefix) {
+      const chapPool = allSentences
+        .filter(s => String(s.key || "").startsWith(chapPrefix) && !(srs[s.key] && srs[s.key].b === "never"))
+        .sort((a, b) => {
+          const ia = +(String(a.key).split(":")[2] || 0);
+          const ib = +(String(b.key).split(":")[2] || 0);
+          const ca = srs[a.key], cb = srs[b.key];
+          const ra = isSlip(ca, now) ? 0 : (ca && ca.u && (ca.box || 0) < 2) ? 1 : (!ca || !ca.u) ? 2 : 3;
+          const rb = isSlip(cb, now) ? 0 : (cb && cb.u && (cb.box || 0) < 2) ? 1 : (!cb || !cb.u) ? 2 : 3;
+          return ra - rb || ia - ib;
+        });
+      let newChapCount = 0;
+      for (const cs of chapPool) {
+        if (chapPicked.length >= 3) break;
+        if (usedAr.has(stripAr(cs.ar))) continue;
+        const c = srs[cs.key];
+        const seen = !!(c && c.u);
+        if (seen && (c.box || 0) >= 3 && !isDue(c, now)) continue;
+        if (!seen && newChapCount >= 2) continue;
+        if (!seen) newChapCount++;
+        chapPicked.push(Object.assign({}, cs, { isNew: !seen }));
+        usedSentKeys.add(cs.key);
+        usedAr.add(stripAr(cs.ar));
+      }
+    }
+
+    // Merge with FreeTry Say-Your-Day sentences (up to 6 total spoken sentences)
+    const sayList = chapPicked.slice();
+    for (const fs of freeTrySents) {
+      if (sayList.length >= 6) break;
+      if (!fs || !fs.ar || usedSentKeys.has(fs.key) || usedAr.has(stripAr(fs.ar))) continue;
+      const seen = !!(fs.key && srs[fs.key] && srs[fs.key].u);
+      sayList.push(Object.assign({}, fs, { isNew: !seen }));
+      if (fs.key) usedSentKeys.add(fs.key);
+      usedAr.add(stripAr(fs.ar));
+    }
+
+    // Part 2: 1 Spoken Lesson Card Golden Rule cue matching active chapter or today's sentences
+    const sayPatterns = new Set(sayList.map(s => s.pattern).filter(p => p && p !== "-"));
+    const lcMatch = lessonCards.find(lc => {
+      if (!lc || (srs[lc.key] && srs[lc.key].b === "never")) return false;
+      const c = srs[lc.key];
+      if (c && (c.box || 0) >= 3 && !isDue(c, now)) return false;
+      const trig = lc.triggers || {};
+      return (trig.patterns || []).some(p => sayPatterns.has(p)) || (activeChapNum && (trig.chapters || []).includes(activeChapNum));
+    });
+    if (lcMatch) {
+      const card = lcMatch.lcCard || lcMatch;
+      const cleanSummary = String(card.audioCue || card.summary || lcMatch.note || "")
+        .replace(/[\u0600-\u06FF]+/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      q.push({
+        kind: "rule",
+        key: lcMatch.key,
+        title: card.title || lcMatch.title || "Lesson Card Rule",
+        enCue: cleanSummary,
+        arModel: lcMatch.speakAr || lcMatch.ar || "",
+        enModel: lcMatch.en || "",
+        lcCard: card,
+        isNew: !(srs[lcMatch.key] && srs[lcMatch.key].u)
+      });
+    }
+
+    // Part 3: Active Chapter + Say-Your-Day sentences
+    sayList.forEach(s => {
+      q.push({
+        kind: "say",
+        key: s.key || null,
+        sent: s,
+        isNew: !!s.isNew
+      });
+    });
+
+    // Part 4: 1–2 Qur'an by Ear ayahs (Mishary Rashid Alafasy recitation)
+    const quranPool = allSentences
+      .filter(s => s.track === "quran" && s.ref && !(srs[s.key] && srs[s.key].b === "never"))
+      .map(qItem => ({
+        qItem,
+        sc: scoreCandidate(qItem, srs, now, hwSet, true, it => (SALAH_RE.test(it.key) ? 3.5 : 1.0), 1.2)
+      }))
+      .sort((a, b) => b.sc - a.sc);
+    quranPool.slice(0, 2).forEach(({ qItem }) => {
+      const seen = !!(srs[qItem.key] && srs[qItem.key].u);
+      q.push({
+        kind: "quran",
+        key: qItem.key,
+        sent: qItem,
+        ref: qItem.ref,
+        isNew: !seen
+      });
+    });
+
+    // Part 5: Vocabulary words (due/weakest + up to 2 unseen class/chapter words taught audio-first), interleaved with sentences
+    const wordCandidates = [];
+    let newWordCount = 0;
+    words.forEach(w => {
+      if (!w || !w.key || !w.ar || !w.en) return;
+      const c = srs[w.key];
+      if (c && c.b === "never") return;
+      const seen = !!(c && c.u);
+      if (!seen && !hwSet.has(w.key) && w.src !== "teacher") return;
+      const sc = scoreCandidate(w, srs, now, hwSet, true, it => (it.src === "teacher" ? 2.0 : 0.5), 1.1);
+      wordCandidates.push({ w, seen, sc });
+    });
+    wordCandidates.sort((a, b) => b.sc - a.sc);
+    const pickedWords = [];
+    for (const cand of wordCandidates) {
+      if (pickedWords.length >= 16) break;
+      if (!cand.seen) {
+        if (newWordCount >= 2) continue;
+        newWordCount++;
+      }
+      pickedWords.push(Object.assign({}, cand.w, { isNew: !cand.seen }));
+    }
+
+    pickedWords.forEach((w, i) => {
+      q.push({ kind: "word", key: w.key, word: w, isNew: !!w.isNew });
+      if ((i + 1) % 3 === 0 && sayList.length) {
+        const s = sayList[Math.floor(i / 3) % sayList.length];
+        q.push({ kind: "sent", key: s.key || null, sent: s, isNew: false });
+      }
+    });
+
+    return q;
+  }
+
+  /* Build a ready-to-paste 3–5 min AI Voice Session Brief tailored to the exact items practiced in this batch */
   function buildSpeakingBrief(items, opts) {
     const o = opts || {};
     const srs = o.srs || {};
@@ -685,7 +1317,6 @@
       return c && (c.g === "no" || c.g === "maybe" || c.b === "learning" || c.b === "weak");
     });
 
-    // Collect grammar rules active in this batch
     const patIds = new Set();
     grams.forEach(g => { if (g.patId) patIds.add(g.patId); });
     sents.forEach(s => { if (s.pattern && s.pattern !== "-") patIds.add(s.pattern); });
@@ -704,7 +1335,7 @@
       p += `1. Target Spoken Sentences from This Batch (drill these + 1 natural variation each):\n`;
       sents.forEach((s, i) => {
         const c = srs[s.key];
-        const tag = c && (c.g === "no" || c.g === "maybe") ? " [PRIORITY SLIP — practice twice!]" : "";
+        const tag = c && (c.g === "no" || c.g === "maybe") ? " [PRIORITY SLIP — practice twice!]" : (s.practiceMode === "teach" ? " [NEW TODAY]" : "");
         p += `   ${i + 1}. ${s.ar} — "${s.en}"${tag}\n`;
       });
       p += `\n`;
@@ -714,7 +1345,7 @@
       p += `2. Vocabulary Words to Weave Into Short Questions:\n`;
       words.forEach(w => {
         const c = srs[w.key];
-        const tag = c && (c.g === "no" || c.g === "maybe") ? " [SLIP]" : "";
+        const tag = c && (c.g === "no" || c.g === "maybe") ? " [SLIP]" : (w.practiceMode === "teach" ? " [NEW]" : "");
         p += `   - ${w.ar} (${w.en})${tag}\n`;
       });
       p += `\n`;
@@ -754,5 +1385,17 @@
     return p;
   }
 
-  return { EFFORT, diagnose, buildGrammarPool, buildGrammarMap, buildBatch, buildSpeakingBrief, recallNow };
+  return {
+    EFFORT,
+    diagnose,
+    analyzeCommuteBalance,
+    summarizeCapabilities,
+    syncVerdict,
+    buildGrammarPool,
+    buildGrammarMap,
+    buildBatch,
+    buildCommuteQueue,
+    buildSpeakingBrief,
+    recallNow
+  };
 });
