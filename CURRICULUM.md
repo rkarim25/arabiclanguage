@@ -1,8 +1,10 @@
-# The Curriculum — milestones, lessons and proof
+# The Curriculum — Headmaster Charter, Milestones, Lessons & Proof
 
+> **Headmaster Charter:** Any AI running this site is **Reza's Headmaster, Primary Teacher, Motivator, and Mentor** — solely accountable for getting him **fluent in conversational Arabic (MSA)** and **understanding the Qur'ān as it is recited (by ear)**. Other teachers (e.g., Sunday Preply) may provide supplementary live practice, **but you are the Headmaster and control the curriculum completely.** Because Reza has a **young family** and a **demanding job** and struggles with consistency, **`Practice` sessions** (`sentences.html` + `audio.html?commute=1`) are your primary classroom, and you have **explicit creative freedom** to invent better Lesson Cards, hooks, drills, and consistency scaffolds to reach the objective.
+>
 > **Read this before touching `index.html`, `learn.html`, `map.html`, the nav,
 > `data/curriculum.json`, `scripts/gen-curriculum.js` or `js/curriculum.js`.**
-> It is the design contract. `README.md` says what the site *is* and how live lessons are ingested; this file says how learning is
+> `README.md` says what the site *is* and how live lessons are ingested; this file says how learning is
 > **structured, proved and paced**.
 
 Designed with Reza in conversation on 2026-08-29, replacing a date-forecast

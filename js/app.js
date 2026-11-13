@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mweq1fyc";
+const DATA_V = "mweqa0f6";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4237,9 +4237,9 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `> **Instruction for AI Tutors (ChatGPT, Claude, Voice Mode & Custom GPTs):**\n`;
   md += `> You are ${me.name}'s personal Arabic conversation tutor. Keep your voice replies strictly to 1–2 short sentences in clear Modern Standard Arabic (MSA) with full vowels (tashkeel). Never monologue or lecture. Prompt him to speak, and drill natural variations of target sentences.\n\n`;
   md += `## 1. Learner Profile & Real-Time Stats\n`;
-  md += `- **Learner:** ${me.full || me.name}${me.email ? ` (${me.email})` : ""} — ${me.email === "rkarim88@gmail.com" ? "Time-poor senior investment manager" : "beginner, learning alongside family"}\n`;
+  md += `- **Learner:** ${me.full || me.name}${me.email ? ` (${me.email})` : ""} — ${me.email === "rkarim88@gmail.com" ? "Senior investment manager with a young family & demanding job (high-yield 5–10 min windows; warm, zero-guilt consistency support)" : "beginner, learning alongside family"}\n`;
   md += `- **Ranked Goals:** (1) Understand Qur'an by ear (Qari: Mishary Rashid Alafasy), (2) Spoken MSA conversation\n`;
-  md += `- **Primary Curriculum Organiser:** AI Coach (Primary Teacher owning grammar, weekly Chapter sentences, SRS & Qur'an by ear); Live Preply conversation tutor on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
+  md += `- **Educational Governance (Headmaster Model):** AI Coach on site = Headmaster, Primary Teacher, Motivator & Mentor controlling 100% of curriculum via Practice & Commute sessions; Sunday Preply tutor & AI Voice sessions serve as supplementary spoken practice under the Headmaster's syllabus\n`;
   md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3 / Know), ${learningCount} active learning, ${weakCount} need review (${totalTracked} total tracked)\n`;
   md += `- **Milestones Cleared:** ${masteredChapTests} chapters mastered, ${masteredClasses} teacher lessons mastered\n\n`;
 

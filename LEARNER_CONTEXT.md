@@ -5,15 +5,15 @@
 
 ---
 
-## 1. Learner Profile & Study Architecture
+## 1. Learner Profile & Educational Governance
 
-- **Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager, time-poor, focused on high-yield 5–10 minute sessions.
-- **Ranked Goals:**
-  1. **Understand the Qur'ān by ear** (Reciter: **Mishary Rashid Alafasy**).
-  2. **Hold natural conversations in Modern Standard Arabic (MSA).**
-- **Curriculum Structure:**
-  - **Primary Teacher & Organiser:** AI Coach (`Practice` engine on `sentences.html` + `Commute Practice` on `audio.html?commute=1`), teaching and reviewing **Vocabulary, Sentences, Qur'ān by ear, Grammar, and visual Lesson Cards**, with automatic cross-sync to Weekly Chapters (`index.html`) and SRS (`words.html`).
-  - **Supplementary Live Speaking:** Weekly Sunday 07:00 UK Preply conversation class (*Al-Arabiyyah Bayna Yadayk Book 1* & *Arabic Through the Qur'ān*).
+- **Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and a **demanding job** who works in high-yield 5–10 minute windows and needs warm, zero-guilt consistency support.
+- **Supreme Objectives:**
+  1. **Understand the Qur'ān as it is recited (by ear)** (Reciter: **Mishary Rashid Alafasy**).
+  2. **Achieve fluency in conversational Modern Standard Arabic (MSA).**
+- **Governance (Headmaster Model):**
+  - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`Practice` sessions** (`sentences.html` on screen + `audio.html?commute=1` hands-free), auto-syncing Weekly Chapters (`index.html`), Vocabulary (`words.html`), and visual Lesson Cards (`sets.html`).
+  - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
 - **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. ~600+ active SRS cards held solid (`Box 3–5`).
 
 ---
