@@ -48,6 +48,12 @@
 5. **Visual Lesson Cards (`data/lesson-cards.json`, `js/lesson-cards.js`, `sets.html`):**
    - 9 structured visual cards (`lc:negation`, `lc:verb-tenses`, `lc:price-triplet`, `lc:pronoun-attachments`, `lc:idafa-vs-adjective`, `lc:lookalike-roots`, `lc:sadr-vs-qalb`, `lc:requests-and-modals`, `lc:days-and-clock`) with diagrams (`timeline`, `lanes`, `fortress`), neural audio tables, trap warnings, pure-English commute `audioCue`s, and SRS review bars. Shelved at the top of `sets.html` (`#lc-<id>`), taught at `#1` in `Practice`, and reviewed via SRS.
 
+6. **`🧑‍🏫 Teacher` Tab & Headmaster Master Plan (`class.html`):**
+   - Top nav (`js/app.js`) exposes **`🧑‍🏫 Teacher`** (`class.html`), combining:
+     - **📋 Auto-Updating 20-Minute Teacher Brief (`#teacherBrief`):** Pulls words, sentences, grammar/Lesson Cards, and Qur'ān items Reza actually practised (`ats-log` + `ats-srs`, switchable `Today` / `7 days` / `14 days`), strictly capped to fit **~20 minutes** of live lesson time (max 4 sentences, max 5 words, 1 grammar twist, 1 roleplay scenario, 1 Qur'ān ayah + up to 3 Qur'ān words + 1 short root/meaning gem, and a 5-word + 2-sentence chat wrap-up rule). 1-tap copy in **🇬🇧 English**, **🇸🇦 العربية**, or **🌐 Both**.
+     - **🗺️ My Progress & Coming Weeks Master Plan (`#masterPlanSection`):** Live capability metrics (`Practice.summarizeCapabilities`), 10-Chapter spine strip, dynamic Now vs Coming Weeks roadmap, and collapsible 4-Stage Master Syllabus.
+     - **📥 Paste Preply Chat Notes (`#pasteLessonSection`)** + collapsible **📚 Captured Preply Lessons & Mastery Tests Archive (`#pastClassesArchive`)**.
+
 ---
 
 ## 2. Current Verified State (13 Nov 2026 — Friday Evening)

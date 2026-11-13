@@ -7,9 +7,9 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Preply Lessons — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfc8qpw">
-  <link rel="stylesheet" href="css/style.css?v=mwfc8qpw">
+  <title>Teacher &amp; Master Plan — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
+  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -120,33 +120,116 @@
     .q-choice.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
 
     /* Paste Box */
-    .paste-card { background: #faf8f5; border: 1px dashed var(--border); border-radius: 14px; padding: 18px; margin-top: 30px; }
+    .paste-card { background: #faf8f5; border: 1px dashed var(--border); border-radius: 14px; padding: 18px; margin-top: 20px; }
     @media (prefers-color-scheme: dark) { .paste-card { background: rgba(255,255,255,0.02); } }
+
+    /* Teacher Hub: 20-Min Brief + Headmaster Master Plan */
+    .tb-card { background: var(--card); border: 1.5px solid var(--accent); border-top: 5px solid var(--accent); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.04); }
+    .tb-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+    .tb-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .tb-pill-group { display: inline-flex; background: rgba(0,0,0,0.03); border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 2px; }
+    @media (prefers-color-scheme: dark) { .tb-pill-group { background: rgba(255,255,255,0.05); } }
+    .tb-pill { border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; cursor: pointer; transition: all 0.12s; }
+    .tb-pill:hover { color: var(--ink); }
+    .tb-pill.active { background: var(--accent); color: #fff; }
+    .tb-section { background: #fcfaf5; border: 1px solid var(--border); border-radius: 11px; padding: 12px 14px; margin-bottom: 10px; }
+    @media (prefers-color-scheme: dark) { .tb-section { background: rgba(255,255,255,0.025); } }
+    .tb-sec-title { font-weight: 700; font-size: 14px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .tb-item-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--border); flex-wrap: wrap; }
+    .tb-item-row:last-child { border-bottom: none; padding-bottom: 2px; }
+    .tb-ar { font-family: var(--font-ar); font-size: 22px; color: var(--ink); direction: rtl; line-height: 1.75; }
+    .tb-word-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+    .tb-word-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 4px 10px; font-size: 13px; }
+    .tb-word-chip.shaky { border-color: #d97706; background: #fffbeb; }
+    @media (prefers-color-scheme: dark) { .tb-word-chip.shaky { background: rgba(217,119,6,0.14); } }
+    .tb-tag { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+    .tb-tag.slip { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .tb-tag.ok { background: var(--accent-soft); color: var(--accent); }
+    @media (prefers-color-scheme: dark) { .tb-tag.slip { background: rgba(220,38,38,0.18); color: #fca5a5; border-color: rgba(220,38,38,0.35); } }
+    .tb-ar-preview { direction: rtl; text-align: right; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; font-size: 14.5px; line-height: 1.85; white-space: pre-wrap; margin-top: 8px; }
+
+    .mp-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; }
+    .mp-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 10px; margin: 12px 0 14px; }
+    .mp-stat { background: #fcfaf5; border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; }
+    @media (prefers-color-scheme: dark) { .mp-stat { background: rgba(255,255,255,0.025); } }
+    .mp-stat-lbl { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+    .mp-stat-val { font-size: 20px; font-weight: 800; color: var(--accent); margin: 3px 0 2px; }
+    .mp-stat-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .mp-chap-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px; }
+    .mp-chap-pill { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); text-decoration: none; font-weight: 600; }
+    .mp-chap-pill.done { background: #ecfdf5; border-color: #10b981; color: #047857; }
+    .mp-chap-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+    @media (prefers-color-scheme: dark) { .mp-chap-pill.done { background: rgba(16,185,129,0.16); color: #6ee7b7; } }
+    .mp-horizon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 10px; }
+    .mp-horizon { border: 1px solid var(--border); border-radius: 11px; padding: 12px 14px; background: var(--card); }
+    .mp-horizon.now { border: 1.5px solid var(--accent); background: rgba(13,122,95,0.04); }
   </style>
 </head>
 <body>
 <main>
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px">
     <div>
-      <span class="class-tag">🧑‍🏫 Live Preply Teacher Lessons</span>
-      <h1 style="margin:4px 0">Sunday Classes &amp; Mastery Tests</h1>
-      <p class="sub" style="margin:2px 0">Every lesson your teacher gives, stored with audio, word-by-word breakdown, deep concept notes, and a comprehensive mastery test.</p>
+      <span class="class-tag">🧑‍🏫 Headmaster Plan &amp; Preply Direction</span>
+      <h1 style="margin:4px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span>Teacher &amp; Master Plan</span>
+        <span class="arabic" style="color:var(--accent);font-size:26px">خُطَّةُ التَّعَلُّمِ وَدَرْسُ الأُسْتَاذَةِ</span>
+      </h1>
+      <p class="sub" style="margin:2px 0">Daily-updating 20-minute brief for your Preply teacher (from what you practised) + your live progress &amp; coming-weeks plan.</p>
     </div>
-    <span id="lessonStatusBadge" class="status-pill" style="font-size:13px;padding:6px 14px">Checking status…</span>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <a href="sentences.html" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Open Practice →</a>
+      <button type="button" class="book-toggle-pill" onclick="document.getElementById('pasteLessonSection').scrollIntoView({behavior:'smooth'})">📥 Paste Class Notes ↓</button>
+    </div>
   </div>
 
-  <!-- LESSON SELECTOR SWITCHER -->
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
-    <span id="lessonSwitcher" style="display:contents"></span>
+  <!-- 1. DAILY-UPDATING 20-MINUTE TEACHER BRIEF -->
+  <div id="teacherBrief">
+    <div class="tb-card" style="color:var(--muted);font-size:14px">Loading your daily 20-minute Teacher Brief…</div>
   </div>
 
-  <!-- UPCOMING SUNDAY PREPARATION / HOMEWORK CARD -->
-  <div id="hwPrepCard"></div>
-  <!-- the brief for her (COACH-LOOP gap C): five lines she can read in 30 seconds -->
-  <div id="teacherBrief"></div>
+  <!-- SUNDAY WARM-UP SCRIPT & HOMEWORK CHECK-IN -->
+  <details id="sundayCheckDrawer" class="more block" style="margin:0 0 16px">
+    <summary>✅ Sunday Class Check-In &amp; Warm-Up Script ("I told her about my week")</summary>
+    <div class="more-body" style="padding-top:10px">
+      <div id="hwPrepCard"></div>
+    </div>
+  </details>
 
-  <!-- ACTIVE LESSON CONTAINER -->
-  <div class="card" id="lessonCard" style="border-top: 4px solid var(--accent)">
+  <!-- 2. HEADMASTER MASTER PLAN: CURRENT PROGRESS & COMING WEEKS -->
+  <div id="masterPlanSection">
+    <div class="mp-card" style="color:var(--muted);font-size:14px">Loading your live progress &amp; coming-weeks Master Plan…</div>
+  </div>
+
+  <!-- 3. PASTE PREPLY CHAT NOTES / SLIDES -->
+  <div class="paste-card" id="pasteLessonSection" style="margin:0 0 20px">
+    <h3 style="margin:0 0 6px">📥 Paste Your Preply Chat Notes (5 Words + 2 Sentences)</h3>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
+      Right after your 25-minute Preply lesson, paste the new/corrected words &amp; sentences from chat (or upload slide photos). Your Headmaster weaves them straight into Practice.
+    </p>
+    <textarea id="pasteText" placeholder="Paste class notes, corrected sentences, or word list here..." style="width:100%;min-height:85px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box"></textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <label style="font-size:13px;color:var(--muted);cursor:pointer">
+        📷 Upload Slides / Photos: <input type="file" id="pasteImages" multiple accept="image/*" style="font-size:12px">
+      </label>
+      <button type="button" class="primary" onclick="submitPreplyLesson()">Save Class Lesson</button>
+    </div>
+    <div id="pasteFeedback" style="font-size:13px;color:var(--accent);margin-top:8px"></div>
+  </div>
+
+  <!-- 4. PAST PREPLY LESSONS & MASTERY TESTS ARCHIVE -->
+  <details id="pastClassesArchive" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:24px">
+    <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <span>📚 Captured Preply Lessons, Reading Dialogues &amp; Mastery Tests</span>
+      <span id="lessonStatusBadge" class="status-pill" style="font-size:12.5px;padding:4px 12px">Checking status…</span>
+    </summary>
+    <div style="margin-top:14px">
+      <!-- LESSON SELECTOR SWITCHER -->
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
+        <span id="lessonSwitcher" style="display:contents"></span>
+      </div>
+
+      <!-- ACTIVE LESSON CONTAINER -->
+      <div class="card" id="lessonCard" style="border-top: 4px solid var(--accent)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
       <div>
         <span id="lessonMetaDate" style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 2 · 27 SEP 2026</span>
@@ -481,34 +564,22 @@
       <button type="button" class="primary" style="font-size:15px;padding:10px 22px" onclick="startMasteryTest()">Start Mastery Test →</button>
     </div>
   </div>
-
-  <!-- 7. PASTE NEXT SUNDAY'S PREPLY LESSON -->
-  <div class="paste-card">
-    <h3 style="margin:0 0 6px">📥 Paste Your Next Preply Lesson</h3>
-    <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
-      After your Sunday 07:00 class, simply paste your notes or upload photos of your teacher's slides here. It will automatically be formatted into the next chapter and comprehensive test.
-    </p>
-    <textarea id="pasteText" placeholder="Paste class notes, sentences, or word list here..." style="width:100%;min-height:90px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:10px"></textarea>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <label style="font-size:13px;color:var(--muted);cursor:pointer">
-        📷 Upload Slides / Photos: <input type="file" id="pasteImages" multiple accept="image/*" style="font-size:12px">
-      </label>
-      <button type="button" class="primary" onclick="submitPreplyLesson()">Save Class Lesson</button>
     </div>
-    <div id="pasteFeedback" style="font-size:13px;color:var(--accent);margin-top:8px"></div>
-  </div>
+  </details>
 </main>
 
-<script src="js/progress-model.js?v=mwfc8qpw"></script>
-<script src="js/curriculum.js?v=mwfc8qpw"></script>
-<script src="js/srs.js?v=mwfc8qpw"></script>
-<script src="js/app.js?v=mwfc8qpw"></script>
-<script src="js/tracker.js?v=mwfc8qpw"></script>
-<script src="js/frames.js?v=mwfc8qpw"></script>
-<script src="js/freetry.js?v=mwfc8qpw"></script>
-<script src="js/errors.js?v=mwfc8qpw"></script>
-<script src="js/plan.js?v=mwfc8qpw"></script>
-<script src="js/account.js?v=mwfc8qpw"></script>
+<script src="js/progress-model.js?v=mwffnqho"></script>
+<script src="js/curriculum.js?v=mwffnqho"></script>
+<script src="js/srs.js?v=mwffnqho"></script>
+<script src="js/frames.js?v=mwffnqho"></script>
+<script src="js/freetry.js?v=mwffnqho"></script>
+<script src="js/practice.js?v=mwffnqho"></script>
+<script src="js/lesson-cards.js?v=mwffnqho"></script>
+<script src="js/app.js?v=mwffnqho"></script>
+<script src="js/tracker.js?v=mwffnqho"></script>
+<script src="js/errors.js?v=mwffnqho"></script>
+<script src="js/plan.js?v=mwffnqho"></script>
+<script src="js/account.js?v=mwffnqho"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -518,22 +589,195 @@ let STORY_DATA = null;
 let CLASS_DATA = null;
 let VERSES_DATA = null;
 
+const TEACHER_HUB = {
+  ready: false,
+  chapters: [],
+  sentences: [],
+  words: [],
+  grammar: [],
+  grammarPatterns: [],
+  grammarMap: {},
+  lessonCards: [],
+  rawLessonCards: [],
+  myday: [],
+  freq: {},
+  keyIndex: new Map(),
+  normWordIndex: new Map()
+};
+let BRIEF_LANG = "en";     // "en" | "ar" | "both"
+let BRIEF_WINDOW = "7d";   // "today" | "7d" | "14d"
+
 (async () => {
   try {
-    const [cRes, vRes] = await Promise.all([
+    const sunDrawer = document.getElementById("sundayCheckDrawer");
+    if (sunDrawer && new Date().getDay() === 0) sunDrawer.open = true;
+
+    const [
+      cRes, vRes, chapRes, bankRes, evRes, qCoreRes, famRes, gramRes, lcRes, mydayRes, freqRes
+    ] = await Promise.all([
       fetch("data/classes.json").then(r => r.json()),
       fetch("data/verses.json").then(r => r.json()),
+      fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
+      fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+      fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+      fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
+      fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
+      fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
+      fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
       loadFamIdx(),
       loadQuranWordAudio()
     ]);
+
     CLASS_DATA = cRes;
     VERSES_DATA = vRes;
+    TEACHER_HUB.chapters = (chapRes && chapRes.chapters) || [];
+    TEACHER_HUB.grammarPatterns = (gramRes && gramRes.patterns) || [];
+    TEACHER_HUB.rawLessonCards = (lcRes && lcRes.cards) || [];
+    TEACHER_HUB.myday = (mydayRes && mydayRes.sentences) || [];
+    TEACHER_HUB.freq = (freqRes && freqRes.words) || {};
+
+    if (window.LessonCards && Array.isArray(TEACHER_HUB.rawLessonCards)) {
+      TEACHER_HUB.lessonCards = LessonCards.buildPracticePool(TEACHER_HUB.rawLessonCards);
+      TEACHER_HUB.lessonCards.forEach(lc => {
+        TEACHER_HUB.keyIndex.set(lc.key, {
+          key: lc.key, kind: "lesson-card", ar: lc.ar, en: lc.en,
+          title: (lc.lcCard && lc.lcCard.title) || lc.title || lc.key,
+          summary: (lc.lcCard && lc.lcCard.summary) || lc.note || "",
+          trap: (lc.lcCard && lc.lcCard.trap) || "",
+          lcCard: lc.lcCard
+        });
+      });
+    }
+
+    if (window.Practice) {
+      TEACHER_HUB.grammar = Practice.buildGrammarPool(TEACHER_HUB.grammarPatterns);
+      TEACHER_HUB.grammarMap = Practice.buildGrammarMap(TEACHER_HUB.grammarPatterns);
+      TEACHER_HUB.grammar.forEach(g => TEACHER_HUB.keyIndex.set(g.key, g));
+    }
+
+    // Build vocabulary pool & key index (matching words.html + sentences.html)
+    const seenW = new Set();
+    const regWord = (key, ar, en, tr, note, src) => {
+      if (!key || !ar || !en) return;
+      const item = { key, kind: src === "quran" ? "quran-word" : "word", ar, en, tr: tr || "", note: note || "", src };
+      TEACHER_HUB.keyIndex.set(key, item);
+      const n = normalizeAr(ar);
+      if (!TEACHER_HUB.normWordIndex.has(n)) TEACHER_HUB.normWordIndex.set(n, item);
+      const nBare = n.replace(/^ال/, "");
+      if (nBare && !TEACHER_HUB.normWordIndex.has(nBare)) TEACHER_HUB.normWordIndex.set(nBare, item);
+      if (!seenW.has(n)) {
+        seenW.add(n);
+        TEACHER_HUB.words.push({ key, ar, en, tr: tr || "", note: note || "", src });
+      }
+    };
+    (cRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => regWord(v.key, v.ar, v.en, v.tr, v.note, "teacher")));
+    (qCoreRes.words || []).forEach((w, i) => regWord("qc:" + i, w.ar, w.en, w.tr, "Qur'an core", "quran"));
+    (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => regWord("ev-" + g.id + ":" + i, m.ar, m.en, m.tr, m.note, "everyday")));
+    (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => regWord("fam-" + f.id + ":" + i, m.ar, m.en, "", "Root: " + f.root, "root")));
+
+    // Index Qur'an word-by-word keys qw:<surahId>:<vi>:<wi> from verses.json
+    ((vRes && vRes.surahs) || []).forEach(s => {
+      (s.verses || []).forEach((v, vi) => {
+        const ref = v.ref || (s.n + ":" + (vi + 1));
+        const ayahObj = {
+          key: "s:q:" + s.id + ":" + (vi + 1),
+          kind: "quran", track: "quran",
+          ar: v.ar, en: v.en, ref,
+          surah: s.name || s.id, surahId: s.id, surahNum: s.n, ayahNum: vi + 1
+        };
+        TEACHER_HUB.keyIndex.set(ayahObj.key, ayahObj);
+        (v.words || []).forEach((w, wi) => {
+          const gloss = w[2] || (w.length > 1 ? w[1] : "");
+          if (w[0] && gloss) {
+            TEACHER_HUB.keyIndex.set("qw:" + s.id + ":" + vi + ":" + wi, {
+              key: "qw:" + s.id + ":" + vi + ":" + wi,
+              kind: "quran-word", src: "quran",
+              ar: w[0], en: gloss, tr: w[1] && w[2] ? w[1] : "",
+              ref, surah: s.name || s.id, surahId: s.id, surahNum: s.n
+            });
+          }
+        });
+      });
+    });
+
+    // Index user tapwords tw:*
+    const tapWords = store.get("ats-tapwords", {}) || {};
+    Object.entries(tapWords).forEach(([norm, tw]) => {
+      if (tw && tw.ar && tw.en) {
+        TEACHER_HUB.keyIndex.set("tw:" + norm, { key: "tw:" + norm, kind: "word", ar: tw.ar, en: tw.en, tr: tw.tr || "", src: "tap" });
+      }
+    });
+
+    // Build sentence pool & key index (matching sentences.html)
+    const seenS = new Set();
+    const regSent = (key, ar, en, tr, src, track, extra) => {
+      if (!ar || !en) return;
+      const obj = Object.assign({
+        key: key || ("s:" + normalizeAr(ar).slice(0, 16)),
+        kind: track === "quran" ? "quran" : "sentence",
+        ar, en, tr: tr || "", src: src || "bank", track: track || "everyday"
+      }, extra || {});
+      TEACHER_HUB.keyIndex.set(obj.key, obj);
+      const n = normalizeAr(ar);
+      if (!seenS.has(n)) {
+        seenS.add(n);
+        TEACHER_HUB.sentences.push(obj);
+      }
+    };
+    TEACHER_HUB.chapters.forEach(c => {
+      (c.sentences || []).forEach((s, idx) => {
+        regSent("chap:" + c.num + ":" + idx, s.ar, s.en, s.tr, "chapters", "everyday", {
+          chapNum: c.num, pattern: s.pattern || null, frames: s.frames || []
+        });
+      });
+    });
+    (cRes.classes || []).forEach(c => {
+      (c.sentences || []).forEach((s, idx) => {
+        regSent("cls:" + c.id + ":" + idx, s.ar, s.en, s.tr, "teacher", "class", {
+          pattern: s.pattern || null, frames: s.frames || []
+        });
+      });
+    });
+    (bankRes.sentences || []).forEach(s => {
+      let surahNum = null, ayahNum = null;
+      if (s.ref && /^d+:d+$/.test(s.ref)) {
+        const parts = s.ref.split(":");
+        surahNum = +parts[0];
+        ayahNum = +parts[1];
+      }
+      regSent(s.key || s.id, s.ar, s.en, s.tr, s.src || "bank", s.track || "everyday", {
+        ref: s.ref || null, surah: s.surah || null, surahNum, ayahNum,
+        pattern: s.pattern || "-", frames: s.frames || []
+      });
+    });
+    TEACHER_HUB.myday.forEach(m => {
+      if (m && m.id && m.ar && m.en) {
+        TEACHER_HUB.keyIndex.set(m.id, {
+          key: m.id, kind: "sentence", ar: m.ar, en: m.en, tr: m.tr || "",
+          swap: m.swap || "", src: "myday", track: "everyday"
+        });
+      }
+    });
+
+    TEACHER_HUB.ready = true;
+    await renderTeacherBrief();
+    renderMasterPlan();
+
     renderLessonSwitcher();
     const want = new URLSearchParams(location.search).get("class");
+    if (want) {
+      const arch = document.getElementById("pastClassesArchive");
+      if (arch) arch.open = true;
+    }
     await loadClassLesson(want && CLASS_DATA.classes.some(c => c.id === want) ? want : CLASS_DATA.classes[0].id);
     renderHomeworkCard();
+
+    // Re-render brief & progress automatically if cloud sync finishes after initial paint
+    window.addEventListener("ats-synced", () => { renderTeacherBrief(); renderMasterPlan(); });
   } catch (e) {
-    console.error("Failed to load lesson data", e);
+    console.error("Failed to load Teacher Hub data", e);
   }
 })();
 
@@ -704,52 +948,596 @@ function renderHomeworkCard() {
   }
 }
 
-/* 📋 THE BRIEF FOR HER — the loop was one-way (her lesson → the site); now the site tells her
-   what it knows: ask me about, I keep missing, drill aloud, my weak grammar, the budget. */
+/* Resolve any SRS / log key to a structured item using TEACHER_HUB */
+function resolveHubItem(key) {
+  if (!key) return null;
+  if (TEACHER_HUB.keyIndex.has(key)) return TEACHER_HUB.keyIndex.get(key);
+  if (/^[\u0600-\u06FF]/.test(key)) {
+    const n = normalizeAr(key);
+    return TEACHER_HUB.normWordIndex.get(n) || TEACHER_HUB.normWordIndex.get(n.replace(/^ال/, "")) || null;
+  }
+  return null;
+}
+
+function getActiveWeeklyChapterObj() {
+  const chaps = TEACHER_HUB.chapters || [];
+  if (!chaps.length) return null;
+  const log = store.get("ats-log", []);
+  const passed = new Set(
+    log.filter(x => x && x.e === "chap-test" && x.chap && (x.score >= 80 || x.pass === true)).map(x => String(x.chap))
+  );
+  const saved = store.get("ats-current-chap-id") || localStorage.getItem("ats-current-chap-id");
+  if (saved) {
+    const hit = chaps.find(c => c.id === saved && !passed.has(c.id));
+    if (hit) return hit;
+  }
+  return chaps.find(c => !passed.has(c.id)) || chaps[chaps.length - 1];
+}
+
+function setBriefLang(lang) {
+  BRIEF_LANG = lang;
+  renderTeacherBrief();
+}
+
+function setBriefWindow(win) {
+  BRIEF_WINDOW = win;
+  renderTeacherBrief();
+}
+
+/* 📋 DAILY-UPDATING 20-MINUTE TEACHER BRIEF:
+   Pulls words, sentences, grammar/Lesson Cards, and Qur'an items Reza actually practised
+   in Practice / Commute sessions, strictly capped to fit ~20 minutes of live lesson time. */
 async function renderTeacherBrief() {
   const el = document.getElementById("teacherBrief");
   if (!el) return;
+  if (!TEACHER_HUB.ready) return;
   try {
-    const prof = typeof planProfile === "function" ? planProfile() : { teacher: "your teacher", isReza: true };
-    const log = store.get("ats-log", []);
-    const script = (typeof planScript === "function" ? planScript() : []).slice(0, 3);
-    const led = (typeof Errors === "object" && Errors) ? Errors.ledger(log, 60) : { pairs: [], sounds: [], cats: {} };
-    // the weakest grammar frame, from the engine's own profile over the bank
-    let gram = null;
-    try {
-      if (typeof FreeTry === "object" && FreeTry && FreeTry.grammarProfile) {
-        const bank = await fetch("data/sentence-bank.json").then(r => r.json());
-        const pool = (bank.sentences || []).filter(s => s.track !== "quran");
-        const G = FreeTry.grammarProfile(pool, { now: Date.now(), srs: getSrs(), log, freq: {}, homework: new Set() });
-        const p = G.focus && G.profile[G.focus];
-        if (G.focus && p && !p.unseen) gram = { frame: G.focus, passRate: p.passRate };
-      }
-    } catch (e) {}
-    // the five words most overdue, named
+    const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const now = Date.now();
+    const DAY_MS = 86400000;
     const srs = getSrs();
-    const dueKeys = Object.entries(srs).filter(([k, c]) => c && c.u && c.b !== "never" && (c.due || 0) < Date.now() && !/^(s:|md:|chap:)/.test(k)).sort((a, b) => (a[1].due || 0) - (b[1].due || 0)).slice(0, 5).map(([k]) => k);
-    let dueWords = [];
-    try { dueWords = (typeof resolveCards === "function" && dueKeys.length) ? (await resolveCards(dueKeys)).filter(c => c && c.ar).slice(0, 5) : []; } catch (e) {}
-    const lines = [];
-    if (script.length) lines.push(`1. Ask me about my day — I can say: ${script.map(s => `"${s.en}"`).join(", ")}.`);
-    else lines.push("1. Ask me about my day — I am building sentences about it this week.");
-    const miss = led.pairs.slice(0, 2).map(p => `${p.model} / ${p.got}`);
-    const snd = led.sounds.slice(0, 1).map(s => `the ${s.name} (${s.sound})`);
-    lines.push(`2. I keep mixing up: ${miss.length ? miss.join(", ") : "nothing recorded yet"}${snd.length ? `; my ${snd[0]} comes out weak` : ""}.`);
-    lines.push(`3. Drill aloud with me: ${dueWords.length ? dueWords.map(c => c.ar + (c.en ? ` (${c.en})` : "")).join(", ") : "my due words — the site will name them next week"}.`);
-    lines.push(`4. My weak grammar: ${gram ? `${gram.frame}${gram.passRate != null ? ` (I pass ${gram.passRate}%)` : ""}` : "not enough evidence yet — ask me to make sentences with كان and لم"}.`);
-    if (prof.budget !== false) lines.push("5. My budget: ten minutes on four mornings. Please: five words and one sentence a week.");
-    const text = `Brief for ${prof.isReza ? "my teacher" : "my teacher"} — ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}\n` + lines.join("\n");
-    el.innerHTML = `<details class="more block" style="margin:0 0 16px"><summary>📋 Brief for ${prof.teacher === "her" ? "her" : "your teacher"} — 30 seconds</summary>
-      <div class="more-body" style="font-size:13.5px;line-height:1.55">
-        ${lines.map(l => `<div style="margin:4px 0">${l.replace(/</g, "&lt;")}</div>`).join("")}
-        <div style="margin-top:8px"><button type="button" class="book-toggle-pill" id="briefCopy">📋 Copy</button> <span class="pd-muted" style="font-size:12px">Send it before Sunday, or read it to her at the start.</span></div>
-      </div></details>`;
+    const log = store.get("ats-log", []);
+    const activeChap = getActiveWeeklyChapterObj();
+    const activeChapNum = activeChap ? activeChap.num : 4;
+
+    // Collect recent practice touches from BOTH ats-log AND srs[k].u
+    const collectTouches = (daysBack) => {
+      const cutoff = now - daysBack * DAY_MS;
+      const map = new Map(); // key -> { item, t, shaky, count }
+      const touch = (key, t, isShaky, fallbackAr, fallbackEn) => {
+        if (!key || !t || t < cutoff) return;
+        let item = resolveHubItem(key);
+        if (!item && fallbackAr && fallbackEn) {
+          item = { key, kind: "sentence", ar: fallbackAr, en: fallbackEn, src: "drill", track: "everyday" };
+        }
+        if (!item || !item.ar || !item.en) return;
+        const prev = map.get(item.key);
+        if (!prev) {
+          map.set(item.key, { item, t, shaky: !!isShaky, count: 1 });
+        } else {
+          prev.t = Math.max(prev.t, t);
+          prev.shaky = prev.shaky || !!isShaky;
+          prev.count++;
+        }
+      };
+
+      log.forEach(ev => {
+        if (!ev || !ev.t || ev.t < cutoff) return;
+        if (ev.e === "vocab-rate" || ev.e === "sentence-rate" || ev.e === "lesson-card-rate") {
+          const shaky = ev.g === "no" || ev.g === "maybe" || ev.bucket === "learning" || ev.bucket === "weak";
+          touch(ev.key, ev.t, shaky);
+        } else if (ev.e === "bucket" && ev.key) {
+          const shaky = ev.bucket === "learning" || ev.bucket === "weak";
+          touch(ev.key, ev.t, shaky);
+        } else if (ev.e === "sent-drill") {
+          touch(ev.key || ("drill:" + normalizeAr(ev.ar || "").slice(0, 14)), ev.t, !ev.ok, ev.ar, ev.en);
+        }
+      });
+
+      Object.entries(srs).forEach(([k, c]) => {
+        if (!c || !c.u || c.u < cutoff || c.b === "never") return;
+        const shaky = c.g === "no" || c.g === "maybe" || (c.box || 0) <= 1 || c.b === "learning" || c.b === "weak";
+        touch(k, c.u, shaky);
+      });
+
+      return [...map.values()].sort((a, b) => (b.shaky ? 1 : 0) - (a.shaky ? 1 : 0) || b.t - a.t);
+    };
+
+    const reqDays = BRIEF_WINDOW === "today" ? 1.5 : BRIEF_WINDOW === "14d" ? 14 : 7;
+    let touches = collectTouches(reqDays);
+    let effectiveWindowNote = BRIEF_WINDOW === "today" ? "practised today" : BRIEF_WINDOW === "14d" ? "practised in last 14 days" : "practised in last 7 days";
+    if (touches.length < 3 && BRIEF_WINDOW !== "14d") {
+      const wider = collectTouches(14);
+      if (wider.length > touches.length) {
+        touches = wider;
+        effectiveWindowNote = BRIEF_WINDOW === "today" ? "no items rated yet today — showing last 7–14 days" : "practised in last 14 days";
+      }
+    }
+    if (touches.length < 3) {
+      const widest = collectTouches(30);
+      if (widest.length > touches.length) {
+        touches = widest;
+        effectiveWindowNote = "from your recent Practice history";
+      }
+    }
+
+    // 1A. Priority Everyday Sentences (STRICT CAP: 4 for 20-min pacing)
+    const sentTouches = touches.filter(x => x.item.kind === "sentence" && x.item.track !== "quran");
+    const shakySents = sentTouches.filter(x => x.shaky);
+    const solidSents = sentTouches.filter(x => !x.shaky);
+    const pickedSents = [];
+    const seenSentAr = new Set();
+    const pushSent = (entry, badge, isShaky) => {
+      if (!entry || !entry.ar || pickedSents.length >= 4) return;
+      const n = normalizeAr(entry.ar);
+      if (seenSentAr.has(n)) return;
+      seenSentAr.add(n);
+      pickedSents.push({ ar: entry.ar, en: entry.en, tr: entry.tr || "", badge, shaky: !!isShaky });
+    };
+    shakySents.slice(0, 3).forEach(x => pushSent(x.item, "Practised — slipped", true));
+    solidSents.slice(0, 4 - pickedSents.length).forEach(x => pushSent(x.item, "Practised — test variations", false));
+    if (pickedSents.length < 3 && activeChap && activeChap.sentences) {
+      activeChap.sentences.forEach((s, idx) => {
+        if (pickedSents.length >= 4) return;
+        const k = "chap:" + activeChap.num + ":" + idx;
+        const c = srs[k];
+        const sh = c && (c.g === "no" || c.g === "maybe" || (c.box || 0) <= 1);
+        pushSent(s, "Active Ch " + activeChap.num, !!sh);
+      });
+    }
+
+    const bareWordNorm = s => normalizeAr(String(s || "").replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")).replace(/^[اٱأإآ]ل/, "");
+    const shortGloss = s => {
+      const clean = String(s || "").replace(/\s*\([^)]*\)/g, "").trim();
+      const base = clean || String(s || "").trim();
+      return base.length > 78 ? base.slice(0, 75).replace(/[\s,—–-]+$/, "") + "…" : base;
+    };
+
+    // 1B. Priority Everyday/Class Words (STRICT CAP: 5 for 20-min pacing; exclude Qur'an-specific groups so they go to Qur'an Corner)
+    const isQuranLexKey = k => /^(qc:|qw:|ev-lesson-muawwidhatayn:|ev-lesson-quran-words:)/.test(String(k || ""));
+    const wordTouches = touches.filter(x => x.item.kind === "word" && x.item.src !== "quran" && !isQuranLexKey(x.item.key));
+    const pickedWords = [];
+    const seenWordAr = new Set();
+    const pushWord = (w, shaky, tag) => {
+      if (!w || !w.ar || pickedWords.length >= 5) return;
+      const n = bareWordNorm(w.ar);
+      if (seenWordAr.has(n)) return;
+      seenWordAr.add(n);
+      pickedWords.push({ ar: w.ar, en: shortGloss(w.en), shaky: !!shaky, tag });
+    };
+    wordTouches.filter(x => x.shaky).forEach(x => pushWord(x.item, true, "slipped"));
+    wordTouches.filter(x => !x.shaky).forEach(x => pushWord(x.item, false, "reviewed"));
+    if (pickedWords.length < 4) {
+      // Top up with overdue words from SRS
+      Object.entries(srs)
+        .filter(([k, c]) => c && c.u && c.b !== "never" && (c.due || 0) <= now)
+        .sort((a, b) => (a[1].due || 0) - (b[1].due || 0))
+        .forEach(([k, c]) => {
+          if (pickedWords.length >= 5) return;
+          const it = resolveHubItem(k);
+          if (it && it.kind === "word") pushWord(it, (c.box || 0) <= 1, "due");
+        });
+    }
+
+    // 1C. 1 Grammar / Lesson Card Twist (tied to recent practice or active chapter)
+    const lcTouch = touches.find(x => x.item.kind === "lesson-card");
+    const gramTouch = touches.find(x => x.item.kind === "grammar");
+    let grammarFocusEn = "";
+    let grammarFocusAr = "";
+    if (activeChapNum === 4 || (lcTouch && /negation|verb-tenses/.test(lcTouch.item.key)) || (gramTouch && /tenses|negation/.test(gramTouch.item.patId || ""))) {
+      grammarFocusEn = "Past (-tu) vs Present (a-) vs Future (sa-) + Negation Pairings: test لَمْ أَذْهَبْ / مَا ذَهَبْتُ (past) vs لَا أَذْهَبُ (present) vs لَنْ أَذْهَبَ (future) — catch me if I say ✗ لَا + past verb.";
+      grammarFocusAr = "تَحْوِيلُ الأَزْمِنَةِ (المَاضِي وَالمُضَارِع وَالمُسْتَقْبَل) مَعَ أَدَوَاتِ النَّفْيِ: (لَمْ أَذْهَبْ / مَا ذَهَبْتُ) مُقَابِلَ (لَا أَذْهَبُ) وَ(لَنْ أَذْهَبَ) — وَتَصْحِيحُ خَطَأ (لَا + المَاضِي).";
+    } else if (lcTouch && lcTouch.item.lcCard) {
+      const lc = lcTouch.item.lcCard;
+      grammarFocusEn = `${lc.title}: ${lc.summary}${lc.trap ? " (" + lc.trap + ")" : ""}`;
+      grammarFocusAr = `تَدْرِيبٌ شَفَهِيٌّ تَطْبِيقِيٌّ عَلَى قَاعِدَةِ: ${lc.titleAr || lc.title}.`;
+    } else if (activeChap && activeChap.grammar) {
+      const cleanG = String(activeChap.grammar.text || "").replace(/<[^>]*>/g, "");
+      grammarFocusEn = `${activeChap.grammar.title}: ${cleanG}`;
+      grammarFocusAr = `التَّدْرِيبُ شَفَهِيًّا عَلَى قَاعِدَةِ الفَصْلِ الحَالِيِّ: ${activeChap.grammar.title}.`;
+    } else {
+      grammarFocusEn = "Pronoun & tense swaps on the sentences above (I ↔ you ↔ he/she; present ↔ past).";
+      grammarFocusAr = "تَبْدِيلُ الضَّمَائِرِ وَالأَزْمِنَةِ فِي الجُمَلِ السَّابِقَةِ شَفَهِيًّا.";
+    }
+
+    // 2. Short Roleplay / Unscripted Chat (1 main scenario — includes "Ask me about my day")
+    const chapRoleplayMap = {
+      1: "Ask me about my day, greetings, and how I am feeling today in clear MSA.",
+      2: "Ask me about my day and roleplay ordering coffee/food or politely requesting things (أُرِيدُ أَنْ... / مِنْ فَضْلِكِ).",
+      3: "Ask me about my day and roleplay taking a taxi or checking into a hotel (asking the fare أُجْرَة vs price سِعْر).",
+      4: "Ask me about my day, work meetings, and young children in clear MSA — push me to switch between yesterday (past), every day (present), tomorrow (future), and negative sentences.",
+      5: "Ask me about my day and have me ask YOU 4–5 natural questions using مَتَى / أَيْنَ / كَيْفَ / لِمَاذَا / كَمْ.",
+      6: "Ask me about my day and ask me to describe rooms in my home and where things are.",
+      7: "Ask me about my day and roleplay buying gifts/items at a market using هَذَا / هَذِهِ and prices.",
+      8: "Ask me about my day and test polite commands & conversation repair phrases (repeat, slower, what does X mean?).",
+      9: "Ask me about my day, Friday Jumu'ah at the mosque, and what we did together (ـنَا).",
+      10: "Ask me about my day, my plans for next week, and how last week was using كَانَ."
+    };
+    const roleplayEn = chapRoleplayMap[activeChapNum] || chapRoleplayMap[4];
+    const roleplayFallbackEn = "Optional backup scenario: short hotel/taxi or restaurant check-in from Chapters 1–3.";
+    const roleplayAr = "حِوَارٌ قَصِيرٌ عَنْ يَوْمِي وَأُسْبُوعِي وَعَمَلِي وَأُسْرَتِي بِالفُصْحَى المَبَسَّطَةِ، مَعَ دَفْعِي لِلتَّبْدِيلِ بَيْنَ المَاضِي وَالمُضَارِعِ وَالمُسْتَقْبَلِ وَالنَّفْيِ.";
+
+    // 3. Qur'an Corner (1 practised ayah + up to 3 practised Qur'an words + teach 1 short gem)
+    const qAyahTouches = touches.filter(x => x.item.kind === "quran" || x.item.track === "quran");
+    const qWordTouches = touches.filter(x => x.item.kind === "quran-word" || x.item.src === "quran" || isQuranLexKey(x.item.key));
+
+    let pickedAyah = qAyahTouches.length ? qAyahTouches[0].item : null;
+    const chapSurahId = (activeChap && activeChap.surahId) || "asr";
+    const chapSurahObj = ((VERSES_DATA && VERSES_DATA.surahs) || []).find(s => s.id === chapSurahId) || ((VERSES_DATA && VERSES_DATA.surahs) || [])[0];
+    if (!pickedAyah && chapSurahObj && chapSurahObj.verses && chapSurahObj.verses.length) {
+      const vIdx = Math.min(1, chapSurahObj.verses.length - 1);
+      const v = chapSurahObj.verses[vIdx];
+      pickedAyah = {
+        ar: v.ar, en: v.en, ref: v.ref || (chapSurahObj.n + ":" + (vIdx + 1)),
+        surah: chapSurahObj.name || chapSurahObj.id, surahNum: chapSurahObj.n, ayahNum: vIdx + 1,
+        isFallback: true
+      };
+    }
+
+    const pickedQWords = [];
+    const seenQW = new Set(seenWordAr); // never repeat a word already listed in Priority Words above
+    qWordTouches.forEach(x => {
+      if (pickedQWords.length >= 3) return;
+      const n = bareWordNorm(x.item.ar);
+      if (seenQW.has(n)) return;
+      seenQW.add(n);
+      pickedQWords.push({ ar: x.item.ar, en: shortGloss(x.item.en), shaky: x.shaky });
+    });
+    if (pickedQWords.length < 2 && chapSurahObj && chapSurahObj.verses) {
+      chapSurahObj.verses.forEach(v => (v.words || []).forEach(w => {
+        if (pickedQWords.length >= 3) return;
+        const gloss = w[2] || w[1] || "";
+        const n = bareWordNorm(w[0] || "");
+        if (!n || n.length < 3 || seenQW.has(n) || !gloss) return;
+        seenQW.add(n);
+        pickedQWords.push({ ar: w[0], en: gloss, shaky: false });
+      }));
+    }
+
+    const dateLabel = new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+
+    // Plain-text English & Arabic copyable briefs (strictly ~20 mins, zero rigid minute timestamps)
+    const enLines = [
+      `📋 20-Minute Lesson Plan (${dateLabel})`,
+      `Hi! Here is what I practised this week. Could we structure ~20 minutes of our lesson around these 3 parts?`,
+      ``,
+      `1) TEST ME ALOUD (please ask in English or Q&A without showing the Arabic):`,
+      `   • Sentences I practised:`,
+      ...pickedSents.map((s, i) => `     ${i + 1}. ${s.ar} — "${s.en}"${s.shaky ? " [slipped — test twice]" : " [swap pronoun/tense]"}`),
+      `   • Words I practised: ${pickedWords.map(w => `${w.ar} (${w.en})`).join(" · ")}`,
+      `   • Grammar twist: ${grammarFocusEn}`,
+      ``,
+      `2) SHORT ROLEPLAY / CONVERSATION:`,
+      `   • ${roleplayEn}`,
+      ``,
+      `3) QUR'AN CORNER (Test by Ear + 1 Short Gem):`,
+      pickedAyah ? `   • Ayah practised: ${pickedAyah.ar} (${pickedAyah.ref || ""}) — "${shortGloss(pickedAyah.en)}"` : `   • Short surah ear check`,
+      pickedQWords.length ? `   • Qur'an words practised: ${pickedQWords.map(w => `${w.ar} (${w.en})`).join(" · ")}` : null,
+      `   • Please recite & check if I catch these by ear, then teach me 1 short root/meaning gem from this surah.`,
+      ``,
+      `📌 Wrap-up note: Please type at most 5 new/corrected words + 2 short sentences in chat at the end so I can save them.`
+    ].filter(Boolean);
+
+    const arLines = [
+      `📋 خُطَّةٌ مُقْتَرَحَةٌ لِـ ٢٠ دَقِيقَةً مِنْ دَرْسِ اليَوْمِ (${dateLabel})`,
+      `السَّلَامُ عَلَيْكُمْ أُسْتَاذَتِي الكَرِيمَة، هَذِهِ الكَلِمَاتُ وَالجُمَلُ الَّتِي تَدَرَّبْتُ عَلَيْهَا مؤخَّرًا. هَلْ يُمْكِنُنَا تَقْسِيمُ ٢٠ دَقِيقَةً مِنْ دَرْسِنَا عَلَى هَذِهِ الأَجْزَاءِ الثَّلَاثَةِ؟`,
+      ``,
+      `١) اخْتَبِرِينِي شَفَهِيًّا فِيمَا تَدَرَّبْتُ عَلَيْهِ (بِدُونِ إِظْهَارِ النَّصِّ العَرَبِيِّ):`,
+      `   • الجُمَلُ (مَعَ تَغْيِيرِ الضَّمِيرِ أَوِ الزَّمَنِ):`,
+      ...pickedSents.map((s, i) => `     ${i + 1}. ${s.ar} (${s.en})`),
+      `   • المُفْرَدَاتُ: ${pickedWords.map(w => `${w.ar} (${w.en})`).join(" · ")}`,
+      `   • القَاعِدَةُ المُسْتَهْدَفَةُ: ${grammarFocusAr}`,
+      ``,
+      `٢) مُحَادَثَةٌ قَصِيرَةٌ وَتَمْثِيلُ أَدْوَارٍ:`,
+      `   • ${roleplayAr}`,
+      ``,
+      `٣) رُكْنُ القُرْآنِ الكَرِيمِ (اخْتِبَارٌ سَمْعِيٌّ + فَائِدَةٌ لُغَوِيَّةٌ قَصِيرَةٌ):`,
+      pickedAyah ? `   • الآيَةُ: ﴿${pickedAyah.ar}﴾ (${pickedAyah.ref || ""})` : null,
+      pickedQWords.length ? `   • كَلِمَاتٌ قُرْآنِيَّةٌ تَدَرَّبْتُ عَلَيْهَا: ${pickedQWords.map(w => w.ar).join(" ، ")}` : null,
+      `   • أَرْجُو تِلَاوَتَهَا وَسُؤَالِي عَنْ مَعَانِيهَا سَمْعِيًّا، ثُمَّ شَرْحَ فَائِدَةٍ بَلَاغِيَّةٍ أَوْ جَذْرٍ لُغَوِيٍّ وَاحِدٍ مِنْ هَذِهِ السُّورَةِ.`,
+      ``,
+      `📌 مُلَاحَظَةٌ خِتَامِيَّةٌ: مِنْ فَضْلِكِ اكْتُبِي لِي فِي المحادثة (Chat) ٥ كَلِمَاتٍ جَدِيدَةٍ أَوْ مُصَحَّحَةٍ كَحَدٍّ أَقْصَى + جُمْلَتَيْنِ قَصِيرَتَيْنِ فِي نِهَايَةِ الدَّرْسِ.`
+    ].filter(Boolean);
+
+    const copyText = BRIEF_LANG === "ar"
+      ? arLines.join("\n")
+      : BRIEF_LANG === "both"
+      ? enLines.join("\n") + "\n\n────────────────────\n\n" + arLines.join("\n")
+      : enLines.join("\n");
+
+    const ayahPlayBtn = pickedAyah
+      ? (pickedAyah.surahNum && pickedAyah.ayahNum
+          ? `<button type="button" class="sym-badge" onclick="reciteVerse(${pickedAyah.surahNum}, ${pickedAyah.ayahNum}, '${encodeURIComponent(pickedAyah.ar)}')" title="Listen (Mishary Rashid Alafasy)">🔊</button>`
+          : `<button type="button" class="sym-badge" onclick="speak('${pickedAyah.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>`)
+      : "";
+
+    el.innerHTML = `
+      <div class="tb-card">
+        <div class="tb-head">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <h2 style="margin:0;font-size:18px;color:var(--accent)">📋 For Your Teacher — 20-Minute Lesson Brief</h2>
+              <span class="tb-tag ok">Updates daily · ${esc(dateLabel)}</span>
+            </div>
+            <div style="font-size:12.5px;color:var(--muted);margin-top:3px">
+              Sized for <b>~20 minutes of actual lesson time</b> (leaving buffer in your 25-min slot) · Source: <b>${esc(effectiveWindowNote)}</b>
+            </div>
+          </div>
+          <div class="tb-controls">
+            <div class="tb-pill-group" title="Practice window used to select items">
+              <button type="button" class="tb-pill ${BRIEF_WINDOW === 'today' ? 'active' : ''}" onclick="setBriefWindow('today')">Today</button>
+              <button type="button" class="tb-pill ${BRIEF_WINDOW === '7d' ? 'active' : ''}" onclick="setBriefWindow('7d')">7 days</button>
+              <button type="button" class="tb-pill ${BRIEF_WINDOW === '14d' ? 'active' : ''}" onclick="setBriefWindow('14d')">14 days</button>
+            </div>
+            <div class="tb-pill-group" title="Language for copying to Preply chat">
+              <button type="button" class="tb-pill ${BRIEF_LANG === 'en' ? 'active' : ''}" onclick="setBriefLang('en')">🇬🇧 English</button>
+              <button type="button" class="tb-pill ${BRIEF_LANG === 'ar' ? 'active' : ''}" onclick="setBriefLang('ar')">🇸🇦 العربية</button>
+              <button type="button" class="tb-pill ${BRIEF_LANG === 'both' ? 'active' : ''}" onclick="setBriefLang('both')">🌐 Both</button>
+            </div>
+            <button type="button" class="primary" id="briefCopy" style="font-size:13px;padding:6px 14px">📋 Copy Brief</button>
+          </div>
+        </div>
+
+        ${BRIEF_LANG !== "ar" ? `
+        <!-- 1. TEST ME ALOUD -->
+        <div class="tb-section">
+          <div class="tb-sec-title">
+            <span>🎯 1. Test Me On What I Practised</span>
+            <span style="font-size:11.5px;font-weight:500;color:var(--muted)">Ask in English or Arabic Q&amp;A — don't show the Arabic</span>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px">Priority Sentences (${pickedSents.length}):</div>
+          <div>
+            ${pickedSents.map(s => `
+              <div class="tb-item-row">
+                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+                  <button type="button" class="sym-badge" onclick="speak('${s.ar.replace(/'/g, "\\'")}', 0.85)" title="Preview audio">🔊</button>
+                  <div>
+                    <div style="font-size:14px;font-weight:600;color:var(--ink)">${esc(s.en)}</div>
+                    <span class="tb-tag ${s.shaky ? 'slip' : 'ok'}">${esc(s.badge)}</span>
+                  </div>
+                </div>
+                <div class="tb-ar">${esc(s.ar)}</div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 4px">Priority Words (${pickedWords.length}):</div>
+          <div class="tb-word-grid">
+            ${pickedWords.map(w => `
+              <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
+                <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
+                <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
+                <span style="color:var(--muted)">— ${esc(w.en)}</span>
+              </span>
+            `).join("")}
+          </div>
+
+          <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:13px;line-height:1.5">
+            <strong style="color:var(--accent)">⚙️ Grammar Twist:</strong> ${esc(grammarFocusEn)}
+          </div>
+        </div>
+
+        <!-- 2. SHORT ROLEPLAY / CHAT -->
+        <div class="tb-section">
+          <div class="tb-sec-title">
+            <span>🗣 2. Short Roleplay / Unscripted Conversation</span>
+            <span style="font-size:11.5px;font-weight:500;color:var(--muted)">1 focused scenario · spoken MSA only</span>
+          </div>
+          <div style="font-size:13.5px;line-height:1.55;color:var(--ink)">${esc(roleplayEn)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${esc(roleplayFallbackEn)}</div>
+        </div>
+
+        <!-- 3. QUR'AN CORNER -->
+        <div class="tb-section" style="margin-bottom:8px">
+          <div class="tb-sec-title">
+            <span>🕌 3. Qur'ān Corner — Test by Ear &amp; Teach 1 Short Gem</span>
+            <span style="font-size:11.5px;font-weight:500;color:var(--muted)">Recite &amp; test comprehension, then share 1 root/meaning insight</span>
+          </div>
+          ${pickedAyah ? `
+            <div class="tb-item-row" style="border-bottom:${pickedQWords.length ? '1px dashed var(--border)' : 'none'}">
+              <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+                ${ayahPlayBtn}
+                <div>
+                  <div style="font-size:13.5px;font-weight:600;color:var(--ink)">${esc(pickedAyah.en)}</div>
+                  <span class="tb-tag ok">${esc(pickedAyah.surah ? "Surah " + pickedAyah.surah + " (" + pickedAyah.ref + ")" : pickedAyah.ref || "Qur'an")}</span>
+                </div>
+              </div>
+              <div class="tb-ar" style="color:var(--accent)">${esc(pickedAyah.ar)}</div>
+            </div>
+          ` : ""}
+          ${pickedQWords.length ? `
+            <div style="margin-top:8px">
+              <span style="font-size:12px;font-weight:700;color:var(--muted)">Qur'ān words I practised:</span>
+              <div class="tb-word-grid">
+                ${pickedQWords.map(w => `
+                  <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
+                    <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)">🔊</button>
+                    <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
+                    <span style="color:var(--muted)">— ${esc(w.en)}</span>
+                  </span>
+                `).join("")}
+              </div>
+            </div>
+          ` : ""}
+        </div>
+        ` : ""}
+
+        ${BRIEF_LANG === "ar" || BRIEF_LANG === "both" ? `
+          <div class="tb-ar-preview">${esc(arLines.join("\n"))}</div>
+        ` : ""}
+
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:12.5px;color:var(--muted)">
+          <span>📌 <b>End-of-class rule:</b> Ask your teacher to type <b>at most 5 new/corrected words + 2 short sentences</b> in Preply chat.</span>
+          <a href="#pasteLessonSection" onclick="event.preventDefault();document.getElementById('pasteLessonSection').scrollIntoView({behavior:'smooth'})" style="color:var(--accent);font-weight:600;text-decoration:none">Paste chat notes below ↓</a>
+        </div>
+      </div>
+    `;
+
     const b = document.getElementById("briefCopy");
-    if (b) b.onclick = async () => { try { await navigator.clipboard.writeText(text); b.textContent = "✓ Copied"; } catch (e) { b.textContent = "Select and copy"; } logEvent({ e: "teacher-brief", lines: lines.length, t: Date.now() }); if (typeof autoSync === "function") { try { autoSync(true); } catch (e2) {} } };
+    if (b) {
+      b.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(copyText);
+          b.textContent = "✓ Copied for Teacher!";
+          setTimeout(() => { if (b) b.textContent = "📋 Copy Brief"; }, 2400);
+        } catch (err) {
+          b.textContent = "Select & copy";
+        }
+        logEvent({ e: "teacher-brief", lang: BRIEF_LANG, window: BRIEF_WINDOW, lines: enLines.length, t: Date.now() });
+        if (typeof autoSync === "function") { try { autoSync(true); } catch (e2) {} }
+      };
+    }
   } catch (e) { console.error("brief", e); }
 }
-document.addEventListener("DOMContentLoaded", () => { setTimeout(renderTeacherBrief, 400); });
+
+/* 🗺️ HEADMASTER MASTER PLAN: Live Current Progress + Coming Weeks Syllabus */
+function renderMasterPlan() {
+  const el = document.getElementById("masterPlanSection");
+  if (!el || !TEACHER_HUB.ready) return;
+  try {
+    const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const srs = getSrs();
+    const log = store.get("ats-log", []);
+    const chaps = TEACHER_HUB.chapters || [];
+    const passedSet = new Set(
+      log.filter(x => x && x.e === "chap-test" && x.chap && (x.score >= 80 || x.pass === true)).map(x => String(x.chap))
+    );
+    const activeChap = getActiveWeeklyChapterObj() || chaps[0] || { num: 4, id: "chap-4", title: "Chapter 4: Time, Routine & Actions", surahId: "asr" };
+    const masteredCount = chaps.filter(c => passedSet.has(c.id)).length;
+
+    const caps = (window.Practice && typeof Practice.summarizeCapabilities === "function")
+      ? Practice.summarizeCapabilities({
+          now: Date.now(), srs, log,
+          words: TEACHER_HUB.words,
+          sentences: TEACHER_HUB.sentences,
+          grammar: TEACHER_HUB.grammar,
+          lessonCards: TEACHER_HUB.lessonCards,
+          activeChapNum: activeChap.num
+        })
+      : null;
+
+    // Next 2 upcoming unmastered chapters after activeChap
+    const upcomingChaps = chaps.filter(c => c.num !== activeChap.num && !passedSet.has(c.id)).slice(0, 2);
+
+    const surahNameFor = (sid) => {
+      const s = ((VERSES_DATA && VERSES_DATA.surahs) || []).find(x => x.id === sid);
+      return s ? `Surah ${s.name} (${(s.verses || []).length} ayahs)` : (sid ? `Surah ${sid}` : "Juz' 'Amma");
+    };
+
+    const lcForChap = (num) => {
+      return (TEACHER_HUB.rawLessonCards || [])
+        .filter(lc => lc.triggers && Array.isArray(lc.triggers.chapters) && lc.triggers.chapters.includes(num))
+        .map(lc => lc.title);
+    };
+
+    const activeLCs = lcForChap(activeChap.num);
+    const curStage = activeChap.num <= 5 ? 1 : activeChap.num <= 8 ? 2 : 3;
+
+    const vHeld = caps ? caps.vocab.held : 0;
+    const vTotal = caps ? caps.vocab.total : TEACHER_HUB.words.length;
+    const vLearn = caps ? caps.vocab.learning : 0;
+    const vSlips = caps ? caps.vocab.slips : 0;
+
+    const sHeld = caps ? caps.sentences.held : 0;
+    const sActive = caps ? caps.sentences.provenActive : 0;
+    const sPassive = caps ? caps.sentences.passiveOnly : 0;
+    const chapSolid = caps ? caps.sentences.activeChapSolid : 0;
+    const chapTotal = caps ? caps.sentences.activeChapTotal : 10;
+
+    const lcHeld = caps ? caps.concepts.lessonCardsHeld : 0;
+    const lcTotal = caps ? caps.concepts.lessonCardsTotal : TEACHER_HUB.lessonCards.length;
+    const grHeld = caps ? caps.concepts.grammarPatternsHeld : 0;
+    const grTotal = caps ? caps.concepts.grammarPatternsTotal : TEACHER_HUB.grammarPatterns.length;
+    const qHeld = caps ? caps.quran.ayahsHeld : 0;
+
+    el.innerHTML = `
+      <div class="mp-card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+          <div>
+            <h2 style="margin:0;font-size:18px;color:var(--ink)">🗺️ My Progress &amp; Coming Weeks Master Plan</h2>
+            <div style="font-size:12.5px;color:var(--muted);margin-top:2px">
+              Twin Goal: <b>Conversational MSA Fluency</b> + <b>Understanding the Qur'ān by Ear</b> · Controlled via daily 5-min Practice &amp; weekly 20-min Preply oral checks
+            </div>
+          </div>
+          <a href="MASTER_PLAN.md" target="_blank" style="font-size:12.5px;color:var(--accent);font-weight:600;text-decoration:none">📘 Full Syllabus Doc →</a>
+        </div>
+
+        <!-- LIVE PROGRESS SNAPSHOT -->
+        <div class="mp-stat-grid">
+          <div class="mp-stat">
+            <div class="mp-stat-lbl">📖 Curriculum Spine</div>
+            <div class="mp-stat-val">${masteredCount} / ${chaps.length || 10} Chapters</div>
+            <div class="mp-stat-sub">Active: <b>Ch ${activeChap.num}</b> (${chapSolid}/${chapTotal} lines solid)</div>
+          </div>
+          <div class="mp-stat">
+            <div class="mp-stat-lbl">📇 Vocabulary Held</div>
+            <div class="mp-stat-val">${vHeld} <span style="font-size:13px;font-weight:600;color:var(--muted)">/ ${vTotal}</span></div>
+            <div class="mp-stat-sub">${vLearn} learning · ${vSlips} slips queued in Practice</div>
+          </div>
+          <div class="mp-stat">
+            <div class="mp-stat-lbl">🗣 Spoken vs Passive</div>
+            <div class="mp-stat-val">${sActive} Spoken <span style="font-size:13px;font-weight:600;color:var(--muted)">/ ${sHeld} held</span></div>
+            <div class="mp-stat-sub">${sPassive} passive-only — Preply &amp; 🎯 Try it turn them active</div>
+          </div>
+          <div class="mp-stat">
+            <div class="mp-stat-lbl">🕌 Concepts &amp; Qur'ān Ear</div>
+            <div class="mp-stat-val">${qHeld} Ayahs · ${lcHeld}/${lcTotal} Cards</div>
+            <div class="mp-stat-sub">${grHeld}/${grTotal} grammar frames solid</div>
+          </div>
+        </div>
+
+        <!-- 10-CHAPTER SPINE BAR -->
+        <div class="mp-chap-strip">
+          ${chaps.map(c => {
+            const done = passedSet.has(c.id);
+            const isAct = c.num === activeChap.num && !done;
+            const cls = done ? "done" : isAct ? "active" : "";
+            const shortT = String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, "");
+            return `<a href="index.html" class="mp-chap-pill ${cls}" title="${esc(c.title)}">${done ? "✓ " : isAct ? "▶ " : ""}Ch ${c.num}: ${esc(shortT)}</a>`;
+          }).join("")}
+        </div>
+
+        <!-- COMING WEEKS ROADMAP -->
+        <div class="mp-horizon-grid">
+          <div class="mp-horizon now">
+            <div style="font-size:11.5px;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:4px">🟢 Now · Current Focus</div>
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px">${esc(activeChap.title)}</div>
+            <div style="font-size:13px;line-height:1.55;color:var(--ink)">
+              • <b>Sentences:</b> ${chapSolid}/${chapTotal} solid in Practice (${chapSolid >= 8 ? "🔥 Ready for Chapter Test on Home!" : "Batch 1 advances unseen lines automatically"})<br>
+              • <b>Grammar:</b> ${esc((activeChap.grammar && activeChap.grammar.title) || "Verb Tenses & Negation")}<br>
+              ${activeLCs.length ? `• <b>Lesson Cards:</b> ${esc(activeLCs.join(" · "))}<br>` : ""}
+              • <b>Qur'ān by Ear:</b> ${esc(surahNameFor(activeChap.surahId))}
+            </div>
+          </div>
+
+          <div class="mp-horizon">
+            <div style="font-size:11.5px;font-weight:800;color:#0284c7;text-transform:uppercase;margin-bottom:4px">🔵 Coming Weeks · Next Up</div>
+            ${upcomingChaps.length ? upcomingChaps.map(uc => `
+              <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed var(--border)">
+                <div style="font-weight:700;font-size:14px">${esc(uc.title)}</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.45">
+                  Grammar: ${esc((uc.grammar && uc.grammar.title) || "Core MSA frame")} · Qur'ān: ${esc(surahNameFor(uc.surahId))}
+                </div>
+              </div>
+            `).join("") : `<div style="font-size:13px;color:var(--muted)">Final chapters consolidating into free unscripted conversation &amp; Juz' 'Amma comprehension.</div>`}
+            <div style="font-size:12px;color:var(--muted)">Advances automatically as soon as your active Chapter passes 80%+ (zero calendar guilt if work is busy).</div>
+          </div>
+        </div>
+
+        <!-- 4-STAGE MASTER SYLLABUS OVERVIEW -->
+        <details class="more block" style="margin-top:12px">
+          <summary>🧭 View Full 4-Stage Master Syllabus (Stages 1–4)</summary>
+          <div class="more-body" style="font-size:13px;line-height:1.6;padding-top:8px">
+            <div style="margin-bottom:6px">${curStage === 1 ? "📍 " : "✓ "}<b>Stage 1 — Core Survival, Requests, Time &amp; Questions (Chapters 1–5):</b> Nominal sentences, polite requests (أُرِيدُ أَنْ), possession/idāfah, past/present/future + 5 negation pairings, question toolkit, and Surahs Al-Ikhlāṣ, Al-Falaq, An-Nās, Al-ʿAṣr &amp; Al-Kawthar by ear.</div>
+            <div style="margin-bottom:6px">${curStage === 2 ? "📍 " : curStage > 2 ? "✓ " : "○ "}<b>Stage 2 — Home, Market &amp; Conversation Repair Kit (Chapters 6–8):</b> Describing rooms &amp; adjective agreement, demonstratives &amp; numbers/prices, polite commands &amp; keeping conversations in Arabic without switching to English; Surahs Al-Qadr, Quraysh &amp; Al-Kāfirūn.</div>
+            <div style="margin-bottom:6px">${curStage === 3 ? "📍 " : "○ "}<b>Stage 3 — Mosque, Past/Future Narratives &amp; Connected Speech (Chapters 9–10):</b> Plural ـنَا forms, كَانَ ("was/were"), time clauses, Friday khutbah stock phrases, Al-Fātiḥah &amp; An-Naṣr + top 300 Qur'ānic core words.</div>
+            <div>○ <b>Stage 4 — Unscripted 15-Min MSA &amp; Cold Qur'ān Listening:</b> Open-ended Preply discussions on work, travel &amp; family + recognising unfamiliar Meccan/Medinan ayahs cold by ear.</div>
+          </div>
+        </details>
+      </div>
+    `;
+  } catch (e) { console.error("masterPlan", e); }
+}
 
 function renderPassage() {
   if (!STORY_DATA) return;
@@ -1750,6 +2538,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function scrollToTest() {
+  const arch = document.getElementById("pastClassesArchive");
+  if (arch) arch.open = true;
   document.getElementById("testBox").scrollIntoView({ behavior: "smooth" });
 }
 

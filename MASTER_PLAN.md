@@ -53,12 +53,12 @@ Because Reza's weekday time is scarce, **every channel has one distinct job**:
 
 1. **Weekday `Practice` (`sentences.html`, 5–10 min, 3–4x/week):** Primary classroom. Teaches unseen Lesson Cards, Chapter sentences, high-frequency vocab, and Qur'ān ayahs; tests recall; collects capability telemetry; auto-syncs Chapters & Words.
 2. **Hands-Free `🚗 Commute` (`audio.html?commute=1`, ~13 min):** Eyes-free reinforcement on drives/walks. Next screen `Practice` automatically compensates for missed visual spelling/diagrams (`🚗→📱 Screen Check`).
-3. **Sunday 25-Minute Preply Class = "Spoken Match Day" (Zero Textbook Dumping):**
-   - **Rule 1 — Flip the Classroom:** `Practice` teaches vocabulary and grammar during the week; Preply is **90% Reza speaking MSA out loud**, never passive textbook reading or 40-word vocabulary dumps.
-   - **Min 0–7 (Real-Life Warm-Up):** Teacher asks unscripted MSA questions about Reza's week, family, and work (`كَيْفَ كَانَ أُسْبُوعُكَ؟ مَاذَا فَعَلْتَ أَمْسِ؟`). Teacher recasts slips cleanly and has Reza repeat once.
-   - **Min 7–17 (Active Pattern & Tense Swaps):** Rapid-fire oral drills on the active weekly Chapter + Lesson Card (currently **Ch 4 Routine + Past/Present/Future & `لَمْ / مَا / لَا` Negation** + `-ka / -ki` swaps).
-   - **Min 17–22 (Cumulative Roleplay):** 5-minute live roleplay mixing mastered Chapters (1–3 + 4) so older material stays active in speech.
-   - **Min 22–25 (Hard Cap Recap):** Teacher writes **at most 5 new/corrected words and 2 target sentences** in chat. Reza pastes them into `Lessons` (`class.html`), and the Headmaster absorbs them into next week's `Practice`.
+3. **Sunday 25-Minute Preply Class = "Spoken Match Day" via the `🧑‍🏫 Teacher` Tab (`class.html`):**
+   - **Rule 1 — Flip the Classroom (~20 Mins Net Lesson Time, Zero Rigid Stopwatch):** `Practice` teaches vocabulary and grammar during the week; the **`🧑‍🏫 Teacher`** tab (`class.html`) auto-generates a **daily-updating 20-minute brief** (copyable in **🇬🇧 English**, **🇸🇦 العربية**, or **🌐 Both**) built directly from what Reza actually practised in `ats-log` / `ats-srs`:
+     1. **🎯 Test Me Aloud (What I Practised):** Strictly capped at **3–4 priority sentences** + **5 priority words** + **1 grammar/Lesson Card twist** (e.g., Past/Present/Future flips + `لَمْ أَذْهَبْ / مَا ذَهَبْتُ` vs `لَا أَذْهَبُ`) — asked in English or Q&A without showing the Arabic.
+     2. **🗣 Short Roleplay / Unscripted Chat:** 1 focused real-life MSA scenario tied to the active weekly Chapter ("Ask me about my day, work meetings, and young children...").
+     3. **🕌 Qur'ān Corner (Test by Ear + 1 Short Gem):** 1 practised Qur'ān ayah + up to 3 practised Qur'ān words tested by ear, plus **1 short root/meaning gem** taught by the tutor.
+     4. **📌 End-of-Class Chat Cap:** Tutor types **at most 5 new/corrected words + 2 short sentences** in Preply chat. Reza pastes them right below on the `🧑‍🏫 Teacher` tab (`#pasteLessonSection`), and the Headmaster weaves them into `Practice`.
 
 ---
 

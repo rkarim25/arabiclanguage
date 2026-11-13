@@ -939,6 +939,9 @@ const bank = D("sentence-bank.json");
   yes(!/typeof resumeLineIdx === "number"\) \? resumeLineIdx : getSavedChapterLine/.test(indexSrcNow) && /if \(typeof resumeLineIdx === "number" && resumeLineIdx > 0\)/.test(indexSrcNow), "index.html never auto-scrolls past #planDoor to a Chapter sentence row on normal page load");
   yes(/href="sentences\.html\?myday=1&amp;batch=\$\{nextBatch\}" class="pd-start"/.test(planSrcNow), "planDoor keeps a full-size .pd-start Practice CTA even after Batch 1 is completed");
   yes(/href="sentences\.html">⚡ Practice<\/a>/.test(appSrcNow), "top nav promotes ⚡ Practice directly beside Sync");
+  yes(/href="class\.html">🧑‍🏫 Teacher<\/a>/.test(appSrcNow), "top nav labels class.html as 🧑‍🏫 Teacher");
+  const teacherSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  yes(/20-Minute Lesson Brief/.test(teacherSrcNow) && /function setBriefLang\(/.test(teacherSrcNow) && /function setBriefWindow\(/.test(teacherSrcNow) && /function renderMasterPlan\(/.test(teacherSrcNow), "Teacher tab exposes daily-updating 20-minute brief (EN/AR/Both) + live Master Plan");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

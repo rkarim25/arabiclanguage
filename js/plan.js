@@ -84,7 +84,7 @@ const PLAN_BLOCKS = {
      Sunday Preply class but also not just the day before." */
   myday:     { icon: "⚡", title: n => `Practice${n ? ` — ${n} in your script` : ""}`, sub: "Adaptive batch (~10-sentence effort): dynamically mixes vocabulary, sentences, grammar, and Qur'an based on your progress and energy, updating every section automatically.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
   rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "rehearse" },
-  withher:   { icon: "✅", title: () => "Tell her about your week — then tick this", sub: "Your script is on the Lessons page. Two minutes about your day, in Arabic; imperfect is fine. Tick when done; pen-note anything she corrected.", url: "class.html", page: "class", done: ["withher-done"] },   // the ✓ on the Lessons page script card
+  withher:   { icon: "✅", title: () => "Use your 20-min Teacher Brief — then tick this", sub: "Your daily-updating 20-minute brief is on the Teacher tab. Speak through your practised items & roleplay; tick when done.", url: "class.html", page: "class", done: ["withher-done"] },   // the ✓ on the Teacher page script card
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
 };
 
