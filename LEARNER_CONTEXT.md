@@ -12,7 +12,7 @@
   1. **Understand the Qur'ān as it is recited (by ear)** (Reciter: **Mishary Rashid Alafasy**).
   2. **Achieve fluency in conversational Modern Standard Arabic (MSA).**
 - **Governance (Headmaster Model):**
-  - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`Practice` sessions** (`sentences.html` on screen + `audio.html?commute=1` hands-free), auto-syncing Weekly Chapters (`index.html`), Vocabulary (`words.html`), and visual Lesson Cards (`sets.html`).
+  - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`⚡ Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free), dynamically linked with Weekly Chapters (`chapters.html`), Master Sentences (`sentences.html`), Vocabulary (`words.html`), Qur'ān (`quran.html`), visual Lesson Cards (`sets.html`), and the `🧑‍🏫 Teacher` Hub (`class.html`), all unified under live read-only **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)**.
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
 - **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,063 total telemetry events; 1,221 SRS cards (698 cleared: 595 active solid in `Box 3–5` + 103 retired/never; 382 active learning, 141 `Box 0`).
 

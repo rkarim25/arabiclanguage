@@ -1,6 +1,6 @@
 # Speak with AI — Practice Guide & Voice Mode Instructions
 
-This guide explains how to get the most out of the **Speak with AI** features across the site (`index.html`, `class.html`, and `converse.html`) using ChatGPT Voice Mode, Claude, or Gemini.
+This guide explains how to get the most out of the **Speak with AI** features across the site (`index.html`, `chapters.html`, `class.html`, and `converse.html`) using ChatGPT Voice Mode, Claude, or Gemini.
 
 ---
 
@@ -8,7 +8,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 
 ```
 [ Arabic Website ]
-   ↓  1. Tap "📋 Copy Voice Prompt" or "📄 Copy Learner Dossier"
+   ↓  1. Tap "📋 Copy Voice Prompt", "🗣 Speak Brief", or "📄 Copy Learner Dossier"
 [ Mobile Phone ]
    ↓  2. Open ChatGPT or Claude app → Tap 🎧 Voice Mode → Paste
 [ Spoken Conversation ]
@@ -17,10 +17,10 @@ This guide explains how to get the most out of the **Speak with AI** features ac
    ↓  4. Say "I'm done" → AI produces a 3-line progress receipt
 ```
 
-1. **On the Website (`index.html`, `class.html`, or `converse.html`):**
-   - Each chapter and Preply lesson includes a dedicated **Speak with AI** box.
-   - Tap **"📋 Copy Voice Prompt"** to copy the specific drill tailored to that lesson's 10 sentences or class reading.
-   - Or tap **"📄 Copy Learner Dossier"** (available on `index.html`, `class.html`, `converse.html`, and `words.html`) to copy your live profile, real-time SRS breakdown, active vocabulary boundaries, and pedagogical rules into any fresh chat session.
+1. **On the Website (`index.html`, `chapters.html`, `class.html`, or `converse.html`):**
+   - After any batch on `⚡ Practice` (`index.html`), tap **`🗣 Speak Brief`**; on `🧑‍🏫 Teacher` (`class.html`), expand the **collapsed Live AI Practice Session Brief (`#aiPracticeBriefCard`)**; or on `📖 Chapters` (`chapters.html`) and Preply lessons (`class.html`), use the dedicated **Speak with AI** box.
+   - Tap **"📋 Copy Voice Prompt"** to copy the specific drill tailored to today's practice batch, that chapter's 10 sentences, or a class reading.
+   - Or tap **"📄 Copy Learner Dossier"** (available on `chapters.html`, `class.html`, `converse.html`, and `words.html`) to copy your live profile, real-time SRS breakdown, active vocabulary boundaries, and pedagogical rules into any fresh chat session.
 
 2. **In the AI App (ChatGPT / Claude / Gemini):**
    - Open the mobile app on your iPhone or Android phone.
@@ -39,7 +39,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
      2. **Hesitations & Errors:** Phrases, sounds, or grammar where you stumbled.
      3. **Words to Review:** Specific vocabulary items to reinforce in upcoming drills.
      4. **Next Recommended Focus:** 1 actionable recommendation for your coach.
-   - **Paste it back:** Copy the report and paste it into the **"📥 Paste AI Voice Session Report"** section on `index.html` or `class.html`. Your coach automatically tailors future lessons, drills, and reviews around your results!
+   - **Paste it back:** Copy the report and paste it into the **"📥 Paste AI Voice Session Report"** section on `chapters.html` or `class.html`. Your coach automatically tailors future lessons, drills, and reviews around your results!
 
 ---
 
@@ -47,9 +47,9 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 
 | Page | Feature | What It Drills | Best For |
 |---|---|---|---|
-| **Unified Practice (`sentences.html`)** | **Built-in `🗣 Speak Brief` per Batch (Batch 1, 2, 3+)** | Auto-generates a ready-to-copy 3–5 min AI Voice Brief tailored to the **exact sentences, vocab, grammar rules, and slips** you just practiced in that batch | Immediate 3-minute spoken lock-in right after any Practice batch |
-| **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the active chapter + 3-rung variations | Weekly chapter speaking mastery |
-| **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | A Trip to the Village & Breakfast Foods (11 Oct), Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
+| **Unified `⚡ Practice` (`index.html` — Home)** | **Built-in `🗣 Speak Brief` per Batch (Batch 1, 2, 3+)** | Auto-generates a ready-to-copy 3–5 min AI Voice Brief tailored to the **exact sentences, vocab, grammar rules, and slips** you just practiced in that batch | Immediate 3-minute spoken lock-in right after any Practice batch |
+| **Teacher Hub (`class.html` — `🧑‍🏫 Teacher`)** | **Collapsed Live AI Practice Session Brief (`#aiPracticeBriefCard`) + Preply Lesson Prompts** | On-demand live voice sparring brief generated from recent Practice/Commute items (`🔴 / 🟡` weak items first) + Sunday Preply lesson reading prompts | Anytime spoken AI sparring & Sunday class consolidation |
+| **Chapters (`chapters.html` — `📖 Chapters`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the active chapter + 3-rung variations | Weekly chapter speaking mastery |
 | **Speaking Lab (`speaking.html`)** | Mic Drill & AI Tutor Bridge | Pronunciation self-check, shadow sentences + 1-click Learner Dossier copy | Pronunciation calibration & hands-free prep |
 | **End-of-Week Review (`converse.html`)** | Spoken Review & Oral Exam | All sentences of the current week + 8 real-life Umrah scenarios | Weekly oral check & progress benchmarking |
 
@@ -57,7 +57,7 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 
 ## 3. The Sentence Variation Drills & On-Site Rung Engine
 
-Rather than just repeating the same sentence, the whole learning engine of the site is built around **sentence variations**. On `index.html`, every chapter sentence has a **🎯 Drill** button featuring 3 progressive, handcrafted rungs that always reveal the target answer with real neural audio:
+Rather than just repeating the same sentence, the whole learning engine of the site is built around **sentence variations**. On `chapters.html`, every chapter sentence has a **🎯 Drill** button featuring 3 progressive, handcrafted rungs that always reveal the target answer with real neural audio:
 
 ```
 [ Base Sentence ]  أُرِيدُ أَنْ آكُلَ شَيْئًا (I want to eat something)
@@ -69,7 +69,7 @@ Rather than just repeating the same sentence, the whole learning engine of the s
   Rung 3: Build on it       ➔  أَنَا جَائِعٌ، أُرِيدُ أَنْ آكُلَ (I am hungry, I want to eat)
 ```
 
-When you tap **"📋 Copy Voice Prompt"** on `index.html`, the site embeds these exact 3-rung variation matrices into the prompt text! When you talk with ChatGPT / Claude Voice, the AI acts as your spoken sparring partner for these exact variations:
+When you tap **"📋 Copy Voice Prompt"** on `chapters.html`, the site embeds these exact 3-rung variation matrices into the prompt text! When you talk with ChatGPT / Claude Voice, the AI acts as your spoken sparring partner for these exact variations:
 1. **Rung 1 (Swap a word / object):** Tests your core vocabulary flexibility (*آكُلَ* ↔ *أَشْرَبَ*, *مَاء* ↔ *شَاي* ↔ *قَهْوَة*).
 2. **Rung 2 (Change who / ask):** Drills pronoun and verb prefixes (*أُرِيدُ* ↔ *تُرِيدُ* ↔ *يُرِيدُ*) and flips statements into inquiries with *هَلْ* or *أَيْنَ*.
 3. **Rung 3 (Build on it):** Compounds the clause with states or reasons (*أَنَا جَائِعٌ* / *أَنَا عَطْشَانُ* / *لِأَنَّنِي مَشْغُولٌ*).
@@ -115,7 +115,7 @@ If you use ChatGPT Plus, Claude Pro, or Gemini, you can set up a permanent voice
 
 ## 6. Current Active Voice Prompt & Mnemonic Reference
 
-> **Tip:** After finishing any batch on `Practice` (`sentences.html`), tap **`🗣 Speak Brief`** to copy a live 3–5 minute voice prompt auto-tailored to the exact sentences, words, grammar rules, and slips you just practiced. Below is the current standalone weekly sprint prompt and mnemonic matrix.
+> **Tip:** After finishing any batch on `⚡ Practice` (`index.html`), tap **`🗣 Speak Brief`** — or anytime on `🧑‍🏫 Teacher` (`class.html`), expand the **Live AI Practice Session Brief (`#aiPracticeBriefCard`)** — to copy a live 3–5 minute voice prompt auto-tailored to the exact sentences, words, grammar rules, and slips you recently practiced. Below is the standalone weekly sprint prompt and mnemonic matrix.
 
 ### II. Friday Eve & Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II)
 ```text
@@ -269,4 +269,4 @@ For busy days when sitting at a laptop is impossible:
 - **iPhone / Android + Headphones:** Open ChatGPT or Claude, paste your copied prompt before setting off, tap the **Headphones (Voice)** icon, and slip the phone into your pocket.
 - **CarPlay / Bluetooth Audio:** In the car, activate ChatGPT Voice Mode over Bluetooth. The AI's conversational turns will play through your car speakers and listen through the cabin microphone.
 - **Micro-Dosing Arabic:** 5 minutes of conversational variations in the car or on a walk delivers more active language production than hours of passive listening.
-- **After the Session:** When you return to the site, paste your session report into the **"📥 Paste AI Voice Session Report"** drawer on `index.html` or `class.html` to log your speaking time and sync weak items into your next review cycle.
+- **After the Session:** When you return to the site, paste your session report into the **"📥 Paste AI Voice Session Report"** drawer on `chapters.html` or `class.html` to log your speaking time and sync weak items into your next review cycle.
