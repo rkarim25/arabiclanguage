@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mweqa0f6">
-  <link rel="stylesheet" href="css/style.css?v=mweqa0f6">
+  <link rel="stylesheet" href="css/fonts.css?v=mwer3glw">
+  <link rel="stylesheet" href="css/style.css?v=mwer3glw">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -112,6 +112,7 @@
         <div class="resume-sub" id="resumeSub"></div>
       </div>
       <div class="resume-actions">
+        <a href="sentences.html?myday=1" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Open your adaptive Practice session (auto-syncs this chapter)">⚡ Practice</a>
         <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
         <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
       </div>
@@ -253,16 +254,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mweqa0f6"></script>
-<script src="js/curriculum.js?v=mweqa0f6"></script>
-<script src="js/srs.js?v=mweqa0f6"></script>
-<script src="js/match.js?v=mweqa0f6"></script>
-<script src="js/errors.js?v=mweqa0f6"></script>
-<script src="js/frames.js?v=mweqa0f6"></script>
-<script src="js/app.js?v=mweqa0f6"></script>
-<script src="js/tracker.js?v=mweqa0f6"></script>
-<script src="js/plan.js?v=mweqa0f6"></script>
-<script src="js/account.js?v=mweqa0f6"></script>
+<script src="js/progress-model.js?v=mwer3glw"></script>
+<script src="js/curriculum.js?v=mwer3glw"></script>
+<script src="js/srs.js?v=mwer3glw"></script>
+<script src="js/match.js?v=mwer3glw"></script>
+<script src="js/errors.js?v=mwer3glw"></script>
+<script src="js/frames.js?v=mwer3glw"></script>
+<script src="js/app.js?v=mwer3glw"></script>
+<script src="js/tracker.js?v=mwer3glw"></script>
+<script src="js/plan.js?v=mwer3glw"></script>
+<script src="js/account.js?v=mwer3glw"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3709,11 +3710,11 @@ function loadChapter(chap, resumeLineIdx) {
   updateChapterSelector();
   updateResumeBanner();
 
-  // Line Resume: auto-scroll to saved line if > 0 or explicitly provided
-  const targetLine = (typeof resumeLineIdx === "number") ? resumeLineIdx : getSavedChapterLine(chap.id);
-  if (targetLine > 0) {
+  // Line Resume: NEVER auto-scroll past #planDoor (Practice) on normal page load;
+  // only scroll when an explicit resumeLineIdx > 0 was requested (or via jumpToSavedLine).
+  if (typeof resumeLineIdx === "number" && resumeLineIdx > 0) {
     setTimeout(() => {
-      const row = document.getElementById(`srow-${targetLine}`);
+      const row = document.getElementById(`srow-${resumeLineIdx}`);
       if (row) {
         row.scrollIntoView({ behavior: "smooth", block: "center" });
         row.classList.add("resume-active");

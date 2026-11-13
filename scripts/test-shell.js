@@ -930,5 +930,16 @@ const bank = D("sentence-bank.json");
   yes(/SRS\.paintBar\(document\.getElementById\("masterTableBody"\)/.test(wordsSrcNow) && /SRS\.paintBar\(document\.getElementById\("bankTableBody"\)/.test(sentSrcNow), "master tables on words.html and sentences.html update ratings in place without jumping rows");
 }
 
+/* ---------- Practice stays front-and-center on Home (13 Nov) ---------- */
+{
+  console.log("\n-- Practice stays front-and-center on Home --");
+  const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const planSrcNow = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
+  const appSrcNow = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+  yes(!/typeof resumeLineIdx === "number"\) \? resumeLineIdx : getSavedChapterLine/.test(indexSrcNow) && /if \(typeof resumeLineIdx === "number" && resumeLineIdx > 0\)/.test(indexSrcNow), "index.html never auto-scrolls past #planDoor to a Chapter sentence row on normal page load");
+  yes(/href="sentences\.html\?myday=1&amp;batch=\$\{nextBatch\}" class="pd-start"/.test(planSrcNow), "planDoor keeps a full-size .pd-start Practice CTA even after Batch 1 is completed");
+  yes(/href="sentences\.html">⚡ Practice<\/a>/.test(appSrcNow), "top nav promotes ⚡ Practice directly beside Sync");
+}
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

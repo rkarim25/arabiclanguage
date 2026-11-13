@@ -855,9 +855,8 @@ function planDoorHTML(p) {
     if (w.spoken) bits.push(`${w.spoken} spoken`);
     if (w.verdicts && !w.tried) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""}`);
     if (w.ear) bits.push(`${w.ear} by ear`);
-    main = `<div class="pd-done">✅ Done for today (Batch ${doneRounds} complete)</div>
-      <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>
-      <div style="margin-top:8px"><a href="sentences.html?myday=1&amp;batch=${nextBatch}" class="book-toggle-pill" style="text-decoration:none;font-weight:600;color:var(--accent);border-color:var(--accent)" title="Keep going in one place — incremental batches shift progressively toward review &amp; consolidation">▶ Continue Practice · Batch ${nextBatch} (${nextDesc}) →</a></div>`;
+    main = `<a href="sentences.html?myday=1&amp;batch=${nextBatch}" class="pd-start" onclick="try{logEvent({e:'door-start',block:'myday',batch:${nextBatch}})}catch(e){}" title="Keep going in one place — incremental batches shift progressively toward review &amp; consolidation">▶ Practice · Batch ${nextBatch} (${nextDesc})</a>
+      <div class="pd-done" style="margin-top:8px;font-size:13.5px">✅ Done for today (Batch ${doneRounds} complete) · <span class="pd-win" style="display:inline">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</span></div>`;
   } else {
     const short = cur.type === "myday" ? "Practice" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
     const bh = planBestHour();
@@ -868,6 +867,7 @@ function planDoorHTML(p) {
   const hw = planHomework();
   const opt = planOptional(p);
   const extras = [
+    (cur && cur.type !== "myday") ? `<a href="sentences.html?myday=1" class="pd-x" title="Open your unified Practice session across Vocabulary, Sentences, Qur'an &amp; Lesson Cards">⚡ Practice</a>` : "",
     `<a href="audio.html?commute=1" class="pd-x pd-x-car" title="Commute — hands-free, your sentences by ear. Pause, back, skip, stop on the lock screen. Works offline. 10+ min counts as the day.">🚗 Commute</a>`,
     hw && !hw.past ? `<a href="class.html" class="pd-x" title="Her lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })} — ${hw.readiness}% ready. Her words ride inside your mornings; this is extra, never owed.">📚 ${hw.readiness}%</a>` : "",
     ...opt.filter(b => b.type !== "homework").slice(0, 2).map(b => `<a href="${b.url}" class="pd-x" title="${b.title} — if you have energy, never owed">${b.icon} ${b.type === "review" ? "Review" : b.type === "ptest" ? "Listening test" : b.type === "audio" ? "Audio" : b.type === "salah" ? "Surah" : b.type === "newwords" ? "New words" : b.type === "story" ? "Story" : b.type === "phrases" ? "Phrases" : b.type === "speakdrill" ? "Speak" : b.type === "exam" ? "Oral exam" : b.title.split(" — ")[0]}</a>`),
