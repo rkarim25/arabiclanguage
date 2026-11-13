@@ -9,7 +9,7 @@
      connection the cached copy answers while the network write-back continues.
    - Audio lives in its own persistent cache so 26MB of clips survive deploys.
    The CACHE version is stamped by scripts/bump-version.js on every deploy. */
-const CACHE = "ats-mwenrprf";
+const CACHE = "ats-mweoucqt";
 const AUDIO_CACHE = "ats-audio-v1";
 const CORE = [
   "index.html", "stories.html", "vocab.html", "quran.html", "grammar.html", "speaking.html",
@@ -31,6 +31,8 @@ const CORE = [
   "js/tryit.js",                      // 🎯 Try it / Try them all / ✨ Free try on the batch pages
   "js/freetry.js",                    // the engine that chooses what he tries next (i+1, ~3 in 4 right)
   "js/practice.js",                   // ⚡ adaptive Practice batch composer (10-sentence effort across vocab, sentences, grammar, Qur'an)
+  "js/lesson-cards.js",               // 📇 visual Lesson Cards (taught in Practice, shelved & revised in Sets)
+  "data/lesson-cards.json",           // 📇 structured Lesson Card diagrams, tables & spaced-review checks
   "js/frames.js",                     // which grammar a sentence demonstrates / exercises
   "data/sentence-bank.json",          // what every lesson is built from — must work on the commute
   "data/quran-sentences.json",        // the short surahs: Al-Fatiha + juz' 'Amma

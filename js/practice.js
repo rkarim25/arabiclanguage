@@ -27,7 +27,7 @@
   "use strict";
 
   const DAY = 86400000;
-  const EFFORT = { word: 0.5, sentence: 1.0, grammar: 1.0, quran: 1.5 };
+  const EFFORT = { word: 0.5, sentence: 1.0, grammar: 1.0, "lesson-card": 1.0, quran: 1.5 };
   const SALAH_RE = /^s:q:(fatiha|ikhlas|falaq|nas|kawthar|asr|nasr|kafirun|qadr|maun|quraysh|fil|kursi):/;
 
   const stripAr = s => String(s || "").replace(/[ً-ْٰـ]/g, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/[؟،؛.،«»!]/g, "").replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
@@ -155,7 +155,7 @@
     const activeChapNum = resolveActiveChapterNum(ctx);
 
     // 1. Gap days & motivation state
-    const studyEvs = log.filter(x => x && x.t && ["vocab-rate", "sentence-rate", "sent-drill", "commute-done", "qtest-done", "qlisten-test", "gtest-done", "bucket", "prompt", "tryit-free-done"].includes(x.e));
+    const studyEvs = log.filter(x => x && x.t && ["vocab-rate", "sentence-rate", "sent-drill", "commute-done", "qtest-done", "qlisten-test", "gtest-done", "bucket", "prompt", "tryit-free-done", "lesson-card-rate"].includes(x.e));
     const lastStudyT = studyEvs.length ? studyEvs[studyEvs.length - 1].t : now;
     const gapDays = studyEvs.length ? Math.max(0, (now - lastStudyT) / DAY) : 0;
 
@@ -506,6 +506,47 @@
       }
     }
 
+    // 3b. Lesson Cards (1.0 effort unit, max 1 per batch):
+    //     · Proactive Teaching: unseen Lesson Card matching a grammar pattern, word, or active chapter in this batch
+    //     · Spaced Review: seen Lesson Card whose SRS interval is due or slipped
+    const lcRawPool = (ctx.lessonCards || []).filter(lc =>
+      lc && lc.key && !usedKeys.has(lc.key) && !exclude.has(lc.key) && !(srs[lc.key] && srs[lc.key].b === "never")
+    );
+    if (lcRawPool.length && effort + EFFORT["lesson-card"] <= diag.budget + 0.01) {
+      const chosenPatterns = new Set();
+      chosen.forEach(x => {
+        if (x.pattern && x.pattern !== "-") chosenPatterns.add(x.pattern);
+        if (x.patId) chosenPatterns.add(x.patId);
+      });
+      const lcCandidates = [];
+      lcRawPool.forEach(lc => {
+        const c = srs[lc.key];
+        const seen = !!(c && c.u);
+        const trig = lc.triggers || {};
+        const patHit = (trig.patterns || []).some(p => chosenPatterns.has(p));
+        const wordHit = (trig.words || []).some(w => coveredNormWords.has(stripAr(w).replace(/^ال/, "")));
+        const chapHit = !!(diag.activeChapNum && (trig.chapters || []).includes(diag.activeChapNum));
+        const matchesBatch = patHit || wordHit || chapHit;
+
+        if (seen && (isSlip(c, now) || isDue(c, now))) {
+          const r = recallNow(c, now);
+          const sc = (isSlip(c, now) ? 24 : 18) + (matchesBatch ? 5 : 0) + (1 - r) * 4;
+          lcCandidates.push({ lc, sc, lcMode: "review", autoReveal: false, why: isSlip(c, now) ? "lesson card slip" : "lesson card review" });
+        } else if (!seen && !diag.light && matchesBatch && (diag.batchNum <= 2 || patHit)) {
+          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0);
+          lcCandidates.push({ lc, sc, lcMode: "teach", autoReveal: true, why: "new lesson card — teach" });
+        } else if (seen && diag.batchNum >= 2 && (c.box || 0) <= 1 && matchesBatch && (now - c.u > 2 * 3600000)) {
+          lcCandidates.push({ lc, sc: 12, lcMode: "review", autoReveal: false, why: "lesson card consolidation" });
+        }
+      });
+      lcCandidates.sort((a, b) => b.sc - a.sc);
+      if (lcCandidates.length) {
+        const best = lcCandidates[0];
+        const copy = Object.assign({}, best.lc, { lcMode: best.lcMode, _autoReveal: best.autoReveal });
+        addItem(copy, "lesson-card", best.why);
+      }
+    }
+
     // 4. Fill remaining effort budget with Vocabulary words (0.5 each)
     const wordPool = (ctx.words || []).filter(w => {
       if (usedKeys.has(w.key)) return false;
@@ -555,19 +596,23 @@
       }
     }
 
-    // 6. Smooth interleaving
+    // 6. Smooth interleaving (Teach-mode Lesson Cards go first so rule is taught before application!)
+    const lcTeachPicked = chosen.filter(x => x.kind === "lesson-card" && x.lcMode === "teach");
+    const lcReviewPicked = chosen.filter(x => x.kind === "lesson-card" && x.lcMode !== "teach");
     const wordsPicked = chosen.filter(x => x.kind === "word");
     const sentsPicked = chosen.filter(x => x.kind === "sentence");
     const gramPicked = chosen.filter(x => x.kind === "grammar");
     const quranPicked = chosen.filter(x => x.kind === "quran");
     const specials = [];
-    const maxSp = Math.max(gramPicked.length, quranPicked.length);
+    const maxSp = Math.max(gramPicked.length, quranPicked.length, lcReviewPicked.length);
     for (let i = 0; i < maxSp; i++) {
+      if (lcReviewPicked[i]) specials.push(lcReviewPicked[i]);
       if (gramPicked[i]) specials.push(gramPicked[i]);
       if (quranPicked[i]) specials.push(quranPicked[i]);
     }
 
     const ordered = [];
+    lcTeachPicked.forEach(x => ordered.push(x));
     if (wordsPicked.length) ordered.push(wordsPicked.shift());
     if (sentsPicked.length) ordered.push(sentsPicked.shift());
     while (wordsPicked.length || sentsPicked.length || specials.length) {
@@ -581,12 +626,14 @@
       word: ordered.filter(x => x.kind === "word").length,
       sentence: ordered.filter(x => x.kind === "sentence").length,
       grammar: ordered.filter(x => x.kind === "grammar").length,
+      lessonCard: ordered.filter(x => x.kind === "lesson-card").length,
       quran: ordered.filter(x => x.kind === "quran").length
     };
     const reviewCount = ordered.filter(x => x._practice && !x._practice.isNew).length;
     const reviewPct = ordered.length ? Math.round((reviewCount / ordered.length) * 100) : 0;
 
     const parts = [];
+    if (counts.lessonCard) parts.push(`${counts.lessonCard} lesson card`);
     if (counts.word) parts.push(`${counts.word} vocab`);
     if (counts.sentence) parts.push(`${counts.sentence} sentence${counts.sentence === 1 ? "" : "s"}`);
     if (counts.grammar) parts.push(`${counts.grammar} grammar`);
@@ -630,6 +677,7 @@
     const sents = (items || []).filter(x => x && x.kind === "sentence");
     const words = (items || []).filter(x => x && x.kind === "word");
     const grams = (items || []).filter(x => x && x.kind === "grammar");
+    const lcards = (items || []).filter(x => x && x.kind === "lesson-card");
     const ayahs = (items || []).filter(x => x && (x.kind === "quran" || x.track === "quran"));
 
     const slips = (items || []).filter(x => {
@@ -645,6 +693,9 @@
       const r = gramMap[pid];
       return r ? `- ${r.ar} (${r.shortName}): ${r.rule}` : null;
     }).filter(Boolean);
+    lcards.forEach(lc => {
+      if (lc && lc.lcCard) ruleLines.unshift(`- [Lesson Card: ${lc.lcCard.title}] ${lc.lcCard.summary}${lc.lcCard.trap ? " (" + lc.lcCard.trap + ")" : ""}`);
+    });
 
     let p = `Role: You are Reza's warm, focused Modern Standard Arabic (MSA) speaking partner for a crisp 3–5 minute voice check-in.\n`;
     p += `Context: I just finished Practice Batch ${batchNum}${chapNum ? ` (advancing Chapter ${chapNum} weekly sentences)` : ""}. Drill ONLY the sentences, words, and grammar patterns below — stay strictly in clear vowelled MSA (الفُصْحَى), never regional dialect.\n\n`;

@@ -196,6 +196,17 @@ try:
 except Exception as e:
     print("Warning: could not parse grammar.json", e)
 
+# Lesson Cards (data/lesson-cards.json) — visual teaching & spaced-review cards
+try:
+    for c in loadd("lesson-cards.json").get("cards", []):
+        for r in c.get("rows", []):
+            if r.get("ar"): add("ar", r["ar"])
+        qc = c.get("quickCheck") or {}
+        if qc.get("speakAr"): add("ar", qc["speakAr"])
+        if qc.get("prompt"): add("en", qc["prompt"])
+except Exception as e:
+    print("Warning: could not parse lesson-cards.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 

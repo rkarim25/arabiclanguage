@@ -1,0 +1,550 @@
+{
+  "cards": [
+    {
+      "id": "negation",
+      "category": "grammar",
+      "categoryLabel": "Grammar System",
+      "icon": "🚫",
+      "title": "The 5 Arabic Negation Pairings",
+      "arTitle": "أَدَوَاتُ النَّفْيِ الخَمْس",
+      "summary": "In Arabic, each time-frame locks onto its own negation particle — and that particle controls the verb ending.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          { "era": "⬅ PAST (\"didn't\")", "ar": "لَمْ + يَفْعَلْ  /  مَا + فَعَلَ", "sub": "Jussive (-ْ) OR Past (-tu)", "tone": "teal" },
+          { "era": "● PRESENT (\"don't\")", "ar": "لَا + يَفْعَلُ", "sub": "Default present (-u)", "tone": "blue" },
+          { "era": "➡ FUTURE (\"won't\")", "ar": "لَنْ + يَفْعَلَ", "sub": "Subjunctive (-a)", "tone": "amber" },
+          { "era": "◻ NOUN (\"is not\")", "ar": "لَيْسَ", "sub": "Nominal sentence (no verb)", "tone": "slate" }
+        ],
+        "danger": "✗ لَا + Past (لَا ذَهَبْتُ) = Wish / Curse (e.g. لَا قَدَّرَ اللهُ \"May Allah forbid\"), NEVER factual \"didn't\"!"
+      },
+      "columns": ["Meaning", "Particle + Verb Form", "Example (\"go to work\")", "Where You Hear It"],
+      "rows": [
+        {
+          "col1": "<b>Past (\"didn't\") — Form A</b>",
+          "col2": "<code>لَمْ</code> + short present (<i>sukūn -ْ</i>)",
+          "ar": "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+          "tr": "lam adhhab ilā l-ʿamali",
+          "col4": "Standard MSA &amp; Qur'ān (<i>لَمْ يَلِدْ وَلَمْ يُولَدْ</i>)"
+        },
+        {
+          "col1": "<b>Past (\"didn't\") — Form B</b>",
+          "col2": "<code>مَا</code> + past verb (<i>-tu</i>)",
+          "ar": "مَا ذَهَبْتُ إِلَى العَمَلِ",
+          "tr": "mā dhahabtu ilā l-ʿamali",
+          "col4": "Everyday spoken &amp; written MSA"
+        },
+        {
+          "col1": "<b>Present (\"don't\")</b>",
+          "col2": "<code>لَا</code> + present (<i>-u</i>)",
+          "ar": "لَا أَذْهَبُ إِلَى العَمَلِ",
+          "tr": "lā adhhabu ilā l-ʿamali",
+          "col4": "Habitual / right now"
+        },
+        {
+          "col1": "<b>Future (\"won't\")</b>",
+          "col2": "<code>لَنْ</code> + present (<i>-a</i>)",
+          "ar": "لَنْ أَذْهَبَ إِلَى العَمَلِ",
+          "tr": "lan adhhaba ilā l-ʿamali",
+          "col4": "Future refusal / certainty"
+        },
+        {
+          "col1": "<b>Nominal (\"is not\")</b>",
+          "col2": "<code>لَيْسَ</code> (no verb)",
+          "ar": "العَمَلُ لَيْسَ بَعِيدًا",
+          "tr": "al-ʿamalu laysa baʿīdan",
+          "col4": "Noun / adjective sentences"
+        }
+      ],
+      "trap": "Never pair لَا with a past verb for ordinary negation: ✗ لَا ذَهَبْتُ is ungrammatical for \"I didn't go\". Always use لَمْ أَذْهَبْ or مَا ذَهَبْتُ.",
+      "quickCheck": {
+        "prompt": "Say \"I did not go to work\" in BOTH valid Arabic ways — and remember why لَا ذَهَبْتُ is never used:",
+        "answerAr": "لَمْ أَذْهَبْ إِلَى العَمَلِ  /  مَا ذَهَبْتُ إِلَى العَمَلِ",
+        "speakAr": "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+        "tr": "lam adhhab ilā l-ʿamali  /  mā dhahabtu ilā l-ʿamali",
+        "answerEn": "لَمْ + short present OR مَا + past verb (never ✗ لَا + past, which expresses a wish/curse)."
+      },
+      "triggers": {
+        "patterns": ["negation", "laysa"],
+        "words": ["لَمْ", "لَنْ", "لَيْسَ"],
+        "chapters": [2, 4]
+      }
+    },
+    {
+      "id": "verb-tenses",
+      "category": "grammar",
+      "categoryLabel": "Grammar System",
+      "icon": "⏳",
+      "title": "How Arabic Marks Past, Present & Future",
+      "arTitle": "الزَّمَنُ فِي الفِعْلِ العَرَبِيّ",
+      "summary": "Past tense glues \"who\" onto the BACK of the root; Present glues \"who\" onto the FRONT; Future simply clips سَـ onto Present.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          { "era": "⬅ PAST (Suffix at BACK)", "ar": "[ذَهَبْ] + ـتُ", "sub": "dhahab-tu — I went", "tone": "teal" },
+          { "era": "● PRESENT (Prefix at FRONT)", "ar": "أَ + [ذْهَبُ]", "sub": "a-dhhabu — I go", "tone": "blue" },
+          { "era": "➡ FUTURE (سَـ + Present)", "ar": "سَـ + أَ + [ذْهَبُ]", "sub": "sa-adhhabu — I will go", "tone": "amber" }
+        ]
+      },
+      "columns": ["Person", "Past (suffix on back)", "Present (prefix on front)", "Future (سَـ + present)"],
+      "rows": [
+        {
+          "col1": "<b>I</b> (أَنَا)",
+          "col2": "ذَهَبْ<b>تُ</b> (<i>dhahabtu</i>)",
+          "ar": "أَذْهَبُ إِلَى المَسْجِدِ",
+          "tr": "adhhabu ilā l-masjidi",
+          "col4": "<b>سَ</b>أَذْهَبُ (<i>sa-adhhabu</i>)"
+        },
+        {
+          "col1": "<b>You (m.)</b> (أَنْتَ)",
+          "col2": "ذَهَبْ<b>تَ</b> (<i>dhahabta</i>)",
+          "ar": "تَذْهَبُ إِلَى العَمَلِ",
+          "tr": "tadhhabu ilā l-ʿamali",
+          "col4": "<b>سَ</b>تَذْهَبُ (<i>sa-tadhhabu</i>)"
+        },
+        {
+          "col1": "<b>He</b> (هُوَ)",
+          "col2": "ذَهَبَ (<i>dhahaba</i>)",
+          "ar": "يَذْهَبُ إِلَى السُّوقِ",
+          "tr": "yadhhabu ilā s-sūqi",
+          "col4": "<b>سَ</b>يَذْهَبُ (<i>sa-yadhhabu</i>)"
+        },
+        {
+          "col1": "<b>We</b> (نَحْنُ)",
+          "col2": "ذَهَبْ<b>نَا</b> (<i>dhahabnā</i>)",
+          "ar": "نَذْهَبُ إِلَى الحَدِيقَةِ",
+          "tr": "nadhhabu ilā l-ḥadīqati",
+          "col4": "<b>سَ</b>نَذْهَبُ (<i>sa-nadhhabu</i>)"
+        }
+      ],
+      "trap": "Don't mix front and back markers at the same time (never ✗ أَذْهَبْتُ). Pick BACK for past (ذَهَبْتُ) or FRONT for present (أَذْهَبُ).",
+      "quickCheck": {
+        "prompt": "Flip \"I read the Qur'an\" across Past → Present → Future:",
+        "answerAr": "قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ",
+        "speakAr": "قَرَأْتُ القُرْآنَ",
+        "tr": "qaraʾtu → aqraʾu → sa-aqraʾu l-qurʾāna",
+        "answerEn": "Past = suffix ـتُ (قَرَأْتُ); Present = prefix أَ (أَقْرَأُ); Future = سَـ + present (سَأَقْرَأُ)."
+      },
+      "triggers": {
+        "patterns": ["tenses", "future"],
+        "words": ["قَرَأْتُ", "أَعُودُ", "أَتَعَلَّمُ", "عَبَدْتُ"],
+        "chapters": [4]
+      }
+    },
+    {
+      "id": "price-triplet",
+      "category": "nuance",
+      "categoryLabel": "Word Nuance",
+      "icon": "🏷️",
+      "title": "The 3 Arabic Words for \"Price / Cost\"",
+      "arTitle": "الفَرْقُ بَيْنَ الثَّمَنِ وَالسِّعْرِ وَالأُجْرَةِ",
+      "summary": "English says \"price/cost\" for almost everything; Arabic cleanly separates intrinsic value, shop rate, and service fare.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          { "badge": "💎 ثَمَن (thaman)", "title": "Intrinsic Value / Worth", "desc": "What an item is truly worth or paid for in exchange (Qur'ān & classic prose)." },
+          { "badge": "🏷️ سِعْر (siʿr)", "title": "Market Sticker / Rate", "desc": "The listed shop price, menu rate, or market quote." },
+          { "badge": "🚕 أُجْرَة (ujrah)", "title": "Service Fare / Rent / Wage", "desc": "Payment for transport, labour, or hiring space (never a physical object)." }
+        ]
+      },
+      "columns": ["Word", "Core Nuance", "Natural Spoken / Qur'ānic Frame", "When to Use"],
+      "rows": [
+        {
+          "col1": "<b>ثَمَن</b> (<i>thaman</i>)",
+          "col2": "Value / purchase sum",
+          "ar": "هَذَا ثَمَنُ الفَاكِهَةِ",
+          "tr": "hādhā thamanu l-fākihati",
+          "col4": "Handing money for goods; Qur'ān 2:41 (<i>ثَمَنًا قَلِيلًا</i>)"
+        },
+        {
+          "col1": "<b>سِعْر</b> (<i>siʿr</i>)",
+          "col2": "Market / tag price",
+          "ar": "كَمِ السِّعْرُ لِهَذَا؟",
+          "tr": "kami s-siʿru li-hādhā?",
+          "col4": "Asking how much something costs in a shop or market"
+        },
+        {
+          "col1": "<b>أُجْرَة</b> (<i>ujrah</i>)",
+          "col2": "Fare / fee / wage",
+          "ar": "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟",
+          "tr": "kami l-ujratu ilā l-funduqi?",
+          "col4": "Taxi rides, bus tickets, delivery fees (root أ-ج-ر <i>ajr</i> reward!)"
+        }
+      ],
+      "trap": "Never ask a taxi driver for السِّعْر — ask كَمِ الأُجْرَةُ؟ (\"How much is the fare?\"). Notice أُجْرَة shares root أ-ج-ر with أَجْر (divine reward/wage).",
+      "quickCheck": {
+        "prompt": "Which word do you ask a shopkeeper vs a taxi driver?",
+        "answerAr": "فِي السُّوقِ: كَمِ السِّعْرُ؟  /  فِي السَّيَّارَةِ: كَمِ الأُجْرَةُ؟",
+        "speakAr": "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟",
+        "tr": "kami s-siʿru (shop) vs kami l-ujratu (taxi fare)",
+        "answerEn": "سِعْر = shop/market tag; أُجْرَة = taxi fare/service fee; ثَمَن = value/sum paid."
+      },
+      "triggers": {
+        "patterns": [],
+        "words": ["ثَمَن", "سِعْر", "أُجْرَة"],
+        "chapters": [1, 3]
+      }
+    },
+    {
+      "id": "pronoun-attachments",
+      "category": "grammar",
+      "categoryLabel": "Grammar & Gender",
+      "icon": "🔗",
+      "title": "Pronoun Endings: Mine, For Me, & Him vs Her (-ka / -ki)",
+      "arTitle": "الضَّمَائِرُ المُتَّصِلَة",
+      "summary": "Arabic rarely leaves \"my / me / your\" as separate words — one tiny ending on a noun, preposition, or verb does the whole job.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          { "badge": "ـِي / ـنِي (Me / My)", "title": "1st Person Attachment", "desc": "Noun + ـِي = my (كِتَابِي) · Prep + ـِي = for/with me (لِي / عِنْدِي) · Verb + ـنِي = me (سَاعَدَنِي)" },
+          { "badge": "ـكَ (You — masc.)", "title": "Speaking to a Man", "desc": "Short fatḥah (-a): كَيْفَ حَالُكَ؟ · مَا اسْمُكَ؟ · هَلْ يُمْكِنُكَ؟" },
+          { "badge": "ـكِ (You — fem.)", "title": "Speaking to a Woman (e.g. Saba)", "desc": "Short kasrah (-i): كَيْفَ كَانَ يَوْمُكِ؟ · هَلْ يُمْكِنُكِ؟ (Same spelling, vowel flips!)" }
+        ]
+      },
+      "columns": ["Attachment", "Meaning", "Target Sentence", "Key Rule"],
+      "rows": [
+        {
+          "col1": "Noun + <b>ـِي</b>",
+          "col2": "My ...",
+          "ar": "أَيْنَ مِفْتَاحِي؟",
+          "tr": "ayna miftāḥī?",
+          "col4": "Drop <i>الـ</i> when adding a possessive suffix"
+        },
+        {
+          "col1": "Prep + <b>ـِي</b> (<code>لِي / عِنْدِي</code>)",
+          "col2": "Mine / I have",
+          "ar": "هَذَا الكِتَابُ لِي",
+          "tr": "hādhā l-kitābu lī",
+          "col4": "<i>لِـ + ـِي = لِي</i> (for me/mine); <i>عِنْدَ + ـِي = عِنْدِي</i> (I have)"
+        },
+        {
+          "col1": "Verb + <b>ـنِي</b>",
+          "col2": "... me (object)",
+          "ar": "خُذْنِي إِلَى الفُنْدُقِ",
+          "tr": "khudhnī ilā l-funduqi",
+          "col4": "Verbs insert a protective <b>ن</b> (<i>nūn al-wiqāyah</i>): <i>ـنِي</i>"
+        },
+        {
+          "col1": "<b>ـكَ</b> vs <b>ـكِ</b>",
+          "col2": "Your (m. vs f.)",
+          "ar": "كَيْفَ كَانَ يَوْمُكِ؟",
+          "tr": "kayfa kāna yawmuki?",
+          "col4": "<i>ـكَ (-ka)</i> to a man · <i>ـكِ (-ki)</i> to Saba / a woman"
+        }
+      ],
+      "trap": "Never keep الـ on a word that has a possessive ending: say كِتَابِي (my book), never ✗ الكِتَابِي!",
+      "quickCheck": {
+        "prompt": "How do you ask Saba \"How was your day?\" vs asking a male colleague?",
+        "answerAr": "لِزَوْجَتِكَ: كَيْفَ كَانَ يَوْمُكِ؟  /  لِلرَّجُلِ: كَيْفَ كَانَ يَوْمُكَ؟",
+        "speakAr": "كَيْفَ كَانَ يَوْمُكِ؟",
+        "tr": "kayfa kāna yawmuki (-ki fem.) vs yawmuka (-ka masc.)",
+        "answerEn": "ـكِ (-ki with kasrah) for her; ـكَ (-ka with fatḥah) for him."
+      },
+      "triggers": {
+        "patterns": ["possessive", "prep-pron", "pronouns"],
+        "words": ["لِي", "يَوْمُكِ", "مُسَاعَدَتِي", "خُذْنِي"],
+        "chapters": [1, 2, 3]
+      }
+    },
+    {
+      "id": "idafa-vs-adjective",
+      "category": "grammar",
+      "categoryLabel": "Grammar System",
+      "icon": "🔑",
+      "title": "Possession (Idāfah) vs Noun + Adjective",
+      "arTitle": "الإِضَافَةُ وَالنَّعْتُ",
+      "summary": "Where الـ sits tells you everything: \"the\" on the SECOND word only = \"X of the Y\"; \"the\" on BOTH words = \"the [adjective] X\".",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          { "badge": "🔑 [No الـ] + [الـ]", "title": "Possession Bridge (إِضَافَة)", "desc": "مِفْتَاحُ الغُرْفَةِ = \"the key OF the room\" (Word 1 is bare; Word 2 takes ـِ kasrah)." },
+          { "badge": "✨ [الـ] + [الـ]", "title": "Noun + Adjective (نَعْت)", "desc": "الغُرْفَةُ الجَدِيدَةُ = \"the new room\" (Adjective comes AFTER noun & mirrors الـ, gender, case)." }
+        ]
+      },
+      "columns": ["Structure", "الـ Pattern", "Arabic Example", "Meaning"],
+      "rows": [
+        {
+          "col1": "<b>Possession (إِضَافَة)</b>",
+          "col2": "Bare + <code>الـ</code>",
+          "ar": "مِفْتَاحُ الغُرْفَةِ",
+          "tr": "miftāḥu l-ghurfati",
+          "col4": "The key <b>of</b> the room"
+        },
+        {
+          "col1": "<b>Possession (إِضَافَة)</b>",
+          "col2": "Bare + <code>الـ</code>",
+          "ar": "صَلَاةُ الجُمُعَةِ",
+          "tr": "ṣalātu l-jumuʿati",
+          "col4": "The prayer <b>of</b> Friday (Jumu'ah prayer)"
+        },
+        {
+          "col1": "<b>Definite + Adjective</b>",
+          "col2": "<code>الـ</code> + <code>الـ</code>",
+          "ar": "المَسْجِدُ القَرِيبُ",
+          "tr": "al-masjidu l-qarību",
+          "col4": "The nearby mosque"
+        },
+        {
+          "col1": "<b>Indefinite + Adjective</b>",
+          "col2": "Bare + Bare",
+          "ar": "طَعَامٌ صِحِّيٌّ",
+          "tr": "ṭaʿāmun ṣiḥḥiyyun",
+          "col4": "Healthy food"
+        }
+      ],
+      "trap": "Never say ✗ المِفْتَاحُ الغُرْفَةِ for \"the room key\" — the first word of an idāfah bridge NEVER wears الـ!",
+      "quickCheck": {
+        "prompt": "Say \"the room key\" in Arabic — where does الـ go?",
+        "answerAr": "مِفْتَاحُ الغُرْفَةِ",
+        "speakAr": "مِفْتَاحُ الغُرْفَةِ",
+        "tr": "miftāḥu l-ghurfati",
+        "answerEn": "الـ goes ONLY on the second word (الغُرْفَةِ); مِفْتَاحُ stays bare."
+      },
+      "triggers": {
+        "patterns": ["idafa", "adj"],
+        "words": ["مِفْتَاح", "صِحِّيّ", "فِكْرَة"],
+        "chapters": [3]
+      }
+    },
+    {
+      "id": "lookalike-roots",
+      "category": "nuance",
+      "categoryLabel": "Letter & Sound Pairs",
+      "icon": "🪞",
+      "title": "High-Value Minimal Pairs: One Dot Changes Everything",
+      "arTitle": "كَلِمَاتٌ مُتَشَابِهَة",
+      "summary": "Locking look-alike pairs side-by-side stops silent mix-ups in both everyday speech and Qur'ānic listening.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          { "badge": "د vs ذ", "title": "أَعُودُ (Return) vs أَعُوذُ (Seek Refuge)", "desc": "Plain د (ع-و-د) = I return home · Dotted ذ (ع-و-ذ) = I seek refuge in Allah (Al-Falaq / An-Nās)." },
+          { "badge": "ج…ز vs ز…ج", "title": "جَوْزَة (Walnut) vs زَوْجَة (Wife)", "desc": "ج leads the crunchy walnut snack (جَوْزَة) · ز leads your spouse/partner (زَوْجَة)!" },
+          { "badge": "ح-ف-ل vs ر-ت-ب", "title": "حَفْلَة (Party) vs أُرَتِّبُ (I Tidy)", "desc": "حَفْلَة shares root with Bengali মাহফিল (mahfil gathering) · أُرَتِّبُ shares root with tartīb (neat order)." }
+        ]
+      },
+      "columns": ["Word A", "Word B", "Example Sentence", "Memory Hook"],
+      "rows": [
+        {
+          "col1": "<b>أَعُودُ</b> (I return)",
+          "col2": "<b>أَعُوذُ</b> (I seek refuge)",
+          "ar": "أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ",
+          "tr": "aʿūdu ilā l-bayti fī l-masāʾi",
+          "col4": "Plain <code>د</code> = return to your door; dotted <code>ذ</code> = <i>أَعُوذُ بِاللَّهِ</i>"
+        },
+        {
+          "col1": "<b>جَوْزَة</b> (walnut)",
+          "col2": "<b>زَوْجَة</b> (wife)",
+          "ar": "أَكَلْتُ ثَلَاثَ تَمَرَاتٍ وَجَوْزَةً",
+          "tr": "akaltu thalātha tamarātin wa-jawzatan",
+          "col4": "<code>ج</code> first = <b>J</b>awzah walnut; <code>ز</code> first = <b>Z</b>awjah wife"
+        },
+        {
+          "col1": "<b>حَفْلَة</b> (party)",
+          "col2": "<b>اجْتِمَاع</b> (meeting)",
+          "ar": "عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ",
+          "tr": "ʿindī jtimāʿun fī ṣ-ṣabāḥi",
+          "col4": "<i>ḥaflah</i> = social celebration (<i>mahfil</i>); <i>ijtimāʿ</i> = work meeting (root <i>Jumu'ah</i>)"
+        },
+        {
+          "col1": "<b>تَقَبَّلَ اللهُ</b>",
+          "col2": "<b>عَبَدْتُ اللهَ</b>",
+          "ar": "تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ",
+          "tr": "taqabbala llāhu minnā wa-minkum",
+          "col4": "<i>taqabbala</i> = Bengali কবুল (<i>kobul</i> accept); <i>ʿabadtu</i> = past of <i>نَعْبُدُ</i>"
+        }
+      ],
+      "quickCheck": {
+        "prompt": "Contrast أَعُودُ vs أَعُوذُ — and what is the Jumu'ah prayer greeting \"May Allah accept\"?",
+        "answerAr": "أَعُودُ (أَرْجِعُ إِلَى البَيْتِ) vs أَعُوذُ (بِاللهِ)  ·  تَقَبَّلَ اللهُ",
+        "speakAr": "تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ",
+        "tr": "aʿūdu (return) vs aʿūdhu (seek refuge) · taqabbala llāh",
+        "answerEn": "Plain د = return home; dotted ذ = seek refuge; تَقَبَّلَ اللهُ = May Allah accept (kobul)."
+      },
+      "triggers": {
+        "patterns": [],
+        "words": ["أَعُودُ", "جَوْزَة", "حَفْلَة", "أُرَتِّبُ", "تَقَبَّلَ الله", "عَبَدْتُ"],
+        "chapters": [4]
+      }
+    },
+    {
+      "id": "sadr-vs-qalb",
+      "category": "quran",
+      "categoryLabel": "Qur'ān Concept",
+      "icon": "🕌",
+      "title": "Surah An-Nās Anatomy: Why الصُّدُور (Chests) and Not القُلُوب (Hearts)?",
+      "arTitle": "الصَّدْرُ وَالقَلْبُ فِي سُورَةِ النَّاس",
+      "summary": "In Qur'ānic precision, the whisperer (الوَسْوَاس الخَنَّاس) can only pace the outer courtyard (الصَّدْر); he cannot enter the locked heart (القَلْب) unless invited.",
+      "diagram": {
+        "type": "fortress",
+        "outer": "الصَّدْر (aṣ-ṣadr — Outer Courtyard / Chest): Where الوَسْوَاس الخَنَّاس throws passing whispers (يُوَسْوِسُ فِي صُدُورِ النَّاسِ).",
+        "shield": "🛡️ ذِكْرُ اللهِ (Remembrance of Allah): The instant you remember Allah, الخَنَّاس shrinks back & retreats!",
+        "inner": "❤️ القَلْب / الفُؤَاد (al-qalb — Inner Sanctuary / Heart): Seat of īmān — locked to Shayṭān unless the gate is opened."
+      },
+      "columns": ["Qur'ānic Term", "Root & Pattern", "Exact Meaning in 113–114", "Spiritual Insight"],
+      "rows": [
+        {
+          "col1": "<b>الْوَسْوَاسِ</b>",
+          "col2": "و-س-و-س (intensive)",
+          "ar": "مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ",
+          "tr": "min sharri l-waswāsi l-khannās",
+          "col4": "Onomatopoeic rustle: repetitive, subtle inner muttering"
+        },
+        {
+          "col1": "<b>الْخَنَّاسِ</b>",
+          "col2": "خ-ن-س (<i>faʿʿāl</i>)",
+          "ar": "الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ",
+          "tr": "alladhī yuwaswisu fī ṣudūri n-nās",
+          "col4": "Cowardly slinker: retreats upon <i>dhikr</i>, creeps back in heedlessness"
+        },
+        {
+          "col1": "<b>صُدُور vs قُلُوب</b>",
+          "col2": "ص-د-ر vs ق-ل-ب",
+          "ar": "فِي صُدُورِ النَّاسِ",
+          "tr": "fī ṣudūri n-nās",
+          "col4": "<i>Ṣudūr</i> = outer foyer/chests (accessible to passing thoughts), NOT <i>qulūb</i>!"
+        },
+        {
+          "col1": "<b>الْعُقَدِ</b>",
+          "col2": "ع-ق-د (plural of عُقْدَة)",
+          "ar": "وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ",
+          "tr": "wa-min sharri n-naffāthāti fī l-ʿuqad",
+          "col4": "Tied knots (same root as <i>ʿaqd</i> contract &amp; <i>ʿaqīdah</i> creed)"
+        }
+      ],
+      "quickCheck": {
+        "prompt": "In Surah An-Nās, why does Allah say فِي صُدُورِ النَّاسِ (in the chests) rather than قُلُوب (hearts), and what makes الخَنَّاس retreat?",
+        "answerAr": "الصَّدْرُ هُوَ السَّاحَةُ الخَارِجِيَّةُ، وَيَخْنِسُ الشَّيْطَانُ عِنْدَ ذِكْرِ اللهِ",
+        "speakAr": "الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ",
+        "tr": "yuwaswisu fī ṣudūri n-nās",
+        "answerEn": "الصَّدْر (chest) is the outer courtyard around القَلْب (the heart), and الخَنَّاس slinks back whenever Allah is remembered."
+      },
+      "triggers": {
+        "patterns": [],
+        "words": ["عُقَد", "غَاسِق", "حَاسِد", "الْخَنَّاس", "الْوَسْوَاس", "صُدُور"],
+        "chapters": [1, 2]
+      }
+    },
+    {
+      "id": "requests-and-modals",
+      "category": "conversation",
+      "categoryLabel": "Conversation System",
+      "icon": "🗣",
+      "title": "The Polite Request & Conversation Control Ladder",
+      "arTitle": "الطَّلَبُ اللَّطِيفُ وَإِدَارَةُ الحِوَار",
+      "summary": "Four reusable sentence frames let you ask for anything, request help politely, or slow a fast speaker down without switching to English.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          { "era": "1. Direct Need", "ar": "أَحْتَاجُ إِلَى + [Noun]", "sub": "I need [something]", "tone": "slate" },
+          { "era": "2. Polite Want", "ar": "أُرِيدُ أَنْ + [Verb ـَ]", "sub": "I want to [do]", "tone": "teal" },
+          { "era": "3. Courteous Help", "ar": "هَلْ يُمْكِنُكَ + [Noun]؟", "sub": "Can you / Could you...?", "tone": "blue" },
+          { "era": "4. Pace Control", "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ", "sub": "Speak slowly, please", "tone": "amber" }
+        ]
+      },
+      "columns": ["Move", "Frame", "Ready-to-Say Sentence", "Memory Hook"],
+      "rows": [
+        {
+          "col1": "<b>State a need</b>",
+          "col2": "<code>أَحْتَاجُ إِلَى</code> + noun (<i>-i</i>)",
+          "ar": "أَحْتَاجُ إِلَى مِفْتَاحِ الغُرْفَةِ",
+          "tr": "aḥtāju ilā miftāḥi l-ghurfati",
+          "col4": "<i>أَحْتَاجُ</i> always pairs with preposition <b>إِلَى</b>"
+        },
+        {
+          "col1": "<b>Say \"want to\"</b>",
+          "col2": "<code>أُرِيدُ أَنْ</code> + present (<i>-a</i>)",
+          "ar": "أُرِيدُ أَنْ أَشْرَبَ شَايًا",
+          "tr": "urīdu an ashraba shāyan",
+          "col4": "Bridge word <b>أَنْ</b> flips verb ending from <i>-u</i> to <i>-a</i>"
+        },
+        {
+          "col1": "<b>Ask for help</b>",
+          "col2": "<code>هَلْ يُمْكِنُكَ / ـكِ</code>",
+          "ar": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟",
+          "tr": "hal yumkinuka musāʿadatī?",
+          "col4": "Bengali মুমকিন (<i>mumkin</i>) + hear <b>AID</b> in <i>mu-sa-AID-ah</i>!"
+        },
+        {
+          "col1": "<b>Slow the speaker</b>",
+          "col2": "<code>بِبُطْءٍ</code> (with slowness)",
+          "ar": "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
+          "tr": "takallam bi-buṭʾin min faḍlika",
+          "col4": "Pair with <i>لَمْ أَفْهَمْ، كَرِّرْ مِنْ فَضْلِكَ</i> (I didn't understand, repeat please)"
+        }
+      ],
+      "quickCheck": {
+        "prompt": "How do you politely ask \"Can you help me?\" and \"Speak slowly, please\" in Arabic?",
+        "answerAr": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟  ·  تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
+        "speakAr": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟",
+        "tr": "hal yumkinuka musāʿadatī? · takallam bi-buṭʾin min faḍlika",
+        "answerEn": "يُمْكِنُكَ (mumkin) + مُسَاعَدَتِي (my aid); تَكَلَّمْ بِبُطْءٍ (speak with slowness)."
+      },
+      "triggers": {
+        "patterns": ["an-verb"],
+        "words": ["مُسَاعَدَة", "مُسَاعَدَتِي", "بِبُطْءٍ", "أَحْتَاجُ"],
+        "chapters": [2]
+      }
+    },
+    {
+      "id": "days-and-clock",
+      "category": "nuance",
+      "categoryLabel": "Time & Number Roots",
+      "icon": "🕰️",
+      "title": "The 7-Day Number Root Map & Telling Time",
+      "arTitle": "أَيَّامُ الأُسْبُوعِ وَالسَّاعَة",
+      "summary": "Five days of the Arabic week literally count 1 to 5 from Sunday, Friday means \"Gathering\", and clock hours use feminine ordinal adjectives.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          { "era": "1 → 5 (Number Roots)", "ar": "الأَحَد (1) · الاِثْنَيْن (2) · الثُّلَاثَاء (3) · الأَرْبِعَاء (4) · الخَمِيس (5)", "sub": "aḥad, ithnān, thalāthah, arbaʿah, khamsah!", "tone": "teal" },
+          { "era": "6. Gathering Day", "ar": "الجُمُعَة (Root ج-م-ع)", "sub": "Same root as اجْتِمَاع (meeting) & مَسْجِد جَامِع", "tone": "blue" },
+          { "era": "7. Rest + Clock Rule", "ar": "السَّبْت · السَّاعَةُ السَّابِعَةُ (7:00)", "sub": "Clock hours match feminine السَّاعَةُ (ordinal -ah)", "tone": "amber" }
+        ]
+      },
+      "columns": ["Day / Time", "Root Connection", "Spoken Sentence", "Meaning"],
+      "rows": [
+        {
+          "col1": "<b>يَوْمُ الأَحَدِ</b>",
+          "col2": "أَحَد = One (<i>اللَّهُ أَحَدٌ</i>)",
+          "ar": "الأَحَدُ لِدَرْسِ العَرَبِيَّةِ",
+          "tr": "al-aḥadu li-darsi l-ʿarabiyyati",
+          "col4": "Sunday is for the Arabic lesson"
+        },
+        {
+          "col1": "<b>الأَرْبِعَاء / الخَمِيس</b>",
+          "col2": "أَرْبَعَة (4) / خَمْسَة (5)",
+          "ar": "غَدًا يَوْمُ الجُمُعَةِ",
+          "tr": "ghadan yawmu l-jumuʿati",
+          "col4": "Tomorrow is Friday (after day 5 الخَمِيس)"
+        },
+        {
+          "col1": "<b>السَّاعَةُ السَّابِعَةُ</b>",
+          "col2": "Ordinal <i>فَاعِلَة</i> (7th hour)",
+          "ar": "أَسْتَيْقِظُ فِي السَّاعَةِ السَّابِعَةِ",
+          "tr": "astayqiẓu fī s-sāʿati s-sābiʿati",
+          "col4": "I wake up at 7 o'clock"
+        },
+        {
+          "col1": "<b>السَّاعَةُ الثَّامِنَةُ</b>",
+          "col2": "Ordinal <i>فَاعِلَة</i> (8th hour)",
+          "ar": "أَعُودُ فِي السَّاعَةِ الثَّامِنَةِ",
+          "tr": "aʿūdu fī s-sāʿati th-thāminati",
+          "col4": "I return at 8 o'clock"
+        }
+      ],
+      "trap": "Exception on the clock: 1 o'clock uses الوَاحِدَة (السَّاعَةُ الوَاحِدَةُ), while 2:00–10:00 follow the clean الثَّانِيَة / الثَّالِثَة / السَّابِعَة / الثَّامِنَة pattern!",
+      "quickCheck": {
+        "prompt": "Why is Thursday called الخَمِيس and Friday called الجُمُعَة — and how do you say \"at 7 o'clock\"?",
+        "answerAr": "الخَمِيس (5) · الجُمُعَة (اجْتِمَاع) · فِي السَّاعَةِ السَّابِعَةِ",
+        "speakAr": "أَسْتَيْقِظُ فِي السَّاعَةِ السَّابِعَةِ",
+        "tr": "al-khamīs (5) · al-jumuʿah (gathering) · fī s-sāʿati s-sābiʿati",
+        "answerEn": "Sunday–Thursday count 1–5 (أحد..خميس); الجُمُعَة = assembly (ج-م-ع); clock hours take feminine ordinals (السَّاعَةِ السَّابِعَةِ)."
+      },
+      "triggers": {
+        "patterns": ["numbers"],
+        "words": ["الجُمُعَة", "الخَمِيس", "الأَرْبِعَاء", "الثُّلَاثَاء", "السَّابِعَة", "الثَّامِنَة"],
+        "chapters": [4]
+      }
+    }
+  ]
+}

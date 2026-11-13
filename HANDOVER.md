@@ -2,6 +2,13 @@
 
 **Updated 2026-11-13 (Friday Morning, `/run-arabic-coach`).** Read this first in any new session.
 
+> **13 Nov 2026 (interactive morning follow-up — Lesson Cards Architecture & Live Launch)** — `data/lesson-cards.json` + `js/lesson-cards.js` + `sets.html` + `sentences.html` + `js/practice.js`:
+> 1. **Lesson Cards (`بِطَاقَاتُ الدُّرُوس` — SRS key `lc:<id>`)**:
+>    - Created a general-purpose **Lesson Card** system for any structured concept worth teaching visually — spanning **Grammar Systems** (`lc:negation`, `lc:verb-tenses`, `lc:pronoun-attachments`, `lc:idafa-vs-adjective`), **Word Nuances & Look-Alike Roots** (`lc:price-triplet`, `lc:lookalike-roots`, `lc:days-and-clock`), **Conversation Systems** (`lc:requests-and-modals`), and **Qur'ān Concepts** (`lc:sadr-vs-qalb`).
+>    - Every Lesson Card includes a responsive visual diagram (`timeline`, `lanes`, or `fortress`), a clean book-like comparison table with pre-generated `🔊` neural audio on every Arabic example (`11,368` verified manifest entries), a "Watch out" trap callout, and an active Quick Check.
+>    - **Home Shelf + Proactive Teaching + Spaced Review:** Lesson Cards reside at the top of `sets.html` (`#lc-<id>`), are **proactively taught at `#1` inside `Practice`** (`lcMode: "teach"`, auto-expanded) whenever a batch introduces an unseen concept, and are **reviewed from time to time via SRS** (`lcMode: "review"`, active Quick Check before reveal) whenever their interval comes due.
+>    - Added `scripts/test-lesson-cards.js` (7 assertions); all **16** automated test suites pass 100%.
+
 > **13 Nov 2026 (interactive morning, `/run-arabic-coach` — Pen Notes #64 & #65)** — AI Coach as Primary Teacher, Inline Grammar Rules, Incremental Multi-Batch `Practice`, Built-In AI Speaking Briefs, `#planBar` Cleanup & Prompt HH:
 > 1. **Pen Note #64 Resolved (`لَمْ أَذْهَبْ إِلَى العَمَلِ` & Primary Teacher Mandate)**:
 >    - Upgraded `negation` in `data/grammar.json` with side-by-side `لَمْ أَذْهَبْ إِلَى العَمَلِ` (`لَمْ` + jussive present) vs `مَا ذَهَبْتُ إِلَى العَمَلِ` (`مَا` + past), explicit `✗ لَا ذَهَبْتُ` trap warning (`لَا` + past expresses a wish/curse, never "didn't"), and added concise `cardRule` summaries across all **22** grammar patterns.
