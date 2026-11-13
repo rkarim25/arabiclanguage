@@ -32,10 +32,10 @@ body {
 nav {
   background: var(--card);
   border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
+  padding: 9px 18px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 6px 10px;
   flex-wrap: wrap;
   position: sticky;
   top: 0;
@@ -1419,26 +1419,70 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 .sym-badge.drill-badge.done { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 
-/* ---------- ✗ ≈ ✓ ★ — the verdict bar (js/srs.js). He gives the verdict, the site sets the date. ---------- */
+/* ---------- Earned Mastery Dot (⚪/🔴/🟡/🟢) + Neutral ✗ · ≈ · ✓ Bar (js/srs.js) ----------
+   Only the read-only earned dot carries colour; self-report buttons stay calm & neutral. */
+.m-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+  cursor: help;
+  box-sizing: border-box;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.m-dot.sm { width: 9px; height: 9px; }
+.m-dot.lg { width: 12px; height: 12px; }
+.m-dot.m-grey  { background: #e2e8f0; border: 1.5px solid #cbd5e1; }
+.m-dot.m-red   { background: #ef4444; border: 1.5px solid #dc2626; box-shadow: 0 0 0 2px rgba(239,68,68,0.16); }
+.m-dot.m-amber { background: #f59e0b; border: 1.5px solid #d97706; box-shadow: 0 0 0 2px rgba(245,158,11,0.18); }
+.m-dot.m-green { background: #10b981; border: 1.5px solid #059669; box-shadow: 0 0 0 2px rgba(16,185,129,0.20); }
+
+.m-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
+}
+.m-progress-track {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e2e8f0;
+  width: 100%;
+}
+.m-progress-seg.green { background: #10b981; transition: width 0.3s ease; }
+.m-progress-seg.amber { background: #f59e0b; transition: width 0.3s ease; }
+.m-progress-seg.red   { background: #ef4444; transition: width 0.3s ease; }
+
 .srs-bar { display: inline-flex; gap: 4px; align-items: center; direction: ltr; flex-wrap: wrap; vertical-align: middle; }
-.srs-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--card); padding: 0;
-  cursor: pointer; font-size: 13px; font-weight: 700; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
-  transition: all 0.12s; color: var(--muted); font-family: inherit; }
-.srs-btn:hover { transform: scale(1.12); }
-.srs-btn.no     { border-color: #ef4444; color: #dc2626; background: #fef2f2; }
-.srs-btn.maybe  { border-color: #d97706; color: #b45309; background: #fffbeb; }
-.srs-btn.yes    { border-color: #0284c7; color: #0369a1; background: #f0f9ff; }
-.srs-btn.solid  { border-color: #10b981; color: #047857; background: #ecfdf5; }
-.srs-btn.retire { border-color: #cbd5e1; color: #94a3b8; background: #f8fafc; font-size: 12px; margin-left: 4px; }
-.srs-btn.sel { color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(0,0,0,0.08); }
-.srs-btn.no.sel     { background: #dc2626; border-color: #dc2626; }
-.srs-btn.maybe.sel  { background: #d97706; border-color: #d97706; }
-.srs-btn.yes.sel    { background: #0284c7; border-color: #0284c7; }
-.srs-btn.solid.sel  { background: #059669; border-color: #059669; }
-.srs-btn.retire.sel { background: #64748b; border-color: #64748b; }
-.srs-said { font-size: 11.5px; color: var(--accent); margin-left: 6px; white-space: nowrap; font-weight: 600; }
+.srs-bar > .m-dot { margin-right: 3px; }
+.srs-btn { width: 25px; height: 25px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); padding: 0;
+  cursor: pointer; font-size: 12.5px; font-weight: 700; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.12s; color: var(--ink); font-family: inherit; }
+.srs-btn:hover { border-color: var(--ink); background: var(--bg); transform: scale(1.08); }
+.srs-btn.no, .srs-btn.maybe, .srs-btn.yes, .srs-btn.solid { border-color: var(--border); color: var(--ink); background: var(--card); }
+.srs-btn.retire { border-color: var(--border); color: var(--muted); background: transparent; font-size: 11.5px; margin-left: 2px; opacity: 0.78; }
+.srs-btn.retire:hover { opacity: 1; }
+.srs-btn.sel,
+.srs-btn.no.sel,
+.srs-btn.maybe.sel,
+.srs-btn.yes.sel,
+.srs-btn.solid.sel,
+.srs-btn.retire.sel { background: #334155; border-color: #334155; color: #fff; transform: scale(1.06); box-shadow: 0 1px 3px rgba(0,0,0,0.12); opacity: 1; }
+.srs-said { font-size: 11px; color: var(--muted); margin-left: 5px; white-space: nowrap; font-weight: 600; }
 .srs-said:empty { display: none; }
 .srs-bar.compact { gap: 3px; }
+.srs-bar.compact > .m-dot { margin-right: 2px; }
 .srs-bar.compact .srs-btn { width: 22px; height: 22px; font-size: 11.5px; }
 .srs-bar.compact .srs-said { font-size: 10.5px; margin-left: 4px; }
 .srs-legend { display: inline-flex; gap: 10px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); align-items: center; }
@@ -1569,3 +1613,10 @@ details.calm-sec > summary .pd-muted { font-weight: 500; font-size: 12.5px; }
 .hl-dot-clear { border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 999px; font-size: 11px; padding: 1px 6px; cursor: pointer; line-height: 1.3; }
 .hl-dot-clear:hover { color: var(--ink); border-color: var(--ink); }
 body[data-hl-pen] .p-ar, body[data-hl-pen] .s-ar, body[data-hl-pen] .ar-cell, body[data-hl-pen] .w-ar { cursor: pointer; }
+
+/* ---------- Collapsible Coach Card (shared across Practice & Chapters) ---------- */
+details.coach-details { border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 12px; padding: 9px 14px; margin-bottom: 14px; cursor: pointer; }
+details.coach-details > summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; color: var(--accent); }
+details.coach-details > summary::-webkit-details-marker { display: none; }
+details.coach-details[open] { background: var(--card); border-color: var(--border); }
+details.coach-details .coach-body { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); cursor: default; }

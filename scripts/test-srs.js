@@ -109,7 +109,24 @@ console.log("\n-- bounds & labels --");
   yes(c.s >= SRS.P.sMin && c.l === 20, "stability has a floor after 20 ✗ and lapses are counted");
   yes(/min/.test(SRS.nextLabel({ due: Date.now() + 600000 })) && /tomorrow/.test(SRS.nextLabel({ due: Date.now() + DAY })) && /wk/.test(SRS.nextLabel({ due: Date.now() + 21 * DAY })), "next-date labels read as minutes / tomorrow / weeks");
   const html = SRS.rateBarHtml("ev-x:1", "rateWord", [3]);
-  yes(/✗/.test(html) && /★/.test(html) && /rateWord\('ev-x:1', 'solid', 3\)/.test(html) && /⊘/.test(html), "the inline bar carries the four symbols + ⊘ and the handler call");
+  yes(/m-dot m-grey/.test(html) && /✗/.test(html) && /≈/.test(html) && /✓/.test(html) && !/★/.test(html) && /rateWord\('ev-x:1', 'yes', 3\)/.test(html) && /⊘/.test(html), "the inline bar carries the earned dot + neutral ✗ · ≈ · ✓ + ⊘ and the handler call");
+}
+
+console.log("\n-- live earned mastery dots (⚪ / 🔴 / 🟡 / 🟢) --");
+{
+  const srs = {};
+  yes(SRS.masteryState("w:1", { srs, now: T0 }).level === "grey", "unseen card starts as ⚪ grey (Unseen)");
+  SRS.rate("w:1", "no", { srs, now: T0 });
+  yes(SRS.masteryState("w:1", { srs, now: T0 + 60000 }).level === "red", "missed card turns 🔴 red (Needs work)");
+  SRS.rate("w:2", "yes", { srs, now: T0 });
+  yes(SRS.masteryState("w:2", { srs, now: T0 + 3600000 }).level === "amber", "1st-day ✓ turns 🟡 amber (Building) — cannot fake green in one sitting");
+  SRS.rate("w:2", "yes", { srs, now: T0 + 2 * DAY });
+  yes(SRS.masteryState("w:2", { srs, now: T0 + 2.5 * DAY }).level === "green", "2nd-day ✓ earns 🟢 green (Mastered across 2+ days)");
+  yes(SRS.masteryState("w:2", { srs, now: T0 + 40 * DAY }).level === "amber", "overdue card whose recall decayed below 85% drops from 🟢 green back to 🟡 amber dynamically");
+  SRS.rate("w:3", "retire", { srs, now: T0 });
+  yes(SRS.masteryState("w:3", { srs, now: T0 }).level === "green", "⊘ retired card counts as 🟢 green");
+  const sc = SRS.summaryCounts(["w:1", "w:2", "w:3", "w:4"], { srs, now: T0 + 2.5 * DAY });
+  yes(sc.green === 2 && sc.red === 1 && sc.grey === 1 && sc.total === 4, `summaryCounts tallies green/amber/red/grey accurately (${JSON.stringify(sc)})`);
 }
 
 

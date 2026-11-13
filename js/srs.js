@@ -1,36 +1,21 @@
 /* ============================================================================
-   SRS — the scheduler that owns the interval (Reza's ask, 2026-10-09)
+   SRS — the scheduler that owns the interval + Earned Mastery Dots
+   (Reza's asks, 2026-10-09 & 2026-11-13)
 
-   "I keep trying to judge how frequently the word should repeat — that decision
-    should be taken away from me." So the five interval buttons (30d/7d/2d/1d/
-   retire) become four VERDICTS and the site does the arithmetic:
-
-       ✗  no      didn't know it
+   1. YOU GIVE THE VERDICT (neutral buttons), THE SITE SETS THE DATE:
+       ✗  no      didn't get it
        ≈  maybe   hesitant, partial, needed a second look
-       ✓  yes     knew it
-       ★  solid   instant, no effort
-       ⊘  (don't repeat — unchanged: his explicit "I know this permanently")
+       ✓  yes     got it cleanly
+       ⊘  retire  already effortless — don't repeat
+      (Internal grade "solid" ★ remains supported for spoken/typed/legacy math.)
 
-   The model is a trimmed FSRS (Jarrett Ye et al.): every card carries a
-   STABILITY s = the gap in days at which recall has fallen to 90%, and a
-   DIFFICULTY d (1 easy … 10 hard). Recall right now is
-       R = 0.9 ^ (days since last review / s).
-   A verdict updates s from R, so TIME ACTUALLY SPENT AWAY is what drives the
-   schedule, not the calendar and not his guess:
-     · five ✓ in one sitting barely move s (R ≈ 1 → nothing was proven yet);
-     · a ✓ after a long gap, when R had sunk, is strong evidence → s jumps;
-     · ✗ collapses s toward hours and asks again in ten minutes;
-     · ≈ holds the card in its band and asks again a little later.
-
-   Everything downstream (curriculum levels, the day plan, the progress chart,
-   the solid counts) keeps reading `box` and `due`, which are now PROJECTED from
-   s. Honesty guard: a card cannot project above box 1 until it has been
-   recalled on two different days — one ★ tap is a claim, not a proof.
-
-   Card fields (all on ats-srs, synced): box, due, u (last write), b ("never" only)
-   + s (stability days), d (difficulty), n (distinct-day successes), r (ratings),
-   l (lapses), g (last verdict), ls (last success time).
-   Legacy cards (no s) are migrated on first touch from their box/due.
+   2. EARNED MASTERY DOT (read-only ● beside every practised or tested item):
+      Reza cannot manually colour the dot; he earns it through Practice batches,
+      Commute sessions, 🎯 Try it, and Chapter/Surah/Lesson tests:
+       ⚪ grey   — Unseen (never practised or tested yet)
+       🔴 red    — Needs work (missed recently / box 0)
+       🟡 amber  — Building (passed on 1 day so far, hesitant ≈, or due refresh R < 85%)
+       🟢 green  — Mastered (proven across 2+ days with box ≥ 2 & live recall R ≥ 85%, or retired)
 
    Tests: node scripts/test-srs.js
    ============================================================================ */
@@ -43,8 +28,10 @@
   const BOX_DAYS = [0, 1, 3, 7, 14, 30];
   const NEVER_DUE = 4102444800000;
   const GRADES = ["no", "maybe", "yes", "solid"];
+  const UI_GRADES = ["no", "maybe", "yes"];
   const P = {                       // tunables — refit yearly from his log like progress-model
     target: 0.9,                    // R at which a card is due
+    greenMinR: 0.85,                // live recall floor required to hold a green dot
     s0: { no: 0.15, maybe: 0.6, yes: 2, solid: 5 },
     d0: { no: 7, maybe: 6, yes: 5, solid: 3.5 },
     G: 1.6, C: 1.5,                 // growth strength / lateness bonus
@@ -71,11 +58,15 @@
       const best = have.sort((a, b) => (b.b === "never") - (a.b === "never") || (b.u || 0) - (a.u || 0) || (b.box || 0) - (a.box || 0))[0];
       g.forEach(k => { if (srs[k] !== best && JSON.stringify(srs[k] || null) !== JSON.stringify(best)) { srs[k] = best; n++; } });
     });
+    if (n > 0) scheduleRefreshDots();
     return n;
   }
   const TITLE = {
-    no: "No — didn't know it", maybe: "Maybe — hesitant or partly", yes: "Yes — knew it",
-    solid: "Solid — instant, no effort", retire: "Don't repeat — I know this for good",
+    no: "✗ Didn't get it — bring back soon",
+    maybe: "≈ Got there with effort — keep building",
+    yes: "✓ Got it cleanly",
+    solid: "★ Instant & effortless",
+    retire: "⊘ Already effortless — don't repeat",
   };
   // old bucket ids / old grades → verdicts, and back (callbacks in old pages still get an id)
   const FROM_LEGACY = { strong: "solid", know: "solid", medium: "yes", later: "yes", weak: "maybe",
@@ -178,7 +169,7 @@
   function rate(key, grade, opts) {
     opts = opts || {};
     const now = opts.now || Date.now();
-    const srs = (typeof getSrs === "function") ? getSrs() : (opts.srs || {});
+    const srs = opts.srs || ((typeof getSrs === "function") ? getSrs() : {});
     const cur = srs[key];
     const g = FROM_LEGACY[grade] || grade;
     // a retired card: a verdict on it is a verdict (12 Oct — the ✓ used to be a silent no-op); ≈ alone leaves it retired
@@ -186,7 +177,8 @@
     const nc = next(cur, g, now);
     srs[key] = nc;
     (ALIAS[key] || []).forEach(k => { if (k !== key) srs[k] = nc; });   // every key of that word
-    if (typeof store !== "undefined" && store.set) store.set("ats-srs", srs);
+    if (!opts.srs && typeof store !== "undefined" && store.set) store.set("ats-srs", srs);
+    if (!opts.srs) scheduleRefreshDots();
     return nc;
   }
   function legacyGrade(key, grade) { return rate(key, FROM_LEGACY[grade] || grade); }
@@ -203,10 +195,11 @@
     now = now || Date.now();
     return items.slice().sort((a, b) => weakness(srs[a.key], now) - weakness(srs[b.key], now));
   }
-  function nextLabel(c) {
+  function nextLabel(c, now) {
     if (!c) return "";
     if (c.b === "never") return "⊘ not repeated";
-    const ms = (c.due || 0) - Date.now();
+    const ms = (c.due || 0) - (now || Date.now());
+    if (ms <= 0) return "due now";
     if (ms < 45 * 60000) return "again in " + Math.max(1, Math.round(ms / 60000)) + " min";
     if (ms < 36 * 3600000) return "again tomorrow";
     const dys = ms / DAY;
@@ -271,41 +264,150 @@
     return o;
   }
 
-  /* ---------- the bar ---------- */
+  /* ---------- LIVE EARNED MASTERY DOTS (⚪ / 🔴 / 🟡 / 🟢) ---------- */
   const esc = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+  function resolveCard(keyOrCard, opts) {
+    if (!keyOrCard) return null;
+    if (typeof keyOrCard === "object") return keyOrCard;
+    opts = opts || {};
+    const srs = opts.srs || ((typeof getSrs === "function") ? getSrs() : {});
+    if (!srs) return null;
+    const keys = [keyOrCard];
+    if (ALIAS[keyOrCard]) ALIAS[keyOrCard].forEach(k => { if (keys.indexOf(k) < 0) keys.push(k); });
+    if (Array.isArray(opts.altKeys)) opts.altKeys.forEach(k => { if (k && keys.indexOf(k) < 0) keys.push(k); });
+    const hits = keys.map(k => srs[k]).filter(c => c && (c.u || c.box || c.b));
+    if (!hits.length) return srs[keyOrCard] || null;
+    if (hits.length === 1) return hits[0];
+    return hits.slice().sort((a, b) => (b.b === "never") - (a.b === "never") || (b.u || 0) - (a.u || 0) || (b.box || 0) - (a.box || 0))[0];
+  }
+
+  function masteryState(keyOrCard, opts) {
+    opts = opts || {};
+    const now = opts.now || Date.now();
+    const raw = resolveCard(keyOrCard, opts);
+    if (!raw || (!raw.u && !raw.box && !raw.b)) {
+      return { level: "grey", label: "Unseen", title: "⚪ Unseen — not practised or tested yet", box: 0, R: 0 };
+    }
+    if (raw.b === "never") {
+      return { level: "green", label: "Mastered", title: "🟢 Mastered — marked effortless (don't repeat)", box: 5, R: 1 };
+    }
+    const mc = migrate(Object.assign({}, raw), now);
+    const box = mc.box || 0;
+    const R = raw.u ? retrievability(mc, now) : (box >= 2 ? 0.9 : 0.6);
+    const pct = Math.round(R * 100);
+    const nxt = nextLabel(mc, now);
+    if (mc.g === "no" || raw.b === "learning" || (box === 0 && (raw.u || raw.b))) {
+      return { level: "red", label: "Needs work", title: "🔴 Needs work — missed recently" + (nxt ? " · " + nxt : ""), box, R };
+    }
+    if (box >= 2 && mc.g !== "maybe" && R >= P.greenMinR) {
+      const daysProven = Math.max(2, mc.n || box);
+      return { level: "green", label: "Mastered", title: "🟢 Mastered — proven across " + daysProven + "+ days · " + pct + "% live recall" + (nxt ? " (" + nxt + ")" : ""), box, R };
+    }
+    const why = (box >= 2 && R < P.greenMinR)
+      ? "due for refresh (" + pct + "% recall) — practise once to restore green"
+      : mc.g === "maybe"
+      ? "got there with effort — one clean pass promotes it"
+      : "1st pass logged — prove on a 2nd day to earn green";
+    return { level: "amber", label: "Building", title: "🟡 Building — " + why + (nxt ? " · " + nxt : ""), box, R };
+  }
+
+  function dotHtml(key, opts) {
+    opts = opts || {};
+    const st = masteryState(key, opts);
+    const cls = "m-dot m-" + st.level + (opts.lg ? " lg" : opts.sm ? " sm" : "");
+    const alt = Array.isArray(opts.altKeys) && opts.altKeys.length ? ` data-malt="${esc(opts.altKeys.join("|"))}"` : "";
+    return `<span class="${cls}" data-mkey="${esc(key)}"${alt} title="${esc(st.title)}" aria-label="${esc(st.label)}"></span>`;
+  }
+
+  function summaryCounts(items, opts) {
+    opts = opts || {};
+    const out = { green: 0, amber: 0, red: 0, grey: 0, total: 0 };
+    (items || []).forEach(it => {
+      if (!it) return;
+      const key = typeof it === "string" ? it : it.key;
+      const altKeys = (typeof it === "object" && it.altKeys) ? it.altKeys : undefined;
+      const st = masteryState(key, Object.assign({}, opts, altKeys ? { altKeys } : null));
+      out[st.level] = (out[st.level] || 0) + 1;
+      out.total++;
+    });
+    return out;
+  }
+
+  let _refreshQueued = false;
+  function refreshDots(rootEl) {
+    if (typeof document === "undefined" || !document.querySelectorAll) return;
+    const scope = rootEl || document;
+    const nodes = scope.querySelectorAll(".m-dot[data-mkey]");
+    const now = Date.now();
+    const srs = (typeof getSrs === "function") ? getSrs() : {};
+    nodes.forEach(el => {
+      const k = el.getAttribute("data-mkey") || "";
+      const malt = el.getAttribute("data-malt");
+      const st = masteryState(k, { srs, now, altKeys: malt ? malt.split("|") : null });
+      el.classList.remove("m-grey", "m-red", "m-amber", "m-green");
+      el.classList.add("m-" + st.level);
+      el.title = st.title;
+      el.setAttribute("aria-label", st.label);
+    });
+    if (!rootEl && typeof window !== "undefined" && typeof CustomEvent === "function") {
+      try { window.dispatchEvent(new CustomEvent("ats-mastery-updated")); } catch (e) {}
+    }
+  }
+  function scheduleRefreshDots() {
+    if (typeof document === "undefined" || _refreshQueued) return;
+    _refreshQueued = true;
+    setTimeout(() => { _refreshQueued = false; refreshDots(); }, 0);
+  }
+  if (typeof window !== "undefined" && window.addEventListener) {
+    window.addEventListener("ats-synced", () => scheduleRefreshDots());
+    window.addEventListener("storage", ev => { if (!ev || !ev.key || ev.key === "ats-srs") scheduleRefreshDots(); });
+  }
+
+  /* ---------- the bar (Earned Dot + Neutral ✗ · ≈ · ✓) ---------- */
   function selectedGrade(c) {
     if (!c) return null;
     if (c.b === "never") return "retire";
-    return c.g && c.u && Date.now() - c.u < DAY ? c.g : null;   // today's verdict shows; yesterday's doesn't nag
+    if (!(c.g && c.u && Date.now() - c.u < DAY)) return null;   // today's self-report highlight fades tomorrow; the earned ● dot stays forever
+    return c.g === "solid" ? "yes" : c.g;
   }
   function buttonsHtml(key, onclickFor, opts) {
     opts = opts || {};
-    const c = (typeof getSrs === "function") ? getSrs()[key] : null;
+    const c = resolveCard(key, opts);
     const sel = selectedGrade(c);
-    const list = opts.retire === false ? GRADES : GRADES.concat(["retire"]);
+    const base = opts.grades || UI_GRADES;
+    const list = opts.retire === false ? base : base.concat(["retire"]);
     return list.map(g => `<button type="button" class="srs-btn ${g}${sel === g ? " sel" : ""}" data-g="${g}" title="${TITLE[g]}" aria-label="${TITLE[g]}" onclick="event.stopPropagation(); ${onclickFor(g)}">${SYMBOL[g]}</button>`).join("");
   }
   /* inline-HTML bar for pages that render rows as template strings:
-     rateBarHtml(key, "rateWord", [idx]) → onclick="rateWord('key','yes',idx)" */
+     rateBarHtml(key, "rateWord", [idx]) → ● + onclick="rateWord('key','yes',idx)" */
   function rateBarHtml(key, handler, extraArgs, opts) {
+    opts = opts || {};
     const extra = (extraArgs || []).map(a => typeof a === "string" ? `'${esc(a)}'` : String(a)).join(", ");
-    const c = (typeof getSrs === "function") ? getSrs()[key] : null;
+    const c = resolveCard(key, opts);
     const said = selectedGrade(c) ? nextLabel(c) : "";
-    return `<span class="srs-bar${opts && opts.compact ? " compact" : ""}" data-key="${esc(key)}">${buttonsHtml(key, g => `${handler}('${esc(key)}', '${g}'${extra ? ", " + extra : ""})`, opts)}<span class="srs-said">${said}</span></span>`;
+    const dot = opts.noDot ? "" : dotHtml(key, { sm: !!opts.compact, altKeys: opts.altKeys });
+    return `<span class="srs-bar${opts.compact ? " compact" : ""}" data-key="${esc(key)}">${dot}${buttonsHtml(key, g => `${handler}('${esc(key)}', '${g}'${extra ? ", " + extra : ""})`, opts)}<span class="srs-said">${said}</span></span>`;
   }
-  /* DOM bar: mountRateBar(slot, key, { onRate(grade, legacyId, card), src, retire }) */
+  /* DOM bar: mountRateBar(slot, key, { onRate(grade, legacyId, card), src, retire, noDot, altKeys }) */
   function mountRateBar(slot, key, opts) {
     if (!slot) return null;
     opts = opts || {};
     const bar = document.createElement("span");
     bar.className = "srs-bar" + (opts.compact ? " compact" : "");
     bar.dataset.key = key;
+    if (!opts.noDot) {
+      const tmp = document.createElement("span");
+      tmp.innerHTML = dotHtml(key, { sm: !!opts.compact, altKeys: opts.altKeys });
+      if (tmp.firstElementChild) bar.appendChild(tmp.firstElementChild);
+    }
     const said = document.createElement("span");
     said.className = "srs-said";
-    const c = (typeof getSrs === "function") ? getSrs()[key] : null;
+    const c = resolveCard(key, opts);
     const sel = selectedGrade(c);
     if (sel) said.textContent = nextLabel(c);
-    const list = opts.retire === false ? GRADES : GRADES.concat(["retire"]);
+    const base = opts.grades || UI_GRADES;
+    const list = opts.retire === false ? base : base.concat(["retire"]);
     list.forEach(g => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -320,6 +422,7 @@
         [...bar.querySelectorAll(".srs-btn")].forEach(b => b.classList.remove("sel"));
         btn.classList.add("sel");
         said.textContent = nextLabel(nc);
+        refreshDots(bar);
         if (typeof logEvent === "function") logEvent({ e: "bucket", key, b: TO_LEGACY[g], g, s: nc.s, R: Math.round(retrievability(nc, Date.now()) * 100) / 100, box: nc.box, src: opts.src || "bar" });
         if (opts.onRate) opts.onRate(g, TO_LEGACY[g], nc);
         if (typeof autoSync === "function") { try { autoSync(); } catch (e) {} }
@@ -331,20 +434,30 @@
     slot.appendChild(bar);
     return bar;
   }
-  /* after a template-string bar is tapped: mark the button, say the next date */
+  /* after a template-string bar is tapped: mark the button, update the earned dot, say the next date */
   function paintBar(container, key, nc) {
     if (!container) return;
     const bar = container.querySelector ? (container.classList && container.classList.contains("srs-bar") ? container : container.querySelector(`.srs-bar[data-key="${CSS && CSS.escape ? CSS.escape(key) : key}"]`)) : null;
-    if (!bar) return;
-    [...bar.querySelectorAll(".srs-btn")].forEach(b => b.classList.toggle("sel", b.dataset.g === (nc.b === "never" ? "retire" : nc.g)));
-    const said = bar.querySelector(".srs-said");
-    if (said) said.textContent = nextLabel(nc);
+    if (bar) {
+      const activeG = nc.b === "never" ? "retire" : (nc.g === "solid" ? "yes" : nc.g);
+      [...bar.querySelectorAll(".srs-btn")].forEach(b => b.classList.toggle("sel", b.dataset.g === activeG));
+      const said = bar.querySelector(".srs-said");
+      if (said) said.textContent = nextLabel(nc);
+    }
+    refreshDots(container);
   }
   function legendHtml() {
-    return `<span class="srs-legend">${GRADES.concat(["retire"]).map(g => `<span class="leg"><span class="srs-btn ${g} mini">${SYMBOL[g]}</span> ${g === "retire" ? "don't repeat" : g}</span>`).join("")}<span class="leg muted">— the site sets the next date</span></span>`;
+    return `<span class="srs-legend">
+      <span class="leg"><span class="m-dot m-grey"></span> Unseen</span>
+      <span class="leg"><span class="m-dot m-red"></span> Needs work</span>
+      <span class="leg"><span class="m-dot m-amber"></span> Building</span>
+      <span class="leg"><span class="m-dot m-green"></span> Mastered</span>
+      <span class="leg muted">· report honestly with ✗ ≈ ✓ (earned colour updates live)</span>
+    </span>`;
   }
 
-  return { DAY, BOX_DAYS, NEVER_DUE, GRADES, P, SYMBOL, TITLE, FROM_LEGACY, TO_LEGACY, LEGACY_BUCKET,
+  return { DAY, BOX_DAYS, NEVER_DUE, GRADES, UI_GRADES, P, SYMBOL, TITLE, FROM_LEGACY, TO_LEGACY, LEGACY_BUCKET,
     migrate, retrievability, next, rate, legacyGrade, boxFromS, weakness, weakestFirst, nextLabel,
-    buildBatch, stats, rateBarHtml, mountRateBar, paintBar, legendHtml, setAliases, aliasOf, adoptAliases };
+    buildBatch, stats, masteryState, dotHtml, summaryCounts, refreshDots,
+    rateBarHtml, mountRateBar, paintBar, legendHtml, setAliases, aliasOf, adoptAliases };
 });

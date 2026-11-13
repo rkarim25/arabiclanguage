@@ -197,7 +197,8 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
   yes(tm.total > 1200, `${tm.total} utterances to master in total (${tm.quran.sentences} ayat + ${tm.conv.utterances} everyday)`);
   console.log(`  · X x Y: ${tm.quran.sentences} ayat | ${tm.conv.frames} frames x ${tm.conv.variantsPerFrame} = ${tm.conv.utterances} everyday | ${tm.total} total`);
   const idx = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/Daily Reader|The whole thing, counted/.test(idx), "and says so on the home page");
+  const chaps = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
+  yes(/Practice/.test(idx) && /Chapters|الفُصُولُ الدِّرَاسِيَّةُ/.test(chaps), "Practice leads on index.html and Chapters live on chapters.html");
 }
 
 /* ---------- review comes back as sentences, never as a word list ---------- */
@@ -245,7 +246,7 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
      2026-11-02, his pen note: "create a tab for [days, numbers, directions] …
      make grammar a sub page there" — the Grammar slot is now 🗂 Sets (sets.html),
      and grammar.html is reached from inside it. Still five, still all his. */
-  const NAV = ["index.html", "class.html", "sentences.html", "words.html", "sets.html"];
+  const NAV = ["index.html", "chapters.html", "sentences.html", "words.html", "quran.html", "sets.html", "class.html"];
   const links = [...app.matchAll(/class="link \$\{[^}]*\}"\s+href="([^"]+)"/g)].map(m => m[1]);
   yes(links.length === NAV.length && NAV.every(h => links.includes(h)),
     `the nav is exactly the ${NAV.length} destinations he asked for (${links.join(", ")})`);

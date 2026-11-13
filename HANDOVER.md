@@ -9,14 +9,27 @@
 - **Living Master Plan:** Read and update MASTER_PLAN.md on every coaching cycle (tracks live capability deltas, 4-stage syllabus progression, and the 25-minute Preply Spoken Match Day protocol).
 - **Your Objective:** Get Reza **fluent in conversational Arabic (MSA)** AND **understanding the Qur'ān as it is recited (by ear)**.
 - **Your Role — Headmaster, Primary Teacher, Motivator & Mentor:** Any AI operating this site is **personally responsible for Reza's Arabic education**. Other teachers (such as his Sunday 07:00 UK Preply tutor or AI voice sparring partners) are supplementary inputs, **but you are the Headmaster and control the curriculum completely**.
-- **Your Primary Teaching Method:** **`Practice` sessions** (`sentences.html` on screen + `audio.html?commute=1` hands-free) are your primary classroom for teaching, reviewing, diagnosing, and motivating him.
+- **Your Primary Teaching Method:** **`Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free) are your primary classroom for teaching, reviewing, diagnosing, and motivating him.
 - **Creative Freedom & Mentorship:** Because Reza balances a young family and demanding career, engineer effortless consistency (zero guilt on gaps, gentle re-entry, 5–10 min bursts, hands-free commutes, honest celebration of real wins) and **allow yourself full pedagogical creativity** — inventing new visual Lesson Cards, Bengali/English/Qur'ānic hooks, micro-drills, or UX improvements whenever they serve the twin fluency + Qur'ān objective.
 
 ---
 
-## 1. Core Architecture: Unified `Practice` + `Commute` + Auto-Sync
+## 1. Core Architecture: 7-Tab Layout + Earned Mastery Dots + Unified `Practice`
 
-`Practice` (`sentences.html` + `js/practice.js`) is Reza's **primary interface** to the website across all 5 learning streams (**Vocabulary, Sentences, Qur'ān by ear, Grammar, and Lesson Cards**):
+### A. Coherent 7-Tab Navigation (`js/app.js` `renderNav`)
+- `⚡ Practice` (`index.html` — Home) · `📖 Chapters` (`chapters.html`) · `💬 Sentences` (`sentences.html` Master Library) · `📇 Words` (`words.html` Master Vocab + Quick 10-Word Drill) · `🕌 Qur'ān` (`quran.html` Surahs, Ayahs & Words by ear) · `🗂 Sets` (`sets.html` Visual Lesson Cards, Thematic Sets & Grammar) · `🧑‍🏫 Teacher` (`class.html` 20-Min Teacher Brief & Master Plan).
+
+### B. Live, Read-Only Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`) + Neutral `✗ · ≈ · ✓` (`js/srs.js`)
+- Every item practised or tested across the site carries a **read-only Earned Mastery Dot** (`SRS.masteryState`, `SRS.dotHtml`, `SRS.summaryCounts`, `SRS.refreshDots` — 100% live client-side FSRS math with zero daily AI dependency):
+  - `⚪` **Grey (`Unseen`):** Never practised or tested yet.
+  - `🔴` **Red (`Needs work`):** Missed recently (`g === "no"` or `box === 0` after exposure).
+  - `🟡` **Amber (`Building`):** Passed on 1 day (`box === 1`), hesitant (`g === "maybe"`), or overdue FSRS recall `R < 0.85`.
+  - `🟢` **Green (`Mastered`):** Proven cleanly across **2+ separate days** (`box >= 2`, `g !== "maybe"`, `R >= 0.85`) or `⊘` retired.
+- Self-report buttons (`✗ · ≈ · ✓` + optional `⊘`) are styled in calm neutral monochrome so **only the earned mastery dot carries colour**. `hydrateChapterHistory()` in `js/app.js` also hydrates historical `test-item` (`test: "chapter"`) and `sent-drill` log events onto `chap:N:i` automatically.
+
+### C. Unified `Practice` + `Commute` + Auto-Sync
+
+`Practice` (`index.html` + `js/practice.js`) is Reza's **primary interface** to the website across all 5 learning streams (**Vocabulary, Sentences, Qur'ān by ear, Grammar, and Lesson Cards**):
 
 1. **Both Teaches Unseen Material & Reviews Seen Material:**
    - **Teach Mode (`🆕 Teach`, `practiceMode: "teach"`):** Unseen items open pre-revealed (`_autoReveal: true`) with word-by-word glosses, transliteration, inline grammar rule explanations (`.s-gram-box`), or full visual **Lesson Cards** (`lc:<id>` positioned at `#1` before sentences apply the rule) so Reza learns them cleanly before rating.

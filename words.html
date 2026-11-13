@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
-  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -165,14 +165,16 @@
     </div>
   </div>
 
+  <div id="wordsMasteryBar" style="margin-bottom:12px"></div>
+
   <!-- Top View Switcher -->
   <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice (10)</button>
-    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master List</button>
+    <button type="button" class="tab-btn active" id="tabMaster" onclick="switchView('master')">📋 All Words</button>
+    <button type="button" class="tab-btn" id="tabPractice" onclick="switchView('practice')">⚡ Quick 10-Word Drill</button>
   </div>
 
   <!-- PRACTICE VIEW -->
-  <div id="viewPractice">
+  <div id="viewPractice" style="display:none">
     <!-- the calm toolbar (12 Oct): what matters, then ⋯ -->
     <div class="calm-row">
       <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each word in turn, then see the answer">🎯 Try them all</button>
@@ -235,18 +237,28 @@
   </div>
 
   <!-- MASTER VOCABULARY LIST VIEW -->
-  <div id="viewMaster" style="display:none">
+  <div id="viewMaster">
     <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
         <input type="text" id="masterSearch" class="m-search" placeholder="🔍 Search English, Arabic, or Transliteration…" oninput="renderMasterTable()">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button type="button" class="chip active m-filter" data-mfilter="all" onclick="setMasterFilter('all', this)">All</button>
-          <button type="button" class="chip m-filter" data-mfilter="due" onclick="setMasterFilter('due', this)">Due Now</button>
-          <button type="button" class="chip m-filter" data-mfilter="learning" onclick="setMasterFilter('learning', this)">Learning</button>
-          <button type="button" class="chip m-filter" data-mfilter="mastered" onclick="setMasterFilter('mastered', this)">Mastered</button>
-          <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">Retired</button>
-          <button type="button" class="chip" onclick="renderMasterTable()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
+          <button type="button" class="chip active m-filter" data-mfilter="all" onclick="setMasterFilter('all', this)">All Sources</button>
+          <button type="button" class="chip m-filter" data-mfilter="teacher" onclick="setMasterFilter('teacher', this)">🧑‍🏫 Preply</button>
+          <button type="button" class="chip m-filter" data-mfilter="quran" onclick="setMasterFilter('quran', this)">🕌 Qur'ān</button>
+          <button type="button" class="chip m-filter" data-mfilter="everyday" onclick="setMasterFilter('everyday', this)">🗣 Everyday</button>
+          <button type="button" class="chip m-filter" data-mfilter="due" onclick="setMasterFilter('due', this)">⏰ Due</button>
+          <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">⊘ Retired</button>
         </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          <button type="button" class="chip active wd-filter" data-dfilter="all" onclick="setWordDotFilter('all', this)">All Dots</button>
+          <button type="button" class="chip wd-filter" data-dfilter="green" onclick="setWordDotFilter('green', this)"><span class="m-dot m-green sm"></span> Mastered <span id="wcnt-green"></span></button>
+          <button type="button" class="chip wd-filter" data-dfilter="amber" onclick="setWordDotFilter('amber', this)"><span class="m-dot m-amber sm"></span> Building <span id="wcnt-amber"></span></button>
+          <button type="button" class="chip wd-filter" data-dfilter="red" onclick="setWordDotFilter('red', this)"><span class="m-dot m-red sm"></span> Needs work <span id="wcnt-red"></span></button>
+          <button type="button" class="chip wd-filter" data-dfilter="grey" onclick="setWordDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="wcnt-grey"></span></button>
+        </div>
+        <button type="button" class="chip" onclick="renderMasterTable()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
       </div>
       <div class="srs-legend-bar" style="margin-bottom:12px">
         <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
@@ -276,16 +288,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwffnqho"></script>
-<script src="js/curriculum.js?v=mwffnqho"></script>
-<script src="js/srs.js?v=mwffnqho"></script>
-<script src="js/match.js?v=mwffnqho"></script>
-<script src="js/errors.js?v=mwffnqho"></script>
-<script src="js/tryit.js?v=mwffnqho"></script>
-<script src="js/app.js?v=mwffnqho"></script>
-<script src="js/tracker.js?v=mwffnqho"></script>
-<script src="js/plan.js?v=mwffnqho"></script>
-<script src="js/account.js?v=mwffnqho"></script>
+<script src="js/progress-model.js?v=mwfgx80c"></script>
+<script src="js/curriculum.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfgx80c"></script>
+<script src="js/match.js?v=mwfgx80c"></script>
+<script src="js/errors.js?v=mwfgx80c"></script>
+<script src="js/tryit.js?v=mwfgx80c"></script>
+<script src="js/app.js?v=mwfgx80c"></script>
+<script src="js/tracker.js?v=mwfgx80c"></script>
+<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/account.js?v=mwfgx80c"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -296,6 +308,32 @@ let REVEALED = new Set();
 let SESSION_COOLDOWN = new Set(); // words rated in this sitting are blocked from immediate repeats
 let currentFilter = "balanced";
 let masterFilter = "all";
+let wordDotFilter = "all";
+let wordShowLimit = 100;
+
+function setWordDotFilter(filt, btn) {
+  wordDotFilter = filt;
+  wordShowLimit = 100;
+  document.querySelectorAll(".wd-filter").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  renderMasterTable();
+}
+
+function renderWordsMasteryBar() {
+  const el = document.getElementById("wordsMasteryBar");
+  if (!el || !window.SRS || !SRS.summaryCounts) return;
+  const sc = SRS.summaryCounts(MASTER_WORDS.map(w => {
+    const n = normalizeAr(w.ar).replace(/^ال/, "");
+    return { key: w.key, altKeys: n ? ["tw:" + n, n] : [] };
+  }));
+  const setCnt = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = `(${v})`; };
+  setCnt("wcnt-green", sc.green); setCnt("wcnt-amber", sc.amber); setCnt("wcnt-red", sc.red); setCnt("wcnt-grey", sc.grey);
+  const gPct = sc.total ? ((sc.green / sc.total) * 100).toFixed(1) : 0;
+  const aPct = sc.total ? ((sc.amber / sc.total) * 100).toFixed(1) : 0;
+  const rPct = sc.total ? ((sc.red / sc.total) * 100).toFixed(1) : 0;
+  el.innerHTML = `<div class="card" style="padding:11px 15px;margin-bottom:0"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:12.5px"><span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap"><b>${sc.total.toLocaleString()} Words</b><span><span class="m-dot m-green"></span> <b>${sc.green}</b> Mastered</span><span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> Building</span><span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span><span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span></span><a href="index.html" style="color:var(--accent);font-weight:600;font-size:12px;text-decoration:none">⚡ Practise Daily Batch →</a></div><div class="m-progress-track"><div class="m-progress-seg green" style="width:${gPct}%"></div><div class="m-progress-seg amber" style="width:${aPct}%"></div><div class="m-progress-seg red" style="width:${rPct}%"></div></div></div>`;
+}
+window.addEventListener("ats-mastery-updated", renderWordsMasteryBar);
 let promptDirection = "en-first"; // "en-first" or "ar-first"
 let audioIdx = 0;
 let isPlaying = false;
@@ -347,6 +385,9 @@ const BATCH_SIZE = 10;
       onVerdict: (it, g, idx) => rateWord(it.key, g, idx),
     });
     load10Words();
+    renderWordsMasteryBar();
+    renderMasterTable();
+    if (new URLSearchParams(location.search).get("drill") === "1") switchView("practice");
     setupAudioSpeed();
   } catch (e) {
     console.error("Failed to load master vocabulary", e);
@@ -454,7 +495,7 @@ function render10Cards() {
 
     return `
       <tr class="sheet-row ${isRevealed ? 'revealed' : ''}" id="wrow-${idx}" onclick="handleCardClick(${idx}, event)">
-        <td class="col-num">${idx + 1}</td>
+        <td class="col-num" style="white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:5px">${SRS.dotHtml(w.key, { lg: true })}<span>${idx + 1}</span></span></td>
         <td>
           ${isEnFirst ? `
             <div class="prompt-text">${w.en}</div>
@@ -512,7 +553,7 @@ function render10Cards() {
           ${TryIt.slotHtml(idx)}
         </td>
         <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateWord", [idx])}</div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateWord", [idx], { noDot: true })}</div>
         </td>
       </tr>
     `;
@@ -617,12 +658,17 @@ function renderMasterTable() {
       if (!matchEn && !matchAr && !matchTr) return false;
     }
 
-    // Status filter
     const item = srs[w.key] || {};
-    if (masterFilter === "due") return item.due && item.due <= now && item.b !== "never";
-    if (masterFilter === "learning") return (item.box === 0 || item.box === 1) && item.b !== "never";
-    if (masterFilter === "mastered") return item.box >= 4 && item.b !== "never";
-    if (masterFilter === "never") return item.b === "never";
+    if (masterFilter === "teacher" && w.src !== "teacher") return false;
+    if (masterFilter === "quran" && w.src !== "quran") return false;
+    if (masterFilter === "everyday" && w.src !== "everyday") return false;
+    if (masterFilter === "due" && !(item.due && item.due <= now && item.b !== "never")) return false;
+    if (masterFilter === "never" && item.b !== "never") return false;
+    if (wordDotFilter !== "all" && window.SRS && SRS.masteryState) {
+      const n = normalizeAr(w.ar).replace(/^ال/, "");
+      const st = SRS.masteryState(w.key, { srs, now, altKeys: n ? ["tw:" + n, n] : [] });
+      if (st.level !== wordDotFilter) return false;
+    }
     return true;
   });
 
@@ -662,14 +708,13 @@ function renderMasterTable() {
           ${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none;margin-top:4px" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}
         </td>
         <td style="text-align:center">
-          ${exp.isRetired ? `<span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10.5px;padding:2px 6px">Retired</span>` :
-            (item.due && item.due <= now) ? `<span class="exp-badge" style="background:#fef3c7;color:#b45309;font-size:10.5px;padding:2px 6px;font-weight:700">Due</span>` :
-            exp.isNew ? `<span class="exp-badge" style="background:rgba(0,0,0,0.04);color:var(--muted);font-size:10.5px;padding:2px 6px">New</span>` :
-            exp.box >= 4 ? `<span class="exp-badge" style="background:#ecfdf5;color:#059669;font-size:10.5px;padding:2px 6px">Mastered</span>` :
-            `<span class="exp-badge" style="background:#f0f9ff;color:#0284c7;font-size:10.5px;padding:2px 6px">Learning</span>`}
+          ${(() => {
+            const n = normalizeAr(w.ar).replace(/^ال/, "");
+            return SRS.dotHtml(w.key, { lg: true, altKeys: n ? ["tw:" + n, n] : [] });
+          })()}
         </td>
         <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encodeURIComponent(w.ar)])}</div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encodeURIComponent(w.ar)], { compact: true, noDot: true })}</div>
         </td>
       </tr>
       ${fam ? `

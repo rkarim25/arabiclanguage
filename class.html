@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
-  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -568,18 +568,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwffnqho"></script>
-<script src="js/curriculum.js?v=mwffnqho"></script>
-<script src="js/srs.js?v=mwffnqho"></script>
-<script src="js/frames.js?v=mwffnqho"></script>
-<script src="js/freetry.js?v=mwffnqho"></script>
-<script src="js/practice.js?v=mwffnqho"></script>
-<script src="js/lesson-cards.js?v=mwffnqho"></script>
-<script src="js/app.js?v=mwffnqho"></script>
-<script src="js/tracker.js?v=mwffnqho"></script>
-<script src="js/errors.js?v=mwffnqho"></script>
-<script src="js/plan.js?v=mwffnqho"></script>
-<script src="js/account.js?v=mwffnqho"></script>
+<script src="js/progress-model.js?v=mwfgx80c"></script>
+<script src="js/curriculum.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfgx80c"></script>
+<script src="js/frames.js?v=mwfgx80c"></script>
+<script src="js/freetry.js?v=mwfgx80c"></script>
+<script src="js/practice.js?v=mwfgx80c"></script>
+<script src="js/lesson-cards.js?v=mwfgx80c"></script>
+<script src="js/app.js?v=mwfgx80c"></script>
+<script src="js/tracker.js?v=mwfgx80c"></script>
+<script src="js/errors.js?v=mwfgx80c"></script>
+<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/account.js?v=mwfgx80c"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1290,6 +1290,7 @@ async function renderTeacherBrief() {
             ${pickedSents.map(s => `
               <div class="tb-item-row">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+                  ${s.key && window.SRS ? SRS.dotHtml(s.key, { lg: true }) : ""}
                   <button type="button" class="sym-badge" onclick="speak('${s.ar.replace(/'/g, "\\'")}', 0.85)" title="Preview audio">🔊</button>
                   <div>
                     <div style="font-size:14px;font-weight:600;color:var(--ink)">${esc(s.en)}</div>
@@ -1305,6 +1306,7 @@ async function renderTeacherBrief() {
           <div class="tb-word-grid">
             ${pickedWords.map(w => `
               <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
+                ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
                 <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
                 <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
                 <span style="color:var(--muted)">— ${esc(w.en)}</span>
@@ -1336,6 +1338,7 @@ async function renderTeacherBrief() {
           ${pickedAyah ? `
             <div class="tb-item-row" style="border-bottom:${pickedQWords.length ? '1px dashed var(--border)' : 'none'}">
               <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+                ${pickedAyah.key && window.SRS ? SRS.dotHtml(pickedAyah.key, { lg: true }) : ""}
                 ${ayahPlayBtn}
                 <div>
                   <div style="font-size:13.5px;font-weight:600;color:var(--ink)">${esc(pickedAyah.en)}</div>
@@ -1351,6 +1354,7 @@ async function renderTeacherBrief() {
               <div class="tb-word-grid">
                 ${pickedQWords.map(w => `
                   <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
+                    ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
                     <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)">🔊</button>
                     <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
                     <span style="color:var(--muted)">— ${esc(w.en)}</span>
@@ -1493,7 +1497,8 @@ function renderMasterPlan() {
             const isAct = c.num === activeChap.num && !done;
             const cls = done ? "done" : isAct ? "active" : "";
             const shortT = String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, "");
-            return `<a href="index.html" class="mp-chap-pill ${cls}" title="${esc(c.title)}">${done ? "✓ " : isAct ? "▶ " : ""}Ch ${c.num}: ${esc(shortT)}</a>`;
+            const cSc = window.SRS ? SRS.summaryCounts((c.sentences || []).map((_, si) => `chap:${c.num}:${si}`)) : { green: 0, total: 10 };
+            return `<a href="chapters.html?chap=${c.id}" class="mp-chap-pill ${cls}" title="${esc(c.title)} (${cSc.green}/${cSc.total} green)">${done ? "✓ " : isAct ? "▶ " : ""}Ch ${c.num}: ${esc(shortT)} (${cSc.green}/${cSc.total})</a>`;
           }).join("")}
         </div>
 
@@ -1503,7 +1508,7 @@ function renderMasterPlan() {
             <div style="font-size:11.5px;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:4px">🟢 Now · Current Focus</div>
             <div style="font-weight:700;font-size:15px;margin-bottom:6px">${esc(activeChap.title)}</div>
             <div style="font-size:13px;line-height:1.55;color:var(--ink)">
-              • <b>Sentences:</b> ${chapSolid}/${chapTotal} solid in Practice (${chapSolid >= 8 ? "🔥 Ready for Chapter Test on Home!" : "Batch 1 advances unseen lines automatically"})<br>
+              • <b>Sentences:</b> ${chapSolid}/${chapTotal} solid in Practice (${chapSolid >= 8 ? "🔥 Ready for Chapter Test on Chapters!" : "Batch 1 advances unseen lines automatically"})<br>
               • <b>Grammar:</b> ${esc((activeChap.grammar && activeChap.grammar.title) || "Verb Tenses & Negation")}<br>
               ${activeLCs.length ? `• <b>Lesson Cards:</b> ${esc(activeLCs.join(" · "))}<br>` : ""}
               • <b>Qur'ān by Ear:</b> ${esc(surahNameFor(activeChap.surahId))}
@@ -1931,6 +1936,7 @@ function renderClassSentences() {
               <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
               <div class="sym-group">
                 <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                ${SRS.rateBarHtml(sKey, "gradeClassSentence", [origIdx], { compact: true, retire: false })}
                 <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${origIdx}" onclick="toggleClsSentenceEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
                 ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${origIdx}" onclick="toggleClsSentenceTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                 <div class="vote-badge-group">
@@ -2247,6 +2253,14 @@ function renderVocabTable() {
       </tbody>
     </table>
   `;
+}
+
+function gradeClassSentence(key, g, origIdx) {
+  const nc = SRS.rate(key, g);
+  logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "class-sentence", t: Date.now() });
+  if (typeof autoSync === "function") autoSync();
+  SRS.paintBar(document.getElementById("cls-srow-" + origIdx), key, nc);
+  renderTeacherBrief();
 }
 
 function gradeClassWord(key, g, btn) {
@@ -2910,3 +2924,5 @@ async function submitPreplyLesson() {
 </script>
 </body>
 </html>
+
+window.addEventListener("ats-mastery-updated", () => { try { renderTeacherBrief(); renderMasterPlan(); } catch (e) {} });

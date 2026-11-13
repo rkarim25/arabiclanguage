@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
-  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -58,11 +58,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwffnqho"></script>
-<script src="js/lesson-cards.js?v=mwffnqho"></script>
-<script src="js/app.js?v=mwffnqho"></script>
-<script src="js/tracker.js?v=mwffnqho"></script>
-<script src="js/plan.js?v=mwffnqho"></script>
+<script src="js/srs.js?v=mwfgx80c"></script>
+<script src="js/lesson-cards.js?v=mwfgx80c"></script>
+<script src="js/app.js?v=mwfgx80c"></script>
+<script src="js/tracker.js?v=mwfgx80c"></script>
+<script src="js/plan.js?v=mwfgx80c"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -148,15 +148,15 @@ function render() {
   let html = "";
   if (LESSON_CARDS.length) {
     const srs = getSrs();
-    const heldCount = LESSON_CARDS.filter(c => ((srs["lc:" + c.id] || {}).box || 0) >= 3).length;
-    html += `<div class="set-section"><h2>Lesson Cards · بِطَاقَاتُ الدُّرُوس (${heldCount}/${LESSON_CARDS.length} held)</h2>`;
+    const lcSum = SRS.summaryCounts(LESSON_CARDS.map(c => "lc:" + c.id));
+    html += `<div class="set-section"><h2>Lesson Cards · بِطَاقَاتُ الدُّرُوس (${lcSum.green}/${LESSON_CARDS.length} mastered)</h2>`;
     LESSON_CARDS.forEach(c => {
       const st = lcStatusText(c.id);
       const isHeld = st === "Held ✓";
       html += `
         <div class="set-row" id="set-lc-${c.id}">
           <div class="set-head" onclick="toggleSet('lc-${c.id}')">
-            <span class="ic">${c.icon || "📇"}</span>
+            <span class="ic" style="display:inline-flex;align-items:center;gap:6px">${SRS.dotHtml("lc:" + c.id, { lg: true })}<span>${c.icon || "📇"}</span></span>
             <span class="ttl">${c.title}<small>${c.categoryLabel || "Lesson Card"} — ${c.summary}</small></span>
             <span class="ar">${c.arTitle || ""}</span>
             <span class="cnt" id="lc-cnt-${c.id}" style="${isHeld ? 'color:var(--accent);font-weight:700' : ''}">${st}</span>
@@ -173,14 +173,16 @@ function render() {
     html += `<div class="set-section"><h2>${sec.h}</h2>`;
     rows.forEach(s => {
       const g = EV.find(x => x.id === s.id);
-      const h = held(s.id);
+      const setKeys = (g.members || []).map((_, mi) => `ev-${s.id}:${mi}`);
+      const sc = SRS.summaryCounts(setKeys);
+      const setLvl = sc.total > 0 && sc.green >= Math.ceil(sc.total * 0.8) ? "green" : sc.red > 0 ? "red" : (sc.green > 0 || sc.amber > 0) ? "amber" : "grey";
       html += `
         <div class="set-row" id="set-${s.id}">
           <div class="set-head" onclick="toggleSet('${s.id}')">
-            <span class="ic">${s.ic}</span>
+            <span class="ic" style="display:inline-flex;align-items:center;gap:6px"><span class="m-dot m-${setLvl} lg" title="${sc.green}/${sc.total} mastered · ${sc.amber} building · ${sc.red} needs work"></span><span>${s.ic}</span></span>
             <span class="ttl">${s.en}<small>${g.theme}</small></span>
             <span class="ar">${g.title || ""}</span>
-            <span class="cnt">${h.k ? `${h.k} of ${h.n} held` : `${h.n} words`}</span>
+            <span class="cnt">${sc.green || sc.amber ? `<span class="m-dot m-green sm"></span> ${sc.green}/${sc.total}` : `${sc.total} words`}</span>
             <span class="chev">▶</span>
           </div>
           <div class="set-body" id="setbody-${s.id}"></div>
@@ -200,7 +202,10 @@ function render() {
       </div>
       <div class="set-body" id="setbody-grammar">
         <div class="g-list">
-          ${PATTERNS.map(p => `<a href="grammar.html?g=${p.id}"><span class="ar">${p.ar || ""}</span><span>${p.name || p.id}</span>${(typeof stepsDone === "function" && stepsDone("gr-" + p.id).test) ? `<span class="ok">✓</span>` : ""}</a>`).join("")}
+          ${PATTERNS.map(p => {
+      const gAlt = Array.from({ length: 6 }, (_, gi) => `gt:${p.id}:${gi}`);
+      return `<a href="grammar.html?g=${p.id}">${SRS.dotHtml("gt:" + p.id + ":0", { altKeys: gAlt })}<span class="ar">${p.ar || ""}</span><span>${p.name || p.id}</span>${(typeof stepsDone === "function" && stepsDone("gr-" + p.id).test) ? `<span class="ok">✓</span>` : ""}</a>`;
+    }).join("")}
         </div>
         <div class="set-links"><a href="grammar.html">Open the Grammar page →</a></div>
       </div>
@@ -240,7 +245,7 @@ function buildLessonCard(lcId) {
         <span style="font-size:12.5px;font-weight:600;color:var(--ink)">Mark Lesson Card for spaced review:</span>
         <span class="lc-rate-slot">${SRS.rateBarHtml(srsKey, "rateSetLessonCard", ["'" + card.id + "'"])}</span>
       </div>
-      <a href="sentences.html?myday=1">Practice in context →</a>
+      <a href="index.html">Practice in context →</a>
     </div>`;
 }
 
@@ -274,7 +279,7 @@ function buildTable(id) {
     <div class="set-links">
       <a href="vocab.html?ev=${id}&mode=drill">Drill me on these →</a>
       <a href="vocab.html?ev=${id}&mode=fill">Fill the sheet</a>
-      <span style="font-size:12px;color:var(--muted)">✗ missed · ≈ hesitant · ✓ knew it · ★ instant · ⊘ don't repeat</span>
+      <span style="font-size:12px;color:var(--muted)">✗ missed · ≈ hesitant · ✓ got it · ⊘ don't repeat (dot colour is earned)</span>
     </div>`;
   const tbody = body.querySelector("tbody");
   g.members.forEach((m, mi) => {

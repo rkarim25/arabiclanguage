@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
-  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,10 +46,10 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwffnqho"></script>
-<script src="js/app.js?v=mwffnqho"></script>
-<script src="js/tracker.js?v=mwffnqho"></script>
-<script src="js/plan.js?v=mwffnqho"></script>
+<script src="js/srs.js?v=mwfgx80c"></script>
+<script src="js/app.js?v=mwfgx80c"></script>
+<script src="js/tracker.js?v=mwfgx80c"></script>
+<script src="js/plan.js?v=mwfgx80c"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -71,6 +71,41 @@ fetch("data/verses.json").then(r => r.json()).then(d => {
 });
 
 function surahDone(id, step) { return !!stepsDone("q-" + id)[step]; }
+
+
+function surahMasteryInfo(s) {
+  const ayahKeys = (s.verses || []).map((v, i) => "s:q:" + s.id + ":" + (i + 1));
+  const wordKeys = [];
+  (s.verses || []).forEach((v, vi) => (v.words || []).forEach((_, wi) => wordKeys.push("qw:" + s.id + ":" + vi + ":" + wi)));
+  const ac = SRS.summaryCounts(ayahKeys);
+  const wc = SRS.summaryCounts(wordKeys);
+  const listenPass = surahDone(s.id, "listen");
+  const testPass = surahDone(s.id, "test");
+  let level = "grey";
+  if (listenPass || (ac.total > 0 && ac.green >= Math.ceil(ac.total * 0.8)) || (testPass && wc.total > 0 && wc.green >= Math.ceil(wc.total * 0.8))) {
+    level = "green";
+  } else if (ac.red > 0 || wc.red > 0) {
+    level = "red";
+  } else if (ac.green > 0 || ac.amber > 0 || wc.green > 0 || wc.amber > 0 || testPass || surahDone(s.id, "study")) {
+    level = "amber";
+  }
+  const greenAyahs = listenPass ? ac.total : ac.green;
+  return { level, ac, wc, greenAyahs, listenPass, testPass };
+}
+
+function rateSurahAyah(key, g, surahId, vi) {
+  const nc = SRS.rate(key, g);
+  const s = (DATA || []).find(x => x.id === surahId);
+  const v = s && s.verses && s.verses[vi];
+  if (v && Array.isArray(v.words) && g !== "retire") {
+    const wg = g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no";
+    v.words.forEach((_, wi) => SRS.rate(`qw:${surahId}:${vi}:${wi}`, wg));
+  }
+  logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "quran-surah", t: Date.now() });
+  autoSync();
+  const blk = document.getElementById("vblock-" + vi);
+  if (blk) SRS.paintBar(blk, key, nc);
+}
 
 function renderList() {
   trackPage("quran:list");
@@ -100,8 +135,12 @@ function renderList() {
     a.className = "story-card";
     a.href = `quran.html?s=${s.id}`;
     const words = s.verses.reduce((n, v) => n + v.words.length, 0);
+    const mi = surahMasteryInfo(s);
     a.innerHTML = `
-      <div class="num">${s.verses.length} verses · ${words} words ${surahDone(s.id, "test") ? "· ✓ tested" : surahDone(s.id, "study") ? "· studied" : ""}</div>
+      <div class="num" style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+        <span style="display:inline-flex;align-items:center;gap:6px"><span class="m-dot m-${mi.level} lg" title="Surah mastery: ${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words mastered"></span>${s.verses.length} verses · ${words} words</span>
+        <span style="font-weight:700;color:${mi.greenAyahs > 0 || mi.wc.green > 0 ? 'var(--accent)' : 'var(--muted)'}">${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words</span>
+      </div>
       <div class="title-ar">${s.name}</div>
       <div class="title-en">${s.nameEn}</div>
       <div class="meta">${s.why}</div>
@@ -252,6 +291,7 @@ function renderListenTest(s) {
       const ok = opts[+b.dataset.i] === v.en;
       if (ok) right++;
       logEvent({ e: "qlisten-q", surah: s.id, ref: v.ref, ok });
+      if (window.SRS && SRS.rate) SRS.rate(`s:q:${s.id}:${vi + 1}`, ok ? "yes" : "no");
       document.querySelectorAll("#clOpts button").forEach(x => {
         x.disabled = true;
         if (opts[+x.dataset.i] === v.en) { x.style.borderColor = "var(--accent)"; x.style.background = "var(--accent-soft)"; }
@@ -361,12 +401,16 @@ function renderSurah(s, mode) {
   s.verses.forEach((v, vi) => {
     const block = document.createElement("div");
     block.className = "verse-block";
+    block.id = "vblock-" + vi;
     // each verse word is hoverable (meaning tooltip, study mode) and tappable
     // (speak + the universal meaning/Learn popover; data-qkey → proper SRS card)
     const arHtml = v.words.map((w, wi) =>
       `<span class="vw" data-qkey="qw:${s.id}:${vi}:${wi}"${mode === "study" ? ` data-tip="${esc(w[2])}"` : ""}>${w[0]}</span>`).join(" ");
     block.innerHTML = `
-      <div class="verse-ref">${v.ref}</div>
+      <div class="verse-ref" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`s:q:${s.id}:${vi + 1}`, { lg: true })}<span>${v.ref}</span></span>
+        ${mode === "study" ? SRS.rateBarHtml(`s:q:${s.id}:${vi + 1}`, "rateSurahAyah", [s.id, vi], { compact: true, noDot: true, retire: false }) : ""}
+      </div>
       <div class="verse-ar"${mode === "test" ? " data-nopeek" : ""}>${arHtml} <span class="sent-play">🔊</span></div>
       <div class="verse-en" style="display:${mode === "study" ? "block" : "none"}">${v.en}</div>
       <table class="wbw"><tbody></tbody></table>
@@ -386,9 +430,9 @@ function renderSurah(s, mode) {
       if (mode === "study") {
         // aiMeaning = the concept-level AI translation from Reza's Quran site (scripts/import-ai-wbw.js)
         const ai = aiMeaning ? `<div class="w-ai">${aiMeaning}</div>` : "";
-        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}${ai}</td>`;
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}${ai}</td>`;
       } else {
-        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
       }
       row.querySelector(".w-ar").onclick = () => {
         speakQuranWord(s.id, vi, wi, ar, 0.75);
@@ -473,6 +517,9 @@ function renderSurah(s, mode) {
         logEvent({ e: "qfill", surah: s.id, ref: v.ref, w: wi, ar: stripTashkeel(ar), typed: input.value, ok });
         gradeCard(`qw:${s.id}:${vi}:${wi}`, ok ? "good" : "again");
       });
+      if (window.SRS && SRS.rate && total > 0) {
+        SRS.rate(`s:q:${s.id}:${vi + 1}`, right === total ? "yes" : right >= Math.ceil(total * 0.6) ? "maybe" : "no");
+      }
       verseResults[vi] = { right, total };
       const btn = versesEl.querySelector(`.vcheck[data-vi="${vi}"]`);
       if (btn) {

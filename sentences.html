@@ -1,173 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d7a5f">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwffnqho">
-  <link rel="stylesheet" href="css/style.css?v=mwffnqho">
+  <meta name="theme-color" content="#0d7a5f">
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      if (q.get("myday") || q.get("rehearse")) {
+        location.replace("index.html" + location.search + location.hash);
+      }
+    })();
+  </script>
+  <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+  <title>Sentences — Arabic</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
   <style>
-    .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
-    .stat-strip { display: flex; gap: 20px; align-items: baseline; }
-    .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .stat-strip .lbl { font-size: 12px; color: var(--muted); }
-
-    /* Top View Switcher */
-    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 12px; }
-    .tab-btn { border: none; background: transparent; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
-    .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(13,122,95,0.25); }
-
-    /* Unified Sleek Practice Toolbar */
-    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 7px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
-    .pt-group { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    
-    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); padding: 2px; }
-    .dir-btn { border: none; background: transparent; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.12s; }
-    .dir-btn.active { background: var(--accent); color: #fff; }
-
-    .filter-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin: 0; }
-    .chip { border: 1px solid var(--border); background: var(--bg); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--muted); transition: all 0.1s; }
-    .chip:hover { border-color: var(--accent); color: var(--ink); }
-    .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-
-    .pt-btn { border: 1px solid var(--border); background: var(--bg); border-radius: 6px; padding: 4px 9px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
-    .pt-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .pt-btn.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
-
-    .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
-    .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-    /* Compact Sentence Cards (One Below Another, Sleek & Neat) */
-    .sentence-list { display: flex; flex-direction: column; gap: 9px; margin-top: 6px; }
-    .s-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.15s; }
-    .s-card:hover { border-color: var(--accent); }
-    .s-card.revealed { background: rgba(13, 122, 95, 0.02); }
-    .s-card.playing { border-color: var(--accent); background: rgba(13, 122, 95, 0.08); border-left: 4px solid var(--accent); }
-
-    .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-    .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; }
-    .s-num { color: var(--muted); font-size: 12px; font-weight: 700; flex-shrink: 0; }
-    .s-prompt-text { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); direction: rtl; text-align: right; }
-    
-    .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
-    .exp-dots-only.new { color: #94a3b8; }
-    .src-tag { color: var(--accent); font-weight: 600; font-size: 11px; }
-
-    .s-action-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: 1px dashed var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; user-select: none; }
-    .s-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-
-    /* Colored SRS Rating Dots (Replaces wordy pills) */
-    .s-rate-bar, .sheet-rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
-    .rate-btn {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
-      border-radius: 50%;
-      padding: 0;
-      border: 2px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1;
-      transition: all 0.12s ease-in-out;
-      user-select: none;
+    .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .m-search {
+      padding: 8px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px;
+      width: 300px; max-width: 100%; background: var(--bg); color: var(--ink);
     }
-    .rate-btn:hover { transform: scale(1.2); }
-    
-    .rate-btn[data-b="strong"] { border-color: #10b981; background: #ecfdf5; color: transparent; }
-    .rate-btn[data-b="strong"].selected { background: #059669; border-color: #059669; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
-
-    .rate-btn[data-b="medium"] { border-color: #0284c7; background: #f0f9ff; color: transparent; }
-    .rate-btn[data-b="medium"].selected { background: #0284c7; border-color: #0284c7; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(2,132,199,0.25); }
-
-    .rate-btn[data-b="weak"] { border-color: #d97706; background: #fffbeb; color: transparent; }
-    .rate-btn[data-b="weak"].selected { background: #d97706; border-color: #d97706; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(217,119,6,0.25); }
-
-    .rate-btn[data-b="learning"] { border-color: #ef4444; background: #fef2f2; color: transparent; }
-    .rate-btn[data-b="learning"].selected { background: #dc2626; border-color: #dc2626; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(220,38,38,0.25); }
-
-    .rate-btn[data-b="never"] { border-color: #94a3b8; background: #f8fafc; color: transparent; }
-    .rate-btn[data-b="never"].selected { background: #64748b; border-color: #64748b; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(100,116,139,0.25); }
-
-    /* SRS Legend Bar */
-    .srs-legend-bar { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
-    .leg-item { display: inline-flex; align-items: center; gap: 4px; }
-    .leg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-    .leg-dot.strong { background: #059669; }
-    .leg-dot.medium { background: #0284c7; }
-    .leg-dot.weak { background: #d97706; }
-    .leg-dot.learning { background: #dc2626; }
-    .leg-dot.never { background: #64748b; }
-
-    .s-revealed-body { display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px; border-top: 1px dashed var(--border); }
-    .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 24px; color: var(--accent); line-height: 1.5; flex: 1; text-align: right; }
-    .s-en-line { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
-    .s-tr-line { font-size: 12px; color: var(--muted); font-style: italic; }
-
-    /* Compact Word-by-Word Chips */
-    .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 5px; direction: rtl; margin-top: 4px; }
-    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--bg); font-size: 11.5px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 1px; transition: all 0.1s; }
+    .chip {
+      border: 1px solid var(--border); background: var(--card); color: var(--muted);
+      border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .m-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .m-table th { text-align: left; padding: 9px 10px; border-bottom: 2px solid var(--border); font-size: 11.5px; text-transform: uppercase; color: var(--muted); }
+    .m-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table tr:hover { background: rgba(0,0,0,0.015); }
+    .line-toggle-btn {
+      border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+      border-radius: 6px; padding: 2px 6px; font-size: 11.5px; cursor: pointer; line-height: 1.2;
+    }
+    .line-toggle-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .s-gram-box {
+      margin-top: 4px; padding: 5px 9px; border-radius: 7px; font-size: 12px; line-height: 1.45;
+      background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.16); color: var(--ink);
+    }
+    .s-gram-box summary { cursor: pointer; font-weight: 600; color: #1d4ed8; list-style: none; }
+    .s-gram-box summary::-webkit-details-marker { display: none; }
+    .s-gram-link { color: #1d4ed8; font-weight: 600; text-decoration: none; margin-left: 4px; white-space: nowrap; }
+    .wbw-chip-sm {
+      display: inline-flex; flex-direction: column; align-items: center; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; cursor: pointer; transition: all 0.12s;
+    }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 15px; color: var(--accent); line-height: 1.25; }
-    .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
-
-    .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
-    .s-gram-box { font-size: 12px; color: var(--ink); background: #fffbeb; border: 1px solid rgba(217,119,6,0.28); border-left: 3px solid var(--amber); padding: 6px 10px; border-radius: 7px; line-height: 1.45; margin-top: 3px; }
-    .s-gram-box summary { cursor: pointer; font-weight: 600; color: #b45309; user-select: none; }
-    .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 11.5px; }
-    .s-gram-link:hover { text-decoration: underline; }
-    .batch-ai-nudge { margin-top: 14px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-align: left; }
-    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
-    .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #ecfdf5; color: var(--accent); border: 1px solid rgba(13,122,95,0.28); }
-    .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; border: 1px solid rgba(29,78,216,0.25); }
-    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 8px; margin-top: 8px; }
-    .cap-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; }
-    .cap-cell b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
-
-    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
-    .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
-    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-
-    /* Master Bank Table & Controls */
-    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
-    .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--card); color: var(--ink); }
-    .m-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
-    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(0,0,0,0.02); }
-    .m-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .m-table tr:hover { background: rgba(13, 122, 95, 0.04); }
-
-    /* Completion Banner */
-    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
-
-    /* Mobile & Flexible Responsive Layout */
-    @media (max-width: 768px) {
-      .s-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .stat-strip { width: 100%; justify-content: space-between; }
-      .practice-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
-      .pt-group { width: 100%; justify-content: space-between; }
-      .dir-toggle { display: flex; flex: 1; }
-      .dir-btn { flex: 1; text-align: center; }
-      .filter-chips { width: 100%; justify-content: flex-start; }
-      
-      .s-head { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .s-meta-wrap { align-self: flex-end; }
-      .s-action-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-      .s-reveal-btn { flex: 1; min-width: 140px; justify-content: center; }
-      .s-rate-bar { width: auto; justify-content: flex-end; margin-left: auto; }
-      .m-table { min-width: 600px; }
-    }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 16px; color: var(--ink); line-height: 1.25; }
+    .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); }
+    @media (max-width: 720px) { .m-table { min-width: 620px; } }
   </style>
 </head>
 <body>
@@ -175,145 +60,76 @@
   <div class="s-header">
     <div>
       <h1 style="display:flex;align-items:center;gap:10px;margin:0">
-        <span>Practice</span>
-        <span class="arabic" style="color:var(--accent);font-size:26px">بِنَاءُ الجُمَل</span>
+        <span>Sentences</span>
+        <span class="arabic" style="color:var(--accent);font-size:26px">مَكْتَبَةُ الجُمَلِ</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Incremental Practice Batches · Batch 1 advances weekly lessons, Batch 2+ consolidates review</p>
     </div>
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <div class="stat-strip">
-        <div><div class="num" id="statHeld">0</div><div class="lbl">Sentences Held</div></div>
-        <div><div class="num" id="statDue">0</div><div class="lbl">Due for Review</div></div>
-        <div><div class="num" id="statTotal">0</div><div class="lbl">Master Bank</div></div>
-      </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <a href="index.html" class="chip" style="text-decoration:none;color:var(--accent);border-color:var(--accent)">⚡ Practise Daily Batch →</a>
     </div>
   </div>
 
-  <!-- Top View Switcher -->
-  <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabPractice" onclick="switchView('practice')">⚡ Practice</button>
-    <button type="button" class="tab-btn" id="tabMaster" onclick="switchView('master')">📋 Master Bank</button>
-  </div>
+  <div id="sentMasteryBar" style="margin-bottom:12px"></div>
 
-  <!-- PRACTICE VIEW -->
-  <div id="viewPractice">
-    <!-- the calm toolbar (12 Oct): what matters, then ⋯ -->
-    <div class="calm-row">
-      <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
-      <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
-      <button type="button" class="pt-btn" onclick="TryIt.free({ hear: true, kind: 'ear' })" title="The same batch, by ear: the Arabic plays, you give the meaning or say it back — your listening line">🎧 By ear</button>
-      <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
-      <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
-      <details class="more"><summary>⋯</summary><div class="more-body">
-        <div class="dir-toggle">
-          <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
-          <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
-        </div>
-        <div class="filter-chips" id="filterChips">
-          <button type="button" class="chip active" data-filter="balanced" title="Adaptive Practice mix (10-sentence effort across vocab, sentences, grammar, and Qur'an)">⚡ Adaptive</button>
-          <button type="button" class="chip" data-filter="due">Due</button>
-          <button type="button" class="chip" data-filter="new">New</button>
-          <button type="button" class="chip" data-filter="weakest" title="Prioritize sentences with struggle words">📉 Weakest</button>
-          <button type="button" class="chip" data-filter="chapters">Chapters</button>
-          <button type="button" class="chip" data-filter="teacher">Preply</button>
-          <button type="button" class="chip" data-filter="quran">Qur'an</button>
-          <button type="button" class="chip" data-filter="everyday">Everyday</button>
-        </div>
-        <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
-        <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
-        <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
-          <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
-          <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
-        </span>
-        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal all</button>
-      </div></details>
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+      <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, transliteration, or grammar…" oninput="renderMasterBank()">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All Sources</button>
+        <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">📖 Chapters</button>
+        <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">🧑‍🏫 Preply</button>
+        <button type="button" class="chip b-filter" data-bfilter="everyday" onclick="setBankFilter('everyday', this)">🗣 Everyday</button>
+        <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">🕌 Qur'ān</button>
+        <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">⏰ Due</button>
+      </div>
     </div>
 
-    <!-- Session Progress & List -->
-    <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <div>
-          <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="✗ no · ≈ maybe · ✓ yes · ★ solid · ⊘ don't repeat — the site sets the next date">⚡ Practice</h2>
-          <div class="srs-legend-bar" id="srsLegend"></div>
-        </div>
-        <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
-          <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards &amp; Qur'an">📊 Capabilities</button>
-          <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
-          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
-          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
-        </span>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center" id="dotFilterBar">
+        <button type="button" class="chip active d-filter" data-dfilter="all" onclick="setDotFilter('all', this)">All Dots</button>
+        <button type="button" class="chip d-filter" data-dfilter="green" onclick="setDotFilter('green', this)"><span class="m-dot m-green sm"></span> Mastered <span id="cnt-green"></span></button>
+        <button type="button" class="chip d-filter" data-dfilter="amber" onclick="setDotFilter('amber', this)"><span class="m-dot m-amber sm"></span> Building <span id="cnt-amber"></span></button>
+        <button type="button" class="chip d-filter" data-dfilter="red" onclick="setDotFilter('red', this)"><span class="m-dot m-red sm"></span> Needs work <span id="cnt-red"></span></button>
+        <button type="button" class="chip d-filter" data-dfilter="grey" onclick="setDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="cnt-grey"></span></button>
       </div>
-      <div id="capabilityDrawer" style="display:none;margin-bottom:12px"></div>
-      <div id="topVoiceBriefDrawer" style="display:none;margin-bottom:12px"></div>
-      <div class="sentence-list" id="sentenceList">Loading practice…</div>
-      <div id="doneArea"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <button type="button" class="chip" id="btnSortWeakest" onclick="toggleWeakestSort()">📉 Weakest First</button>
+        <button type="button" class="chip" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()" title="Show/hide word breakdown">🧩 Words</button>
+        <button type="button" class="chip" id="btnToggleAllTblTr" onclick="toggleAllTblTr()" title="Show/hide transliteration">🔤 Translit</button>
+        <button type="button" class="chip" onclick="renderMasterBank()" title="Re-sort / refresh list">↻ Resort</button>
+      </div>
     </div>
-  </div>
 
-  <!-- MASTER SENTENCE BANK VIEW -->
-  <div id="viewMaster" style="display:none">
-    <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px">
-        <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, or Surah…" oninput="renderMasterBank()">
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All (1,200+)</button>
-          <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">10 Chapters (100)</button>
-          <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">Preply Class (74)</button>
-          <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">Qur'an (597)</button>
-          <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">Due Now</button>
-          <button type="button" class="chip" onclick="renderMasterBank()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
-        </div>
-      </div>
-      <div class="srs-legend-bar" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
-          <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
-          <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
-          <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
-          <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button type="button" class="book-toggle-pill" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()" title="Show/hide word breakdown across all sentences">🧩 Words</button>
-          <button type="button" class="book-toggle-pill" id="btnToggleAllTblTr" onclick="toggleAllTblTr()" title="Show/hide transliteration across all sentences">🔤 Translit</button>
-        </div>
-      </div>
-      <div class="sheet-wrap">
-        <table class="m-table">
-          <thead>
-            <tr>
-              <th style="width:28px">#</th>
-              <th style="width:38%">Arabic Sentence</th>
-              <th style="width:28%">English Meaning</th>
-              <th style="width:12%">Source</th>
-              <th style="width:65px;text-align:center">Status</th>
-              <th style="width:18%;text-align:right">SRS Rating</th>
-            </tr>
-          </thead>
-          <tbody id="bankTableBody">
-            <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Loading master sentence bank…</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="bankFooter" style="text-align:center;padding:12px 8px 4px;font-size:12px;color:var(--muted)"></div>
+    <div style="overflow-x:auto">
+      <table class="m-table">
+        <thead>
+          <tr>
+            <th style="width:44px">Dot</th>
+            <th style="width:36%">Arabic</th>
+            <th style="width:34%">English Meaning</th>
+            <th style="width:10%">Source</th>
+            <th style="width:16%;text-align:right">Self-Check</th>
+          </tr>
+        </thead>
+        <tbody id="bankTableBody">
+          <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">Loading master sentence library…</td></tr>
+        </tbody>
+      </table>
     </div>
+    <div id="bankFooter" style="text-align:center;padding:12px 8px 4px;font-size:12px;color:var(--muted)"></div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwffnqho"></script>
-<script src="js/curriculum.js?v=mwffnqho"></script>
-<script src="js/srs.js?v=mwffnqho"></script>
-<script src="js/frames.js?v=mwffnqho"></script>
-<script src="js/freetry.js?v=mwffnqho"></script>
-<script src="js/practice.js?v=mwffnqho"></script>
-<script src="js/lesson-cards.js?v=mwffnqho"></script>
-<script src="js/match.js?v=mwffnqho"></script>
-<script src="js/errors.js?v=mwffnqho"></script>
-<script src="js/tryit.js?v=mwffnqho"></script>
-<script src="js/app.js?v=mwffnqho"></script>
-<script src="js/tracker.js?v=mwffnqho"></script>
-<script src="js/plan.js?v=mwffnqho"></script>
-<script src="js/account.js?v=mwffnqho"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwfgx80c"></script>
+<script src="js/curriculum.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfgx80c"></script>
+<script src="js/frames.js?v=mwfgx80c"></script>
+<script src="js/practice.js?v=mwfgx80c"></script>
+<script src="js/lesson-cards.js?v=mwfgx80c"></script>
+<script src="js/app.js?v=mwfgx80c"></script>
+<script src="js/tracker.js?v=mwfgx80c"></script>
+<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/account.js?v=mwfgx80c"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -326,7 +142,7 @@ function diagnoseVerb(typed, it) {
   const bare = w => normalizeAr(String(w || "")).replace(/ة/g, "ه").replace(/[ؤئ]/g, "ء");
   const first = bare(conv.trim().split(/\s+/)[0]);
   if (!first) return null;
-  if (first === bare(it.form)) return null; // verb was right; the object differed
+  if (first === bare(it.form)) return null;
   for (const p of DATA.persons) {
     const row = it.forms[p.key];
     if (!row) continue;
@@ -339,52 +155,22 @@ function diagnoseVerb(typed, it) {
 }
 
 let MASTER_SENTENCES = [];
-let PRACTICE_WORDS = [];
 let PRACTICE_GRAMMAR = [];
-let PRACTICE_LESSON_CARDS = [];
-let LESSON_CARD_LOOKUP = { byId: {}, byPattern: {} };
 let GRAMMAR_PATTERNS = [];
 let GRAMMAR_MAP = {};
+let LESSON_CARD_LOOKUP = { byId: {}, byPattern: {} };
 let CHAPTERS_LIST = [];
 let WORD_GLOSS_BY_NORM = new Map();
-let FREQ_WORDS = {};
-let ACTIVE_SENTENCES = [];
-let CURRENT_BUILT_BATCH = null;
-let REVEALED = new Set();
-let BATCH_RATED = new Set();
-let BATCH_DONE_LOGGED = false;
-let IS_ADAPTIVE_PRACTICE = true;
-let SESSION_COOLDOWN = new Set();
-let currentFilter = "balanced";
 let bankFilter = "all";
-let promptDirection = "en-first";
-let audioIdx = 0;
-const BATCH_SIZE = 10;
-
-function getActiveWeeklyChapter() {
-  if (!CHAPTERS_LIST.length) return null;
-  const log = store.get("ats-log", []);
-  const isMast = cid => log.some(x => x && x.e === "chap-test" && x.chap === cid && (x.score >= 80 || x.pass === true));
-  const savedId = store.get("ats-current-chap-id") || localStorage.getItem("ats-current-chap-id");
-  if (savedId) {
-    const found = CHAPTERS_LIST.find(c => c.id === savedId);
-    if (found && !isMast(found.id)) return found;
-  }
-  return CHAPTERS_LIST.find(c => !isMast(c.id)) || CHAPTERS_LIST[CHAPTERS_LIST.length - 1];
-}
-
-function allPracticeItems() {
-  return MASTER_SENTENCES.concat(PRACTICE_GRAMMAR, PRACTICE_LESSON_CARDS, PRACTICE_WORDS.map(w => ({
-    key: w.key, kind: "word", effort: 0.5, ar: w.ar, en: w.en, tr: w.tr || "",
-    note: w.note || (w.root ? "Root: " + w.root : ""), words: [[w.ar, w.en]],
-    src: "vocab", wordSrc: w.src || "everyday", track: w.src === "quran" ? "quran-word" : "vocab"
-  })));
-}
+let dotFilter = "all";
+let sortWeakest = false;
+let showLimit = 80;
+let allTblWbwVisible = false;
+let allTblTrVisible = false;
 
 (async () => {
   try {
-    if (window.LessonCards) LessonCards.ensureStyles();
-    const [bRes, cRes, clsRes, senRes, qCoreRes, evRes, famRes, gramRes, lcRes, freqRes] = await Promise.all([
+    const [bRes, cRes, clsRes, senRes, qCoreRes, evRes, famRes, gramRes, lcRes, mdRes] = await Promise.all([
       fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
       fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
@@ -394,49 +180,33 @@ function allPracticeItems() {
       fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
       fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
       fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
-      fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
+      fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
       loadFamIdx()
     ]);
     DATA = senRes;
-    FREQ_WORDS = (freqRes && freqRes.words) || {};
     CHAPTERS_LIST = (cRes && cRes.chapters) || [];
     GRAMMAR_PATTERNS = (gramRes && gramRes.patterns) || [];
     if (window.LessonCards && lcRes && Array.isArray(lcRes.cards)) {
-      PRACTICE_LESSON_CARDS = LessonCards.buildPracticePool(lcRes.cards);
       LESSON_CARD_LOOKUP = LessonCards.buildLookup(lcRes.cards);
     }
-
-    // Vocabulary pool with exact SRS keys matching words.html
-    const seenWords = new Set();
-    const addWord = (k, ar, en, tr, note, src, root) => {
-      if (!k || !ar || !en) return;
-      const n = normalizeAr(ar);
-      if (!WORD_GLOSS_BY_NORM.has(n)) WORD_GLOSS_BY_NORM.set(n, en);
-      if (seenWords.has(n)) return;
-      seenWords.add(n);
-      const fam = famLookup(ar);
-      PRACTICE_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: root || (fam ? fam.root : ""), fam });
-    };
-    (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => addWord(v.key, v.ar, v.en, v.tr, v.note, "teacher")));
-    (qCoreRes.words || []).forEach((w, i) => addWord(`qc:${i}`, w.ar, w.en, w.tr, "", "quran"));
-    (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addWord(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday")));
-    (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addWord(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root)));
-
-    // Register canonical word keys so _wordKeyFor() resolves sentence words & adopts tw: twins automatically
-    if (typeof registerWordKeys === "function" && PRACTICE_WORDS.length) {
-      const wkMap = {};
-      PRACTICE_WORDS.forEach(w => {
-        const n = normalizeAr(w.ar).replace(/^ال/, "");
-        if (n && !wkMap[n]) wkMap[n] = w.key;
-      });
-      registerWordKeys(wkMap);
-    }
-
-    // Grammar pool + inline rule lookup map matching grammar.html
     if (window.Practice) {
       if (typeof Practice.buildGrammarPool === "function") PRACTICE_GRAMMAR = Practice.buildGrammarPool(GRAMMAR_PATTERNS);
       if (typeof Practice.buildGrammarMap === "function") GRAMMAR_MAP = Practice.buildGrammarMap(GRAMMAR_PATTERNS);
     }
+
+    const wkMap = {};
+    const regW = (k, ar, en) => {
+      if (!k || !ar) return;
+      const n = normalizeAr(ar);
+      if (en && !WORD_GLOSS_BY_NORM.has(n)) WORD_GLOSS_BY_NORM.set(n, en);
+      const bare = n.replace(/^ال/, "");
+      if (bare && !wkMap[bare]) wkMap[bare] = k;
+    };
+    (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => regW(v.key, v.ar, v.en)));
+    (qCoreRes.words || []).forEach((w, i) => regW(`qc:${i}`, w.ar, w.en));
+    (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => regW(`ev-${g.id}:${i}`, m.ar, m.en)));
+    (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => regW(`fam-${f.id}:${i}`, m.ar, m.en)));
+    if (typeof registerWordKeys === "function") registerWordKeys(wkMap);
 
     const seen = new Set();
     const add = (key, ar, en, tr, hint, words, src, track, note, extra) => {
@@ -446,784 +216,116 @@ function allPracticeItems() {
       seen.add(n);
       MASTER_SENTENCES.push(Object.assign({
         key: key || ("s:" + n.slice(0, 16)),
-        ar,
-        en,
-        tr: tr || "",
-        hint: hint || "",
-        words: words || [],
-        src: src || "bank",
-        track: track || "everyday",
-        note: note || ""
-      }, extra || {}));   // extra: wk (word keys per word), pattern, use — what Free try plans with
+        ar, en, tr: tr || "", hint: hint || "", words: words || [],
+        src: src || "bank", track: track || "everyday", note: note || ""
+      }, extra || {}));
     };
 
-    // 1. Chapters 1-10 sentences (Reza's weekly units)
     (cRes.chapters || []).forEach(c => {
       (c.sentences || []).forEach((s, idx) => {
         add(`chap:${c.num}:${idx}`, s.ar, s.en, s.tr, s.hint, s.words, "chapters", "everyday", `Chapter ${c.num}: ${c.title}`, { pattern: s.pattern || null, frames: s.frames || [] });
       });
     });
-
-    // 2. Preply Teacher sentences
     (clsRes.classes || []).forEach(c => {
       (c.sentences || []).forEach((s, idx) => {
         add(`cls:${c.id}:${idx}`, s.ar, s.en, s.tr, s.note, s.words, "teacher", "class", `Preply: ${c.title}`, { pattern: s.pattern || null, frames: s.frames || [] });
       });
     });
-
-    // 3. Sentence Bank (never emit bare s.pattern slug into s.note — grammar rules render via GRAMMAR_MAP!)
     (bRes.sentences || []).forEach(s => {
       const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
       const cleanNote = s.surah
         ? `Surah ${s.surah}${s.ref ? " (" + s.ref + ")" : ""}${s.note ? " — " + s.note : ""}`
         : (s.note && !GRAMMAR_MAP[s.note] ? s.note : "");
       add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", cleanNote,
-        { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), ref: s.ref || null, surah: s.surah || null, wordKeys: s.wordKeys || [], pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
+        { ref: s.ref || null, surah: s.surah || null, pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
+    });
+    const fem = typeof planProfile === "function" && planProfile().gender === "f";
+    (mdRes.sentences || []).forEach(s0 => {
+      const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
+      const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
+      const words = toks.map(w => {
+        const nw = normalizeAr(w);
+        return [w, WORD_GLOSS_BY_NORM.get(nw) || WORD_GLOSS_BY_NORM.get(nw.replace(/^ال/, "")) || ""];
+      });
+      add(s.id, s.ar, s.en, s.tr || "", s.swap || "", words, "myday", "everyday", "", {});
     });
 
-    await loadMyDay();
-
-    updateOverallStats();
-    const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
-    /* 🎯 Try it — say it or write it; ✨ Free try builds a batch from what he holds */
-    TryIt.setup({
-      src: "sentences",
-      items: () => ACTIVE_SENTENCES,
-      rowId: idx => "scard-" + idx,
-      pool: () => MASTER_SENTENCES,
-      size: BATCH_SIZE,
-      onVerdict: (it, g, idx, how, meta) => rateSentence(it.key, g, idx, how, meta),
-      onFreeDone: (okN, n) => {
-        // the commute's sentences count as checked only now — when the round actually ended
-        if (window._pendingCommuteCheck) {
-          const c = window._pendingCommuteCheck;
-          window._pendingCommuteCheck = null;
-          logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
-          (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
-        }
-        BATCH_DONE_LOGGED = true;
-        const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-        const nextB = curB + 1;
-        const nextDesc = nextB === 2 ? "75% Review + Weekly Sentences" : "Deep Review Mix";
-        let t = document.getElementById("freeDone");
-        if (!t) { t = document.createElement("div"); t.id = "freeDone"; const d = document.getElementById("doneArea"); if (d && d.parentNode) d.parentNode.insertBefore(t, d); else document.body.appendChild(t); }
-        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? `🎉 Batch ${curB} Complete!` : `✓ Batch ${curB} Complete!`}</h3>
-          <p style="margin:0 0 10px;font-size:14px">${okN ? `${okN} of ${n} said or written and got right — every section updated automatically.` : `${n} practiced — every verdict updated its home section.`}</p>
-          ${typeof planMoodHTML === "function" && curB === 1 ? planMoodHTML() : ""}
-          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:14.5px;padding:8px 18px">▶ Start Batch ${nextB} (${nextDesc}) →</button>
-            <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:13.5px;padding:7px 14px">↻ Redo batch</button>
-            <a href="index.html" class="pt-btn" style="font-size:13.5px;padding:7px 14px;text-decoration:none">Back to Home →</a>
-          </div>
-          ${renderBatchVoiceBriefHTML("free")}
-        </div>`;
-        if (t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "center" });
-      },
-      onFree: (list, meta) => {
-        stopAudio();
-        REVEALED.clear();
-        BATCH_RATED.clear();
-        BATCH_DONE_LOGGED = false;
-        IS_ADAPTIVE_PRACTICE = false;
-        const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
-        ACTIVE_SENTENCES = list;
-        LAST_BATCH_KEYS = list.map(x => x.key);
-        const t = document.getElementById("sessionTitle");
-        if (t) t.textContent = meta.title || `✨ Free try — level ${meta.theta}`;
-        const lg = document.getElementById("srsLegend");
-        const gf = meta.grammar && meta.grammar.focus ? meta.grammar.focus : null;
-        const gp = gf && meta.grammar.profile[gf];
-        const gTxt = gf ? (gp && gp.unseen ? `new grammar this time: ${gf}` : `grammar focus: ${gf}${gp && gp.passRate != null ? ` (you pass ${gp.passRate}%)` : ""}`) : "";
-        if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">built from what you hold · aimed at about 3 in 4 right${gTxt ? " · " + gTxt : ""} · ${meta.mix.retry ? meta.mix.retry + " retry · " : ""}${meta.mix.grammar || 0} grammar · ${meta.mix.stretch} stretch · ${meta.mix.consolidate} consolidate · ${meta.candidates} qualified${meta.tries ? " · level from " + meta.tries + " of your tries" : " · first session: starting level"}</span></span>`;
-        render10Cards();
-      },
-    });
-    setupAudioSpeed();
-    /* the plan's core block: ?myday=1 → Practice; &rehearse=1 → only what he proved this week */
-    const q = new URLSearchParams(location.search);
-    const reqBatch = parseInt(q.get("batch") || "0", 10);
-    if (q.get("myday")) await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
-    else load10Sentences();
-    if (q.get("view") === "list" || q.get("view") === "master") switchView("master");   // the "full bank" links
+    renderSentMasterySummary();
+    renderMasterBank();
   } catch (e) {
-    console.error("Failed to load sentence bank", e);
+    console.error("Failed to load sentence library", e);
   }
 })();
 
-function getExposure(key) {
-  const srs = getSrs();
-  let item = srs[key];
-  if (!item && key.startsWith("s:")) item = srs[key.slice(2)];
-  if (!item && !key.startsWith("s:")) item = srs["s:" + key];
-  item = item || {};
-  const reps = item.reps || (item.u ? 1 : 0);
-  const box = item.box != null ? item.box : 0;
-  return {
-    reps,
-    box,
-    isNew: !item.u && reps === 0,
-    isLeech: (box === 0 || box === 1) && reps >= 4,
-    isRetired: item.b === "never"
-  };
-}
-
-function updateOverallStats() {
-  const srs = getSrs();
-  const now = Date.now();
-  const held = MASTER_SENTENCES.filter(s => (srs[s.key] || {}).box >= 3).length;
-  const due = MASTER_SENTENCES.filter(s => {
-    const item = srs[s.key];
-    return item && item.b !== "never" && item.due && item.due <= now;
-  }).length;
-
-  document.getElementById("statHeld").textContent = held;
-  document.getElementById("statDue").textContent = due;
-  document.getElementById("statTotal").textContent = MASTER_SENTENCES.length;
-}
-
-/* ADAPTIVE PRACTICE + FILTERED SENTENCE BATCH ENGINE */
-function loadPracticeBatch(explicitBatchNum) {
-  stopAudio();
-  if (window.TryIt) TryIt.endFree();
-  REVEALED.clear();
-  BATCH_RATED.clear();
-  BATCH_DONE_LOGGED = false;
-  IS_ADAPTIVE_PRACTICE = true;
-  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
-
-  const hw = store.get("ats-homework", null);
-  const hwPast = !!(hw && hw.lessonAt && new Date(hw.lessonAt).getTime() + 2 * 3600000 < Date.now());
-  const easy = (typeof planEasyDay === "function") && planEasyDay();
-  const activeChap = getActiveWeeklyChapter();
-
-  const built = Practice.buildBatch({
-    now: Date.now(),
-    batchNum: explicitBatchNum,
-    activeChapNum: activeChap ? activeChap.num : null,
-    srs: getSrs(),
-    log: store.get("ats-log", []),
-    words: PRACTICE_WORDS,
-    sentences: MASTER_SENTENCES,
-    grammar: PRACTICE_GRAMMAR,
-    lessonCards: PRACTICE_LESSON_CARDS,
-    grammarPatterns: GRAMMAR_PATTERNS,
-    grammarMap: GRAMMAR_MAP,
-    freq: FREQ_WORDS,
-    homework: new Set((hw && !hwPast && hw.keys) || []),
-    exclude: SESSION_COOLDOWN,
-    easyDay: easy,
-    FreeTry: window.FreeTry || null,
-    wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null
-  });
-
-  CURRENT_BUILT_BATCH = built;
-  if (built.capabilities) store.set("ats-capabilities", built.capabilities);
-  if (built.pendingCommute) { const cd = built.pendingCommute; window._pendingCommuteCheck = { forT: cd.t, forTs: cd.forTs || [cd.t], n: cd.n }; }
-  const titleEl = document.getElementById("sessionTitle");
-  if (titleEl) titleEl.textContent = built.title;
-  const lg = document.getElementById("srsLegend");
-  if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">${built.summary}</span></span>`;
-
-  ACTIVE_SENTENCES = built.list;
-  ACTIVE_SENTENCES.forEach((it, idx) => { if (it && it._autoReveal) REVEALED.add(idx); });
-  LAST_BATCH_KEYS = built.list.map(x => x.key);
-  const topDrawer = document.getElementById("topVoiceBriefDrawer");
-  if (topDrawer && topDrawer.style.display !== "none") {
-    topDrawer.innerHTML = renderBatchVoiceBriefHTML("top");
-  }
-  const capDrawer = document.getElementById("capabilityDrawer");
-  if (capDrawer && capDrawer.style.display !== "none") {
-    capDrawer.innerHTML = renderCapabilityDrawerHTML();
-  }
-  logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, teachCount: built.teachCount, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, commuteDebt: !!built.diag.commuteDebt, t: Date.now() });
-  render10Cards();
-}
-
-function renderCapabilityDrawerHTML() {
-  if (!window.Practice || typeof Practice.summarizeCapabilities !== "function") return "";
-  const activeChap = getActiveWeeklyChapter();
-  const cap = Practice.summarizeCapabilities({
-    now: Date.now(),
-    activeChapNum: activeChap ? activeChap.num : null,
-    srs: getSrs(),
-    log: store.get("ats-log", []),
-    words: PRACTICE_WORDS,
-    sentences: MASTER_SENTENCES,
-    grammar: PRACTICE_GRAMMAR,
-    lessonCards: PRACTICE_LESSON_CARDS
-  });
-  store.set("ats-capabilities", cap);
-  return `
-    <div class="batch-ai-nudge" style="margin-top:0">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <div style="font-size:13px"><b>📊 Live Capability Ledger</b> <span style="color:var(--muted)">— measured from your Practice, Commute &amp; Test verdicts (auto-synced across all sections)</span></div>
-        <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" style="font-size:11.5px;padding:3px 9px">Close ✕</button>
+function renderSentMasterySummary() {
+  const el = document.getElementById("sentMasteryBar");
+  if (!el || !window.SRS || !SRS.summaryCounts) return;
+  const sc = SRS.summaryCounts(MASTER_SENTENCES.map(s => s.key));
+  const setCnt = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = `(${v})`; };
+  setCnt("cnt-green", sc.green);
+  setCnt("cnt-amber", sc.amber);
+  setCnt("cnt-red", sc.red);
+  setCnt("cnt-grey", sc.grey);
+  const gPct = sc.total ? ((sc.green / sc.total) * 100).toFixed(1) : 0;
+  const aPct = sc.total ? ((sc.amber / sc.total) * 100).toFixed(1) : 0;
+  const rPct = sc.total ? ((sc.red / sc.total) * 100).toFixed(1) : 0;
+  el.innerHTML = `
+    <div class="card" style="padding:11px 15px;margin-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:12.5px">
+        <span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <b>${sc.total.toLocaleString()} Sentences</b>
+          <span><span class="m-dot m-green"></span> <b>${sc.green}</b> Mastered</span>
+          <span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> Building</span>
+          <span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span>
+          <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span>
+        </span>
+        <span style="color:var(--muted);font-size:12px">Dots are earned automatically from Practice, Commute &amp; Tests</span>
       </div>
-      <div class="cap-grid">
-        <div class="cap-cell">
-          <b>🔤 Vocabulary</b>
-          <div><b>${cap.vocab.held}</b> solid · <b>${cap.vocab.learning}</b> learning${cap.vocab.slips ? ` · <span style="color:#dc2626;font-weight:600">${cap.vocab.slips} slips</span>` : ""}</div>
-          <div style="color:var(--muted);font-size:11px">Synced with Words &amp; Chapter Vocab</div>
-        </div>
-        <div class="cap-cell">
-          <b>🗣 Sentences &amp; Production</b>
-          <div><b>${cap.sentences.held}</b> held · <b>${cap.sentences.provenActive}</b> spoken/typed</div>
-          <div style="color:var(--muted);font-size:11px">${cap.sentences.activeChapNum ? `Ch ${cap.sentences.activeChapNum}: ${cap.sentences.activeChapSolid}/${cap.sentences.activeChapTotal} solid` : "Synced with Chapters"}</div>
-        </div>
-        <div class="cap-cell">
-          <b>📇 Lesson Cards &amp; Grammar</b>
-          <div><b>${cap.concepts.lessonCardsHeld}/${cap.concepts.lessonCardsTotal}</b> Lesson Cards · <b>${cap.concepts.grammarPatternsHeld}/${cap.concepts.grammarPatternsTotal}</b> rules</div>
-          <div style="color:var(--muted);font-size:11px">Synced with Sets &amp; Grammar</div>
-        </div>
-        <div class="cap-cell">
-          <b>🕌 Qur'an &amp; Commute Balance</b>
-          <div><b>${cap.quran.ayahsHeld}</b> ayahs · <b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
-          <div style="color:var(--muted);font-size:11px">${cap.modality.unverifiedCommuteCount ? `🔄 ${cap.modality.unverifiedCommuteCount} commute item(s) queued for screen check` : "Screen &amp; commute balanced ✓"}</div>
-        </div>
+      <div class="m-progress-track">
+        <div class="m-progress-seg green" style="width:${gPct}%"></div>
+        <div class="m-progress-seg amber" style="width:${aPct}%"></div>
+        <div class="m-progress-seg red" style="width:${rPct}%"></div>
       </div>
-      ${(cap.canDo.length || cap.gaps.length) ? `
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:8px;font-size:12px">
-          ${cap.canDo.length ? `<div><b style="color:var(--accent)">✓ Proven Capabilities:</b><ul style="margin:4px 0 0 16px;padding:0">${cap.canDo.map(x => `<li>${escBriefHtml(x)}</li>`).join("")}</ul></div>` : ""}
-          ${cap.gaps.length ? `<div><b style="color:#b45309">🎯 What Practice Is Targeting Next:</b><ul style="margin:4px 0 0 16px;padding:0">${cap.gaps.map(x => `<li>${escBriefHtml(x)}</li>`).join("")}</ul></div>` : ""}
-        </div>
-      ` : ""}
     </div>
   `;
 }
+window.addEventListener("ats-mastery-updated", renderSentMasterySummary);
 
-function toggleCapabilityDrawer() {
-  const el = document.getElementById("capabilityDrawer");
-  if (!el) return;
-  if (el.style.display === "none") {
-    el.innerHTML = renderCapabilityDrawerHTML();
-    el.style.display = "block";
-  } else {
-    el.style.display = "none";
-  }
-}
-
-function startNextPracticeBatch(nextB) {
-  currentFilter = "balanced";
-  document.querySelectorAll(".f-chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
-  loadPracticeBatch(nextB);
-  const vp = document.getElementById("viewPractice");
-  if (vp && vp.scrollIntoView) vp.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function escBriefHtml(str) {
-  return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function getBatchSpeakingBriefText() {
-  if (!window.Practice || typeof Practice.buildSpeakingBrief !== "function") return "";
-  const activeChap = getActiveWeeklyChapter();
-  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-  return Practice.buildSpeakingBrief(ACTIVE_SENTENCES, {
-    srs: getSrs(),
-    grammarMap: GRAMMAR_MAP,
-    batchNum: curB,
-    activeChapNum: activeChap ? activeChap.num : null
-  });
-}
-
-function copyBatchVoiceBrief(btn) {
-  const txt = getBatchSpeakingBriefText();
-  if (!txt) return;
-  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-  const orig = btn ? btn.textContent : "";
-  const done = () => {
-    logEvent({ e: "prompt", src: "practice-batch", batch: curB, t: Date.now() });
-    if (btn) {
-      btn.textContent = "✓ Copied Speaking Brief!";
-      setTimeout(() => { btn.textContent = orig; }, 2200);
-    }
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(txt).then(done).catch(() => {
-      const ta = document.createElement("textarea");
-      ta.value = txt; document.body.appendChild(ta); ta.select();
-      try { document.execCommand("copy"); } catch (_) {}
-      document.body.removeChild(ta);
-      done();
-    });
-  } else {
-    const ta = document.createElement("textarea");
-    ta.value = txt; document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); } catch (_) {}
-    document.body.removeChild(ta);
-    done();
-  }
-}
-
-function renderBatchVoiceBriefHTML(slotId) {
-  const brief = getBatchSpeakingBriefText();
-  if (!brief) return "";
-  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-  return `
-    <div class="batch-ai-nudge" id="voice-nudge-${slotId}">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="font-size:13px;line-height:1.4">
-          🗣 <b>3–5 min AI Speaking Check-In (Batch ${curB})</b>
-          <span style="color:var(--muted)">— paste into ChatGPT or Claude Voice to speak these exact sentences, words &amp; slips out loud.</span>
-        </div>
-        <button type="button" class="pt-btn" onclick="copyBatchVoiceBrief(this)" style="font-weight:700;color:var(--accent);border-color:var(--accent)">📋 Copy Speaking Brief</button>
-      </div>
-      <details style="margin-top:7px">
-        <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--accent);user-select:none">View written brief for this batch ▾</summary>
-        <pre class="batch-ai-pre">${escBriefHtml(brief)}</pre>
-      </details>
-    </div>
-  `;
-}
-
-function toggleTopVoiceBrief() {
-  const el = document.getElementById("topVoiceBriefDrawer");
-  if (!el) return;
-  if (el.style.display === "none") {
-    el.innerHTML = renderBatchVoiceBriefHTML("top");
-    el.style.display = "block";
-  } else {
-    el.style.display = "none";
-  }
-}
-
-function renderGrammarRuleHtml(s, forceCompact) {
-  if (!s || s.kind === "word" || s.kind === "grammar" || s.kind === "lesson-card") return "";
+function renderGrammarRuleHtml(s) {
+  if (!s) return "";
   const patId = s.pattern && s.pattern !== "-" ? s.pattern : null;
-  const g = (patId && GRAMMAR_MAP[patId]) || s.grammarRule || null;
+  const g = (patId && GRAMMAR_MAP[patId]) || null;
   if (!g) return "";
   const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
   const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
-  const srs = getSrs();
-  const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
-  const isSolid = gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
-  if (!forceCompact && (!isSolid || g.id === "negation")) {
-    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${g.ar} (${g.shortName}):</b> ${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div>`;
-  }
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${g.ar} (${g.shortName})</summary><div style="margin-top:4px">${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
-}
-
-function load10Sentences() {
-  if (currentFilter === "balanced" && window.Practice && typeof Practice.buildBatch === "function") {
-    loadPracticeBatch();
-    return;
-  }
-  stopAudio();
-  if (window.TryIt) TryIt.endFree();
-  { const lg = document.getElementById("srsLegend"); if (lg && window.SRS) lg.innerHTML = SRS.legendHtml(); }
-  REVEALED.clear();
-  BATCH_RATED.clear();
-  BATCH_DONE_LOGGED = false;
-  IS_ADAPTIVE_PRACTICE = false;
-  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
-  const srs = getSrs();
-  const now = Date.now();
-
-  let pool = MASTER_SENTENCES;
-  if (currentFilter === "chapters") pool = MASTER_SENTENCES.filter(s => s.src === "chapters");
-  else if (currentFilter === "teacher") pool = MASTER_SENTENCES.filter(s => s.src === "teacher");
-  else if (currentFilter === "quran") pool = MASTER_SENTENCES.filter(s => s.track === "quran");
-  else if (currentFilter === "everyday") pool = MASTER_SENTENCES.filter(s => s.track === "everyday");
-
-  const mode = ["weakest", "due", "new"].includes(currentFilter) ? currentFilter : "balanced";
-  const chosen = SRS.buildBatch(pool, { size: BATCH_SIZE, mode, exclude: SESSION_COOLDOWN, srs, now });
-
-  const titleEl = document.getElementById("sessionTitle");
-  if (titleEl) titleEl.textContent = currentFilter === "weakest" ? "Weakest Sentences" : "Practice — Sentences";
-
-  LAST_BATCH_KEYS = chosen.map(x => x.key);
-  ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
-  render10Cards();
-}
-
-let LAST_BATCH_KEYS = [];
-/* ↻ the same batch again, weakest first — his verdicts decide the order, not him */
-function redoBatch() {
-  if (!LAST_BATCH_KEYS.length) { load10Sentences(); return; }
-  stopAudio();
-  if (window.TryIt) TryIt.endFree();
-  REVEALED.clear();
-  BATCH_RATED.clear();
-  BATCH_DONE_LOGGED = false;
-  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
-  const fullPool = allPracticeItems();
-  const chosen = SRS.buildBatch(fullPool, { size: Math.max(BATCH_SIZE, LAST_BATCH_KEYS.length), mode: "redo", redoKeys: LAST_BATCH_KEYS });
-  const titleEl = document.getElementById("sessionTitle");
-  if (titleEl) titleEl.textContent = "Redo — weakest first";
-  ACTIVE_SENTENCES = chosen;
-  LAST_BATCH_KEYS = chosen.map(x => x.key);
-  logEvent({ e: "redo-batch", kind: IS_ADAPTIVE_PRACTICE ? "practice" : "sentences", n: chosen.length, t: Date.now() });
-  render10Cards();
-  const list = document.getElementById("sentenceList");
-  if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function render10Cards() {
-  const container = document.getElementById("sentenceList");
-  container.innerHTML = ACTIVE_SENTENCES.map(cardHtml).join("");
-  if (window.TryIt) TryIt.rewire();
-
-  updateSessionProgress();
-}
-
-function playCardAudio(idx) {
-  const s = ACTIVE_SENTENCES[idx];
-  if (!s) return;
-  stopAudio();
-  if (s.ref && typeof reciteVerse === "function") {
-    const p = String(s.ref).split(":").map(Number);
-    if (p[0] && p[1]) {
-      reciteVerse(p[0], p[1], s.ar, 0.85);
-      logEvent({ e: "audio-play", text: s.ar, ref: s.ref, type: "quran-ayah", t: Date.now() });
-      return;
-    }
-  }
-  speak(s.speakAr || s.ar, 0.85);
-  logEvent({ e: "audio-play", text: s.speakAr || s.ar, type: s.kind || "sentence", t: Date.now() });
-}
-
-function playChipAudio(idx, wIdx, encodedWord) {
-  const s = ACTIVE_SENTENCES[idx];
-  const word = decodeURIComponent(encodedWord);
-  if (s && (s.kind === "quran" || s.track === "quran") && Array.isArray(s.wk) && Array.isArray(s.wk[wIdx]) && typeof speakQuranWord === "function") {
-    const qwKey = s.wk[wIdx].find(k => /^qw:[^:]+:\d+:\d+$/.test(k));
-    if (qwKey) {
-      const parts = qwKey.split(":");
-      speakQuranWord(parts[1], +parts[2], +parts[3], word, 0.85);
-      return;
-    }
-  }
-  speak(word, 0.85);
-}
-
-/* one card's HTML. revealCard swaps ONLY this card in place */
-function cardHtml(s, idx) {
-  const isEnFirst = promptDirection === "en-first";
-  const isRevealed = REVEALED.has(idx);
-  if (s.kind === "lesson-card") {
-    const whyTag = s._try && s._try.why ? s._try.why : (s.lcMode === "teach" ? "teach first" : "spaced review");
-    return `
-      <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
-        <div class="s-head">
-          <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>
-            <span class="tryit-why" style="font-weight:700;background:#ecfdf5;color:var(--accent)">📇 Lesson Card · ${s.categoryLabel || "Concept"}</span>
-            <span class="tryit-why">${whyTag}</span>
-            <span class="s-prompt-text">${s.lcMode === "teach" ? (s.title || s.en) : s.en}</span>
-          </div>
-        </div>
-        ${!isRevealed ? `
-          <div class="s-action-bar">
-            <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Open Lesson Card &amp; Diagram ▾
-            </div>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
-          </div>
-        ` : `
-          <div class="s-revealed-body">
-            ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${s.note || ""}</div>`}
-            ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check Answer:</b> <span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">${s.ar}</span>${s.note ? ` — ${s.note}` : ""}</div>` : ""}
-          </div>
-          <div class="s-action-bar" style="margin-top:6px">
-            <span style="font-size:11.5px;color:var(--muted)">${s.lcMode === "teach" ? "Understood Lesson Card? (sets next review date):" : "Rate Lesson Card recall:"}</span>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
-          </div>
-        `}
-      </div>
-    `;
-  }
-  const isTeach = s.practiceMode === "teach";
-  const isCommuteVerify = s.practiceMode === "commute-verify";
-  const modePill = isTeach
-    ? `<span class="mode-pill-teach" title="New unseen item — opened upfront so Practice teaches it first before scheduling review">🆕 Teach</span>`
-    : isCommuteVerify
-    ? `<span class="mode-pill-commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning on screen">🚗→📱 Screen Check</span>`
-    : "";
-  const kindBadge = s.kind === "word" ? "🔤 Vocab"
-    : s.kind === "grammar" ? `📐 Grammar${s.grammarName ? " · " + s.grammarName : ""}`
-    : (s.kind === "quran" || s.track === "quran") ? `🕌 Qur'an${s.surah ? " · " + s.surah : ""}${s.ref ? " (" + s.ref + ")" : ""}`
-    : s.src === "chapters" ? "📖 Chapter"
-    : s.src === "teacher" ? "🧑‍🏫 Class"
-    : "";
-  const whyTag = s._try && s._try.why ? `${s._try.why}${s._try.p != null ? " · " + s._try.p + "%" : ""}` : "";
-  const showWbwOpen = s.kind === "word" || isTeach;
-  const showTrOpen = isTeach && !!s.tr;
-
-  return `
-      <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
-        <div class="s-head">
-          <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${TryIt.badgeHtml(idx)}${modePill}${kindBadge ? `<span class="tryit-why" style="font-weight:600">${kindBadge}</span>` : ""}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
-            <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
-              ${isEnFirst ? s.en : s.ar}
-            </span>
-            ${!isEnFirst ? `<button type="button" class="small icon-btn" onclick="event.stopPropagation(); playCardAudio(${idx})">🔊</button>` : ''}
-          </div>
-        </div>
-
-        ${!isRevealed ? `
-          <div class="s-action-bar">
-            <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Check ${isEnFirst ? 'Arabic' : 'English'} ▾
-            </div>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
-          </div>
-        ` : `
-          <div class="s-revealed-body">
-            ${isEnFirst ? `
-              <div class="s-ar-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
-                <div class="sym-group">
-                  <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                </div>
-              </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
-            ` : `
-              <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <span>${s.en}</span>
-                <div class="sym-group">
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                </div>
-              </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
-            `}
-
-            ${s.words && s.words.length ? `
-              <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:${showWbwOpen ? 'flex' : 'none'}" onclick="event.stopPropagation()">
-                <div class="wbw-chips-wrap" style="display:flex;gap:5px;flex-wrap:wrap">
-                  ${s.words.map((w, wIdx) => {
-                    const fam = famLookup(w[0]);
-                    return `
-                      <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="playChipAudio(${idx}, ${wIdx}, '${encodeURIComponent(w[0])}')" title="${w[1]}">
-                        <span class="w-ar">${w[0]}</span>
-                        <span class="w-en">${w[1]}</span>
-                        ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('drill-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
-                      </div>
-                    `;
-                  }).join("")}
-                </div>
-                <div class="wbw-drawer-slot" id="wbw-drawer-slot-drill-${idx}"></div>
-              </div>
-            ` : ''}
-
-            ${s.note ? `
-              <div class="s-hint-line">💡 ${s.note}</div>
-            ` : ''}
-            ${renderGrammarRuleHtml(s, false)}
-          </div>
-
-          <div class="s-action-bar" style="margin-top:4px">
-            <span style="font-size:11.5px;color:var(--muted)">${isTeach ? "🔊 Listen &amp; 🎯 Try it, then rate to schedule review:" : isCommuteVerify ? "Verified on screen? Rate recall:" : "Rate recall:"}</span>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx])}</div>
-          </div>
-        `}
-        ${TryIt.slotHtml(idx)}
-      </div>
-    `;
-}
-
-function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest("a") || e.target.closest("details") || e.target.closest("summary") || e.target.closest(".s-gram-box") || e.target.closest(".lc-wrap") || e.target.closest(".tryit") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
-  if (!REVEALED.has(idx)) {
-    revealCard(idx);
-  }
-}
-
-function revealCard(idx) {
-  REVEALED.add(idx);
-  const s = ACTIVE_SENTENCES[idx];
-  const old = document.getElementById("scard-" + idx);
-  if (old && s) {
-    const y = window.scrollY;
-    const tmp = document.createElement("div");
-    tmp.innerHTML = cardHtml(s, idx);
-    old.replaceWith(tmp.firstElementChild);
-    if (window.TryIt) TryIt.rewire();
-    updateSessionProgress();
-    if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
-  } else render10Cards();
-  if (s) playCardAudio(idx);
-}
-
-function revealAllCards() {
-  ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
-  render10Cards();
-}
-
-function setDirection(dir) {
-  promptDirection = dir;
-  document.getElementById("dirEnFirst").classList.toggle("active", dir === "en-first");
-  document.getElementById("dirArFirst").classList.toggle("active", dir === "ar-first");
-  render10Cards();
-}
-
-/* ---- Practice / Rehearse ---- */
-let MYDAY = null;
-async function loadMyDay() {
-  if (MYDAY) return MYDAY;
-  const d = await fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] }));
-  const fem = typeof planProfile === "function" && planProfile().gender === "f";   // Saba: her own forms
-  MYDAY = (d.sentences || []).map(s0 => {
-    const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
-    const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
-    const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
-    const words = toks.map(w => {
-      const nw = normalizeAr(w);
-      const gl = WORD_GLOSS_BY_NORM.get(nw) || WORD_GLOSS_BY_NORM.get(nw.replace(/^ال/, "")) || "";
-      return [w, gl];
-    });
-    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words, src: "myday", track: "everyday", note: "", pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
-  });
-  // they join the master list so verdicts and the Sunday script resolve them
-  MYDAY.forEach(s => { if (!MASTER_SENTENCES.some(x => x.key === s.key)) MASTER_SENTENCES.push(s); });
-  return MYDAY;
-}
-async function startMyDay(rehearse, explicitBatchNum) {
-  const md = await loadMyDay();
-  const mine = md.filter(s => s.who === "me");
-  if (rehearse) {
-    const proven = new Set((typeof planScript === "function" ? planScript() : []).map(x => x.en.toLowerCase()));
-    let pool = MASTER_SENTENCES.filter(s => proven.has(String(s.en).trim().toLowerCase()));
-    if (pool.length < 5) pool = pool.concat(mine.filter(s => !pool.includes(s)).slice(0, 8 - pool.length));
-    await TryIt.free({ pool, loose: true, includeRecent: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
-  } else {
-    currentFilter = "balanced";
-    loadPracticeBatch(explicitBatchNum);
-  }
-}
-
-/* Every verdict inside Practice automatically updates its home section:
-   · word    → words.html / vocab.html / review.html (vocab-rate + tw: twin)
-   · grammar → grammar.html (gt:<id>:<i> + gtest-done when pattern passes)
-   · quran   → quran.html + words.html (sentence-rate + qw:/qc: word keys)
-   · sentence→ sentences.html + chapters + constituent words */
-function wordGradeFor(g) { return g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no"; }
-function rateSentence(key, g, cardIdx, how, meta) {
-  SESSION_COOLDOWN.add(key);
-  BATCH_RATED.add(key);
-  const s = ACTIVE_SENTENCES[cardIdx];
-  let nc = null;
-  if (s && window.Practice && typeof Practice.syncVerdict === "function") {
-    const res = Practice.syncVerdict({
-      item: s,
-      key,
-      grade: g,
-      srsApi: SRS,
-      getSrs,
-      store,
-      logEvent,
-      normalizeAr,
-      wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
-      chapters: CHAPTERS_LIST,
-      via: "practice",
-      meta
-    });
-    nc = res ? res.nc : SRS.rate(key, g);
-    if ((s.kind === "quran" || s.track === "quran") && promptDirection === "ar-first" && g !== "retire") {
-      logEvent({ e: "alisten-grade", key, ok: g === "yes" || g === "solid", src: "practice-quran", t: Date.now() });
-    }
-    autoSync();
-  } else {
-    nc = SRS.rate(key, g);
-    autoSync();
-  }
-  const capDrawer = document.getElementById("capabilityDrawer");
-  if (capDrawer && capDrawer.style.display !== "none") {
-    capDrawer.innerHTML = renderCapabilityDrawerHTML();
-  }
-  updateOverallStats();
-  SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
-  updateSessionProgress();
-}
-
-function updateSessionProgress() {
-  const total = ACTIVE_SENTENCES.length;
-  const ratedCount = ACTIVE_SENTENCES.filter(s => BATCH_RATED.has(s.key)).length;
-  document.getElementById("sessionCount").textContent = `${ratedCount} of ${total} rated`;
-
-  const doneArea = document.getElementById("doneArea");
-  if (ratedCount === total && total > 0) {
-    if (IS_ADAPTIVE_PRACTICE && !BATCH_DONE_LOGGED) {
-      BATCH_DONE_LOGGED = true;
-      if (window._pendingCommuteCheck) {
-        const c = window._pendingCommuteCheck;
-        window._pendingCommuteCheck = null;
-        logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
-        (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
-      }
-      const srsNow = getSrs();
-      const okAll = ACTIVE_SENTENCES.filter(s => srsNow[s.key] && (srsNow[s.key].g === "yes" || srsNow[s.key].g === "solid" || srsNow[s.key].b === "never")).length;
-      if (window.Practice && typeof Practice.summarizeCapabilities === "function") {
-        const activeChapNow = getActiveWeeklyChapter();
-        store.set("ats-capabilities", Practice.summarizeCapabilities({
-          now: Date.now(), activeChapNum: activeChapNow ? activeChapNow.num : null,
-          srs: srsNow, log: store.get("ats-log", []), words: PRACTICE_WORDS,
-          sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
-        }));
-      }
-      logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });
-      autoSync();
-    }
-    const freeDoneEl = document.getElementById("freeDone");
-    if (freeDoneEl && freeDoneEl.innerHTML.trim()) {
-      doneArea.innerHTML = "";
-      return;
-    }
-    const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-    const nextB = curB + 1;
-    const nextDesc = nextB === 2 ? "75% Review + Consolidation" : "Deep Review Mix";
-    const activeChap = getActiveWeeklyChapter();
-    let chapProgHtml = "";
-    if (IS_ADAPTIVE_PRACTICE && activeChap) {
-      const srsNow = getSrs();
-      const chapPrefix = `chap:${activeChap.num}:`;
-      const chapSents = MASTER_SENTENCES.filter(s => String(s.key || "").startsWith(chapPrefix));
-      const chapSolid = chapSents.filter(s => ((srsNow[s.key] || {}).box || 0) >= 2 || (srsNow[s.key] || {}).b === "never").length;
-      if (chapSents.length) {
-        const readyTest = chapSolid >= Math.ceil(chapSents.length * 0.8);
-        chapProgHtml = `<div style="margin:6px 0 8px;font-size:13px;color:var(--ink)">📖 <b>Chapter ${activeChap.num} (${activeChap.en}):</b> ${chapSolid}/${chapSents.length} weekly sentences solid${readyTest ? ` · <a href="index.html#testBox" style="color:var(--accent);font-weight:700">Take Chapter ${activeChap.num} Mastery Test →</a>` : ""}</div>`;
-      }
-    }
-    doneArea.innerHTML = `
-      <div class="done-banner">
-        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${IS_ADAPTIVE_PRACTICE ? `🎉 Batch ${curB} Complete!` : `🎉 Practice Batch Complete!`}</h3>
-        <p style="margin:0 0 8px;font-size:14px">Every verdict updated its home section (Vocabulary, Sentences, Grammar, Qur'an) and set its next review date automatically.</p>
-        ${chapProgHtml}
-        ${IS_ADAPTIVE_PRACTICE && curB === 1 && typeof planMoodHTML === "function" ? planMoodHTML() : ""}
-        <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-          ${IS_ADAPTIVE_PRACTICE
-            ? `<button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:15px;padding:9px 22px">▶ Start Batch ${nextB} (${nextDesc}) →</button>`
-            : `<button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Next Sentence Batch →</button>`}
-          <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px" title="The same batch again, weakest first">↻ Redo batch</button>
-          <a href="index.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">Back to Home →</a>
-        </div>
-        ${renderBatchVoiceBriefHTML("done")}
-      </div>
-    `;
-  } else {
-    doneArea.innerHTML = "";
-  }
-}
-
-/* MASTER SENTENCE BANK LOGIC */
-function switchView(view) {
-  const isPractice = view === "practice";
-  document.getElementById("viewPractice").style.display = isPractice ? "block" : "none";
-  document.getElementById("viewMaster").style.display = isPractice ? "none" : "block";
-  document.getElementById("tabPractice").classList.toggle("active", isPractice);
-  document.getElementById("tabMaster").classList.toggle("active", !isPractice);
-  if (!isPractice) {
-    renderMasterBank();
-  }
+  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 ${g.ar} (${g.shortName})</summary><div style="margin-top:4px">${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
 }
 
 function setBankFilter(filt, btn) {
   bankFilter = filt;
+  showLimit = 80;
   document.querySelectorAll(".b-filter").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+  if (btn) btn.classList.add("active");
+  renderMasterBank();
+}
+
+function setDotFilter(filt, btn) {
+  dotFilter = filt;
+  showLimit = 80;
+  document.querySelectorAll(".d-filter").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  renderMasterBank();
+}
+
+function toggleWeakestSort() {
+  sortWeakest = !sortWeakest;
+  const btn = document.getElementById("btnSortWeakest");
+  if (btn) btn.classList.toggle("active", sortWeakest);
+  renderMasterBank();
+}
+
+function showMoreSentences() {
+  showLimit += 100;
   renderMasterBank();
 }
 
@@ -1245,46 +347,55 @@ function renderMasterBank() {
       const matchGram = gInfo ? (gInfo.shortName.toLowerCase().includes(query) || gInfo.rule.toLowerCase().includes(query)) : false;
       if (!matchEn && !matchAr && !matchTr && !matchNote && !matchGram) return false;
     }
-
-    if (bankFilter === "chapters") return s.src === "chapters";
-    if (bankFilter === "teacher") return s.src === "teacher";
-    if (bankFilter === "quran") return s.track === "quran";
+    if (bankFilter === "chapters" && s.src !== "chapters") return false;
+    if (bankFilter === "teacher" && s.src !== "teacher") return false;
+    if (bankFilter === "everyday" && !(s.track === "everyday" && s.src !== "chapters")) return false;
+    if (bankFilter === "quran" && s.track !== "quran") return false;
     if (bankFilter === "due") {
       const item = srs[s.key] || {};
-      return item.due && item.due <= now && item.b !== "never";
+      if (!(item.due && item.due <= now && item.b !== "never")) return false;
+    }
+    if (dotFilter !== "all" && window.SRS && SRS.masteryState) {
+      if (SRS.masteryState(s.key, { srs, now }).level !== dotFilter) return false;
     }
     return true;
   });
 
+  if (sortWeakest && window.SRS && SRS.weakestFirst) {
+    filtered = SRS.weakestFirst(filtered, srs, now);
+  }
+
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No sentences found matching criteria.</td></tr>`;
-    if (footer) footer.textContent = "";
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No sentences found matching criteria.</td></tr>`;
+    if (footer) footer.innerHTML = "";
     return;
   }
 
-  const displaySlice = filtered.slice(0, 50);
-
+  const displaySlice = filtered.slice(0, showLimit);
   tbody.innerHTML = displaySlice.map((s, idx) => {
-    const exp = getExposure(s.key);
-    const item = srs[s.key] || {};
-    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
-    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
-
+    const playCall = s.ref
+      ? `playRefOrSpeak('${s.ref}', '${encodeURIComponent(s.ar)}')`
+      : `playSingle('${encodeURIComponent(s.ar)}')`;
     return `
       <tr>
-        <td style="color:var(--muted);font-size:11.5px">${idx + 1}</td>
+        <td style="white-space:nowrap">
+          <span style="display:inline-flex;align-items:center;gap:6px">
+            ${SRS.dotHtml(s.key, { lg: true })}
+            <span style="color:var(--muted);font-size:11px">${idx + 1}</span>
+          </span>
+        </td>
         <td>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.4">${s.ar}</span>
+            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.45">${s.ar}</span>
             <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
-              <button type="button" class="small icon-btn" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
-              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
-              ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
+              <button type="button" class="small icon-btn" onclick="${playCall}" title="Listen">🔊</button>
+              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
+              ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
             </div>
           </div>
-          ${s.tr ? `<div id="tbl-tr-${idx}" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+          ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
           ${s.words && s.words.length ? `
-            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:none;margin-top:3px">
+            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:${allTblWbwVisible ? 'flex' : 'none'};margin-top:4px">
               <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
                 ${s.words.map((w, wIdx) => {
                   const fam = famLookup(w[0]);
@@ -1303,48 +414,26 @@ function renderMasterBank() {
         </td>
         <td>
           <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
-          ${s.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
-          ${renderGrammarRuleHtml(s, true)}
+          ${s.note ? `<div style="font-size:11.5px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
+          ${renderGrammarRuleHtml(s)}
         </td>
         <td>
-          <span style="font-size:11.5px;color:var(--muted)">
-            ${s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'an" : '🗣 Everyday'}
+          <span style="font-size:11.5px;color:var(--muted);white-space:nowrap">
+            ${s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'ān" : '🗣 Everyday'}
           </span>
         </td>
-        <td style="text-align:center">
-          ${exp.isRetired ? `<span class="exp-badge" style="background:rgba(0,0,0,0.06);color:var(--muted);font-size:10.5px;padding:2px 6px">Retired</span>` :
-            (item.due && item.due <= now && item.b !== 'never') ? `<span class="exp-badge" style="background:#fef3c7;color:#b45309;font-size:10.5px;padding:2px 6px;font-weight:700">Due</span>` :
-            exp.box >= 4 ? `<span class="exp-badge" style="background:#ecfdf5;color:#059669;font-size:10.5px;padding:2px 6px">Mastered</span>` :
-            `<span style="color:var(--muted);font-size:11px">—</span>`}
-        </td>
-        <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [])}</div>
+        <td style="text-align:right;white-space:nowrap">
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true, noDot: true })}</div>
         </td>
       </tr>
     `;
   }).join("");
 
   if (footer) {
-    footer.textContent = filtered.length > 50 ? `Showing first 50 of ${filtered.length} matching sentences. Search to narrow down.` : "";
+    footer.innerHTML = filtered.length > showLimit
+      ? `Showing ${showLimit} of ${filtered.length} matching sentences · <button type="button" class="chip" onclick="showMoreSentences()">Show 100 more ↓</button>`
+      : `Showing all ${filtered.length} matching sentence${filtered.length === 1 ? "" : "s"}.`;
   }
-}
-
-function toggleDrillWbw(idx) {
-  const el = document.getElementById("drill-wbw-" + idx);
-  const btn = document.getElementById("btn-drill-wbw-" + idx);
-  if (!el) return;
-  const isHidden = el.style.display === "none" || !el.style.display;
-  el.style.display = isHidden ? "flex" : "none";
-  if (btn) btn.classList.toggle("active", isHidden);
-}
-
-function toggleDrillTr(idx) {
-  const el = document.getElementById("drill-tr-" + idx);
-  const btn = document.getElementById("btn-drill-tr-" + idx);
-  if (!el) return;
-  const isHidden = el.style.display === "none" || !el.style.display;
-  el.style.display = isHidden ? "block" : "none";
-  if (btn) btn.classList.toggle("active", isHidden);
 }
 
 function toggleTblWbw(idx) {
@@ -1365,28 +454,18 @@ function toggleTblTr(idx) {
   if (btn) btn.classList.toggle("active", isHidden);
 }
 
-let allTblWbwVisible = false;
 function toggleAllTblWbw() {
   allTblWbwVisible = !allTblWbwVisible;
-  document.querySelectorAll("[id^='tbl-wbw-']").forEach(el => {
-    el.style.display = allTblWbwVisible ? "flex" : "none";
-  });
-  document.querySelectorAll("[id^='btn-tbl-wbw-']").forEach(btn => {
-    btn.classList.toggle("active", allTblWbwVisible);
-  });
+  document.querySelectorAll("[id^='tbl-wbw-']").forEach(el => { el.style.display = allTblWbwVisible ? "flex" : "none"; });
+  document.querySelectorAll("[id^='btn-tbl-wbw-']").forEach(btn => { btn.classList.toggle("active", allTblWbwVisible); });
   const btnAll = document.getElementById("btnToggleAllTblWbw");
   if (btnAll) btnAll.classList.toggle("active", allTblWbwVisible);
 }
 
-let allTblTrVisible = false;
 function toggleAllTblTr() {
   allTblTrVisible = !allTblTrVisible;
-  document.querySelectorAll("[id^='tbl-tr-']").forEach(el => {
-    el.style.display = allTblTrVisible ? "block" : "none";
-  });
-  document.querySelectorAll("[id^='btn-tbl-tr-']").forEach(btn => {
-    btn.classList.toggle("active", allTblTrVisible);
-  });
+  document.querySelectorAll("[id^='tbl-tr-']").forEach(el => { el.style.display = allTblTrVisible ? "block" : "none"; });
+  document.querySelectorAll("[id^='btn-tbl-tr-']").forEach(btn => { btn.classList.toggle("active", allTblTrVisible); });
   const btnAll = document.getElementById("btnToggleAllTblTr");
   if (btnAll) btnAll.classList.toggle("active", allTblTrVisible);
 }
@@ -1405,208 +484,30 @@ function rateMasterSentence(key, g) {
     nc = SRS.rate(key, g);
   }
   autoSync();
-  updateOverallStats();
   SRS.paintBar(document.getElementById("bankTableBody"), key, nc);
+  renderSentMasterySummary();
 }
 
-/* Audio Toolbar Handling */
 function playSingle(encodedAr) {
-  stopAudio();
+  stopSpeak();
   const text = decodeURIComponent(encodedAr);
   speak(text, 0.85);
   logEvent({ e: "audio-play", text, type: "sentence", t: Date.now() });
 }
 
-function setupAudioSpeed() {
-  const n = document.getElementById("spNorm");
-  const s = document.getElementById("spSlow");
-  const update = () => {
-    const slow = speakSpeed() === "slow";
-    n.style.fontWeight = slow ? "400" : "700";
-    s.style.fontWeight = slow ? "700" : "400";
-  };
-  n.onclick = () => { setSpeakSpeed("normal"); update(); };
-  s.onclick = () => { setSpeakSpeed("slow"); update(); };
-  update();
-}
-
-let isPlaying = false;
-let isPaused = false;
-let currentWithPause = false;
-let _sentenceToken = 0;
-
-function stopAudio() {
-  _sentenceToken++;
-  isPlaying = false;
-  isPaused = false;
+function playRefOrSpeak(ref, encodedAr) {
   stopSpeak();
-  clearAppMediaSession();
-  document.querySelectorAll(".sheet-row, .s-card").forEach(c => c.classList.remove("playing", "active"));
-  document.getElementById("btnPlayAll").classList.remove("playing");
-  document.getElementById("btnPlayPauses").classList.remove("playing");
-  const pBtn = document.getElementById("btnPause");
-  if (pBtn) { pBtn.style.display = "none"; pBtn.textContent = "⏸ Pause"; }
-  document.getElementById("btnStop").style.display = "none";
-}
-
-function pauseSentenceAudio() {
-  if (!isPlaying || isPaused) return;
-  _sentenceToken++;
-  isPaused = true;
-  stopSpeak();
-  const pBtn = document.getElementById("btnPause");
-  if (pBtn) pBtn.textContent = "▶ Resume";
-  setAppMediaSession({ state: "paused" });
-}
-
-function resumeSentenceAudio() {
-  if (!isPlaying || !isPaused) return;
-  isPaused = false;
-  const pBtn = document.getElementById("btnPause");
-  if (pBtn) pBtn.textContent = "⏸ Pause";
-  setAppMediaSession({ state: "playing" });
-  playStep(currentWithPause);
-}
-
-function nextSentence() {
-  if (!ACTIVE_SENTENCES || ACTIVE_SENTENCES.length === 0) return;
-  _sentenceToken++;
-  stopSpeak();
-  audioIdx = (audioIdx + 1) % ACTIVE_SENTENCES.length;
-  if (isPaused) {
-    isPaused = false;
-    const pBtn = document.getElementById("btnPause");
-    if (pBtn) pBtn.textContent = "⏸ Pause";
-  }
-  playStep(currentWithPause);
-}
-
-function prevSentence() {
-  if (!ACTIVE_SENTENCES || ACTIVE_SENTENCES.length === 0) return;
-  _sentenceToken++;
-  stopSpeak();
-  audioIdx = audioIdx > 0 ? audioIdx - 1 : ACTIVE_SENTENCES.length - 1;
-  if (isPaused) {
-    isPaused = false;
-    const pBtn = document.getElementById("btnPause");
-    if (pBtn) pBtn.textContent = "⏸ Pause";
-  }
-  playStep(currentWithPause);
-}
-
-document.getElementById("btnPlayAll").onclick = () => {
-  stopAudio();
-  isPlaying = true;
-  isPaused = false;
-  currentWithPause = false;
-  document.getElementById("btnStop").style.display = "inline-block";
-  const pBtn = document.getElementById("btnPause");
-  if (pBtn) { pBtn.style.display = "inline-block"; pBtn.textContent = "⏸ Pause"; }
-  document.getElementById("btnPlayAll").classList.add("playing");
-  audioIdx = 0;
-  playStep(false);
-};
-
-document.getElementById("btnPlayPauses").onclick = () => {
-  stopAudio();
-  isPlaying = true;
-  isPaused = false;
-  currentWithPause = true;
-  document.getElementById("btnStop").style.display = "inline-block";
-  const pBtn = document.getElementById("btnPause");
-  if (pBtn) { pBtn.style.display = "inline-block"; pBtn.textContent = "⏸ Pause"; }
-  document.getElementById("btnPlayPauses").classList.add("playing");
-  audioIdx = 0;
-  playStep(true);
-};
-
-const pBtn = document.getElementById("btnPause");
-if (pBtn) {
-  pBtn.onclick = () => {
-    if (isPaused) resumeSentenceAudio();
-    else pauseSentenceAudio();
-  };
-}
-
-document.getElementById("btnStop").onclick = stopAudio;
-
-function playStep(withPause) {
-  if (!isPlaying || isPaused || audioIdx >= ACTIVE_SENTENCES.length) {
-    if (audioIdx >= ACTIVE_SENTENCES.length) stopAudio();
-    return;
-  }
-  currentWithPause = !!withPause;
-  const myTok = ++_sentenceToken;
-  const s = ACTIVE_SENTENCES[audioIdx];
-  document.querySelectorAll(".sheet-row, .s-card").forEach(c => c.classList.remove("playing", "active"));
-  const row = document.getElementById("srow-" + audioIdx) || document.getElementById("scard-" + audioIdx);
-  if (row) {
-    row.classList.add("playing");
-    row.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
-  setAppMediaSession({
-    metadata: {
-      title: s.ar,
-      artist: s.en,
-      album: `Sentences · ${audioIdx + 1}/${ACTIVE_SENTENCES.length}`
-    },
-    onPlay: () => {
-      if (isPaused) resumeSentenceAudio();
-      else if (!isPlaying) {
-        isPlaying = true;
-        isPaused = false;
-        playStep(withPause);
-      }
-    },
-    onPause: pauseSentenceAudio,
-    onNext: nextSentence,
-    onPrev: prevSentence,
-    onStop: stopAudio,
-    state: isPaused ? "paused" : "playing"
-  });
-
-  const afterArabic = () => {
-    if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
-    if (withPause) {
-      playAudioGap(3, () => {
-        if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
-        speak(s.en, 1.0, () => {
-          if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
-          playAudioGap(1, () => {
-            if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
-            audioIdx++;
-            playStep(withPause);
-          });
-        });
-      });
-    } else {
-      playAudioGap(1, () => {
-        if (myTok !== _sentenceToken || !isPlaying || isPaused) return;
-        audioIdx++;
-        playStep(withPause);
-      });
-    }
-  };
-  if (s.ref && typeof playRecitation === "function") {
-    const p = String(s.ref).split(":").map(Number);
+  const text = decodeURIComponent(encodedAr);
+  if (ref && typeof reciteVerse === "function") {
+    const p = String(ref).split(":").map(Number);
     if (p[0] && p[1]) {
-      playRecitation([{ n: p[0], ayah: p[1] }], afterArabic, err => { if (err) speak(s.ar, 0.85, afterArabic); });
+      reciteVerse(p[0], p[1], text, 0.85);
+      logEvent({ e: "audio-play", text, ref, type: "quran-ayah", t: Date.now() });
       return;
     }
   }
-  speak(s.ar, 0.85, afterArabic);
+  speak(text, 0.85);
 }
-
-// Topic filter chips
-document.getElementById("filterChips").addEventListener("click", e => {
-  const b = e.target.closest("[data-filter]");
-  if (!b) return;
-  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-  b.classList.add("active");
-  currentFilter = b.dataset.filter;
-  load10Sentences();
-});
 </script>
 </body>
 </html>

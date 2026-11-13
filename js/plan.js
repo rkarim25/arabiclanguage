@@ -82,8 +82,8 @@ const PLAN_BLOCKS = {
      demotivating is my Preply class when I can't have a simple conversation. If I
      could just talk about my day …" and "do it in a way I could get ready before my
      Sunday Preply class but also not just the day before." */
-  myday:     { icon: "⚡", title: n => `Practice${n ? ` — ${n} in your script` : ""}`, sub: "Adaptive batch (~10-sentence effort): dynamically mixes vocabulary, sentences, grammar, and Qur'an based on your progress and energy, updating every section automatically.", url: "sentences.html?myday=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
-  rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "sentences.html?myday=1&rehearse=1", page: "sentences", done: ["tryit-free-done"], when: ev => ev.kind === "rehearse" },
+  myday:     { icon: "⚡", title: n => `Practice${n ? ` — ${n} in your script` : ""}`, sub: "Adaptive batch (~10-sentence effort): dynamically mixes vocabulary, sentences, grammar, and Qur'an based on your progress and energy, updating every section automatically.", url: "index.html?myday=1", page: "home", done: ["tryit-free-done"], when: ev => ev.kind === "myday" },
+  rehearse:  { icon: "🎤", title: n => `Rehearse Sunday's two minutes${n ? ` — ${n} sentences` : ""}`, sub: "Only what you already proved this week. Say them aloud once with the mic; tomorrow you say them to her.", url: "index.html?myday=1&rehearse=1", page: "home", done: ["tryit-free-done"], when: ev => ev.kind === "rehearse" },
   withher:   { icon: "✅", title: () => "Use your 20-min Teacher Brief — then tick this", sub: "Your daily-updating 20-minute brief is on the Teacher tab. Speak through your practised items & roleplay; tick when done.", url: "class.html", page: "class", done: ["withher-done"] },   // the ✓ on the Teacher page script card
   exam:      { icon: "🎤", title: () => "Oral exam (via any AI)", sub: "Ten minutes with an AI examiner — the score anchors your speaking line.", url: "converse.html?exam=1", page: "converse", done: ["ptest-speak"] },
 };
@@ -648,7 +648,7 @@ function planPaintBar() {
 }
 /* sentences.html hosts the primary multi-batch Practice session with its own completion card;
    mounting #planBar underneath created redundant bottom dots & links (13 Nov pen note). */
-const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html", "sets.html", "sentences.html"];
+const PLAN_BAR_QUIET = ["index.html", "chapters.html", "map.html", "more.html", "class.html", "placement.html", "sets.html", "sentences.html", "quran.html", "words.html"];
 function planMountBar() {
   if (document.getElementById("planBar")) return;
   const p = planGet();
@@ -855,7 +855,7 @@ function planDoorHTML(p) {
     if (w.spoken) bits.push(`${w.spoken} spoken`);
     if (w.verdicts && !w.tried) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""}`);
     if (w.ear) bits.push(`${w.ear} by ear`);
-    main = `<a href="sentences.html?myday=1&amp;batch=${nextBatch}" class="pd-start" onclick="try{logEvent({e:'door-start',block:'myday',batch:${nextBatch}})}catch(e){}" title="Keep going in one place — incremental batches shift progressively toward review &amp; consolidation">▶ Practice · Batch ${nextBatch} (${nextDesc})</a>
+    main = `<a href="index.html?myday=1&amp;batch=${nextBatch}" class="pd-start" onclick="try{logEvent({e:'door-start',block:'myday',batch:${nextBatch}})}catch(e){}" title="Keep going in one place — incremental batches shift progressively toward review &amp; consolidation">▶ Practice · Batch ${nextBatch} (${nextDesc})</a>
       <div class="pd-done" style="margin-top:8px;font-size:13.5px">✅ Done for today (Batch ${doneRounds} complete) · <span class="pd-win" style="display:inline">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</span></div>`;
   } else {
     const short = cur.type === "myday" ? "Practice" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
@@ -867,7 +867,7 @@ function planDoorHTML(p) {
   const hw = planHomework();
   const opt = planOptional(p);
   const extras = [
-    (cur && cur.type !== "myday") ? `<a href="sentences.html?myday=1" class="pd-x" title="Open your unified Practice session across Vocabulary, Sentences, Qur'an &amp; Lesson Cards">⚡ Practice</a>` : "",
+    (cur && cur.type !== "myday") ? `<a href="index.html?myday=1" class="pd-x" title="Open your unified Practice session across Vocabulary, Sentences, Qur'an &amp; Lesson Cards">⚡ Practice</a>` : "",
     `<a href="audio.html?commute=1" class="pd-x pd-x-car" title="Commute — hands-free, your sentences by ear. Pause, back, skip, stop on the lock screen. Works offline. 10+ min counts as the day.">🚗 Commute</a>`,
     hw && !hw.past ? `<a href="class.html" class="pd-x" title="Her lesson ${new Date(hw.lessonT).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })} — ${hw.readiness}% ready. Her words ride inside your mornings; this is extra, never owed.">📚 ${hw.readiness}%</a>` : "",
     ...opt.filter(b => b.type !== "homework").slice(0, 2).map(b => `<a href="${b.url}" class="pd-x" title="${b.title} — if you have energy, never owed">${b.icon} ${b.type === "review" ? "Review" : b.type === "ptest" ? "Listening test" : b.type === "audio" ? "Audio" : b.type === "salah" ? "Surah" : b.type === "newwords" ? "New words" : b.type === "story" ? "Story" : b.type === "phrases" ? "Phrases" : b.type === "speakdrill" ? "Speak" : b.type === "exam" ? "Oral exam" : b.title.split(" — ")[0]}</a>`),

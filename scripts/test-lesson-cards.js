@@ -119,11 +119,16 @@ check("Practice SKIPS fresh solid Lesson Cards, then REVIEWS them from time to t
   assert(picked && picked.key === "lc:negation" && picked.lcMode === "review" && picked._autoReveal === false);
 });
 
-check("sets.html and sentences.html both load js/lesson-cards.js and data/lesson-cards.json", () => {
+check("sets.html, index.html (Practice), and sentences.html load js/lesson-cards.js and render Earned Mastery Dots", () => {
   const setsHtml = fs.readFileSync(path.join(ROOT, "sets.html"), "utf8");
+  const idxHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const sentsHtml = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
   assert(setsHtml.includes("js/lesson-cards.js") && setsHtml.includes("data/lesson-cards.json"));
-  assert(sentsHtml.includes("js/lesson-cards.js") && sentsHtml.includes("data/lesson-cards.json"));
+  assert(idxHtml.includes("js/lesson-cards.js") && idxHtml.includes("data/lesson-cards.json"));
+  assert(sentsHtml.includes("js/lesson-cards.js"));
+  global.SRS = require(path.join(ROOT, "js", "srs.js"));
+  const cardHtml = LessonCards.renderBodyHtml(lcData.cards[0], {});
+  assert(cardHtml.includes('data-mkey="lc:' + lcData.cards[0].id + '"'), "Lesson Card header must include Earned Mastery Dot");
 });
 
 console.log(`\n✓ ${passed} Lesson Card assertions passed.`);

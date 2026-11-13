@@ -25,7 +25,7 @@ const ok = m => console.log("  ✓ " + m);
 const drills = D("chapter-drills.json").chapters || {};
 const chapters = D("chapters.json").chapters || [];
 const man = D("audio-manifest.json");
-const html = T("index.html");
+const html = T("chapters.html");
 
 /* 1 — shape: every drilled chapter exists, one entry per sentence, rungs 1-2-3 */
 let items = 0, bad = [];
@@ -62,19 +62,19 @@ noClip.length ? fail(`${noClip.length} drill lines have no audio clip — run py
               : ok("every drill line has a generated clip");
 
 /* 3 — wiring: loader, generator, offline cache, plan credit */
-html.includes('fetch("data/chapter-drills.json")') ? ok("index.html loads the drills") : fail("index.html does not fetch data/chapter-drills.json");
+html.includes('fetch("data/chapter-drills.json")') ? ok("chapters.html loads the drills") : fail("chapters.html does not fetch data/chapter-drills.json");
 T("scripts/gen-audio.py").includes("chapter-drills.json") ? ok("gen-audio.py reads the drills") : fail("gen-audio.py does not read chapter-drills.json — new lines would ship silent");
 T("sw.js").includes("data/chapter-drills.json") ? ok("sw.js caches the drills for the commute") : fail("sw.js CORE is missing data/chapter-drills.json");
 /"sent-drill"/.test(T("js/plan.js")) ? ok("a drill pass credits the plan's speak block") : fail("plan.js does not count sent-drill events");
 ["renderDayDrillHtml", "drillMic", "drillCheckTyped", "drillSelf", "drillRungDone"].forEach(fn => {
-  new RegExp("function " + fn + "\\(").test(html) ? ok(`index.html defines ${fn}()`) : fail(`index.html is missing ${fn}()`);
+  new RegExp("function " + fn + "\\(").test(html) ? ok(`chapters.html defines ${fn}()`) : fail(`chapters.html is missing ${fn}()`);
 });
 
 /* 4 — the inline <script> still parses with the engine in it */
 const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 let parseErr = null;
 for (const s of scripts) { try { new Function(s); } catch (e) { parseErr = e.message; break; } }
-parseErr ? fail(`index.html inline script does not parse: ${parseErr}`) : ok(`index.html inline scripts parse (${scripts.length})`);
+parseErr ? fail(`chapters.html inline script does not parse: ${parseErr}`) : ok(`chapters.html inline scripts parse (${scripts.length})`);
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
 process.exit(fails ? 1 : 0);

@@ -57,7 +57,7 @@ if (m) {
     ? `${missing.length} CORE file(s) do not exist — cache.addAll would reject the whole install: ${missing.join(", ")}`
     : `all ${files.length} CORE files exist`);
   // the pages he actually uses must be offline-capable
-  ["index.html", "learn.html", "sentences.html", "class.html", "story.html"].forEach(p =>
+  ["index.html", "chapters.html", "learn.html", "sentences.html", "words.html", "quran.html", "sets.html", "class.html", "story.html"].forEach(p =>
     yes(files.includes(p), `${p} is cached for the commute`));
   ["data/curriculum.json", "data/sentence-bank.json", "data/frequency.json", "data/classes.json"].forEach(p =>
     yes(files.includes(p), `${p} is cached for the commute`));
@@ -555,7 +555,7 @@ const bank = D("sentence-bank.json");
   const app = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
   yes(more.indexOf('id="syncCard"') > 0 && more.indexOf('id="syncCard"') < more.indexOf("<h2>The two ways in</h2>"), "the sync card is the FIRST card on More");
   yes((more.match(/id="syncCard"/g) || []).length === 1, "…and there is exactly one of it");
-  yes(/href="index\.html">(?:📖\s*)?Home<\/a>\s*<a class="link" id="navSync" href="more\.html#syncCard"/.test(app), "the ☁ pill sits right after Home in the nav");
+  yes(/id="navSync" href="more\.html#syncCard"[\s\S]{0,200}href="index\.html">⚡ Practice<\/a>/.test(app), "the ☁ pill sits right before ⚡ Practice (Home) in the nav");
   yes(/wireNavSync\(el\.querySelector\("#navSync"\)\)/.test(app) && /function wireNavSync\(/.test(app), "…and is wired on every page that renders the nav");
   yes(/a\.textContent = "☁ Sign in"/.test(app) && /a\.textContent = "☁ Sync"/.test(app), "…reading Sign in when signed out and Sync when signed in");
   yes(/autoSync\(true\)/.test(app.slice(app.indexOf("function wireNavSync"), app.indexOf("function wireNavSync") + 1500)) && !/ev\.preventDefault\(\)/.test(app.slice(app.indexOf("function wireNavSync"), app.indexOf("function wireNavSync") + 1500)), "…and a tap syncs on the way AND still opens the hub (12 Oct: more/map/learn were unreachable while signed in)");
@@ -705,8 +705,8 @@ const bank = D("sentence-bank.json");
   console.log("\n-- the one door --");
   const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
   const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/id="planDoor"/.test(indexSrc), "index.html has the door");
-  yes(/<div class="plan-door" id="planDoor">[\s\S]*id="resumeBanner"/.test(indexSrc), "…and it comes BEFORE the resume banner — the first thing he sees");
+  yes(/id="viewPractice"/.test(indexSrc) && /id="sentenceList"/.test(indexSrc), "index.html opens directly into ⚡ Practice");
+  yes(/<div id="homeChapStrip"[\s\S]*id="viewPractice"/.test(indexSrc), "…with the live active Chapter earned-green strip right above the Practice batch");
   yes(/function planMountDoor\(/.test(planSrc) && /function planDoorHTML\(/.test(planSrc), "plan.js builds the door");
   yes(/if \(door\) planMountDoor\(door\); else planMountBar\(\);/.test(planSrc), "plan.js mounts the door on the home page and the bar everywhere else (the bar had no caller before)");
   yes(/p\.handover = \{ t: Date\.now\(\), from: block\.title \}/.test(planSrc) && /pb-hand/.test(planSrc), "a block that runs out its time hands over to the next in the bar");
@@ -735,7 +735,7 @@ const bank = D("sentence-bank.json");
   yes(/async function runCommute\(/.test(audioSrc) && /function buildCommuteQueue\(/.test(audioSrc) && /kind: "script"/.test(audioSrc) && /kind: "say"/.test(audioSrc), "the programme: your script → say your day → due words, one queue, no clicks");
   yes(/async function sayRound\(/.test(audioSrc) && /speakP\(sent\.en, 1\)[\s\S]{0,200}gapP\(5\)/.test(audioSrc), "say your day by ear: English first, a gap to produce, then the model");
   yes(/body\.commute \.ac-ar \{ font-size: 44px/.test(audioSrc) && /document\.body\.classList\.toggle\("commute"/.test(audioSrc), "one layout — big type if he looks, nothing if he doesn't");
-  yes(/sentEns: \(S\.heardSents/.test(audioSrc) && /commute-check-done/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "the next morning's Say your day starts with what he heard");
+  yes(/sentEns: \(S\.heardSents/.test(audioSrc) && /commute-check-done/.test(indexSrc), "the next morning's Practice starts with what he heard");
   // 26 Oct: "all over the place" — three sequencers from three taps while the words loaded
   yes(/if \(_starting \|\| \(S && S\.playing\)\) return;/.test(audioSrc) && /\} finally \{ _starting = false; \}/.test(audioSrc), "one sequencer at a time: a second tap while the words load is ignored");
   yes(/\["acCommute", "acStart"\]\.forEach\(id => \{ const b = document\.getElementById\(id\); if \(b\) \{ b\.disabled = true;/.test(audioSrc), "…and both start buttons go dark the instant the first tap lands");
@@ -749,7 +749,7 @@ const bank = D("sentence-bank.json");
   yes(md.every(s => s.en && s.tr && s.moment && s.who), "…each with meaning, transliteration, moment of the day and who says it");
   yes(md.filter(s => s.who === "her").length >= 5, "…and the questions she is likely to ask");
   const sentSrc = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
-  yes(/q\.get\("myday"\)/.test(sentSrc) && /async function startMyDay/.test(sentSrc), "sentences.html opens Say your day / Rehearse from the plan's link");
+  yes(/q\.get\("rehearse"\)/.test(indexSrc) && /async function startMyDay/.test(indexSrc) && /location\.replace\("index\.html"/.test(sentSrc), "index.html opens Say your day / Rehearse directly (and sentences.html?myday=1 forwards cleanly)");
   const tryitSrc = fs.readFileSync(path.join(ROOT, "js", "tryit.js"), "utf8");
   yes(/e: "tryit-free-done"/.test(tryitSrc), "finishing the session logs the event the plan counts as done");
 
@@ -768,13 +768,13 @@ const bank = D("sentence-bank.json");
   yes(/h1 \+ \.sub \{ display: none; \}/.test(css), "calm: page taglines are gone everywhere");
   yes(/\.stat-strip \{ display: none !important; \}/.test(css), "calm: no numbers on a screen at the top of practice pages");
   yes(/details\.more > summary/.test(css) && /\.sym-group\.open \.sym-hid/.test(css), "calm: one ⋯ pattern for toolbars and for rows");
-  const ix = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/class="sym-badge sym-more"/.test(ix) && /<span class="sym-hid">/.test(ix), "calm: Daily Reader rows show 🔊 🎯 verdicts ⋯ — the rest behind ⋯");
-  yes(/closest\("\.s-ar-side"\)[^\n]*toggleDayEn/.test(ix), "calm: tapping the Arabic shows the English");
-  yes(/<details class="card ai-box calm-sec">/.test(ix), "calm: Speak with AI folds to its heading");
-  yes(!/Jump to Line/.test(ix) && !/Play All \(Ar \+ En\)/.test(ix), "calm: shorter button labels");
-  for (const p of ["sentences.html", "words.html"]) {
-    const h = fs.readFileSync(p, "utf8");
+  const chaps = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
+  yes(/class="sym-badge sym-more"/.test(chaps) && /<span class="sym-hid">/.test(chaps), "calm: Chapter Reader rows show 🔊 🎯 verdicts ⋯ — the rest behind ⋯");
+  yes(/closest\("\.s-ar-side"\)[^\n]*toggleDayEn/.test(chaps), "calm: tapping the Arabic shows the English");
+  yes(/<details class="card ai-box calm-sec">/.test(chaps), "calm: Speak with AI folds to its heading");
+  yes(!/Jump to Line/.test(chaps) && !/Play All \(Ar \+ En\)/.test(chaps), "calm: shorter button labels");
+  for (const p of ["index.html", "words.html"]) {
+    const h = fs.readFileSync(path.join(ROOT, p), "utf8");
     yes(/<div class="calm-row">\s*<button[^>]*TryIt\.all\(\)/.test(h) && /<details class="more"><summary>⋯<\/summary>/.test(h), p + ": Try them all first, everything else behind ⋯");
     for (const id of ["btnPlayAll", "btnPlayPauses", "spNorm", "spSlow", "filterChips", "dirEnFirst", "btnPause", "btnStop"]) yes(h.includes('id="' + id + '"'), p + ": " + id + " still exists for the engine");
   }
@@ -830,15 +830,16 @@ const bank = D("sentence-bank.json");
   const orphan = [...doneNames].filter(n => !new RegExp('e: "' + n + '"').test(corpus));
   yes(!orphan.length, orphan.length ? "completing events nothing ever logs: " + orphan.join(", ") : `all ${doneNames.size} completing events are logged somewhere`);
   yes(!/"spract-done"/.test(planSrc) && !/commute-check"/.test(planSrc), "the dead events (spract-done, commute-check) are gone from the plan");
+  const chapsSrc = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
   // Try it: a miss moves on; self-grades are not 'got right'; the mic uses the one grader
   yes(/Next anyway →/.test(tryitSrc) && /st\.result && st\.result\.ok && variants/.test(tryitSrc), "Try it: an honest miss has a Next (it comes back tomorrow) and never climbs a rung");
   yes(/s\.result\.how !== "self"/.test(tryitSrc), "the round's 'got right' count excludes self-grades");
-  yes(/Match\.spoken/.test(tryitSrc) && /Match\.spoken/.test(indexSrc), "both Try it engines grade speech with js/match.js");
-  yes(/via: "tryit"/.test(tryitSrc) && /via: "tryit"/.test(indexSrc), "…and mark their prompt events so the level counts each try once");
-  yes(/Next anyway →/.test(indexSrc) && /key: \`chap:\$\{curChap\.num\}:\$\{idx\}\`/.test(indexSrc), "the Daily Reader engine: Next after a miss, and a shared rung ladder by key");
-  yes(/}, 4000\);/.test(tryitSrc) && /}, 4000\);/.test(indexSrc), "four seconds of silence before the mic closes (he said he would be slow)");
+  yes(/Match\.spoken/.test(tryitSrc) && /Match\.spoken/.test(chapsSrc), "both Try it engines grade speech with js/match.js");
+  yes(/via: "tryit"/.test(tryitSrc) && /via: "tryit"/.test(chapsSrc), "…and mark their prompt events so the level counts each try once");
+  yes(/Next anyway →/.test(chapsSrc) && /chap:\$\{curChap\.num\}:\$\{idx\}/.test(chapsSrc), "the Chapter Reader engine: Next after a miss, and a shared rung ladder by key");
+  yes(/}, 4000\);/.test(tryitSrc) && /}, 4000\);/.test(chapsSrc), "four seconds of silence before the mic closes (he said he would be slow)");
   // the morning after a commute
-  yes(/window\._pendingCommuteCheck = \{ forT: cd\.t/.test(sentSrc) && /e: "commute-check-done", forT: c\.forT/.test(sentSrc), "the commute check is logged when the round ENDS, not when it starts");
+  yes(/window\._pendingCommuteCheck = \{ forT: cd\.t/.test(indexSrc) && /e: "commute-check-done", forT: c\.forT/.test(indexSrc), "the commute check is logged when the round ENDS, not when it starts");
   yes(/const bst = typeof ctx\.boost/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "the engine reads the caller's boost");
   yes(/pagehide", \(\) => \{ if \(S\) \{ S\.partial = true; stop\(\); \} \}/.test(audioSrc), "a commute closed from the pocket still logs commute-done");
   yes(/async function prefetchQueue/.test(audioSrc) && /await prefetchQueue\(S\.queue\)/.test(audioSrc), "the commute caches ITS OWN clips before it starts");
@@ -853,7 +854,7 @@ const bank = D("sentence-bank.json");
   // offline: every data file a core page fetches is precached
   const core = (swSrc.match(/const CORE = \[([\s\S]*?)\];/) || [])[1] || "";
   const fetched = new Set();
-  ["index.html", "sentences.html", "words.html", "class.html", "audio.html", "review.html", "grammar.html"].forEach(p => {
+  ["index.html", "chapters.html", "sentences.html", "words.html", "quran.html", "sets.html", "class.html", "audio.html", "review.html", "grammar.html"].forEach(p => {
     (fs.readFileSync(path.join(ROOT, p), "utf8").match(/fetch\("(data\/[^"?]+)"/g) || []).forEach(m => fetched.add(m.slice(7, -1)));
   });
   ["app.js", "tryit.js", "plan.js", "freetry.js", "curriculum.js", "progress-model.js"].forEach(j => {
@@ -866,7 +867,7 @@ const bank = D("sentence-bank.json");
   // pages and scripts
   const wordsSrc = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
   yes(wordsSrc.indexOf("js/tracker.js") < wordsSrc.indexOf("js/plan.js"), "words.html loads the plan after the tracker");
-  ["sentences.html", "class.html", "audio.html", "words.html"].forEach(p => yes(/js\/account\.js/.test(fs.readFileSync(path.join(ROOT, p), "utf8")), p + " refreshes the homework contract (account.js)"));
+  ["index.html", "chapters.html", "sentences.html", "class.html", "audio.html", "words.html"].forEach(p => yes(/js\/account\.js/.test(fs.readFileSync(path.join(ROOT, p), "utf8")), p + " refreshes the homework contract (account.js)"));
   yes(/if \(!card\) return;\r?\n\r?\n  \/\/ 1\. If remote coach note exists/.test(fs.readFileSync(path.join(ROOT, "js", "account.js"), "utf8")), "the contract is stored BEFORE the note card is looked for");
   yes(/function planProfile\(/.test(planSrc) && /sabatarif\.15@gmail\.com/.test(planSrc), "the plan knows who it is talking to (Saba gets her own wording)");
   yes(/"preply-paste", text, imageCount: files\.length, imgs/.test(fs.readFileSync(path.join(ROOT, "class.html"), "utf8")), "a pasted lesson uploads its photos and reaches the coach as a note");
@@ -877,11 +878,12 @@ const bank = D("sentence-bank.json");
   console.log("\n-- the coach loop: ledger, ear, brief, aliases, cap --");
   const tryitSrc = fs.readFileSync(path.join(ROOT, "js", "tryit.js"), "utf8");
   const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const chapsSrc = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
   const classSrc = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
   const srsSrc = fs.readFileSync(path.join(ROOT, "js", "srs.js"), "utf8");
-  yes(/Errors\.classify\(model, typed, "typed"\)/.test(tryitSrc) && /Errors\.classify\(tg\.ar, st\.heard, "mic"\)/.test(tryitSrc) && /Errors\.classify\(item\.ar, st\.heard, "mic"\)/.test(indexSrc), "every miss is classified where it happens (both engines) and the event carries err");
+  yes(/Errors\.classify\(model, typed, "typed"\)/.test(tryitSrc) && /Errors\.classify\(tg\.ar, st\.heard, "mic"\)/.test(tryitSrc) && /Errors\.classify\(item\.ar, st\.heard, "mic"\)/.test(chapsSrc), "every miss is classified where it happens (both engines) and the event carries err");
   yes(/function earGrade\(/.test(tryitSrc) && /e: "alisten-grade", key: it\.key, ok: !!ok, src: "tryit-ear"/.test(tryitSrc) && /🎧 Hear it first/.test(tryitSrc), "hear-first Try it: the Arabic plays, the verdict is listening evidence");
-  yes(/hear: true, kind: 'ear'/.test(fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8")), "…and a whole round by ear is one tap on the Sentences page");
+  yes(/hear: true, kind: 'ear'/.test(indexSrc), "…and a whole round by ear is one tap on Practice (Home)");
   yes(/frames, t: Date\.now\(\)/.test(tryitSrc) && /x\.frames \|\| framesOf\(s\)/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "a rung variant's own frames are the grammar evidence (rung labels)");
   yes(/async function renderTeacherBrief/.test(classSrc) && /e: "teacher-brief"/.test(classSrc) && /Ask me about my day/.test(classSrc), "the brief for her: five lines, copyable, logged");
   const al = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "aliases.json"), "utf8"));
@@ -907,11 +909,11 @@ const bank = D("sentence-bank.json");
   const trackerSrcNow = fs.readFileSync(path.join(ROOT, "js", "tracker.js"), "utf8");
   const cssSrcNow = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
   const classSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
-  const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const chapsSrcNow = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
   yes(/const HL_COLORS = \["yellow", "green", "blue", "pink", "orange"\]/.test(appSrcNow), "5 highlighter colours defined in app.js");
   yes(/function setWordHighlight\(/.test(appSrcNow) && /function applyWordHighlights\(/.test(appSrcNow), "setWordHighlight and applyWordHighlights exist in app.js");
   yes(/class="wp-hl-row"/.test(appSrcNow), "#wordPop includes the multi-colour highlight dot row");
-  yes(/renderHlToolbarHtml\(\)/.test(classSrcNow) && /renderHlToolbarHtml\(\)/.test(indexSrcNow), "1-tap highlighter pen bar mounted on class.html and index.html");
+  yes(/renderHlToolbarHtml\(\)/.test(classSrcNow) && /renderHlToolbarHtml\(\)/.test(chapsSrcNow), "1-tap highlighter pen bar mounted on class.html and chapters.html");
   yes(/\.ar-hl-yellow/.test(cssSrcNow) && /\.ar-hl-green/.test(cssSrcNow) && /\.ar-hl-blue/.test(cssSrcNow) && /\.ar-hl-pink/.test(cssSrcNow) && /\.ar-hl-orange/.test(cssSrcNow), "CSS defines all 5 highlight colour classes");
   yes(/highlights: store\.get\("ats-highlights"/.test(trackerSrcNow) && /remote\.highlights/.test(trackerSrcNow), "tracker.js syncs ats-highlights to and from Cloudflare KV");
 }
@@ -920,28 +922,36 @@ const bank = D("sentence-bank.json");
 {
   console.log("\n-- non-live weakest-first sort + explicit Resort button --");
   const classSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
-  const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const chapsSrcNow = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
   const wordsSrcNow = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
   const sentSrcNow = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
   yes(/function resortVocabTable\(/.test(classSrcNow) && /vocabFrozenOrder/.test(classSrcNow) && /id="btnVocabResort"/.test(classSrcNow), "class.html Class Vocabulary freezes sort order while reading and exposes ↻ Resort");
   yes(/function resortClassSentences\(/.test(classSrcNow) && /clsSentFrozenOrder/.test(classSrcNow) && /id="btnClsSentResort"/.test(classSrcNow), "class.html Class Sentences freezes sort order while reading and exposes ↻ Resort");
-  yes(/function resortDaySentences\(/.test(indexSrcNow) && /daySentFrozenOrder/.test(indexSrcNow) && /id="btnDaySentResort"/.test(indexSrcNow), "index.html Chapter Sentences freezes sort order while reading and exposes ↻ Resort");
-  yes(/function resortChapVocab\(/.test(indexSrcNow) && /chapVocabFrozenOrder/.test(indexSrcNow) && /id="btnChapVocabResort"/.test(indexSrcNow), "index.html Chapter Vocabulary freezes sort order while reading and exposes ↻ Resort");
+  yes(/function resortDaySentences\(/.test(chapsSrcNow) && /daySentFrozenOrder/.test(chapsSrcNow) && /id="btnDaySentResort"/.test(chapsSrcNow), "chapters.html Chapter Sentences freezes sort order while reading and exposes ↻ Resort");
+  yes(/function resortChapVocab\(/.test(chapsSrcNow) && /chapVocabFrozenOrder/.test(chapsSrcNow) && /id="btnChapVocabResort"/.test(chapsSrcNow), "chapters.html Chapter Vocabulary freezes sort order while reading and exposes ↻ Resort");
   yes(/SRS\.paintBar\(document\.getElementById\("masterTableBody"\)/.test(wordsSrcNow) && /SRS\.paintBar\(document\.getElementById\("bankTableBody"\)/.test(sentSrcNow), "master tables on words.html and sentences.html update ratings in place without jumping rows");
 }
 
-/* ---------- Practice stays front-and-center on Home (13 Nov) ---------- */
+/* ---------- Practice Home, 7-Tab Architecture & Earned Mastery Dots (13 Nov) ---------- */
 {
-  console.log("\n-- Practice stays front-and-center on Home --");
+  console.log("\n-- Practice Home, 7-Tab Architecture & Earned Mastery Dots --");
   const indexSrcNow = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const chapsSrcNow = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
+  const sentSrcNow = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
+  const wordsSrcNow = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
+  const quranSrcNow = fs.readFileSync(path.join(ROOT, "quran.html"), "utf8");
+  const setsSrcNow = fs.readFileSync(path.join(ROOT, "sets.html"), "utf8");
+  const teacherSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  const cssSrcNow = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
   const planSrcNow = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
   const appSrcNow = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
-  yes(!/typeof resumeLineIdx === "number"\) \? resumeLineIdx : getSavedChapterLine/.test(indexSrcNow) && /if \(typeof resumeLineIdx === "number" && resumeLineIdx > 0\)/.test(indexSrcNow), "index.html never auto-scrolls past #planDoor to a Chapter sentence row on normal page load");
-  yes(/href="sentences\.html\?myday=1&amp;batch=\$\{nextBatch\}" class="pd-start"/.test(planSrcNow), "planDoor keeps a full-size .pd-start Practice CTA even after Batch 1 is completed");
-  yes(/href="sentences\.html">⚡ Practice<\/a>/.test(appSrcNow), "top nav promotes ⚡ Practice directly beside Sync");
+  yes(!/typeof resumeLineIdx === "number"\) \? resumeLineIdx : getSavedChapterLine/.test(chapsSrcNow) && /if \(typeof resumeLineIdx === "number" && resumeLineIdx > 0\)/.test(chapsSrcNow), "chapters.html never auto-scrolls on normal page load");
+  yes(/href="index\.html\?myday=1&amp;batch=\$\{nextBatch\}" class="pd-start"/.test(planSrcNow), "planDoor keeps a full-size .pd-start Practice CTA even after Batch 1 is completed");
+  yes(/href="index\.html">⚡ Practice<\/a>/.test(appSrcNow) && /href="chapters\.html">📖 Chapters<\/a>/.test(appSrcNow) && /href="sentences\.html">💬 Sentences<\/a>/.test(appSrcNow) && /href="quran\.html">🕌 Qur'ān<\/a>/.test(appSrcNow), "top nav exposes coherent 7-tab architecture (⚡ Practice · 📖 Chapters · 💬 Sentences · 📇 Words · 🕌 Qur'ān · 🗂 Sets · 🧑‍🏫 Teacher)");
   yes(/href="class\.html">🧑‍🏫 Teacher<\/a>/.test(appSrcNow), "top nav labels class.html as 🧑‍🏫 Teacher");
-  const teacherSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
   yes(/20-Minute Lesson Brief/.test(teacherSrcNow) && /function setBriefLang\(/.test(teacherSrcNow) && /function setBriefWindow\(/.test(teacherSrcNow) && /function renderMasterPlan\(/.test(teacherSrcNow), "Teacher tab exposes daily-updating 20-minute brief (EN/AR/Both) + live Master Plan");
+  yes(/\.m-dot\.m-grey/.test(cssSrcNow) && /\.m-dot\.m-red/.test(cssSrcNow) && /\.m-dot\.m-amber/.test(cssSrcNow) && /\.m-dot\.m-green/.test(cssSrcNow), "CSS defines read-only Earned Mastery Dots (⚪ grey · 🔴 red · 🟡 amber · 🟢 green)");
+  yes(/function renderHomeChapStrip\(/.test(indexSrcNow) && /function renderChapterMasteryStrip\(/.test(chapsSrcNow) && /id="sentMasteryBar"/.test(sentSrcNow) && /id="wordsMasteryBar"/.test(wordsSrcNow) && /function surahMasteryInfo\(/.test(quranSrcNow) && /SRS\.dotHtml/.test(setsSrcNow) && /SRS\.dotHtml/.test(teacherSrcNow), "Earned Mastery Dots and live summary bars render across all 7 tabs");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

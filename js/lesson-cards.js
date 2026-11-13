@@ -132,7 +132,7 @@
       <div class="lc-wrap" onclick="event.stopPropagation()">
         ${!o.hideHeader ? `
           <div class="lc-top">
-            <span class="lc-cat cat-${card.category || "grammar"}">${card.icon || "📇"} Lesson Card · ${card.categoryLabel || card.category || "Concept"}</span>
+            <span style="display:inline-flex;align-items:center;gap:7px">${typeof SRS === "object" && SRS && SRS.dotHtml ? SRS.dotHtml("lc:" + card.id, { lg: true }) : ""}<span class="lc-cat cat-${card.category || "grammar"}">${card.icon || "📇"} Lesson Card · ${card.categoryLabel || card.category || "Concept"}</span></span>
             ${o.setsLink ? `<a href="sets.html#lc-${card.id}" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none">View in Sets →</a>` : ""}
           </div>
           <div class="lc-title-row">

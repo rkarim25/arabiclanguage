@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwffnqho";
+const DATA_V = "mwfgx80c";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2680,13 +2680,15 @@ function renderNav(active) {
   const el = document.createElement("nav");
   el.innerHTML = `
     <a class="brand" href="index.html"><span class="ar">العربية</span><span>Arabic</span></a>
-    <span class="spacer"></span>
-    <a class="link ${active === "home" || active === "learn" ? "active" : ""}" href="index.html">📖 Home</a>
     <a class="link" id="navSync" href="more.html#syncCard" title="Cloud sync">☁</a>
-    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">⚡ Practice</a>
-    <a class="link ${active === "classes" ? "active" : ""}" href="class.html">🧑‍🏫 Teacher</a>
+    <span class="spacer"></span>
+    <a class="link ${active === "home" || active === "practice" ? "active" : ""}" href="index.html">⚡ Practice</a>
+    <a class="link ${active === "chapters" || active === "learn" ? "active" : ""}" href="chapters.html">📖 Chapters</a>
+    <a class="link ${active === "sentences" ? "active" : ""}" href="sentences.html">💬 Sentences</a>
     <a class="link ${active === "words" || active === "vocab" ? "active" : ""}" href="words.html">📇 Words</a>
+    <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">🕌 Qur'ān</a>
     <a class="link ${active === "sets" || active === "grammar" ? "active" : ""}" href="sets.html">🗂 Sets</a>
+    <a class="link ${active === "classes" || active === "teacher" ? "active" : ""}" href="class.html">🧑‍🏫 Teacher</a>
   `;
   document.body.prepend(el);
   wireNavSync(el.querySelector("#navSync"));
@@ -3150,6 +3152,7 @@ fetch("data/aliases.json").then(r => r.json()).then(d => {
   const srs = getSrs();
   const n = SRS.adoptAliases(srs);
   if (n) { store.set("ats-srs", srs); if (typeof logEvent === "function") logEvent({ e: "alias-adopt", n }); }
+  if (typeof SRS.refreshDots === "function") SRS.refreshDots();
 }).catch(() => {});
 function mnemFor(ar) {
   if (!ar) return null;
@@ -3267,10 +3270,56 @@ function registerWordKeys(map) {
   if (fixed) {
     store.set("ats-srs", srs);
     logEvent({ e: "tw-adopt", n: fixed });
+    if (typeof SRS === "object" && SRS && typeof SRS.refreshDots === "function") SRS.refreshDots();
   }
 }
 function pageWordKey(disp) {
   return _wordKeyFor(normalizeAr(String(disp)).replace(/^ال/, ""));
+}
+
+/* Hydrate missing chap:N:i SRS entries from real historical chapter test-item & sent-drill log events */
+let _cachedChaptersForHydrate = null;
+function hydrateChapterHistory(chapters) {
+  if (!Array.isArray(chapters) || !chapters.length) return 0;
+  if (!(typeof SRS === "object" && SRS && typeof SRS.next === "function")) return 0;
+  _cachedChaptersForHydrate = chapters;
+  const srs = getSrs();
+  const log = store.get("ats-log", []);
+  if (!Array.isArray(log) || !log.length) return 0;
+  const byId = {};
+  chapters.forEach(c => { if (c && c.id) byId[c.id] = c; });
+  const preExisting = new Set(Object.keys(srs).filter(k => srs[k] && srs[k].u));
+  let hydrated = 0;
+  const normEn = s => String(s || "").trim().toLowerCase();
+  const events = log.filter(x => x && x.t && ((x.e === "test-item" && x.test === "chapter" && x.chap && x.target) || (x.e === "sent-drill" && x.chap && typeof x.idx === "number"))).slice().sort((a, b) => a.t - b.t);
+  events.forEach(ev => {
+    const ch = byId[ev.chap];
+    if (!ch || !Array.isArray(ch.sentences)) return;
+    let idx = typeof ev.idx === "number" ? ev.idx : -1;
+    if (idx < 0 && ev.target) {
+      const tEn = normEn(ev.target);
+      const tAr = normalizeAr(String(ev.target));
+      idx = ch.sentences.findIndex(s => normEn(s.en) === tEn || (tAr && normalizeAr(s.ar) === tAr));
+    }
+    if (idx < 0 || idx >= ch.sentences.length) return;
+    const key = `chap:${ch.num}:${idx}`;
+    if (preExisting.has(key)) return;
+    srs[key] = SRS.next(srs[key] || null, ev.ok ? "yes" : "no", ev.t);
+    hydrated++;
+  });
+  if (hydrated) {
+    store.set("ats-srs", srs);
+    if (typeof SRS.refreshDots === "function") SRS.refreshDots();
+  }
+  return hydrated;
+}
+fetch("data/chapters.json").then(r => r.json()).then(d => {
+  if (d && Array.isArray(d.chapters)) hydrateChapterHistory(d.chapters);
+}).catch(() => {});
+if (typeof window !== "undefined" && window.addEventListener) {
+  window.addEventListener("ats-synced", () => {
+    if (_cachedChaptersForHydrate) hydrateChapterHistory(_cachedChaptersForHydrate);
+  });
 }
 
 /* ---------- tap-to-review ----------
