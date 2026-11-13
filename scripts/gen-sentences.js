@@ -73,6 +73,10 @@ const normalizeAr = s => stripTashkeel(s)
 const formToKey = new Map();      // form -> the card the site would prefer
 const formToKeys = new Map();     // form -> EVERY card for that form
 const gloss = new Map();          // form -> best English gloss we know
+const glossExact = new Map();     // hamza-preserving form -> exact gloss (prevents أَذْهَبْ matching اِذْهَبْ "go!")
+const nounGloss = new Map();      // bare form -> best NOUN gloss (used when الـ proves the word is a noun, e.g. العَمَلِ = "the work", not عَمِلَ "he worked")
+const keepHamza = s => stripTashkeel(s).replace(/[؟،؛.!?,]/g, "").replace(/\s+/g, " ").trim();
+const isVerbGloss = en => /^(he|she|they|i|we|you)\s+/i.test(String(en || "").trim()) || /!$/.test(String(en || "").trim());
 const claim = (ar, key, en, tr) => {
   const f = normalizeAr(ar);
   if (!f) return;
@@ -80,6 +84,12 @@ const claim = (ar, key, en, tr) => {
   if (!formToKeys.has(f)) formToKeys.set(f, []);
   if (!formToKeys.get(f).includes(key)) formToKeys.get(f).push(key);
   if (en && !gloss.has(f)) gloss.set(f, { en, tr: tr || "" });
+  const kh = keepHamza(ar);
+  if (en && kh && !glossExact.has(kh)) glossExact.set(kh, { en, tr: tr || "" });
+  const bare = f.replace(/^ال/, "");
+  if (en && bare && !isVerbGloss(en) && !nounGloss.has(bare)) {
+    nounGloss.set(bare, { en: String(en).replace(/^the\s+/i, ""), tr: String(tr || "").replace(/^al-/, "") });
+  }
 };
 
 core.words.forEach((w, i) => claim(w.ar, `qc:${i}`, w.en, w.tr));
@@ -127,14 +137,64 @@ const wordKeysAll = ar => {
   return all.length ? all : [`w:${f}`];
 };
 
+/* Conjugated verb gloss lookup (preserves hamza so أَذْهَبْ "I go" never collides with اِذْهَبْ "go!") */
+const verbGlossExact = new Map();
+const V_PERSON_EN = { ana: "I", anta: "you", anti: "you", huwa: "he", hiya: "she", nahnu: "we", antum: "you all", hum: "they" };
+(sentences.verbs || []).forEach(v => {
+  Object.entries(v.forms || {}).forEach(([pk, row]) => {
+    const pen = V_PERSON_EN[pk] || pk;
+    const third = pk === "huwa" || pk === "hiya";
+    const pres = third ? String(v.base).replace(/(s|sh|ch|x|o)$/, "$1e").replace(/y$/, "ie") + "s" : v.base;
+    if (row.past) { const kh = keepHamza(row.past); if (kh && !verbGlossExact.has(kh)) verbGlossExact.set(kh, { en: `${pen} ${v.past}`, tr: "" }); }
+    if (row.pres) { const kh = keepHamza(row.pres); if (kh && !verbGlossExact.has(kh)) verbGlossExact.set(kh, { en: `${pen} ${pres}`, tr: "" }); }
+    if (row.fut) { const kh = keepHamza(row.fut); if (kh && !verbGlossExact.has(kh)) verbGlossExact.set(kh, { en: `${pen} will ${v.base}`, tr: "" }); }
+  });
+});
+
 /* Function words carry structure, not meaning worth drilling on their own. They
    are still part of the sentence and still shown — they just never become the
    reason a sentence is chosen. */
 const FUNCTION_WORDS = new Set(["من", "في", "علي", "الي", "عن", "مع", "ما", "لا", "ان", "و", "ب", "ل", "ك", "يا", "قد", "ثم", "او", "بل", "هل", "لم", "لن", "كل", "بين", "عند", "حتي", "اذا", "ان"]);
+const FN_GLOSS = {
+  "لم": { en: "did not (past + short verb)", tr: "lam" },
+  "لن": { en: "will not (future)", tr: "lan" },
+  "لا": { en: "not / do not", tr: "lā" },
+  "ما": { en: "not / what", tr: "mā" },
+  "الي": { en: "to", tr: "ilā" },
+  "في": { en: "in", tr: "fī" },
+  "من": { en: "from", tr: "min" },
+  "علي": { en: "on / upon", tr: "ʿalā" },
+  "عن": { en: "from / about", tr: "ʿan" },
+  "مع": { en: "with", tr: "maʿa" },
+  "هل": { en: "do / is? (yes/no)", tr: "hal" },
+  "ثم": { en: "then", tr: "thumma" },
+  "قد": { en: "indeed / already", tr: "qad" },
+  "او": { en: "or", tr: "aw" },
+  "بل": { en: "rather", tr: "bal" },
+  "حتي": { en: "until", tr: "ḥattā" },
+  "بين": { en: "between", tr: "bayna" }
+};
 
 const words = (pairs) => pairs.map(([ar, en, tr]) => {
   const f = normalizeAr(ar);
-  const known = gloss.get(f);
+  const kh = keepHamza(ar);
+  const bare = f.replace(/^ال/, "");
+  const khBare = kh.replace(/^ال/, "");
+  const isAl = bare !== f && bare.length >= 2 && f !== "الله" && f !== "اللهم";
+  // Prefer hamza-exact match, then conjugated verb match (fixes أَذْهَبْ vs اِذْهَبْ!), then folded gloss, then الـ-stripped noun, then function-word fallback
+  let known = glossExact.get(kh) || verbGlossExact.get(kh);
+  if (!known) {
+    const cand = gloss.get(f);
+    // Do not let an imperative ("go!") gloss a 1st-person أَ/أُ verb!
+    if (cand && !(/^أ[َُ]/.test(String(ar).trim()) && /!$/.test(cand.en || ""))) known = cand;
+  }
+  if (!known && isAl) {
+    const baseG = nounGloss.get(bare) || glossExact.get(khBare) || gloss.get(bare);
+    if (baseG && baseG.en && !isVerbGloss(baseG.en)) {
+      known = { en: /^the\s+/i.test(baseG.en) ? baseG.en : "the " + baseG.en, tr: baseG.tr ? "al-" + baseG.tr : "" };
+    }
+  }
+  if (!known && FN_GLOSS[f]) known = FN_GLOSS[f];
   return {
     ar: String(ar).trim(),
     en: en || (known ? known.en : ""),

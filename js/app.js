@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwdv31x3";
+const DATA_V = "mwenrprf";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4239,7 +4239,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `## 1. Learner Profile & Real-Time Stats\n`;
   md += `- **Learner:** ${me.full || me.name}${me.email ? ` (${me.email})` : ""} — ${me.email === "rkarim88@gmail.com" ? "Time-poor senior investment manager" : "beginner, learning alongside family"}\n`;
   md += `- **Ranked Goals:** (1) Understand Qur'an by ear (Qari: Mishary Rashid Alafasy), (2) Spoken MSA conversation\n`;
-  md += `- **Active Course:** Live Preply teacher on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
+  md += `- **Primary Curriculum Organiser:** AI Coach (Primary Teacher owning grammar, weekly Chapter sentences, SRS & Qur'an by ear); Live Preply conversation tutor on Sundays (*Al-Arabiyyah Bayna Yadayk Book 1*)\n`;
   md += `- **Vocabulary Status:** ${solidCount} solid words (Box ≥3 / Know), ${learningCount} active learning, ${weakCount} need review (${totalTracked} total tracked)\n`;
   md += `- **Milestones Cleared:** ${masteredChapTests} chapters mastered, ${masteredClasses} teacher lessons mastered\n\n`;
 
@@ -4260,8 +4260,10 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   md += `## 4. Current Bottleneck Vocabulary & Slips to Review\n`;
-  md += `- **Active Telemetry Slips & Wednesday 11 Nov Spoken Sprint (Prompt FF):**\n`;
-  md += `  - *Wednesday 11 Nov Midweek Work & Routine Slips:* (1) عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a morning meeting — rated Box 0; root ج-م-ع / Jumu'ah Friday prayer & assembly), (2) كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; rated Box 0; feminine suffix «ـكِ» vs masculine «ـكَ»), (3) هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — tapped words; Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah), (4) تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — replayed 5 times! Box 0; root ب-ط-ء / with slowness)\n`;
+  md += `- **Friday 13 Nov Morning Telemetry & Negation Breakthrough (Prompt HH):**\n`;
+  md += `  - *Past Negation Rule (Pen Note #64):* Say "I didn't go" as **لَمْ أَذْهَبْ** (لَمْ + jussive present, like لَمْ يَلِدْ) OR **مَا ذَهَبْتُ** (مَا + past) — **NEVER ✗ لَا ذَهَبْتُ** (لَا + past expresses a wish/curse, never "didn't"!). Contrast present **لَا أَذْهَبُ** and future **لَنْ أَذْهَبَ**.\n`;
+  md += `  - *Friday 13 Nov Morning Batch 1 Slips:* (1) تَقَبَّلَ اللهُ (May Allah accept — Bengali কবুল kobul cognate), (2) أُرَتِّبُ (I tidy/arrange — tartīb order), (3) حَفْلَة (party — mahfil مَحْفِل root ح-ف-ل), (4) عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ), (5) عُقَد (knots — 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ)\n`;
+  md += `  - *Midweek Work & Politeness Slips:* (1) عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a morning meeting — root ج-م-ع / Jumu'ah Friday prayer & assembly), (2) كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»), (3) هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah), (4) تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — root ب-ط-ء / with slowness)\n`;
   md += `  - *Celebrated Verb Promotions out of Box 0 to Box 1 (11 Nov morning wins!):* أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (s: 1.179, Box 1, Bengali ta'lim hook!) and أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (s: 1.632, Box 1, plain dāl refuge hook!)\n`;
   md += `  - *Solid Routine & Commute Anchors:* الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for Arabic lesson — Box 3), قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ (Box 3), أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (Box 3), هَذَا الكِتَابُ لِي (Box 3), عِنْدِي أَوْلَادٌ صِغَارٌ (Box 1)\n`;
   md += `  - *Sunday 8 Nov Post-Class Spoken Sprint & Evening Consolidation (18:00 UK):* (1) عِنْدِي حَجْزٌ فِي المَطْعَمِ (proven!), (2) أَتَعَلَّمُ العَرَبِيَّةَ كُلَّ يَوْمٍ قَلِيلًا (ta'lim hook!), (3) أُسَاعِدُ فِي البَيْتِ فِي يَوْمِ العُطْلَةِ, (4) يَوْمُ الأَحَدِ عِنْدِي دَرْسُ العَرَبِيَّةِ فِي السَّاعَةِ السَّابِعَةِ صَبَاحًا, (5) أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ، وَالمَسَاءُ لِلْعَائِلَةِ (plain dāl refuge hook!)\n`;

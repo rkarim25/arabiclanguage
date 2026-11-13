@@ -78,11 +78,11 @@ Built as a calm **Book Reader** and focused **10-Word Drill** with zero button-c
 
 | Page | What it is |
 |---|---|
-| `index.html` | **Daily Book Reader.** Single clean spread: 10 high-frequency sentences (with audio, Practice Mode, and `📉 Weakest First`) + 3–5 Qur'an ayats by ear (word-by-word hover, Alafasy recitation, root families) + conditional grammar + 1-click dynamic AI voice prompt + 5-min test. |
-| `class.html` | **Preply Live Lessons.** Sunday teacher sessions (Bayna Yadayk Unit 1, Samer flat reading with audio & hover gloss, Class Vocabulary with interval buttons & `📉 Weakest First`, Class Sentences with Practice Mode & `📉 Weakest First`) + **comprehensive untimed mastery test** ($\ge 80\%$) and tailored AI voice prompt. |
-| `sentences.html` | **Sentences Library & Drill.** Full inventory of sentence frames, tense filters (past/present/future), and `📉 Weakest` filter chip prioritizing struggle words. |
+| `index.html` | **Daily Book Reader & Door.** Single clean spread: 1-click door into today's `Practice` (plus continuation link to `Batch 2 / Batch 3` once daily core is complete), 10 high-frequency chapter sentences, 3–5 Qur'an ayats by ear (Alafasy recitation, root families), conditional grammar, 1-click dynamic AI voice prompt, and 5-min chapter mastery test. |
+| `sentences.html` | **Unified Incremental `Practice` & Master Bank.** Reza's primary one-stop practice workspace (`js/practice.js`). **Batch 1** fulfills the daily core (`10.0` effort units across vocab, sentences, grammar, and Qur'an) AND advances active weekly Chapter sentence lessons. **Batch 2, Batch 3+** continue seamlessly in one place, shifting progressively toward consolidation (~75–85% then ~90–100% review). Every sentence card teaches its underlying grammar rule inline (`cardRule` from `data/grammar.json`), and every batch generates a ready-to-copy **3–5 min AI Speaking Brief (`🗣 Speak Brief`)** tailored to that batch's exact items and slips. |
+| `class.html` | **Supplementary Preply Live Lessons.** Captures Sunday live conversation sessions (Bayna Yadayk Unit 1, Samer flat, Working Day, Trip to the Village) into the master curriculum + **comprehensive untimed mastery test** ($\ge 80\%$) and tailored AI voice prompt. |
 | `words.html` | **10-Word Vocab Drill.** Strict 10-word batch from master vocabulary with audio (continuous/pauses), interval pills (`30d`, `7d`, `2d`, `1d`, `Retire`), `📉 Weakest` filter chip, and 1-click Vocabulary Dossier export. |
-| `grammar.html` | **Grammar Reference.** Ordered list of grammar patterns and structural rules taught across the curriculum. |
+| `grammar.html` | **Grammar Reference.** Complete 22-pattern grammar spine owned by the AI Coach (Primary Teacher & Main Curriculum Organiser) so every foundational rule (e.g. `لَمْ + jussive` vs `مَا + past` vs `لَا + present` negation) is taught systematically and reinforced inline on sentence cards. |
 | `more.html` | Cloud sync card, backup, and legacy tools. |
 
 Rules:

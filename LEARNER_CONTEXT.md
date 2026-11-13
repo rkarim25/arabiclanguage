@@ -13,8 +13,16 @@
   1. **Understand the Qur'an by ear** (primary goal; favourite Qari: **Mishary Rashid Alafasy**).
   2. **Hold practical everyday conversation in Modern Standard Arabic (MSA / الفصحى)**.
 - **Active Coursework & Telemetry:**
-  - Live 1-on-1 Preply teacher **every Sunday 07:00 UK**, working through *Al-Arabiyyah Bayna Yadayk Book 1* (Unit 1: Housing, Family, Daily Routines & Surah Falaq/Nas).
-  - **Live Telemetry (12 Nov 2026 evening):** 4,012 recorded practice events (+12 logged 11–12 Nov); 1,210 cards in SRS (**627 solid/strong** in Box 3–5: 548 Box 5, 25 Box 4, 54 Box 3); 441 active learning (388 Box 1, 53 Box 2); 142 need review (Box 0); passed Chapter 1, 2, and 3 tests at 100% (9/9 on Chapter 3!); Thursday 12 Nov routine & spoken focus (Prompt GG): assistance requests («هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟»), speech pacing repair («تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك»), family check-in («كَيْفَ كَانَ يَوْمُكِ؟»), and Jumu'ah eve work routine («عِنْدِي اجْتِمَاعٌ» / «غَدًا يَوْمُ الجُمُعَةِ»); multi-colour word highlighter (`🖍️`) live across all pages.
+  - **Primary Teacher & Main Curriculum Organiser:** **The AI Coach (`Antigravity` / `run-arabic-coach`) is Reza's Primary Teacher and Main Organiser of Arabic**, owning grammar instruction, weekly Chapter sentence progression (**Chapter 4: Time, Routine & Actions** currently active), SRS consolidation, and Qur'ān-by-ear mastery so nothing foundational is ever left out.
+  - **Supplementary Live Class:** Live 1-on-1 Preply conversation tutor **every Sunday 07:00 UK** (*Al-Arabiyyah Bayna Yadayk Book 1* & *Arabic Through the Qur'ān*), ingested into the AI Coach's master curriculum.
+  - **Live Telemetry (13 Nov 2026 morning — Friday Jumu'ah):** **4,047 recorded practice events** (+35 logged Friday morning 06:49–06:57 UTC completing adaptive `Practice` Batch 1); **1,213 cards in SRS** (**595 active solid** in Box 3–5 + **103 retired `⊘`** = **698 cleared/held**; **381 active learning** in Box 1–2: 53 Box 2, 328 Box 1; **134 need review** in Box 0). Chapters 1, 2, and 3 passed at 100%; **Chapter 4 (Time, Routine & Actions)** is now actively fed into `Practice` Batch 1.
+  - **Friday 13 Nov Morning Diagnostic & Grammar Focus (Pen Notes #64 & #65 / Prompt HH):**
+    - **Foundational Grammar Lesson — Arabic Negation Pairings (`لَمْ` vs `مَا` vs `لَا` vs `لَنْ` vs `لَيْسَ`):**
+      - Past ("didn't"): **`لَمْ` + jussive present** (*لَمْ أَذْهَبْ إِلَى العَمَلِ* — standard MSA & Qur'anic) **OR** **`مَا` + past** (*مَا ذَهَبْتُ إِلَى العَمَلِ* — everyday MSA).
+      - **Trap to Avoid:** **NEVER** say *`✗ لَا ذَهَبْتُ`* for "I didn't go"! In Arabic, `لَا` + past verb expresses a wish/prayer or curse (*لَا قَدَّرَ اللهُ* "may Allah forbid"), never past factual negation.
+      - Present ("don't"): **`لَا` + present** (*لَا أَذْهَبُ*). Future ("won't"): **`لَنْ` + subjunctive** (*لَنْ أَذْهَبَ*). Nominal ("is not"): **`لَيْسَ`** (*لَيْسَ بَعِيدًا* / *لَيْسَ عِنْدِي*).
+    - **Friday Morning Batch 1 Holds:** `الجُمُعَة` (Friday), `يَقُولُ` (grammar tense `gt:tenses:0`), `إِنَّ ٱلۡإِنسَٰنَ لَفِي خُسۡرٍ` (103:2, Box 3), `إِنْ شاءَ الله` (retired `⊘`), `أَنَامُ` (I sleep), `غَاسِق` (nightfall), `حَاسِد` (envier).
+    - **Friday Morning 5 Priority Slips:** `عَبَدْتُ اللهَ` (*ʿabadtu llāha* — I worshipped Allah, rated `maybe`), `حَفْلَة` (*ḥaflah* — party/celebration, rated `no`), `تَقَبَّلَ الله` (*taqabbala llāh* — may Allah accept, rated `no`), `أُرَتِّبُ` (*urattibu* — I tidy/arrange, rated `no`), `عُقَد` (*ʿuqad* — knots, rated `maybe`).
   - **Curriculum Standings:**
     - 🎧 **Qur'an by ear:** Not yet A1 → A1 at **67%** (13 weekly exams sat, 73% last 2 exam average; Al-Fatiha ear certification lapsed past 45 days, 0/18 active certification words; salah coverage 12.8% in progress model with n=151 evidence points).
     - 🗣 **Conversation:** Not yet A1 → A1 at **78%** (90 minutes spoken out loud, 9/26 greeting/asking bank solid, 73% last 2 exam avg).
@@ -71,7 +79,7 @@
    - **Pronoun / Subject Swaps:** e.g., *أُرِيدُ* (I want) ↔ *هَلْ تُرِيدُ؟* (Do you want?) ↔ *هُوَ يُرِيدُ* (He wants).
    - **Noun / Object Substitutions:** e.g., *أُرِيدُ مَاءً* (water) ↔ *أُرِيدُ شَايًا* (tea) ↔ *أُرِيدُ قَهْوَةً* (coffee).
    - **Question Formation:** Turn affirmative statements into inquiries using *هَلْ* (is/do?), *أَيْنَ* (where?), *مَتَى* (when?), *كَمْ* (how much/many?), *مَاذَا* (what?).
-   - **Negation:** Practice *لَا أُرِيدُ* (I don't want) or *لَيْسَ عِنْدِي* (I don't have) or *لَمْ أَفْهَمْ* (I did not understand).
+   - **Negation (Match Particle to Verb Form — Never `لَا` + Past!):** Practice present *لَا أُرِيدُ / لَا أَذْهَبُ*, past *لَمْ أَذْهَبْ / لَمْ أَفْهَمْ* (jussive present) AND *مَا ذَهَبْتُ / مَا فَهِمْتُ* (past verb), future *لَنْ أَذْهَبَ*, and nominal *لَيْسَ عِنْدِي*. Gently correct any *✗ لَا ذَهَبْتُ* immediately.
 5. **Gentle Error Correction:**
    If Reza makes a pronunciation or grammatical mistake:
    - Positively acknowledge what was understood.

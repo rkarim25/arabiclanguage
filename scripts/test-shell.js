@@ -573,7 +573,8 @@ const bank = D("sentence-bank.json");
   yes(/"map\.html"/.test(quiet) && /"more\.html"/.test(quiet), `Progress and More get no plan bar (${quiet.trim()})`);
   yes(/if \(PLAN_BAR_QUIET\.includes\(page\)\) return;/.test(plan), "…enforced in planMountBar");
   yes(/class="pb-today"/.test(plan) && /\.pb-today \{/.test(css), "…and where it does appear, it is labelled Today");
-  ["learn.html", "vocab.html", "sentences.html"].forEach(f => yes(!quiet.includes(f), `${f} keeps the bar — it is a doing page`));
+  ["learn.html", "vocab.html"].forEach(f => yes(!quiet.includes(f), `${f} keeps the bar — it is a doing page`));
+  yes(/"sentences\.html"/.test(quiet) && !/see the chart/.test(plan), "sentences.html suppresses the redundant bottom bar and stale 'see the chart' copy is gone (13 Nov pen note)");
 }
 
 /* ---------- 19. SAY THE MEANING ----------

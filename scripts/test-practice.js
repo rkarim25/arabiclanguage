@@ -100,4 +100,69 @@ console.log("\n-- Practice: effort equivalence & adaptive behaviour --");
     `composition adapts dynamically (vocab-slip day: ${b1.counts.word} words/${b1.counts.quran} Qur'an vs ear-gap day: ${b2.counts.word} words/${b2.counts.quran} Qur'an)`);
 }
 
+// 5. Incremental Multi-Batch Progression: Batch 1 advances active weekly Chapter sentences; Batch 2 & Batch 3 shift toward review!
+{
+  const chapData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "chapters.json"), "utf8"));
+  const chapPool = [];
+  chapData.chapters.forEach(c => (c.sentences || []).forEach((s, idx) => {
+    chapPool.push({
+      key: `chap:${c.num}:${idx}`, ar: s.ar, en: s.en, tr: s.tr || "",
+      words: s.words || [], src: "chapters", track: "everyday", pattern: s.pattern || null, frames: s.frames || []
+    });
+  }));
+  const fullSentences = chapPool.concat(sentencePool);
+  const srs = {};
+  // Seed 20 seen items (due/shaky) so incremental batches have real review material
+  sentencePool.filter(s => s.track !== "quran").slice(0, 12).forEach(s => {
+    srs[s.key] = { box: 1, s: 1.0, g: "maybe", u: now - 2 * DAY, due: now - 3600000 };
+  });
+  wordPool.slice(0, 14).forEach(w => {
+    srs[w.key] = { box: 1, s: 1.0, g: "no", u: now - 2 * DAY, due: now - 3600000 };
+  });
+  grammarPool.slice(0, 3).forEach(g => {
+    srs[g.key] = { box: 1, s: 1.0, g: "maybe", u: now - 2 * DAY, due: now - 3600000 };
+  });
+  sentencePool.filter(s => s.track === "quran").slice(0, 4).forEach(q => {
+    srs[q.key] = { box: 2, s: 2.0, g: "yes", u: now - 5 * DAY, due: now - 3600000 };
+  });
+
+  // Chapters 1-3 passed -> Chapter 4 is active weekly lesson!
+  const baseLog = [
+    { e: "chap-test", chap: "chap-1", score: 100, pass: true, t: now - 14 * DAY },
+    { e: "chap-test", chap: "chap-2", score: 100, pass: true, t: now - 10 * DAY },
+    { e: "chap-test", chap: "chap-3", score: 100, pass: true, t: now - 4 * DAY },
+    { e: "sentence-rate", g: "yes", t: now - DAY }
+  ];
+
+  const b1 = Practice.buildBatch({
+    now, srs, log: baseLog, words: wordPool, sentences: fullSentences,
+    grammar: grammarPool, grammarPatterns: gramData.patterns, freq: freqData.words, FreeTry
+  });
+  yes(b1.batchNum === 1 && b1.diag.activeChapNum === 4, `Batch 1 detects active weekly Chapter 4 (got batch=${b1.batchNum}, chap=${b1.diag.activeChapNum})`);
+  const ch4InB1 = b1.list.filter(x => String(x.key).startsWith("chap:4:"));
+  yes(ch4InB1.length >= 1, `Batch 1 advances active weekly Chapter 4 sentences (${ch4InB1.length} included)`);
+
+  const logAfterB1 = baseLog.concat([{ e: "tryit-free-done", kind: "myday", n: b1.list.length, ok: 9, t: now - 600000 }]);
+  const b2 = Practice.buildBatch({
+    now, srs, log: logAfterB1, exclude: new Set(b1.list.map(x => x.key)),
+    words: wordPool, sentences: fullSentences, grammar: grammarPool, grammarPatterns: gramData.patterns, freq: freqData.words, FreeTry
+  });
+  const logAfterB2 = logAfterB1.concat([{ e: "tryit-free-done", kind: "myday", n: b2.list.length, ok: 10, t: now - 300000 }]);
+  const b3 = Practice.buildBatch({
+    now, srs, log: logAfterB2, exclude: new Set(b1.list.concat(b2.list).map(x => x.key)),
+    words: wordPool, sentences: fullSentences, grammar: grammarPool, grammarPatterns: gramData.patterns, freq: freqData.words, FreeTry
+  });
+  yes(b2.batchNum === 2 && b3.batchNum === 3, "completed daily rounds increment Batch 1 → Batch 2 → Batch 3 automatically");
+  yes(b3.reviewPct >= b2.reviewPct && b2.reviewPct > b1.reviewPct && b3.reviewPct >= 90,
+    `review share rises across incremental batches (Batch 1: ${b1.reviewPct}% → Batch 2: ${b2.reviewPct}% → Batch 3: ${b3.reviewPct}%)`);
+
+  // Inline grammar rule attachment + AI Speaking Brief
+  const gramMap = Practice.buildGrammarMap(gramData.patterns);
+  yes(gramMap.negation && /لَمْ/.test(gramMap.negation.rule) && /لَا ذَهَبْتُ/.test(gramMap.negation.rule),
+    "negation grammar rule explains لَمْ + short present vs مَا + past and warns against ✗ لَا ذَهَبْتُ");
+  const brief = Practice.buildSpeakingBrief(b1.list, { srs, grammarMap: gramMap, batchNum: 1, activeChapNum: 4 });
+  yes(/Practice Batch 1/.test(brief) && /AI VOICE SESSION REPORT/.test(brief) && ch4InB1.every(s => brief.includes(s.ar)),
+    "buildSpeakingBrief produces a ready-to-paste 3-5 min AI voice brief containing the batch's exact sentences & report block");
+}
+
 console.log(`\n✓ ${passed} Practice assertions passed.\n`);

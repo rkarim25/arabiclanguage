@@ -35,7 +35,8 @@
      "ar": "إِنَّهُ",
      "hint": "innahu"
     }
-   ]
+   ],
+   "cardRule": "إِنَّ means 'indeed / truly' and puts the noun right after it into -a: إِنَّ اللَّهَ، إِنَّ الإِنْسَانَ. With pronouns it fuses: إِنَّهُ (indeed he), إِنَّا (indeed we)."
   },
   {
    "id": "alladhina",
@@ -72,7 +73,8 @@
      "ar": "آمَنُوا",
      "hint": "āmanū"
     }
-   ]
+   ],
+   "cardRule": "الَّذِي (who, m.), الَّتِي (who, f.), الَّذِينَ (those who) attach a description to a definite noun — e.g. الَّذِينَ آمَنُوا 'those who believe'."
   },
   {
    "id": "idafa",
@@ -109,7 +111,8 @@
      "ar": "أَهْل الْبَيْت",
      "hint": "ahl al-bayt"
     }
-   ]
+   ],
+   "cardRule": "Possession by pairing two nouns with NO word for 'of': مِفْتَاحُ الغُرْفَةِ (the room key). Trap: the FIRST noun never takes الـ!"
   },
   {
    "id": "pronouns",
@@ -146,7 +149,8 @@
      "ar": "عَلَيْهِمْ",
      "hint": "ʿalayhim"
     }
-   ]
+   ],
+   "cardRule": "Possessive/object pronouns glue to the END of words: ـِي (my/me), ـكَ (your, m.), ـكِ (your, f.), ـهُ (his/him), ـنَا (our/us), ـهُمْ (their/them)."
   },
   {
    "id": "tenses",
@@ -183,7 +187,8 @@
      "ar": "يَعْلَمُ",
      "hint": "yaʿlamu"
     }
-   ]
+   ],
+   "cardRule": "Verb shape shows WHO and WHEN: أَ... (I do), تَ... (you/she), يَ... (he), نَ... (we). Past puts the person at the END: ـتُ (I did), ـنَا (we did), ـُوا (they did). Future adds سَـ to present."
   },
   {
    "id": "who-acts",
@@ -220,17 +225,27 @@
      "ar": "قَرَأْنَا",
      "hint": "qaraʾnā"
     }
-   ]
+   ],
+   "cardRule": "نَـ with NO tail = WE (نَقُولُ we say). يَـ + ـونَ = THEY (يَقُولُونَ they say). Past: ـنَا = we (قُلْنَا), ـُوا = they (قَالُوا)."
   },
   {
    "id": "negation",
-   "ar": "لَا / مَا / لَمْ / لَنْ",
-   "name": "the four ways to say 'not'",
-   "what": "لَا + present = doesn't/don't (لَا يَعْلَمُونَ they don't know). مَا + past = didn't (مَا كَانَ he was not). لَمْ + short present = didn't, emphatic (لَمْ يَلِدْ He did not beget). لَنْ + present = will never (لَن تَفْعَلُوا you will never do). When you hear any of these, the sentence flips negative.",
+   "ar": "لَا / مَا / لَمْ / لَنْ / لَيْسَ",
+   "name": "how to say 'not' — matching the particle to the verb",
+   "cardRule": "Each 'not' demands its own verb shape — NEVER put لَا before a past verb (✗ لَا ذَهَبْتُ)! Past 'didn't': لَمْ + short present (لَمْ أَذْهَبْ) OR مَا + past (مَا ذَهَبْتُ). Present 'don't': لَا + present (لَا أَذْهَبُ). Future 'won't': لَنْ + present -a (لَنْ أَذْهَبَ). Nominal 'is not': لَيْسَ.",
+   "what": "Arabic never uses one 'not' for every tense — each negative particle pairs with its own verb shape.\n\n1. PAST ('didn't') — TWO ways, NEVER لَا + past:\n  • لَمْ + short present (sukūn at the end): لَمْ أَذْهَبْ = 'I did not go' (standard MSA & Qur'an: لَمْ يَلِدْ 'He did not beget'). Even though أَذْهَبْ looks like present tense, لَمْ flips its time to the PAST and clips the final vowel to sukūn (-ْ).\n  • مَا + past verb: مَا ذَهَبْتُ = 'I did not go' (warm spoken MSA & Qur'an: مَا كَانَ 'he was not').\n  ⚠️ TRAP: NEVER say ✗ لَا ذَهَبْتُ! Putting لَا + past in ordinary prose means a wish/curse ('May you not...'), never 'I didn't'.\n\n2. PRESENT ('don't / doesn't'):\n  • لَا + present (-u): لَا أَذْهَبُ = 'I don't go', لَا أَعْرِفُ = 'I don't know', لَا يَعْلَمُونَ = 'they don't know'.\n\n3. FUTURE ('will not'):\n  • لَنْ + present (-a): لَنْ أَذْهَبَ = 'I will not go', لَنْ تَفْعَلُوا = 'you will never do'.\n\n4. NOMINAL ('is not / don't have'):\n  • لَيْسَ: لَيْسَ عِنْدِي وَقْتٌ = 'I don't have time'.",
    "examples": [
     {
      "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
-     "en": "He did not beget nor was He born. (112:3)"
+     "en": "He did not beget nor was He born. (112:3 — لَمْ + short present = past)"
+    },
+    {
+     "ar": "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+     "en": "I did not go to work. (لَمْ + أَذْهَبْ = مَا ذَهَبْتُ, never لَا ذَهَبْتُ)"
+    },
+    {
+     "ar": "مَا ذَهَبْتُ إِلَى العَمَلِ",
+     "en": "I did not go to work. (spoken MSA twin: مَا + past verb ذَهَبْتُ)"
     },
     {
      "ar": "لَا رَيْبَ فِيهِ",
@@ -238,7 +253,7 @@
     },
     {
      "ar": "يَوْمَ لَا يَنفَعُ مَالٌ",
-     "en": "The Day when wealth will not benefit. (26:88)"
+     "en": "The Day when wealth will not benefit. (26:88 — لَا + present)"
     }
    ],
    "test": [
@@ -248,14 +263,19 @@
      "hint": "lam yalid"
     },
     {
+     "prompt": "'I did not go' using لَمْ (past meaning + clipped present verb!)",
+     "ar": "لَمْ أَذْهَبْ",
+     "hint": "lam adhhab — never lā dhahabtu!"
+    },
+    {
      "prompt": "'no doubt' (2:2, two words)",
      "ar": "لَا رَيْبَ",
      "hint": "lā rayba"
     },
     {
-     "prompt": "Which particle negates the PAST with a normal verb? ('he did not...')",
+     "prompt": "Which particle goes before a PAST verb like ذَهَبْتُ ('I didn't go')?",
      "ar": "مَا",
-     "hint": "mā"
+     "hint": "mā (مَا ذَهَبْتُ — never لَا ذَهَبْتُ)"
     }
    ]
   },
@@ -294,7 +314,8 @@
      "ar": "ثُمَّ",
      "hint": "thumma"
     }
-   ]
+   ],
+   "cardRule": "وَ = and (glued on), فَـ = so / immediate next step (glued on), ثُمَّ = then / after a gap (separate word)."
   },
   {
    "id": "prep-pron",
@@ -331,7 +352,8 @@
      "ar": "عَلَيْهِ",
      "hint": "ʿalayhi"
     }
-   ]
+   ],
+   "cardRule": "Prepositions fuse directly with pronoun endings: لِي (for me), لَكَ (for you), لَهُ (for him), فِيهِ (in it), عَلَيْهِمْ (upon them), مَعِي (with me)."
   },
   {
    "id": "lam-li",
@@ -388,7 +410,8 @@
     }
    ],
    "source": "teacher",
-   "lesson": "Coach session — 26 Oct"
+   "lesson": "Coach session — 26 Oct",
+   "cardRule": "لِـ means 'for / belongs to'. When لِـ meets الـ, the alif vanishes: لِ + العَائِلَةِ = لِلْعَائِلَةِ (for the family), لِ + الله = لِلَّهِ."
   },
   {
    "id": "have",
@@ -425,7 +448,8 @@
      "ar": "لَيْسَ عِندِي",
      "hint": "laysa 3indii"
     }
-   ]
+   ],
+   "cardRule": "Arabic has no verb 'to have' — use عِنْدَ ('at/with') + pronoun: عِنْدِي (I have), عِنْدَكَ (you have). Negate with لَيْسَ عِنْدِي or مَا عِنْدِي."
   },
   {
    "id": "dual",
@@ -480,7 +504,8 @@
      "ar": "مَعَ خَالَيْنِ",
      "hint": "ma3a khaalayni"
     }
-   ]
+   ],
+   "cardRule": "For 'two', never say the number — add ـَانِ (subject) or ـَيْنِ (after prep / object): كِتَابَانِ / مَعَ خَالَيْنِ. Feminine ـة opens to ـتَانِ (غُرْفَتَانِ)."
   },
   {
    "id": "wujud",
@@ -521,7 +546,8 @@
      "ar": "الشَّقَّةُ فِيهَا غُرْفَةُ نَوْمٍ وَغُرْفَةُ جُلُوسٍ وَمَطْبَخٌ",
      "hint": "ash-shaqqatu fiihaa ghurfatu nawmin wa ghurfatu juluusin wa matbakh"
     }
-   ]
+   ],
+   "cardRule": "Arabic needs no dummy word for 'there': lead with the place (فِي المَطْبَخِ ثَلَّاجَةٌ) or open with يُوجَدُ ('there is/are found'). Negate: لَا يُوجَدُ."
   },
   {
    "id": "nominal",
@@ -558,7 +584,8 @@
      "ar": "أُمِّي مُعَلِّمَةٌ",
      "hint": "ummii mu3allima"
     }
-   ]
+   ],
+   "cardRule": "No word for 'is/am/are' in the present! Definite noun (الـ) + indefinite description (-un) creates the 'is' gap: الشَّقَّةُ جَمِيلَةٌ = 'The flat [is] beautiful.'"
   },
   {
    "id": "questions",
@@ -595,7 +622,8 @@
      "ar": "هَلْ عِنْدَكُمْ مِصْعَدٌ؟",
      "hint": "hal 3indakum mis3ad"
     }
-   ]
+   ],
+   "cardRule": "Question words always come FIRST without scrambling word order: هَلْ (yes/no?), مَا/مَاذَا (what?), أَيْنَ (where?), مَتَى (when?), كَيْفَ (how?), كَمْ (how much/many?)."
   },
   {
    "id": "plurals",
@@ -632,7 +660,8 @@
      "ar": "مُعَلِّمَات",
      "hint": "mu3allimaat"
     }
-   ]
+   ],
+   "cardRule": "Broken plurals reshape the inside (كِتَاب → كُتُب). Crucial rule: NON-HUMAN plurals take FEMININE SINGULAR adjectives & verbs (الكُتُبُ جَدِيدَةٌ)!"
   },
   {
    "id": "imperative",
@@ -669,7 +698,8 @@
      "ar": "تَقَدَّمُوا",
      "hint": "taqaddamuu"
     }
-   ]
+   ],
+   "cardRule": "Commands drop the present prefix (تَـ/يَـ) and end in sukūn (-ْ), adding a helper ا if needed: تَذْهَبُ → اِذْهَبْ (go!), تَقُولُ → قُلْ (say!)."
   },
   {
    "id": "demonstratives",
@@ -706,7 +736,8 @@
      "ar": "مَا هَذَا؟",
      "hint": "maa haadhaa"
     }
-   ]
+   ],
+   "cardRule": "هَذَا (this, m.) vs هَذِهِ (this, f.); ذَلِكَ (that, m.) vs تِلْكَ (that, f.). Watch الـ: هَذَا الكِتَابُ = 'this book', while هَذَا كِتَابٌ = 'this IS a book.'"
   },
   {
    "id": "kana",
@@ -738,7 +769,8 @@
      "ar": "لَمْ يَكُنْ",
      "hint": "lam yakun"
     }
-   ]
+   ],
+   "cardRule": "كَانَ puts a nominal sentence into the past ('was/were') and gives the description -an: كَانَ البَيْتُ كَبِيرًا. Negative past: لَمْ يَكُنْ or مَا كَانَ."
   },
   {
    "id": "past-tu",
@@ -795,7 +827,8 @@
     }
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "cardRule": "To say 'I did', drop present أَ and add ـتُ (-tu) with sukūn before it: أَذْهَبُ → ذَهَبْتُ (I went), أَشْرَبُ → شَرِبْتُ (I drank). Never add لَا before ـتُ; negate with مَا ذَهَبْتُ or لَمْ أَذْهَبْ!"
   },
   {
    "id": "ordinals",
@@ -852,7 +885,8 @@
     }
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "cardRule": "Ordinals follow the noun like adjectives and match gender: اليَوْمُ الثَّالِثُ (3rd day) vs السَّاعَةُ السَّادِسَةُ (6 o'clock — السَّاعَة is feminine!). Only 1st is irregular: أَوَّل / أُولَى."
   },
   {
    "id": "gender",
@@ -909,7 +943,8 @@
     }
    ],
    "source": "teacher",
-   "lesson": "Class — 11 Oct: a trip to the village"
+   "lesson": "Class — 11 Oct: a trip to the village",
+   "cardRule": "Words ending in ـة are feminine (قَرْيَةٌ صَغِيرَةٌ), EXCEPT famous Qur'anic feminines without ـة (أَرْض، دَار، شَمْس، نَفْس، يَد) and male titles with ـة (خَلِيفَة)."
   }
  ]
 }

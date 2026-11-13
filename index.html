@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwdv31x3">
-  <link rel="stylesheet" href="css/style.css?v=mwdv31x3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwenrprf">
+  <link rel="stylesheet" href="css/style.css?v=mwenrprf">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwdv31x3"></script>
-<script src="js/curriculum.js?v=mwdv31x3"></script>
-<script src="js/srs.js?v=mwdv31x3"></script>
-<script src="js/match.js?v=mwdv31x3"></script>
-<script src="js/errors.js?v=mwdv31x3"></script>
-<script src="js/frames.js?v=mwdv31x3"></script>
-<script src="js/app.js?v=mwdv31x3"></script>
-<script src="js/tracker.js?v=mwdv31x3"></script>
-<script src="js/plan.js?v=mwdv31x3"></script>
-<script src="js/account.js?v=mwdv31x3"></script>
+<script src="js/progress-model.js?v=mwenrprf"></script>
+<script src="js/curriculum.js?v=mwenrprf"></script>
+<script src="js/srs.js?v=mwenrprf"></script>
+<script src="js/match.js?v=mwenrprf"></script>
+<script src="js/errors.js?v=mwenrprf"></script>
+<script src="js/frames.js?v=mwenrprf"></script>
+<script src="js/app.js?v=mwenrprf"></script>
+<script src="js/tracker.js?v=mwenrprf"></script>
+<script src="js/plan.js?v=mwenrprf"></script>
+<script src="js/account.js?v=mwenrprf"></script>
 <script>
 renderNav("home");
 trackPage("home");
@@ -3681,12 +3681,22 @@ function buildChapterAiPrompt(chap) {
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
   p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Wednesday 11 Nov Evening Spoken Sprint: Midweek Work Routine, Family Check-In & Politeness Drill (Prompt FF):\n`;
-  p += `       - Fresh Wednesday 11 Nov Morning Telemetry Slips & Target Sentences:\n`;
-  p += `         1. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a meeting in the morning — rated learning, Box 0; root ج-م-ع / Jumu'ah Friday prayer & assembly).\n`;
-  p += `         2. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; rated learning, Box 0; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;
-  p += `         3. هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — tapped words; Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah).\n`;
-  p += `         4. تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — replayed 5 times! Box 0; root ب-ط-ء / with slowness).\n`;
+  p += `     * Friday 13 Nov Jumu'ah Spoken Sprint: Past Negation (لَمْ vs مَا), Chapter 4 Routine & Morning Slips (Prompt HH):\n`;
+  p += `       - Core Negation Grammar Breakthrough (NEVER say "لَا ذَهَبْتُ"!):\n`;
+  p += `         1. لَمْ أَذْهَبْ إِلَى العَمَلِ (I did not go to work — لَمْ + jussive present, standard MSA & Qur'anic like لَمْ يَلِدْ).\n`;
+  p += `         2. مَا ذَهَبْتُ إِلَى العَمَلِ (I did not go to work — مَا + past verb, natural spoken MSA).\n`;
+  p += `         3. Contrast: لَا أَذْهَبُ (I don't go — present) vs لَنْ أَذْهَبَ (I won't go — future) vs لَيْسَ عِنْدِي (I don't have — nominal). Gently correct any "لَا + past" immediately!\n`;
+  p += `       - Friday 13 Nov Morning Batch 1 Slips (drill each in a 1-line exchange):\n`;
+  p += `         1. تَقَبَّلَ اللهُ (May Allah accept — Jumu'ah du'a; Bengali কবুল kobul / qabūl cognate!).\n`;
+  p += `         2. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order).\n`;
+  p += `         3. حَفْلَة (party / celebration — shares root ح-ف-ل with مَحْفِل mahfil!).\n`;
+  p += `         4. عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ).\n`;
+  p += `         5. عُقَد (knots — 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ).\n`;
+  p += `       - Earlier Midweek Work & Politeness Slips:\n`;
+  p += `         1. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a meeting in the morning — root ج-م-ع / Jumu'ah assembly).\n`;
+  p += `         2. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;
+  p += `         3. هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah).\n`;
+  p += `         4. تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — root ب-ط-ء / with slowness).\n`;
   p += `       - Celebrated Verb Promotions out of Box 0 into Box 1 (11 Nov morning wins!):\n`;
   p += `         * أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — s: 1.179, Box 1, Bengali তালিম ta'lim hook!).\n`;
   p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — s: 1.632, Box 1, plain dāl refuge hook!).\n`;

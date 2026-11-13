@@ -612,12 +612,13 @@ function planBank() {
 /* ================= UI ================= */
 function planBarHTML(p) {
   const cur = planCurrent(p);
-  const boxes = p.blocks.map(b => `<span class="pb-box ${b.done ? "on" : ""}"></span>`).join("");
+  const coreBlocks = p.blocks.filter(b => !b.optional);
+  const boxes = coreBlocks.length > 1 ? coreBlocks.map(b => `<span class="pb-box ${b.done ? "on" : ""}"></span>`).join("") : "";
   if (!cur && p.handover && Date.now() - p.handover.t < 90000) {
     const nxt = planOptional(p)[0];
     if (nxt) return `<span class="pb-today">Today</span> ${boxes} <span class="pb-label pb-hand">✓ that's enough there — if you have energy: ${nxt.icon} ${nxt.title.split(" — ")[0]}</span> <a href="${nxt.url}" class="pb-next pb-go">go →</a>`;
   }
-  if (!cur) return `<span class="pb-today">Today</span> <span class="pb-done">✅ complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">see the chart →</a>`;
+  if (!cur) return `<span class="pb-today">Today</span> <span class="pb-done">✅ complete — أَحْسَنْت</span> ${boxes} <a href="index.html" class="pb-next">Back to Home →</a>`;
   const here = (location.pathname.split("/").pop() || "index.html").startsWith(cur.page);
   // "start" only when nothing is done yet — his 08-13 note: "shouldnt it say
   // continue rather than start, i already started"
@@ -628,10 +629,10 @@ function planBarHTML(p) {
     return `<span class="pb-today">Today</span> ${boxes} <span class="pb-label pb-hand">✓ that's enough there — next: ${cur.icon} ${cur.title}</span>
       <a href="${cur.url}" class="pb-next pb-go">go →</a>`;
   }
-  return `<span class="pb-today" title="today's plan — three short blocks">Today</span> ${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
+  return `<span class="pb-today" title="today's core daily block">Today</span> ${boxes} <span class="pb-label">${cur.icon} ${cur.title}</span>
     ${here ? `<button class="pb-tick" title="mark this block done">✓ done</button>`
            : `<a href="${cur.url}" class="pb-next">${go}</a>`}
-    <a href="index.html" class="pb-plan" title="back to today's plan">📋 plan</a>`;
+    <a href="index.html" class="pb-plan" title="back to today's plan">📋 Home</a>`;
 }
 function planPaintBar() {
   const bar = document.getElementById("planBar");
@@ -645,7 +646,9 @@ function planPaintBar() {
   if (document.getElementById("planCard")) planRenderCard(document.getElementById("planCard"));
   planPaintDoor();
 }
-const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html", "sets.html"];
+/* sentences.html hosts the primary multi-batch Practice session with its own completion card;
+   mounting #planBar underneath created redundant bottom dots & links (13 Nov pen note). */
+const PLAN_BAR_QUIET = ["map.html", "more.html", "class.html", "placement.html", "sets.html", "sentences.html"];
 function planMountBar() {
   if (document.getElementById("planBar")) return;
   const p = planGet();
@@ -842,13 +845,19 @@ function planDoorHTML(p) {
   let main;
   if (!cur) {
     const w = planTodayWins();
+    const log = store.get("ats-log", []);
+    const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+    const doneRounds = Math.max(1, log.filter(x => x && x.t >= t0.getTime() && x.e === "tryit-free-done" && x.kind === "myday").length);
+    const nextBatch = doneRounds + 1;
+    const nextDesc = nextBatch === 2 ? "75% Review + Weekly Sentences" : "Deep Review Mix";
     const bits = [];
     if (w.tried) bits.push(`${w.tried} sentence${w.tried > 1 ? "s" : ""} right`);
     if (w.spoken) bits.push(`${w.spoken} spoken`);
     if (w.verdicts && !w.tried) bits.push(`${w.verdicts} verdict${w.verdicts > 1 ? "s" : ""}`);
     if (w.ear) bits.push(`${w.ear} by ear`);
-    main = `<div class="pd-done">✅ Done for today</div>
-      <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>`;
+    main = `<div class="pd-done">✅ Done for today (Batch ${doneRounds} complete)</div>
+      <div class="pd-win">${bits.length ? bits.join(" · ") : "Block done"}${w.mins ? ` · ${w.mins} min` : ""}</div>
+      <div style="margin-top:8px"><a href="sentences.html?myday=1&amp;batch=${nextBatch}" class="book-toggle-pill" style="text-decoration:none;font-weight:600;color:var(--accent);border-color:var(--accent)" title="Keep going in one place — incremental batches shift progressively toward review &amp; consolidation">▶ Continue Practice · Batch ${nextBatch} (${nextDesc}) →</a></div>`;
   } else {
     const short = cur.type === "myday" ? "Practice" : cur.type === "rehearse" ? "Rehearse for Sunday" : cur.type === "withher" ? "Tell her about your week" : cur.title;
     const bh = planBestHour();

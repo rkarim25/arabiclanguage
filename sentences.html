@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sentence Practice & Master Bank — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwdv31x3">
-  <link rel="stylesheet" href="css/style.css?v=mwdv31x3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwenrprf">
+  <link rel="stylesheet" href="css/style.css?v=mwenrprf">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -124,6 +124,12 @@
     .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
 
     .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
+    .s-gram-box { font-size: 12px; color: var(--ink); background: #fffbeb; border: 1px solid rgba(217,119,6,0.28); border-left: 3px solid var(--amber); padding: 6px 10px; border-radius: 7px; line-height: 1.45; margin-top: 3px; }
+    .s-gram-box summary { cursor: pointer; font-weight: 600; color: #b45309; user-select: none; }
+    .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 11.5px; }
+    .s-gram-link:hover { text-decoration: underline; }
+    .batch-ai-nudge { margin-top: 14px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-align: left; }
+    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
 
     .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
@@ -167,7 +173,7 @@
         <span>Sentence Practice</span>
         <span class="arabic" style="color:var(--accent);font-size:26px">بِنَاءُ الجُمَل</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Active recall · 10-sentence dynamic batches · 70/30 review ratio</p>
+      <p class="sub" style="margin:2px 0">Incremental Practice Batches · Batch 1 advances weekly lessons, Batch 2+ consolidates review</p>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div class="stat-strip">
@@ -225,11 +231,13 @@
           <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="✗ no · ≈ maybe · ✓ yes · ★ solid · ⊘ don't repeat — the site sets the next date">⚡ Practice</h2>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
-        <span style="display:inline-flex;align-items:center;gap:8px">
+        <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
           <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
           <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
         </span>
       </div>
+      <div id="topVoiceBriefDrawer" style="display:none;margin-bottom:12px"></div>
       <div class="sentence-list" id="sentenceList">Loading practice…</div>
       <div id="doneArea"></div>
     </div>
@@ -284,19 +292,19 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwdv31x3"></script>
-<script src="js/curriculum.js?v=mwdv31x3"></script>
-<script src="js/srs.js?v=mwdv31x3"></script>
-<script src="js/frames.js?v=mwdv31x3"></script>
-<script src="js/freetry.js?v=mwdv31x3"></script>
-<script src="js/practice.js?v=mwdv31x3"></script>
-<script src="js/match.js?v=mwdv31x3"></script>
-<script src="js/errors.js?v=mwdv31x3"></script>
-<script src="js/tryit.js?v=mwdv31x3"></script>
-<script src="js/app.js?v=mwdv31x3"></script>
-<script src="js/tracker.js?v=mwdv31x3"></script>
-<script src="js/plan.js?v=mwdv31x3"></script>
-<script src="js/account.js?v=mwdv31x3"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwenrprf"></script>
+<script src="js/curriculum.js?v=mwenrprf"></script>
+<script src="js/srs.js?v=mwenrprf"></script>
+<script src="js/frames.js?v=mwenrprf"></script>
+<script src="js/freetry.js?v=mwenrprf"></script>
+<script src="js/practice.js?v=mwenrprf"></script>
+<script src="js/match.js?v=mwenrprf"></script>
+<script src="js/errors.js?v=mwenrprf"></script>
+<script src="js/tryit.js?v=mwenrprf"></script>
+<script src="js/app.js?v=mwenrprf"></script>
+<script src="js/tracker.js?v=mwenrprf"></script>
+<script src="js/plan.js?v=mwenrprf"></script>
+<script src="js/account.js?v=mwenrprf"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -324,8 +332,13 @@ function diagnoseVerb(typed, it) {
 let MASTER_SENTENCES = [];
 let PRACTICE_WORDS = [];
 let PRACTICE_GRAMMAR = [];
+let GRAMMAR_PATTERNS = [];
+let GRAMMAR_MAP = {};
+let CHAPTERS_LIST = [];
+let WORD_GLOSS_BY_NORM = new Map();
 let FREQ_WORDS = {};
 let ACTIVE_SENTENCES = [];
+let CURRENT_BUILT_BATCH = null;
 let REVEALED = new Set();
 let BATCH_RATED = new Set();
 let BATCH_DONE_LOGGED = false;
@@ -336,6 +349,18 @@ let bankFilter = "all";
 let promptDirection = "en-first";
 let audioIdx = 0;
 const BATCH_SIZE = 10;
+
+function getActiveWeeklyChapter() {
+  if (!CHAPTERS_LIST.length) return null;
+  const log = store.get("ats-log", []);
+  const isMast = cid => log.some(x => x && x.e === "chap-test" && x.chap === cid && (x.score >= 80 || x.pass === true));
+  const savedId = store.get("ats-current-chap-id") || localStorage.getItem("ats-current-chap-id");
+  if (savedId) {
+    const found = CHAPTERS_LIST.find(c => c.id === savedId);
+    if (found && !isMast(found.id)) return found;
+  }
+  return CHAPTERS_LIST.find(c => !isMast(c.id)) || CHAPTERS_LIST[CHAPTERS_LIST.length - 1];
+}
 
 function allPracticeItems() {
   return MASTER_SENTENCES.concat(PRACTICE_GRAMMAR, PRACTICE_WORDS.map(w => ({
@@ -361,12 +386,15 @@ function allPracticeItems() {
     ]);
     DATA = senRes;
     FREQ_WORDS = (freqRes && freqRes.words) || {};
+    CHAPTERS_LIST = (cRes && cRes.chapters) || [];
+    GRAMMAR_PATTERNS = (gramRes && gramRes.patterns) || [];
 
     // Vocabulary pool with exact SRS keys matching words.html
     const seenWords = new Set();
     const addWord = (k, ar, en, tr, note, src, root) => {
       if (!k || !ar || !en) return;
       const n = normalizeAr(ar);
+      if (!WORD_GLOSS_BY_NORM.has(n)) WORD_GLOSS_BY_NORM.set(n, en);
       if (seenWords.has(n)) return;
       seenWords.add(n);
       const fam = famLookup(ar);
@@ -377,9 +405,10 @@ function allPracticeItems() {
     (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addWord(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday")));
     (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addWord(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root)));
 
-    // Grammar pool with exact gt:<id>:<i> keys matching grammar.html
-    if (window.Practice && typeof Practice.buildGrammarPool === "function") {
-      PRACTICE_GRAMMAR = Practice.buildGrammarPool(gramRes.patterns || []);
+    // Grammar pool + inline rule lookup map matching grammar.html
+    if (window.Practice) {
+      if (typeof Practice.buildGrammarPool === "function") PRACTICE_GRAMMAR = Practice.buildGrammarPool(GRAMMAR_PATTERNS);
+      if (typeof Practice.buildGrammarMap === "function") GRAMMAR_MAP = Practice.buildGrammarMap(GRAMMAR_PATTERNS);
     }
 
     const seen = new Set();
@@ -401,7 +430,7 @@ function allPracticeItems() {
       }, extra || {}));   // extra: wk (word keys per word), pattern, use — what Free try plans with
     };
 
-    // 1. Chapters 1-10 sentences (Reza's daily units)
+    // 1. Chapters 1-10 sentences (Reza's weekly units)
     (cRes.chapters || []).forEach(c => {
       (c.sentences || []).forEach((s, idx) => {
         add(`chap:${c.num}:${idx}`, s.ar, s.en, s.tr, s.hint, s.words, "chapters", "everyday", `Chapter ${c.num}: ${c.title}`, { pattern: s.pattern || null, frames: s.frames || [] });
@@ -415,10 +444,13 @@ function allPracticeItems() {
       });
     });
 
-    // 3. Sentence Bank (1,106 sentences, including Qur'an ayats with ref & wordKeys)
+    // 3. Sentence Bank (never emit bare s.pattern slug into s.note — grammar rules render via GRAMMAR_MAP!)
     (bRes.sentences || []).forEach(s => {
       const words = (s.words || []).map(w => Array.isArray(w) ? w : [w.ar, w.en]);
-      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", s.surah ? `Surah ${s.surah}${s.ref ? " (" + s.ref + ")" : ""}${s.note ? " — " + s.note : ""}` : s.pattern || "",
+      const cleanNote = s.surah
+        ? `Surah ${s.surah}${s.ref ? " (" + s.ref + ")" : ""}${s.note ? " — " + s.note : ""}`
+        : (s.note && !GRAMMAR_MAP[s.note] ? s.note : "");
+      add(s.key || s.id, s.ar, s.en, s.tr, s.note, words, s.src || "bank", s.track || "everyday", cleanNote,
         { wk: (s.words || []).map(w => Array.isArray(w) ? [] : (w.keys && w.keys.length ? w.keys : (w.key ? [w.key] : []))), ref: s.ref || null, surah: s.surah || null, wordKeys: s.wordKeys || [], pattern: s.pattern || "-", frames: s.frames || [], use: s.use || 0 });
     });
 
@@ -438,16 +470,21 @@ function allPracticeItems() {
         // the commute's sentences count as checked only now — when the round actually ended
         if (window._pendingCommuteCheck) { const c = window._pendingCommuteCheck; window._pendingCommuteCheck = null; logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() }); }
         BATCH_DONE_LOGGED = true;
+        const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+        const nextB = curB + 1;
+        const nextDesc = nextB === 2 ? "75% Review + Weekly Sentences" : "Deep Review Mix";
         let t = document.getElementById("freeDone");
         if (!t) { t = document.createElement("div"); t.id = "freeDone"; const d = document.getElementById("doneArea"); if (d && d.parentNode) d.parentNode.insertBefore(t, d); else document.body.appendChild(t); }
-        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? "🎉 Practice Complete!" : "✓ Practice Complete!"}</h3>
+        t.innerHTML = `<div class="done-banner"><h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${okN >= Math.ceil(n / 2) ? `🎉 Batch ${curB} Complete!` : `✓ Batch ${curB} Complete!`}</h3>
           <p style="margin:0 0 10px;font-size:14px">${okN ? `${okN} of ${n} said or written and got right — every section updated automatically.` : `${n} practiced — every verdict updated its home section.`}</p>
-          ${typeof planMoodHTML === "function" ? planMoodHTML() : ""}
+          ${typeof planMoodHTML === "function" && curB === 1 ? planMoodHTML() : ""}
           <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button type="button" class="primary" onclick="load10Sentences()" style="font-size:14.5px;padding:8px 18px">Next Practice Batch →</button>
+            <button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:14.5px;padding:8px 18px">▶ Start Batch ${nextB} (${nextDesc}) →</button>
             <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:13.5px;padding:7px 14px">↻ Redo batch</button>
-            <a href="index.html" class="pt-btn" style="font-size:13.5px;padding:7px 14px;text-decoration:none">Back to door →</a>
-          </div></div>`;
+            <a href="index.html" class="pt-btn" style="font-size:13.5px;padding:7px 14px;text-decoration:none">Back to Home →</a>
+          </div>
+          ${renderBatchVoiceBriefHTML("free")}
+        </div>`;
         if (t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "center" });
       },
       onFree: (list, meta) => {
@@ -472,7 +509,8 @@ function allPracticeItems() {
     setupAudioSpeed();
     /* the plan's core block: ?myday=1 → Practice; &rehearse=1 → only what he proved this week */
     const q = new URLSearchParams(location.search);
-    if (q.get("myday")) await startMyDay(!!q.get("rehearse"));
+    const reqBatch = parseInt(q.get("batch") || "0", 10);
+    if (q.get("myday")) await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
     else load10Sentences();
     if (q.get("view") === "list" || q.get("view") === "master") switchView("master");   // the "full bank" links
   } catch (e) {
@@ -512,7 +550,7 @@ function updateOverallStats() {
 }
 
 /* ADAPTIVE PRACTICE + FILTERED SENTENCE BATCH ENGINE */
-function loadPracticeBatch() {
+function loadPracticeBatch(explicitBatchNum) {
   stopAudio();
   if (window.TryIt) TryIt.endFree();
   REVEALED.clear();
@@ -524,14 +562,19 @@ function loadPracticeBatch() {
   const hw = store.get("ats-homework", null);
   const hwPast = !!(hw && hw.lessonAt && new Date(hw.lessonAt).getTime() + 2 * 3600000 < Date.now());
   const easy = (typeof planEasyDay === "function") && planEasyDay();
+  const activeChap = getActiveWeeklyChapter();
 
   const built = Practice.buildBatch({
     now: Date.now(),
+    batchNum: explicitBatchNum,
+    activeChapNum: activeChap ? activeChap.num : null,
     srs: getSrs(),
     log: store.get("ats-log", []),
     words: PRACTICE_WORDS,
     sentences: MASTER_SENTENCES,
     grammar: PRACTICE_GRAMMAR,
+    grammarPatterns: GRAMMAR_PATTERNS,
+    grammarMap: GRAMMAR_MAP,
     freq: FREQ_WORDS,
     homework: new Set((hw && !hwPast && hw.keys) || []),
     exclude: SESSION_COOLDOWN,
@@ -540,6 +583,7 @@ function loadPracticeBatch() {
     wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null
   });
 
+  CURRENT_BUILT_BATCH = built;
   if (built.pendingCommute) { const cd = built.pendingCommute; window._pendingCommuteCheck = { forT: cd.t, n: cd.n }; }
   const titleEl = document.getElementById("sessionTitle");
   if (titleEl) titleEl.textContent = built.title;
@@ -548,8 +592,111 @@ function loadPracticeBatch() {
 
   ACTIVE_SENTENCES = built.list;
   LAST_BATCH_KEYS = built.list.map(x => x.key);
-  logEvent({ e: "practice-batch", effort: built.effort, budget: built.budget, counts: built.counts, mode: built.diag.mode, t: Date.now() });
+  const topDrawer = document.getElementById("topVoiceBriefDrawer");
+  if (topDrawer && topDrawer.style.display !== "none") {
+    topDrawer.innerHTML = renderBatchVoiceBriefHTML("top");
+  }
+  logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, t: Date.now() });
   render10Cards();
+}
+
+function startNextPracticeBatch(nextB) {
+  currentFilter = "balanced";
+  document.querySelectorAll(".f-chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
+  loadPracticeBatch(nextB);
+  const vp = document.getElementById("viewPractice");
+  if (vp && vp.scrollIntoView) vp.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function escBriefHtml(str) {
+  return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function getBatchSpeakingBriefText() {
+  if (!window.Practice || typeof Practice.buildSpeakingBrief !== "function") return "";
+  const activeChap = getActiveWeeklyChapter();
+  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  return Practice.buildSpeakingBrief(ACTIVE_SENTENCES, {
+    srs: getSrs(),
+    grammarMap: GRAMMAR_MAP,
+    batchNum: curB,
+    activeChapNum: activeChap ? activeChap.num : null
+  });
+}
+
+function copyBatchVoiceBrief(btn) {
+  const txt = getBatchSpeakingBriefText();
+  if (!txt) return;
+  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  const orig = btn ? btn.textContent : "";
+  const done = () => {
+    logEvent({ e: "prompt", src: "practice-batch", batch: curB, t: Date.now() });
+    if (btn) {
+      btn.textContent = "✓ Copied Speaking Brief!";
+      setTimeout(() => { btn.textContent = orig; }, 2200);
+    }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done).catch(() => {
+      const ta = document.createElement("textarea");
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {}
+      document.body.removeChild(ta);
+      done();
+    });
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (_) {}
+    document.body.removeChild(ta);
+    done();
+  }
+}
+
+function renderBatchVoiceBriefHTML(slotId) {
+  const brief = getBatchSpeakingBriefText();
+  if (!brief) return "";
+  const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  return `
+    <div class="batch-ai-nudge" id="voice-nudge-${slotId}">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="font-size:13px;line-height:1.4">
+          🗣 <b>3–5 min AI Speaking Check-In (Batch ${curB})</b>
+          <span style="color:var(--muted)">— paste into ChatGPT or Claude Voice to speak these exact sentences, words &amp; slips out loud.</span>
+        </div>
+        <button type="button" class="pt-btn" onclick="copyBatchVoiceBrief(this)" style="font-weight:700;color:var(--accent);border-color:var(--accent)">📋 Copy Speaking Brief</button>
+      </div>
+      <details style="margin-top:7px">
+        <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--accent);user-select:none">View written brief for this batch ▾</summary>
+        <pre class="batch-ai-pre">${escBriefHtml(brief)}</pre>
+      </details>
+    </div>
+  `;
+}
+
+function toggleTopVoiceBrief() {
+  const el = document.getElementById("topVoiceBriefDrawer");
+  if (!el) return;
+  if (el.style.display === "none") {
+    el.innerHTML = renderBatchVoiceBriefHTML("top");
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
+
+function renderGrammarRuleHtml(s, forceCompact) {
+  if (!s || s.kind === "word" || s.kind === "grammar") return "";
+  const patId = s.pattern && s.pattern !== "-" ? s.pattern : null;
+  const g = (patId && GRAMMAR_MAP[patId]) || s.grammarRule || null;
+  if (!g) return "";
+  const srs = getSrs();
+  const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
+  const isSolid = gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
+  if (!forceCompact && (!isSolid || g.id === "negation")) {
+    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${g.ar} (${g.shortName}):</b> ${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a></div>`;
+  }
+  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${g.ar} (${g.shortName})</summary><div style="margin-top:4px">${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a></div></details>`;
 }
 
 function load10Sentences() {
@@ -635,7 +782,7 @@ function playChipAudio(idx, wIdx, encodedWord) {
   const s = ACTIVE_SENTENCES[idx];
   const word = decodeURIComponent(encodedWord);
   if (s && (s.kind === "quran" || s.track === "quran") && Array.isArray(s.wk) && Array.isArray(s.wk[wIdx]) && typeof speakQuranWord === "function") {
-    const qwKey = s.wk[wIdx].find(k => /^qw:[^:]+:d+:d+$/.test(k));
+    const qwKey = s.wk[wIdx].find(k => /^qw:[^:]+:\d+:\d+$/.test(k));
     if (qwKey) {
       const parts = qwKey.split(":");
       speakQuranWord(parts[1], +parts[2], +parts[3], word, 0.85);
@@ -720,6 +867,7 @@ function cardHtml(s, idx) {
             ${s.note ? `
               <div class="s-hint-line">💡 ${s.note}</div>
             ` : ''}
+            ${renderGrammarRuleHtml(s, false)}
           </div>
 
           <div class="s-action-bar" style="margin-top:4px">
@@ -733,7 +881,7 @@ function cardHtml(s, idx) {
 }
 
 function handleCardClick(idx, e) {
-  if (e.target.closest("button") || e.target.closest(".tryit") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
+  if (e.target.closest("button") || e.target.closest("a") || e.target.closest("details") || e.target.closest("summary") || e.target.closest(".s-gram-box") || e.target.closest(".tryit") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }
@@ -776,14 +924,19 @@ async function loadMyDay() {
   MYDAY = (d.sentences || []).map(s0 => {
     const s = fem && s0.arf ? Object.assign({}, s0, { ar: s0.arf, tr: s0.trf || s0.tr, en: s0.enf || s0.en }) : s0;
     const fr = (typeof Frames !== "undefined" && Frames) ? Frames.detect(s.ar) : { pattern: null, frames: [] };
-    const toks = s.ar.replace(/[.،؟!]/g, "").split(/s+/).filter(Boolean);
-    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words: toks.map(w => [w, ""]), src: "myday", track: "everyday", note: "", pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
+    const toks = s.ar.replace(/[.،؟!]/g, "").split(/\s+/).filter(Boolean);
+    const words = toks.map(w => {
+      const nw = normalizeAr(w);
+      const gl = WORD_GLOSS_BY_NORM.get(nw) || WORD_GLOSS_BY_NORM.get(nw.replace(/^ال/, "")) || "";
+      return [w, gl];
+    });
+    return { key: s.id, ar: s.ar, en: s.en, tr: s.tr || "", hint: s.swap || "", words, src: "myday", track: "everyday", note: "", pattern: fr.pattern, frames: fr.frames, who: s.who, moment: s.moment, use: 3 };
   });
   // they join the master list so verdicts and the Sunday script resolve them
   MYDAY.forEach(s => { if (!MASTER_SENTENCES.some(x => x.key === s.key)) MASTER_SENTENCES.push(s); });
   return MYDAY;
 }
-async function startMyDay(rehearse) {
+async function startMyDay(rehearse, explicitBatchNum) {
   const md = await loadMyDay();
   const mine = md.filter(s => s.who === "me");
   if (rehearse) {
@@ -793,7 +946,7 @@ async function startMyDay(rehearse) {
     await TryIt.free({ pool, loose: true, includeRecent: true, size: Math.min(8, Math.max(5, pool.length)), kind: "rehearse", title: "🎤 Rehearse — your Sunday script" });
   } else {
     currentFilter = "balanced";
-    loadPracticeBatch();
+    loadPracticeBatch(explicitBatchNum);
   }
 }
 
@@ -874,16 +1027,35 @@ function updateSessionProgress() {
       doneArea.innerHTML = "";
       return;
     }
+    const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+    const nextB = curB + 1;
+    const nextDesc = nextB === 2 ? "75% Review + Consolidation" : "Deep Review Mix";
+    const activeChap = getActiveWeeklyChapter();
+    let chapProgHtml = "";
+    if (IS_ADAPTIVE_PRACTICE && activeChap) {
+      const srsNow = getSrs();
+      const chapPrefix = `chap:${activeChap.num}:`;
+      const chapSents = MASTER_SENTENCES.filter(s => String(s.key || "").startsWith(chapPrefix));
+      const chapSolid = chapSents.filter(s => ((srsNow[s.key] || {}).box || 0) >= 2 || (srsNow[s.key] || {}).b === "never").length;
+      if (chapSents.length) {
+        const readyTest = chapSolid >= Math.ceil(chapSents.length * 0.8);
+        chapProgHtml = `<div style="margin:6px 0 8px;font-size:13px;color:var(--ink)">📖 <b>Chapter ${activeChap.num} (${activeChap.en}):</b> ${chapSolid}/${chapSents.length} weekly sentences solid${readyTest ? ` · <a href="index.html#testBox" style="color:var(--accent);font-weight:700">Take Chapter ${activeChap.num} Mastery Test →</a>` : ""}</div>`;
+      }
+    }
     doneArea.innerHTML = `
       <div class="done-banner">
-        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">🎉 Practice Batch Complete!</h3>
-        <p style="margin:0 0 10px;font-size:14px">Every verdict updated its home section (Vocabulary, Sentences, Grammar, Qur'an) and set its next review date automatically.</p>
-        ${IS_ADAPTIVE_PRACTICE && typeof planMoodHTML === "function" ? planMoodHTML() : ""}
+        <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${IS_ADAPTIVE_PRACTICE ? `🎉 Batch ${curB} Complete!` : `🎉 Practice Batch Complete!`}</h3>
+        <p style="margin:0 0 8px;font-size:14px">Every verdict updated its home section (Vocabulary, Sentences, Grammar, Qur'an) and set its next review date automatically.</p>
+        ${chapProgHtml}
+        ${IS_ADAPTIVE_PRACTICE && curB === 1 && typeof planMoodHTML === "function" ? planMoodHTML() : ""}
         <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-          <button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Next Practice Batch →</button>
+          ${IS_ADAPTIVE_PRACTICE
+            ? `<button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:15px;padding:9px 22px">▶ Start Batch ${nextB} (${nextDesc}) →</button>`
+            : `<button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Next Sentence Batch →</button>`}
           <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px" title="The same batch again, weakest first">↻ Redo batch</button>
-          <a href="index.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">Back to door →</a>
+          <a href="index.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">Back to Home →</a>
         </div>
+        ${renderBatchVoiceBriefHTML("done")}
       </div>
     `;
   } else {
@@ -924,7 +1096,9 @@ function renderMasterBank() {
       const matchAr = s.ar.includes(query) || normalizeAr(s.ar).includes(query);
       const matchTr = (s.tr || "").toLowerCase().includes(query);
       const matchNote = (s.note || "").toLowerCase().includes(query);
-      if (!matchEn && !matchAr && !matchTr && !matchNote) return false;
+      const gInfo = s.pattern && GRAMMAR_MAP[s.pattern];
+      const matchGram = gInfo ? (gInfo.shortName.toLowerCase().includes(query) || gInfo.rule.toLowerCase().includes(query)) : false;
+      if (!matchEn && !matchAr && !matchTr && !matchNote && !matchGram) return false;
     }
 
     if (bankFilter === "chapters") return s.src === "chapters";
@@ -985,6 +1159,7 @@ function renderMasterBank() {
         <td>
           <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
           ${s.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
+          ${renderGrammarRuleHtml(s, true)}
         </td>
         <td>
           <span style="font-size:11.5px;color:var(--muted)">

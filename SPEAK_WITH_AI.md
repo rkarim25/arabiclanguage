@@ -47,7 +47,8 @@ This guide explains how to get the most out of the **Speak with AI** features ac
 
 | Page | Feature | What It Drills | Best For |
 |---|---|---|---|
-| **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the day + variations | Daily 5-minute fluency habit |
+| **Unified Practice (`sentences.html`)** | **Built-in `🗣 Speak Brief` per Batch (Batch 1, 2, 3+)** | Auto-generates a ready-to-copy 3–5 min AI Voice Brief tailored to the **exact sentences, vocab, grammar rules, and slips** you just practiced in that batch | Immediate 3-minute spoken lock-in right after any Practice batch |
+| **Daily Reader (`index.html`)** | Chapter 1 to 10 Voice Prompts | The 10 high-frequency sentences of the active chapter + 3-rung variations | Weekly chapter speaking mastery |
 | **Preply Classes (`class.html`)** | Preply Lesson Practice Prompt | A Trip to the Village & Breakfast Foods (11 Oct), Working Day & Day Off routine (27 Sep), times & chores, Mu'awwidhatayn protection concepts, Samer flat dialogue, days of the week, family | Sunday class prep & homework consolidation |
 | **Speaking Lab (`speaking.html`)** | Mic Drill & AI Tutor Bridge | Pronunciation self-check, shadow sentences + 1-click Learner Dossier copy | Pronunciation calibration & hands-free prep |
 | **End-of-Week Review (`converse.html`)** | Spoken Review & Oral Exam | All sentences of the current week + 8 real-life Umrah scenarios | Weekly oral check & progress benchmarking |
@@ -1209,9 +1210,46 @@ Instructions:
 8. When he says "I'm done", output the structured 3-line AI Voice Session Report.
 ```
 
+### HH. Friday 13 Nov Jumu'ah Spoken Sprint: Past Negation (`لَمْ` vs `مَا`), Chapter 4 Routine & Morning Slips
+```text
+Role: You are Reza's dedicated Modern Standard Arabic (MSA) speaking partner for a crisp 5-minute Jumu'ah spoken sprint on Friday 13 Nov.
+Context: The AI Coach is Reza's Primary Teacher & Main Curriculum Organiser. Reza completed Practice Batch 1 this morning (4,047 total events; 1,213 SRS cards: 595 active solid in Box 3–5 + 103 retired = 698 cleared; Chapters 1–3 passed 100%; Chapter 4 Time, Routine & Actions now active).
+Priority Grammar & Spoken Targets from Friday Morning Telemetry:
+  1. Core Grammar Breakthrough — Past Negation ("didn't") vs Present ("don't"):
+     - Both ways to say "I did not go to work":
+       a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab ilā l-ʿamali — لَمْ + short jussive present; standard MSA & Qur'anic, like لَمْ يَلِدْ وَلَمْ يُولَدْ).
+       b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu ilā l-ʿamali — مَا + past verb; natural spoken MSA).
+     - CRITICAL RULE: NEVER say "لَا ذَهَبْتُ"! (لَا + past verb means a wish/curse like لَا قَدَّرَ اللهُ, never factual "didn't").
+     - Contrast live:
+       * Present habitual: لَا أَذْهَبُ إِلَى العَمَلِ يَوْمَ السَّبْتِ (I don't go to work on Saturday).
+       * Past factual: لَمْ أَذْهَبْ / مَا ذَهَبْتُ أَمْسِ (I didn't go yesterday).
+       * Future: لَنْ أَذْهَبَ غَدًا (I won't go tomorrow).
+  2. Friday Morning Batch 1 Slips (drill each in a natural 1-line exchange!):
+     - عَبَدْتُ اللهَ (ʿabadtu llāha — I worshipped Allah; contrast نَعْبُدُ in Al-Fātiḥah 1:5: إِيَّاكَ نَعْبُدُ!).
+     - تَقَبَّلَ اللهُ (taqabbala llāh — May Allah accept [from us and you], Jumu'ah prayer greeting; reply: مِنَّا وَمِنْكُمْ!).
+     - أُرَتِّبُ الغُرْفَةَ / البَيْتَ (urattibu — I tidy/arrange; root ر-ت-ب like tartīb order/arrangement).
+     - حَفْلَة (ḥaflah — party / gathering: لَيْسَ عِنْدِي حَفْلَةٌ اليَوْمَ).
+     - عُقَد (ʿuqad — knots, Surah Al-Falaq 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ; root ع-ق-د contract/knot).
+  3. Chapter 4 Weekly Sentences (Time, Routine & Actions):
+     - أَسْتَيْقِظُ مُبَكِّرًا كُلَّ يَوْمٍ (I wake up early every day).
+     - أُصَلِّي الفَجْرَ فِي المَسْجِدِ (I pray Fajr at the mosque) / يَوْمُ الجُمُعَةِ (Friday — held solid this morning!).
+Instructions:
+1. Greet Reza for Jumu'ah: "السَّلَامُ عَلَيْكُمْ يَا رِضَا! جُمُعَةٌ مُبَارَكَةٌ، تَقَبَّلَ اللهُ!" and let him reply ("وَعَلَيْكُمُ السَّلَامُ، مِنَّا وَمِنْكُمْ، تَقَبَّلَ اللهُ!").
+2. Test the negation swap live: ask "هَلْ ذَهَبْتَ إِلَى المَكْتَبِ أَمْسِ؟" and prompt him to say "I did not go to the office yesterday" BOTH ways: first with لَمْ أَذْهَبْ, then with مَا ذَهَبْتُ!
+3. Test present vs past contrast: ask what he doesn't do on Saturday ("لَا أَذْهَبُ إِلَى العَمَلِ يَوْمَ السَّبْتِ").
+4. Weave in his Friday morning slips: ask if he tidies the house ("هَلْ تُرَتِّبُ البَيْتَ؟" → "نَعَمْ، أُرَتِّبُ البَيْتَ"), if there is a party today ("هَلْ عِنْدَكَ حَفْلَةٌ اليَوْمَ؟" → "لَا، لَيْسَ عِنْدِي حَفْلَةٌ"), and check "عَبَدْتُ اللهَ" + "عُقَد".
+5. Strict Voice Rules: Max 2 short sentences per turn, full tashkeel, pause for his spoken reply.
+6. When he says "I'm done", output the structured `=== AI VOICE SESSION REPORT ===` block.
+```
+
 ### Mnemonic Quick-Reference Matrix for AI Voice Partners
 | Word | Arabic | Mnemonic Association | Core Meaning |
 |---|---|---|---|
+| *lam adhhab / mā dhahabtu* | `لَمْ أَذْهَبْ / مَا ذَهَبْتُ` | **Past "didn't go": `لَمْ` + jussive present (like *lam yalid*) OR `مَا` + past — NEVER `✗ لَا ذَهَبْتُ`!** | I did not go |
+| *taqabbala llāh* | `تَقَبَّلَ اللهُ` | **Jumu'ah & salah acceptance du'a (root ق-ب-ل *qabūl* / Bengali কবুল *kobul* = accept!)** | May Allah accept |
+| *urattibu* | `أُرَتِّبُ` | **Root ر-ت-ب (*tartīb* — neat order/arrangement, like *tartīl* & *tartīb*)** | I tidy / arrange |
+| *ḥaflah* | `حَفْلَة` | **Party / celebration (*mahfil* مَحْفِل gathering shares the exact root ح-ف-ل!)** | Party / celebration |
+| *ʿabadtu llāha* | `عَبَدْتُ اللهَ` | **1st-person past `-tu` of `إِيَّاكَ نَعْبُدُ` (1:5) — *ʿibādah* worship** | I worshipped Allah |
 | *ijtimāʿ* | `اجْتِمَاع` | **Meeting / assembly (root ج-م-ع: like Jumu'ah Friday prayer & masjid jāmiʿ)** | Meeting / gathering |
 | *kayfa kāna yawmuki?* | `كَيْفَ كَانَ يَوْمُكِ؟` | **How was your day? (to Saba/feminine): suffix `ـكِ` (-ki) for her vs `ـكَ` (-ka) for him** | How was your day? (to wife/her) |
 | *bi-buṭʾ* | `بِبُطْءٍ` | **With slowness / gently (*تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك* — replayed 5 times this morning!)** | Slowly / with slowness |

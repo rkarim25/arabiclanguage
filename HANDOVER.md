@@ -1,6 +1,23 @@
 # Handover — Arabic (rkarim25/arabiclanguage)
 
-**Updated 2026-11-12 (Thursday Morning).** Read this first in any new session.
+**Updated 2026-11-13 (Friday Morning, `/run-arabic-coach`).** Read this first in any new session.
+
+> **13 Nov 2026 (interactive morning, `/run-arabic-coach` — Pen Notes #64 & #65)** — AI Coach as Primary Teacher, Inline Grammar Rules, Incremental Multi-Batch `Practice`, Built-In AI Speaking Briefs, `#planBar` Cleanup & Prompt HH:
+> 1. **Pen Note #64 Resolved (`لَمْ أَذْهَبْ إِلَى العَمَلِ` & Primary Teacher Mandate)**:
+>    - Upgraded `negation` in `data/grammar.json` with side-by-side `لَمْ أَذْهَبْ إِلَى العَمَلِ` (`لَمْ` + jussive present) vs `مَا ذَهَبْتُ إِلَى العَمَلِ` (`مَا` + past), explicit `✗ لَا ذَهَبْتُ` trap warning (`لَا` + past expresses a wish/curse, never "didn't"), and added concise `cardRule` summaries across all **22** grammar patterns.
+>    - Fixed `scripts/gen-sentences.js` & regenerated `data/sentence-bank.json` so `أَذْهَبْ` glosses accurately as `"I go"` (never imperative `اِذْهَبْ` `"go!"`) and `الـ`-prefixed nouns like `العَمَلِ` gloss as `"the work, labour"` (never past verb `عَمِلَ`).
+>    - Replaced raw `💡 negation` slug leaks on `sentences.html` with inline `.s-gram-box` grammar explanations (`renderGrammarRuleHtml`) directly on revealed Practice cards and Master Bank rows.
+>    - Updated `AGENTS.md`, `LEARNER_CONTEXT.md`, `CURRICULUM.md`, `SPEAK_WITH_AI.md`, `.agents/skills/run-arabic-coach/SKILL.md`, `js/app.js`, and `learner-profile.md` establishing **the AI Coach as Reza's Primary Teacher and Main Curriculum Organiser of Arabic**.
+> 2. **Pen Note #65 Resolved (Incremental Multi-Batch `Practice`, `#planBar` Removal & Built-In AI Speaking Brief)**:
+>    - Suppressed the bottom `#planBar` on `sentences.html` (`PLAN_BAR_QUIET`) and removed the confusing 3 optional-block dots + `"see the chart →"` link in `js/plan.js`. Added a `▶ Continue Practice · Batch N →` link on `index.html` once the daily core is complete.
+>    - Upgraded `Practice.buildBatch` (`js/practice.js` + `sentences.html`) into a seamless incremental multi-batch engine in ONE place:
+>      - **Batch 1**: Completes daily core (`10.0` effort units) AND automatically advances active weekly Chapter sentences (**Chapter 4: Time, Routine & Actions** for Reza, since Chapters 1–3 passed 100%).
+>      - **Batch 2, Batch 3+**: Stay in `sentences.html` with 1-click `▶ Start Batch N` progression, shifting progressively toward consolidation (`Batch 1: ~58% review → Batch 2: ~83% review → Batch 3+: ~92%+ review`).
+>      - **Built-in AI Speaking Check-In (`🗣 Speak Brief` + `Practice.buildSpeakingBrief`)**: Every batch provides a gentle nudge, 1-click Copy button, and expandable written 3–5 min AI Voice Brief tailored to the exact sentences, words, grammar rules, and slips practiced in that batch.
+> 3. **Friday 13 Nov Telemetry & Audio/Test Verification**:
+>    - 4,047 recorded events (+35 Friday morning completing Batch 1); 1,213 SRS cards (595 active solid in Box 3–5 + 103 retired `⊘` = 698 cleared; 381 active learning; 134 Box 0).
+>    - Friday morning slips targeted in **Prompt HH** (`SPEAK_WITH_AI.md`, `index.html`, `class.html`, `js/app.js`): `تَقَبَّلَ اللهُ` (Bengali *kobul* hook), `أُرَتِّبُ` (*tartīb*), `حَفْلَة` (*mahfil* root ح-ف-ل), `عَبَدْتُ اللهَ` (past `-tu` of `نَعْبُدُ`), `عُقَد` (113:4 knots).
+>    - Generated 8 new neural audio clips (`11,338` total manifest entries: `5,590 ar + 5,748 en`, 0 missing). All **15** automated test suites pass 100%.
 
 > **12 Nov 2026 (interactive morning)** — Adaptive Multi-Stream `Practice` Engine (`js/practice.js` + `sentences.html` + `js/plan.js`):
 > 1. **Unified Adaptive `Practice` Session**:
