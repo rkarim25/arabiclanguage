@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -253,7 +253,7 @@
           <button type="button" class="chip m-filter" data-mfilter="never" onclick="setMasterFilter('never', this)">⊘ Retired</button>
         </div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--border)">
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           <button type="button" class="chip active wd-filter" data-dfilter="all" onclick="setWordDotFilter('all', this)">All Dots</button>
           <button type="button" class="chip wd-filter" data-dfilter="green" onclick="setWordDotFilter('green', this)"><span class="m-dot m-green sm"></span> Mastered <span id="wcnt-green"></span></button>
@@ -261,46 +261,52 @@
           <button type="button" class="chip wd-filter" data-dfilter="red" onclick="setWordDotFilter('red', this)"><span class="m-dot m-red sm"></span> Needs work <span id="wcnt-red"></span></button>
           <button type="button" class="chip wd-filter" data-dfilter="grey" onclick="setWordDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="wcnt-grey"></span></button>
         </div>
-        <button type="button" class="chip" onclick="renderMasterTable()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:11.5px;color:var(--muted)">Review:</span>
+          <button type="button" class="chip active w-rmode" id="btnWordModeAll" onclick="setWordReviewMode('all')">All</button>
+          <button type="button" class="chip w-rmode" id="btnWordModeEn" onclick="setWordReviewMode('en-only')" title="Hide Arabic — test recall from English, tap to check">🇬🇧 EN → AR</button>
+          <button type="button" class="chip w-rmode" id="btnWordModeAr" onclick="setWordReviewMode('ar-only')" title="Hide English — test meaning from Arabic, tap to check">🇸🇦 AR → EN</button>
+          <span id="wordRevealAllBtns" style="display:none;gap:4px">
+            <button type="button" class="chip" onclick="toggleAllMasterWordReveal(true)">👁 Reveal All</button>
+            <button type="button" class="chip" onclick="toggleAllMasterWordReveal(false)">🙈 Hide All</button>
+          </span>
+          <button type="button" class="chip" id="btnWordSortWeakest" onclick="toggleWordWeakestSort()">📉 Weakest First</button>
+          <button type="button" class="chip" id="btnToggleAllMasterTr" onclick="toggleAllMasterTr()" title="Show/hide transliteration">🔤 Translit</button>
+          <button type="button" class="chip" onclick="resortMasterWords()" title="Re-sort / refresh list with latest ratings">↻ Resort</button>
+        </div>
       </div>
-      <div class="srs-legend-bar" style="margin-bottom:12px">
-        <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
-        <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
-        <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
-        <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
-        <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
-      </div>
+      <div id="masterDotLegend" style="margin-bottom:10px"></div>
       <div style="overflow-x:auto">
         <table class="m-table">
           <thead>
             <tr>
-              <th style="width:30px">#</th>
-              <th style="width:26%">Arabic</th>
-              <th style="width:32%">English Meaning</th>
+              <th style="width:48px">Dot</th>
+              <th style="width:28%">Arabic</th>
+              <th style="width:36%">English Meaning</th>
               <th style="width:14%">Category</th>
-              <th style="width:75px;text-align:center">Status</th>
-              <th style="text-align:right">SRS Rating</th>
+              <th style="text-align:right">Self-Check</th>
             </tr>
           </thead>
           <tbody id="masterTableBody">
-            <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
+            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
           </tbody>
         </table>
       </div>
+      <div id="wordsFooter" style="text-align:center;padding:12px 8px 4px;font-size:12px;color:var(--muted)"></div>
     </div>
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwfhfp7r"></script>
-<script src="js/curriculum.js?v=mwfhfp7r"></script>
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/match.js?v=mwfhfp7r"></script>
-<script src="js/errors.js?v=mwfhfp7r"></script>
-<script src="js/tryit.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
-<script src="js/account.js?v=mwfhfp7r"></script>
+<script src="js/progress-model.js?v=mwfi0hay"></script>
+<script src="js/curriculum.js?v=mwfi0hay"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/match.js?v=mwfi0hay"></script>
+<script src="js/errors.js?v=mwfi0hay"></script>
+<script src="js/tryit.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
+<script src="js/account.js?v=mwfi0hay"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -313,28 +319,96 @@ let currentFilter = "balanced";
 let masterFilter = "all";
 let wordDotFilter = "all";
 let wordShowLimit = 100;
+let wordReviewMode = "all"; // 'all' | 'en-only' | 'ar-only'
+let wordSortWeakest = false;
+let wordFrozenKeys = null;
+let MASTER_REVEALED = new Set();
+let allMasterTrVisible = true;
 
 function setWordDotFilter(filt, btn) {
   wordDotFilter = filt;
   wordShowLimit = 100;
+  wordFrozenKeys = null;
   document.querySelectorAll(".wd-filter").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   renderMasterTable();
 }
 
+function setWordReviewMode(mode) {
+  wordReviewMode = mode;
+  MASTER_REVEALED.clear();
+  document.querySelectorAll(".w-rmode").forEach(b => b.classList.remove("active"));
+  const activeId = mode === "en-only" ? "btnWordModeEn" : mode === "ar-only" ? "btnWordModeAr" : "btnWordModeAll";
+  const btn = document.getElementById(activeId);
+  if (btn) btn.classList.add("active");
+  const revBtns = document.getElementById("wordRevealAllBtns");
+  if (revBtns) revBtns.style.display = mode === "all" ? "none" : "inline-flex";
+  renderMasterTable();
+}
+
+function toggleAllMasterWordReveal(show) {
+  if (show) MASTER_WORDS.forEach(w => MASTER_REVEALED.add(w.key));
+  else MASTER_REVEALED.clear();
+  renderMasterTable();
+}
+
+function revealMasterWord(key, encodedAr) {
+  MASTER_REVEALED.add(key);
+  renderMasterTable();
+  if (encodedAr && wordReviewMode === "en-only") playSingle(encodedAr);
+}
+
+function toggleWordWeakestSort() {
+  wordSortWeakest = !wordSortWeakest;
+  wordFrozenKeys = null;
+  const btn = document.getElementById("btnWordSortWeakest");
+  if (btn) btn.classList.toggle("active", wordSortWeakest);
+  renderMasterTable();
+}
+
+function toggleAllMasterTr() {
+  allMasterTrVisible = !allMasterTrVisible;
+  const btn = document.getElementById("btnToggleAllMasterTr");
+  if (btn) btn.classList.toggle("active", allMasterTrVisible);
+  renderMasterTable();
+}
+
+function resortMasterWords() {
+  wordFrozenKeys = null;
+  renderMasterTable();
+}
+
+function showMoreMasterWords() {
+  wordShowLimit += 100;
+  renderMasterTable();
+}
+
+function wordAltKeys(ar) {
+  const n = normalizeAr(ar || "").replace(/^ال/, "");
+  return n ? ["tw:" + n, n, ar].filter(Boolean) : (ar ? [ar] : []);
+}
+
+function syncWordTwinsLocal(key, ar, g) {
+  if (!ar || !window.SRS || !SRS.rate) return;
+  const srsNow = getSrs();
+  const norm = normalizeAr(ar).replace(/^ال/, "");
+  ["tw:" + norm, norm, ar].forEach(tk => {
+    if (tk && tk !== key && srsNow[tk] && !(srsNow[tk].b === "never" && g === "maybe")) {
+      SRS.rate(tk, g);
+    }
+  });
+}
+
 function renderWordsMasteryBar() {
   const el = document.getElementById("wordsMasteryBar");
   if (!el || !window.SRS || !SRS.summaryCounts) return;
-  const sc = SRS.summaryCounts(MASTER_WORDS.map(w => {
-    const n = normalizeAr(w.ar).replace(/^ال/, "");
-    return { key: w.key, altKeys: n ? ["tw:" + n, n] : [] };
-  }));
+  const sc = SRS.summaryCounts(MASTER_WORDS.map(w => ({ key: w.key, altKeys: wordAltKeys(w.ar) })));
   const setCnt = (id, v) => { const n = document.getElementById(id); if (n) n.textContent = `(${v})`; };
   setCnt("wcnt-green", sc.green); setCnt("wcnt-amber", sc.amber); setCnt("wcnt-red", sc.red); setCnt("wcnt-grey", sc.grey);
   const gPct = sc.total ? ((sc.green / sc.total) * 100).toFixed(1) : 0;
   const aPct = sc.total ? ((sc.amber / sc.total) * 100).toFixed(1) : 0;
   const rPct = sc.total ? ((sc.red / sc.total) * 100).toFixed(1) : 0;
-  el.innerHTML = `<div class="card" style="padding:11px 15px;margin-bottom:0"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:12.5px"><span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap"><b>${sc.total.toLocaleString()} Words</b><span><span class="m-dot m-green"></span> <b>${sc.green}</b> Mastered</span><span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> Building</span><span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span><span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span></span><a href="index.html" style="color:var(--accent);font-weight:600;font-size:12px;text-decoration:none">⚡ Practise Daily Batch →</a></div><div class="m-progress-track"><div class="m-progress-seg green" style="width:${gPct}%"></div><div class="m-progress-seg amber" style="width:${aPct}%"></div><div class="m-progress-seg red" style="width:${rPct}%"></div></div></div>`;
+  el.innerHTML = `<div class="card" style="padding:11px 15px;margin-bottom:0"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:12.5px"><span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap"><b>${sc.total.toLocaleString()} Words</b><span><span class="m-dot m-green"></span> <b>${sc.green}</b> Mastered</span><span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> Building</span><span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span><span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span></span><span style="color:var(--muted);font-size:12px">Review directly below, in Quick 10-Word Drill, or in <a href="index.html" style="color:var(--accent);font-weight:700;text-decoration:none">⚡ Practice →</a> — all update the same dots</span></div><div class="m-progress-track"><div class="m-progress-seg green" style="width:${gPct}%"></div><div class="m-progress-seg amber" style="width:${aPct}%"></div><div class="m-progress-seg red" style="width:${rPct}%"></div></div></div>`;
 }
 window.addEventListener("ats-mastery-updated", renderWordsMasteryBar);
 let promptDirection = "en-first"; // "en-first" or "ar-first"
@@ -353,9 +427,12 @@ const BATCH_SIZE = 10;
     ]);
 
     const seen = new Set();
+    const wkMap = {};
     const add = (k, ar, en, tr, note, src, root) => {
       if (!ar || !en) return;
       const n = normalizeAr(ar);
+      const bare = n.replace(/^ال/, "");
+      if (bare && k && !wkMap[bare]) wkMap[bare] = k;
       if (seen.has(n)) return;
       seen.add(n);
       const fam = famLookup(ar);
@@ -377,9 +454,11 @@ const BATCH_SIZE = 10;
     (famRes.families || []).forEach(f => {
       (f.members || []).forEach((m, i) => add(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root));
     });
+    if (typeof registerWordKeys === "function") registerWordKeys(wkMap);
 
     updateOverallStats();
     const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
+    const mlg = document.getElementById("masterDotLegend"); if (mlg) mlg.innerHTML = SRS.legendHtml();
     /* 🎯 Try it — English in, Arabic out (said or written), then the answer */
     TryIt.setup({
       src: "words",
@@ -419,9 +498,11 @@ function getExposure(key, ar) {
 function updateOverallStats() {
   const srs = getSrs();
   const now = Date.now();
-  const held = MASTER_WORDS.filter(w => (srs[w.key] || {}).box >= 3).length;
+  const held = (window.SRS && SRS.masteryState)
+    ? MASTER_WORDS.filter(w => SRS.masteryState(w.key, { srs, now, altKeys: wordAltKeys(w.ar) }).level === "green").length
+    : MASTER_WORDS.filter(w => (srs[w.key] || {}).box >= 2).length;
   const due = MASTER_WORDS.filter(w => {
-    const item = srs[w.key];
+    const item = (window.SRS && SRS.masteryState) ? (srs[w.key] || null) : srs[w.key];
     return item && item.b !== "never" && item.due && item.due <= now;
   }).length;
 
@@ -498,7 +579,7 @@ function render10Cards() {
 
     return `
       <tr class="sheet-row ${isRevealed ? 'revealed' : ''}" id="wrow-${idx}" onclick="handleCardClick(${idx}, event)">
-        <td class="col-num" style="white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:5px">${SRS.dotHtml(w.key, { lg: true })}<span>${idx + 1}</span></span></td>
+        <td class="col-num" style="white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:5px">${SRS.dotHtml(w.key, { lg: true, altKeys: wordAltKeys(w.ar) })}<span>${idx + 1}</span></span></td>
         <td>
           ${isEnFirst ? `
             <div class="prompt-text">${w.en}</div>
@@ -597,12 +678,14 @@ function setDirection(dir) {
 function rateWord(key, g, cardIdx) {
   const nc = SRS.rate(key, g);                 // ✗ ≈ ✓ ★ → stability → next date
   SESSION_COOLDOWN.add(key);                   // block this word from the very next batch today
-  updateOverallStats();
   const w = ACTIVE_WORDS[cardIdx];
   if (w) {
+    syncWordTwinsLocal(key, w.ar, g);
     logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, wordAr: w.ar, wordEn: w.en, src: w.src, t: Date.now() });
     autoSync();
   }
+  updateOverallStats();
+  renderWordsMasteryBar();
   SRS.paintBar(document.getElementById("wrow-" + cardIdx) || document.getElementById("wcard-" + cardIdx), key, nc);
   updateSessionProgress();
 }
@@ -641,6 +724,8 @@ function switchView(view) {
 
 function setMasterFilter(filt, btn) {
   masterFilter = filt;
+  wordShowLimit = 100;
+  wordFrozenKeys = null;
   document.querySelectorAll(".m-filter").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   renderMasterTable();
@@ -648,12 +733,12 @@ function setMasterFilter(filt, btn) {
 
 function renderMasterTable() {
   const tbody = document.getElementById("masterTableBody");
+  const footer = document.getElementById("wordsFooter");
   const query = (document.getElementById("masterSearch")?.value || "").trim().toLowerCase();
   const srs = getSrs();
   const now = Date.now();
 
   let filtered = MASTER_WORDS.filter(w => {
-    // Text search
     if (query) {
       const matchEn = w.en.toLowerCase().includes(query);
       const matchAr = w.ar.includes(query) || normalizeAr(w.ar).includes(query);
@@ -668,12 +753,23 @@ function renderMasterTable() {
     if (masterFilter === "due" && !(item.due && item.due <= now && item.b !== "never")) return false;
     if (masterFilter === "never" && item.b !== "never") return false;
     if (wordDotFilter !== "all" && window.SRS && SRS.masteryState) {
-      const n = normalizeAr(w.ar).replace(/^ال/, "");
-      const st = SRS.masteryState(w.key, { srs, now, altKeys: n ? ["tw:" + n, n] : [] });
+      const st = SRS.masteryState(w.key, { srs, now, altKeys: wordAltKeys(w.ar) });
       if (st.level !== wordDotFilter) return false;
     }
     return true;
   });
+
+  if (wordSortWeakest && window.SRS && SRS.weakestFirst) {
+    if (!wordFrozenKeys) {
+      wordFrozenKeys = SRS.weakestFirst(filtered, srs, now).map(w => w.key);
+    }
+    const rankMap = new Map(wordFrozenKeys.map((k, i) => [k, i]));
+    filtered = filtered.slice().sort((a, b) => {
+      const ra = rankMap.has(a.key) ? rankMap.get(a.key) : 999999;
+      const rb = rankMap.has(b.key) ? rankMap.get(b.key) : 999999;
+      return ra - rb;
+    });
+  }
 
   const wPracLink = document.getElementById("practiseWordsFilterLink");
   if (wPracLink) {
@@ -691,53 +787,56 @@ function renderMasterTable() {
   }
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;
+    if (footer) footer.innerHTML = "";
     return;
   }
 
-  // Cap render at 100 for snappy performance
-  const displaySlice = filtered.slice(0, 100);
+  const displaySlice = filtered.slice(0, wordShowLimit);
 
   tbody.innerHTML = displaySlice.map((w, idx) => {
-    const exp = getExposure(w.key, w.ar);
     const fam = w.fam || famLookup(w.ar);
-    const item = srs[w.key] || {};
-    const curBucket = item.b || (item.box >= 4 ? "strong" : item.box >= 2 ? "medium" : item.box === 1 ? "weak" : null);
-    const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+    const encAr = encodeURIComponent(w.ar);
+    const escKey = String(w.key).replace(/'/g, "\\'");
+    const isRevealed = wordReviewMode === "all" || MASTER_REVEALED.has(w.key);
+    const arCellHtml = (wordReviewMode === "en-only" && !isRevealed)
+      ? `<div style="display:flex;align-items:center;gap:8px">
+           <button type="button" class="chip" onclick="revealMasterWord('${escKey}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Arabic</button>
+           <button type="button" class="small" onclick="event.stopPropagation(); playSingle('${encAr}')" title="Listen hint">🔊</button>
+         </div>`
+      : `<div style="display:flex;align-items:center;gap:8px">
+           <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent)">${w.ar}</span>
+           <button type="button" class="small" onclick="playSingle('${encAr}')">🔊</button>
+         </div>`;
+    const enCellHtml = (wordReviewMode === "ar-only" && !isRevealed)
+      ? `<button type="button" class="chip" onclick="revealMasterWord('${escKey}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Meaning</button>`
+      : `<div style="font-weight:600">${w.en}</div>
+         ${(w.tr && allMasterTrVisible) ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
+         ${w.note ? `<div style="font-size:11px;color:var(--muted)">${w.note}</div>` : ''}`;
 
     return `
       <tr>
-        <td style="color:var(--muted);font-size:11.5px">${idx + 1}</td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent)">${w.ar}</span>
-            <button type="button" class="small" onclick="playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
-          </div>
+        <td style="white-space:nowrap">
+          <span style="display:inline-flex;align-items:center;gap:6px">
+            ${SRS.dotHtml(w.key, { lg: true, altKeys: wordAltKeys(w.ar) })}
+            <span style="color:var(--muted);font-size:11.5px">${idx + 1}</span>
+          </span>
         </td>
-        <td>
-          <div style="font-weight:600">${w.en}</div>
-          ${w.tr ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
-          ${w.note ? `<div style="font-size:11px;color:var(--muted)">${w.note}</div>` : ''}
-        </td>
+        <td>${arCellHtml}</td>
+        <td>${enCellHtml}</td>
         <td>
           <span style="font-size:12px;color:var(--muted)">
             ${w.src === 'teacher' ? '🧑‍🏫 Preply' : w.src === 'quran' ? "📖 Qur'an" : w.src === 'root' ? '🌿 Root' : '🗣 Everyday'}
           </span>
           ${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none;margin-top:4px" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}
         </td>
-        <td style="text-align:center">
-          ${(() => {
-            const n = normalizeAr(w.ar).replace(/^ال/, "");
-            return SRS.dotHtml(w.key, { lg: true, altKeys: n ? ["tw:" + n, n] : [] });
-          })()}
-        </td>
-        <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encodeURIComponent(w.ar)], { compact: true, noDot: true })}</div>
+        <td style="text-align:right;white-space:nowrap">
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encAr], { compact: true, noDot: true })}</div>
         </td>
       </tr>
       ${fam ? `
         <tr id="m-rf-${idx}" style="display:none;background:rgba(13,122,95,0.03)">
-          <td colspan="6" style="padding:10px 16px">
+          <td colspan="5" style="padding:10px 16px">
             <div class="rf-info-line">
               <b>🌿 Root ${fam.root}</b> <i>(${fam.rootTr || ''})</i> — <span style="color:var(--muted)">${fam.theme}</span>
             </div>
@@ -756,8 +855,10 @@ function renderMasterTable() {
     `;
   }).join("");
 
-  if (filtered.length > 100) {
-    tbody.innerHTML += `<tr><td colspan="6" style="text-align:center;padding:12px;font-size:12px;color:var(--muted)">Showing first 100 of ${filtered.length} matching words. Type in search to narrow down.</td></tr>`;
+  if (footer) {
+    footer.innerHTML = filtered.length > wordShowLimit
+      ? `Showing ${wordShowLimit} of ${filtered.length} matching words · <button type="button" class="chip" onclick="showMoreMasterWords()">Show 100 more ↓</button>`
+      : `Showing all ${filtered.length} matching word${filtered.length === 1 ? "" : "s"}.`;
   }
 }
 
@@ -769,20 +870,19 @@ function toggleMasterRootDrawer(idx) {
 }
 
 function rateMasterWord(key, g, encodedAr) {
+  const wasVeiled = wordReviewMode !== "all" && !MASTER_REVEALED.has(key);
+  MASTER_REVEALED.add(key);
   const nc = SRS.rate(key, g);
   if (encodedAr) {
     const ar = decodeURIComponent(encodedAr);
-    const norm = normalizeAr(ar).replace(/^ال/, "");
-    if (norm && getSrs()["tw:" + norm]) SRS.rate("tw:" + norm, g);   // a tapped-word twin rides along
+    syncWordTwinsLocal(key, ar, g);
   }
   logEvent({ e: "vocab-rate", key, bucket: SRS.LEGACY_BUCKET[g] || g, g, s: nc.s, box: nc.box, src: "master", t: Date.now() });
   autoSync();
   updateOverallStats();
+  renderWordsMasteryBar();
+  if (wasVeiled) renderMasterTable();
   SRS.paintBar(document.getElementById("masterTableBody"), key, nc);
-  return;
-  autoSync();
-  updateOverallStats();
-  renderMasterTable();
 }
 
 /* Audio Toolbar Handling */

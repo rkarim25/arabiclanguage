@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,10 +34,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -127,10 +127,14 @@ function renderList() {
       : isNext ? `<span style="color:var(--accent);font-weight:600">▶ next burst</span>`
       : `<span style="color:var(--muted)">in about ${queuePos + 1} week${queuePos ? "s" : ""}</span>`;
     if (isNext) div.style.borderColor = "var(--accent)";
+    const gAlt = (p.test || []).map((_, ti) => `gt:${p.id}:${ti}`);
+    const gDot = (window.SRS && SRS.dotHtml) ? SRS.dotHtml(`gt:${p.id}:0`, { lg: true, altKeys: gAlt }) : "";
     div.innerHTML = `
-      <div class="g-ar">${p.ar}</div>
-      <div class="g-name">${p.name}</div>
-      <div class="meta">${n ? `used by <b>${n}</b> sentences you have to learn` : "from your class"}
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span style="display:inline-flex;align-items:center;gap:6px">${gDot}<span class="g-name" style="margin:0">${p.name}</span></span>
+        <span class="g-ar" style="margin:0">${p.ar}</span>
+      </div>
+      <div class="meta" style="margin-top:6px">${n ? `used by <b>${n}</b> sentences you have to learn` : "from your class"}
         · ${p.test.length}-question test<br>${status}</div>
     `;
     div.onclick = () => { history.pushState({}, "", `grammar.html?g=${p.id}`); renderPattern(p); };
@@ -182,8 +186,9 @@ function renderPattern(p) {
   p.test.forEach((t, i) => {
     const div = document.createElement("div");
     div.className = "gt";
+    const tDot = (window.SRS && SRS.dotHtml) ? SRS.dotHtml(`gt:${p.id}:${i}`, { lg: true }) : "";
     div.innerHTML = `
-      <div class="prompt">${t.prompt}<span class="hint">${t.hint}</span></div>
+      <div class="prompt" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">${tDot}<span>${t.prompt}</span><span class="hint">${t.hint}</span></div>
       <input class="fill-input" data-i="${i}" autocomplete="off" style="max-width:260px">
       <span class="correct-answer" style="display:none"></span>
     `;
@@ -220,16 +225,18 @@ function renderPattern(p) {
       if (romOk) { right++; ans.style.display = "block"; ans.textContent = t.ar; }
       else if (ok) { right++; ans.style.display = "none"; }
       else { ans.style.display = "block"; ans.textContent = t.ar; }
+      if (window.SRS && SRS.rate) SRS.rate(`gt:${p.id}:${i}`, ok ? "yes" : "no");
       logEvent({ e: "gfill", g: p.id, i, typed: input.value, ok, ...(romOk ? { rom: true } : {}) });
     });
+    if (window.SRS && SRS.refreshDots) SRS.refreshDots(ta);
     let scoreMsg = `Score: ${right} / ${p.test.length}` + (right === p.test.length ? " — ممتاز! 🎉" : " — re-read the pattern and try again any time.");
     if (right >= Math.ceil(p.test.length * 0.6)) {
       // pattern learnt once is pattern forgotten — its chunks join the spaced-review deck
       const added = seedCards(p.test.map((t, i) => `gt:${p.id}:${i}`));
       if (added) scoreMsg += ` These ${added} pattern chunks will now resurface in your Review on a spaced schedule.`;
+      setStepDone("gr-" + p.id, "test");
     }
     document.getElementById("gScore").textContent = scoreMsg;
-    setStepDone("gr-" + p.id, "test");
     logEvent({ e: "gtest-done", g: p.id, score: right, total: p.test.length });
     autoSync();
   };

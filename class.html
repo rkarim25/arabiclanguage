@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -580,18 +580,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwfhfp7r"></script>
-<script src="js/curriculum.js?v=mwfhfp7r"></script>
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/frames.js?v=mwfhfp7r"></script>
-<script src="js/freetry.js?v=mwfhfp7r"></script>
-<script src="js/practice.js?v=mwfhfp7r"></script>
-<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/errors.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
-<script src="js/account.js?v=mwfhfp7r"></script>
+<script src="js/progress-model.js?v=mwfi0hay"></script>
+<script src="js/curriculum.js?v=mwfi0hay"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/frames.js?v=mwfi0hay"></script>
+<script src="js/freetry.js?v=mwfi0hay"></script>
+<script src="js/practice.js?v=mwfi0hay"></script>
+<script src="js/lesson-cards.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/errors.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
+<script src="js/account.js?v=mwfi0hay"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -2307,11 +2307,7 @@ function renderVocabTable() {
   vDiv.innerHTML = `
     <div class="srs-legend-bar" style="margin:4px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <span class="leg-item"><span class="leg-dot strong"></span> 30d</span>
-        <span class="leg-item"><span class="leg-dot medium"></span> 7d</span>
-        <span class="leg-item"><span class="leg-dot weak"></span> 2d</span>
-        <span class="leg-item"><span class="leg-dot learning"></span> 1d</span>
-        <span class="leg-item"><span class="leg-dot never"></span> Retire</span>
+        ${(window.SRS && SRS.legendHtml) ? SRS.legendHtml() : ""}
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <span style="font-size:11.5px;color:var(--muted);margin-right:2px">Order:</span>
@@ -2400,10 +2396,23 @@ function renderVocabTable() {
 
 function gradeClassSentence(key, g, origIdx) {
   const nc = SRS.rate(key, g);
+  const cls = getCurrentClass();
+  const s = cls && cls.sentences && cls.sentences[origIdx];
+  if (s && Array.isArray(s.words) && (g === "yes" || g === "solid")) {
+    const srsNow = getSrs();
+    s.words.forEach(w => {
+      const wAr = Array.isArray(w) ? w[0] : (w && w.ar);
+      if (!wAr) return;
+      const n = normalizeAr(wAr);
+      const found = (cls.vocabulary || []).find(v => normalizeAr(v.ar) === n);
+      if (found && found.key && !(srsNow[found.key] && srsNow[found.key].b === "never")) SRS.rate(found.key, "yes");
+    });
+  }
   logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "class-sentence", t: Date.now() });
   if (typeof autoSync === "function") autoSync();
   SRS.paintBar(document.getElementById("cls-srow-" + origIdx), key, nc);
   renderTeacherBrief();
+  if (typeof renderAiPracticeBrief === "function") renderAiPracticeBrief();
 }
 
 function gradeClassWord(key, g, btn) {
@@ -2419,6 +2428,13 @@ function gradeClassWord(key, g, btn) {
       const found = (c.vocabulary || []).find(x => x.key === key);
       if (found) { wordAr = found.ar; wordEn = found.en; break; }
     }
+  }
+  if (wordAr) {
+    const norm = normalizeAr(wordAr).replace(/^ال/, "");
+    const srsNow = getSrs();
+    ["tw:" + norm, norm, wordAr].forEach(tk => {
+      if (tk && tk !== key && srsNow[tk] && !(srsNow[tk].b === "never" && g === "maybe")) SRS.rate(tk, g);
+    });
   }
 
   logEvent({
@@ -2442,6 +2458,8 @@ function gradeClassWord(key, g, btn) {
   if (typeof autoSync === "function") autoSync();
 
   renderVocabTable();
+  renderTeacherBrief();
+  if (typeof renderAiPracticeBrief === "function") renderAiPracticeBrief();
 }
 
 function renderVocabAndSentences() {
@@ -3006,6 +3024,19 @@ function startMasteryTest() {
     btns.forEach(b => b.disabled = true);
     const qItem = questions[curQ];
     const isOk = picked === correct;
+    if (window.SRS && SRS.rate && CLASS_DATA && Array.isArray(CLASS_DATA.classes)) {
+      const mAr = (qItem.q || "").match(/class=['"]arabic['"][^>]*>([^<]+)<\//);
+      const qAr = mAr ? normalizeAr(mAr[1]) : "";
+      if (qAr) {
+        const cls = CLASS_DATA.classes.find(c => c.id === CURRENT_CLASS_ID);
+        if (cls) {
+          const vHit = (cls.vocabulary || []).find(v => normalizeAr(v.ar) === qAr);
+          if (vHit && vHit.key) SRS.rate(vHit.key, isOk ? "yes" : "no");
+          const sIdx = (cls.sentences || []).findIndex(s => normalizeAr(s.ar) === qAr);
+          if (sIdx >= 0) SRS.rate(`cls:${cls.id}:${sIdx}`, isOk ? "yes" : "no");
+        }
+      }
+    }
     logEvent({
       e: "test-item",
       test: "preply",

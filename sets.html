@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -58,11 +58,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/lesson-cards.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -179,10 +179,10 @@ function render() {
       html += `
         <div class="set-row" id="set-${s.id}">
           <div class="set-head" onclick="toggleSet('${s.id}')">
-            <span class="ic" style="display:inline-flex;align-items:center;gap:6px"><span class="m-dot m-${setLvl} lg" title="${sc.green}/${sc.total} mastered · ${sc.amber} building · ${sc.red} needs work"></span><span>${s.ic}</span></span>
+            <span class="ic" style="display:inline-flex;align-items:center;gap:6px"><span class="m-dot m-${setLvl} lg" id="set-dot-${s.id}" title="${sc.green}/${sc.total} mastered · ${sc.amber} building · ${sc.red} needs work"></span><span>${s.ic}</span></span>
             <span class="ttl">${s.en}<small>${g.theme}</small></span>
             <span class="ar">${g.title || ""}</span>
-            <span class="cnt">${sc.green || sc.amber ? `<span class="m-dot m-green sm"></span> ${sc.green}/${sc.total}` : `${sc.total} words`}</span>
+            <span class="cnt" id="set-cnt-${s.id}">${sc.green || sc.amber ? `<span class="m-dot m-green sm"></span> ${sc.green}/${sc.total}` : `${sc.total} words`}</span>
             <span class="chev">▶</span>
           </div>
           <div class="set-body" id="setbody-${s.id}"></div>
@@ -246,11 +246,30 @@ function buildLessonCard(lcId) {
     <div class="set-links" id="lc-rate-wrap-${card.id}" style="justify-content:space-between">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-size:12.5px;font-weight:600;color:var(--ink)">Mark Lesson Card for spaced review:</span>
-        <span class="lc-rate-slot">${SRS.rateBarHtml(srsKey, "rateSetLessonCard", ["'" + card.id + "'"])}</span>
+        <span class="lc-rate-slot">${SRS.rateBarHtml(srsKey, "rateSetLessonCard", [card.id])}</span>
       </div>
       <a href="index.html?lc=${encodeURIComponent(card.id)}" style="font-weight:700">⚡ Practise Lesson Card in Practice →</a>
     </div>`;
 }
+
+function refreshSetHeaders() {
+  if (!window.SRS || !SRS.summaryCounts) return;
+  EV.forEach(g => {
+    const dotEl = document.getElementById("set-dot-" + g.id);
+    const cntEl = document.getElementById("set-cnt-" + g.id);
+    if (!dotEl && !cntEl) return;
+    const sc = SRS.summaryCounts((g.members || []).map((_, mi) => `ev-${g.id}:${mi}`));
+    const setLvl = sc.total > 0 && sc.green >= Math.ceil(sc.total * 0.8) ? "green" : sc.red > 0 ? "red" : (sc.green > 0 || sc.amber > 0) ? "amber" : "grey";
+    if (dotEl) {
+      dotEl.className = "m-dot m-" + setLvl + " lg";
+      dotEl.title = `${sc.green}/${sc.total} mastered · ${sc.amber} building · ${sc.red} needs work`;
+    }
+    if (cntEl) {
+      cntEl.innerHTML = sc.green || sc.amber ? `<span class="m-dot m-green sm"></span> ${sc.green}/${sc.total}` : `${sc.total} words`;
+    }
+  });
+}
+window.addEventListener("ats-mastery-updated", refreshSetHeaders);
 
 function rateSetLessonCard(key, g, lcId) {
   const nc = SRS.rate(key, g);

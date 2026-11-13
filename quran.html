@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,10 +46,10 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -294,7 +294,16 @@ function renderListenTest(s) {
       const ok = opts[+b.dataset.i] === v.en;
       if (ok) right++;
       logEvent({ e: "qlisten-q", surah: s.id, ref: v.ref, ok });
-      if (window.SRS && SRS.rate) SRS.rate(`s:q:${s.id}:${vi + 1}`, ok ? "yes" : "no");
+      if (window.SRS && SRS.rate) {
+        SRS.rate(`s:q:${s.id}:${vi + 1}`, ok ? "yes" : "no");
+        if (Array.isArray(v.words)) {
+          const srsNow = typeof getSrs === "function" ? getSrs() : {};
+          v.words.forEach((_, wi) => {
+            const wk = `qw:${s.id}:${vi}:${wi}`;
+            if (ok || (srsNow[wk] && srsNow[wk].u)) SRS.rate(wk, ok ? "yes" : "no");
+          });
+        }
+      }
       document.querySelectorAll("#clOpts button").forEach(x => {
         x.disabled = true;
         if (opts[+x.dataset.i] === v.en) { x.style.borderColor = "var(--accent)"; x.style.background = "var(--accent-soft)"; }

@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
-  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .m-search {
@@ -93,10 +93,18 @@
         <button type="button" class="chip d-filter" data-dfilter="grey" onclick="setDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="cnt-grey"></span></button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:11.5px;color:var(--muted)">Review:</span>
+        <button type="button" class="chip active s-rmode" id="btnSentModeAll" onclick="setSentReviewMode('all')">All</button>
+        <button type="button" class="chip s-rmode" id="btnSentModeEn" onclick="setSentReviewMode('en-only')" title="Hide Arabic — produce Arabic from English, tap to check">🇬🇧 EN → AR</button>
+        <button type="button" class="chip s-rmode" id="btnSentModeAr" onclick="setSentReviewMode('ar-only')" title="Hide English — recognise meaning from Arabic, tap to check">🇸🇦 AR → EN</button>
+        <span id="sentRevealAllBtns" style="display:none;gap:4px">
+          <button type="button" class="chip" onclick="toggleAllSentReveal(true)">👁 Reveal All</button>
+          <button type="button" class="chip" onclick="toggleAllSentReveal(false)">🙈 Hide All</button>
+        </span>
         <button type="button" class="chip" id="btnSortWeakest" onclick="toggleWeakestSort()">📉 Weakest First</button>
         <button type="button" class="chip" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()" title="Show/hide word breakdown">🧩 Words</button>
         <button type="button" class="chip" id="btnToggleAllTblTr" onclick="toggleAllTblTr()" title="Show/hide transliteration">🔤 Translit</button>
-        <button type="button" class="chip" onclick="renderMasterBank()" title="Re-sort / refresh list">↻ Resort</button>
+        <button type="button" class="chip" onclick="resortMasterSentences()" title="Re-sort / refresh list">↻ Resort</button>
       </div>
     </div>
 
@@ -120,16 +128,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwfhfp7r"></script>
-<script src="js/curriculum.js?v=mwfhfp7r"></script>
-<script src="js/srs.js?v=mwfhfp7r"></script>
-<script src="js/frames.js?v=mwfhfp7r"></script>
-<script src="js/practice.js?v=mwfhfp7r"></script>
-<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
-<script src="js/app.js?v=mwfhfp7r"></script>
-<script src="js/tracker.js?v=mwfhfp7r"></script>
-<script src="js/plan.js?v=mwfhfp7r"></script>
-<script src="js/account.js?v=mwfhfp7r"></script>
+<script src="js/progress-model.js?v=mwfi0hay"></script>
+<script src="js/curriculum.js?v=mwfi0hay"></script>
+<script src="js/srs.js?v=mwfi0hay"></script>
+<script src="js/frames.js?v=mwfi0hay"></script>
+<script src="js/practice.js?v=mwfi0hay"></script>
+<script src="js/lesson-cards.js?v=mwfi0hay"></script>
+<script src="js/app.js?v=mwfi0hay"></script>
+<script src="js/tracker.js?v=mwfi0hay"></script>
+<script src="js/plan.js?v=mwfi0hay"></script>
+<script src="js/account.js?v=mwfi0hay"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -164,6 +172,9 @@ let WORD_GLOSS_BY_NORM = new Map();
 let bankFilter = "all";
 let dotFilter = "all";
 let sortWeakest = false;
+let sentFrozenKeys = null;
+let sentReviewMode = "all"; // 'all' | 'en-only' | 'ar-only'
+let SENT_REVEALED = new Set();
 let showLimit = 80;
 let allTblWbwVisible = false;
 let allTblTrVisible = false;
@@ -279,7 +290,7 @@ function renderSentMasterySummary() {
           <span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span>
           <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span>
         </span>
-        <span style="color:var(--muted);font-size:12px">Dots are earned automatically from Practice, Commute &amp; Tests</span>
+        <span style="color:var(--muted);font-size:12px">Review directly below, in Chapters, Qur'ān, or in ⚡ Practice — all update the same dots</span>
       </div>
       <div class="m-progress-track">
         <div class="m-progress-seg green" style="width:${gPct}%"></div>
@@ -290,6 +301,38 @@ function renderSentMasterySummary() {
   `;
 }
 window.addEventListener("ats-mastery-updated", renderSentMasterySummary);
+
+function setSentReviewMode(mode) {
+  sentReviewMode = mode;
+  SENT_REVEALED.clear();
+  document.querySelectorAll(".s-rmode").forEach(b => b.classList.remove("active"));
+  const activeId = mode === "en-only" ? "btnSentModeEn" : mode === "ar-only" ? "btnSentModeAr" : "btnSentModeAll";
+  const btn = document.getElementById(activeId);
+  if (btn) btn.classList.add("active");
+  const revBtns = document.getElementById("sentRevealAllBtns");
+  if (revBtns) revBtns.style.display = mode === "all" ? "none" : "inline-flex";
+  renderMasterBank();
+}
+
+function toggleAllSentReveal(show) {
+  if (show) MASTER_SENTENCES.forEach(s => SENT_REVEALED.add(s.key));
+  else SENT_REVEALED.clear();
+  renderMasterBank();
+}
+
+function revealMasterSentence(key, refOrEmpty, encodedAr) {
+  SENT_REVEALED.add(key);
+  renderMasterBank();
+  if (sentReviewMode === "en-only" && encodedAr) {
+    if (refOrEmpty) playRefOrSpeak(refOrEmpty, encodedAr);
+    else playSingle(encodedAr);
+  }
+}
+
+function resortMasterSentences() {
+  sentFrozenKeys = null;
+  renderMasterBank();
+}
 
 function renderGrammarRuleHtml(s) {
   if (!s) return "";
@@ -304,6 +347,7 @@ function renderGrammarRuleHtml(s) {
 function setBankFilter(filt, btn) {
   bankFilter = filt;
   showLimit = 80;
+  sentFrozenKeys = null;
   document.querySelectorAll(".b-filter").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   renderMasterBank();
@@ -312,6 +356,7 @@ function setBankFilter(filt, btn) {
 function setDotFilter(filt, btn) {
   dotFilter = filt;
   showLimit = 80;
+  sentFrozenKeys = null;
   document.querySelectorAll(".d-filter").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   renderMasterBank();
@@ -319,6 +364,7 @@ function setDotFilter(filt, btn) {
 
 function toggleWeakestSort() {
   sortWeakest = !sortWeakest;
+  sentFrozenKeys = null;
   const btn = document.getElementById("btnSortWeakest");
   if (btn) btn.classList.toggle("active", sortWeakest);
   renderMasterBank();
@@ -362,7 +408,15 @@ function renderMasterBank() {
   });
 
   if (sortWeakest && window.SRS && SRS.weakestFirst) {
-    filtered = SRS.weakestFirst(filtered, srs, now);
+    if (!sentFrozenKeys) {
+      sentFrozenKeys = SRS.weakestFirst(filtered, srs, now).map(s => s.key);
+    }
+    const rankMap = new Map(sentFrozenKeys.map((k, i) => [k, i]));
+    filtered = filtered.slice().sort((a, b) => {
+      const ra = rankMap.has(a.key) ? rankMap.get(a.key) : 999999;
+      const rb = rankMap.has(b.key) ? rankMap.get(b.key) : 999999;
+      return ra - rb;
+    });
   }
 
   const pracLink = document.getElementById("practiseSentFilterLink");
@@ -388,9 +442,50 @@ function renderMasterBank() {
 
   const displaySlice = filtered.slice(0, showLimit);
   tbody.innerHTML = displaySlice.map((s, idx) => {
+    const encAr = encodeURIComponent(s.ar);
     const playCall = s.ref
-      ? `playRefOrSpeak('${s.ref}', '${encodeURIComponent(s.ar)}')`
-      : `playSingle('${encodeURIComponent(s.ar)}')`;
+      ? `playRefOrSpeak('${s.ref}', '${encAr}')`
+      : `playSingle('${encAr}')`;
+    const isRevealed = sentReviewMode === "all" || SENT_REVEALED.has(s.key);
+    const escKey = String(s.key).replace(/'/g, "\\'");
+    const escRef = String(s.ref || "").replace(/'/g, "\\'");
+    const arCellHtml = (sentReviewMode === "en-only" && !isRevealed)
+      ? `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+           <button type="button" class="chip" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Arabic</button>
+           <button type="button" class="small icon-btn" onclick="event.stopPropagation(); ${playCall}" title="Listen hint">🔊</button>
+         </div>`
+      : `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+           <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.45">${s.ar}</span>
+           <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+             <button type="button" class="small icon-btn" onclick="${playCall}" title="Listen">🔊</button>
+             ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
+             ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
+           </div>
+         </div>
+         ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+         ${s.words && s.words.length ? `
+           <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:${allTblWbwVisible ? 'flex' : 'none'};margin-top:4px">
+             <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
+               ${s.words.map((w, wIdx) => {
+                 const fam = famLookup(w[0]);
+                 return `
+                   <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
+                     <span class="w-ar">${w[0]}</span>
+                     <span class="w-en">${w[1]}</span>
+                     ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('tbl-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                   </div>
+                 `;
+               }).join("")}
+             </div>
+             <div class="wbw-drawer-slot" id="wbw-drawer-slot-tbl-${idx}"></div>
+           </div>
+         ` : ''}`;
+    const enCellHtml = (sentReviewMode === "ar-only" && !isRevealed)
+      ? `<button type="button" class="chip" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Meaning</button>`
+      : `<div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
+         ${s.note ? `<div style="font-size:11.5px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
+         ${renderGrammarRuleHtml(s)}`;
+
     return `
       <tr>
         <td style="white-space:nowrap">
@@ -399,39 +494,8 @@ function renderMasterBank() {
             <span style="color:var(--muted);font-size:11px">${idx + 1}</span>
           </span>
         </td>
-        <td>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.45">${s.ar}</span>
-            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
-              <button type="button" class="small icon-btn" onclick="${playCall}" title="Listen">🔊</button>
-              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
-              ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
-            </div>
-          </div>
-          ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
-          ${s.words && s.words.length ? `
-            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:${allTblWbwVisible ? 'flex' : 'none'};margin-top:4px">
-              <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
-                ${s.words.map((w, wIdx) => {
-                  const fam = famLookup(w[0]);
-                  return `
-                    <div class="wbw-chip-sm ${fam ? 'has-fam' : ''}" onclick="speak('${encodeURIComponent(w[0])}')" title="${w[1]}">
-                      <span class="w-ar">${w[0]}</span>
-                      <span class="w-en">${w[1]}</span>
-                      ${fam ? `<span class="wbw-rf-badge" onclick="event.stopPropagation(); toggleWbwRootFamily('tbl-${idx}', ${wIdx}, '${encodeURIComponent(w[0])}')" title="Explore root ${fam.root}">🌿 ${fam.root}</span>` : ''}
-                    </div>
-                  `;
-                }).join("")}
-              </div>
-              <div class="wbw-drawer-slot" id="wbw-drawer-slot-tbl-${idx}"></div>
-            </div>
-          ` : ''}
-        </td>
-        <td>
-          <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
-          ${s.note ? `<div style="font-size:11.5px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
-          ${renderGrammarRuleHtml(s)}
-        </td>
+        <td>${arCellHtml}</td>
+        <td>${enCellHtml}</td>
         <td>
           <span style="font-size:11.5px;color:var(--muted);white-space:nowrap">
             ${s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'ān" : '🗣 Everyday'}
@@ -486,6 +550,8 @@ function toggleAllTblTr() {
 }
 
 function rateMasterSentence(key, g) {
+  const wasVeiled = sentReviewMode !== "all" && !SENT_REVEALED.has(key);
+  SENT_REVEALED.add(key);
   const s = MASTER_SENTENCES.find(x => x.key === key);
   let nc = null;
   if (s && window.Practice && typeof Practice.syncVerdict === "function") {
@@ -499,6 +565,7 @@ function rateMasterSentence(key, g) {
     nc = SRS.rate(key, g);
   }
   autoSync();
+  if (wasVeiled) renderMasterBank();
   SRS.paintBar(document.getElementById("bankTableBody"), key, nc);
   renderSentMasterySummary();
 }

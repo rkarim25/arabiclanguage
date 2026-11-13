@@ -21,13 +21,28 @@ bank.sentences.forEach(s => (s.words || []).forEach(w => {
   const keys = (w && w.keys) || [];
   for (let i = 1; i < keys.length; i++) union(keys[0], keys[i]);
 }));
-/* sentences: the same Arabic under two keys (bank, everyday groups, phrases, Say your day) */
+/* sentences & vocabulary: the same Arabic under two keys (bank, chapters, classes, everyday, quran-core, families, phrases, quran, Say your day) */
 const byAr = new Map();
 const claim = (ar, key) => { const n = norm(ar); if (!n || !key) return; if (!byAr.has(n)) byAr.set(n, []); if (!byAr.get(n).includes(key)) byAr.get(n).push(key); };
 bank.sentences.forEach(s => claim(s.ar, s.key));
+try { D("chapters.json").chapters.forEach(c => (c.sentences || []).forEach((s, i) => claim(s.ar, `chap:${c.num}:${i}`))); } catch (e) {}
+try {
+  D("classes.json").classes.forEach(c => {
+    (c.sentences || []).forEach((s, i) => claim(s.ar, `cls:${c.id}:${i}`));
+    (c.vocabulary || []).forEach(v => claim(v.ar, v.key));
+  });
+} catch (e) {}
+try { D("quran-core.json").words.forEach((w, i) => claim(w.ar, `qc:${i}`)); } catch (e) {}
 try { D("everyday.json").groups.forEach(g => g.members.forEach((m, i) => claim(m.ar, `ev-${g.id}:${i}`))); } catch (e) {}
+try { D("families.json").families.forEach(f => (f.members || []).forEach((m, i) => claim(m.ar, `fam-${f.id}:${i}`))); } catch (e) {}
 try { D("phrases.json").groups.forEach(g => g.members.forEach((m, i) => claim(m.ar, `ph-${g.id}:${i}`))); } catch (e) {}
 try { D("myday.json").sentences.forEach(s => claim(s.ar, s.id)); } catch (e) {}
+try {
+  D("quran.json").surahs.forEach(s => (s.verses || []).forEach((v, vi) => {
+    claim(v.ar, `s:q:${s.id}:${vi + 1}`);
+    (v.words || []).forEach((w, wi) => claim(Array.isArray(w) ? w[0] : w.ar, `qw:${s.id}:${vi}:${wi}`));
+  }));
+} catch (e) {}
 let sentDupes = 0;
 byAr.forEach(keys => { if (keys.length > 1) { sentDupes++; for (let i = 1; i < keys.length; i++) union(keys[0], keys[i]); } });
 
