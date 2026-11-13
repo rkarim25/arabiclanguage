@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,10 +34,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -142,7 +142,10 @@ function renderPattern(p) {
   trackPage(`grammar:${p.id}`);
   window.scrollTo({ top: 0 });
   content.innerHTML = `
-    <p><a href="grammar.html" style="color:var(--accent);text-decoration:none">← All patterns</a></p>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+      <a href="grammar.html" style="color:var(--accent);text-decoration:none">← All patterns</a>
+      <a href="index.html?grammar=${encodeURIComponent(p.id)}" style="background:var(--accent);color:#fff;text-decoration:none;font-weight:700;border-radius:999px;padding:5px 14px;font-size:13px">⚡ Practise Pattern in Practice →</a>
+    </div>
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>${p.name}</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">${p.ar}</span>

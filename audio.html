@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -52,15 +52,15 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/frames.js?v=mwfgx80c"></script>
-<script src="js/freetry.js?v=mwfgx80c"></script>
-<script src="js/practice.js?v=mwfgx80c"></script>
-<script src="js/lesson-cards.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/frames.js?v=mwfhfp7r"></script>
+<script src="js/freetry.js?v=mwfhfp7r"></script>
+<script src="js/practice.js?v=mwfhfp7r"></script>
+<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -530,7 +530,7 @@ function checkDueLine() {
     const since = Date.now() - last.t;
     const done = lg.some(e => e.e === "commute-check-done" && e.forT === last.t);
     if (!done && since >= 8 * 3600e3 && since <= 7 * 86400e3)
-      return `<a href="sentences.html?myday=1" style="flex-basis:100%;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px dashed var(--accent);border-radius:12px;padding:10px 14px">🗣 Your last commute's sentences are waiting in Say your day →</a>`;
+      return `<a href="index.html?myday=1" style="flex-basis:100%;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px dashed var(--accent);border-radius:12px;padding:10px 14px">🗣 Your last commute's sentences are waiting in Practice →</a>`;
   } catch (e) {}
   return "";
 }

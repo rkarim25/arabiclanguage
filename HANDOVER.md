@@ -63,9 +63,13 @@
 
 6. **`🧑‍🏫 Teacher` Tab & Headmaster Master Plan (`class.html`):**
    - Top nav (`js/app.js`) exposes **`🧑‍🏫 Teacher`** (`class.html`), combining:
-     - **📋 Auto-Updating 20-Minute Teacher Brief (`#teacherBrief`):** Pulls words, sentences, grammar/Lesson Cards, and Qur'ān items Reza actually practised (`ats-log` + `ats-srs`, switchable `Today` / `7 days` / `14 days`), strictly capped to fit **~20 minutes** of live lesson time (max 4 sentences, max 5 words, 1 grammar twist, 1 roleplay scenario, 1 Qur'ān ayah + up to 3 Qur'ān words + 1 short root/meaning gem, and a 5-word + 2-sentence chat wrap-up rule). 1-tap copy in **🇬🇧 English**, **🇸🇦 العربية**, or **🌐 Both**.
+     - **📋 Auto-Updating 20-Minute Teacher Brief (`#teacherBrief`):** Pulls words, sentences, grammar/Lesson Cards, and Qur'ān items Reza actually practised (`ats-log` + `ats-srs`, switchable `Today` / `7 days` / `14 days`), strictly capped to fit **~20 minutes** of live lesson time (max 4 sentences, max 5 words, 1 grammar twist, 1 roleplay scenario, 1 Qur'ān ayah + up to 3 Qur'ān words + 1 short root/meaning gem, and a 5-word + 2-sentence chat wrap-up rule). 1-tap copy in **🇬🇧 English**, **🇸🇦 العربية**, or **🌐 Both**, plus `⚡ Practise Brief` deep-link into `index.html`.
+     - **🗣 Collapsed Live AI Practice Session Brief (`#aiPracticeBriefCard` / `renderAiPracticeBrief`):** Collapsed-by-default `<details>` card right under `#teacherBrief` that dynamically builds a 5-minute AI Voice Sparring prompt from the same recent `Practice` & `Commute` items, with 1-tap `📋 Copy AI Voice Brief`, `📄 Learner Context`, and `⚡ Practise These Items →`.
      - **🗺️ My Progress & Coming Weeks Master Plan (`#masterPlanSection`):** Live capability metrics (`Practice.summarizeCapabilities`), 10-Chapter spine strip, dynamic Now vs Coming Weeks roadmap, and collapsible 4-Stage Master Syllabus.
      - **📥 Paste Preply Chat Notes (`#pasteLessonSection`)** + collapsible **📚 Captured Preply Lessons & Mastery Tests Archive (`#pastClassesArchive`)**.
+
+7. **Universal Dynamic `Practice` Deep-Linking (`index.html` `loadFocusedPracticeFromUrl` + `sourceLinkMeta`):**
+   - Every tab dynamically links into `index.html` (`?chap=chap-N`, `?surah=<id>`, `?lc=<id>`, `?set=<id>`, `?grammar=<id>`, `?class=<id>`, `?focus=words&wsrc=...&dot=...`, `?filter=...&dot=...`, `?keys=...`), opening unseen items in Teach mode and seen items in Review mode with a 1-tap `⚡ Back to Daily Adaptive Batch` banner; every card in `index.html` also carries a clickable source badge linking back to its home tab.
 
 ---
 

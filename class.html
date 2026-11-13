@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
     .passage-box { background: #fcfaf5; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 16px 0; }
@@ -177,7 +177,7 @@
       <p class="sub" style="margin:2px 0">Daily-updating 20-minute brief for your Preply teacher (from what you practised) + your live progress &amp; coming-weeks plan.</p>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <a href="sentences.html" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Open Practice →</a>
+      <a href="index.html" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Open Practice →</a>
       <button type="button" class="book-toggle-pill" onclick="document.getElementById('pasteLessonSection').scrollIntoView({behavior:'smooth'})">📥 Paste Class Notes ↓</button>
     </div>
   </div>
@@ -186,6 +186,15 @@
   <div id="teacherBrief">
     <div class="tb-card" style="color:var(--muted);font-size:14px">Loading your daily 20-minute Teacher Brief…</div>
   </div>
+
+  <!-- 1B. COLLAPSED LIVE AI PRACTICE SESSION BRIEF (VOICE SPARRING) -->
+  <details class="card calm-sec" id="aiPracticeBriefCard" style="margin:0 0 16px">
+    <summary>
+      <span>🗣 Live AI Practice Session Brief <span style="font-weight:500;color:var(--muted);font-size:12.5px">· ChatGPT / Claude Voice Sparring</span></span>
+      <span class="pd-muted" id="aiBriefSummaryMeta">Live from Practice · Tap to expand ▾</span>
+    </summary>
+    <div id="aiPracticeBriefBody" style="margin-top:12px;color:var(--muted);font-size:13.5px">Building your live AI voice practice brief…</div>
+  </details>
 
   <!-- SUNDAY WARM-UP SCRIPT & HOMEWORK CHECK-IN -->
   <details id="sundayCheckDrawer" class="more block" style="margin:0 0 16px">
@@ -235,7 +244,10 @@
         <span id="lessonMetaDate" style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 2 · 27 SEP 2026</span>
         <h2 id="lessonTitle" style="margin:2px 0 6px">A Working Day &amp; The Protection Surahs (يَوْمُ العَمَل والمعوذتان)</h2>
       </div>
-      <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <a id="practiseClassLink" href="index.html?filter=teacher" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Practise Lesson in Practice →</a>
+        <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
+      </div>
     </div>
     <details class="more block" style="margin:6px 0 14px"><summary>About this lesson</summary>
     <p id="lessonCoveredDesc" class="more-body" style="font-size:14.5px;line-height:1.6;margin:8px 0 4px">
@@ -568,18 +580,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwfgx80c"></script>
-<script src="js/curriculum.js?v=mwfgx80c"></script>
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/frames.js?v=mwfgx80c"></script>
-<script src="js/freetry.js?v=mwfgx80c"></script>
-<script src="js/practice.js?v=mwfgx80c"></script>
-<script src="js/lesson-cards.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/errors.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>
+<script src="js/progress-model.js?v=mwfhfp7r"></script>
+<script src="js/curriculum.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/frames.js?v=mwfhfp7r"></script>
+<script src="js/freetry.js?v=mwfhfp7r"></script>
+<script src="js/practice.js?v=mwfhfp7r"></script>
+<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/errors.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -776,6 +788,7 @@ let BRIEF_WINDOW = "7d";   // "today" | "7d" | "14d"
 
     // Re-render brief & progress automatically if cloud sync finishes after initial paint
     window.addEventListener("ats-synced", () => { renderTeacherBrief(); renderMasterPlan(); });
+    window.addEventListener("ats-mastery-updated", () => { renderTeacherBrief(); renderMasterPlan(); });
   } catch (e) {
     console.error("Failed to load Teacher Hub data", e);
   }
@@ -796,6 +809,8 @@ async function loadClassLesson(classId) {
   const pTitleEl = document.getElementById("passageTitleHeader");
   const testTitleEl = document.getElementById("testBoxTitle");
 
+  const pracClsEl = document.getElementById("practiseClassLink");
+  if (pracClsEl) pracClsEl.href = "index.html?class=" + encodeURIComponent(cls.id);
   if (metaDateEl) metaDateEl.textContent = `LESSON ${classNumber(cls.id)} · ${classDateLabel(cls.date).toUpperCase()}`;
   if (titleEl) titleEl.textContent = cls.title || "Preply Sunday Lesson";
   if (descEl) descEl.innerHTML = cls.covered ? `From your Preply teacher: ${cls.covered}` : "";
@@ -1067,22 +1082,22 @@ async function renderTeacherBrief() {
     const solidSents = sentTouches.filter(x => !x.shaky);
     const pickedSents = [];
     const seenSentAr = new Set();
-    const pushSent = (entry, badge, isShaky) => {
+    const pushSent = (entry, badge, isShaky, explicitKey) => {
       if (!entry || !entry.ar || pickedSents.length >= 4) return;
       const n = normalizeAr(entry.ar);
       if (seenSentAr.has(n)) return;
       seenSentAr.add(n);
-      pickedSents.push({ ar: entry.ar, en: entry.en, tr: entry.tr || "", badge, shaky: !!isShaky });
+      pickedSents.push({ key: explicitKey || entry.key || "", ar: entry.ar, en: entry.en, tr: entry.tr || "", pattern: entry.pattern || null, badge, shaky: !!isShaky });
     };
-    shakySents.slice(0, 3).forEach(x => pushSent(x.item, "Practised — slipped", true));
-    solidSents.slice(0, 4 - pickedSents.length).forEach(x => pushSent(x.item, "Practised — test variations", false));
+    shakySents.slice(0, 3).forEach(x => pushSent(x.item, "Practised — slipped", true, x.item.key));
+    solidSents.slice(0, 4 - pickedSents.length).forEach(x => pushSent(x.item, "Practised — test variations", false, x.item.key));
     if (pickedSents.length < 3 && activeChap && activeChap.sentences) {
       activeChap.sentences.forEach((s, idx) => {
         if (pickedSents.length >= 4) return;
         const k = "chap:" + activeChap.num + ":" + idx;
         const c = srs[k];
         const sh = c && (c.g === "no" || c.g === "maybe" || (c.box || 0) <= 1);
-        pushSent(s, "Active Ch " + activeChap.num, !!sh);
+        pushSent(s, "Active Ch " + activeChap.num, !!sh, k);
       });
     }
 
@@ -1103,7 +1118,7 @@ async function renderTeacherBrief() {
       const n = bareWordNorm(w.ar);
       if (seenWordAr.has(n)) return;
       seenWordAr.add(n);
-      pickedWords.push({ ar: w.ar, en: shortGloss(w.en), shaky: !!shaky, tag });
+      pickedWords.push({ key: w.key || "", ar: w.ar, en: shortGloss(w.en), tr: w.tr || "", shaky: !!shaky, tag });
     };
     wordTouches.filter(x => x.shaky).forEach(x => pushWord(x.item, true, "slipped"));
     wordTouches.filter(x => !x.shaky).forEach(x => pushWord(x.item, false, "reviewed"));
@@ -1168,6 +1183,7 @@ async function renderTeacherBrief() {
       const vIdx = Math.min(1, chapSurahObj.verses.length - 1);
       const v = chapSurahObj.verses[vIdx];
       pickedAyah = {
+        key: "s:q:" + chapSurahObj.id + ":" + (vIdx + 1),
         ar: v.ar, en: v.en, ref: v.ref || (chapSurahObj.n + ":" + (vIdx + 1)),
         surah: chapSurahObj.name || chapSurahObj.id, surahNum: chapSurahObj.n, ayahNum: vIdx + 1,
         isFallback: true
@@ -1181,20 +1197,29 @@ async function renderTeacherBrief() {
       const n = bareWordNorm(x.item.ar);
       if (seenQW.has(n)) return;
       seenQW.add(n);
-      pickedQWords.push({ ar: x.item.ar, en: shortGloss(x.item.en), shaky: x.shaky });
+      pickedQWords.push({ key: x.item.key || "", ar: x.item.ar, en: shortGloss(x.item.en), shaky: x.shaky });
     });
     if (pickedQWords.length < 2 && chapSurahObj && chapSurahObj.verses) {
-      chapSurahObj.verses.forEach(v => (v.words || []).forEach(w => {
+      chapSurahObj.verses.forEach((v, vIdx) => (v.words || []).forEach((w, wIdx) => {
         if (pickedQWords.length >= 3) return;
         const gloss = w[2] || w[1] || "";
         const n = bareWordNorm(w[0] || "");
         if (!n || n.length < 3 || seenQW.has(n) || !gloss) return;
         seenQW.add(n);
-        pickedQWords.push({ ar: w[0], en: gloss, shaky: false });
+        pickedQWords.push({ key: "qw:" + chapSurahObj.id + ":" + vIdx + ":" + wIdx, ar: w[0], en: gloss, shaky: false });
       }));
     }
 
     const dateLabel = new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+    const briefKeys = [
+      ...pickedSents.map(s => s.key),
+      ...pickedWords.map(w => w.key),
+      pickedAyah ? pickedAyah.key : "",
+      ...pickedQWords.map(w => w.key)
+    ].filter(Boolean);
+    const briefPracticeHref = briefKeys.length
+      ? ("index.html?keys=" + encodeURIComponent(briefKeys.join(",")) + "&label=" + encodeURIComponent("Teacher Brief (" + dateLabel + ")"))
+      : "index.html";
 
     // Plain-text English & Arabic copyable briefs (strictly ~20 mins, zero rigid minute timestamps)
     const enLines = [
@@ -1274,6 +1299,7 @@ async function renderTeacherBrief() {
               <button type="button" class="tb-pill ${BRIEF_LANG === 'ar' ? 'active' : ''}" onclick="setBriefLang('ar')">🇸🇦 العربية</button>
               <button type="button" class="tb-pill ${BRIEF_LANG === 'both' ? 'active' : ''}" onclick="setBriefLang('both')">🌐 Both</button>
             </div>
+            <a href="${briefPracticeHref}" class="tb-pill" style="text-decoration:none;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:5px 10px" title="Practise these exact sentences, words &amp; Qur'ān items right now in Practice">⚡ Practise Brief</a>
             <button type="button" class="primary" id="briefCopy" style="font-size:13px;padding:6px 14px">📋 Copy Brief</button>
           </div>
         </div>
@@ -1391,7 +1417,121 @@ async function renderTeacherBrief() {
         if (typeof autoSync === "function") { try { autoSync(true); } catch (e2) {} }
       };
     }
+
+    renderAiPracticeBrief({
+      dateLabel,
+      effectiveWindowNote,
+      activeChap,
+      activeChapNum,
+      pickedSents,
+      pickedWords,
+      grammarFocusEn,
+      roleplayEn,
+      pickedAyah,
+      pickedQWords,
+      briefPracticeHref,
+      srs
+    });
   } catch (e) { console.error("brief", e); }
+}
+
+/* 🗣 COLLAPSED LIVE AI PRACTICE SESSION BRIEF (ChatGPT / Claude / Gemini Voice Sparring) */
+function renderAiPracticeBrief(ctx) {
+  const bodyEl = document.getElementById("aiPracticeBriefBody");
+  const metaEl = document.getElementById("aiBriefSummaryMeta");
+  if (!bodyEl || !ctx) return;
+  const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  const itemsForBrief = [];
+  (ctx.pickedSents || []).forEach(s => itemsForBrief.push({
+    key: s.key || "", kind: "sentence", ar: s.ar, en: s.en, tr: s.tr || "", pattern: s.pattern || null
+  }));
+  (ctx.pickedWords || []).forEach(w => itemsForBrief.push({
+    key: w.key || "", kind: "word", ar: w.ar, en: w.en, tr: w.tr || ""
+  }));
+  if (ctx.pickedAyah) {
+    itemsForBrief.push({
+      key: ctx.pickedAyah.key || "", kind: "quran", track: "quran",
+      ar: ctx.pickedAyah.ar, en: ctx.pickedAyah.en, ref: ctx.pickedAyah.ref || ""
+    });
+  }
+
+  let basePrompt = "";
+  if (window.Practice && typeof Practice.buildSpeakingBrief === "function" && itemsForBrief.length) {
+    basePrompt = Practice.buildSpeakingBrief(itemsForBrief, {
+      srs: ctx.srs || getSrs(),
+      grammarMap: TEACHER_HUB.grammarMap || {},
+      batchNum: 1,
+      activeChapNum: ctx.activeChapNum
+    });
+  }
+
+  const aiLines = [
+    basePrompt || `You are my warm, encouraging Modern Standard Arabic (MSA) voice sparring partner.`,
+    ``,
+    `EXTRA LIVE CONTEXT FROM MY RECENT PRACTICE (${ctx.dateLabel} · ${ctx.effectiveWindowNote}):`,
+    ctx.grammarFocusEn ? `• Target Grammar Twist: ${ctx.grammarFocusEn}` : null,
+    ctx.roleplayEn ? `• Unscripted Roleplay Scenario: ${ctx.roleplayEn}` : null,
+    ctx.pickedAyah ? `• Qur'an by Ear Check: Recite or ask me word-by-word about ﴿${ctx.pickedAyah.ar}﴾ (${ctx.pickedAyah.ref || "Qur'an"}) — "${ctx.pickedAyah.en}".` : null,
+    (ctx.pickedQWords && ctx.pickedQWords.length) ? `• Qur'an Vocabulary: ${ctx.pickedQWords.map(w => `${w.ar} (${w.en})`).join(" · ")}` : null,
+    ``,
+    `At the end of our 5-minute voice session, output a short summary block:`,
+    `=== AI VOICE SESSION REPORT ===`,
+    `Phrases Spoken Cleanly: ...`,
+    `Hesitations & Corrections: ...`,
+    `Words to Queue in Practice: ...`
+  ].filter(v => v !== null).join("\n");
+
+  if (metaEl) {
+    metaEl.textContent = `${(ctx.pickedSents || []).length} sentences · ${(ctx.pickedWords || []).length} words · Tap to expand ▾`;
+  }
+
+  bodyEl.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div style="font-size:12.5px;color:var(--muted)">
+        Built live from <b>${esc(ctx.effectiveWindowNote)}</b> (Ch ${ctx.activeChapNum}) · Paste into ChatGPT Voice or Claude Voice for a 5-min spoken drill.
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <div class="tb-pill-group" title="Practice window">
+          <button type="button" class="tb-pill ${BRIEF_WINDOW === 'today' ? 'active' : ''}" onclick="setBriefWindow('today')">Today</button>
+          <button type="button" class="tb-pill ${BRIEF_WINDOW === '7d' ? 'active' : ''}" onclick="setBriefWindow('7d')">7 days</button>
+          <button type="button" class="tb-pill ${BRIEF_WINDOW === '14d' ? 'active' : ''}" onclick="setBriefWindow('14d')">14 days</button>
+        </div>
+        <a href="${ctx.briefPracticeHref}" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Practise These Items →</a>
+        <button type="button" class="book-toggle-pill" id="btnCopyAiDossier" title="Copy your Learner Context Dossier so the AI stays within your vocabulary">📄 Learner Context</button>
+        <button type="button" class="primary" id="btnCopyAiPracticeBrief" style="font-size:13px;padding:6px 14px">📋 Copy AI Voice Brief</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      ${(ctx.pickedSents || []).map(s => `<span class="tb-word-chip ${s.shaky ? 'shaky' : ''}" style="font-size:12px">${s.key && window.SRS ? SRS.dotHtml(s.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--accent)">${esc(s.ar)}</span></span>`).join("")}
+      ${(ctx.pickedWords || []).map(w => `<span class="tb-word-chip ${w.shaky ? 'shaky' : ''}" style="font-size:12px">${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--accent)">${esc(w.ar)}</span> <span style="color:var(--muted)">${esc(w.en)}</span></span>`).join("")}
+    </div>
+    <pre style="white-space:pre-wrap;margin:0;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--ink);font-family:monospace;font-size:12px;line-height:1.5;max-height:220px;overflow:auto">${esc(aiLines)}</pre>
+  `;
+
+  const copyBtn = document.getElementById("btnCopyAiPracticeBrief");
+  if (copyBtn) {
+    copyBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(aiLines);
+        copyBtn.textContent = "✓ Copied AI Brief!";
+        setTimeout(() => { if (copyBtn) copyBtn.textContent = "📋 Copy AI Voice Brief"; }, 2200);
+      } catch (e) {
+        copyBtn.textContent = "Select text below";
+      }
+      logEvent({ e: "prompt", src: "teacher-ai-brief", window: BRIEF_WINDOW, t: Date.now() });
+      if (typeof autoSync === "function") { try { autoSync(true); } catch (e2) {} }
+    };
+  }
+  const dosBtn = document.getElementById("btnCopyAiDossier");
+  if (dosBtn && typeof copyLearnerDossier === "function") {
+    dosBtn.onclick = () => {
+      copyLearnerDossier(ctx.activeChap).then(() => {
+        dosBtn.textContent = "✓ Context Copied!";
+        setTimeout(() => { if (dosBtn) dosBtn.textContent = "📄 Learner Context"; }, 2200);
+      });
+    };
+  }
 }
 
 /* 🗺️ HEADMASTER MASTER PLAN: Live Current Progress + Coming Weeks Syllabus */
@@ -1505,7 +1645,10 @@ function renderMasterPlan() {
         <!-- COMING WEEKS ROADMAP -->
         <div class="mp-horizon-grid">
           <div class="mp-horizon now">
-            <div style="font-size:11.5px;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:4px">🟢 Now · Current Focus</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+              <span style="font-size:11.5px;font-weight:800;color:var(--accent);text-transform:uppercase">🟢 Now · Current Focus</span>
+              <a href="index.html?chap=${activeChap.id}" style="font-size:12px;font-weight:700;color:var(--accent);text-decoration:none">⚡ Practise Ch ${activeChap.num} →</a>
+            </div>
             <div style="font-weight:700;font-size:15px;margin-bottom:6px">${esc(activeChap.title)}</div>
             <div style="font-size:13px;line-height:1.55;color:var(--ink)">
               • <b>Sentences:</b> ${chapSolid}/${chapTotal} solid in Practice (${chapSolid >= 8 ? "🔥 Ready for Chapter Test on Chapters!" : "Batch 1 advances unseen lines automatically"})<br>

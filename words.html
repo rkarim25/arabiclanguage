@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -168,9 +168,12 @@
   <div id="wordsMasteryBar" style="margin-bottom:12px"></div>
 
   <!-- Top View Switcher -->
-  <div class="tab-bar">
-    <button type="button" class="tab-btn active" id="tabMaster" onclick="switchView('master')">📋 All Words</button>
-    <button type="button" class="tab-btn" id="tabPractice" onclick="switchView('practice')">⚡ Quick 10-Word Drill</button>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+    <div class="tab-bar" style="margin-bottom:0">
+      <button type="button" class="tab-btn active" id="tabMaster" onclick="switchView('master')">📋 All Words</button>
+      <button type="button" class="tab-btn" id="tabPractice" onclick="switchView('practice')">⚡ Quick 10-Word Drill</button>
+    </div>
+    <a id="practiseWordsFilterLink" href="index.html?focus=words" class="chip" style="text-decoration:none;color:var(--accent);border-color:var(--accent);font-weight:700">⚡ Practise Words in Practice →</a>
   </div>
 
   <!-- PRACTICE VIEW -->
@@ -288,16 +291,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwfgx80c"></script>
-<script src="js/curriculum.js?v=mwfgx80c"></script>
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/match.js?v=mwfgx80c"></script>
-<script src="js/errors.js?v=mwfgx80c"></script>
-<script src="js/tryit.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>
+<script src="js/progress-model.js?v=mwfhfp7r"></script>
+<script src="js/curriculum.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/match.js?v=mwfhfp7r"></script>
+<script src="js/errors.js?v=mwfhfp7r"></script>
+<script src="js/tryit.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -671,6 +674,21 @@ function renderMasterTable() {
     }
     return true;
   });
+
+  const wPracLink = document.getElementById("practiseWordsFilterLink");
+  if (wPracLink) {
+    if (query && filtered.length > 0) {
+      const topKeys = filtered.slice(0, 12).map(w => w.key).join(",");
+      wPracLink.href = "index.html?keys=" + encodeURIComponent(topKeys) + "&label=" + encodeURIComponent("Words: " + query);
+      wPracLink.textContent = "⚡ Practise " + Math.min(12, filtered.length) + " Matching in Practice →";
+    } else if (masterFilter !== "all" || wordDotFilter !== "all") {
+      wPracLink.href = "index.html?focus=words&wsrc=" + encodeURIComponent(masterFilter) + (wordDotFilter !== "all" ? "&dot=" + encodeURIComponent(wordDotFilter) : "");
+      wPracLink.textContent = "⚡ Practise Filtered (" + filtered.length + ") in Practice →";
+    } else {
+      wPracLink.href = "index.html?focus=words";
+      wPracLink.textContent = "⚡ Practise Words in Practice →";
+    }
+  }
 
   if (filtered.length === 0) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;

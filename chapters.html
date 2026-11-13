@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
@@ -109,7 +109,7 @@
         <div class="resume-sub" id="resumeSub"></div>
       </div>
       <div class="resume-actions">
-        <a href="index.html" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Open your adaptive Practice session (auto-syncs this chapter)">⚡ Practice</a>
+        <a href="index.html" id="btnPractiseChapter" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Practise this chapter dynamically in Practice (auto-syncs sentences, words &amp; dots)">⚡ Practise Chapter</a>
         <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
         <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
       </div>
@@ -169,7 +169,7 @@
     <div class="sentence-list" id="sentenceList">Loading sentences…</div>
     <div class="vocab-list" id="chapterVocabList" style="display:none;overflow-x:auto">Loading vocabulary…</div>
     <div style="margin-top:10px;text-align:right">
-      <a href="sentences.html?view=list" style="font-size:12.5px;color:var(--accent);text-decoration:none">View full sentence bank &amp; verb frames →</a>
+      <a href="sentences.html" style="font-size:12.5px;color:var(--accent);text-decoration:none">View full sentence library →</a>
     </div>
   </div>
 
@@ -251,16 +251,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwfgx80c"></script>
-<script src="js/curriculum.js?v=mwfgx80c"></script>
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/match.js?v=mwfgx80c"></script>
-<script src="js/errors.js?v=mwfgx80c"></script>
-<script src="js/frames.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>
+<script src="js/progress-model.js?v=mwfhfp7r"></script>
+<script src="js/curriculum.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/match.js?v=mwfhfp7r"></script>
+<script src="js/errors.js?v=mwfhfp7r"></script>
+<script src="js/frames.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3707,6 +3707,13 @@ function loadChapter(chap, resumeLineIdx) {
   resetTestArea();
   renderAiReportHistory();
 
+  // Update dynamic Practice link for this chapter
+  const btnPracChap = document.getElementById("btnPractiseChapter");
+  if (btnPracChap && chap) {
+    btnPracChap.href = "index.html?chap=" + encodeURIComponent(chap.id);
+    btnPracChap.textContent = "⚡ Practise Ch " + chap.num;
+  }
+
   // Update Selector and Resume Banner
   updateChapterSelector();
   updateResumeBanner();
@@ -4054,7 +4061,7 @@ function renderChapterMasteryStrip() {
           <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span>
         </span>
         <span style="color:var(--muted);font-size:12px">
-          🔤 Words: <span class="m-dot m-green sm"></span> <b>${vc.green}/${vc.total}</b> · Earned via <a href="index.html" style="color:var(--accent);font-weight:600;text-decoration:none">⚡ Practice</a> &amp; tests
+          🔤 Words: <span class="m-dot m-green sm"></span> <b>${vc.green}/${vc.total}</b> · <a href="index.html?chap=${curChap.id}" style="color:var(--accent);font-weight:700;text-decoration:none">⚡ Practise Ch ${curChap.num} in Practice →</a>
         </span>
       </div>
       <div class="m-progress-track" title="${sc.green} green · ${sc.amber} amber · ${sc.red} red · ${sc.grey} unseen">

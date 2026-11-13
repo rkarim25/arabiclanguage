@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -206,6 +206,7 @@
 
   <!-- LIVE ACTIVE CHAPTER EARNED GREEN BAR -->
   <div id="homeChapStrip" style="margin-bottom:12px"></div>
+  <div id="focusBanner" style="display:none;margin-bottom:10px"></div>
 
   <!-- PRACTICE VIEW -->
   <div id="viewPractice">
@@ -266,20 +267,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwfgx80c"></script>
-<script src="js/curriculum.js?v=mwfgx80c"></script>
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/frames.js?v=mwfgx80c"></script>
-<script src="js/freetry.js?v=mwfgx80c"></script>
-<script src="js/practice.js?v=mwfgx80c"></script>
-<script src="js/lesson-cards.js?v=mwfgx80c"></script>
-<script src="js/match.js?v=mwfgx80c"></script>
-<script src="js/errors.js?v=mwfgx80c"></script>
-<script src="js/tryit.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwfhfp7r"></script>
+<script src="js/curriculum.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/frames.js?v=mwfhfp7r"></script>
+<script src="js/freetry.js?v=mwfhfp7r"></script>
+<script src="js/practice.js?v=mwfhfp7r"></script>
+<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
+<script src="js/match.js?v=mwfhfp7r"></script>
+<script src="js/errors.js?v=mwfhfp7r"></script>
+<script src="js/tryit.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -312,6 +313,11 @@ let LESSON_CARD_LOOKUP = { byId: {}, byPattern: {} };
 let GRAMMAR_PATTERNS = [];
 let GRAMMAR_MAP = {};
 let CHAPTERS_LIST = [];
+let CLASSES_LIST = [];
+let EV_GROUPS = [];
+let SURAH_MAP = {};
+let KEY_ITEM_MAP = new Map();
+let FOCUSED_PRACTICE_SPEC = null;
 let WORD_GLOSS_BY_NORM = new Map();
 let FREQ_WORDS = {};
 let ACTIVE_SENTENCES = [];
@@ -350,7 +356,7 @@ function allPracticeItems() {
 (async () => {
   try {
     if (window.LessonCards) LessonCards.ensureStyles();
-    const [bRes, cRes, clsRes, senRes, qCoreRes, evRes, famRes, gramRes, lcRes, freqRes] = await Promise.all([
+    const [bRes, cRes, clsRes, senRes, qCoreRes, evRes, famRes, gramRes, lcRes, freqRes, vRes] = await Promise.all([
       fetch("data/sentence-bank.json").then(r => r.json()).catch(() => ({ sentences: [] })),
       fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
       fetch("data/classes.json").then(r => r.json()).catch(() => ({ classes: [] })),
@@ -361,11 +367,15 @@ function allPracticeItems() {
       fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
       fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
       fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
+      fetch("data/verses.json").then(r => r.json()).catch(() => ({ surahs: [] })),
       loadFamIdx()
     ]);
     DATA = senRes;
     FREQ_WORDS = (freqRes && freqRes.words) || {};
     CHAPTERS_LIST = (cRes && cRes.chapters) || [];
+    CLASSES_LIST = (clsRes && clsRes.classes) || [];
+    EV_GROUPS = (evRes && evRes.groups) || [];
+    ((vRes && vRes.surahs) || []).forEach(s => { if (s && s.id) SURAH_MAP[s.id] = s; });
     GRAMMAR_PATTERNS = (gramRes && gramRes.patterns) || [];
     if (window.LessonCards && lcRes && Array.isArray(lcRes.cards)) {
       PRACTICE_LESSON_CARDS = LessonCards.buildPracticePool(lcRes.cards);
@@ -449,6 +459,36 @@ function allPracticeItems() {
 
     await loadMyDay();
 
+    // Index all Practice items + Surah ayahs & words so any dynamic ?keys= / ?surah= / ?set= / ?chap= link resolves cleanly
+    KEY_ITEM_MAP.clear();
+    allPracticeItems().forEach(it => { if (it && it.key && !KEY_ITEM_MAP.has(it.key)) KEY_ITEM_MAP.set(it.key, it); });
+    Object.values(SURAH_MAP).forEach(sur => {
+      (sur.verses || []).forEach((v, vi) => {
+        const aKey = "s:q:" + sur.id + ":" + (vi + 1);
+        const wPairs = (v.words || []).map(w => [w[0], w[2] || w[1] || ""]);
+        const wKeys = (v.words || []).map((_, wi) => ["qw:" + sur.id + ":" + vi + ":" + wi]);
+        if (!KEY_ITEM_MAP.has(aKey)) {
+          KEY_ITEM_MAP.set(aKey, {
+            key: aKey, kind: "quran", track: "quran", src: "quran",
+            ar: v.ar, en: v.en, tr: v.tr || "", words: wPairs, wk: wKeys,
+            ref: v.ref || (sur.n + ":" + (vi + 1)), surah: sur.nameEn ? sur.nameEn.split("—")[0].trim() : sur.name,
+            surahId: sur.id, note: "Surah " + (sur.nameEn ? sur.nameEn.split("—")[0].trim() : sur.name) + " (" + (v.ref || (sur.n + ":" + (vi + 1))) + ")"
+          });
+        }
+        (v.words || []).forEach((w, wi) => {
+          const qwKey = "qw:" + sur.id + ":" + vi + ":" + wi;
+          const gloss = w[2] || w[1] || "";
+          if (w[0] && gloss && !KEY_ITEM_MAP.has(qwKey)) {
+            KEY_ITEM_MAP.set(qwKey, {
+              key: qwKey, kind: "word", effort: 0.5, ar: w[0], en: gloss, tr: w[1] && w[2] ? w[1] : "",
+              note: "Surah " + (sur.nameEn ? sur.nameEn.split("—")[0].trim() : sur.name) + " (" + (sur.n + ":" + (vi + 1)) + ")",
+              words: [[w[0], gloss]], wk: [[qwKey]], src: "vocab", wordSrc: "quran", track: "quran-word", surahId: sur.id
+            });
+          }
+        });
+      });
+    });
+
     updateOverallStats();
     const lg = document.getElementById("srsLegend"); if (lg) lg.innerHTML = SRS.legendHtml();
     /* 🎯 Try it — say it or write it; ✨ Free try builds a batch from what he holds */
@@ -508,8 +548,10 @@ function allPracticeItems() {
     /* the plan's core block: ?myday=1 → Practice; &rehearse=1 → only what he proved this week */
     const q = new URLSearchParams(location.search);
     if (q.get("view") === "list" || q.get("view") === "master") { location.replace("sentences.html"); return; }
-    const reqBatch = parseInt(q.get("batch") || "0", 10);
-    await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
+    if (!loadFocusedPracticeFromUrl(location.search)) {
+      const reqBatch = parseInt(q.get("batch") || "0", 10);
+      await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
+    }
     renderHomeChapStrip();
   } catch (e) {
     console.error("Failed to load sentence bank", e);
@@ -551,6 +593,9 @@ function updateOverallStats() {
 function loadPracticeBatch(explicitBatchNum) {
   stopAudio();
   if (window.TryIt) TryIt.endFree();
+  FOCUSED_PRACTICE_SPEC = null;
+  const fb = document.getElementById("focusBanner");
+  if (fb) { fb.style.display = "none"; fb.innerHTML = ""; }
   REVEALED.clear();
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
@@ -769,6 +814,325 @@ function renderGrammarRuleHtml(s, forceCompact) {
   return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${g.ar} (${g.shortName})</summary><div style="margin-top:4px">${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
 }
 
+function sourceLinkMeta(s) {
+  if (!s) return null;
+  const k = String(s.key || "");
+  if (s.kind === "lesson-card") {
+    const id = (s.lcCard && s.lcCard.id) || k.replace(/^lc:/, "");
+    return { href: "sets.html#lc-" + id, label: "📇 Lesson Card · " + (s.categoryLabel || "Concept"), title: "Open Lesson Card in Sets" };
+  }
+  if (s.kind === "word") {
+    if (/^ev-([^:]+):/.test(k)) {
+      const gid = k.match(/^ev-([^:]+):/)[1];
+      if (EV_GROUPS.some(g => g.id === gid && g.source !== "teacher")) {
+        return { href: "sets.html#" + gid, label: "🔤 Vocab · Set", title: "Open Vocabulary Set" };
+      }
+    }
+    if (s.surahId) return { href: "quran.html?s=" + s.surahId, label: "🔤 Qur'ān Word", title: "Open Surah in Qur'ān" };
+    return { href: "words.html", label: "🔤 Vocab", title: "Open in Master Vocabulary" };
+  }
+  if (s.kind === "grammar") {
+    return { href: "grammar.html?g=" + encodeURIComponent(s.patId || ""), label: "📐 Grammar" + (s.grammarName ? " · " + s.grammarName : ""), title: "Open Grammar Pattern" };
+  }
+  if (s.kind === "quran" || s.track === "quran") {
+    const sid = s.surahId || (k.startsWith("s:q:") ? k.split(":")[2] : "");
+    return {
+      href: sid ? ("quran.html?s=" + encodeURIComponent(sid)) : "quran.html",
+      label: "🕌 Qur'ān" + (s.surah ? " · " + s.surah : "") + (s.ref ? " (" + s.ref + ")" : ""),
+      title: "Open Surah in Qur'ān"
+    };
+  }
+  if (s.src === "chapters" || k.startsWith("chap:")) {
+    const cnum = k.startsWith("chap:") ? k.split(":")[1] : "";
+    return { href: cnum ? ("chapters.html?chap=chap-" + cnum) : "chapters.html", label: cnum ? ("📖 Ch " + cnum) : "📖 Chapter", title: "Open in Chapters" };
+  }
+  if (s.src === "teacher" || k.startsWith("cls:")) {
+    const cid = k.startsWith("cls:") ? k.split(":")[1] : "";
+    return { href: cid ? ("class.html?class=" + encodeURIComponent(cid)) : "class.html", label: "🧑‍🏫 Class", title: "Open in Teacher tab" };
+  }
+  return { href: "sentences.html", label: "💬 Sentence", title: "Open in Sentence Library" };
+}
+
+function decorateFocusItem(raw, srs, now) {
+  if (!raw) return null;
+  const st = window.SRS && SRS.masteryState ? SRS.masteryState(raw.key, { srs, now }) : { level: "grey" };
+  const isUnseen = st.level === "grey";
+  const copy = Object.assign({}, raw);
+  if (copy.kind === "lesson-card") {
+    copy.lcMode = isUnseen ? "teach" : "review";
+    copy._autoReveal = isUnseen;
+  } else if (isUnseen) {
+    copy.practiceMode = "teach";
+    copy._autoReveal = true;
+  }
+  return copy;
+}
+
+function rankFocusItems(pool, srs, now, limit, preserveOrder) {
+  const seenKeys = new Set();
+  const dedup = [];
+  (pool || []).forEach(it => {
+    if (!it || !it.key || seenKeys.has(it.key)) return;
+    if ((srs[it.key] || {}).b === "never") return;
+    seenKeys.add(it.key);
+    dedup.push(it);
+  });
+  let picked = dedup;
+  if (!preserveOrder && dedup.length > 1) {
+    const prio = { red: 0, grey: 1, amber: 2, green: 3 };
+    picked = dedup.slice().sort((a, b) => {
+      if (a.kind === "lesson-card" && b.kind !== "lesson-card") return -1;
+      if (b.kind === "lesson-card" && a.kind !== "lesson-card") return 1;
+      const sa = window.SRS && SRS.masteryState ? SRS.masteryState(a.key, { srs, now }).level : "grey";
+      const sb = window.SRS && SRS.masteryState ? SRS.masteryState(b.key, { srs, now }).level : "grey";
+      return (prio[sa] ?? 2) - (prio[sb] ?? 2);
+    });
+  }
+  return picked.slice(0, limit || 12).map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
+}
+
+function clearPracticeFocus() {
+  FOCUSED_PRACTICE_SPEC = null;
+  if (history && history.replaceState) history.replaceState({}, "", location.pathname);
+  if (promptDirection !== "en-first") setDirection("en-first");
+  currentFilter = "balanced";
+  document.querySelectorAll("#filterChips .chip").forEach(c => c.classList.toggle("active", c.dataset.filter === "balanced"));
+  loadPracticeBatch();
+}
+
+function focusPracticeUrl(searchStr) {
+  if (history && history.replaceState) history.replaceState({}, "", location.pathname + searchStr);
+  loadFocusedPracticeFromUrl(searchStr);
+  const vp = document.getElementById("focusBanner") || document.getElementById("viewPractice");
+  if (vp && vp.scrollIntoView) vp.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function loadFocusedPracticeFromUrl(searchStr) {
+  const q = new URLSearchParams(searchStr != null ? searchStr : location.search);
+  const srs = getSrs();
+  const now = Date.now();
+  let list = [];
+  let title = "";
+  let sub = "";
+  let backHref = "";
+  let backLabel = "";
+  let forceDir = null;
+
+  const chapParam = q.get("chap");
+  const surahParam = q.get("surah");
+  const lcParam = q.get("lc");
+  const setParam = q.get("set");
+  const gramParam = q.get("grammar");
+  const classParam = q.get("class");
+  const focusParam = q.get("focus");
+  const filterParam = q.get("filter");
+  const dotParam = q.get("dot");
+  const keysParam = q.get("keys");
+
+  if (chapParam) {
+    const ch = CHAPTERS_LIST.find(c => c.id === chapParam || String(c.num) === String(chapParam).replace(/^chap-/, ""));
+    if (ch) {
+      const pool = [];
+      PRACTICE_LESSON_CARDS.forEach(lc => {
+        const chs = (lc.lcCard && lc.lcCard.triggers && lc.lcCard.triggers.chapters) || [];
+        if (chs.includes(ch.num)) {
+          const st = SRS.masteryState(lc.key, { srs, now });
+          if (st.level !== "green") pool.push(lc);
+        }
+      });
+      MASTER_SENTENCES.filter(s => String(s.key || "").startsWith("chap:" + ch.num + ":")).forEach(s => pool.push(s));
+      if (ch.surahId) {
+        MASTER_SENTENCES.filter(s => String(s.key || "").startsWith("s:q:" + ch.surahId + ":")).slice(0, 3).forEach(s => pool.push(s));
+      }
+      list = rankFocusItems(pool, srs, now, 13, false);
+      title = "📖 Focused Practice — " + ch.title;
+      sub = "All verdicts update Chapter " + ch.num + " sentences, vocabulary & Earned Mastery Dots live.";
+      backHref = "chapters.html?chap=" + ch.id;
+      backLabel = "📖 Back to Chapter " + ch.num;
+    }
+  } else if (surahParam) {
+    const sur = SURAH_MAP[surahParam];
+    const pool = [];
+    if (sur) {
+      (sur.verses || []).forEach((_, vi) => {
+        const ak = "s:q:" + sur.id + ":" + (vi + 1);
+        const it = KEY_ITEM_MAP.get(ak);
+        if (it) pool.push(it);
+      });
+      (sur.verses || []).forEach((v, vi) => (v.words || []).forEach((_, wi) => {
+        const qk = "qw:" + sur.id + ":" + vi + ":" + wi;
+        const it = KEY_ITEM_MAP.get(qk);
+        if (it) pool.push(it);
+      }));
+      list = rankFocusItems(pool, srs, now, 12, false);
+      const sName = sur.nameEn ? sur.nameEn.split("—")[0].trim() : sur.name;
+      title = "🕌 Qur'ān Practice — Surah " + sName;
+      sub = "Mishary Rashid Alafasy recitation + word-by-word recall · Verdicts sync directly to Qur'ān & Words.";
+      backHref = "quran.html?s=" + encodeURIComponent(sur.id);
+      backLabel = "🕌 Back to Surah " + sName;
+      forceDir = "ar-first";
+    }
+  } else if (lcParam) {
+    const lcKey = lcParam.startsWith("lc:") ? lcParam : ("lc:" + lcParam);
+    const lcItem = PRACTICE_LESSON_CARDS.find(x => x.key === lcKey);
+    if (lcItem) {
+      const pats = new Set(((lcItem.lcCard && lcItem.lcCard.triggers && lcItem.lcCard.triggers.patterns) || []));
+      const chaps = new Set(((lcItem.lcCard && lcItem.lcCard.triggers && lcItem.lcCard.triggers.chapters) || []));
+      const appPool = [];
+      PRACTICE_GRAMMAR.filter(g => pats.has(g.patId)).forEach(g => appPool.push(g));
+      MASTER_SENTENCES.forEach(s => {
+        if ((s.pattern && pats.has(s.pattern)) || (Array.isArray(s.frames) && s.frames.some(f => pats.has(f)))) appPool.push(s);
+        else if (String(s.key || "").startsWith("chap:") && chaps.has(Number(String(s.key).split(":")[1]))) appPool.push(s);
+      });
+      const head = decorateFocusItem(lcItem, srs, now);
+      if (head) { head._autoReveal = true; }
+      list = [head].concat(rankFocusItems(appPool, srs, now, 9, false)).filter(Boolean);
+      title = "📇 Lesson Card Practice — " + (lcItem.title || lcParam);
+      sub = "Study the visual mental map first, then apply it immediately across real sentences.";
+      backHref = "sets.html#lc-" + lcKey.replace(/^lc:/, "");
+      backLabel = "📇 Back to Lesson Cards";
+    }
+  } else if (setParam) {
+    const grp = EV_GROUPS.find(g => g.id === setParam);
+    const setPrefix = "ev-" + setParam + ":";
+    const setWords = allPracticeItems().filter(it => it.kind === "word" && String(it.key || "").startsWith(setPrefix));
+    if (setWords.length) {
+      const setNorms = new Set(setWords.map(w => normalizeAr(w.ar).replace(/^ال/, "")).filter(Boolean));
+      const matchingSents = MASTER_SENTENCES.filter(s =>
+        (s.words || []).some(w => setNorms.has(normalizeAr(w[0] || "").replace(/^ال/, "")))
+      ).slice(0, 5);
+      list = rankFocusItems(setWords.concat(matchingSents), srs, now, 12, false);
+      title = "🗂 Set Practice — " + ((grp && (grp.theme || grp.title)) || setParam);
+      sub = "Words from this set + real sentences using them · Verdicts sync with Sets & Words.";
+      backHref = "sets.html#" + encodeURIComponent(setParam);
+      backLabel = "🗂 Back to Sets";
+    }
+  } else if (gramParam) {
+    const pat = GRAMMAR_PATTERNS.find(p => p.id === gramParam);
+    const pool = [];
+    const lcCard = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[gramParam];
+    if (lcCard) {
+      const lcIt = PRACTICE_LESSON_CARDS.find(x => x.key === "lc:" + lcCard.id);
+      if (lcIt) pool.push(lcIt);
+    }
+    PRACTICE_GRAMMAR.filter(g => g.patId === gramParam).forEach(g => pool.push(g));
+    MASTER_SENTENCES.filter(s => s.pattern === gramParam || (Array.isArray(s.frames) && s.frames.includes(gramParam))).slice(0, 12).forEach(s => pool.push(s));
+    if (pool.length) {
+      list = rankFocusItems(pool, srs, now, 11, false);
+      title = "📐 Grammar Practice — " + ((pat && pat.name) || gramParam);
+      sub = "Pattern checks + sentences demonstrating this frame · Verdicts sync with Grammar & Sets.";
+      backHref = "grammar.html?g=" + encodeURIComponent(gramParam);
+      backLabel = "📐 Back to Pattern";
+    }
+  } else if (classParam) {
+    const cls = CLASSES_LIST.find(c => c.id === classParam);
+    if (cls) {
+      const clsSents = MASTER_SENTENCES.filter(s => String(s.key || "").startsWith("cls:" + cls.id + ":"));
+      const clsWordKeys = new Set((cls.vocabulary || []).map(v => v.key));
+      const clsWords = allPracticeItems().filter(it => it.kind === "word" && clsWordKeys.has(it.key));
+      list = rankFocusItems(clsSents.concat(clsWords), srs, now, 12, false);
+      title = "🧑‍🏫 Preply Class Practice — " + (cls.title || cls.id);
+      sub = "Captured Sunday class dialogue sentences & vocabulary · Verdicts sync with Teacher & Words.";
+      backHref = "class.html?class=" + encodeURIComponent(cls.id);
+      backLabel = "🧑‍🏫 Back to Teacher";
+    }
+  } else if (keysParam) {
+    const rawKeys = keysParam.split(",").map(s => s.trim()).filter(Boolean);
+    const resolved = rawKeys.map(k => KEY_ITEM_MAP.get(k)).filter(Boolean);
+    if (resolved.length) {
+      list = rankFocusItems(resolved, srs, now, Math.min(16, resolved.length), true);
+      const customLabel = q.get("label") || "Selected Items";
+      title = "⚡ Focused Practice — " + customLabel;
+      sub = list.length + " targeted items loaded dynamically into Practice.";
+      backHref = document.referrer && document.referrer.includes(location.host) ? "" : "class.html";
+      backLabel = "🧑‍🏫 Teacher Brief";
+    }
+  } else if (focusParam === "words") {
+    const wsrc = q.get("wsrc") || "all";
+    let wPool = allPracticeItems().filter(it => it.kind === "word");
+    if (wsrc === "teacher") wPool = wPool.filter(w => w.wordSrc === "teacher");
+    else if (wsrc === "quran") wPool = wPool.filter(w => w.wordSrc === "quran");
+    else if (wsrc === "everyday") wPool = wPool.filter(w => w.wordSrc === "everyday");
+    else if (wsrc === "due") wPool = wPool.filter(w => { const c = srs[w.key]; return c && c.b !== "never" && c.due && c.due <= now; });
+    if (dotParam && dotParam !== "all") {
+      wPool = wPool.filter(w => SRS.masteryState(w.key, { srs, now }).level === dotParam);
+    }
+    if (wPool.length) {
+      const pickedWords = SRS.buildBatch(wPool, { size: 10, mode: wsrc === "due" ? "due" : "balanced", srs, now });
+      list = pickedWords.map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
+      title = "📇 Vocabulary in Practice" + (wsrc !== "all" ? " · " + wsrc : "") + (dotParam && dotParam !== "all" ? " · " + dotParam : "");
+      sub = "Every word verdict updates Master Vocabulary, Sets & Chapter Vocab automatically.";
+      backHref = "words.html";
+      backLabel = "📇 Back to Words";
+    }
+  } else if (filterParam || (dotParam && dotParam !== "all")) {
+    const f = filterParam || "all";
+    let sPool = MASTER_SENTENCES.slice();
+    if (f === "chapters") sPool = sPool.filter(s => s.src === "chapters");
+    else if (f === "teacher") sPool = sPool.filter(s => s.src === "teacher");
+    else if (f === "everyday") sPool = sPool.filter(s => s.track === "everyday" && s.src !== "chapters");
+    else if (f === "quran") { sPool = sPool.filter(s => s.track === "quran"); forceDir = "ar-first"; }
+    else if (f === "due") sPool = sPool.filter(s => { const c = srs[s.key]; return c && c.b !== "never" && c.due && c.due <= now; });
+    if (dotParam && dotParam !== "all") {
+      sPool = sPool.filter(s => SRS.masteryState(s.key, { srs, now }).level === dotParam);
+    }
+    if (sPool.length) {
+      const mode = ["weakest", "due", "new"].includes(f) ? f : "balanced";
+      const chosen = SRS.buildBatch(sPool, { size: BATCH_SIZE, mode, srs, now });
+      list = chosen.map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
+      title = "💬 Sentence Practice" + (f !== "all" ? " · " + f : "") + (dotParam && dotParam !== "all" ? " · " + dotParam : "");
+      sub = "Filtered from your Sentence Library · Verdicts update Earned Mastery Dots live.";
+      backHref = f === "quran" ? "quran.html" : "sentences.html";
+      backLabel = f === "quran" ? "🕌 Back to Qur'ān" : "💬 Back to Sentences";
+    }
+  }
+
+  if (!list.length) return false;
+
+  stopAudio();
+  if (window.TryIt) TryIt.endFree();
+  REVEALED.clear();
+  BATCH_RATED.clear();
+  BATCH_DONE_LOGGED = false;
+  IS_ADAPTIVE_PRACTICE = false;
+  const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
+
+  if (forceDir && promptDirection !== forceDir) {
+    promptDirection = forceDir;
+    const enBtn = document.getElementById("dirEnFirst");
+    const arBtn = document.getElementById("dirArFirst");
+    if (enBtn) enBtn.classList.toggle("active", forceDir === "en-first");
+    if (arBtn) arBtn.classList.toggle("active", forceDir === "ar-first");
+  }
+
+  FOCUSED_PRACTICE_SPEC = { title, sub, backHref, backLabel, search: searchStr || location.search };
+  ACTIVE_SENTENCES = list;
+  ACTIVE_SENTENCES.forEach((it, idx) => { if (it && it._autoReveal) REVEALED.add(idx); });
+  LAST_BATCH_KEYS = list.map(x => x.key);
+
+  const titleEl = document.getElementById("sessionTitle");
+  if (titleEl) titleEl.textContent = title;
+  const lg = document.getElementById("srsLegend");
+  if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">${escBriefHtml(sub)}</span></span>`;
+
+  const fb = document.getElementById("focusBanner");
+  if (fb) {
+    fb.style.display = "block";
+    fb.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);border:1.5px solid var(--accent);font-size:13px">
+        <span><b>${escBriefHtml(title)}</b> <span style="color:var(--muted)">· ${list.length} items · syncs across all tabs</span></span>
+        <span style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
+          ${backHref ? `<a href="${backHref}" class="pt-btn" style="font-size:12px;padding:4px 10px;text-decoration:none">${escBriefHtml(backLabel)}</a>` : ""}
+          <button type="button" class="pt-btn" onclick="clearPracticeFocus()" style="font-size:12px;padding:4px 10px;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Back to Daily Adaptive Batch</button>
+        </span>
+      </div>
+    `;
+  }
+
+  render10Cards();
+  return true;
+}
+
 function load10Sentences() {
   if (currentFilter === "balanced" && window.Practice && typeof Practice.buildBatch === "function") {
     loadPracticeBatch();
@@ -873,7 +1237,7 @@ function cardHtml(s, idx) {
         <div class="s-head">
           <div class="s-prompt-wrap">
             <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}
-            <span class="tryit-why" style="font-weight:700;background:#ecfdf5;color:var(--accent)">📇 Lesson Card · ${s.categoryLabel || "Concept"}</span>
+            <a class="tryit-why" href="${(sourceLinkMeta(s) || {}).href || 'sets.html'}" onclick="event.stopPropagation()" title="Open in Sets" style="font-weight:700;background:#ecfdf5;color:var(--accent);text-decoration:none">📇 Lesson Card · ${s.categoryLabel || "Concept"} ↗</a>
             <span class="tryit-why">${whyTag}</span>
             <span class="s-prompt-text">${s.lcMode === "teach" ? (s.title || s.en) : s.en}</span>
           </div>
@@ -905,11 +1269,9 @@ function cardHtml(s, idx) {
     : isCommuteVerify
     ? `<span class="mode-pill-commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning on screen">🚗→📱 Screen Check</span>`
     : "";
-  const kindBadge = s.kind === "word" ? "🔤 Vocab"
-    : s.kind === "grammar" ? `📐 Grammar${s.grammarName ? " · " + s.grammarName : ""}`
-    : (s.kind === "quran" || s.track === "quran") ? `🕌 Qur'an${s.surah ? " · " + s.surah : ""}${s.ref ? " (" + s.ref + ")" : ""}`
-    : s.src === "chapters" ? "📖 Chapter"
-    : s.src === "teacher" ? "🧑‍🏫 Class"
+  const srcMeta = sourceLinkMeta(s);
+  const kindBadgeHtml = srcMeta
+    ? `<a class="tryit-why" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" style="font-weight:600;text-decoration:none">${srcMeta.label} ↗</a>`
     : "";
   const whyTag = s._try && s._try.why ? `${s._try.why}${s._try.p != null ? " · " + s._try.p + "%" : ""}` : "";
   const showWbwOpen = s.kind === "word" || isTeach;
@@ -919,7 +1281,7 @@ function cardHtml(s, idx) {
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
           <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}${TryIt.badgeHtml(idx)}${modePill}${kindBadge ? `<span class="tryit-why" style="font-weight:600">${kindBadge}</span>` : ""}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
+            <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}${TryIt.badgeHtml(idx)}${modePill}${kindBadgeHtml}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
             <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
               ${isEnFirst ? s.en : s.ar}
             </span>
@@ -1162,6 +1524,8 @@ function updateSessionProgress() {
         <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
           ${IS_ADAPTIVE_PRACTICE
             ? `<button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:15px;padding:9px 22px">▶ Start Batch ${nextB} (${nextDesc}) →</button>`
+            : FOCUSED_PRACTICE_SPEC
+            ? `<button type="button" class="primary" onclick="clearPracticeFocus()" style="font-size:15px;padding:9px 22px">⚡ Back to Daily Adaptive Batch →</button>`
             : `<button type="button" class="primary" onclick="load10Sentences()" style="font-size:15px;padding:9px 22px">Next Sentence Batch →</button>`}
           <button type="button" class="pt-btn" onclick="redoBatch()" style="font-size:14px;padding:8px 16px" title="The same batch again, weakest first">↻ Redo batch</button>
           <a href="chapters.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">📖 Open Chapters →</a>
@@ -1598,6 +1962,7 @@ function renderHomeChapStrip() {
         <span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px">
           ${new Date().getDay() === 6 ? `<a href="index.html?myday=1&amp;rehearse=1" style="color:var(--accent);font-weight:600;text-decoration:none">🎤 Rehearse for Sunday →</a>` : new Date().getDay() === 0 ? `<a href="class.html" style="color:var(--accent);font-weight:600;text-decoration:none">🧑‍🏫 Lesson Brief →</a>` : ""}
           ${readyTest ? `<a href="chapters.html?chap=${activeChap.id}#testBox" style="color:var(--accent);font-weight:700;text-decoration:none">🔥 Test Ready →</a>` : ""}
+          <button type="button" class="pt-btn" onclick="focusPracticeUrl('?chap=${activeChap.id}')" style="font-size:11.5px;padding:2px 9px;color:var(--accent);border-color:var(--accent);font-weight:700" title="Focus Practice exclusively on Chapter ${activeChap.num} sentences &amp; Lesson Cards">⚡ Focus Ch ${activeChap.num}</button>
           <a href="chapters.html?chap=${activeChap.id}" style="color:var(--accent);font-weight:600;text-decoration:none">Open Chapter →</a>
         </span>
       </div>

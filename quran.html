@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,10 +46,10 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -110,7 +110,10 @@ function rateSurahAyah(key, g, surahId, vi) {
 function renderList() {
   trackPage("quran:list");
   content.innerHTML = `
-    <h1>Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <h1 style="margin:0">Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
+      <a href="index.html?filter=quran" class="pill" style="text-decoration:none;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 13px;font-size:13px">⚡ Practise Qur'ān in Practice →</a>
+    </div>
     <p class="sub">Word-by-word surahs you hear recited constantly. Study each word, then test yourself by filling in the meanings.
     These use the Quran's highest-frequency vocabulary — every word here pays off across the whole mushaf.</p>
     <div class="card" id="qOfflineCard" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:14px;background:var(--card);border-color:var(--border)">
@@ -330,7 +333,10 @@ function renderSurah(s, mode) {
   trackPage(`quran:${s.id}:${mode}`);
   window.scrollTo({ top: 0 });
   content.innerHTML = `
-    <p><a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a></p>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+      <a href="quran.html" style="color:var(--accent);text-decoration:none">← All surahs</a>
+      <a href="index.html?surah=${encodeURIComponent(s.id)}" style="background:var(--accent);color:#fff;text-decoration:none;font-weight:700;border-radius:999px;padding:5px 14px;font-size:13px" title="Practise this Surah's Alafasy ayahs &amp; word-by-word meanings dynamically in Practice">⚡ Practise Surah in Practice →</a>
+    </div>
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <span>${s.nameEn}</span>
       <span class="arabic" style="color:var(--accent)" dir="rtl">سُورَة ${s.name}</span>

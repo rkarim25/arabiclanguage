@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .m-search {
@@ -65,7 +65,7 @@
       </h1>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <a href="index.html" class="chip" style="text-decoration:none;color:var(--accent);border-color:var(--accent)">⚡ Practise Daily Batch →</a>
+      <a id="practiseSentFilterLink" href="index.html" class="chip" style="text-decoration:none;color:var(--accent);border-color:var(--accent);font-weight:700">⚡ Practise in Practice →</a>
     </div>
   </div>
 
@@ -120,16 +120,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwfgx80c"></script>
-<script src="js/curriculum.js?v=mwfgx80c"></script>
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/frames.js?v=mwfgx80c"></script>
-<script src="js/practice.js?v=mwfgx80c"></script>
-<script src="js/lesson-cards.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
-<script src="js/account.js?v=mwfgx80c"></script>
+<script src="js/progress-model.js?v=mwfhfp7r"></script>
+<script src="js/curriculum.js?v=mwfhfp7r"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/frames.js?v=mwfhfp7r"></script>
+<script src="js/practice.js?v=mwfhfp7r"></script>
+<script src="js/lesson-cards.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
+<script src="js/account.js?v=mwfhfp7r"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -363,6 +363,21 @@ function renderMasterBank() {
 
   if (sortWeakest && window.SRS && SRS.weakestFirst) {
     filtered = SRS.weakestFirst(filtered, srs, now);
+  }
+
+  const pracLink = document.getElementById("practiseSentFilterLink");
+  if (pracLink) {
+    if (query && filtered.length > 0) {
+      const topKeys = filtered.slice(0, 12).map(s => s.key).join(",");
+      pracLink.href = "index.html?keys=" + encodeURIComponent(topKeys) + "&label=" + encodeURIComponent("Sentences: " + query);
+      pracLink.textContent = "⚡ Practise " + Math.min(12, filtered.length) + " Matching in Practice →";
+    } else if (bankFilter !== "all" || dotFilter !== "all") {
+      pracLink.href = "index.html?filter=" + encodeURIComponent(bankFilter) + (dotFilter !== "all" ? "&dot=" + encodeURIComponent(dotFilter) : "");
+      pracLink.textContent = "⚡ Practise Filtered (" + filtered.length + ") in Practice →";
+    } else {
+      pracLink.href = "index.html";
+      pracLink.textContent = "⚡ Practise Daily Batch →";
+    }
   }
 
   if (filtered.length === 0) {

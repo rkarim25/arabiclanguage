@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfgx80c">
-  <link rel="stylesheet" href="css/style.css?v=mwfgx80c">
+  <link rel="stylesheet" href="css/fonts.css?v=mwfhfp7r">
+  <link rel="stylesheet" href="css/style.css?v=mwfhfp7r">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,10 +52,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwfgx80c"></script>
-<script src="js/app.js?v=mwfgx80c"></script>
-<script src="js/tracker.js?v=mwfgx80c"></script>
-<script src="js/plan.js?v=mwfgx80c"></script>
+<script src="js/srs.js?v=mwfhfp7r"></script>
+<script src="js/app.js?v=mwfhfp7r"></script>
+<script src="js/tracker.js?v=mwfhfp7r"></script>
+<script src="js/plan.js?v=mwfhfp7r"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -212,7 +212,7 @@ function renderLessonsView(body) {
   const labelOf = g => g.lesson || [BOOKS[g.book] || g.book || "", (g.unit || "").replace(/^aby(\d+)-u(\d+)$/, "Book $1, Unit $2")].filter(Boolean).join(" — ") || "Your lessons";
   const groups = {};
   mine.forEach(g => { const k = labelOf(g); (groups[k] = groups[k] || []).push(g); });
-  let html = `<p class="sub">Everything your teacher has taught you, ready to study — from any book, notes, or lesson. Tap a set to learn it. Once studied, these words return automatically in <a href="review.html">Review</a> and “Start my 5 minutes” — no marking needed. Lesson grammar shows up in <a href="grammar.html">Grammar</a>, dialogues become stories, and verbs drill in <a href="sentences.html">Sentence Practice</a>.</p>`;
+  let html = `<p class="sub">Everything your teacher has taught you, ready to study — from any book, notes, or lesson. Tap a set to learn it. Once studied, these words return automatically in <a href="review.html">Review</a> and “Start my 5 minutes” — no marking needed. Lesson grammar shows up in <a href="grammar.html">Grammar</a>, dialogues become stories, and verbs drill in <a href="index.html">Practice</a>.</p>`;
   const keys = Object.keys(groups);
   keys.forEach((k, ki) => {
     const total = groups[k].reduce((n, g) => n + g.members.length, 0);
