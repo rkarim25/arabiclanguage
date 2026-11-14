@@ -967,6 +967,8 @@ const bank = D("sentence-bank.json");
   yes(/function setWordReviewMode\(/.test(wordsSrcNow) && /function setSentReviewMode\(/.test(sentSrcNow) && !/<span class="leg-dot strong"><\/span>\s*30d/.test(wordsSrcNow) && !/<span class="leg-dot strong"><\/span>\s*30d/.test(teacherSrcNow), "Words and Sentences master sheets support direct EN→AR / AR→EN Review Mode with Earned Mastery Dot legends");
   yes(/SRS\.rate\(`gt:\$\{p\.id\}:\$\{i\}`/.test(grammarSrcNow) && /const wk = `qw:\$\{s\.id\}:\$\{vi\}:\$\{wi\}`/.test(quranSrcNow) && /function refreshSetHeaders\(/.test(setsSrcNow) && /syncWordTwinsLocal\(/.test(wordsSrcNow) && Object.keys(aliasesJsonNow.groups || {}).length >= 500, "direct reviews & tests across Words, Sentences, Chapters, Qur'ān, Sets, Grammar & Teacher all contribute to Earned Mastery Dots");
   yes(/function rateSurahWord\(/.test(quranSrcNow) && /SRS\.rateBarHtml\(`qw:\$\{s\.id\}:\$\{vi\}:\$\{wi\}`/.test(quranSrcNow), "quran.html Study mode gives direct ✗ · ≈ · ✓ rating buttons on individual Qur'ān words (Pen Note #68)");
+  const trackerSrcPen = fs.readFileSync(path.join(ROOT, "js", "tracker.js"), "utf8");
+  yes(/await autoSync\(true\)/.test(appSrcNow) && /_syncForceQueued/.test(trackerSrcPen), "pen notes force immediate cloud sync (bypassing the 60s autoSync throttle and queuing if busy)");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

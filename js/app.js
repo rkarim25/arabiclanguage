@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwg3m2cb";
+const DATA_V = "mwg71j22";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4177,9 +4177,18 @@ function mountNotePen() {
         }
       }
       logEvent({ e: "note", text: text.slice(0, 2000), ctx, user: who ? who.name : undefined, ...(imgs.length ? { imgs } : {}) });
-      box.innerHTML = `<p style="font-size:15px;margin:0">✓ Saved${who ? ", " + who.name : ""}${imgs.length ? ` — photo${imgs.length > 1 ? "s" : ""} sent too` : ""}. Your coach will read it tonight and reply in your dashboard notes.</p>`;
-      setTimeout(closeOv, 2000);
-      if (typeof autoSync === "function") setTimeout(autoSync, 50);
+      const connected = typeof syncMethod === "function" && !!syncMethod();
+      if (connected && typeof autoSync === "function") {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Sending to cloud…";
+        const synced = await autoSync(true);
+        box.innerHTML = synced
+          ? `<p style="font-size:15px;margin:0">✓ Sent to your coach${who ? ", " + who.name : ""}${imgs.length ? ` — photo${imgs.length > 1 ? "s" : ""} attached` : ""}.</p>`
+          : `<p style="font-size:15px;margin:0">✓ Saved on this device${who ? ", " + who.name : ""} — cloud sync will retry automatically when online.</p>`;
+      } else {
+        box.innerHTML = `<p style="font-size:15px;margin:0">✓ Saved on this device${who ? "" : " — sign in on Account so your coach receives it in the cloud"}.</p>`;
+      }
+      setTimeout(closeOv, 1800);
     };
   };
 }

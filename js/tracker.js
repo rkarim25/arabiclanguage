@@ -300,14 +300,24 @@ async function syncNow() {
   throw new Error("not-connected");
 }
 
-let _syncing = false;
+let _syncing = false, _syncForceQueued = false;
 async function autoSync(force) {
-  if (!syncMethod() || _syncing) return;
+  if (!syncMethod()) return false;
+  if (_syncing) {
+    if (force) _syncForceQueued = true;
+    return false;
+  }
   const last = store.get(SYNC_KEY, 0);
-  if (!force && Date.now() - last < 60 * 1000) return; // at most every minute; a hide / reconnect / block-done forces it
+  if (!force && Date.now() - last < 60 * 1000) return false; // at most every minute; a hide / reconnect / note / block-done forces it
   _syncing = true;
-  try { await syncNow(); } catch (e) { /* silent for auto */ }
+  let ok = false;
+  try { await syncNow(); ok = true; } catch (e) { /* silent for auto */ }
   _syncing = false;
+  if (_syncForceQueued) {
+    _syncForceQueued = false;
+    return autoSync(true);
+  }
+  return ok;
 }
 
 async function fetchCoach() {
