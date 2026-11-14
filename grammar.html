@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
-  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/fonts.css?v=mwg3m2cb">
+  <link rel="stylesheet" href="css/style.css?v=mwg3m2cb">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,10 +34,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwfi0hay"></script>
-<script src="js/app.js?v=mwfi0hay"></script>
-<script src="js/tracker.js?v=mwfi0hay"></script>
-<script src="js/plan.js?v=mwfi0hay"></script>
+<script src="js/srs.js?v=mwg3m2cb"></script>
+<script src="js/app.js?v=mwg3m2cb"></script>
+<script src="js/tracker.js?v=mwg3m2cb"></script>
+<script src="js/plan.js?v=mwg3m2cb"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -155,7 +155,7 @@ function renderPattern(p) {
       <span class="arabic" style="color:var(--accent)" dir="rtl">${p.ar}</span>
     </h1>
     <div class="card">
-      <p style="font-size:15px;margin-top:0">${p.what}</p>
+      <p style="font-size:15.5px;line-height:1.8;margin-top:0">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(p.what).replace(/\n/g, "<br>") : p.what}</p>
       <div id="examples"></div>
     </div>
     <div class="card">

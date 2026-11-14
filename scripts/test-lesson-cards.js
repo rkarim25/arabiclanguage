@@ -49,6 +49,15 @@ check("Negation Lesson Card (lc:negation) renders visual diagram, 5 pairings tab
   assert(html.includes("sets.html#lc-negation"));
 });
 
+check("Verb Tenses Lesson Card (lc:verb-tenses) includes She (هِيَ) and They (هُمْ: ذَهَبُوا / يَذْهَبُونَ / سَيَذْهَبُونَ) with legible .ar-inline spans", () => {
+  const vt = lcData.cards.find(c => c.id === "verb-tenses");
+  assert(vt);
+  const html = LessonCards.renderBodyHtml(vt, { setsLink: true });
+  assert(html.includes("هُمْ") && html.includes("يَذْهَبُونَ إِلَى المَسْجِدِ") && html.includes("ذَهَبُ<b>وا</b>") && html.includes("<b>سَ</b>يَذْهَبُونَ"));
+  assert(html.includes("هِيَ") && html.includes("تَذْهَبُ إِلَى البَيْتِ"));
+  assert(html.includes('class="ar-inline"'), "inline Arabic inside table cells/summaries must wrap in .ar-inline");
+});
+
 check("every spoken Arabic example across all Lesson Cards resolves to a real neural MP3 clip", () => {
   for (const c of lcData.cards) {
     for (const r of c.rows) {

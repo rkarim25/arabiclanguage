@@ -22,9 +22,9 @@
     .lc-cat.cat-quran { background: #fef3c7; color: #b45309; }
     .lc-cat.cat-conversation { background: #f3e8ff; color: #7e22ce; }
     .lc-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; width: 100%; }
-    .lc-title { font-size: 16px; font-weight: 700; color: var(--ink, #111827); margin: 3px 0 0; }
-    .lc-ar-title { font-family: var(--font-ar, serif); font-size: 21px; color: var(--accent, #0d7a5f); direction: rtl; }
-    .lc-summary { font-size: 13.5px; color: var(--ink, #1f2937); line-height: 1.45; margin: 0 0 12px; padding: 8px 11px; background: rgba(13,122,95,0.05); border-left: 3px solid var(--accent, #0d7a5f); border-radius: 6px; }
+    .lc-title { font-size: 17px; font-weight: 700; color: var(--ink, #111827); margin: 3px 0 0; }
+    .lc-ar-title { font-family: var(--font-ar, serif); font-size: 24px; color: var(--accent, #0d7a5f); direction: rtl; }
+    .lc-summary { font-size: 14.5px; color: var(--ink, #1f2937); line-height: 1.65; margin: 0 0 12px; padding: 9px 12px; background: rgba(13,122,95,0.05); border-left: 3px solid var(--accent, #0d7a5f); border-radius: 6px; }
 
     /* Diagrams */
     .lc-diagram { margin: 10px 0 12px; }
@@ -34,37 +34,51 @@
     .lc-tl-node.tone-blue { border-top: 3px solid #2563eb; background: rgba(37,99,235,0.04); }
     .lc-tl-node.tone-amber { border-top: 3px solid #d97706; background: rgba(217,119,6,0.05); }
     .lc-tl-node.tone-slate { border-top: 3px solid #64748b; background: rgba(100,116,139,0.05); }
-    .lc-tl-era { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted, #6b7280); margin-bottom: 3px; }
-    .lc-tl-ar { font-family: var(--font-ar, serif); font-size: 19px; color: var(--ink, #111827); direction: rtl; text-align: right; line-height: 1.45; }
-    .lc-tl-sub { font-size: 11.5px; color: var(--muted, #6b7280); margin-top: 3px; }
-    .lc-danger-pill { margin-top: 8px; padding: 7px 11px; border-radius: 8px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 12.5px; font-weight: 600; line-height: 1.4; }
+    .lc-tl-era { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted, #6b7280); margin-bottom: 3px; }
+    .lc-tl-ar { font-family: var(--font-ar, serif); font-size: 22px; color: var(--ink, #111827); direction: rtl; text-align: right; line-height: 1.55; }
+    .lc-tl-sub { font-size: 12.5px; color: var(--muted, #6b7280); margin-top: 3px; }
+    .lc-danger-pill { margin-top: 8px; padding: 8px 12px; border-radius: 8px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 13.5px; font-weight: 600; line-height: 1.55; }
 
     .lc-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
     .lc-lane { border: 1px solid var(--border, #e5e7eb); border-radius: 10px; padding: 10px 12px; background: var(--bg, #f9fafb); }
-    .lc-lane-badge { display: inline-block; font-family: var(--font-ar, serif); font-size: 16px; font-weight: 700; color: var(--accent, #0d7a5f); background: var(--card, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 7px; padding: 2px 8px; margin-bottom: 5px; }
-    .lc-lane-title { font-size: 13px; font-weight: 700; color: var(--ink, #111827); margin-bottom: 3px; }
-    .lc-lane-desc { font-size: 12px; color: var(--muted, #4b5563); line-height: 1.4; }
+    .lc-lane-badge { display: inline-block; font-family: var(--font-ar, serif); font-size: 19px; font-weight: 700; color: var(--accent, #0d7a5f); background: var(--card, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 7px; padding: 2px 9px; margin-bottom: 5px; }
+    .lc-lane-title { font-size: 14px; font-weight: 700; color: var(--ink, #111827); margin-bottom: 3px; }
+    .lc-lane-desc { font-size: 13.5px; color: var(--muted, #4b5563); line-height: 1.55; }
 
     .lc-fortress { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 11px 13px; background: #f8fafc; }
-    .lc-fort-layer { font-size: 12.5px; line-height: 1.45; color: var(--ink, #1f2937); margin-bottom: 8px; }
-    .lc-fort-shield { border: 1.5px solid #0d7a5f; border-radius: 10px; padding: 8px 11px; background: rgba(13,122,95,0.07); font-size: 12.5px; font-weight: 600; color: #065f46; margin-bottom: 8px; }
-    .lc-fort-inner { border: 2px solid #d97706; border-radius: 9px; padding: 9px 12px; background: #fffbeb; font-size: 12.5px; font-weight: 600; color: #92400e; }
+    .lc-fort-layer { font-size: 13.5px; line-height: 1.6; color: var(--ink, #1f2937); margin-bottom: 8px; }
+    .lc-fort-shield { border: 1.5px solid #0d7a5f; border-radius: 10px; padding: 8px 11px; background: rgba(13,122,95,0.07); font-size: 13.5px; font-weight: 600; line-height: 1.6; color: #065f46; margin-bottom: 8px; }
+    .lc-fort-inner { border: 2px solid #d97706; border-radius: 9px; padding: 9px 12px; background: #fffbeb; font-size: 13.5px; font-weight: 600; line-height: 1.6; color: #92400e; }
 
     /* Clean Book Table (matches Reza's reference table) */
     .lc-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--border, #e5e7eb); border-radius: 10px; background: var(--card, #fff); margin: 8px 0; }
-    .lc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .lc-table th { text-align: left; padding: 9px 12px; background: rgba(0,0,0,0.03); border-bottom: 1px solid var(--border, #e5e7eb); font-size: 12px; font-weight: 600; color: var(--ink, #374151); white-space: nowrap; }
-    .lc-table td { padding: 9px 12px; border-bottom: 1px solid var(--border, #e5e7eb); vertical-align: middle; line-height: 1.45; color: var(--ink, #1f2937); }
+    .lc-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+    .lc-table th { text-align: left; padding: 9px 12px; background: rgba(0,0,0,0.03); border-bottom: 1px solid var(--border, #e5e7eb); font-size: 13px; font-weight: 600; color: var(--ink, #374151); white-space: nowrap; }
+    .lc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border, #e5e7eb); vertical-align: middle; line-height: 1.65; color: var(--ink, #1f2937); }
     .lc-table tr:last-child td { border-bottom: none; }
-    .lc-table code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 5px; padding: 1px 6px; font-family: var(--font-ar, monospace); font-size: 15px; color: #0f172a; }
+    .lc-table code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 5px; padding: 1px 7px; font-family: var(--font-ar, monospace); font-size: 18px; line-height: 1.55; color: #0f172a; }
     .lc-ex-cell { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .lc-ex-ar { font-family: var(--font-ar, serif); font-size: 19px; color: var(--ink, #111827); direction: rtl; line-height: 1.4; }
-    .lc-ex-tr { font-size: 11.5px; color: var(--muted, #6b7280); font-style: italic; }
-    .lc-speak-btn { border: 1px solid var(--border, #e5e7eb); background: var(--bg, #f9fafb); border-radius: 6px; padding: 2px 7px; font-size: 12px; cursor: pointer; flex-shrink: 0; }
+    .lc-ex-ar { font-family: var(--font-ar, serif); font-size: 23px; color: var(--ink, #111827); direction: rtl; line-height: 1.55; }
+    .lc-ex-tr { font-size: 12.5px; color: var(--muted, #6b7280); font-style: italic; }
+    .lc-speak-btn { border: 1px solid var(--border, #e5e7eb); background: var(--bg, #f9fafb); border-radius: 6px; padding: 3px 8px; font-size: 13px; cursor: pointer; flex-shrink: 0; }
     .lc-speak-btn:hover { border-color: var(--accent, #0d7a5f); background: var(--accent-soft, rgba(13,122,95,0.1)); }
 
-    .lc-trap { margin-top: 8px; padding: 8px 11px; border-radius: 8px; background: #fffbeb; border: 1px solid rgba(217,119,6,0.3); border-left: 3px solid #d97706; font-size: 12.5px; color: #78350f; line-height: 1.45; }
+    .lc-trap { margin-top: 8px; padding: 9px 12px; border-radius: 8px; background: #fffbeb; border: 1px solid rgba(217,119,6,0.3); border-left: 3px solid #d97706; font-size: 13.5px; color: #78350f; line-height: 1.65; }
   `;
+
+  const _AR_CHARS = "\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF";
+  const _AR_ATOM = `(?:<(?:b|strong)>[${_AR_CHARS}]+<\\/(?:b|strong)>|[${_AR_CHARS}]+)`;
+  const _AR_CONTAINER = `<code\\b[^>]*>[\\s\\S]*?<\\/code>|<(span|div|p|b|strong|td|th|a)\\b[^>]*\\bclass="[^"]*\\b(?:arabic|ar-inline|lc-ex-ar|lc-tl-ar|lc-ar-title|lc-lane-badge|w-ar|s-ar-text)\\b[^"]*"[^>]*>[\\s\\S]*?<\\/\\2>|<!--[\\s\\S]*?-->`;
+  const _AR_RUN = `${_AR_ATOM}(?:(?:[\\s\\/،؛؟!ـ]+|…|\\.{2,3})(?=${_AR_ATOM})|${_AR_ATOM})*`;
+  const _AR_ENHANCE_RE = new RegExp(`(${_AR_CONTAINER})|(${_AR_RUN})|(<[^>]+>)`, "gi");
+
+  function enhanceInlineArabic(html) {
+    const src = String(html == null ? "" : html);
+    if (!/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/.test(src)) return src;
+    return src.replace(_AR_ENHANCE_RE, (full, _cont, _contTag, arRun) =>
+      arRun ? `<span class="ar-inline" dir="rtl">${arRun}</span>` : full
+    );
+  }
 
   function ensureStyles() {
     if (typeof document === "undefined") return;
@@ -87,13 +101,13 @@
           <div class="lc-timeline">
             ${d.nodes.map(n => `
               <div class="lc-tl-node tone-${n.tone || "teal"}">
-                <div class="lc-tl-era">${n.era || ""}</div>
+                <div class="lc-tl-era">${enhanceInlineArabic(n.era || "")}</div>
                 <div class="lc-tl-ar">${n.ar || ""}</div>
-                ${n.sub ? `<div class="lc-tl-sub">${n.sub}</div>` : ""}
+                ${n.sub ? `<div class="lc-tl-sub">${enhanceInlineArabic(n.sub)}</div>` : ""}
               </div>
             `).join("")}
           </div>
-          ${d.danger ? `<div class="lc-danger-pill">${d.danger}</div>` : ""}
+          ${d.danger ? `<div class="lc-danger-pill">${enhanceInlineArabic(d.danger)}</div>` : ""}
         </div>`;
     }
     if (d.type === "lanes" && Array.isArray(d.lanes)) {
@@ -103,8 +117,8 @@
             ${d.lanes.map(l => `
               <div class="lc-lane">
                 <div class="lc-lane-badge">${l.badge || ""}</div>
-                <div class="lc-lane-title">${l.title || ""}</div>
-                <div class="lc-lane-desc">${l.desc || ""}</div>
+                <div class="lc-lane-title">${enhanceInlineArabic(l.title || "")}</div>
+                <div class="lc-lane-desc">${enhanceInlineArabic(l.desc || "")}</div>
               </div>
             `).join("")}
           </div>
@@ -114,9 +128,9 @@
       return `
         <div class="lc-diagram">
           <div class="lc-fortress">
-            <div class="lc-fort-layer">🏛️ ${d.outer || ""}</div>
-            <div class="lc-fort-shield">${d.shield || ""}</div>
-            <div class="lc-fort-inner">${d.inner || ""}</div>
+            <div class="lc-fort-layer">🏛️ ${enhanceInlineArabic(d.outer || "")}</div>
+            <div class="lc-fort-shield">${enhanceInlineArabic(d.shield || "")}</div>
+            <div class="lc-fort-inner">${enhanceInlineArabic(d.inner || "")}</div>
           </div>
         </div>`;
     }
@@ -136,22 +150,22 @@
             ${o.setsLink ? `<a href="sets.html#lc-${card.id}" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none">View in Sets →</a>` : ""}
           </div>
           <div class="lc-title-row">
-            <div class="lc-title">${card.title}</div>
+            <div class="lc-title">${enhanceInlineArabic(card.title)}</div>
             <div class="lc-ar-title">${card.arTitle || ""}</div>
           </div>
         ` : ""}
-        <p class="lc-summary" style="margin-top:${o.hideHeader ? '0' : '8px'}"><b>Core Rule:</b> ${card.summary}</p>
+        <p class="lc-summary" style="margin-top:${o.hideHeader ? '0' : '8px'}"><b>Core Rule:</b> ${enhanceInlineArabic(card.summary)}</p>
         ${renderDiagramHtml(card.diagram)}
         <div class="lc-table-wrap">
           <table class="lc-table">
             <thead>
-              <tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr>
+              <tr>${cols.map(c => `<th>${enhanceInlineArabic(c)}</th>`).join("")}</tr>
             </thead>
             <tbody>
               ${(card.rows || []).map(r => `
                 <tr>
-                  <td>${r.col1 || ""}</td>
-                  <td>${r.col2 || ""}</td>
+                  <td>${enhanceInlineArabic(r.col1 || "")}</td>
+                  <td>${enhanceInlineArabic(r.col2 || "")}</td>
                   <td>
                     <div class="lc-ex-cell">
                       <div>
@@ -161,13 +175,13 @@
                       ${r.ar ? `<button type="button" class="lc-speak-btn" onclick="event.stopPropagation(); ${speakFn}('${escAttr(r.ar)}')" title="Listen">🔊</button>` : ""}
                     </div>
                   </td>
-                  <td>${r.col4 || ""}</td>
+                  <td>${enhanceInlineArabic(r.col4 || "")}</td>
                 </tr>
               `).join("")}
             </tbody>
           </table>
         </div>
-        ${card.trap ? `<div class="lc-trap">⚠️ <b>Watch out:</b> ${card.trap}</div>` : ""}
+        ${card.trap ? `<div class="lc-trap">⚠️ <b>Watch out:</b> ${enhanceInlineArabic(card.trap)}</div>` : ""}
       </div>
     `;
   }
@@ -223,6 +237,7 @@
 
   return {
     ensureStyles,
+    enhanceInlineArabic,
     renderDiagramHtml,
     renderBodyHtml,
     speakEncoded,

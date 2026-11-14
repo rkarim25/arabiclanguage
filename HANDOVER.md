@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-13  
+**Last Updated:** 2026-11-14  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,13 +77,17 @@
 
 ---
 
-## 2. Current Verified State (13 Nov 2026 — Friday Evening)
+## 2. Current Verified State (14 Nov 2026 — Saturday Morning)
 
-- **Telemetry & SRS Progress:** 4,063 total telemetry events; 1,221 tracked SRS cards (698 cleared: 595 active solid in Box 3–5 + 103 retired/never; 382 active learning, 141 in Box 0).
+- **Telemetry & SRS Progress:** 4,243 total telemetry events; 1,265 tracked SRS cards (682 cleared: 618 active solid in Box 3–5 + 64 retired/never; 422 active learning in Box 1–2, 161 in Box 0). Scored **28/29** on Al-Fātiḥah word-by-word test and completed Saturday Practice Batch 1 + opened Batch 2 (`mood: "good"`).
 - **Chapters 1–3:** Mastered at 100% on chapter tests; **Chapter 4 (Daily Routine, Time & Tenses)** is the active weekly Chapter advancing automatically via Practice.
-- **Speak with AI:** Refreshed with **Prompt II** for Friday Eve / Saturday 14 Nov weekend workout & Sunday 15 Nov 07:00 UK Preply class warmup (9 visual Lesson Cards, past negation `لَمْ` vs `مَا`, Friday practice slips `عُقَد` 113:4, `حَاسِد`, `غَاسِق`, `عَبَدْتُ اللهَ`, `تَقَبَّلَ اللهُ`, `أُرَتِّبُ`, `حَفْلَة`, and village breakfast foods).
-- **Audio Manifest:** `11,377` verified neural clips (`5,611` Arabic `ar-SA-HamedNeural` + `5,766` English `en-GB-RyanNeural`), plus Mishary Rashid Alafasy recitation for all Qur'ān ayahs and word-by-word clips.
-- **Recent Pen Notes Resolved:** Notes #64 & #65 (`لَمْ أَذْهَبْ` vs `مَا ذَهَبْتُ`, never `✗ لَا ذَهَبْتُ`; redundant `#planBar` removed from `sentences.html`, multi-batch Practice with per-batch `🗣 Speak Brief`).
+- **Motivation, Energy & Session-Adjustment Engine (`Practice.summarizeMotivation`, `#motivationStrip`):** Live 7-day consistency rhythm (`X/4 target days` — zero guilt on rest days) + 1-tap `😮‍💨 Low energy / 🙂 Steady / ⚡ Energised` selector at the top of Practice that immediately scales session budget (`6.0` light confidence review vs `10.0` daily core vs `surge`) and feeds post-batch check-ins (`planMoodHTML`) + `📊 Capabilities`.
+- **Decluttered Practice Layout & Next-Batch Flow (`index.html`):** Removed confusing `"🎯 Try them all · ✨ Free try · 🎧 By ear"` row, moved Chapter 4 progress (`#homeChapStrip`) and Coach's Note (`#coachCard`) below `#viewPractice`, and added always-visible **`▶ Batch N →`** controls in both the Practice header and `#doneArea` (even on partially rated batches).
+- **Recent Pen Notes Resolved (#66, #67, #68, #69):**
+  - **#66:** Added `She (هِيَ: ذَهَبَتْ / تَذْهَبُ / سَتَذْهَبُ)` and `They (هُمْ: ذَهَبُوا / يَذْهَبُونَ / سَيَذْهَبُونَ)` to `lc:verb-tenses` and `data/grammar.json` (+ neural MP3 generated).
+  - **#67:** Enlarged inline Arabic via `.ar-inline` + `enhanceInlineArabic()` across hints, grammar boxes, and Lesson Cards (`19–28px` `Noto Sans Arabic`, preserving mid-word `<b>` cursive joining).
+  - **#68:** Added direct `✗ · ≈ · ✓` word rating buttons (`rateSurahWord`) to every word row in `quran.html` Study mode alongside ayah ratings.
+  - **#69:** Upgraded `fuzzyEn()` (`js/app.js`) with multi-group Qur'ānic synonym matching (`wrath / anger / angered`, `astray / lost / misguided`, `favoured / blessed`, etc.) and included `aiMeaning` head glosses in `quran.html` `gradeVerse()`.
 
 ---
 

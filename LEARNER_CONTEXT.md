@@ -14,7 +14,7 @@
 - **Governance (Headmaster Model):**
   - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`⚡ Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free), dynamically linked with Weekly Chapters (`chapters.html`), Master Sentences (`sentences.html`), Vocabulary (`words.html`), Qur'ān (`quran.html`), visual Lesson Cards (`sets.html`), and the `🧑‍🏫 Teacher` Hub (`class.html`), all unified under live read-only **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)**.
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
-- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,063 total telemetry events; 1,221 SRS cards (698 cleared: 595 active solid in `Box 3–5` + 103 retired/never; 382 active learning, 141 `Box 0`).
+- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,243 total telemetry events; 1,265 SRS cards (682 cleared: 618 active solid in `Box 3–5` + 64 retired/never; 422 active learning in `Box 1–2`, 161 `Box 0`). Scored **28/29** on Al-Fātiḥah word-by-word test (`1:7` `ٱلْمَغْضُوبِ` typed `"angered you"` — valid wrath/anger root, passive participle nuance).
 
 ---
 
@@ -39,7 +39,7 @@ Stay within these domains unless teaching 1 requested word at a time:
 1. **The 5 Arabic Negation Pairings (`lc:negation`):**
    - **Past ("didn't"):** `لَمْ أَذْهَبْ` (`لَمْ` + jussive present `-ْ`, standard MSA & Qur'ān like `لَمْ يَلِدْ`) OR `مَا ذَهَبْتُ` (`مَا` + past `-tu`, spoken MSA). **NEVER `✗ لَا ذَهَبْتُ`** (`لَا` + past expresses a wish/curse, never factual past negation!).
    - **Present ("don't"):** `لَا أَذْهَبُ` · **Future ("won't"):** `لَنْ أَذْهَبَ` · **Nominal ("is not"):** `لَيْسَ`.
-2. **Verb Tenses (`lc:verb-tenses`):** Past puts person on the **back** (`ذَهَبْتُ / قَرَأْتُ / عَبَدْتُ`); Present puts person on the **front** (`أَذْهَبُ / أَقْرَأُ`); Future clips `سَـ` onto Present (`سَأَذْهَبُ`).
+2. **Verb Tenses (`lc:verb-tenses`):** Past puts person on the **back** (`ذَهَبْتُ / ذَهَبَتْ / ذَهَبُوا`); Present puts person on the **front** (`أَذْهَبُ / تَذْهَبُ / يَذْهَبُونَ`); Future clips `سَـ` onto Present (`سَأَذْهَبُ / سَتَذْهَبُ / سَيَذْهَبُونَ`). Note: only `هُمْ` (*they*) takes the plural tail (`ـُونَ` / `ـُوا`); `نَحْنُ` (*we*) is `نَذْهَبُ` with no tail.
 3. **Pronoun Attachments (`lc:pronoun-attachments`):** `ـِي` (my: `كِتَابِي`, `لِي`, `عِنْدِي`), `ـنِي` after verbs (me: `خُذْنِي`, `سَاعَدَنِي`), `ـكَ` (`-ka` to a man) vs `ـكِ` (`-ki` to wife Saba: `كَيْفَ كَانَ يَوْمُكِ؟`).
 4. **Possession (`إِضَافَة`) vs Adjective (`lc:idafa-vs-adjective`):** `مِفْتَاحُ الغُرْفَةِ` (`الـ` on second word only = "key of the room") vs `الغُرْفَةُ الجَدِيدَةُ` (`الـ` on both = "the new room").
 5. **Semantic & Minimal-Pair Anchors:** `ثَمَن` (value) vs `سِعْر` (shop tag) vs `أُجْرَة` (taxi fare); `أَعُودُ` (plain `د` = return home) vs `أَعُوذُ` (dotted `ذ` = seek refuge); `جَوْزَة` (`ج` = walnut) vs `زَوْجَة` (`ز` = wife); Surah An-Nās `صُدُور` (outer chest courtyard) vs `قُلُوب` (locked heart).
@@ -48,14 +48,16 @@ Stay within these domains unless teaching 1 requested word at a time:
 
 ## 4. Current Priority Slips & High-Value Mnemonics
 
-- `تَقَبَّلَ اللهُ` — *May Allah accept* (Bengali কবুল *kobul* cognate; reply `مِنَّا وَمِنْكُمْ`).
+- `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د; rated weak in Saturday Batch 1).
+- `الآنَ` — *now* (`الْآنَ` right now — rated weak in Saturday Batch 1).
+- `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`; rated medium in Saturday Batch 1).
+- `تَقَبَّلَ اللهُ` — *May Allah accept* (Bengali কবুল *kobul* cognate; reply `مِنَّا وَمِنْكُمْ` — promoted to ✓ in Saturday Batch 1!).
 - `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order).
 - `حَفْلَة` — *party / celebration* (shares root ح-ف-ل with *mahfil* مَحْفِل).
-- `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`).
-- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`; rated weak in Friday practice).
-- `حَاسِد` — *envier* (Surah Al-Falaq 113:5 `حَاسِدٍ إِذَا حَسَدَ`; rated medium in Friday practice).
+- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`).
+- `حَاسِد` — *envier* (Surah Al-Falaq 113:5 `حَاسِدٍ إِذَا حَسَدَ`).
 - `غَاسِق` — *intense nightfall* (Surah Al-Falaq 113:3 `غَاسِقٍ إِذَا وَقَبَ`).
-- `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ` — *I have a morning meeting* (root ج-م-ع = *Jumu'ah* gathering).
+- `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ` — *I have a morning meeting* (root ج-م-ع = *Jumu'ah* gathering — held ✓ in Saturday Batch 1!).
 - `هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟` — *Can you help me?* (Bengali মুমকিন *mumkin* + hear **AID** inside *mu-sa-AID-ah*).
 - `تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ` — *Speak slowly, please* (`بِبُطْءٍ` = with slowness).
 

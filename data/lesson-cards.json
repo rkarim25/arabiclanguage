@@ -166,14 +166,28 @@
           "col4": "<b>سَ</b>يَذْهَبُ (<i>sa-yadhhabu</i>)"
         },
         {
+          "col1": "<b>She</b> (هِيَ)",
+          "col2": "ذَهَبَ<b>تْ</b> (<i>dhahabat</i>)",
+          "ar": "تَذْهَبُ إِلَى البَيْتِ",
+          "tr": "tadhhabu ilā l-bayti",
+          "col4": "<b>سَ</b>تَذْهَبُ (<i>sa-tadhhabu</i>)"
+        },
+        {
           "col1": "<b>We</b> (نَحْنُ)",
           "col2": "ذَهَبْ<b>نَا</b> (<i>dhahabnā</i>)",
           "ar": "نَذْهَبُ إِلَى الحَدِيقَةِ",
           "tr": "nadhhabu ilā l-ḥadīqati",
           "col4": "<b>سَ</b>نَذْهَبُ (<i>sa-nadhhabu</i>)"
+        },
+        {
+          "col1": "<b>They</b> (هُمْ)",
+          "col2": "ذَهَبُ<b>وا</b> (<i>dhahabū</i>)",
+          "ar": "يَذْهَبُونَ إِلَى المَسْجِدِ",
+          "tr": "yadhhabūna ilā l-masjidi",
+          "col4": "<b>سَ</b>يَذْهَبُونَ (<i>sa-yadhhabūna</i>)"
         }
       ],
-      "trap": "Don't mix front and back markers at the same time (never ✗ أَذْهَبْتُ). Pick BACK for past (ذَهَبْتُ) or FRONT for present (أَذْهَبُ).",
+      "trap": "Don't mix front and back markers (never ✗ أَذْهَبْتُ) — and remember only THEY (هُمْ) takes the plural tail ـُونَ in present (يَذْهَبُونَ) and ـُوا in past (ذَهَبُوا); WE (نَحْنُ) is just نَـ with NO tail (نَذْهَبُ).",
       "quickCheck": {
         "prompt": "Flip \"I read the Qur'an\" across Past → Present → Future:",
         "answerAr": "قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ",

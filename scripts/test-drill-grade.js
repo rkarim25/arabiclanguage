@@ -85,5 +85,19 @@ console.log("\nNonsense still misses (grading stays honest):");
 t("unrelated word", "بيت", "لا أَعْرِف", "miss");
 t("blank single word", "", "كِتاب", "miss");
 
+console.log("\nfuzzyEn Qur'ān & MSA synonym grading (Pen Note #69):");
+const { fuzzyEn } = ctx;
+const fe = (label, typed, gloss, want) => {
+  const got = !!fuzzyEn(typed, gloss);
+  if (got !== want) fail++;
+  console.log(`  ${got === want ? "✓" : "✗"} ${label}: "${typed}" vs "${gloss}" → ${got}`);
+};
+fe("Pen Note #69: 'angered you' matches 'the ones brought under wrath'", "angered you", "the ones brought under wrath", true);
+fe("earned wrath / incurred anger matches wrath gloss", "incurred anger", "the ones brought under wrath ; those who earned (Your) wrath", true);
+fe("'astray' / 'misguided' matches 'the astray, lost'", "misguided", "the astray, lost", true);
+fe("'blessed' / 'favoured' matches 'bestowed favor You (did)'", "you blessed", "bestowed favor You (did)", true);
+fe("unrelated answer 'guided' does NOT match 'the ones brought under wrath'", "guided", "the ones brought under wrath", false);
+fe("chest vs heart stays distinct (صُدُور ≠ قُلُوب)", "hearts", "chests, breasts", false);
+
 console.log(fail ? `\n${fail} FAILED` : "\nALL TESTS PASS");
 process.exit(fail ? 1 : 0);

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
-  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/fonts.css?v=mwg3m2cb">
+  <link rel="stylesheet" href="css/style.css?v=mwg3m2cb">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -49,10 +49,10 @@
     .s-card.playing { border-color: var(--accent); background: rgba(13, 122, 95, 0.08); border-left: 4px solid var(--accent); }
 
     .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-    .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; }
-    .s-num { color: var(--muted); font-size: 12px; font-weight: 700; flex-shrink: 0; }
-    .s-prompt-text { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 22px; color: var(--accent); direction: rtl; text-align: right; }
+    .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; flex-wrap: wrap; }
+    .s-num { color: var(--muted); font-size: 12.5px; font-weight: 700; flex-shrink: 0; }
+    .s-prompt-text { font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.55; }
     
     .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
@@ -110,24 +110,42 @@
     .leg-dot.learning { background: #dc2626; }
     .leg-dot.never { background: #64748b; }
 
-    .s-revealed-body { display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px; border-top: 1px dashed var(--border); }
+    .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 9px 0 5px; border-top: 1px dashed var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 24px; color: var(--accent); line-height: 1.5; flex: 1; text-align: right; }
-    .s-en-line { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
-    .s-tr-line { font-size: 12px; color: var(--muted); font-style: italic; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 28px; color: var(--accent); line-height: 1.6; flex: 1; text-align: right; }
+    .s-en-line { font-size: 15.5px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+    .s-tr-line { font-size: 13.5px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
-    .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 5px; direction: rtl; margin-top: 4px; }
-    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px; background: var(--bg); font-size: 11.5px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 1px; transition: all 0.1s; }
+    .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin-top: 4px; }
+    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; background: var(--bg); font-size: 12px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.1s; }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 15px; color: var(--accent); line-height: 1.25; }
-    .wbw-chip-sm .w-en { font-size: 10px; color: var(--muted); direction: ltr; }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--accent); line-height: 1.35; }
+    .wbw-chip-sm .w-en { font-size: 11.5px; color: var(--muted); direction: ltr; }
 
-    .s-hint-line { font-size: 11.5px; color: var(--muted); background: rgba(0,0,0,0.02); padding: 4px 8px; border-radius: 6px; line-height: 1.35; margin-top: 2px; }
-    .s-gram-box { font-size: 12px; color: var(--ink); background: #fffbeb; border: 1px solid rgba(217,119,6,0.28); border-left: 3px solid var(--amber); padding: 6px 10px; border-radius: 7px; line-height: 1.45; margin-top: 3px; }
+    .s-hint-line { font-size: 14px; color: var(--ink); background: rgba(13, 122, 95, 0.04); border-left: 3px solid rgba(13, 122, 95, 0.32); padding: 7px 11px; border-radius: 6px; line-height: 1.75; margin-top: 3px; }
+    .s-gram-box { font-size: 14px; color: var(--ink); background: #fffbeb; border: 1px solid rgba(217,119,6,0.28); border-left: 3px solid var(--amber); padding: 8px 12px; border-radius: 7px; line-height: 1.75; margin-top: 3px; }
     .s-gram-box summary { cursor: pointer; font-weight: 600; color: #b45309; user-select: none; }
-    .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 11.5px; }
+    .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 12.5px; }
     .s-gram-link:hover { text-decoration: underline; }
+
+    /* Motivation, Rhythm & Live Energy Pacing Strip */
+    .mot-strip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px 14px; flex-wrap: wrap; }
+    .mot-left { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 240px; }
+    .mot-top-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; }
+    .mot-week { display: inline-flex; align-items: center; gap: 3px; }
+    .mot-day { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+    .mot-day.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .mot-day.today { box-shadow: 0 0 0 2px rgba(13, 122, 95, 0.25); }
+    .mot-mode-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+    .mot-mode-badge.light { background: #ecfdf5; color: #047857; }
+    .mot-mode-badge.surge { background: #fffbeb; color: #b45309; }
+    .mot-nurture { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+    .mot-right { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .mot-pill { border: 1px solid var(--border); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
+    .mot-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .mot-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .batch-progress-footer { margin-top: 14px; padding: 13px 16px; border-radius: 12px; background: var(--bg); border: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
     .batch-ai-nudge { margin-top: 14px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-align: left; }
     .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
     .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #ecfdf5; color: var(--accent); border: 1px solid rgba(13,122,95,0.28); }
@@ -189,7 +207,64 @@
     </div>
   </div>
 
-  <!-- COLLAPSIBLE COACH'S NOTE -->
+  <div id="focusBanner" style="display:none;margin-bottom:10px"></div>
+
+  <!-- PRACTICE VIEW -->
+  <div id="viewPractice">
+    <!-- MOTIVATION, CONSISTENCY RHYTHM & LIVE ENERGY SELECTOR -->
+    <div id="motivationStrip"></div>
+
+    <!-- Session Progress & List -->
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div>
+          <h2 style="margin:0;font-size:16px" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
+          <div class="srs-legend-bar" id="srsLegend"></div>
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
+          <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">▶ Next Batch →</button>
+          <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
+          <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
+          <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards, Qur'an &amp; Motivation">📊 Capabilities</button>
+          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo</button>
+          <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
+          <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
+          <details class="more"><summary title="Direction, stream filters &amp; audio controls">⋯</summary><div class="more-body">
+            <div class="dir-toggle">
+              <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
+              <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
+            </div>
+            <div class="filter-chips" id="filterChips">
+              <button type="button" class="chip active" data-filter="balanced" title="Adaptive Practice mix (10-sentence effort across vocab, sentences, grammar, and Qur'an)">⚡ Adaptive</button>
+              <button type="button" class="chip" data-filter="due">Due</button>
+              <button type="button" class="chip" data-filter="new">New</button>
+              <button type="button" class="chip" data-filter="weakest" title="Prioritize sentences with struggle words">📉 Weakest</button>
+              <button type="button" class="chip" data-filter="chapters">Chapters</button>
+              <button type="button" class="chip" data-filter="teacher">Preply</button>
+              <button type="button" class="chip" data-filter="quran">Qur'an</button>
+              <button type="button" class="chip" data-filter="everyday">Everyday</button>
+            </div>
+            <button type="button" class="pt-btn" id="btnPlayAll" title="Play batch continuously">▶ Play</button>
+            <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
+            <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
+              <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
+              <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
+            </span>
+            <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal all items in this batch">👁️ Reveal all</button>
+          </div></details>
+        </span>
+      </div>
+      <div id="capabilityDrawer" style="display:none;margin-bottom:12px"></div>
+      <div id="topVoiceBriefDrawer" style="display:none;margin-bottom:12px"></div>
+      <div class="sentence-list" id="sentenceList">Loading practice…</div>
+      <div id="doneArea"></div>
+    </div>
+  </div>
+
+  <!-- ACTIVE CHAPTER EARNED GREEN BAR & COACH'S NOTE (AT END OF PRACTICE PAGE) -->
+  <div id="homeChapStrip" style="margin-top:14px;margin-bottom:12px"></div>
+
   <details class="coach-details" id="coachCard" style="display:none;margin-bottom:12px">
     <summary>
       <span>
@@ -204,83 +279,23 @@
     </div>
   </details>
 
-  <!-- LIVE ACTIVE CHAPTER EARNED GREEN BAR -->
-  <div id="homeChapStrip" style="margin-bottom:12px"></div>
-  <div id="focusBanner" style="display:none;margin-bottom:10px"></div>
-
-  <!-- PRACTICE VIEW -->
-  <div id="viewPractice">
-    <!-- the calm toolbar (12 Oct): what matters, then ⋯ -->
-    <div class="calm-row">
-      <button type="button" class="pt-btn" onclick="TryIt.all()" title="Say or write each sentence in turn — chapter sentences get three variations">🎯 Try them all</button>
-      <button type="button" class="pt-btn" onclick="TryIt.free()" title="A batch built from what you already hold, at the length you have been passing — it rises with you">✨ Free try</button>
-      <button type="button" class="pt-btn" onclick="TryIt.free({ hear: true, kind: 'ear' })" title="The same batch, by ear: the Arabic plays, you give the meaning or say it back — your listening line">🎧 By ear</button>
-      <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
-      <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
-      <details class="more"><summary>⋯</summary><div class="more-body">
-        <div class="dir-toggle">
-          <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
-          <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
-        </div>
-        <div class="filter-chips" id="filterChips">
-          <button type="button" class="chip active" data-filter="balanced" title="Adaptive Practice mix (10-sentence effort across vocab, sentences, grammar, and Qur'an)">⚡ Adaptive</button>
-          <button type="button" class="chip" data-filter="due">Due</button>
-          <button type="button" class="chip" data-filter="new">New</button>
-          <button type="button" class="chip" data-filter="weakest" title="Prioritize sentences with struggle words">📉 Weakest</button>
-          <button type="button" class="chip" data-filter="chapters">Chapters</button>
-          <button type="button" class="chip" data-filter="teacher">Preply</button>
-          <button type="button" class="chip" data-filter="quran">Qur'an</button>
-          <button type="button" class="chip" data-filter="everyday">Everyday</button>
-        </div>
-        <button type="button" class="pt-btn" id="btnPlayAll" title="Play All 10 continuously">▶ Play</button>
-        <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
-        <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
-          <button type="button" id="spNorm" title="Normal audio speed">🔊</button>
-          <button type="button" id="spSlow" title="Slow audio speed">🐢</button>
-        </span>
-        <button type="button" class="pt-btn" onclick="revealAllCards()" title="Reveal All 10">👁️ Reveal all</button>
-      </div></details>
-    </div>
-
-    <!-- Session Progress & List -->
-    <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <div>
-          <h2 style="margin:0;font-size:15.5px" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
-          <div class="srs-legend-bar" id="srsLegend"></div>
-        </div>
-        <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
-          <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards &amp; Qur'an">📊 Capabilities</button>
-          <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
-          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo batch</button>
-          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
-        </span>
-      </div>
-      <div id="capabilityDrawer" style="display:none;margin-bottom:12px"></div>
-      <div id="topVoiceBriefDrawer" style="display:none;margin-bottom:12px"></div>
-      <div class="sentence-list" id="sentenceList">Loading practice…</div>
-      <div id="doneArea"></div>
-    </div>
-  </div>
-
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwfi0hay"></script>
-<script src="js/curriculum.js?v=mwfi0hay"></script>
-<script src="js/srs.js?v=mwfi0hay"></script>
-<script src="js/frames.js?v=mwfi0hay"></script>
-<script src="js/freetry.js?v=mwfi0hay"></script>
-<script src="js/practice.js?v=mwfi0hay"></script>
-<script src="js/lesson-cards.js?v=mwfi0hay"></script>
-<script src="js/match.js?v=mwfi0hay"></script>
-<script src="js/errors.js?v=mwfi0hay"></script>
-<script src="js/tryit.js?v=mwfi0hay"></script>
-<script src="js/app.js?v=mwfi0hay"></script>
-<script src="js/tracker.js?v=mwfi0hay"></script>
-<script src="js/plan.js?v=mwfi0hay"></script>
-<script src="js/account.js?v=mwfi0hay"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwg3m2cb"></script>
+<script src="js/curriculum.js?v=mwg3m2cb"></script>
+<script src="js/srs.js?v=mwg3m2cb"></script>
+<script src="js/frames.js?v=mwg3m2cb"></script>
+<script src="js/freetry.js?v=mwg3m2cb"></script>
+<script src="js/practice.js?v=mwg3m2cb"></script>
+<script src="js/lesson-cards.js?v=mwg3m2cb"></script>
+<script src="js/match.js?v=mwg3m2cb"></script>
+<script src="js/errors.js?v=mwg3m2cb"></script>
+<script src="js/tryit.js?v=mwg3m2cb"></script>
+<script src="js/app.js?v=mwg3m2cb"></script>
+<script src="js/tracker.js?v=mwg3m2cb"></script>
+<script src="js/plan.js?v=mwg3m2cb"></script>
+<script src="js/account.js?v=mwg3m2cb"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -552,6 +567,7 @@ function allPracticeItems() {
       const reqBatch = parseInt(q.get("batch") || "0", 10);
       await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
     }
+    renderMotivationStrip();
     renderHomeChapStrip();
   } catch (e) {
     console.error("Failed to load sentence bank", e);
@@ -691,6 +707,13 @@ function renderCapabilityDrawerHTML() {
           <div><b>${cap.quran.ayahsHeld}</b> ayahs · <b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
           <div style="color:var(--muted);font-size:11px">${cap.modality.unverifiedCommuteCount ? `🔄 ${cap.modality.unverifiedCommuteCount} commute item(s) queued for screen check` : "Screen &amp; commute balanced ✓"}</div>
         </div>
+        ${cap.motivation ? `
+        <div class="cap-cell">
+          <b>💪 Motivation &amp; Rhythm</b>
+          <div><b>${cap.motivation.activeDays7d}/${cap.motivation.targetDays || 4}</b> target days · <b>${cap.motivation.todayMood === "heavy" ? "😮‍💨 Low energy" : cap.motivation.todayMood === "good" ? "⚡ Energised" : cap.motivation.todayMood === "fine" ? "🙂 Steady" : "Auto"}</b></div>
+          <div style="color:var(--muted);font-size:11px">${escBriefHtml(cap.motivation.modeLabel)}</div>
+        </div>
+        ` : ""}
       </div>
       ${(cap.canDo.length || cap.gaps.length) ? `
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:8px;font-size:12px">
@@ -713,10 +736,75 @@ function toggleCapabilityDrawer() {
   }
 }
 
+function renderMotivationStrip(adjustNotice, offerRebuild) {
+  const el = document.getElementById("motivationStrip");
+  if (!el || !window.Practice || typeof Practice.summarizeMotivation !== "function") return;
+  const activeChap = getActiveWeeklyChapter();
+  const easy = (typeof planEasyDay === "function") && planEasyDay();
+  const mot = Practice.summarizeMotivation({
+    now: Date.now(),
+    log: store.get("ats-log", []),
+    srs: getSrs(),
+    sentences: MASTER_SENTENCES,
+    activeChapNum: activeChap ? activeChap.num : null,
+    easyDay: easy
+  });
+  const modeCls = (mot.activeMode === "light" || mot.activeMode === "comeback") ? "light" : mot.activeMode === "surge" ? "surge" : "";
+  const weekDots = (mot.weekDays || []).map(d =>
+    `<span class="mot-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.on ? "Active study day" : "Rest day — zero guilt"}">${d.label}</span>`
+  ).join("");
+  const curMood = mot.todayMood || "";
+  el.innerHTML = `
+    <div class="mot-strip">
+      <div class="mot-left">
+        <div class="mot-top-line">
+          <span class="mot-week" title="${mot.activeDays7d} of ${mot.targetDays} target days active in the last 7 days (4 mornings = a full week)">${weekDots}</span>
+          <span style="font-weight:600;color:var(--ink)">${mot.activeDays7d}/${mot.targetDays} target days</span>
+          <span class="mot-mode-badge ${modeCls}">${escBriefHtml(mot.modeLabel)}</span>
+          ${adjustNotice ? `<span style="font-size:12px;font-weight:700;color:var(--accent)">✓ ${escBriefHtml(adjustNotice)}</span>` : ""}
+          ${offerRebuild ? `<button type="button" class="pt-btn" onclick="rebuildBatchForMood()" style="font-size:11.5px;padding:2px 8px;color:var(--accent);border-color:var(--accent);font-weight:700">↻ Adjust current batch now</button>` : ""}
+        </div>
+        <div class="mot-nurture">${escBriefHtml(mot.nurtureText)}</div>
+      </div>
+      <div class="mot-right" role="group" aria-label="How is your energy today?">
+        <span style="font-size:12px;color:var(--muted);font-weight:600">Energy:</span>
+        <button type="button" class="mot-pill ${curMood === "heavy" ? "active" : ""}" onclick="setPracticeMood('heavy')" title="Tired or pressed for time — switches Practice immediately to a calm 6-unit review round (no new items)">😮‍💨 Low energy</button>
+        <button type="button" class="mot-pill ${curMood === "fine" ? "active" : ""}" onclick="setPracticeMood('fine')" title="Normal day — balanced 10-unit Daily Core advancing weekly Chapter sentences + review">🙂 Steady</button>
+        <button type="button" class="mot-pill ${curMood === "good" ? "active" : ""}" onclick="setPracticeMood('good')" title="Feeling sharp — full pace advancing weekly Chapter, Lesson Cards &amp; active recall">⚡ Energised</button>
+      </div>
+    </div>
+  `;
+}
+
+function setPracticeMood(mood) {
+  logEvent({ e: "mood", mood, via: "practice", t: Date.now() });
+  if (typeof autoSync === "function") { try { autoSync(); } catch (e) {} }
+  const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  const label = mood === "heavy" ? "Switched to Light 5-min Review" : mood === "good" ? "Switched to Energised Pace" : "Switched to Steady Core";
+  if (IS_ADAPTIVE_PRACTICE && BATCH_RATED.size === 0) {
+    loadPracticeBatch(curB);
+    renderMotivationStrip(label, false);
+  } else {
+    renderMotivationStrip(label + (IS_ADAPTIVE_PRACTICE ? " (applies to next batch)" : ""), IS_ADAPTIVE_PRACTICE && BATCH_RATED.size > 0 && BATCH_RATED.size < ACTIVE_SENTENCES.length);
+    updateSessionProgress();
+  }
+}
+
+function rebuildBatchForMood() {
+  const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  loadPracticeBatch(curB);
+  renderMotivationStrip("Current batch rebuilt for your energy", false);
+}
+
+window.addEventListener("ats-mood-updated", function () {
+  renderMotivationStrip("Saved feeling — next batch tuned automatically", false);
+});
+
 function startNextPracticeBatch(nextB) {
   currentFilter = "balanced";
-  document.querySelectorAll(".f-chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
+  document.querySelectorAll("#filterChips .chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
   loadPracticeBatch(nextB);
+  renderMotivationStrip();
   const vp = document.getElementById("viewPractice");
   if (vp && vp.scrollIntoView) vp.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -805,13 +893,15 @@ function renderGrammarRuleHtml(s, forceCompact) {
   if (!g) return "";
   const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
   const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
+  const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
+  const arBadge = `<span class="ar-inline" dir="rtl">${g.ar}</span>`;
   const srs = getSrs();
   const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
   const isSolid = gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
   if (!forceCompact && (!isSolid || g.id === "negation")) {
-    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${g.ar} (${g.shortName}):</b> ${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div>`;
+    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${arBadge} (${g.shortName}):</b> ${ruleHtml} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div>`;
   }
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${g.ar} (${g.shortName})</summary><div style="margin-top:4px">${g.rule} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
+  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${arBadge} (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
 }
 
 function sourceLinkMeta(s) {
@@ -1232,6 +1322,9 @@ function cardHtml(s, idx) {
   const isRevealed = REVEALED.has(idx);
   if (s.kind === "lesson-card") {
     const whyTag = s._try && s._try.why ? s._try.why : (s.lcMode === "teach" ? "teach first" : "spaced review");
+    const escLcKey = String(s.key || "").replace(/'/g, "\\'");
+    const lcRated = BATCH_RATED.has(s.key);
+    const noteEnhanced = s.note ? (typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note) : "";
     return `
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-head">
@@ -1239,7 +1332,7 @@ function cardHtml(s, idx) {
             <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}
             <a class="tryit-why" href="${(sourceLinkMeta(s) || {}).href || 'sets.html'}" onclick="event.stopPropagation()" title="Open in Sets" style="font-weight:700;background:#ecfdf5;color:var(--accent);text-decoration:none">📇 Lesson Card · ${s.categoryLabel || "Concept"} ↗</a>
             <span class="tryit-why">${whyTag}</span>
-            <span class="s-prompt-text">${s.lcMode === "teach" ? (s.title || s.en) : s.en}</span>
+            <span class="s-prompt-text">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.lcMode === "teach" ? (s.title || s.en) : s.en) : (s.lcMode === "teach" ? (s.title || s.en) : s.en)}</span>
           </div>
         </div>
         ${!isRevealed ? `
@@ -1251,12 +1344,15 @@ function cardHtml(s, idx) {
           </div>
         ` : `
           <div class="s-revealed-body">
-            ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${s.note || ""}</div>`}
-            ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check Answer:</b> <span class="arabic" dir="rtl" style="font-size:18px;color:var(--accent)">${s.ar}</span>${s.note ? ` — ${s.note}` : ""}</div>` : ""}
+            ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${noteEnhanced}</div>`}
+            ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check Answer:</b> <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}</div>` : ""}
           </div>
           <div class="s-action-bar" style="margin-top:6px">
-            <span style="font-size:11.5px;color:var(--muted)">${s.lcMode === "teach" ? "Understood Lesson Card? (sets next review date):" : "Rate Lesson Card recall:"}</span>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
+            <span style="font-size:12.5px;color:var(--muted)">${s.lcMode === "teach" ? "Read the mental map above, then mark understood:" : "Rate Lesson Card recall:"}</span>
+            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap" onclick="event.stopPropagation()">
+              ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); render10Cards();" style="font-weight:700;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<span style="font-size:12px;font-weight:700;color:var(--accent)">✓ Marked</span>`}
+              <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
+            </div>
           </div>
         `}
       </div>
@@ -1338,7 +1434,7 @@ function cardHtml(s, idx) {
             ` : ''}
 
             ${s.note ? `
-              <div class="s-hint-line">💡 ${s.note}</div>
+              <div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>
             ` : ''}
             ${renderGrammarRuleHtml(s, false)}
           </div>
@@ -1467,42 +1563,79 @@ function rateSentence(key, g, cardIdx, how, meta) {
   updateSessionProgress();
 }
 
+function jumpToNextUnrated() {
+  const unratedIdx = ACTIVE_SENTENCES.findIndex(s => !BATCH_RATED.has(s.key));
+  if (unratedIdx < 0) return;
+  const el = document.getElementById("scard-" + unratedIdx);
+  if (el && el.scrollIntoView) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.style.boxShadow = "0 0 0 3px rgba(13, 122, 95, 0.35)";
+    setTimeout(() => { el.style.boxShadow = ""; }, 1800);
+  }
+}
+
+function finalizeCurrentBatchTelemetry() {
+  const total = ACTIVE_SENTENCES.length;
+  if (!IS_ADAPTIVE_PRACTICE || BATCH_DONE_LOGGED || total === 0) return;
+  BATCH_DONE_LOGGED = true;
+  if (window._pendingCommuteCheck) {
+    const c = window._pendingCommuteCheck;
+    window._pendingCommuteCheck = null;
+    logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
+    (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
+  }
+  const srsNow = getSrs();
+  const okAll = ACTIVE_SENTENCES.filter(s => srsNow[s.key] && (srsNow[s.key].g === "yes" || srsNow[s.key].g === "solid" || srsNow[s.key].b === "never")).length;
+  if (window.Practice && typeof Practice.summarizeCapabilities === "function") {
+    const activeChapNow = getActiveWeeklyChapter();
+    store.set("ats-capabilities", Practice.summarizeCapabilities({
+      now: Date.now(), activeChapNum: activeChapNow ? activeChapNow.num : null,
+      srs: srsNow, log: store.get("ats-log", []), words: PRACTICE_WORDS,
+      sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
+    }));
+  }
+  logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });
+  autoSync();
+}
+
+function advanceToNextBatch() {
+  if (IS_ADAPTIVE_PRACTICE) {
+    const curB = (CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+    if (BATCH_RATED.size > 0) finalizeCurrentBatchTelemetry();
+    startNextPracticeBatch(curB + 1);
+  } else if (FOCUSED_PRACTICE_SPEC) {
+    clearPracticeFocus();
+  } else {
+    load10Sentences();
+  }
+}
+
 function updateSessionProgress() {
   const total = ACTIVE_SENTENCES.length;
   const ratedCount = ACTIVE_SENTENCES.filter(s => BATCH_RATED.has(s.key)).length;
   document.getElementById("sessionCount").textContent = `${ratedCount} of ${total} rated`;
 
+  const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
+  const nextB = curB + 1;
+  const nextDesc = nextB === 2 ? "75% Review + Consolidation" : "Deep Review Mix";
+  const topNextBtn = document.getElementById("btnTopNextBatch");
+  if (topNextBtn) {
+    topNextBtn.textContent = IS_ADAPTIVE_PRACTICE
+      ? `▶ Batch ${nextB} →`
+      : FOCUSED_PRACTICE_SPEC
+      ? "⚡ Daily Batch →"
+      : "▶ Next Batch →";
+  }
+
   const doneArea = document.getElementById("doneArea");
   if (ratedCount === total && total > 0) {
-    if (IS_ADAPTIVE_PRACTICE && !BATCH_DONE_LOGGED) {
-      BATCH_DONE_LOGGED = true;
-      if (window._pendingCommuteCheck) {
-        const c = window._pendingCommuteCheck;
-        window._pendingCommuteCheck = null;
-        logEvent({ e: "commute-check-done", forT: c.forT, n: c.n, t: Date.now() });
-        (c.forTs || []).forEach(ft => { if (ft && ft !== c.forT) logEvent({ e: "commute-check-done", forT: ft, n: c.n, t: Date.now() }); });
-      }
-      const srsNow = getSrs();
-      const okAll = ACTIVE_SENTENCES.filter(s => srsNow[s.key] && (srsNow[s.key].g === "yes" || srsNow[s.key].g === "solid" || srsNow[s.key].b === "never")).length;
-      if (window.Practice && typeof Practice.summarizeCapabilities === "function") {
-        const activeChapNow = getActiveWeeklyChapter();
-        store.set("ats-capabilities", Practice.summarizeCapabilities({
-          now: Date.now(), activeChapNum: activeChapNow ? activeChapNow.num : null,
-          srs: srsNow, log: store.get("ats-log", []), words: PRACTICE_WORDS,
-          sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
-        }));
-      }
-      logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });
-      autoSync();
-    }
+    finalizeCurrentBatchTelemetry();
+    renderMotivationStrip();
     const freeDoneEl = document.getElementById("freeDone");
     if (freeDoneEl && freeDoneEl.innerHTML.trim()) {
       doneArea.innerHTML = "";
       return;
     }
-    const curB = (IS_ADAPTIVE_PRACTICE && CURRENT_BUILT_BATCH && CURRENT_BUILT_BATCH.batchNum) || 1;
-    const nextB = curB + 1;
-    const nextDesc = nextB === 2 ? "75% Review + Consolidation" : "Deep Review Mix";
     const activeChap = getActiveWeeklyChapter();
     let chapProgHtml = "";
     if (IS_ADAPTIVE_PRACTICE && activeChap) {
@@ -1520,7 +1653,7 @@ function updateSessionProgress() {
         <h3 style="margin:0 0 6px;color:var(--accent);font-size:20px">${IS_ADAPTIVE_PRACTICE ? `🎉 Batch ${curB} Complete!` : `🎉 Practice Batch Complete!`}</h3>
         <p style="margin:0 0 8px;font-size:14px">Every verdict updated its home section (Vocabulary, Sentences, Grammar, Qur'an) and set its next review date automatically.</p>
         ${chapProgHtml}
-        ${IS_ADAPTIVE_PRACTICE && curB === 1 && typeof planMoodHTML === "function" ? planMoodHTML() : ""}
+        ${typeof planMoodHTML === "function" ? planMoodHTML() : ""}
         <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
           ${IS_ADAPTIVE_PRACTICE
             ? `<button type="button" class="primary" onclick="startNextPracticeBatch(${nextB})" style="font-size:15px;padding:9px 22px">▶ Start Batch ${nextB} (${nextDesc}) →</button>`
@@ -1531,6 +1664,30 @@ function updateSessionProgress() {
           <a href="chapters.html" class="pt-btn" style="font-size:14px;padding:8px 16px;text-decoration:none">📖 Open Chapters →</a>
         </div>
         ${renderBatchVoiceBriefHTML("done")}
+      </div>
+    `;
+  } else if (total > 0 && ratedCount > 0) {
+    const leftCount = total - ratedCount;
+    const firstUnratedIdx = ACTIVE_SENTENCES.findIndex(s => !BATCH_RATED.has(s.key));
+    doneArea.innerHTML = `
+      <div class="batch-progress-footer">
+        <div style="font-size:13.5px;color:var(--ink)">
+          <b>${ratedCount} of ${total} rated</b>
+          <span style="color:var(--muted)">· ${leftCount} item${leftCount === 1 ? "" : "s"} above not rated yet${firstUnratedIdx >= 0 ? ` (starting at #${firstUnratedIdx + 1})` : ""}</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button type="button" class="pt-btn" onclick="jumpToNextUnrated()" style="font-size:13px;padding:6px 12px">↑ Jump to #${firstUnratedIdx + 1}</button>
+          ${IS_ADAPTIVE_PRACTICE
+            ? `<button type="button" class="primary" onclick="advanceToNextBatch()" style="font-size:13.5px;padding:7px 16px">▶ Finish &amp; Start Batch ${nextB} (${nextDesc}) →</button>`
+            : `<button type="button" class="primary" onclick="advanceToNextBatch()" style="font-size:13.5px;padding:7px 16px">▶ Next Batch →</button>`}
+        </div>
+      </div>
+    `;
+  } else if (total > 0) {
+    doneArea.innerHTML = `
+      <div class="batch-progress-footer" style="padding:10px 14px">
+        <span style="font-size:13px;color:var(--muted)">Rate each item (<b>✗ · ≈ · ✓</b>) as you go — every verdict syncs across Words, Chapters, Sentences &amp; Qur'ān.</span>
+        <button type="button" class="pt-btn" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)">${IS_ADAPTIVE_PRACTICE ? `▶ Next: Batch ${nextB} (${nextDesc}) →` : `▶ Next Batch →`}</button>
       </div>
     `;
   } else {

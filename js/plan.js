@@ -300,6 +300,8 @@ function planBestHour() {
 }
 function planMoodsToday() { const t0 = new Date(); t0.setHours(0, 0, 0, 0); return planMoods(2).filter(x => x.t >= t0.getTime()); }
 function planEasyDay() {
+  const today = planMoodsToday().slice(-1)[0];
+  if (today) return today.mood === "heavy";
   const m = planMoods(4);
   if (m.length < 2) return false;
   const last = m.slice(-2);
@@ -307,11 +309,21 @@ function planEasyDay() {
 }
 function planMoodHTML() {
   const today = planMoodsToday().slice(-1)[0];
-  if (today) return `<div class="pd-mood done">Thanks — noted ${today.mood === "heavy" ? "😮‍💨 heavy" : today.mood === "good" ? "⚡ good" : "🙂 fine"}. ${today.mood === "heavy" ? "Tomorrow's block will be lighter." : today.mood === "good" ? "Tomorrow builds on it." : "Same again tomorrow."}</div>`;
-  return `<div class="pd-mood"><span class="pd-muted">How did that feel?</span>
-    <button type="button" class="book-toggle-pill" onclick="planMood('heavy', this)">😮‍💨 heavy</button>
-    <button type="button" class="book-toggle-pill" onclick="planMood('fine', this)">🙂 fine</button>
-    <button type="button" class="book-toggle-pill" onclick="planMood('good', this)">⚡ good</button></div>`;
+  const cur = today ? today.mood : "";
+  const note = cur === "heavy"
+    ? "🌿 Light 5-min review active (no new items; confidence builders)."
+    : cur === "good"
+    ? "🔥 Energised mode active (advancing Chapter + active recall)."
+    : cur === "fine"
+    ? "⚡ Steady core pace active."
+    : "";
+  return `<div class="pd-mood ${cur ? "done" : ""}">
+    <span class="pd-muted">${cur ? "How you're feeling today:" : "How did that feel?"}</span>
+    <button type="button" class="book-toggle-pill ${cur === "heavy" ? "active" : ""}" onclick="planMood('heavy', this)">😮‍💨 Low energy</button>
+    <button type="button" class="book-toggle-pill ${cur === "fine" ? "active" : ""}" onclick="planMood('fine', this)">🙂 Steady</button>
+    <button type="button" class="book-toggle-pill ${cur === "good" ? "active" : ""}" onclick="planMood('good', this)">⚡ Energised</button>
+    ${note ? `<div style="font-size:12px;color:var(--accent);margin-top:4px">${note}</div>` : ""}
+  </div>`;
 }
 function planMood(mood, btn) {
   logEvent({ e: "mood", mood, t: Date.now() });
@@ -319,6 +331,9 @@ function planMood(mood, btn) {
   const box = btn && btn.closest(".pd-mood");
   if (box) box.outerHTML = planMoodHTML();
   planPaintDoor();
+  if (typeof window !== "undefined" && typeof window.dispatchEvent === "function" && typeof CustomEvent === "function") {
+    try { window.dispatchEvent(new CustomEvent("ats-mood-updated", { detail: { mood } })); } catch (e) {}
+  }
 }
 /* the line on the door that looks after him */
 function planNurtureLine(p) {
@@ -817,8 +832,9 @@ function planWeekDays() {
     const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
     const a = d.getTime(), b = a + 86400000;
     const secs = log.filter(x => x && x.t >= a && x.t < b && x.e === "time" && x.sec).reduce((s, x) => s + Math.min(x.sec, 600), 0);
-    const done = log.some(x => x && x.t >= a && x.t < b && x.e === "plan-done");
-    days.push({ d, label: d.toLocaleDateString(undefined, { weekday: "narrow" }), on: secs >= 120 || done, done, today: i === 0 });
+    const done = log.some(x => x && x.t >= a && x.t < b && (x.e === "plan-done" || x.e === "tryit-free-done" || x.e === "commute-done"));
+    const actions = log.filter(x => x && x.t >= a && x.t < b && (x.e === "vocab-rate" || x.e === "sentence-rate" || x.e === "sent-drill" || x.e === "lesson-card-rate")).length;
+    days.push({ d, label: d.toLocaleDateString(undefined, { weekday: "narrow" }), on: secs >= 120 || done || actions >= 5, done, today: i === 0 });
   }
   return days;
 }

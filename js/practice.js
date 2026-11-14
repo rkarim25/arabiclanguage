@@ -243,6 +243,99 @@
     };
   }
 
+  /* Motivation & Consistency Engine:
+     Tracks how Reza is feeling (heavy / fine / good), 7-day study rhythm (4 days = full week),
+     comeback gaps, and computes both the session pacing mode and a warm, honest nurture line. */
+  function summarizeMotivation(ctx) {
+    const now = (ctx && ctx.now) || Date.now();
+    const log = (ctx && ctx.log) || [];
+    const activeChapNum = resolveActiveChapterNum(ctx || {});
+    const day0 = startOfLocalDay(now);
+
+    const studyTypes = new Set(["vocab-rate", "sentence-rate", "sent-drill", "commute-done", "qtest-done", "qlisten-test", "gtest-done", "bucket", "prompt", "tryit-free-done", "lesson-card-rate"]);
+    const studyEvs = log.filter(x => x && x.t && studyTypes.has(x.e));
+    const lastStudyT = studyEvs.length ? studyEvs[studyEvs.length - 1].t : now;
+    const gapDays = studyEvs.length ? Math.max(0, (now - lastStudyT) / DAY) : 0;
+    const priorStudyEvs = studyEvs.filter(x => x.t < day0);
+    const prevGapDays = priorStudyEvs.length ? Math.max(0, (day0 - priorStudyEvs[priorStudyEvs.length - 1].t) / DAY) : 0;
+
+    const moods7d = log.filter(x => x && x.e === "mood" && x.t >= now - 7 * DAY).sort((a, b) => a.t - b.t);
+    const moods4d = moods7d.filter(x => x.t >= now - 4 * DAY);
+    const moodsToday = moods7d.filter(x => x.t >= day0);
+    const todayMood = moodsToday.length ? moodsToday[moodsToday.length - 1].mood : null;
+    const lastMood = moods7d.length ? moods7d[moods7d.length - 1].mood : null;
+    const twoHeavy = moods4d.length >= 2 && moods4d.slice(-2).every(m => m.mood === "heavy");
+    const heavyCount7d = moods7d.filter(m => m.mood === "heavy").length;
+    const goodCount7d = moods7d.filter(m => m.mood === "good").length;
+
+    const weekDays = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - i);
+      const a = d.getTime(), b = a + DAY;
+      const secs = log.filter(x => x && x.t >= a && x.t < b && x.e === "time" && x.sec).reduce((s, x) => s + Math.min(x.sec, 600), 0);
+      const done = log.some(x => x && x.t >= a && x.t < b && (x.e === "plan-done" || x.e === "tryit-free-done" || x.e === "commute-done"));
+      const actions = log.filter(x => x && x.t >= a && x.t < b && studyTypes.has(x.e)).length;
+      let label = ["S", "M", "T", "W", "T", "F", "S"][d.getDay()];
+      try { label = d.toLocaleDateString(undefined, { weekday: "narrow" }) || label; } catch (_) {}
+      weekDays.push({ ts: a, label, on: secs >= 120 || done || actions >= 5, today: i === 0, actions });
+    }
+    const activeDays7d = weekDays.filter(d => d.on).length;
+    const todayWins = log.filter(x => x && x.t >= day0 && (
+      ((x.e === "vocab-rate" || x.e === "sentence-rate" || x.e === "lesson-card-rate") && (x.g === "yes" || x.g === "solid")) ||
+      (x.e === "sent-drill" && x.ok)
+    )).length;
+
+    const comeback = gapDays >= 4;
+    const easyDay = !!(ctx && ctx.easyDay) || todayMood === "heavy" || (!todayMood && twoHeavy);
+    const activeMode = comeback ? "comeback"
+      : easyDay ? "light"
+      : todayMood === "good" ? "surge"
+      : "steady";
+
+    const modeLabel = activeMode === "comeback" ? "🌱 Gentle Comeback (6 units)"
+      : activeMode === "light" ? "🌿 Light 5-min Review (6 units)"
+      : activeMode === "surge" ? "🔥 Energised Pace"
+      : "⚡ Steady Core";
+
+    let nurtureText = "";
+    if (comeback) {
+      nurtureText = "Welcome back — life happens and zero catch-up is owed. Today is a calm 6-unit review batch to warm your ear back up.";
+    } else if (todayMood === "heavy") {
+      nurtureText = "Low-energy mode active — paused new items and shortened Practice to 6 review units so 5 calm minutes still locks a win.";
+    } else if (!todayMood && twoHeavy) {
+      nurtureText = "After two heavy days, Practice starts lighter today (6 review units, no new load) — tap 🙂 Steady or ⚡ Energised anytime to step up.";
+    } else if (todayMood === "good") {
+      nurtureText = `Energised mode active — advancing Chapter ${activeChapNum || 4} sentences, visual Lesson Cards & active recall${todayWins ? ` (${todayWins} solid today)` : ""}.`;
+    } else if (prevGapDays >= 2.0 && weekDays[weekDays.length - 1] && weekDays[weekDays.length - 1].on) {
+      nurtureText = `Back in rhythm today (${activeDays7d}/4 target days this week${todayWins ? ` · ${todayWins} solid today` : ""}) — 5 steady minutes beats waiting for a free hour.`;
+    } else if (activeDays7d >= 4) {
+      nurtureText = `Full weekly target hit (${activeDays7d}/4 days active${todayWins ? ` · ${todayWins} solid today` : ""}) — consistency is compounding!`;
+    } else {
+      nurtureText = `${activeDays7d}/4 target days active this week (4 mornings = a full week${todayWins ? ` · ${todayWins} solid today` : ""}) — tap how you feel anytime to tune pace.`;
+    }
+
+    return {
+      todayMood,
+      lastMood,
+      twoHeavy,
+      easyDay,
+      comeback,
+      heavyCount7d,
+      goodCount7d,
+      activeDays7d,
+      targetDays: 4,
+      gapDays: Math.round(gapDays * 10) / 10,
+      prevGapDays: Math.round(prevGapDays * 10) / 10,
+      todayWins,
+      weekDays,
+      activeMode,
+      modeLabel,
+      nurtureText
+    };
+  }
+
   /* Read telemetry + SRS + motivation + commute balance + batchNum to diagnose what the learner needs */
   function diagnose(ctx) {
     const now = ctx.now || Date.now();
@@ -256,16 +349,13 @@
     const activeChapNum = resolveActiveChapterNum(ctx);
     const cb = analyzeCommuteBalance(log, now);
 
-    // 1. Gap days & motivation state
-    const studyEvs = log.filter(x => x && x.t && ["vocab-rate", "sentence-rate", "sent-drill", "commute-done", "qtest-done", "qlisten-test", "gtest-done", "bucket", "prompt", "tryit-free-done", "lesson-card-rate"].includes(x.e));
-    const lastStudyT = studyEvs.length ? studyEvs[studyEvs.length - 1].t : now;
-    const gapDays = studyEvs.length ? Math.max(0, (now - lastStudyT) / DAY) : 0;
-
-    const moods = log.filter(x => x && x.e === "mood" && x.t >= now - 7 * DAY).sort((a, b) => a.t - b.t);
-    const lastMood = moods.length ? moods[moods.length - 1].mood : null;
-    const twoHeavy = moods.length >= 2 && moods.slice(-2).every(m => m.mood === "heavy");
-    const easyDay = !!ctx.easyDay || twoHeavy;
-    const comeback = gapDays >= 4;
+    // 1. Gap days & motivation state (reacts immediately to today's mood tap AND 4d history)
+    const mot = summarizeMotivation({ now, log, srs, sentences, activeChapNum, easyDay: ctx.easyDay });
+    const gapDays = mot.gapDays;
+    const todayMood = mot.todayMood;
+    const lastMood = mot.lastMood;
+    const easyDay = mot.easyDay;
+    const comeback = mot.comeback;
     const light = easyDay || comeback;
     const budget = light ? 6.0 : (ctx.budget || 10.0);
 
@@ -328,7 +418,7 @@
       : (cb.commuteHeavy && batchNum === 1) ? "commute-balance"
       : batchNum >= 3 ? "deep-review"
       : batchNum === 2 ? "review-plus"
-      : (lastMood === "good" && recentPassRate >= 0.8) ? "surge"
+      : (todayMood === "good" || (!todayMood && lastMood === "good" && recentPassRate >= 0.8)) ? "surge"
       : "steady";
 
     // Compute dynamic target effort units per stream (including commute modality compensation!)
@@ -393,7 +483,7 @@
       batchNum, activeChapNum,
       weeklyChapTotal: weeklyChapSents.length,
       weeklyChapSolid,
-      lastMood, recentPassRate: Math.round(recentPassRate * 100),
+      todayMood, lastMood, motivation: mot, recentPassRate: Math.round(recentPassRate * 100),
       allowNew, maxNewItems, reviewTargetShare, budget,
       wordSlips, wordDue, hwWordsShaky,
       grammarSlips, grammarDue, recentErrors, weakFrame,
@@ -582,6 +672,7 @@
         commuteHeavy: cb.commuteHeavy,
         unverifiedCommuteCount: cb.unverifiedWords.size + Math.max(cb.unverifiedSents.size, cb.unverifiedEns.size)
       },
+      motivation: summarizeMotivation({ now, log, srs, sentences, activeChapNum, easyDay: ctx.easyDay }),
       canDo,
       gaps
     };
@@ -1388,6 +1479,7 @@
   return {
     EFFORT,
     diagnose,
+    summarizeMotivation,
     analyzeCommuteBalance,
     summarizeCapabilities,
     syncVerdict,

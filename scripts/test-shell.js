@@ -705,8 +705,8 @@ const bank = D("sentence-bank.json");
   console.log("\n-- the one door --");
   const planSrc = fs.readFileSync(path.join(ROOT, "js", "plan.js"), "utf8");
   const indexSrc = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
-  yes(/id="viewPractice"/.test(indexSrc) && /id="sentenceList"/.test(indexSrc), "index.html opens directly into ⚡ Practice");
-  yes(/<div id="homeChapStrip"[\s\S]*id="viewPractice"/.test(indexSrc), "…with the live active Chapter earned-green strip right above the Practice batch");
+  yes(/id="viewPractice"/.test(indexSrc) && /id="sentenceList"/.test(indexSrc) && /id="motivationStrip"/.test(indexSrc) && /id="btnTopNextBatch"/.test(indexSrc), "index.html opens directly into ⚡ Practice with live Motivation Strip & Next Batch button");
+  yes(/id="viewPractice"[\s\S]*<div id="homeChapStrip"[\s\S]*id="coachCard"/.test(indexSrc), "…with active Chapter strip & Coach's Note placed cleanly at the end of the Practice page");
   yes(/function planMountDoor\(/.test(planSrc) && /function planDoorHTML\(/.test(planSrc), "plan.js builds the door");
   yes(/if \(door\) planMountDoor\(door\); else planMountBar\(\);/.test(planSrc), "plan.js mounts the door on the home page and the bar everywhere else (the bar had no caller before)");
   yes(/p\.handover = \{ t: Date\.now\(\), from: block\.title \}/.test(planSrc) && /pb-hand/.test(planSrc), "a block that runs out its time hands over to the next in the bar");
@@ -773,10 +773,18 @@ const bank = D("sentence-bank.json");
   yes(/closest\("\.s-ar-side"\)[^\n]*toggleDayEn/.test(chaps), "calm: tapping the Arabic shows the English");
   yes(/<details class="card ai-box calm-sec">/.test(chaps), "calm: Speak with AI folds to its heading");
   yes(!/Jump to Line/.test(chaps) && !/Play All \(Ar \+ En\)/.test(chaps), "calm: shorter button labels");
-  for (const p of ["index.html", "words.html"]) {
-    const h = fs.readFileSync(path.join(ROOT, p), "utf8");
-    yes(/<div class="calm-row">\s*<button[^>]*TryIt\.all\(\)/.test(h) && /<details class="more"><summary>⋯<\/summary>/.test(h), p + ": Try them all first, everything else behind ⋯");
-    for (const id of ["btnPlayAll", "btnPlayPauses", "spNorm", "spSlow", "filterChips", "dirEnFirst", "btnPause", "btnStop"]) yes(h.includes('id="' + id + '"'), p + ": " + id + " still exists for the engine");
+  {
+    const idxHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+    yes(!/TryIt\.all\(\)/.test(idxHtml) && !/TryIt\.free\(/.test(idxHtml.slice(0, idxHtml.indexOf("<script"))) && /<details class="more"><summary[^>]*>⋯<\/summary>/.test(idxHtml),
+      "index.html: confusing Try them all / Free try / By ear buttons removed from top bar; secondary controls tucked behind ⋯");
+    for (const id of ["btnPlayAll", "btnPlayPauses", "spNorm", "spSlow", "filterChips", "dirEnFirst", "btnPause", "btnStop"]) {
+      yes(idxHtml.includes('id="' + id + '"'), "index.html: " + id + " still exists for the engine");
+    }
+    const wHtml = fs.readFileSync(path.join(ROOT, "words.html"), "utf8");
+    yes(/<div class="calm-row">\s*<button[^>]*TryIt\.all\(\)/.test(wHtml) && /<details class="more"><summary>⋯<\/summary>/.test(wHtml), "words.html: Try them all first, everything else behind ⋯");
+    for (const id of ["btnPlayAll", "btnPlayPauses", "spNorm", "spSlow", "filterChips", "dirEnFirst", "btnPause", "btnStop"]) {
+      yes(wHtml.includes('id="' + id + '"'), "words.html: " + id + " still exists for the engine");
+    }
   }
   const cl = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
   yes(/details\.sec"\)\.forEach\(\(d, i\) => \{ if \(i > 0\) d\.open = false; \}\)/.test(cl), "calm: Lessons opens one section, the rest are headings");
@@ -883,7 +891,7 @@ const bank = D("sentence-bank.json");
   const srsSrc = fs.readFileSync(path.join(ROOT, "js", "srs.js"), "utf8");
   yes(/Errors\.classify\(model, typed, "typed"\)/.test(tryitSrc) && /Errors\.classify\(tg\.ar, st\.heard, "mic"\)/.test(tryitSrc) && /Errors\.classify\(item\.ar, st\.heard, "mic"\)/.test(chapsSrc), "every miss is classified where it happens (both engines) and the event carries err");
   yes(/function earGrade\(/.test(tryitSrc) && /e: "alisten-grade", key: it\.key, ok: !!ok, src: "tryit-ear"/.test(tryitSrc) && /🎧 Hear it first/.test(tryitSrc), "hear-first Try it: the Arabic plays, the verdict is listening evidence");
-  yes(/hear: true, kind: 'ear'/.test(indexSrc), "…and a whole round by ear is one tap on Practice (Home)");
+  yes(/id="dirArFirst"/.test(indexSrc) && /audio\.html\?commute=1/.test(indexSrc), "…and hands-free Commute + AR→EN ear direction are available on Practice (Home) without cluttering the main bar");
   yes(/frames, t: Date\.now\(\)/.test(tryitSrc) && /x\.frames \|\| framesOf\(s\)/.test(fs.readFileSync(path.join(ROOT, "js", "freetry.js"), "utf8")), "a rung variant's own frames are the grammar evidence (rung labels)");
   yes(/async function renderTeacherBrief/.test(classSrc) && /e: "teacher-brief"/.test(classSrc) && /Ask me about my day/.test(classSrc), "the brief for her: five lines, copyable, logged");
   const al = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "aliases.json"), "utf8"));
@@ -958,6 +966,7 @@ const bank = D("sentence-bank.json");
   const aliasesJsonNow = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "aliases.json"), "utf8"));
   yes(/function setWordReviewMode\(/.test(wordsSrcNow) && /function setSentReviewMode\(/.test(sentSrcNow) && !/<span class="leg-dot strong"><\/span>\s*30d/.test(wordsSrcNow) && !/<span class="leg-dot strong"><\/span>\s*30d/.test(teacherSrcNow), "Words and Sentences master sheets support direct EN→AR / AR→EN Review Mode with Earned Mastery Dot legends");
   yes(/SRS\.rate\(`gt:\$\{p\.id\}:\$\{i\}`/.test(grammarSrcNow) && /const wk = `qw:\$\{s\.id\}:\$\{vi\}:\$\{wi\}`/.test(quranSrcNow) && /function refreshSetHeaders\(/.test(setsSrcNow) && /syncWordTwinsLocal\(/.test(wordsSrcNow) && Object.keys(aliasesJsonNow.groups || {}).length >= 500, "direct reviews & tests across Words, Sentences, Chapters, Qur'ān, Sets, Grammar & Teacher all contribute to Earned Mastery Dots");
+  yes(/function rateSurahWord\(/.test(quranSrcNow) && /SRS\.rateBarHtml\(`qw:\$\{s\.id\}:\$\{vi\}:\$\{wi\}`/.test(quranSrcNow), "quran.html Study mode gives direct ✗ · ≈ · ✓ rating buttons on individual Qur'ān words (Pen Note #68)");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

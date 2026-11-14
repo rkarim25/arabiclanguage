@@ -291,6 +291,32 @@ console.log("\n-- Practice: effort equivalence & adaptive behaviour --");
   });
   yes(caps.modality.commuteHeavy && caps.gaps.some(g => /commute/i.test(g)) && caps.concepts.lessonCardsTotal === lcPool.length,
     "summarizeCapabilities tracks honest capability breakdown & flags unverified commute gaps");
+
+  // 9. Immediate same-day Motivation & Energy adjustment (single 'heavy' mood tap today -> instant light 6-unit review; 'fine' overrides past heavy; 'good' enters surge)
+  const heavyTodayLog = [{ e: "sentence-rate", g: "yes", t: now - DAY }, { e: "mood", mood: "heavy", t: now - 120000 }];
+  const bHeavyToday = Practice.buildBatch({
+    now, srs, log: heavyTodayLog, words: wordPool, sentences: allSents, grammar: grammarPool, freq: freqData.words, FreeTry
+  });
+  yes(bHeavyToday.diag.light && bHeavyToday.budget === 6 && !bHeavyToday.diag.allowNew && bHeavyToday.diag.motivation.activeMode === "light",
+    "a single 'heavy' mood tap today immediately switches Practice to Light 6-unit review-only mode");
+
+  const recoveredLog = [
+    { e: "mood", mood: "heavy", t: now - 2 * DAY },
+    { e: "mood", mood: "heavy", t: now - DAY },
+    { e: "mood", mood: "fine", t: now - 60000 }
+  ];
+  const bRecovered = Practice.buildBatch({
+    now, srs, log: recoveredLog, words: wordPool, sentences: allSents, grammar: grammarPool, freq: freqData.words, FreeTry
+  });
+  yes(!bRecovered.diag.light && bRecovered.budget === 10 && bRecovered.diag.motivation.activeMode === "steady",
+    "tapping 'fine' (Steady) today immediately restores full 10-unit Daily Core even after 2 heavy days");
+
+  const goodTodayLog = [{ e: "sentence-rate", g: "yes", t: now - DAY }, { e: "mood", mood: "good", t: now - 60000 }];
+  const bGoodToday = Practice.buildBatch({
+    now, srs, log: goodTodayLog, words: wordPool, sentences: allSents, grammar: grammarPool, freq: freqData.words, FreeTry
+  });
+  yes(bGoodToday.diag.mode === "surge" && bGoodToday.diag.motivation.activeMode === "surge",
+    "tapping 'good' (Energised) today immediately activates Surge mode");
 }
 
 console.log(`\n✓ ${passed} Practice assertions passed.\n`);

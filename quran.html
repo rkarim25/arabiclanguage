@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwfi0hay">
-  <link rel="stylesheet" href="css/style.css?v=mwfi0hay">
+  <link rel="stylesheet" href="css/fonts.css?v=mwg3m2cb">
+  <link rel="stylesheet" href="css/style.css?v=mwg3m2cb">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -46,10 +46,10 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwfi0hay"></script>
-<script src="js/app.js?v=mwfi0hay"></script>
-<script src="js/tracker.js?v=mwfi0hay"></script>
-<script src="js/plan.js?v=mwfi0hay"></script>
+<script src="js/srs.js?v=mwg3m2cb"></script>
+<script src="js/app.js?v=mwg3m2cb"></script>
+<script src="js/tracker.js?v=mwg3m2cb"></script>
+<script src="js/plan.js?v=mwg3m2cb"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -99,12 +99,38 @@ function rateSurahAyah(key, g, surahId, vi) {
   const v = s && s.verses && s.verses[vi];
   if (v && Array.isArray(v.words) && g !== "retire") {
     const wg = g === "solid" || g === "yes" ? "yes" : g === "maybe" ? "maybe" : "no";
-    v.words.forEach((_, wi) => SRS.rate(`qw:${surahId}:${vi}:${wi}`, wg));
+    v.words.forEach((_, wi) => {
+      const wKey = `qw:${surahId}:${vi}:${wi}`;
+      const wnc = SRS.rate(wKey, wg);
+      const wr = document.getElementById(`wrow-${vi}-${wi}`);
+      if (wr) SRS.paintBar(wr, wKey, wnc);
+    });
   }
   logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "quran-surah", t: Date.now() });
   autoSync();
   const blk = document.getElementById("vblock-" + vi);
   if (blk) SRS.paintBar(blk, key, nc);
+}
+
+function rateSurahWord(key, g, surahId, vi, wi) {
+  const nc = SRS.rate(key, g);
+  const s = (DATA || []).find(x => x.id === surahId);
+  const v = s && s.verses && s.verses[vi];
+  const w = v && v.words && v.words[wi];
+  logEvent({
+    e: "vocab-rate",
+    key,
+    bucket: g === "yes" || g === "solid" ? "medium" : g === "maybe" ? "weak" : "learning",
+    g,
+    box: nc.box,
+    ar: w ? stripTashkeel(w[0]) : "",
+    en: w ? w[2] : "",
+    src: "quran-word",
+    t: Date.now()
+  });
+  autoSync();
+  const row = document.getElementById(`wrow-${vi}-${wi}`);
+  if (row) SRS.paintBar(row, key, nc);
 }
 
 function renderList() {
@@ -441,11 +467,13 @@ function renderSurah(s, mode) {
     v.words.forEach((word, wi) => {
       const [ar, tr, en, grammar, root, aiMeaning] = word;
       const row = document.createElement("tr");
+      row.id = `wrow-${vi}-${wi}`;
       const gBtn = grammar ? `<span class="g-btn" title="grammar note">ⓘ نحو</span>` : "";
       if (mode === "study") {
         // aiMeaning = the concept-level AI translation from Reza's Quran site (scripts/import-ai-wbw.js)
         const ai = aiMeaning ? `<div class="w-ai">${aiMeaning}</div>` : "";
-        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en">${en} ${gBtn}${ai}</td>`;
+        const wBar = SRS.rateBarHtml(`qw:${s.id}:${vi}:${wi}`, "rateSurahWord", [s.id, vi, wi], { compact: true, noDot: true, retire: false });
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><span>${en} ${gBtn}</span>${wBar}</div>${ai}</td>`;
       } else {
         row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
       }
@@ -518,11 +546,13 @@ function renderSurah(s, mode) {
       if (verseResults[vi]) return verseResults[vi];
       const v = s.verses[vi];
       let right = 0, total = 0;
-      v.words.forEach(([ar, tr, en], wi) => {
+      v.words.forEach(([ar, tr, en, _gr, _rt, aiMeaning], wi) => {
         total++;
         const input = versesEl.querySelector(`input[data-v="${vi}"][data-w="${wi}"]`);
         const trueEn = input.nextElementSibling;
-        const ok = fuzzyEn(input.value, en);
+        const aiLead = aiMeaning ? String(aiMeaning).split(/\s*[—–]\s*/)[0].trim() : "";
+        const targetGloss = aiLead ? `${en} ; ${aiLead}` : en;
+        const ok = fuzzyEn(input.value, targetGloss);
         input.classList.remove("ok", "no");
         input.classList.add(ok ? "ok" : "no");
         input.disabled = true;

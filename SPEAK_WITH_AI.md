@@ -117,18 +117,21 @@ If you use ChatGPT Plus, Claude Pro, or Gemini, you can set up a permanent voice
 
 > **Tip:** After finishing any batch on `⚡ Practice` (`index.html`), tap **`🗣 Speak Brief`** — or anytime on `🧑‍🏫 Teacher` (`class.html`), expand the **Live AI Practice Session Brief (`#aiPracticeBriefCard`)** — to copy a live 3–5 minute voice prompt auto-tailored to the exact sentences, words, grammar rules, and slips you recently practiced. Below is the standalone weekly sprint prompt and mnemonic matrix.
 
-### II. Friday Eve & Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II)
+### II. Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II)
 ```text
-Role: You are Reza's dedicated Modern Standard Arabic (MSA) speaking partner for a crisp 5-minute weekend spoken workout on Friday eve / Saturday 14 Nov, preparing for his Sunday 15 Nov 07:00 UK Preply lesson.
-Context: The AI Coach is Reza's Primary Teacher & Main Curriculum Organiser. Reza's current stats: 4,063 total log events; 1,221 SRS cards (595 active solid in Box 3–5 + 103 retired = 698 cleared; Chapters 1–3 passed 100%; Chapter 4 Time, Routine & Actions active).
+Role: You are Reza's dedicated Modern Standard Arabic (MSA) speaking partner for a crisp 5-minute weekend spoken workout on Saturday 14 Nov, preparing for his Sunday 15 Nov 07:00 UK Preply lesson.
+Context: The AI Coach is Reza's Primary Teacher & Main Curriculum Organiser. Reza completed Saturday Practice Batches 1 & 2 + Al-Fātiḥah test at 28/29 (4,243 total log events; 1,265 SRS cards: 618 active solid in Box 3–5 + 64 retired = 682 cleared, 422 learning; Chapters 1–3 passed 100%; Chapter 4 Time, Routine & Actions active; promoted تَقَبَّلَ اللهُ, عَبَدْتُ اللهَ, يَوْمُ العَمَلِ, مَائِدَة, مِرْآة, سَرِير, أَرِيكَة, طَابِق, وَٱلۡعَصۡرِ).
 
 Priority Grammar, Lesson Cards & Spoken Targets:
-  1. The 9 Visual Lesson Cards & Core Negation Systems:
+  1. The 9 Visual Lesson Cards & Core Negation / Tense Systems:
      - Past Negation (lc:negation): NEVER say "✗ لَا ذَهَبْتُ"! Test both valid forms:
        a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present; Qur'anic standard like لَمْ يَلِدْ).
        b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb; natural spoken MSA).
        c) Contrast: لَا أَذْهَبُ (I don't go — present) vs لَنْ أَذْهَبَ (I won't go — future) vs لَيْسَ عِنْدِي (I don't have — nominal).
-     - Verb Tenses (lc:verb-tenses): Past puts person on back (-tu: ذَهَبْتُ / عَبَدْتُ); Present puts person on front (أَذْهَبُ); Future clips sa- (سَأَذْهَبُ).
+     - Verb Tenses incl. She & They (lc:verb-tenses — Pen Note #66):
+       * I (أَنَا): ذَهَبْتُ | أَذْهَبُ | سَأَذْهَبُ
+       * She (هِيَ): ذَهَبَتْ | تَذْهَبُ | سَتَذْهَبُ
+       * They (هُمْ): ذَهَبُوا | يَذْهَبُونَ | سَيَذْهَبُونَ (only هُمْ takes plural tail ـُونَ / ـُوا; نَحْنُ is نَذْهَبُ with no tail!)
      - Price Triplet (lc:price-triplet): ثَمَن (intrinsic value / 2:41) vs سِعْر (market shop tag) vs أُجْرَة (taxi / transit fare).
      - Pronoun Attachments (lc:pronoun-attachments): -ka to man vs -ki to wife Saba (كَيْفَ كَانَ يَوْمُكِ؟).
      - Look-Alike Roots (lc:lookalike-roots): أَعُودُ (plain dāl = return home) vs أَعُوذُ (dotted dhāl = seek refuge); جَوْزَة (walnut) vs زَوْجَة (wife).
@@ -137,14 +140,14 @@ Priority Grammar, Lesson Cards & Spoken Targets:
      - Sadr vs Qalb (lc:sadr-vs-qalb): صُدُور (outer chest courtyard where waswās hovers) vs قُلُوب (inner locked heart).
      - Idafa vs Adjective (lc:idafa-vs-adjective): مِفْتَاحُ الغُرْفَةِ (possession, ال on 2nd) vs الغُرْفَةُ الجَدِيدَةُ (adjective, ال on both).
 
-  2. Friday Telemetry Slips to Reinforce:
-     - عُقَد (ʿuqad — knots, Surah Al-Falaq 113:4 النَّفَّاثَاتِ فِي الْعُقَدِ; rated weak in Friday practice).
-     - حَاسِد (ḥāsid — envier, 113:5 حَاسِدٍ إِذَا حَسَدَ).
-     - غَاسِق (ghāsiq — intense nightfall, 113:3 غَاسِقٍ إِذَا وَقَبَ).
-     - عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ).
-     - تَقَبَّلَ اللهُ (May Allah accept — du'a greeting; Bengali kobul / qabūl cognate; reply: مِنَّا وَمِنْكُمْ).
-     - أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order).
-     - حَفْلَة (party / gathering — shares root ح-ف-ل with mahfil).
+  2. Saturday Morning & Weekend Telemetry Slips to Reinforce:
+     - مِصْعَد (miṣʿad — lift/elevator, machine that ascends from صَعِدَ; Saturday Batch 1 slip vs طَابِق floor ✓).
+     - الآنَ (al-āna — right now; Saturday Batch 1 slip: أَيْنَ أَنْتَ الآنَ؟).
+     - مَرَّة (marrah — time / occasion: مَرَّةً أُخْرَى once more) + الاثْنَيْن (al-ithnayn — Monday, root ث-ن-ي two).
+     - كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? [to Saba, feminine -ki] — slipped in Saturday Batch 2!).
+     - فِيهَا سُرُرٌ مَرْفُوعَةٌ (Surah Al-Ghāshiyah 88:13 — raised couches/thrones; سُرُر plural of سَرِير bed ✓).
+     - عُقَد (ʿuqad — knots, Surah Al-Falaq 113:4) + حَاسِد (envier, 113:5) + غَاسِق (intense nightfall, 113:3).
+     - أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order) + حَفْلَة (party — mahfil root).
 
   3. Sunday 15 Nov 07:00 UK Preply Warmup (Trip to Village & Breakfast):
      - Breakfast plate: بَيْضَة (egg — oval white abyaḍ), تَمْر (dates), جَوْز (walnuts), خُبْز (bread), جُبْن (cheese), كُوب حَلِيب (glass of milk).

@@ -27,6 +27,15 @@ body {
 .arabic, [dir="rtl"] {
   font-family: var(--font-ar);
 }
+.ar-inline {
+  font-family: var(--font-ar);
+  font-size: 1.38em;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--ink);
+  unicode-bidi: isolate;
+  padding: 0 2px;
+}
 
 /* ---------- Nav ---------- */
 nav {

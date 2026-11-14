@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwfi0hay";
+const DATA_V = "mwg3m2cb";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3015,10 +3015,71 @@ const _SYN_GROUPS = [
   ["day", "days"],
   ["worldly", "world", "dunya"],
   ["hereafter", "afterlife"],
+  ["wrath", "anger", "angered", "angry", "displeasure", "fury", "wrathed", "rage"],
+  ["astray", "lost", "stray", "straying", "strayed", "misguided", "erring", "wandering"],
+  ["favor", "favour", "favored", "favoured", "blessed", "blessing", "blessings", "grace", "bounty", "bestowed", "graced"],
+  ["straight", "upright", "direct"],
+  ["praise", "thanks", "gratitude", "glory", "commendation"],
+  ["owner", "sovereign", "king", "possessor", "ruler"],
+  ["judgment", "judgement", "recompense", "reckoning", "account", "retribution", "religion"],
+  ["worship", "serve", "adore", "devote"],
+  ["help", "aid", "assistance", "support", "succor", "succour"],
+  ["seek", "ask", "beg", "implore", "request"],
+  ["refuge", "protection", "shelter", "sanctuary"],
+  ["dawn", "daybreak", "daylight", "morning"],
+  ["evil", "harm", "mischief", "wickedness", "bad"],
+  ["darkness", "night", "nightfall", "gloom"],
+  ["settles", "settled", "falls", "fell", "spreads", "intensifies", "penetrates", "overspreads"],
+  ["blowers", "blow", "blowing", "witches", "sorceresses"],
+  ["knots", "knot", "ties", "cords"],
+  ["envier", "envious", "envies", "envy", "jealous", "jealousy"],
+  ["whisperer", "whispers", "whisper", "whispering", "tempter", "promptings"],
+  ["retreats", "withdraws", "slinks", "slinker", "hides", "recedes", "sneaking"],
+  ["chest", "chests", "breast", "breasts", "bosom", "bosoms"],
+  ["eternal", "absolute", "independent", "sufficient"],
+  ["beget", "begets", "begat", "begotten", "born", "birth", "fathered", "child", "offspring"],
+  ["equal", "comparable", "equivalent", "like", "match", "peer"],
+  ["abundance", "abundant", "plenty", "kawthar"],
+  ["sacrifice", "slaughter", "immolate"],
+  ["hater", "enemy", "foe", "detester"],
+  ["severed", "abtar", "disconnected", "bereft"],
+  ["time", "age", "era", "epoch", "afternoon"],
+  ["loss", "ruin", "losing", "loser", "losers", "perdition"],
+  ["patience", "patient", "perseverance", "steadfastness", "endurance"],
+  ["urge", "exhort", "encourage", "advise", "counsel", "enjoin", "recommend"],
+  ["victory", "triumph", "conquest"],
+  ["crowds", "multitudes", "troops", "throngs", "groups", "masses"],
+  ["glorify", "exalt", "hallow", "celebrate"],
+  ["repentance", "accepting", "relenting"],
+  ["perish", "ruined", "doomed", "destroyed"],
+  ["wealth", "money", "riches", "property"],
+  ["earned", "gained", "acquired"],
+  ["blazing", "flaming", "flames", "flame", "fiery"],
+  ["wife", "woman", "spouse"],
+  ["carrier", "carrying", "bearer", "bearing"],
+  ["firewood", "wood", "fuel", "kindling"],
+  ["neck", "throat"],
+  ["rope", "cord", "twine"],
+  ["fiber", "fibre", "masad", "twisted"],
+  ["decree", "power", "majesty", "destiny", "grandeur", "qadr"],
+  ["months", "month"],
+  ["peace", "safety", "security"],
+  ["slumber", "drowsiness", "dozing"],
+  ["throne", "footstool", "seat", "chair", "kursi"],
+  ["tires", "fatigues", "wearies", "burdens", "exhausts"],
+  ["preserving", "guarding", "maintaining", "protecting"],
+  ["exalted", "supreme", "highest", "lofty"],
 ];
 const _SYN = {};
-_SYN_GROUPS.forEach((grp, gi) => grp.forEach(w => { _SYN[w] = gi; }));
-function _canon(w) { return _SYN[w] !== undefined ? "~" + _SYN[w] : w; }
+_SYN_GROUPS.forEach((grp, gi) => grp.forEach(w => {
+  if (!_SYN[w]) _SYN[w] = [];
+  if (!_SYN[w].includes(gi)) _SYN[w].push(gi);
+}));
+function _synMatch(a, b) {
+  if (a === b) return true;
+  const ga = _SYN[a], gb = _SYN[b];
+  return !!(ga && gb && ga.some(id => gb.includes(id)));
+}
 
 function fuzzyEn(typed, gloss) {
   if (!typed.trim()) return false;
@@ -3030,7 +3091,7 @@ function fuzzyEn(typed, gloss) {
   const alts = typed.split(/[;,\/]|\bor\b/).map(s => s.trim()).filter(Boolean);
   if (alts.length > 1) return alts.every(a => fuzzyEn(a, gloss));
   const raw = s => s.toLowerCase().replace(/[!.?'’]/g, "").trim();
-  const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w)).map(_canon);
+  const norm = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w));
   const t = norm(typed), g = norm(gloss);
   // exact match against any gloss part always wins ("he was" for "he was; it was")
   const parts = gloss.toLowerCase().split(/[;,\/]/).map(x => raw(x));
@@ -3041,10 +3102,9 @@ function fuzzyEn(typed, gloss) {
     return r.length > 0 && gloss.toLowerCase().includes(r);
   }
   if (!g.length) return false; // handled by the exact-part check above
-  if (t.some(w => g.includes(w))) return true; // shares a meaningful word (or synonym)
+  if (t.some(w => g.some(gw => _synMatch(w, gw)))) return true; // shares a meaningful word (or synonym)
   // near-miss on a content word: a one-letter typo, or a shared stem (prefix)
-  const words = s => s.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/[\s-]+/).filter(w => w && !_EN_STOP.has(w));
-  const tw = words(typed), gw = words(gloss);
+  const tw = t, gw = g;
   return tw.some(w => w.length >= 4 && gw.some(x => x.length >= 4 && (editDist(w, x) <= 1 || x.startsWith(w) || w.startsWith(x))));
 }
 
@@ -4262,6 +4322,20 @@ async function packTextsForKeys(keys, ctx) {
   return out;
 }
 
+const _INLINE_AR_CHARS = "\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF";
+const _INLINE_AR_ATOM = `(?:<(?:b|strong)>[${_INLINE_AR_CHARS}]+<\\/(?:b|strong)>|[${_INLINE_AR_CHARS}]+)`;
+const _INLINE_AR_CONT = `<code\\b[^>]*>[\\s\\S]*?<\\/code>|<(span|div|p|b|strong|td|th|a)\\b[^>]*\\bclass="[^"]*\\b(?:arabic|ar-inline|lc-ex-ar|lc-tl-ar|lc-ar-title|lc-lane-badge|w-ar|s-ar-text)\\b[^"]*"[^>]*>[\\s\\S]*?<\\/\\2>|<!--[\\s\\S]*?-->`;
+const _INLINE_AR_RUN = `${_INLINE_AR_ATOM}(?:(?:[\\s\\/،؛؟!ـ]+|…|\\.{2,3})(?=${_INLINE_AR_ATOM})|${_INLINE_AR_ATOM})*`;
+const _INLINE_AR_RE = new RegExp(`(${_INLINE_AR_CONT})|(${_INLINE_AR_RUN})|(<[^>]+>)`, "gi");
+
+function enhanceInlineArabic(html) {
+  const src = String(html == null ? "" : html);
+  if (!/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/.test(src)) return src;
+  return src.replace(_INLINE_AR_RE, (full, _cont, _contTag, arRun) =>
+    arRun ? `<span class="ar-inline" dir="rtl">${arRun}</span>` : full
+  );
+}
+
 /* ---------- AI Tutors & Learner Dossier Export ---------- */
 function generateLearnerDossierMarkdown(currentContext) {
   const wordsState = store.get("ats-srs", store.get("ats-words", {}));
@@ -4295,25 +4369,26 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `## 2. Active Curriculum Domains & Known Vocabulary\n`;
   md += `- **Preply Unit 1 & Sunday Lessons:**\n`;
   md += `  - *Trip to the Village (11 Oct):* breakfast foods (eggs بَيْض, dates تَمْر, walnuts جَوْز, glass of milk كُوب حَلِيب, bread خُبْز, cheese جُبْن), shopping on the way (chicken دَجَاج, fish سَمَك, salad سَلَطَة, ghee سَمْن, sugar سُكَّر), meal (وَجْبَة), legumes (بُقُولِيَّات), ordinals (first الأَوَّل, second الثَّانِي, third الثَّالِث), clock (6 o'clock السَّادِسَة, 8 o'clock الثَّامِنَة), past tense board sentences (-tu: قَرَأْتُ، صَلَّيْتُ، أَكَلْتُ، شَرِبْتُ، ذَهَبْتُ، عُدْتُ، سَاعَدْتُ), Qur'anic pairs (punishment عِقَاب / عَذَاب, first/last أَوَّل / آخِر, triumph فَوْز / نَصْر, famine day 90:14 إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ)\n`;
-  md += `  - *Housing & The Flat:* flat (شَقَّة), building (عِمَارَة), floor (طَابِق / دَوْر), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), cupboards (خَزَائِن), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
-  md += `  - *Daily Routine & Chores (27 Sep):* work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), newspaper (صَحِيفَة), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), tidy (أُرَتِّبُ), party (حَفْلَة), trip (رِحْلَة), sleep (أَنَامُ), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
+  md += `  - *Housing & The Flat:* flat (شَقَّة), building (عِمَارَة), floor (طَابِق / دَوْر), lift/elevator (مِصْعَد), bedroom (غُرْفَة نَوْم), living room (غُرْفَة جُلُوس), kitchen (مَطْبَخ), bathroom (حَمَّام), bed (سَرِير), sofa (أَرِيكَة), oven (فُرْن), fridge (ثَلَّاجَة), curtain (سِتَارَة), cupboards (خَزَائِن), rug (سَجَّادَة), days of the week (السبت..الجمعة), maternal relatives (خال، خالة، خالان)\n`;
+  md += `  - *Daily Routine & Chores (27 Sep):* work day (يَوْم العَمَل), day off (يَوْم العُطْلَة), wake early (أَسْتَيْقِظُ مُبَكِّرًا), wake late (مُتَأَخِّرًا), clothes (مَلَابِس), wash (أَغْسِلُ), return (أَعُودُ), breakfast (الفَطُور), newspaper (صَحِيفَة), help (أُسَاعِدُ), sweep (كَنَس), dishes (أَطْبَاق), tidy (أُرَتِّبُ), party (حَفْلَة), trip (رِحْلَة), sleep (أَنَامُ), now (الآن), but I (لَكِنَّنِي), because I (لِأَنَّنِي)\n`;
   md += `  - *Protection Concepts (Falaq & Nas, 27 Sep):* refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), King (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), slinker (الْخَنَّاس), chests (صُدُور)\n`;
-  md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), يَذْهَبُ / سَأَذْهَبُ (goes), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange)\n`;
+  md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), ذَهَبَ / ذَهَبُوا / يَذْهَبُ / يَذْهَبُونَ / سَأَذْهَبُ (goes across all persons including هُمْ plural), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange)\n`;
   md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى* / *فِي السَّاعَةِ*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
   md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
   md += `## 3. Strict Rules for AI Voice Sessions\n`;
   md += `1. **Max 2 Sentences:** Never exceed 2 short sentences per turn in voice mode.\n`;
   md += `2. **Modern Standard Arabic (الفصحى):** Use clear MSA with full vowels (tashkeel). No slang/regional dialects.\n`;
   md += `3. **Elicit, Don't Lecture:** Ask ONE question or give ONE prompt at a time, then PAUSE and wait for his spoken reply.\n`;
-  md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns, turn statements into questions with hal/ayna/mata/kam).\n`;
+  md += `4. **Drill Sentence Variations:** Test him on natural variations (swap nouns, swap pronouns including هُمْ ذَهَبُوا / يَذْهَبُونَ, turn statements into questions with hal/ayna/mata/kam).\n`;
   md += `5. **Gentle Correction:** If he makes a mistake, model the correct sentence with clear vowels, explain briefly in 1 sentence, and ask him to repeat it once.\n`;
   md += `6. **Session Wrap-Up:** When Reza says "I'm done" or after 5–10 minutes, output a 3-line diagnostic summary: (1) Strong phrases, (2) Variations handled, (3) Words to review.\n\n`;
   const caps = store.get("ats-capabilities", null);
   if (caps && caps.vocab && caps.sentences) {
-    md += `## 4. Live Practice Capability Snapshot\n`;
+    md += `## 4. Live Practice Capability & Motivation Snapshot\n`;
     md += `- **Vocabulary:** ${caps.vocab.held} solid, ${caps.vocab.learning} learning, ${caps.vocab.slips} active slips\n`;
     md += `- **Sentences:** ${caps.sentences.held} solid (${caps.sentences.provenActive} proven spoken/typed), ${caps.sentences.slips} slips\n`;
     md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 9} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
+    if (caps.motivation) md += `- **Motivation & Rhythm:** ${caps.motivation.activeDays7d}/4 target days active (7d) · Feeling: ${caps.motivation.todayMood || caps.motivation.lastMood || "steady"} · Mode: ${caps.motivation.modeLabel}\n`;
     if (caps.gaps && caps.gaps.length) md += `- **Current Priority Gaps:** ${caps.gaps.join(" · ")}\n`;
     md += `\n`;
   }
@@ -4321,7 +4396,8 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `## 5. Active Focus, Lesson Cards & High-Value Mnemonics\n`;
   md += `- **Active Chapter 4 (Daily Routine, Time & Tenses):** Advancing weekly sentences automatically via unified Practice & Commute sessions (Chapters 1–3 mastered 100%).\n`;
   md += `- **5 Negation Pairings (Lesson Card #1):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
-  md += `- **Priority Slips to Weave In:** تَقَبَّلَ اللهُ (May Allah accept — Bengali কবুল kobul cognate), أُرَتِّبُ (I tidy — tartīb order), حَفْلَة (party — mahfil root ح-ف-ل), عَبَدْتُ اللهَ (I worshipped Allah — past -tu of نَعْبُدُ), عُقَد (knots — 113:4), عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (morning meeting — Jumu'ah root ج-م-ع), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mumkin + mu-sa-AID-ah), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
+  md += `- **Verb Tenses incl. They (هُمْ) (Lesson Card #2):** Past = **ذَهَبُوا** (-ū), Present = **يَذْهَبُونَ** (ya-...-ūna), Future = **سَيَذْهَبُونَ** (only هُمْ takes the plural tail -ūna/-ū; نَحْنُ is plain **نَذْهَبُ**).\n`;
+  md += `- **Priority Slips to Weave In:** مِصْعَد (lift/elevator — صَعِدَ ascend / Mi'raj ladder), الآن (now — al-āna), عَبَدْتُ اللهَ (I worshipped Allah — past -tu of نَعْبُدُ), أُرَتِّبُ (I tidy — tartīb order), حَفْلَة (party — mahfil root ح-ف-ل), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mumkin + mu-sa-AID-ah), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
   md += `- **Look-Alike & Nuance Anchors:** أَعُودُ (plain د = return home) vs أَعُوذُ (dotted ذ = seek refuge); جَوْزَة (ج leads walnut) vs زَوْجَة (ز leads wife); price triplet ثَمَن (value) vs سِعْر (shop tag) vs أُجْرَة (taxi fare); Surah An-Nās صُدُور (outer chest courtyard) vs قُلُوب (locked heart).\n\n`;
   if (currentContext && currentContext.sentences) {
     md += `\n## 6. Current Target Sentences to Practice\n`;

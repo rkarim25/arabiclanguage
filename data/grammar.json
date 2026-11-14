@@ -188,7 +188,7 @@
      "hint": "yaʿlamu"
     }
    ],
-   "cardRule": "Verb shape shows WHO and WHEN: أَ... (I do), تَ... (you/she), يَ... (he), نَ... (we). Past puts the person at the END: ـتُ (I did), ـنَا (we did), ـُوا (they did). Future adds سَـ to present."
+   "cardRule": "Verb shape shows WHO and WHEN: أَـ… (I do), تَـ… (you/she), يَـ… (he), نَـ… (we), يَـ…ـُونَ (they do). Past puts the person at the END: ـتُ (I did), ـنَا (we did), ـُوا (they did). Future adds سَـ to present."
   },
   {
    "id": "who-acts",
