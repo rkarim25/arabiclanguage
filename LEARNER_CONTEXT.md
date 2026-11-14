@@ -14,7 +14,7 @@
 - **Governance (Headmaster Model):**
   - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`⚡ Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free), dynamically linked with Weekly Chapters (`chapters.html`), Master Sentences (`sentences.html`), Vocabulary (`words.html`), Qur'ān (`quran.html`), visual Lesson Cards (`sets.html`), and the `🧑‍🏫 Teacher` Hub (`class.html`), all unified under live read-only **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)**.
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
-- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,243 total telemetry events; 1,265 SRS cards (682 cleared: 618 active solid in `Box 3–5` + 64 retired/never; 422 active learning in `Box 1–2`, 161 `Box 0`). Scored **28/29** on Al-Fātiḥah word-by-word test (`1:7` `ٱلْمَغْضُوبِ` typed `"angered you"` — valid wrath/anger root, passive participle nuance).
+- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Verb Tenses)** is the active weekly Chapter. 4,258 total telemetry events; 1,265 SRS cards (682 cleared: 618 active solid in `Box 3–5` + 64 retired/never; 422 active learning in `Box 1–2`, 161 `Box 0`). Scored **28/29** on Al-Fātiḥah word-by-word test (`1:7` `ٱلْمَغْضُوبِ` typed `"angered you"` — valid wrath/anger root, passive participle nuance). Ready for Sunday 15 Nov 07:00 UK Preply class.
 
 ---
 
@@ -50,6 +50,11 @@ Stay within these domains unless teaching 1 requested word at a time:
 
 - `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د; rated weak in Saturday Batch 1).
 - `الآنَ` — *now* (`الْآنَ` right now — rated weak in Saturday Batch 1).
+- `مَرَّة` — *time / occasion* (root م-ر-ر: `مَرَّةً أُخْرَى` once more — rated weak in Saturday Batch 2).
+- `الاثْنَيْن` — *Monday* (root ث-ن-ي two, 2nd day of Arab work week — rated weak in Saturday Batch 2).
+- `كَيْفَ كَانَ يَوْمُكِ؟` — *How was your day?* (to wife Saba; feminine suffix `ـكِ` vs masculine `ـكَ` — slipped in Saturday Batch 2).
+- `فِيهَا سُرُرٌ مَرْفُوعَةٌ` — *thrones raised high* (Surah Al-Ghāshiyah 88:13; `سُرُر` is the plural of `سَرِير` bed!).
+- `ٱلْمَغْضُوبِ` — *those who earned wrath / anger* (Al-Fātiḥah 1:7; passive participle of root غ-ض-ب anger vs active `أَنْعَمْتَ`).
 - `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`; rated medium in Saturday Batch 1).
 - `تَقَبَّلَ اللهُ` — *May Allah accept* (Bengali কবুল *kobul* cognate; reply `مِنَّا وَمِنْكُمْ` — promoted to ✓ in Saturday Batch 1!).
 - `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order).
