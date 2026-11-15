@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
-  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .m-search {
@@ -30,14 +30,17 @@
     }
     .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
     .m-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--border); font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: transparent; }
-    .m-table td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .m-table tr:hover { background: rgba(13, 122, 95, 0.02); }
+    .m-table th { text-align: left; padding: 6px 10px; border-bottom: 1.5px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: transparent; font-weight: 600; }
+    .m-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table tr:hover { background: rgba(13, 122, 95, 0.015); }
+    .m-en-cell { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--ink); line-height: 1.45; }
+    .m-ar-cell { font-family: var(--font-ar); font-size: 23px; color: var(--ink); line-height: 1.65; }
+    .m-src-tag { font-size: 11px; color: var(--muted); font-weight: 500; white-space: nowrap; }
     .line-toggle-btn {
       border: 1px solid var(--border); background: transparent; color: var(--muted);
-      border-radius: 6px; padding: 2px 6px; font-size: 11.5px; cursor: pointer; line-height: 1.2;
+      border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; line-height: 1.2; opacity: 0.72;
     }
-    .line-toggle-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .line-toggle-btn.active { border-color: var(--ink); background: rgba(0,0,0,0.05); color: var(--ink); opacity: 1; }
     .s-gram-box {
       margin-top: 5px; padding: 5px 10px; border-radius: 0; font-size: 13.5px; line-height: 1.65;
       background: transparent; border: 0; border-left: 2.5px solid var(--accent); color: var(--ink);
@@ -111,11 +114,11 @@
       <table class="m-table">
         <thead>
           <tr>
-            <th style="width:44px">Dot</th>
-            <th style="width:36%">Arabic</th>
-            <th style="width:34%">English Meaning</th>
+            <th style="width:34px">#</th>
+            <th style="width:35%">English Meaning</th>
+            <th style="width:37%">Arabic</th>
             <th style="width:10%">Source</th>
-            <th style="width:16%;text-align:right">Self-Check</th>
+            <th style="width:18%;text-align:right">Verdict</th>
           </tr>
         </thead>
         <tbody id="bankTableBody">
@@ -127,16 +130,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwic8lfa"></script>
-<script src="js/curriculum.js?v=mwic8lfa"></script>
-<script src="js/srs.js?v=mwic8lfa"></script>
-<script src="js/frames.js?v=mwic8lfa"></script>
-<script src="js/practice.js?v=mwic8lfa"></script>
-<script src="js/lesson-cards.js?v=mwic8lfa"></script>
-<script src="js/app.js?v=mwic8lfa"></script>
-<script src="js/tracker.js?v=mwic8lfa"></script>
-<script src="js/plan.js?v=mwic8lfa"></script>
-<script src="js/account.js?v=mwic8lfa"></script>
+<script src="js/progress-model.js?v=mwicuqza"></script>
+<script src="js/curriculum.js?v=mwicuqza"></script>
+<script src="js/srs.js?v=mwicuqza"></script>
+<script src="js/frames.js?v=mwicuqza"></script>
+<script src="js/practice.js?v=mwicuqza"></script>
+<script src="js/lesson-cards.js?v=mwicuqza"></script>
+<script src="js/app.js?v=mwicuqza"></script>
+<script src="js/tracker.js?v=mwicuqza"></script>
+<script src="js/plan.js?v=mwicuqza"></script>
+<script src="js/account.js?v=mwicuqza"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -451,19 +454,19 @@ function renderMasterBank() {
     const escKey = String(s.key).replace(/'/g, "\\'");
     const escRef = String(s.ref || "").replace(/'/g, "\\'");
     const arCellHtml = (sentReviewMode === "en-only" && !isRevealed)
-      ? `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-           <button type="button" class="chip" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Arabic</button>
+      ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+           <button type="button" class="book-cue ar-side" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')">Show Arabic →</button>
            <button type="button" class="small icon-btn" onclick="event.stopPropagation(); ${playCall}" title="Listen hint">🔊</button>
          </div>`
       : `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-           <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.45">${s.ar}</span>
+           <span class="arabic m-ar-cell" dir="rtl">${s.ar}</span>
            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
              <button type="button" class="small icon-btn" onclick="${playCall}" title="Listen">🔊</button>
              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
              ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
            </div>
          </div>
-         ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+         ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
          ${s.words && s.words.length ? `
            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:${allTblWbwVisible ? 'flex' : 'none'};margin-top:4px">
              <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
@@ -482,28 +485,23 @@ function renderMasterBank() {
            </div>
          ` : ''}`;
     const enCellHtml = (sentReviewMode === "ar-only" && !isRevealed)
-      ? `<button type="button" class="chip" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')" style="font-weight:600;color:var(--accent);border-color:var(--accent)">👁 Check Meaning</button>`
-      : `<div style="font-weight:600;font-size:14.5px;color:var(--ink)">${s.en}</div>
-         ${s.note ? `<div style="font-size:13.5px;line-height:1.7;color:var(--ink);margin-top:3px">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>` : ''}
+      ? `<button type="button" class="book-cue" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')">Show meaning →</button>`
+      : `<div class="m-en-cell">${s.en}</div>
+         ${s.note ? `<div style="font-size:13px;line-height:1.55;color:var(--muted);margin-top:3px">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>` : ''}
          ${renderGrammarRuleHtml(s)}`;
 
     return `
       <tr>
-        <td style="white-space:nowrap">
-          <span style="display:inline-flex;align-items:center;gap:6px">
-            ${SRS.dotHtml(s.key, { lg: true })}
-            <span style="color:var(--muted);font-size:11px">${idx + 1}</span>
-          </span>
-        </td>
-        <td>${arCellHtml}</td>
+        <td style="color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums">${idx + 1}</td>
         <td>${enCellHtml}</td>
+        <td>${arCellHtml}</td>
         <td>
-          <span style="font-size:11.5px;color:var(--muted);white-space:nowrap">
-            ${/^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || '') ? "🕋 Mosque" : s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'ān" : '🗣 Everyday'}
+          <span class="m-src-tag">
+            ${/^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || '') ? "Mosque" : s.src === 'chapters' ? 'Chapter' : s.src === 'teacher' ? 'Preply' : s.track === 'quran' ? "Qur'ān" : 'Everyday'}
           </span>
         </td>
         <td style="text-align:right;white-space:nowrap">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true, noDot: true })}</div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true })}</div>
         </td>
       </tr>
     `;

@@ -973,11 +973,12 @@ const bank = D("sentence-bank.json");
   yes(/await autoSync\(true\)/.test(appSrcNow) && /_syncForceQueued/.test(trackerSrcPen), "pen notes force immediate cloud sync (bypassing the 60s autoSync throttle and queuing if busy)");
   const weeklySrcNow = fs.readFileSync(path.join(ROOT, "weekly.html"), "utf8");
   const swSrcNow = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
-  yes(/max-width:\s*820px/.test(cssSrcNow) && /--font-serif/.test(cssSrcNow), "Quiet Interactive Book CSS uses ~820px reading measure and serif editorial typography");
+  yes(/max-width:\s*1160px/.test(cssSrcNow) && /--font-serif/.test(cssSrcNow), "Open-Book Spread CSS uses ~1160px two-column reading measure and serif editorial typography");
   yes(/@media print/.test(weeklySrcNow) && /window\.print\(\)/.test(weeklySrcNow) && /#notePen/.test(weeklySrcNow) && /reciteVerse\(/.test(weeklySrcNow) && /LessonCards\.renderBodyHtml/.test(weeklySrcNow), "weekly.html renders personalized printable A4 booklet with Alafasy audio & Lesson Cards");
   yes(/"weekly\.html"/.test(swSrcNow) && /"weekly\.html"/.test(planSrcNow), "weekly.html is precached in sw.js and listed in PLAN_BAR_QUIET");
   yes(/weekly\.html/.test(indexSrcNow) && /weekly\.html/.test(chapsSrcNow) && /weekly\.html/.test(quranSrcNow) && /weekly\.html/.test(teacherSrcNow), "Practice, Chapters, Qur'an and Teacher tabs link to weekly.html");
   yes(/id="navPrintWeek"/.test(appSrcNow) && /class="print-week-cta"/.test(indexSrcNow) && /autoPrint/.test(weeklySrcNow) && /toggleWkMode/.test(weeklySrcNow), "top nav & Practice expose 1-click Print Week with ?print=1 auto-print and Book Chapter mode");
+  yes(/\.s-col-prompt/.test(indexSrcNow) && /\.s-col-answer/.test(indexSrcNow) && /\.s-col-dock/.test(indexSrcNow) && /\.book-cue/.test(cssSrcNow), "Practice cards put target content first in a horizontal parallel book spread with quiet margin controls");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

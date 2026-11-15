@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
-  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -41,19 +41,51 @@
     .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
     .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    /* Quiet Book Reading Entries (One Below Another, Divided by Hairlines) */
+    /* Quiet Open-Book Spread Entries (Parallel Left/Right Layout, Divided by Hairlines) */
     .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
-    .s-card { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 14px 2px; display: flex; flex-direction: column; gap: 8px; transition: background 0.15s; }
+    .s-card {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      padding: 9px 2px;
+      display: grid;
+      grid-template-columns: 28px minmax(220px, 1fr) minmax(240px, 1.15fr) auto;
+      column-gap: 18px;
+      row-gap: 4px;
+      align-items: baseline;
+      transition: background 0.15s;
+    }
+    .s-card.s-lc-open { display: block; padding: 12px 2px; }
     .s-card:last-child { border-bottom: 0; }
     .s-card:hover { background: rgba(13, 122, 95, 0.015); }
     .s-card.revealed { background: transparent; }
     .s-card.playing { background: rgba(13, 122, 95, 0.05); border-left: 3px solid var(--accent); padding-left: 12px; }
 
+    .s-col-num { grid-column: 1; color: var(--muted); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; user-select: none; }
+    .s-col-prompt { grid-column: 2; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .s-prompt-main { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+    .s-prompt-text { font-family: var(--font-serif); font-size: 17px; font-weight: 500; color: var(--ink); line-height: 1.45; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 25px; color: var(--ink); direction: rtl; text-align: right; line-height: 1.65; }
+    .s-src-foot { font-size: 11px; color: var(--muted); opacity: 0.58; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; transition: opacity 0.14s ease; }
+    .s-card:hover .s-src-foot, .s-card:focus-within .s-src-foot { opacity: 1; }
+    .s-src-foot a { color: inherit; text-decoration: none; border-bottom: 1px dotted transparent; }
+    .s-src-foot a:hover { color: var(--ink); border-bottom-color: var(--muted); }
+    .s-flag-inline { font-size: 10.5px; font-weight: 600; color: var(--accent); }
+    .s-flag-inline.commute { color: var(--amber); }
+
+    .s-col-answer { grid-column: 3; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+    .s-ans-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    .s-ans-row.en-side { justify-content: flex-start; }
+    .s-col-dock { grid-column: 4; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; justify-self: end; }
+    .s-row-extras { grid-column: 2 / -1; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
+    .s-card > .tryit { grid-column: 2 / -1; }
+    .s-lc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .s-lc-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); }
+
     .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; flex-wrap: wrap; }
     .s-num { color: var(--muted); font-size: 12px; font-weight: 600; flex-shrink: 0; font-variant-numeric: tabular-nums; }
-    .s-prompt-text { font-family: var(--font-serif); font-size: 17px; font-weight: 500; color: var(--ink); line-height: 1.5; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 27px; color: var(--ink); direction: rtl; text-align: right; line-height: 1.8; }
 
     .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
@@ -96,9 +128,9 @@
 
     .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 0 4px; border-top: 1px dashed var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 28px; color: var(--ink); line-height: 1.8; flex: 1; text-align: right; }
-    .s-en-line { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--ink); line-height: 1.5; }
-    .s-tr-line { font-size: 13.5px; color: var(--muted); font-style: italic; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 24px; color: var(--ink); line-height: 1.6; text-align: right; }
+    .s-en-line { font-family: var(--font-serif); font-size: 16.5px; font-weight: 500; color: var(--ink); line-height: 1.45; }
+    .s-tr-line { font-size: 12.5px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
     .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin-top: 4px; }
@@ -168,6 +200,12 @@
       .s-action-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
       .s-reveal-btn { flex: 1; min-width: 140px; justify-content: center; }
       .s-rate-bar { width: auto; justify-content: flex-end; margin-left: auto; }
+      .s-card { grid-template-columns: 24px 1fr; column-gap: 10px; row-gap: 6px; padding: 10px 2px; }
+      .s-col-prompt { grid-column: 2; }
+      .s-col-answer { grid-column: 2; align-items: flex-start; }
+      .s-ans-row { width: 100%; justify-content: space-between; }
+      .s-col-dock { grid-column: 2; justify-self: end; }
+      .s-row-extras, .s-card > .tryit { grid-column: 2; }
       .m-table { min-width: 600px; }
     }
   </style>
@@ -180,7 +218,6 @@
         <span>Practice</span>
         <span class="arabic" style="color:var(--accent);font-size:26px">بِنَاءُ الجُمَل</span>
       </h1>
-      <p class="sub" style="margin:2px 0">Incremental Practice Batches · Batch 1 advances weekly lessons, Batch 2+ consolidates review</p>
     </div>
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
       <div class="stat-strip">
@@ -201,16 +238,15 @@
 
     <!-- Session Progress & List -->
     <div class="card" style="padding:10px 0;border-top:0">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
-        <div>
-          <h2 style="margin:0;font-size:16px" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <h2 style="margin:0;font-size:15.5px;font-weight:600" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
         <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span style="font-size:12.5px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
+          <span style="font-size:12px;font-weight:600;color:var(--muted)" id="sessionCount">0 rated</span>
           <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">▶ Next Batch →</button>
           <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
-          <a class="pt-btn" href="weekly.html?print=1" style="text-decoration:none" title="Read or print your learning booklet for the coming week">🖨️ Print Week</a>
           <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
           <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
           <details class="more"><summary title="Direction, stream filters, speak brief, capabilities &amp; audio controls">⋯</summary><div class="more-body">
@@ -268,20 +304,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwic8lfa"></script>
-<script src="js/curriculum.js?v=mwic8lfa"></script>
-<script src="js/srs.js?v=mwic8lfa"></script>
-<script src="js/frames.js?v=mwic8lfa"></script>
-<script src="js/freetry.js?v=mwic8lfa"></script>
-<script src="js/practice.js?v=mwic8lfa"></script>
-<script src="js/lesson-cards.js?v=mwic8lfa"></script>
-<script src="js/match.js?v=mwic8lfa"></script>
-<script src="js/errors.js?v=mwic8lfa"></script>
-<script src="js/tryit.js?v=mwic8lfa"></script>
-<script src="js/app.js?v=mwic8lfa"></script>
-<script src="js/tracker.js?v=mwic8lfa"></script>
-<script src="js/plan.js?v=mwic8lfa"></script>
-<script src="js/account.js?v=mwic8lfa"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwicuqza"></script>
+<script src="js/curriculum.js?v=mwicuqza"></script>
+<script src="js/srs.js?v=mwicuqza"></script>
+<script src="js/frames.js?v=mwicuqza"></script>
+<script src="js/freetry.js?v=mwicuqza"></script>
+<script src="js/practice.js?v=mwicuqza"></script>
+<script src="js/lesson-cards.js?v=mwicuqza"></script>
+<script src="js/match.js?v=mwicuqza"></script>
+<script src="js/errors.js?v=mwicuqza"></script>
+<script src="js/tryit.js?v=mwicuqza"></script>
+<script src="js/app.js?v=mwicuqza"></script>
+<script src="js/tracker.js?v=mwicuqza"></script>
+<script src="js/plan.js?v=mwicuqza"></script>
+<script src="js/account.js?v=mwicuqza"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -1457,101 +1493,132 @@ function cardHtml(s, idx) {
   const isEnFirst = promptDirection === "en-first";
   const isRevealed = REVEALED.has(idx);
   if (s.kind === "lesson-card") {
-    const whyTag = s._try && s._try.why ? s._try.why : (s.lcMode === "teach" ? "teach first" : "spaced review");
     const escLcKey = String(s.key || "").replace(/'/g, "\\'");
     const lcRated = BATCH_RATED.has(s.key);
     const noteEnhanced = s.note ? (typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note) : "";
+    const lcTitle = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.lcMode === "teach" ? (s.title || s.en) : s.en) : (s.lcMode === "teach" ? (s.title || s.en) : s.en);
+    const lcHref = (sourceLinkMeta(s) || {}).href || "sets.html";
+    const lcSrc = `Lesson Card · ${s.categoryLabel || "Concept"}`;
+    if (!isRevealed) {
+      return `
+        <div class="s-card" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+          <div class="s-col-num">${idx + 1}</div>
+          <div class="s-col-prompt">
+            <div class="s-prompt-main">
+              <span class="s-prompt-text">${lcTitle}</span>
+            </div>
+            <div class="s-src-foot">
+              ${s.lcMode === "teach" ? `<span class="s-flag-inline">New concept</span>` : ""}
+              <a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets">${lcSrc} ↗</a>
+            </div>
+          </div>
+          <div class="s-col-answer">
+            <div class="s-ans-row en-side">
+              <button type="button" class="book-cue" onclick="event.stopPropagation(); revealCard(${idx})">Open Lesson Card →</button>
+            </div>
+          </div>
+          <div class="s-col-dock" onclick="event.stopPropagation()">
+            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+          </div>
+          ${TryIt.slotHtml(idx)}
+        </div>
+      `;
+    }
     return `
-      <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
-        <div class="s-head">
-          <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}
-            <a class="tryit-why" href="${(sourceLinkMeta(s) || {}).href || 'sets.html'}" onclick="event.stopPropagation()" title="Open in Sets" style="font-weight:700;background:#ecfdf5;color:var(--accent);text-decoration:none">📇 Lesson Card · ${s.categoryLabel || "Concept"} ↗</a>
-            <span class="tryit-why">${whyTag}</span>
-            <span class="s-prompt-text">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.lcMode === "teach" ? (s.title || s.en) : s.en) : (s.lcMode === "teach" ? (s.title || s.en) : s.en)}</span>
+      <div class="s-card revealed s-lc-open" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+        <div class="s-lc-head">
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <span class="s-col-num">${idx + 1}</span>
+            <span class="s-prompt-text">${lcTitle}</span>
+            <span class="s-src-foot"><a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets">${lcSrc} ↗</a></span>
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap" onclick="event.stopPropagation()">
+            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:600;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`}
+            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
           </div>
         </div>
-        ${!isRevealed ? `
-          <div class="s-action-bar">
-            <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Open Lesson Card &amp; Diagram ▾
-            </div>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
+        <div class="s-revealed-body">
+          ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${noteEnhanced}</div>`}
+          ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check:</b> <span class="arabic" dir="rtl" style="font-size:21px;color:var(--ink)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}</div>` : ""}
+        </div>
+        <div class="s-lc-foot" onclick="event.stopPropagation()">
+          <span style="font-size:12px;color:var(--muted)">${s.lcMode === "teach" ? "Mark understood to collapse &amp; continue:" : "Rate recall:"}</span>
+          <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:600;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">✓ Collapse</button>`}
+            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
           </div>
-        ` : `
-          <div class="s-revealed-body">
-            ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${noteEnhanced}</div>`}
-            ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check Answer:</b> <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}</div>` : ""}
-          </div>
-          <div class="s-action-bar" style="margin-top:6px">
-            <span style="font-size:12.5px;color:var(--muted)">${s.lcMode === "teach" ? "Read the mental map above, then mark understood:" : "Rate Lesson Card recall:"}</span>
-            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap" onclick="event.stopPropagation()">
-              ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); render10Cards();" style="font-weight:700;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<span style="font-size:12px;font-weight:700;color:var(--accent)">✓ Marked</span>`}
-              <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
-            </div>
-          </div>
-        `}
+        </div>
+        ${TryIt.slotHtml(idx)}
       </div>
     `;
   }
   const isTeach = s.practiceMode === "teach";
   const isCommuteVerify = s.practiceMode === "commute-verify";
-  const modePill = isTeach
-    ? `<span class="mode-pill-teach" title="New unseen item — opened upfront so Practice teaches it first before scheduling review">🆕 Teach</span>`
-    : isCommuteVerify
-    ? `<span class="mode-pill-commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning on screen">🚗→📱 Screen Check</span>`
-    : "";
   const srcMeta = sourceLinkMeta(s);
-  const kindBadgeHtml = srcMeta
-    ? `<a class="tryit-why" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" style="font-weight:600;text-decoration:none">${srcMeta.label} ↗</a>`
-    : "";
-  const whyTag = s._try && s._try.why ? `${s._try.why}${s._try.p != null ? " · " + s._try.p + "%" : ""}` : "";
-  const showWbwOpen = s.kind === "word" || isTeach;
+  const cleanSrcLbl = srcMeta ? String(srcMeta.label || "").replace(/^[^\p{L}\p{N}]+/u, "") : "";
+  const hasMultiWbw = !!(s.words && s.words.length > 1);
+  const hasSingleRoot = !!(s.words && s.words.length === 1 && famLookup(s.words[0][0]));
+  const showWbwOpen = isTeach ? (hasMultiWbw || hasSingleRoot) : false;
   const showTrOpen = isTeach && !!s.tr;
+  const gramHtml = isRevealed ? renderGrammarRuleHtml(s, false) : "";
+  const hasWbwBlock = hasMultiWbw || hasSingleRoot;
+  const hasExtras = isRevealed && (hasWbwBlock || !!s.note || !!gramHtml);
 
   return `
       <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
-        <div class="s-head">
-          <div class="s-prompt-wrap">
-            <span class="s-num">#${idx + 1}</span>${SRS.dotHtml(s.key, { lg: true })}${TryIt.badgeHtml(idx)}${modePill}${kindBadgeHtml}${whyTag ? `<span class="tryit-why" title="why Practice chose this item">${whyTag}</span>` : ""}
-            <span class="s-prompt-text ${isEnFirst ? '' : 'ar'}" ${!isEnFirst ? 'dir="rtl"' : ''}>
-              ${isEnFirst ? s.en : s.ar}
-            </span>
-            ${!isEnFirst ? `<button type="button" class="small icon-btn" onclick="event.stopPropagation(); playCardAudio(${idx})">🔊</button>` : ''}
+        <div class="s-col-num">${idx + 1}</div>
+        <div class="s-col-prompt">
+          <div class="s-prompt-main">
+            ${isEnFirst
+              ? `<span class="s-prompt-text">${s.en}</span>`
+              : `<span class="arabic s-prompt-text ar" dir="rtl">${s.ar}</span><button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen" aria-label="Listen">🔊</button>`
+            }
           </div>
+          ${(isTeach || isCommuteVerify || srcMeta) ? `
+            <div class="s-src-foot">
+              ${isTeach ? `<span class="s-flag-inline" title="New unseen item — taught first before scheduling review">New</span>` : isCommuteVerify ? `<span class="s-flag-inline commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning">Screen check</span>` : ""}
+              ${srcMeta ? `<a href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}">${cleanSrcLbl} ↗</a>` : ""}
+            </div>
+          ` : ""}
         </div>
 
-        ${!isRevealed ? `
-          <div class="s-action-bar">
-            <div class="s-reveal-btn" onclick="event.stopPropagation(); revealCard(${idx})">
-              👁️ Check ${isEnFirst ? 'Arabic' : 'English'} ▾
+        <div class="s-col-answer">
+          ${!isRevealed ? `
+            <div class="s-ans-row ${isEnFirst ? '' : 'en-side'}">
+              <button type="button" class="book-cue ${isEnFirst ? 'ar-side' : ''}" onclick="event.stopPropagation(); revealCard(${idx})">
+                ${isEnFirst ? 'Show Arabic →' : 'Show meaning →'}
+              </button>
             </div>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
-          </div>
-        ` : `
-          <div class="s-revealed-body">
-            ${isEnFirst ? `
-              <div class="s-ar-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
-                <div class="sym-group">
-                  <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                </div>
+          ` : isEnFirst ? `
+            <div class="s-ans-row">
+              <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
               </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
-            ` : `
-              <div class="s-en-line" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <span>${s.en}</span>
-                <div class="sym-group">
-                  ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                </div>
+            </div>
+            ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
+          ` : `
+            <div class="s-ans-row en-side">
+              <span class="s-en-line">${s.en}</span>
+              <div class="sym-group">
+                ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
               </div>
-              ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
-            `}
+            </div>
+            ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
+          `}
+        </div>
 
-            ${s.words && s.words.length ? `
+        <div class="s-col-dock" onclick="event.stopPropagation()">
+          ${TryIt.badgeHtml(idx)}
+          <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+        </div>
+
+        ${hasExtras ? `
+          <div class="s-row-extras">
+            ${hasWbwBlock ? `
               <div class="s-wbw-wrap" id="drill-wbw-${idx}" style="display:${showWbwOpen ? 'flex' : 'none'}" onclick="event.stopPropagation()">
                 <div class="wbw-chips-wrap" style="display:flex;gap:5px;flex-wrap:wrap">
                   ${s.words.map((w, wIdx) => {
@@ -1568,18 +1635,11 @@ function cardHtml(s, idx) {
                 <div class="wbw-drawer-slot" id="wbw-drawer-slot-drill-${idx}"></div>
               </div>
             ` : ''}
-
-            ${s.note ? `
-              <div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>
-            ` : ''}
-            ${renderGrammarRuleHtml(s, false)}
+            ${s.note ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>` : ''}
+            ${gramHtml}
           </div>
+        ` : ''}
 
-          <div class="s-action-bar" style="margin-top:4px">
-            <span style="font-size:11.5px;color:var(--muted)">${isTeach ? "🔊 Listen &amp; 🎯 Try it, then rate to schedule review:" : isCommuteVerify ? "Verified on screen? Rate recall:" : "Rate recall:"}</span>
-            <div class="s-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { noDot: true })}</div>
-          </div>
-        `}
         ${TryIt.slotHtml(idx)}
       </div>
     `;
@@ -1695,7 +1755,12 @@ function rateSentence(key, g, cardIdx, how, meta) {
     capDrawer.innerHTML = renderCapabilityDrawerHTML();
   }
   updateOverallStats();
-  SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
+  if (s && s.kind === "lesson-card" && REVEALED.has(cardIdx) && (g === "yes" || g === "solid" || g === "retire")) {
+    REVEALED.delete(cardIdx);
+    render10Cards();
+  } else {
+    SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
+  }
   updateSessionProgress();
 }
 

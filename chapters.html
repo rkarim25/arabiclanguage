@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
-  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
     .chap-select { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--paper-elevated); color: var(--ink); }
@@ -25,7 +25,7 @@
 
     /* Quiet Interactive Book Reader Spread */
     .sentence-list { display: flex; flex-direction: column; gap: 0; }
-    .s-row { display: flex; flex-direction: column; gap: 8px; padding: 14px 2px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; transition: background 0.15s; }
+    .s-row { display: flex; flex-direction: column; gap: 5px; padding: 8px 2px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; transition: background 0.15s; }
     .s-row:last-child { border-bottom: 0; }
     .s-row:hover { background: rgba(13, 122, 95, 0.015); }
     .s-row.active { border-left: 3px solid var(--accent); padding-left: 12px; background: var(--accent-soft); }
@@ -33,7 +33,7 @@
     .s-ar-wrap { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex: 1; min-width: 240px; }
     .s-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
     .s-meta { flex: 1; min-width: 220px; }
-    .s-en { font-family: var(--font-serif); font-size: 15.5px; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.5; }
+    .s-en { font-family: var(--font-serif); font-size: 17.5px; font-weight: 500; color: var(--ink); margin-bottom: 1px; line-height: 1.45; }
     .s-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-bottom: 2px; }
     .s-hint { font-size: 12px; color: var(--muted); }
     .s-actions { display: flex; gap: 6px; align-items: center; }
@@ -48,12 +48,12 @@
     .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
     /* Audio Toolbar */
-    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 14px; padding: 8px 0 12px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
+    .audio-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 4px 0 10px; padding: 6px 0 8px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
     .audio-bar button { padding: 5px 12px; font-size: 13px; font-weight: 500; }
     .audio-bar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
     /* Quran Verse Card */
-    .q-verse { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .q-verse { padding: 8px 0; border-bottom: 1px solid var(--border); }
     .q-verse:last-child { border-bottom: none; }
     .q-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.95; direction: rtl; text-align: right; color: var(--ink); }
     .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0 4px; }
@@ -252,16 +252,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwic8lfa"></script>
-<script src="js/curriculum.js?v=mwic8lfa"></script>
-<script src="js/srs.js?v=mwic8lfa"></script>
-<script src="js/match.js?v=mwic8lfa"></script>
-<script src="js/errors.js?v=mwic8lfa"></script>
-<script src="js/frames.js?v=mwic8lfa"></script>
-<script src="js/app.js?v=mwic8lfa"></script>
-<script src="js/tracker.js?v=mwic8lfa"></script>
-<script src="js/plan.js?v=mwic8lfa"></script>
-<script src="js/account.js?v=mwic8lfa"></script>
+<script src="js/progress-model.js?v=mwicuqza"></script>
+<script src="js/curriculum.js?v=mwicuqza"></script>
+<script src="js/srs.js?v=mwicuqza"></script>
+<script src="js/match.js?v=mwicuqza"></script>
+<script src="js/errors.js?v=mwicuqza"></script>
+<script src="js/frames.js?v=mwicuqza"></script>
+<script src="js/app.js?v=mwicuqza"></script>
+<script src="js/tracker.js?v=mwicuqza"></script>
+<script src="js/plan.js?v=mwicuqza"></script>
+<script src="js/account.js?v=mwicuqza"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
