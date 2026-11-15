@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
-  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -182,12 +182,13 @@
       </h1>
       <p class="sub" style="margin:2px 0">Incremental Practice Batches · Batch 1 advances weekly lessons, Batch 2+ consolidates review</p>
     </div>
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
       <div class="stat-strip">
         <div><div class="num" id="statHeld">0</div><div class="lbl">Sentences Held</div></div>
         <div><div class="num" id="statDue">0</div><div class="lbl">Due for Review</div></div>
         <div><div class="num" id="statTotal">0</div><div class="lbl">Master Bank</div></div>
       </div>
+      <a href="weekly.html?print=1" class="print-week-cta" title="Print or save your personalized learning PDF for the coming week">🖨️ Print for the Week</a>
     </div>
   </div>
 
@@ -209,7 +210,7 @@
           <span style="font-size:12.5px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
           <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">▶ Next Batch →</button>
           <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
-          <a class="pt-btn" href="weekly.html" style="text-decoration:none" title="Read or print your learning booklet for the coming week">🖨️ Weekly Print</a>
+          <a class="pt-btn" href="weekly.html?print=1" style="text-decoration:none" title="Read or print your learning booklet for the coming week">🖨️ Print Week</a>
           <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
           <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
           <details class="more"><summary title="Direction, stream filters, speak brief, capabilities &amp; audio controls">⋯</summary><div class="more-body">
@@ -267,20 +268,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwibvv6x"></script>
-<script src="js/curriculum.js?v=mwibvv6x"></script>
-<script src="js/srs.js?v=mwibvv6x"></script>
-<script src="js/frames.js?v=mwibvv6x"></script>
-<script src="js/freetry.js?v=mwibvv6x"></script>
-<script src="js/practice.js?v=mwibvv6x"></script>
-<script src="js/lesson-cards.js?v=mwibvv6x"></script>
-<script src="js/match.js?v=mwibvv6x"></script>
-<script src="js/errors.js?v=mwibvv6x"></script>
-<script src="js/tryit.js?v=mwibvv6x"></script>
-<script src="js/app.js?v=mwibvv6x"></script>
-<script src="js/tracker.js?v=mwibvv6x"></script>
-<script src="js/plan.js?v=mwibvv6x"></script>
-<script src="js/account.js?v=mwibvv6x"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwic8lfa"></script>
+<script src="js/curriculum.js?v=mwic8lfa"></script>
+<script src="js/srs.js?v=mwic8lfa"></script>
+<script src="js/frames.js?v=mwic8lfa"></script>
+<script src="js/freetry.js?v=mwic8lfa"></script>
+<script src="js/practice.js?v=mwic8lfa"></script>
+<script src="js/lesson-cards.js?v=mwic8lfa"></script>
+<script src="js/match.js?v=mwic8lfa"></script>
+<script src="js/errors.js?v=mwic8lfa"></script>
+<script src="js/tryit.js?v=mwic8lfa"></script>
+<script src="js/app.js?v=mwic8lfa"></script>
+<script src="js/tracker.js?v=mwic8lfa"></script>
+<script src="js/plan.js?v=mwic8lfa"></script>
+<script src="js/account.js?v=mwic8lfa"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -2255,6 +2256,7 @@ function renderHomeChapStrip() {
           ${new Date().getDay() === 6 ? `<a href="index.html?myday=1&amp;rehearse=1" style="color:var(--accent);font-weight:600;text-decoration:none">🎤 Rehearse for Sunday →</a>` : new Date().getDay() === 0 ? `<a href="class.html" style="color:var(--accent);font-weight:600;text-decoration:none">🧑‍🏫 Lesson Brief →</a>` : ""}
           ${readyTest ? `<a href="chapters.html?chap=${activeChap.id}#testBox" style="color:var(--accent);font-weight:700;text-decoration:none">🔥 Test Ready →</a>` : ""}
           <button type="button" class="pt-btn" onclick="focusPracticeUrl('?chap=${activeChap.id}')" style="font-size:11.5px;padding:2px 9px;color:var(--accent);border-color:var(--accent);font-weight:700" title="Focus Practice exclusively on Chapter ${activeChap.num} sentences &amp; Lesson Cards">⚡ Focus Ch ${activeChap.num}</button>
+          <a href="weekly.html?chap=${activeChap.num}&amp;print=1" class="pt-btn" style="font-size:11.5px;padding:2px 9px;text-decoration:none" title="Print Chapter ${activeChap.num}'s weekly booklet">🖨️ Print</a>
           <a href="chapters.html?chap=${activeChap.id}" style="color:var(--accent);font-weight:600;text-decoration:none">Open Chapter →</a>
         </span>
       </div>

@@ -105,6 +105,37 @@ nav a.link.active {
   border-radius: 0;
   padding-bottom: 4px;
 }
+nav a.link.nav-print {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+nav a.link.nav-print:hover,
+nav a.link.nav-print.active {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-width: 1px;
+}
+.print-week-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff !important;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity .15s;
+}
+.print-week-cta:hover { opacity: 0.9; }
 nav .spacer { flex: 0 1 18px; }
 .badge {
   background: var(--amber);

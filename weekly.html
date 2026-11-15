@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
-  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
   <style>
     .wk-controls {
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
@@ -23,8 +23,8 @@
     }
     .wk-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
     .wk-pill.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
-    .wk-pill.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .wk-pill.primary:hover { background: #0a614c; color: #fff; }
+    .wk-pill.primary { background: var(--accent); color: #fff; border-color: var(--accent); padding: 7px 16px; font-size: 13.5px; font-weight: 700; }
+    .wk-pill.primary:hover { opacity: 0.9; color: #fff; }
     .wk-select {
       padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px;
       font-size: 12.5px; font-weight: 600; background: var(--paper-elevated); color: var(--ink);
@@ -186,11 +186,12 @@
     <div class="wk-ctrl-group">
       <a href="index.html" class="wk-pill" title="Return to live Practice">← Practice</a>
       <select id="wkChapSelect" class="wk-select" title="Choose Chapter for this booklet"></select>
+      <button type="button" id="btnWkMode" class="wk-pill" onclick="toggleWkMode()" title="Switch between your personalized SRS week and a standalone Book Chapter edition">⚡ My Week</button>
       <button type="button" id="btnWkTr" class="wk-pill active" onclick="toggleWkTr()" title="Show or hide transliteration in screen &amp; PDF">🔤 Translit</button>
       <button type="button" id="btnWkBoxes" class="wk-pill active" onclick="toggleWkBoxes()" title="Include Mon/Wed/Fri pen review checkboxes on printed PDF">☐ Checkboxes</button>
     </div>
     <div class="wk-ctrl-group">
-      <button type="button" class="wk-pill primary" onclick="window.print()" title="Print cleanly or Save as PDF (A4)">🖨️ Print / Save as PDF</button>
+      <button type="button" class="wk-pill primary" onclick="window.print()" title="Print cleanly or Save as PDF (A4)">🖨️ Print / Save This Week's PDF</button>
     </div>
   </div>
 
@@ -199,12 +200,12 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwibvv6x"></script>
-<script src="js/practice.js?v=mwibvv6x"></script>
-<script src="js/lesson-cards.js?v=mwibvv6x"></script>
-<script src="js/app.js?v=mwibvv6x"></script>
-<script src="js/tracker.js?v=mwibvv6x"></script>
-<script src="js/plan.js?v=mwibvv6x"></script>
+<script src="js/srs.js?v=mwic8lfa"></script>
+<script src="js/practice.js?v=mwic8lfa"></script>
+<script src="js/lesson-cards.js?v=mwic8lfa"></script>
+<script src="js/app.js?v=mwic8lfa"></script>
+<script src="js/tracker.js?v=mwic8lfa"></script>
+<script src="js/plan.js?v=mwic8lfa"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -231,14 +232,24 @@ const esc = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 let WK_STATE = { chaps: [], lcCards: [], qCore: [], verses: [], qSents: [], evGroups: [], myday: [], activeChapNum: 1 };
 let showTr = localStorage.getItem("wk-show-tr") !== "0";
 let showBoxes = localStorage.getItem("wk-show-boxes") !== "0";
+let bookMode = new URLSearchParams(location.search).get("mode") === "book";
 
 function applyWkToggles() {
   document.body.classList.toggle("wk-hide-tr", !showTr);
   document.body.classList.toggle("wk-hide-boxes", !showBoxes);
+  const bMode = document.getElementById("btnWkMode");
   const bTr = document.getElementById("btnWkTr");
   const bBx = document.getElementById("btnWkBoxes");
+  if (bMode) {
+    bMode.classList.toggle("active", bookMode);
+    bMode.textContent = bookMode ? "📖 Book Chapter" : "⚡ My Week";
+  }
   if (bTr) bTr.classList.toggle("active", showTr);
   if (bBx) bBx.classList.toggle("active", showBoxes);
+}
+function toggleWkMode() {
+  bookMode = !bookMode;
+  renderBooklet();
 }
 function toggleWkTr() {
   showTr = !showTr;
@@ -295,7 +306,22 @@ function extractChapterVocab(chap) {
 }
 
 function selectLessonCards(cards, chapNum, srs) {
-  const scored = (cards || []).map((c, idx) => {
+  const all = cards || [];
+  if (bookMode && all.length) {
+    const chMatches = all.filter(c => Array.isArray(c.triggers && c.triggers.chapters) && c.triggers.chapters.includes(chapNum));
+    const picks = chMatches.slice(0, 2);
+    let cursor = ((Math.max(1, chapNum) - 1) * 2) % all.length;
+    for (let tries = 0; picks.length < 2 && tries < all.length; tries++) {
+      const cand = all[(cursor + tries) % all.length];
+      if (!picks.some(p => p.id === cand.id)) picks.push(cand);
+    }
+    return picks.map(c => {
+      const key = "lc:" + c.id;
+      const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs }) : { level: "grey" };
+      return { card: c, key, st, rank: 0 };
+    });
+  }
+  const scored = all.map((c, idx) => {
     const key = "lc:" + c.id;
     const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs }) : { level: "grey" };
     if (st.level === "green") return null;
@@ -307,8 +333,22 @@ function selectLessonCards(cards, chapNum, srs) {
   return scored.slice(0, 2);
 }
 
-function selectCoreQuranWords(qCore, srs) {
-  const items = (qCore || []).map((w, i) => {
+function selectCoreQuranWords(qCore, srs, chapNum) {
+  const list = qCore || [];
+  if (bookMode && list.length) {
+    const start = ((Math.max(1, chapNum || 1) - 1) * 12) % list.length;
+    const picked = [];
+    for (let k = 0; k < Math.min(12, list.length); k++) {
+      const i = (start + k) % list.length;
+      const w = list[i];
+      const key = "qc:" + i;
+      const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [w.ar] }) : { level: "grey" };
+      const pillar = (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en) : "word";
+      picked.push({ w, i, key, st, pillar, pri: 0 });
+    }
+    return picked;
+  }
+  const items = list.map((w, i) => {
     const key = "qc:" + i;
     const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [w.ar] }) : { level: "grey" };
     if (st.level === "green") return null;
@@ -344,9 +384,9 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   const unlocked = [];
   (qSents || []).forEach(s => {
     const key = "qs:" + s.surah + ":" + s.ayah;
-    if (isGreen(key, srs)) return;
+    if (!bookMode && isGreen(key, srs)) return;
     const rd = (window.Practice && Practice.ayahReadiness) ? Practice.ayahReadiness(Object.assign({}, s, { key }), srs, knownLookup) : { unknownWords: 2, knownWords: 0, totalWords: 3 };
-    if (rd.unknownWords <= 2) {
+    if (rd.unknownWords <= (bookMode ? 4 : 2)) {
       unlocked.push({
         kind: "Unlocked i+1 (" + rd.knownWords + "/" + rd.totalWords + " words held)",
         surahName: s.surahName,
@@ -364,7 +404,8 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   unlocked.sort((a, b) => a.unknownWords - b.unknownWords || a.surahNum - b.surahNum || a.ayahNum - b.ayahNum);
   const picked = [];
   const seenRef = new Set();
-  for (const x of out.filter(v => !v.green).concat(unlocked).concat(out)) {
+  const ordered = bookMode ? out.concat(unlocked) : out.filter(v => !v.green).concat(unlocked).concat(out);
+  for (const x of ordered) {
     if (picked.length >= 5) break;
     if (seenRef.has(x.ref)) continue;
     seenRef.add(x.ref);
@@ -373,9 +414,22 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   return picked;
 }
 
-function selectMosqueCues(evGroups, srs) {
+function selectMosqueCues(evGroups, srs, chapNum) {
   const pool = [];
   const labels = { khutba: "Friday Khutbah", duas: "Common Du'ā", masjid: "Imam / Mosque" };
+  if (bookMode) {
+    const offset = Math.max(0, (chapNum || 1) - 1) * 2;
+    ["khutba", "duas", "masjid"].forEach(gid => {
+      const g = (evGroups || []).find(x => x.id === gid);
+      const members = (g && g.members) || [];
+      for (let k = 0; k < Math.min(2, members.length); k++) {
+        const i = (offset + k) % members.length;
+        const m = members[i];
+        pool.push({ m, key: "ev-" + gid + ":" + i, label: labels[gid], pri: 0, idx: i });
+      }
+    });
+    return pool.slice(0, 6);
+  }
   ["khutba", "duas", "masjid"].forEach(gid => {
     const g = (evGroups || []).find(x => x.id === gid);
     if (!g) return;
@@ -391,8 +445,21 @@ function selectMosqueCues(evGroups, srs) {
   return pool.slice(0, 6);
 }
 
-function selectSayYourDay(mydaySents, srs) {
-  const pool = (mydaySents || []).map((s, idx) => {
+function selectSayYourDay(mydaySents, srs, chapNum) {
+  const list = mydaySents || [];
+  if (bookMode && list.length) {
+    const start = ((Math.max(1, chapNum || 1) - 1) * 6) % list.length;
+    const picked = [];
+    for (let k = 0; k < Math.min(6, list.length); k++) {
+      const idx = (start + k) % list.length;
+      const s = list[idx];
+      const key = "myday:" + s.id;
+      const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [s.id, s.ar] }) : { level: "grey" };
+      picked.push({ s, key, st, pri: 0, idx });
+    }
+    return picked;
+  }
+  const pool = list.map((s, idx) => {
     const key = "myday:" + s.id;
     const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [s.id, s.ar] }) : { level: "grey" };
     if (st.level === "green") return null;
@@ -412,13 +479,14 @@ function renderBooklet() {
   const chapVocab = extractChapterVocab(chap);
   const chapGreen = (chap.sentences || []).filter((_, i) => isGreen("chap:" + chap.num + ":" + i, srs)).length;
   const lcPicks = selectLessonCards(lcCards, chap.num, srs);
-  const core12 = selectCoreQuranWords(qCore, srs);
+  const core12 = selectCoreQuranWords(qCore, srs, chap.num);
   const ayahs5 = selectAyahs(verses, qSents, chap, qCore, srs);
-  const mosque6 = selectMosqueCues(evGroups, srs);
-  const day6 = selectSayYourDay(myday, srs);
-  const preply3 = (chap.sentences || [])
-    .map((s, i) => ({ s, key: "chap:" + chap.num + ":" + i, green: isGreen("chap:" + chap.num + ":" + i, srs) }))
-    .filter(x => !x.green)
+  const mosque6 = selectMosqueCues(evGroups, srs, chap.num);
+  const day6 = selectSayYourDay(myday, srs, chap.num);
+  const chapPromptPool = (chap.sentences || [])
+    .map((s, i) => ({ s, key: "chap:" + chap.num + ":" + i, green: isGreen("chap:" + chap.num + ":" + i, srs) }));
+  const chapPromptFiltered = bookMode ? chapPromptPool : chapPromptPool.filter(x => !x.green);
+  const preply3 = (chapPromptFiltered.length ? chapPromptFiltered : chapPromptPool)
     .slice(0, 2)
     .map(x => ({ ar: x.s.ar, en: x.s.en, tr: x.s.tr, tag: "Ch " + chap.num }))
     .concat(day6.slice(0, 3).map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, tag: "Say Your Day" })))
@@ -451,14 +519,14 @@ function renderBooklet() {
 
   const html = `
     <div class="wk-titleplate">
-      <div class="wk-kicker">Weekly Study Booklet · Arabic Mastery Programme</div>
+      <div class="wk-kicker">${bookMode ? "Book Chapter Edition · Arabic Mastery Programme" : "Weekly Study Booklet · Arabic Mastery Programme"}</div>
       <h1 class="wk-title">
         <span>${esc(chap.title)}</span>
         <span class="ar-sub" dir="rtl">كُرَّاسَةُ الأُسْبُوع</span>
       </h1>
       <div class="wk-meta">
-        Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green) ·
-        Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save as PDF</b> for A4 paper.
+        ${bookMode ? `Standalone Book Chapter · <b>Ch ${chap.num}</b>` : `Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green)`} ·
+        Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save This Week's PDF</b> for A4 paper.
       </div>
     </div>
 
@@ -633,6 +701,16 @@ function renderBooklet() {
       };
     }
     renderBooklet();
+    const autoPrint = new URLSearchParams(location.search).get("print") === "1";
+    if (autoPrint) {
+      try {
+        const cleanUrl = new URL(location.href);
+        cleanUrl.searchParams.delete("print");
+        history.replaceState(null, "", cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+      } catch (_) {}
+      (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
+        .then(() => setTimeout(() => window.print(), 200));
+    }
   } catch (e) {
     document.getElementById("weeklyBook").innerHTML = `<p style="color:var(--red)">Could not load booklet data: ${esc(e.message || e)}</p>`;
   }

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
-  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/fonts.css?v=mwic8lfa">
+  <link rel="stylesheet" href="css/style.css?v=mwic8lfa">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
     .chap-select { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--paper-elevated); color: var(--ink); }
@@ -110,7 +110,7 @@
       </div>
       <div class="resume-actions">
         <a href="index.html" id="btnPractiseChapter" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Practise this chapter dynamically in Practice (auto-syncs sentences, words &amp; dots)">⚡ Practise Chapter</a>
-        <a href="weekly.html" id="btnPrintChapterWeek" class="btn-resume" style="text-decoration:none" title="Print or save this chapter's weekly booklet as PDF">🖨️ Print Week</a>
+        <a href="weekly.html?print=1" id="btnPrintChapterWeek" class="btn-resume" style="text-decoration:none" title="Print or save this chapter's weekly booklet as PDF">🖨️ Print Week</a>
         <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
         <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
       </div>
@@ -252,16 +252,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwibvv6x"></script>
-<script src="js/curriculum.js?v=mwibvv6x"></script>
-<script src="js/srs.js?v=mwibvv6x"></script>
-<script src="js/match.js?v=mwibvv6x"></script>
-<script src="js/errors.js?v=mwibvv6x"></script>
-<script src="js/frames.js?v=mwibvv6x"></script>
-<script src="js/app.js?v=mwibvv6x"></script>
-<script src="js/tracker.js?v=mwibvv6x"></script>
-<script src="js/plan.js?v=mwibvv6x"></script>
-<script src="js/account.js?v=mwibvv6x"></script>
+<script src="js/progress-model.js?v=mwic8lfa"></script>
+<script src="js/curriculum.js?v=mwic8lfa"></script>
+<script src="js/srs.js?v=mwic8lfa"></script>
+<script src="js/match.js?v=mwic8lfa"></script>
+<script src="js/errors.js?v=mwic8lfa"></script>
+<script src="js/frames.js?v=mwic8lfa"></script>
+<script src="js/app.js?v=mwic8lfa"></script>
+<script src="js/tracker.js?v=mwic8lfa"></script>
+<script src="js/plan.js?v=mwic8lfa"></script>
+<script src="js/account.js?v=mwic8lfa"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3716,7 +3716,7 @@ function loadChapter(chap, resumeLineIdx) {
   }
   const btnPrintWeek = document.getElementById("btnPrintChapterWeek");
   if (btnPrintWeek && chap) {
-    btnPrintWeek.href = "weekly.html?chap=" + encodeURIComponent(chap.num);
+    btnPrintWeek.href = "weekly.html?chap=" + encodeURIComponent(chap.num) + "&print=1";
   }
 
   // Update Selector and Resume Banner

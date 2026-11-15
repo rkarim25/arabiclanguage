@@ -977,6 +977,7 @@ const bank = D("sentence-bank.json");
   yes(/@media print/.test(weeklySrcNow) && /window\.print\(\)/.test(weeklySrcNow) && /#notePen/.test(weeklySrcNow) && /reciteVerse\(/.test(weeklySrcNow) && /LessonCards\.renderBodyHtml/.test(weeklySrcNow), "weekly.html renders personalized printable A4 booklet with Alafasy audio & Lesson Cards");
   yes(/"weekly\.html"/.test(swSrcNow) && /"weekly\.html"/.test(planSrcNow), "weekly.html is precached in sw.js and listed in PLAN_BAR_QUIET");
   yes(/weekly\.html/.test(indexSrcNow) && /weekly\.html/.test(chapsSrcNow) && /weekly\.html/.test(quranSrcNow) && /weekly\.html/.test(teacherSrcNow), "Practice, Chapters, Qur'an and Teacher tabs link to weekly.html");
+  yes(/id="navPrintWeek"/.test(appSrcNow) && /class="print-week-cta"/.test(indexSrcNow) && /autoPrint/.test(weeklySrcNow) && /toggleWkMode/.test(weeklySrcNow), "top nav & Practice expose 1-click Print Week with ?print=1 auto-print and Book Chapter mode");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwibvv6x";
+const DATA_V = "mwic8lfa";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2689,7 +2689,12 @@ function renderNav(active) {
     <a class="link ${active === "quran" ? "active" : ""}" href="quran.html">🕌 Qur'ān</a>
     <a class="link ${active === "sets" || active === "grammar" ? "active" : ""}" href="sets.html">🗂 Sets</a>
     <a class="link ${active === "classes" || active === "teacher" ? "active" : ""}" href="class.html">🧑‍🏫 Teacher</a>
+    <a class="link nav-print" id="navPrintWeek" href="weekly.html" title="Open and print your learning PDF for the coming week">🖨️ Print Week</a>
   `;
+  if (active === "weekly") {
+    const pw = el.querySelector("#navPrintWeek");
+    if (pw) pw.classList.add("active");
+  }
   document.body.prepend(el);
   wireNavSync(el.querySelector("#navSync"));
   mountNotePen();
