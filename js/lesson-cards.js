@@ -172,7 +172,7 @@
                         <div class="lc-ex-ar">${r.ar || ""}</div>
                         ${r.tr ? `<div class="lc-ex-tr">(${r.tr})</div>` : ""}
                       </div>
-                      ${r.ar ? `<button type="button" class="lc-speak-btn" onclick="event.stopPropagation(); ${speakFn}('${escAttr(r.ar)}')" title="Listen">🔊</button>` : ""}
+                      ${r.ar ? `<button type="button" class="lc-speak-btn" onclick="event.stopPropagation(); ${r.ayahRef && speakFn === "LessonCards.speakEncoded" ? `LessonCards.reciteOrSpeak('${r.ayahRef}', '${escAttr(r.ar)}')` : `${speakFn}('${escAttr(r.ar)}')`}" title="${r.ayahRef ? `Listen to Mishary Rashid Alafasy recitation (${r.ayahRef})` : "Listen"}">🔊</button>` : ""}
                     </div>
                   </td>
                   <td>${enhanceInlineArabic(r.col4 || "")}</td>
@@ -193,17 +193,35 @@
     }
   }
 
+  /* Play Mishary Rashid Alafasy recitation for Qur'ān Lesson Card ayah rows; fall back seamlessly to neural TTS */
+  function reciteOrSpeak(ayahRef, encodedAr) {
+    const txt = decodeURIComponent(encodedAr || "");
+    if (ayahRef && typeof window !== "undefined" && typeof window.reciteVerse === "function") {
+      const p = String(ayahRef).split(":").map(Number);
+      if (p[0] && p[1]) {
+        window.reciteVerse(p[0], p[1], txt, 0.85);
+        return;
+      }
+    }
+    if (txt && typeof window !== "undefined" && typeof window.speak === "function") {
+      window.speak(txt, 0.85);
+    }
+  }
+
   /* Convert data/lesson-cards.json into Practice-ready items (SRS key: lc:<id>) */
   function buildPracticePool(cards) {
     return (cards || []).map(c => {
       const qc = c.quickCheck || {};
+      const speakAr = qc.speakAr || (c.rows && c.rows[0] && c.rows[0].ar) || "";
+      const matchRow = (c.rows || []).find(r => r && r.ar === speakAr && r.ayahRef);
       return {
         key: `lc:${c.id}`,
         lcId: c.id,
         kind: "lesson-card",
         effort: 1.0,
         ar: qc.answerAr || (c.rows && c.rows[0] && c.rows[0].ar) || c.arTitle || "",
-        speakAr: qc.speakAr || (c.rows && c.rows[0] && c.rows[0].ar) || "",
+        speakAr,
+        ref: (c.category === "quran" && matchRow) ? matchRow.ayahRef : null,
         en: qc.prompt || `${c.title}: ${c.summary}`,
         tr: qc.tr || "",
         note: qc.answerEn || c.summary || "",
@@ -241,6 +259,7 @@
     renderDiagramHtml,
     renderBodyHtml,
     speakEncoded,
+    reciteOrSpeak,
     buildPracticePool,
     buildLookup
   };

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwgpw59t">
-  <link rel="stylesheet" href="css/style.css?v=mwgpw59t">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -282,20 +282,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwgpw59t"></script>
-<script src="js/curriculum.js?v=mwgpw59t"></script>
-<script src="js/srs.js?v=mwgpw59t"></script>
-<script src="js/frames.js?v=mwgpw59t"></script>
-<script src="js/freetry.js?v=mwgpw59t"></script>
-<script src="js/practice.js?v=mwgpw59t"></script>
-<script src="js/lesson-cards.js?v=mwgpw59t"></script>
-<script src="js/match.js?v=mwgpw59t"></script>
-<script src="js/errors.js?v=mwgpw59t"></script>
-<script src="js/tryit.js?v=mwgpw59t"></script>
-<script src="js/app.js?v=mwgpw59t"></script>
-<script src="js/tracker.js?v=mwgpw59t"></script>
-<script src="js/plan.js?v=mwgpw59t"></script>
-<script src="js/account.js?v=mwgpw59t"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwi55dtu"></script>
+<script src="js/curriculum.js?v=mwi55dtu"></script>
+<script src="js/srs.js?v=mwi55dtu"></script>
+<script src="js/frames.js?v=mwi55dtu"></script>
+<script src="js/freetry.js?v=mwi55dtu"></script>
+<script src="js/practice.js?v=mwi55dtu"></script>
+<script src="js/lesson-cards.js?v=mwi55dtu"></script>
+<script src="js/match.js?v=mwi55dtu"></script>
+<script src="js/errors.js?v=mwi55dtu"></script>
+<script src="js/tryit.js?v=mwi55dtu"></script>
+<script src="js/app.js?v=mwi55dtu"></script>
+<script src="js/tracker.js?v=mwi55dtu"></script>
+<script src="js/plan.js?v=mwi55dtu"></script>
+<script src="js/account.js?v=mwi55dtu"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -322,6 +322,7 @@ function diagnoseVerb(typed, it) {
 
 let MASTER_SENTENCES = [];
 let PRACTICE_WORDS = [];
+let QURAN_CORE_LIST = [];
 let PRACTICE_GRAMMAR = [];
 let PRACTICE_LESSON_CARDS = [];
 let LESSON_CARD_LOOKUP = { byId: {}, byPattern: {} };
@@ -391,25 +392,45 @@ function allPracticeItems() {
     CLASSES_LIST = (clsRes && clsRes.classes) || [];
     EV_GROUPS = (evRes && evRes.groups) || [];
     ((vRes && vRes.surahs) || []).forEach(s => { if (s && s.id) SURAH_MAP[s.id] = s; });
+    QURAN_CORE_LIST = (qCoreRes && qCoreRes.words) || [];
     GRAMMAR_PATTERNS = (gramRes && gramRes.patterns) || [];
     if (window.LessonCards && lcRes && Array.isArray(lcRes.cards)) {
       PRACTICE_LESSON_CARDS = LessonCards.buildPracticePool(lcRes.cards);
       LESSON_CARD_LOOKUP = LessonCards.buildLookup(lcRes.cards);
     }
 
+    // Core 151 Qur'ānic Frequency index (gives every matching word its exact rank & Mushaf count)
+    const qcByNorm = new Map();
+    QURAN_CORE_LIST.forEach((w, i) => {
+      const n = normalizeAr(w.ar);
+      if (!n) return;
+      const meta = {
+        qcKey: `qc:${i}`,
+        qcRank: i,
+        qcFreq: w.n || 0,
+        qcPillar: (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en, i) : "noun"
+      };
+      if (!qcByNorm.has(n)) qcByNorm.set(n, meta);
+      const bare = n.replace(/^ال/, "");
+      if (bare && !qcByNorm.has(bare)) qcByNorm.set(bare, meta);
+    });
+
     // Vocabulary pool with exact SRS keys matching words.html
     const seenWords = new Set();
-    const addWord = (k, ar, en, tr, note, src, root) => {
+    const addWord = (k, ar, en, tr, note, src, root, extra) => {
       if (!k || !ar || !en) return;
       const n = normalizeAr(ar);
       if (!WORD_GLOSS_BY_NORM.has(n)) WORD_GLOSS_BY_NORM.set(n, en);
       if (seenWords.has(n)) return;
       seenWords.add(n);
       const fam = famLookup(ar);
-      PRACTICE_WORDS.push({ key: k, ar, en, tr: tr || "", note: note || "", src, root: root || (fam ? fam.root : ""), fam });
+      const qcMeta = qcByNorm.get(n) || qcByNorm.get(n.replace(/^ال/, "")) || {};
+      PRACTICE_WORDS.push(Object.assign({
+        key: k, ar, en, tr: tr || "", note: note || "", src, root: root || (fam ? fam.root : ""), fam
+      }, qcMeta, extra || {}));
     };
     (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => addWord(v.key, v.ar, v.en, v.tr, v.note, "teacher")));
-    (qCoreRes.words || []).forEach((w, i) => addWord(`qc:${i}`, w.ar, w.en, w.tr, "", "quran"));
+    QURAN_CORE_LIST.forEach((w, i) => addWord(`qc:${i}`, w.ar, w.en, w.tr, `Top 151 Qur'ān Core #${i + 1} (${Number(w.n || 0).toLocaleString()}× in Mushaf)`, "quran", w.fam || ""));
     (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addWord(`ev-${g.id}:${i}`, m.ar, m.en, m.tr, m.note, "everyday")));
     (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addWord(`fam-${f.id}:${i}`, m.ar, m.en, "", `Root: ${f.root}`, "root", f.root)));
 
@@ -630,6 +651,7 @@ function loadPracticeBatch(explicitBatchNum) {
     srs: getSrs(),
     log: store.get("ats-log", []),
     words: PRACTICE_WORDS,
+    quranCore: QURAN_CORE_LIST,
     sentences: MASTER_SENTENCES,
     grammar: PRACTICE_GRAMMAR,
     lessonCards: PRACTICE_LESSON_CARDS,
@@ -675,6 +697,7 @@ function renderCapabilityDrawerHTML() {
     srs: getSrs(),
     log: store.get("ats-log", []),
     words: PRACTICE_WORDS,
+    quranCore: QURAN_CORE_LIST,
     sentences: MASTER_SENTENCES,
     grammar: PRACTICE_GRAMMAR,
     lessonCards: PRACTICE_LESSON_CARDS
@@ -703,8 +726,13 @@ function renderCapabilityDrawerHTML() {
           <div style="color:var(--muted);font-size:11px">Synced with Sets &amp; Grammar</div>
         </div>
         <div class="cap-cell">
-          <b>🕌 Qur'an &amp; Commute Balance</b>
-          <div><b>${cap.quran.ayahsHeld}</b> ayahs · <b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
+          <b>🕌 Qur'ān Engine &amp; Ear</b>
+          <div><b>${cap.quran.coreWordsHeld || 0}/${cap.quran.coreWordsTotal || 151}</b> Core Words (<b>${cap.quran.mushafCoveragePct || 0}%</b> Mushaf) · <b>${cap.quran.ayahsHeld}</b> ayahs</div>
+          <div style="color:var(--muted);font-size:11px">${cap.quran.quranCardsHeld || 0}/${cap.quran.quranCardsTotal || 5} moulds · ${cap.quran.composableAyahsUnlocked || 0} unlocked i+1 · <a href="quran.html" style="color:var(--accent);font-weight:600;text-decoration:none">Details →</a></div>
+        </div>
+        <div class="cap-cell">
+          <b>🚗 Screen &amp; Commute Balance</b>
+          <div><b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
           <div style="color:var(--muted);font-size:11px">${cap.modality.unverifiedCommuteCount ? `🔄 ${cap.modality.unverifiedCommuteCount} commute item(s) queued for screen check` : "Screen &amp; commute balanced ✓"}</div>
         </div>
         ${cap.motivation ? `
@@ -909,9 +937,16 @@ function sourceLinkMeta(s) {
   const k = String(s.key || "");
   if (s.kind === "lesson-card") {
     const id = (s.lcCard && s.lcCard.id) || k.replace(/^lc:/, "");
+    if (s.category === "quran" || (s.lcCard && s.lcCard.category === "quran")) {
+      return { href: "quran.html?tab=structures#lc-" + id, label: "🧱 Qur'ān Structure", title: "Open in Qur'ān Structures & Moulds" };
+    }
     return { href: "sets.html#lc-" + id, label: "📇 Lesson Card · " + (s.categoryLabel || "Concept"), title: "Open Lesson Card in Sets" };
   }
   if (s.kind === "word") {
+    if (/^qc:/.test(k) || s.wordSrc === "quran") {
+      if (s.surahId) return { href: "quran.html?s=" + s.surahId, label: "🔤 Qur'ān Word", title: "Open Surah in Qur'ān" };
+      return { href: "quran.html?tab=words", label: "📊 Core Qur'ān Word", title: "Open in Top 151 Core Qur'ān Words" };
+    }
     if (/^ev-([^:]+):/.test(k)) {
       const gid = k.match(/^ev-([^:]+):/)[1];
       if (EV_GROUPS.some(g => g.id === gid && g.source !== "teacher")) {
@@ -1015,11 +1050,79 @@ function loadFocusedPracticeFromUrl(searchStr) {
   const gramParam = q.get("grammar");
   const classParam = q.get("class");
   const focusParam = q.get("focus");
+  const qpillarParam = q.get("qpillar");
   const filterParam = q.get("filter");
   const dotParam = q.get("dot");
   const keysParam = q.get("keys");
 
-  if (chapParam) {
+  if (qpillarParam) {
+    if (qpillarParam === "structures") {
+      const qCards = PRACTICE_LESSON_CARDS.filter(c => c.category === "quran");
+      const qPatIds = new Set(["inna", "alladhina", "idafa", "pronouns", "negation", "past-present", "imperative"]);
+      const qGrams = PRACTICE_GRAMMAR.filter(g => qPatIds.has(g.patId));
+      list = rankFocusItems(qCards.concat(qGrams), srs, now, 12, false);
+      title = "🧱 Practice — Qur'ān Structures & Moulds";
+      sub = "Visual decoding systems & grammar patterns that unlock the Qur'ān by ear · Syncs directly to Qur'ān & Sets.";
+      backHref = "quran.html?tab=structures";
+      backLabel = "🧱 Back to Structures";
+    } else if (qpillarParam === "core") {
+      const pillarFilter = q.get("pillar") || "all";
+      const toWordCard = (w, i) => ({
+        key: `qc:${i}`,
+        kind: "word",
+        effort: 0.5,
+        ar: w.ar,
+        en: w.en,
+        tr: w.tr || "",
+        note: `Top 151 Qur'ān Core #${i + 1} (${Number(w.n || 0).toLocaleString()}× in Mushaf)`,
+        words: [[w.ar, w.en]],
+        src: "vocab",
+        wordSrc: "quran",
+        track: "quran-word",
+        qcRank: i,
+        qcFreq: w.n || 0,
+        qcPillar: window.Practice && Practice.classifyQuranWord ? Practice.classifyQuranWord(w.ar, w.en, i) : "noun"
+      });
+      let qWords = QURAN_CORE_LIST.map(toWordCard);
+      if (pillarFilter !== "all") qWords = qWords.filter(w => w.qcPillar === pillarFilter);
+      if (dotParam && dotParam !== "all") qWords = qWords.filter(w => SRS.masteryState(w.key, { srs, now }).level === dotParam);
+      if (qWords.length) {
+        const picked = SRS.buildBatch(qWords, { size: 10, mode: "balanced", srs, now });
+        list = picked.map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
+        title = "📊 Practice — Top 151 Core Qur'ānic Words" + (pillarFilter !== "all" ? " · " + pillarFilter : "");
+        sub = "Frequency-ranked Qur'ānic skeleton (~58% of all Mushaf word-occurrences) · Verdicts sync across Qur'ān & Words.";
+        backHref = "quran.html?tab=words";
+        backLabel = "📊 Back to Core 151";
+      }
+    } else if (qpillarParam === "salah") {
+      const sPool = MASTER_SENTENCES.filter(s => s.track === "quran" && window.Practice && Practice.SALAH_RE && Practice.SALAH_RE.test(s.key || ""));
+      if (sPool.length) {
+        const picked = SRS.buildBatch(sPool, { size: 10, mode: "balanced", srs, now });
+        list = picked.map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
+        title = "🕋 Practice — 13 Salah Surahs by Ear";
+        sub = "Mishary Rashid Alafasy recitation · Build instant recognition across every surah you pray.";
+        backHref = "quran.html?tab=surahs";
+        backLabel = "🕋 Back to Salah Surahs";
+        forceDir = "ar-first";
+      }
+    } else if (qpillarParam === "composable") {
+      const knownLookup = window.Practice && Practice.buildKnownNormLookup ? Practice.buildKnownNormLookup(PRACTICE_WORDS) : new Map();
+      let uPool = MASTER_SENTENCES.filter(s => s.track === "quran" && !(window.Practice && Practice.SALAH_RE && Practice.SALAH_RE.test(s.key || "")))
+        .map(s => ({ s, rd: window.Practice && Practice.ayahReadiness ? Practice.ayahReadiness(s, srs, knownLookup) : { isComposable: false, knownRatio: 0 } }))
+        .filter(x => x.rd.isComposable)
+        .sort((a, b) => b.rd.knownRatio - a.rd.knownRatio || a.rd.unknownWords - b.rd.unknownWords)
+        .map(x => x.s);
+      if (!uPool.length) uPool = MASTER_SENTENCES.filter(s => s.track === "quran").slice(0, 12);
+      if (uPool.length) {
+        list = rankFocusItems(uPool, srs, now, 10, true);
+        title = "🔓 Practice — Unlocked i+1 Qur'ān Ayahs";
+        sub = "Juz' 'Amma ayahs already composed mostly of words you hold · Listen via Mishary Alafasy.";
+        backHref = "quran.html?tab=unlocked";
+        backLabel = "🔓 Back to Unlocked Ayahs";
+        forceDir = "ar-first";
+      }
+    }
+  } else if (chapParam) {
     const ch = CHAPTERS_LIST.find(c => c.id === chapParam || String(c.num) === String(chapParam).replace(/^chap-/, ""));
     if (ch) {
       const pool = [];
@@ -1591,7 +1694,7 @@ function finalizeCurrentBatchTelemetry() {
     store.set("ats-capabilities", Practice.summarizeCapabilities({
       now: Date.now(), activeChapNum: activeChapNow ? activeChapNow.num : null,
       srs: srsNow, log: store.get("ats-log", []), words: PRACTICE_WORDS,
-      sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
+      quranCore: QURAN_CORE_LIST, sentences: MASTER_SENTENCES, grammar: PRACTICE_GRAMMAR, lessonCards: PRACTICE_LESSON_CARDS
     }));
   }
   logEvent({ e: "tryit-free-done", kind: "myday", n: total, ok: okAll, okAll, via: "markers", t: Date.now() });

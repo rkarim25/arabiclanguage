@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwgpw59t">
-  <link rel="stylesheet" href="css/style.css?v=mwgpw59t">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -38,7 +38,40 @@
     .wbw .g-btn { cursor: pointer; color: var(--amber); font-size: 13px; user-select: none; }
     .wbw .g-row td { background: var(--amber-soft); font-size: 13px; direction: ltr; text-align: left; color: var(--ink); line-height: 1.5; }
     .wbw .g-row .g-root { color: var(--amber); font-weight: 600; display: block; margin-top: 4px; }
-    @media (max-width: 600px) { .verse-ar { font-size: 25px; } .wbw .w-ar { font-size: 20px; } }
+    .q-engine-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 10px; margin: 14px 0; }
+    .q-pillar { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 13px; cursor: pointer; text-align: left; transition: all 0.14s; }
+    .q-pillar:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .q-pillar.active { border-color: var(--accent); background: rgba(13, 122, 95, 0.045); box-shadow: 0 2px 10px rgba(13, 122, 95, 0.09); }
+    .q-pillar-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--muted); }
+    .q-pillar-num { font-size: 20px; font-weight: 800; color: var(--accent); margin: 4px 0 2px; line-height: 1.2; }
+    .q-pillar-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .q-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .q-tab { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.12s; }
+    .q-tab:hover { border-color: var(--accent); color: var(--ink); }
+    .q-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .q-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 10px 13px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+    .q-chips { display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+    .q-chip { border: 1px solid var(--border); background: var(--bg); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted); }
+    .q-chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+    .q-glue-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .q-glue-tbl th, .q-glue-tbl td { padding: 8px 9px; border-bottom: 1px solid var(--border); text-align: center; }
+    .q-glue-tbl th { font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.025); }
+    .q-glue-tbl td:first-child, .q-glue-tbl th:first-child { text-align: left; }
+    .q-glue-btn { background: transparent; border: 1px solid transparent; border-radius: 7px; padding: 3px 6px; cursor: pointer; font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.3; transition: all 0.1s; }
+    .q-glue-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+    .q-glue-tr { display: block; font-family: var(--font-ui); font-size: 11px; color: var(--muted); }
+    .q-core-tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .q-core-tbl th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; background: rgba(0,0,0,0.02); }
+    .q-core-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .q-freq-pill { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: #fef3c7; color: #92400e; white-space: nowrap; }
+    .q-pillar-tag { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: rgba(13,122,95,0.08); color: var(--accent); white-space: nowrap; }
+    .q-reveal-btn { border: 1px dashed var(--border); background: var(--bg); color: var(--muted); border-radius: 7px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .q-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .q-ayah-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; margin-bottom: 10px; }
+    .q-tok-chip { display: inline-flex; flex-direction: column; align-items: center; padding: 3px 8px; border-radius: 7px; border: 1px solid var(--border); background: var(--bg); margin: 2px; font-size: 12px; }
+    .q-tok-chip.known { border-color: rgba(13,122,95,0.35); background: rgba(13,122,95,0.06); }
+    .q-tok-chip.new-tok { border-color: #f59e0b; background: #fffbeb; }
+    @media (max-width: 600px) { .verse-ar { font-size: 25px; } .wbw .w-ar { font-size: 20px; } .q-glue-tbl, .q-core-tbl { min-width: 580px; } }
   </style>
 </head>
 <body>
@@ -46,28 +79,130 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwgpw59t"></script>
-<script src="js/app.js?v=mwgpw59t"></script>
-<script src="js/tracker.js?v=mwgpw59t"></script>
-<script src="js/plan.js?v=mwgpw59t"></script>
+<script src="js/srs.js?v=mwi55dtu"></script>
+<script src="js/practice.js?v=mwi55dtu"></script>
+<script src="js/lesson-cards.js?v=mwi55dtu"></script>
+<script src="js/app.js?v=mwi55dtu"></script>
+<script src="js/tracker.js?v=mwi55dtu"></script>
+<script src="js/plan.js?v=mwi55dtu"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
 
 const content = document.getElementById("content");
 let DATA = null;
-
+let QCORE = [];
+let QCARDS = [];
+let QGRAMMAR = [];
+let QSENTS = [];
+let QC_LOOKUP = new Map();
+let QC_QWBW_POS = new Map();
 let FAM_BY_ROOT = {};
+
+const QURAN_GRAMMAR_IDS = ["inna", "alladhina", "idafa", "pronouns", "negation", "past-present", "imperative"];
+const GLUE_MATRIX = [
+  { base: "فِي", en: "in", cells: [
+    ["فِيَّ", "fiyya"], ["فِيكَ", "fī-ka"], ["فِيهِ", "fī-hi"], ["فِيهَا", "fī-hā"], ["فِينَا", "fī-nā"], ["فِيكُمْ", "fī-kum"], ["فِيهِمْ", "fī-him"]
+  ]},
+  { base: "عَلَى", en: "upon", cells: [
+    ["عَلَيَّ", "ʿalay-ya"], ["عَلَيْكَ", "ʿalay-ka"], ["عَلَيْهِ", "ʿalay-hi"], ["عَلَيْهَا", "ʿalay-hā"], ["عَلَيْنَا", "ʿalay-nā"], ["عَلَيْكُمْ", "ʿalay-kum"], ["عَلَيْهِمْ", "ʿalay-him"]
+  ]},
+  { base: "لِ", en: "for / to", cells: [
+    ["لِي", "lī"], ["لَكَ", "la-ka"], ["لَهُ", "la-hu"], ["لَهَا", "la-hā"], ["لَنَا", "la-nā"], ["لَكُمْ", "la-kum"], ["لَهُمْ", "la-hum"]
+  ]},
+  { base: "مِنْ", en: "from", cells: [
+    ["مِنِّي", "min-nī"], ["مِنْكَ", "min-ka"], ["مِنْهُ", "min-hu"], ["مِنْهَا", "min-hā"], ["مِنَّا", "min-nā"], ["مِنْكُمْ", "min-kum"], ["مِنْهُمْ", "min-hum"]
+  ]},
+  { base: "بِ", en: "with / by", cells: [
+    ["بِي", "bī"], ["بِكَ", "bi-ka"], ["بِهِ", "bi-hi"], ["بِهَا", "bi-hā"], ["بِنَا", "bi-nā"], ["بِكُمْ", "bi-kum"], ["بِهِمْ", "bi-him"]
+  ]},
+  { base: "إِنَّ", en: "indeed", cells: [
+    ["إِنِّي", "in-nī"], ["إِنَّكَ", "inna-ka"], ["إِنَّهُ", "inna-hu"], ["إِنَّهَا", "inna-hā"], ["إِنَّا", "in-nā"], ["إِنَّكُمْ", "inna-kum"], ["إِنَّهُمْ", "inna-hum"]
+  ]},
+  { base: "رَبّ", en: "Lord", cells: [
+    ["رَبِّي", "rabb-ī"], ["رَبُّكَ", "rabbu-ka"], ["رَبُّهُ", "rabbu-hu"], ["رَبُّهَا", "rabbu-hā"], ["رَبُّنَا", "rabbu-nā"], ["رَبُّكُمْ", "rabbu-kum"], ["رَبُّهُمْ", "rabbu-hum"]
+  ]}
+];
+
+let currentQuranTab = "structures";
+let corePillarFilter = "all";
+let coreDotFilter = "all";
+let coreSearch = "";
+let coreReviewMode = "all";
+let coreSortWeakest = false;
+let coreFrozenRanks = null;
+let coreShowTr = true;
+const CORE_REVEALED = new Set();
+
+let unlockedFilter = "ready";
+let unlockedReviewMode = "all";
+const UNLOCKED_REVEALED = new Set();
+
 // word roots arrive as rich strings ("ق-و-ل (q-w-l) — to say…"); reduce to the bare Arabic letters
 const rootKey = s => ((s || "").split("(")[0]).replace(/[^ء-ي]/g, "").replace(/ـ/g, "").replace(/[أإآٱ]/g, "ا");
-fetch("data/families.json").then(r => r.json()).then(d => { d.families.forEach(f => { FAM_BY_ROOT[rootKey(f.root)] = f; }); }).catch(() => {});
-fetch("data/verses.json").then(r => r.json()).then(d => {
-  DATA = d.surahs;
+
+if (window.LessonCards) LessonCards.ensureStyles();
+Promise.all([
+  fetch("data/verses.json").then(r => r.json()).catch(() => ({ surahs: [] })),
+  fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+  fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
+  fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
+  fetch("data/quran-sentences.json").then(r => r.json()).catch(() => ({ sentences: [] })),
+  fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] }))
+]).then(([vRes, qcRes, lcRes, grRes, qsRes, famRes]) => {
+  DATA = vRes.surahs || [];
+  QCORE = (qcRes.words || []).map((w, i) => ({
+    rank: i,
+    key: `qc:${i}`,
+    ar: w.ar,
+    tr: w.tr || "",
+    en: w.en || "",
+    n: w.n || 0,
+    famId: w.fam || "",
+    pillar: (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en, i) : "noun"
+  }));
+  QCARDS = (lcRes.cards || []).filter(c => c && c.category === "quran");
+  QGRAMMAR = (grRes.patterns || []).filter(p => QURAN_GRAMMAR_IDS.includes(p.id));
+  QSENTS = qsRes.sentences || [];
+  (famRes.families || []).forEach(f => { FAM_BY_ROOT[rootKey(f.root)] = f; });
+
+  const wkMap = {};
+  QCORE.forEach(w => {
+    const n = normalizeAr(w.ar).replace(/^ال/, "");
+    if (n && !wkMap[n]) wkMap[n] = w.key;
+  });
+  if (typeof registerWordKeys === "function" && Object.keys(wkMap).length) registerWordKeys(wkMap);
+
+  if (window.Practice && Practice.buildKnownNormLookup) {
+    QC_LOOKUP = Practice.buildKnownNormLookup(QCORE);
+  }
+  DATA.forEach(s => {
+    (s.verses || []).forEach((v, vi) => {
+      (v.words || []).forEach((w, wi) => {
+        const bare = normalizeAr(w[0]).replace(/^ال/, "");
+        if (bare && !QC_QWBW_POS.has(bare)) QC_QWBW_POS.set(bare, { surahId: s.id, vi, wi });
+      });
+    });
+  });
+  loadQuranWordAudio();
+
   const params = new URLSearchParams(location.search);
   const s = DATA.find(x => x.id === params.get("s"));
+  const urlTab = params.get("tab");
+  if (urlTab && ["structures", "words", "surahs", "unlocked"].includes(urlTab)) {
+    currentQuranTab = urlTab;
+  } else if (location.hash && location.hash.startsWith("#lc-")) {
+    currentQuranTab = "structures";
+  }
   if (s) renderSurah(s, params.get("mode") || "study");
   else if (params.get("listen")) renderListenQueue();
-  else renderList();
+  else {
+    renderList();
+    if (location.hash && location.hash.startsWith("#lc-")) {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target && target.scrollIntoView) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+    }
+  }
 });
 
 function surahDone(id, step) { return !!stepsDone("q-" + id)[step]; }
@@ -133,33 +268,447 @@ function rateSurahWord(key, g, surahId, vi, wi) {
   if (row) SRS.paintBar(row, key, nc);
 }
 
-function renderList() {
-  trackPage("quran:list");
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-      <h1 style="margin:0">Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
-      <a href="index.html?filter=quran" class="pill" style="text-decoration:none;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 13px;font-size:13px">⚡ Practise Qur'ān in Practice →</a>
+function switchQuranTab(tab) {
+  currentQuranTab = tab;
+  if (history && history.replaceState) {
+    history.replaceState({}, "", "quran.html?tab=" + encodeURIComponent(tab));
+  }
+  renderList();
+}
+window.addEventListener("ats-mastery-updated", () => { if (DATA && !new URLSearchParams(location.search).get("s")) refreshEngineStrip(); });
+
+function quranWordAltKeys(ar) {
+  const n = normalizeAr(ar || "").replace(/^ال/, "");
+  return n ? ["tw:" + n, n, ar].filter(Boolean) : (ar ? [ar] : []);
+}
+
+function computeEngineMetrics() {
+  const srs = typeof getSrs === "function" ? getSrs() : {};
+  const lcKeys = QCARDS.map(c => "lc:" + c.id);
+  const lcCounts = window.SRS && SRS.summaryCounts ? SRS.summaryCounts(lcKeys) : { green: 0, total: QCARDS.length };
+
+  const gramHeldCount = QGRAMMAR.filter(p => {
+    const tKeys = (p.test || []).map((_, i) => `gt:${p.id}:${i}`);
+    return tKeys.length > 0 && tKeys.every(k => {
+      const st = window.SRS && SRS.masteryState ? SRS.masteryState(k, { srs }) : { level: "grey" };
+      return st.level === "green";
+    });
+  }).length;
+
+  const coreCounts = window.SRS && SRS.summaryCounts
+    ? SRS.summaryCounts(QCORE.map(w => ({ key: w.key, altKeys: quranWordAltKeys(w.ar) })))
+    : { green: 0, amber: 0, red: 0, grey: QCORE.length, total: QCORE.length };
+  let coreHeldCount = 0;
+  let heldTokens = 0;
+  QCORE.forEach(w => {
+    const keys = [w.key].concat(quranWordAltKeys(w.ar));
+    const held = keys.some(k => { const c = srs[k]; return c && (c.b === "never" || (c.box || 0) >= 1); });
+    if (held) {
+      coreHeldCount++;
+      heldTokens += (w.n || 0);
+    }
+  });
+  const totalTokens = (window.Practice && Practice.MUSHAF_TOTAL_TOKENS) || 77430;
+  const mushafPct = heldTokens ? ((heldTokens / totalTokens) * 100).toFixed(1) : "0.0";
+
+  const salahTotalAyahs = (DATA || []).reduce((n, s) => n + (s.verses || []).length, 0);
+  const salahGreenAyahs = (DATA || []).reduce((n, s) => n + surahMasteryInfo(s).greenAyahs, 0);
+
+  const unlockedList = computeUnlockedAyahs(srs);
+  const readyNowCount = unlockedList.filter(x => x.rd.unknownWords <= 1).length;
+
+  return {
+    lcCounts, gramHeldCount, gramTotal: QGRAMMAR.length,
+    coreCounts, coreHeldCount, heldTokens, mushafPct,
+    salahTotalAyahs, salahGreenAyahs,
+    unlockedCount: unlockedList.length, readyNowCount
+  };
+}
+
+function computeUnlockedAyahs(srsNow) {
+  const srs = srsNow || (typeof getSrs === "function" ? getSrs() : {});
+  const salahSurahNums = new Set((DATA || []).map(s => s.n));
+  if (!window.Practice || !Practice.ayahReadiness) return [];
+  const out = [];
+  QSENTS.forEach(s => {
+    if (salahSurahNums.has(s.surah)) return;
+    const key = `s:qs:${s.surah}:${s.ayah}`;
+    const item = Object.assign({}, s, { key });
+    const rd = Practice.ayahReadiness(item, srs, QC_LOOKUP);
+    const held = !!(srs[key] && (srs[key].b === "never" || (srs[key].box || 0) >= 1));
+    if (rd.isComposable || held) {
+      out.push({ key, sent: s, rd, held });
+    }
+  });
+  out.sort((a, b) => a.rd.unknownWords - b.rd.unknownWords || b.rd.knownRatio - a.rd.knownRatio || a.sent.surah - b.sent.surah || a.sent.ayah - b.sent.ayah);
+  return out;
+}
+
+function renderEngineStripHtml(m) {
+  return `
+    <div class="q-engine-strip" id="qEngineStrip">
+      <button type="button" class="q-pillar ${currentQuranTab === 'structures' ? 'active' : ''}" onclick="switchQuranTab('structures')">
+        <div class="q-pillar-top"><span>🧱 1. Structures &amp; Moulds</span><span>Teach First</span></div>
+        <div class="q-pillar-num">${m.lcCounts.green}/${QCARDS.length} <span style="font-size:13px;font-weight:600;color:var(--muted)">cards · ${m.gramHeldCount}/${m.gramTotal} rules</span></div>
+        <div class="q-pillar-sub">Glue chains, Doer vs Done-To (فَاعِل/مَفْعُول), plurals &amp; verb shifts</div>
+      </button>
+      <button type="button" class="q-pillar ${currentQuranTab === 'words' ? 'active' : ''}" onclick="switchQuranTab('words')">
+        <div class="q-pillar-top"><span>📊 2. Top 151 Core Words</span><span>58% Ceiling</span></div>
+        <div class="q-pillar-num">${m.coreHeldCount}/151 <span style="font-size:13px;font-weight:600;color:var(--muted)">· ${m.mushafPct}% Mushaf</span></div>
+        <div class="q-pillar-sub">${m.coreCounts.green} mastered 🟢 · ${m.coreCounts.amber} building 🟡 (${m.heldTokens.toLocaleString()} tokens)</div>
+      </button>
+      <button type="button" class="q-pillar ${currentQuranTab === 'surahs' ? 'active' : ''}" onclick="switchQuranTab('surahs')">
+        <div class="q-pillar-top"><span>🕋 3. 13 Salah Surahs</span><span>Daily Prayer</span></div>
+        <div class="q-pillar-num">${m.salahGreenAyahs}/${m.salahTotalAyahs} <span style="font-size:13px;font-weight:600;color:var(--muted)">ayahs 🟢</span></div>
+        <div class="q-pillar-sub">Always active in Practice &amp; Commute via Mishary Rashid Alafasy</div>
+      </button>
+      <button type="button" class="q-pillar ${currentQuranTab === 'unlocked' ? 'active' : ''}" onclick="switchQuranTab('unlocked')">
+        <div class="q-pillar-top"><span>🔓 4. Unlocked i+1 Ayahs</span><span>Auto-Gated</span></div>
+        <div class="q-pillar-num">${m.unlockedCount} <span style="font-size:13px;font-weight:600;color:var(--muted)">unlocked (${m.readyNowCount} ≤1 new)</span></div>
+        <div class="q-pillar-sub">Juz' 'Amma ayahs gated until your held words reach comprehension</div>
+      </button>
     </div>
-    <p class="sub">Word-by-word surahs you hear recited constantly. Study each word, then test yourself by filling in the meanings.
-    These use the Quran's highest-frequency vocabulary — every word here pays off across the whole mushaf.</p>
-    <div class="card" id="qOfflineCard" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:14px;background:var(--card);border-color:var(--border)">
+  `;
+}
+
+function refreshEngineStrip() {
+  const el = document.getElementById("qEngineStrip");
+  if (!el) return;
+  const m = computeEngineMetrics();
+  const tmp = document.createElement("div");
+  tmp.innerHTML = renderEngineStripHtml(m);
+  el.replaceWith(tmp.firstElementChild);
+}
+
+function rateQuranStructure(key, g, cardId) {
+  const nc = SRS.rate(key, g);
+  logEvent({ e: "vocab-rate", key, g, box: nc.box, src: "quran-structures", t: Date.now() });
+  autoSync();
+  const cardEl = document.getElementById("qstruct-" + cardId);
+  if (cardEl) SRS.paintBar(cardEl, key, nc);
+  refreshEngineStrip();
+}
+
+function renderStructuresTab() {
+  const body = document.getElementById("qTabBody");
+  if (!body) return;
+  const cardsHtml = QCARDS.map(c => {
+    const key = "lc:" + c.id;
+    const cardBody = window.LessonCards ? LessonCards.renderBodyHtml(c, {}) : `<p>${c.summary || ""}</p>`;
+    return `
+      <div class="card" id="lc-${c.id}" style="padding:14px 16px;margin-bottom:14px">
+        <div id="qstruct-${c.id}">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <span style="display:inline-flex;align-items:center;gap:8px">
+              ${SRS.dotHtml(key, { lg: true })}
+              <strong style="font-size:15.5px">${c.icon || "🧱"} ${c.title}</strong>
+            </span>
+            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+              ${SRS.rateBarHtml(key, "rateQuranStructure", [c.id], { compact: true, noDot: true, retire: false })}
+              <a href="index.html?lc=${encodeURIComponent(c.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise →</a>
+            </div>
+          </div>
+          ${cardBody}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const glueHtml = `
+    <div class="card" style="padding:14px 16px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        <div>
+          <strong style="font-size:15.5px">🔗 Glue &amp; Pronoun Fusion Reference Matrix</strong>
+          <div style="font-size:12.5px;color:var(--muted)">Tap any form to hear neural pronunciation — spot how prepositions bend (<code>عَلَى</code> → <code>عَلَيْـ</code>, <code>لِ</code> → <code>لَـ</code>) when tails attach.</div>
+        </div>
+        <a href="index.html?lc=quran-glue-chains" class="q-chip active" style="text-decoration:none">⚡ Practise Glue →</a>
+      </div>
+      <div class="sheet-wrap" style="overflow-x:auto">
+        <table class="q-glue-tbl">
+          <thead>
+            <tr>
+              <th>Base</th>
+              <th>-ī (me/my)</th>
+              <th>-ka (you)</th>
+              <th>-hu (him/it)</th>
+              <th>-hā (her/it)</th>
+              <th>-nā (us/our)</th>
+              <th>-kum (you all)</th>
+              <th>-hum (them)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${GLUE_MATRIX.map(r => `
+              <tr>
+                <td><strong class="arabic" style="font-size:20px;color:var(--accent)">${r.base}</strong> <span style="font-size:12px;color:var(--muted)">${r.en}</span></td>
+                ${r.cells.map(([ar, tr]) => `
+                  <td><button type="button" class="q-glue-btn" onclick="speak('${ar.replace(/'/g, "\\'")}', 0.85)">${ar}<span class="q-glue-tr">${tr}</span></button></td>
+                `).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const gramHtml = `
+    <div class="card" style="padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div>
+          <strong style="font-size:15.5px">📐 Core Qur'ānic Grammar Patterns</strong>
+          <div style="font-size:12.5px;color:var(--muted)">High-yield sentence patterns shared between the Qur'ān and everyday Arabic (synced with <a href="grammar.html" style="color:var(--accent)">Grammar</a>).</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:10px">
+        ${QGRAMMAR.map(p => {
+          const tKeys = (p.test || []).map((_, i) => `gt:${p.id}:${i}`);
+          const gs = SRS.summaryCounts(tKeys);
+          const ex = (p.examples && p.examples[0]) || null;
+          return `
+            <div style="border:1px solid var(--border);border-radius:10px;padding:11px 13px;background:var(--bg)">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px">
+                <strong style="font-size:14px">${p.name}</strong>
+                <span class="arabic" style="font-size:21px;color:var(--accent)" dir="rtl">${p.ar}</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:8px">${window.LessonCards ? LessonCards.enhanceInlineArabic(p.cardRule || p.what) : (p.cardRule || p.what)}</div>
+              ${ex ? `<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 8px;border-radius:8px;background:var(--card);border:1px solid var(--border);margin-bottom:8px">
+                <div><div class="arabic" style="font-size:18px" dir="rtl">${ex.ar}</div><div style="font-size:11.5px;color:var(--muted)">${ex.en}</div></div>
+                <button type="button" class="lc-speak-btn" onclick="speak('${ex.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
+              </div>` : ""}
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px">
+                <span>${gs.green}/${gs.total} test items 🟢</span>
+                <a href="index.html?grammar=${encodeURIComponent(p.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise Pattern →</a>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  body.innerHTML = `
+    <div class="q-toolbar">
+      <div style="font-size:13px"><b>Layer 1 &amp; 3 · Decoding Structures &amp; Moulds</b> — Practice introduces these automatically before testing unseen ayahs.</div>
+      <a href="index.html?qpillar=structures" class="pill" style="text-decoration:none;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 14px;font-size:12.5px">⚡ Practise Structures in Practice →</a>
+    </div>
+    ${cardsHtml}
+    ${glueHtml}
+    ${gramHtml}
+  `;
+}
+
+function speakQuranCoreWord(encodedAr) {
+  const ar = decodeURIComponent(encodedAr || "");
+  if (!ar) return;
+  const bare = normalizeAr(ar).replace(/^ال/, "");
+  const pos = QC_QWBW_POS.get(bare);
+  if (pos && typeof speakQuranWord === "function") {
+    speakQuranWord(pos.surahId, pos.vi, pos.wi, ar, 0.8);
+    return;
+  }
+  speak(ar, 0.82);
+}
+
+function rateCoreQuranWord(key, g, encodedAr) {
+  const nc = SRS.rate(key, g);
+  const ar = decodeURIComponent(encodedAr || "");
+  const norm = normalizeAr(ar).replace(/^ال/, "");
+  const srsNow = getSrs();
+  ["tw:" + norm, norm, ar].forEach(tk => {
+    if (tk && tk !== key && srsNow[tk] && !(srsNow[tk].b === "never" && g === "maybe")) {
+      SRS.rate(tk, g);
+    }
+  });
+  logEvent({ e: "vocab-rate", key, g, box: nc.box, ar: norm, src: "quran-core", t: Date.now() });
+  autoSync();
+  const tbody = document.getElementById("qCoreTbody");
+  if (tbody) SRS.paintBar(tbody, key, nc);
+  refreshEngineStrip();
+}
+
+function setCorePillar(p) { corePillarFilter = p; coreFrozenRanks = null; renderCoreWordsTab(); }
+function setCoreDotFilter(d) { coreDotFilter = d; coreFrozenRanks = null; renderCoreWordsTab(); }
+function setCoreReviewMode(m) { coreReviewMode = m; CORE_REVEALED.clear(); renderCoreWordsTab(); }
+function toggleCoreWeakest() { coreSortWeakest = !coreSortWeakest; coreFrozenRanks = null; renderCoreWordsTab(); }
+function toggleCoreTr() { coreShowTr = !coreShowTr; renderCoreWordsTab(); }
+function resortCoreWords() { coreFrozenRanks = null; renderCoreWordsTab(); }
+function revealCoreRow(key, encodedAr) {
+  CORE_REVEALED.add(key);
+  renderCoreWordsTab();
+  if (encodedAr && coreReviewMode === "en-only") speakQuranCoreWord(encodedAr);
+}
+function toggleAllCoreReveal(show) {
+  if (show) QCORE.forEach(w => CORE_REVEALED.add(w.key));
+  else CORE_REVEALED.clear();
+  renderCoreWordsTab();
+}
+
+function renderCoreWordsTab() {
+  const body = document.getElementById("qTabBody");
+  if (!body) return;
+  const srs = getSrs();
+  const now = Date.now();
+  const m = computeEngineMetrics();
+  const dotMap = { red: 0, grey: 1, amber: 2, green: 3 };
+
+  let rows = QCORE.slice();
+  if (corePillarFilter !== "all") rows = rows.filter(w => w.pillar === corePillarFilter);
+  if (coreDotFilter !== "all") {
+    rows = rows.filter(w => SRS.masteryState(w.key, { srs, now, altKeys: quranWordAltKeys(w.ar) }).level === coreDotFilter);
+  }
+  const q = coreSearch.trim().toLowerCase();
+  if (q) {
+    const qNorm = normalizeAr(q);
+    rows = rows.filter(w =>
+      w.en.toLowerCase().includes(q) ||
+      w.tr.toLowerCase().includes(q) ||
+      (qNorm && normalizeAr(w.ar).includes(qNorm)) ||
+      w.ar.includes(q)
+    );
+  }
+  if (coreSortWeakest) {
+    if (!coreFrozenRanks) {
+      const sorted = rows.slice().sort((a, b) => {
+        const sa = SRS.masteryState(a.key, { srs, now, altKeys: quranWordAltKeys(a.ar) }).level;
+        const sb = SRS.masteryState(b.key, { srs, now, altKeys: quranWordAltKeys(b.ar) }).level;
+        return (dotMap[sa] ?? 1) - (dotMap[sb] ?? 1) || a.rank - b.rank;
+      });
+      coreFrozenRanks = sorted.map(w => w.rank);
+    }
+    const orderIdx = new Map(coreFrozenRanks.map((r, i) => [r, i]));
+    rows.sort((a, b) => (orderIdx.has(a.rank) ? orderIdx.get(a.rank) : 999) - (orderIdx.has(b.rank) ? orderIdx.get(b.rank) : 999));
+  }
+
+  const practiceHref = `index.html?qpillar=core&pillar=${encodeURIComponent(corePillarFilter)}${coreDotFilter !== "all" ? "&dot=" + encodeURIComponent(coreDotFilter) : ""}`;
+  body.innerHTML = `
+    <div class="q-toolbar">
+      <div style="font-size:13px">
+        <b>Layer 2 · Top 151 Core Qur'ānic Words</b> — <b>${m.coreHeldCount}/151</b> held = <b>${m.mushafPct}%</b> of all 77,430 Mushaf word-occurrences (out of 58.4% ceiling).
+        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Practice feeds these in frequency order (rank #1 upward). Verdicts here sync live with Words &amp; Practice.</div>
+      </div>
+      <a href="${practiceHref}" class="pill" style="text-decoration:none;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 14px;font-size:12.5px">⚡ Practise Filtered Words →</a>
+    </div>
+    <div class="q-toolbar">
+      <input type="text" id="qCoreSearch" value="${coreSearch.replace(/"/g, "&quot;")}" placeholder="🔍 Search Arabic, translit, or English…" style="padding:6px 11px;border:1px solid var(--border);border-radius:9px;font-size:13px;min-width:210px;background:var(--bg);color:var(--ink)">
+      <div class="q-chips">
+        <button type="button" class="q-chip ${corePillarFilter === 'all' ? 'active' : ''}" onclick="setCorePillar('all')">All (151)</button>
+        <button type="button" class="q-chip ${corePillarFilter === 'glue' ? 'active' : ''}" onclick="setCorePillar('glue')">🔗 Glue &amp; Particles</button>
+        <button type="button" class="q-chip ${corePillarFilter === 'verb' ? 'active' : ''}" onclick="setCorePillar('verb')">⚡ Core Verbs</button>
+        <button type="button" class="q-chip ${corePillarFilter === 'noun' ? 'active' : ''}" onclick="setCorePillar('noun')">🏛️ Nouns &amp; Names</button>
+      </div>
+      <div class="q-chips">
+        <button type="button" class="q-chip ${coreDotFilter === 'all' ? 'active' : ''}" onclick="setCoreDotFilter('all')">All Dots</button>
+        <button type="button" class="q-chip ${coreDotFilter === 'green' ? 'active' : ''}" onclick="setCoreDotFilter('green')"><span class="m-dot m-green sm"></span> ${m.coreCounts.green}</button>
+        <button type="button" class="q-chip ${coreDotFilter === 'amber' ? 'active' : ''}" onclick="setCoreDotFilter('amber')"><span class="m-dot m-amber sm"></span> ${m.coreCounts.amber}</button>
+        <button type="button" class="q-chip ${coreDotFilter === 'red' ? 'active' : ''}" onclick="setCoreDotFilter('red')"><span class="m-dot m-red sm"></span> ${m.coreCounts.red}</button>
+        <button type="button" class="q-chip ${coreDotFilter === 'grey' ? 'active' : ''}" onclick="setCoreDotFilter('grey')"><span class="m-dot m-grey sm"></span> ${m.coreCounts.grey}</button>
+      </div>
+    </div>
+    <div class="q-toolbar" style="padding:7px 13px">
+      <div class="q-chips">
+        <span style="font-size:12px;color:var(--muted);font-weight:600">Review:</span>
+        <button type="button" class="q-chip ${coreReviewMode === 'all' ? 'active' : ''}" onclick="setCoreReviewMode('all')">All</button>
+        <button type="button" class="q-chip ${coreReviewMode === 'en-only' ? 'active' : ''}" onclick="setCoreReviewMode('en-only')">🇬🇧 EN → AR</button>
+        <button type="button" class="q-chip ${coreReviewMode === 'ar-only' ? 'active' : ''}" onclick="setCoreReviewMode('ar-only')">🇸🇦 AR → EN</button>
+        ${coreReviewMode !== 'all' ? `<button type="button" class="q-chip" onclick="toggleAllCoreReveal(true)">👁️ Reveal all</button><button type="button" class="q-chip" onclick="toggleAllCoreReveal(false)">🙈 Hide all</button>` : ""}
+      </div>
+      <div class="q-chips">
+        <button type="button" class="q-chip ${coreSortWeakest ? 'active' : ''}" onclick="toggleCoreWeakest()">📉 Weakest First</button>
+        ${coreSortWeakest ? `<button type="button" class="q-chip" onclick="resortCoreWords()">↻ Re-sort</button>` : ""}
+        <button type="button" class="q-chip ${coreShowTr ? 'active' : ''}" onclick="toggleCoreTr()">🔤 Translit</button>
+        <span style="font-size:12px;color:var(--muted)">Showing ${rows.length}</span>
+      </div>
+    </div>
+    <div class="sheet-wrap" style="overflow-x:auto">
+      <table class="q-core-tbl">
+        <thead>
+          <tr>
+            <th style="width:44px">#</th>
+            <th>Arabic</th>
+            ${coreShowTr ? "<th>Translit</th>" : ""}
+            <th>Meaning</th>
+            <th>Pillar</th>
+            <th>Qur'ān Freq</th>
+            <th style="text-align:right">Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="qCoreTbody">
+          ${rows.length ? rows.map(w => {
+            const encAr = encodeURIComponent(w.ar);
+            const rev = coreReviewMode === "all" || CORE_REVEALED.has(w.key);
+            const hideAr = coreReviewMode === "en-only" && !rev;
+            const hideEn = coreReviewMode === "ar-only" && !rev;
+            const pillarLbl = w.pillar === "glue" ? "🔗 Glue" : w.pillar === "verb" ? "⚡ Verb" : "🏛️ Noun";
+            const fam = w.famId ? FAM_BY_ROOT[rootKey(w.famId)] : null;
+            return `
+              <tr>
+                <td style="color:var(--muted);font-weight:700;font-size:12px">${w.rank + 1}</td>
+                <td>
+                  ${hideAr
+                    ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}', '${encAr}')">👁️ Check AR</button>`
+                    : `<span style="display:inline-flex;align-items:center;gap:7px">
+                        ${SRS.dotHtml(w.key, { altKeys: quranWordAltKeys(w.ar) })}
+                        <span class="arabic" style="font-size:22px;color:var(--accent)" dir="rtl">${w.ar}</span>
+                        <button type="button" class="lc-speak-btn" onclick="speakQuranCoreWord('${encAr}')" title="Listen">🔊</button>
+                       </span>`
+                  }
+                </td>
+                ${coreShowTr ? `<td style="color:var(--muted);font-style:italic">${hideAr ? "···" : w.tr}</td>` : ""}
+                <td>
+                  ${hideEn
+                    ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}')">👁️ Check EN</button>`
+                    : `<span><b>${w.en}</b>${fam ? ` <span style="font-size:11px;color:var(--accent)">🌿 ${fam.root}</span>` : ""}</span>`
+                  }
+                </td>
+                <td><span class="q-pillar-tag">${pillarLbl}</span></td>
+                <td><span class="q-freq-pill">${Number(w.n || 0).toLocaleString()}×</span></td>
+                <td style="text-align:right">${SRS.rateBarHtml(w.key, "rateCoreQuranWord", [encAr], { compact: true, noDot: true })}</td>
+              </tr>
+            `;
+          }).join("") : `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No matching words for this filter.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+  const searchEl = document.getElementById("qCoreSearch");
+  if (searchEl) {
+    searchEl.oninput = (e) => {
+      coreSearch = e.target.value || "";
+      const pos = e.target.selectionStart;
+      renderCoreWordsTab();
+      const restored = document.getElementById("qCoreSearch");
+      if (restored) { restored.focus(); try { restored.setSelectionRange(pos, pos); } catch (_) {} }
+    };
+  }
+}
+
+function renderSurahsTab() {
+  const body = document.getElementById("qTabBody");
+  if (!body) return;
+  body.innerHTML = `
+    <div class="q-toolbar">
+      <div style="font-size:13px"><b>Layer 3 · 13 Salah Surahs</b> — Always active in Practice &amp; Commute · Tap any surah to study word-by-word, test meanings, or pass 🎧 Cold Listen (Mishary Rashid Alafasy).</div>
+      <a href="index.html?qpillar=salah" class="pill" style="text-decoration:none;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 14px;font-size:12.5px">⚡ Practise Salah Surahs →</a>
+    </div>
+    <div class="card" id="qOfflineCard" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:12px;background:var(--card);border-color:var(--border)">
       <div>
         <strong style="font-size:14px">📥 Offline Commute Pack</strong>
         <span id="qAllOfflineStatus" style="font-size:12.5px;color:var(--muted);display:block;margin-top:2px">Checking saved recitation…</span>
       </div>
       <button type="button" class="small primary" id="btnPackAllQuran" style="font-size:12px;padding:6px 14px">📥 Load All for Offline (2.5MB)</button>
     </div>
-    <div class="card" style="border-color:var(--accent);margin-bottom:16px">
-      <p style="margin:0;font-size:14.5px">🔁 <a href="quran.html?listen=1" style="color:var(--accent);font-weight:600">Listen queue</a> —
-      real recitation of every surah you've studied, back to back. Zero clicks once it starts.</p>
+    <div class="card" style="border-color:var(--accent);margin-bottom:14px;padding:11px 14px">
+      <p style="margin:0;font-size:14px">🔁 <a href="quran.html?listen=1" style="color:var(--accent);font-weight:600">Listen queue</a> —
+      real recitation (Mishary Rashid Alafasy) of every surah you've studied, back to back. Zero clicks once it starts.</p>
     </div>
     <div class="story-grid" id="sGrid"></div>
-    <div class="card" style="margin-top:20px">
-      <p style="margin:0;font-size:13.5px;color:var(--muted)">▶ Real recitation streams a real qari (Mishary Rashid Alafasy) verse by verse. A verse's 🔊 plays him too, and tapping any word now plays a real human voice for that word (browser voice only as offline fallback).</p>
+    <div class="card" style="margin-top:16px;padding:12px 14px">
+      <p style="margin:0;font-size:13.5px;color:var(--muted)">▶ Real recitation streams a real qari (Mishary Rashid Alafasy) verse by verse. A verse's 🔊 plays him too, and tapping any word plays a real human voice for that word.</p>
     </div>
   `;
   const grid = document.getElementById("sGrid");
-  DATA.forEach(s => {
+  (DATA || []).forEach(s => {
     const a = document.createElement("a");
     a.className = "story-card";
     a.href = `quran.html?s=${s.id}`;
@@ -184,7 +733,7 @@ function renderList() {
     const btn = document.getElementById("btnPackAllQuran");
     if (!lbl || !btn) return;
     if (st.isReady) {
-      lbl.innerHTML = `<span style="color:var(--accent);font-weight:600">✓ All ${st.total} ayahs saved</span> · ready for flights & commute`;
+      lbl.innerHTML = `<span style="color:var(--accent);font-weight:600">✓ All ${st.total} ayahs saved</span> · ready for flights &amp; commute`;
       btn.textContent = "✓ Saved (Re-verify)";
       btn.classList.remove("primary");
     } else {
@@ -206,6 +755,122 @@ function renderList() {
       updateOfflineOverview();
     };
   }
+}
+
+function rateUnlockedAyah(key, g) {
+  const nc = SRS.rate(key, g);
+  logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "quran-unlocked", t: Date.now() });
+  autoSync();
+  const card = document.getElementById("uq-" + key.replace(/[^a-zA-Z0-9_-]/g, "_"));
+  if (card) SRS.paintBar(card, key, nc);
+  refreshEngineStrip();
+}
+
+function setUnlockedFilter(f) { unlockedFilter = f; renderUnlockedTab(); }
+function setUnlockedReviewMode(m) { unlockedReviewMode = m; UNLOCKED_REVEALED.clear(); renderUnlockedTab(); }
+function revealUnlockedAyah(key) { UNLOCKED_REVEALED.add(key); renderUnlockedTab(); }
+
+function renderUnlockedTab() {
+  const body = document.getElementById("qTabBody");
+  if (!body) return;
+  const srs = getSrs();
+  const allUnlocked = computeUnlockedAyahs(srs);
+  let filtered = allUnlocked;
+  if (unlockedFilter === "ready") filtered = allUnlocked.filter(x => x.rd.unknownWords <= 1);
+  else if (unlockedFilter === "stretch") filtered = allUnlocked.filter(x => x.rd.unknownWords === 2);
+  else if (unlockedFilter === "mastered") filtered = allUnlocked.filter(x => SRS.masteryState(x.key, { srs }).level === "green");
+
+  const slice = filtered.slice(0, 60);
+  body.innerHTML = `
+    <div class="q-toolbar">
+      <div style="font-size:13px">
+        <b>Layer 4 · Unlocked Juz' 'Amma Ayahs (i+1)</b> — Practice gates unseen non-Salah ayahs until you already hold most of their words. Each Core 151 word you master unlocks more of the Qur'ān here.
+      </div>
+      <a href="index.html?qpillar=composable" class="pill" style="text-decoration:none;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 14px;font-size:12.5px">⚡ Practise Unlocked Ayahs →</a>
+    </div>
+    <div class="q-toolbar" style="padding:8px 13px">
+      <div class="q-chips">
+        <button type="button" class="q-chip ${unlockedFilter === 'ready' ? 'active' : ''}" onclick="setUnlockedFilter('ready')">🟢 Ready Now (≤1 new · ${allUnlocked.filter(x => x.rd.unknownWords <= 1).length})</button>
+        <button type="button" class="q-chip ${unlockedFilter === 'stretch' ? 'active' : ''}" onclick="setUnlockedFilter('stretch')">🟡 Stretch (2 new · ${allUnlocked.filter(x => x.rd.unknownWords === 2).length})</button>
+        <button type="button" class="q-chip ${unlockedFilter === 'all' ? 'active' : ''}" onclick="setUnlockedFilter('all')">All (${allUnlocked.length})</button>
+        <button type="button" class="q-chip ${unlockedFilter === 'mastered' ? 'active' : ''}" onclick="setUnlockedFilter('mastered')">Mastered 🟢</button>
+      </div>
+      <div class="q-chips">
+        <span style="font-size:12px;color:var(--muted);font-weight:600">Review:</span>
+        <button type="button" class="q-chip ${unlockedReviewMode === 'all' ? 'active' : ''}" onclick="setUnlockedReviewMode('all')">All</button>
+        <button type="button" class="q-chip ${unlockedReviewMode === 'ar-only' ? 'active' : ''}" onclick="setUnlockedReviewMode('ar-only')">🇸🇦 By Ear (AR → EN)</button>
+        <button type="button" class="q-chip ${unlockedReviewMode === 'en-only' ? 'active' : ''}" onclick="setUnlockedReviewMode('en-only')">🇬🇧 EN → AR</button>
+      </div>
+    </div>
+    ${slice.length ? slice.map(item => {
+      const a = item.sent;
+      const rev = unlockedReviewMode === "all" || UNLOCKED_REVEALED.has(item.key);
+      const hideAr = unlockedReviewMode === "en-only" && !rev;
+      const hideEn = unlockedReviewMode === "ar-only" && !rev;
+      const domId = "uq-" + item.key.replace(/[^a-zA-Z0-9_-]/g, "_");
+      const escAr = String(a.ar || "").replace(/'/g, "\\'");
+      const tokens = String(a.ar || "").replace(/[\u06D6-\u06ED.،؟!«»]/g, "").trim().split(/\s+/).filter(Boolean);
+      return `
+        <div class="q-ayah-card" id="${domId}">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+            <span style="display:inline-flex;align-items:center;gap:7px">
+              ${SRS.dotHtml(item.key, { lg: true })}
+              <strong style="color:var(--accent);font-size:13px">${a.surahName} (${a.ref})</strong>
+              <span class="q-pillar-tag">${item.rd.knownWords}/${item.rd.totalWords} words held</span>
+            </span>
+            <div style="display:inline-flex;align-items:center;gap:8px">
+              <button type="button" class="lc-speak-btn" onclick="reciteVerse(${a.surah}, ${a.ayah}, '${escAr}', 0.85)" title="Listen to Mishary Rashid Alafasy recitation (${a.ref})">🔊 Alafasy</button>
+              ${SRS.rateBarHtml(item.key, "rateUnlockedAyah", [], { compact: true, noDot: true, retire: false })}
+            </div>
+          </div>
+          ${hideAr
+            ? `<div style="margin:6px 0"><button type="button" class="q-reveal-btn" onclick="revealUnlockedAyah('${item.key}'); reciteVerse(${a.surah}, ${a.ayah}, '${escAr}', 0.85)">👁️ Reveal Arabic &amp; Play Alafasy</button></div>`
+            : `<div class="arabic" style="font-size:25px;line-height:1.8;text-align:right;margin:4px 0" dir="rtl">${a.ar}</div>`
+          }
+          ${hideEn
+            ? `<div style="margin:6px 0"><button type="button" class="q-reveal-btn" onclick="revealUnlockedAyah('${item.key}')">👁️ Check English Meaning</button></div>`
+            : `<div style="font-size:14px;color:var(--ink);margin:4px 0">${a.en}</div>
+               <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                 ${tokens.map((tok, wi) => {
+                   const known = item.rd.tokenKnown[wi];
+                   const gl = (a.words && a.words[wi]) ? a.words[wi] : "";
+                   return `<span class="q-tok-chip ${known ? 'known' : 'new-tok'}" title="${known ? 'Held or root known' : 'Target stretch word'}"><span class="arabic" style="font-size:16px">${tok}</span>${gl ? `<span style="color:var(--muted);font-size:11px">${gl}</span>` : ""}</span>`;
+                 }).join("")}
+               </div>`
+          }
+        </div>
+      `;
+    }).join("") : `
+      <div class="card" style="text-align:center;padding:24px">
+        <p style="margin:0 0 10px">No non-Salah ayahs match this filter yet — keep practising your <strong>Top 151 Core Words</strong> and <strong>Structures</strong>, and ayahs unlock here automatically as your held vocabulary grows.</p>
+        <a href="index.html?qpillar=core" class="q-chip active" style="text-decoration:none;padding:6px 14px">⚡ Practise Top Core Words →</a>
+      </div>
+    `}
+  `;
+}
+
+function renderList() {
+  trackPage("quran:list");
+  const m = computeEngineMetrics();
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <h1 style="margin:0">Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
+      <a href="index.html?filter=quran" class="pill" style="text-decoration:none;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 13px;font-size:13px">⚡ Practise Qur'ān in Practice →</a>
+    </div>
+    <p class="sub">All teaching &amp; review flows automatically through daily <strong>⚡ Practice</strong> &amp; <strong>🚗 Commute</strong>. Use this page as your visual map &amp; standalone review library for every structure, common word, Salah surah, and unlocked ayah.</p>
+    ${renderEngineStripHtml(m)}
+    <div class="q-tabs" role="tablist">
+      <button type="button" class="q-tab ${currentQuranTab === 'structures' ? 'active' : ''}" onclick="switchQuranTab('structures')">🧱 Structures &amp; Moulds</button>
+      <button type="button" class="q-tab ${currentQuranTab === 'words' ? 'active' : ''}" onclick="switchQuranTab('words')">📊 Top 151 Core Words (${m.mushafPct}%)</button>
+      <button type="button" class="q-tab ${currentQuranTab === 'surahs' ? 'active' : ''}" onclick="switchQuranTab('surahs')">🕋 13 Salah Surahs</button>
+      <button type="button" class="q-tab ${currentQuranTab === 'unlocked' ? 'active' : ''}" onclick="switchQuranTab('unlocked')">🔓 Unlocked i+1 Ayahs (${m.unlockedCount})</button>
+    </div>
+    <div id="qTabBody"></div>
+  `;
+  if (currentQuranTab === "words") renderCoreWordsTab();
+  else if (currentQuranTab === "surahs") renderSurahsTab();
+  else if (currentQuranTab === "unlocked") renderUnlockedTab();
+  else renderStructuresTab();
 }
 
 /* Listen queue: real recitation of the surahs you've already studied — repeated

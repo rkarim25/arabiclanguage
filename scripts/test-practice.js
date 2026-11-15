@@ -317,6 +317,75 @@ console.log("\n-- Practice: effort equivalence & adaptive behaviour --");
   });
   yes(bGoodToday.diag.mode === "surge" && bGoodToday.diag.motivation.activeMode === "surge",
     "tapping 'good' (Energised) today immediately activates Surge mode");
+
+  // 10. Re-geared Qur'ān-by-Ear Engine ("Engine First, Surahs as Proving Ground")
+  const qcData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "quran-core.json"), "utf8"));
+  yes(Practice.classifyQuranWord("مِنْ", "from; of") === "glue" &&
+      Practice.classifyQuranWord("قَالَ", "he said") === "verb" &&
+      Practice.classifyQuranWord("اللَّه", "Allah") === "noun",
+    "classifyQuranWord separates Glue/Particles, Core Verbs, and Core Nouns cleanly");
+
+  const qcWords = qcData.words.map((w, i) => ({
+    key: "qc:" + i, ar: w.ar, en: w.en, tr: w.tr || "", src: "quran", qcRank: i, qcFreq: w.n || 0
+  }));
+  const qcLookup = Practice.buildKnownNormLookup(qcWords);
+  const coldHardAyah = {
+    key: "s:qs:88:13",
+    ar: "فِيهَا سُرُرٌ مَرْفُوعَةٌ وَأَكْوَابٌ مَوْضُوعَةٌ",
+    en: "In it are raised couches and cups put in place",
+    track: "quran",
+    ref: "88:13"
+  };
+  const easyUnlockedAyah = {
+    key: "s:qs:99:1",
+    ar: "مِنْ رَبِّ وَيَوْمٍ",
+    en: "test composable short phrase",
+    track: "quran",
+    ref: "99:1"
+  };
+  const salahAyah = {
+    key: "s:q:fatiha:2",
+    ar: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ",
+    en: "Praise be to Allah, Lord of the worlds",
+    track: "quran",
+    ref: "1:2"
+  };
+  const holdIdx = (arTarget) => qcWords.findIndex(w => w.ar.replace(/[ً-ْ]/g, "") === arTarget);
+  const partialSrs = {
+    "qc:0": { box: 2, s: 7, u: now - 3 * DAY, due: now + 4 * DAY }, // مِنْ
+  };
+  const rabbIdx = holdIdx("رَبّ"), yawmIdx = holdIdx("يَوْم");
+  if (rabbIdx >= 0) partialSrs["qc:" + rabbIdx] = { box: 2, s: 7, u: now - 3 * DAY, due: now + 4 * DAY };
+  if (yawmIdx >= 0) partialSrs["qc:" + yawmIdx] = { box: 2, s: 7, u: now - 3 * DAY, due: now + 4 * DAY };
+
+  const rdSalah = Practice.ayahReadiness(salahAyah, partialSrs, qcLookup);
+  const rdCold = Practice.ayahReadiness(coldHardAyah, partialSrs, qcLookup);
+  const rdEasy = Practice.ayahReadiness(easyUnlockedAyah, partialSrs, qcLookup);
+  yes(rdSalah.isSalah === true && !rdCold.isComposable && rdEasy.isComposable === true,
+    `ayahReadiness identifies Salah anchor (isSalah=${rdSalah.isSalah}), gates cold dense ayah (${rdCold.unknownWords} unknown -> composable=${rdCold.isComposable}), and unlocks i+1 ayah (${rdEasy.knownWords}/${rdEasy.totalWords})`);
+
+  const quranBatch = Practice.buildBatch({
+    now,
+    batchNum: 1,
+    srs: partialSrs,
+    log: [{ e: "sent-drill", ok: true, how: "mic", t: now - DAY }],
+    words: qcWords.concat(wordPool),
+    quranCore: qcData.words,
+    sentences: chapPool.slice(30, 38).concat([coldHardAyah, easyUnlockedAyah]),
+    grammar: grammarPool,
+    lessonCards: lcPool,
+    freq: freqData.words,
+    FreeTry
+  });
+  yes(!quranBatch.list.some(x => x.key === "s:qs:88:13") || quranBatch.list.some(x => x.key === "s:qs:99:1"),
+    "Practice prefers unlocked i+1 ayah & top Core Qur'ān words instead of ambushing Reza with gated cold verses");
+
+  const qCaps = Practice.summarizeCapabilities({
+    now, srs: partialSrs, log: [], words: qcWords, quranCore: qcData.words,
+    sentences: [salahAyah, coldHardAyah, easyUnlockedAyah], grammar: grammarPool, lessonCards: lcPool
+  });
+  yes(qCaps.quran.coreWordsHeld >= 2 && qCaps.quran.coreWordsTotal === 151 && qCaps.quran.mushafCoveragePct > 0 && qCaps.quran.composableAyahsUnlocked >= 1,
+    `summarizeCapabilities reports real Core 151 coverage (${qCaps.quran.coreWordsHeld}/151 = ${qCaps.quran.mushafCoveragePct}% Mushaf, ${qCaps.quran.composableAyahsUnlocked} i+1 unlocked)`);
 }
 
 console.log(`\n✓ ${passed} Practice assertions passed.\n`);

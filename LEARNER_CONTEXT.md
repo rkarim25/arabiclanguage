@@ -43,6 +43,7 @@ Stay within these domains unless teaching 1 requested word at a time:
 3. **Pronoun Attachments (`lc:pronoun-attachments`):** `ـِي` (my: `كِتَابِي`, `لِي`, `عِنْدِي`), `ـنِي` after verbs (me: `خُذْنِي`, `سَاعَدَنِي`), `ـكَ` (`-ka` to a man) vs `ـكِ` (`-ki` to wife Saba: `كَيْفَ كَانَ يَوْمُكِ؟`).
 4. **Possession (`إِضَافَة`) vs Adjective (`lc:idafa-vs-adjective`):** `مِفْتَاحُ الغُرْفَةِ` (`الـ` on second word only = "key of the room") vs `الغُرْفَةُ الجَدِيدَةُ` (`الـ` on both = "the new room").
 5. **Semantic & Minimal-Pair Anchors:** `ثَمَن` (value) vs `سِعْر` (shop tag) vs `أُجْرَة` (taxi fare); `أَعُودُ` (plain `د` = return home) vs `أَعُوذُ` (dotted `ذ` = seek refuge); `جَوْزَة` (`ج` = walnut) vs `زَوْجَة` (`ز` = wife); Surah An-Nās `صُدُور` (outer chest courtyard) vs `قُلُوب` (locked heart).
+6. **Qur'ān Decoding Ear Moulds (4-Layer Engine):** Fused Glue + Pronoun Chains (`فِيهَا / عَلَيْهِمْ / لَهُمْ / إِنَّهُ`, `lc:quran-glue-chains`); Active Doer `CāCiC` vs Passive Done-To `maCCūC` (`مَالِك` vs `مَغْضُوب / مَرْفُوعَة`, `lc:quran-active-passive`); Qur'ān Plural Story (`ـُوا / يَـ…ـُونَ / تَـ…ـُونَ`, `lc:quran-plural-story`); and Verb Form Shifts II/IV/X (`عَلَّمَ / أَنْزَلَ / اسْتَغْفَرَ`, `lc:quran-verb-shifts`).
 
 ---
 

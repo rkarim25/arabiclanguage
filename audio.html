@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Audio Coach — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwgpw59t">
-  <link rel="stylesheet" href="css/style.css?v=mwgpw59t">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
   <style>
     .ac-stage {
       text-align: center; padding: 26px 16px 30px; border-radius: 18px;
@@ -52,15 +52,15 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwgpw59t"></script>
-<script src="js/frames.js?v=mwgpw59t"></script>
-<script src="js/freetry.js?v=mwgpw59t"></script>
-<script src="js/practice.js?v=mwgpw59t"></script>
-<script src="js/lesson-cards.js?v=mwgpw59t"></script>
-<script src="js/app.js?v=mwgpw59t"></script>
-<script src="js/tracker.js?v=mwgpw59t"></script>
-<script src="js/plan.js?v=mwgpw59t"></script>
-<script src="js/account.js?v=mwgpw59t"></script>
+<script src="js/srs.js?v=mwi55dtu"></script>
+<script src="js/frames.js?v=mwi55dtu"></script>
+<script src="js/freetry.js?v=mwi55dtu"></script>
+<script src="js/practice.js?v=mwi55dtu"></script>
+<script src="js/lesson-cards.js?v=mwi55dtu"></script>
+<script src="js/app.js?v=mwi55dtu"></script>
+<script src="js/tracker.js?v=mwi55dtu"></script>
+<script src="js/plan.js?v=mwi55dtu"></script>
+<script src="js/account.js?v=mwi55dtu"></script>
 <script>
 renderNav("audio");
 trackPage("audio");
@@ -136,16 +136,24 @@ async function buildSentences() {
       const pWords = [];
       const seenWNorm = new Set();
       const wkMap = {};
-      const addPW = (k, ar, en, tr, src) => {
+      const qcRankByNorm = new Map();
+      (qcRes.words || []).forEach((w, i) => {
+        const n = normalizeAr(w.ar);
+        if (n && !qcRankByNorm.has(n)) qcRankByNorm.set(n, { qcRank: i, qcFreq: w.n || 0 });
+        const bare = n.replace(/^ال/, "");
+        if (bare && !qcRankByNorm.has(bare)) qcRankByNorm.set(bare, { qcRank: i, qcFreq: w.n || 0 });
+      });
+      const addPW = (k, ar, en, tr, src, extra) => {
         if (!k || !ar || !en) return;
         const n = normalizeAr(ar).replace(/^ال/, "");
         if (n && !wkMap[n]) wkMap[n] = k;
         if (seenWNorm.has(n)) return;
         seenWNorm.add(n);
-        pWords.push({ key: k, ar, en, tr: tr || "", src });
+        const qcMeta = qcRankByNorm.get(n) || {};
+        pWords.push(Object.assign({ key: k, ar, en, tr: tr || "", src }, qcMeta, extra || {}));
       };
       (clsRes.classes || []).forEach(c => (c.vocabulary || []).forEach(v => addPW(v.key, v.ar, v.en, v.tr, "teacher")));
-      (qcRes.words || []).forEach((w, i) => addPW("qc:" + i, w.ar, w.en, w.tr, "quran"));
+      (qcRes.words || []).forEach((w, i) => addPW("qc:" + i, w.ar, w.en, w.tr, "quran", { qcRank: i, qcFreq: w.n || 0 }));
       (evRes.groups || []).forEach(g => (g.members || []).forEach((m, i) => addPW("ev-" + g.id + ":" + i, m.ar, m.en, m.tr, "everyday")));
       (famRes.families || []).forEach(f => (f.members || []).forEach((m, i) => addPW("fam-" + f.id + ":" + i, m.ar, m.en, "", "root")));
       if (typeof registerWordKeys === "function" && Object.keys(wkMap).length) registerWordKeys(wkMap);

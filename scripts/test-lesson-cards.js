@@ -21,13 +21,17 @@ const bankData = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "sentence-ba
 
 const normAr = s => String(s || "").replace(/[ً-ٰـۖ-ۭ]/g, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/[؟،؛]/g, "").replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
 
-check("lesson-cards.json contains at least 8 structured Lesson Cards spanning multiple categories", () => {
-  assert(Array.isArray(lcData.cards) && lcData.cards.length >= 8);
+check("lesson-cards.json contains at least 12 structured Lesson Cards spanning multiple categories + 5 Qur'ān Decoding cards", () => {
+  assert(Array.isArray(lcData.cards) && lcData.cards.length >= 12);
   const cats = new Set(lcData.cards.map(c => c.category));
   assert(cats.has("grammar") && cats.has("nuance") && cats.has("quran") && cats.has("conversation"));
+  const qIds = new Set(lcData.cards.filter(c => c.category === "quran").map(c => c.id));
+  ["quran-glue-chains", "quran-active-passive", "quran-plural-story", "quran-verb-shifts", "sadr-vs-qalb"].forEach(id => {
+    assert(qIds.has(id), "missing Qur'ān Decoding Lesson Card: " + id);
+  });
 });
 
-check("every Lesson Card has unique id, title, arTitle, summary, visual diagram, rows, and quickCheck", () => {
+check("every Lesson Card has unique id, title, arTitle, summary, visual diagram, rows, pure English audioCue, and quickCheck", () => {
   const ids = new Set();
   for (const c of lcData.cards) {
     assert(c.id && !ids.has(c.id), "duplicate or missing id: " + c.id);
@@ -36,7 +40,9 @@ check("every Lesson Card has unique id, title, arTitle, summary, visual diagram,
     assert(c.diagram && ["timeline", "lanes", "fortress"].includes(c.diagram.type));
     assert(Array.isArray(c.rows) && c.rows.length >= 3);
     assert(c.quickCheck && c.quickCheck.prompt && c.quickCheck.answerAr);
+    assert(c.audioCue && c.audioCue.length >= 30 && !/[\u0600-\u06FF]/.test(c.audioCue), "audioCue must be pure English: " + c.id);
   }
+  assert(typeof LessonCards.reciteOrSpeak === "function", "LessonCards.reciteOrSpeak must be exposed for Alafasy ayah playback");
 });
 
 check("Negation Lesson Card (lc:negation) renders visual diagram, 5 pairings table, and ✗ لَا ذَهَبْتُ warning", () => {

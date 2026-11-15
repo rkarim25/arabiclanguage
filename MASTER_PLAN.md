@@ -16,8 +16,8 @@ Computed directly from `data:rkarim88@gmail.com` (`4,063` logged events):
 | **Weekly Chapters** | **Ch 1–3 passed (100%)** · **Ch 4 active** (`0/10` solid) | **Ch 1–10** (`≥80%` test) | Survival greetings, food/requests, and hotel/taxi mastered; **Daily Routine, Time & Tenses** now active. |
 | **Vocabulary** | **199 / 873** held (`23` learning, `116` slips) | **600+** core words held | Strong passive recognition base; `Practice` recycles slips automatically. |
 | **Sentences & Speaking** | **41** held (**39 passive**, **2 proven active**) · **90 min** spoken | **150+** proven spoken | **#1 Bottleneck:** Passive recognition is far ahead of active spoken production. |
-| **Lesson Cards & Grammar** | **0 / 9** Lesson Cards solid · **1 / 22** grammar frames solid | **9+ cards** · **22 frames** | Priority systems queued in `Practice`: **Negation (`lc:negation`)** & **Verb Tenses (`lc:verb-tenses`)**. |
-| **Qur'ān by Ear** | **2 / 598** ayahs held · **0 / 18** Fātiḥah ear checks | **Salah surahs + Juz' 'Amma** | Needs steady Alafasy ear-first checks inside `Practice` & `🚗 Commute`. |
+| **Lesson Cards & Grammar** | **0 / 13** Lesson Cards solid · **1 / 22** grammar frames solid | **13+ cards** · **22 frames** | Priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)** & **5 Qur'ān Decoding Moulds**. |
+| **Qur'ān by Ear** | **4-Layer Engine** active in `Practice` · tracked live on `quran.html` | **Structures + Top 151 Core (~45.8% Mushaf) + 13 Salah Surahs + `i+1` Juz' 'Amma** | Engine-first order: Structures & Glue Chains → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (`Practice` & `🚗 Commute`). |
 
 ---
 
@@ -28,18 +28,18 @@ Progress is **milestone-based, never calendar-guilt-based** (busy work/family we
 ### Stage 1 — Everyday Survival, Time & Core Salah Anchors *(Active Now)*
 - **Chapters 1–5:** Greetings & Courtesy (✓ 100%), Wants & Restaurant (✓ 100%), Travel & Hotel (✓ 100%), **Ch 4: Daily Routine, Clock & Tenses (Active)**, Ch 5: Family, Home & Describing Things.
 - **Core Systems (`Lesson Cards`):** Nominal sentences, `أُرِيدُ أَنْ`, Possession (`إِضَافَة`) vs Adjective, **5 Negation Pairings (`لَمْ / مَا / لَا / لَنْ / لَيْسَ`)**, **3-Tense Verb Engine (`ذَهَبْتُ / أَذْهَبُ / سَأَذْهَبُ`)**, Pronoun suffixes (`-ī / -nī / -ka / -ki`), Price triplet (`ثَمَن / سِعْر / أُجْرَة`).
-- **Qur'ān by Ear:** Al-Fātiḥah (1), Al-Ikhlāṣ (112), Al-Falaq (113), An-Nās (114), Al-ʿAṣr (103), Al-Kawthar (108).
+- **Qur'ān by Ear (Engine Stage 1):** Glue & Pronoun Chains (`lc:quran-glue-chains`), Doer vs Done-To (`lc:quran-active-passive`), Top 50 Core Qur'ānic Words (`qc:0..49`), plus Al-Fātiḥah (1), Al-Ikhlāṣ (112), Al-Falaq (113), An-Nās (114), Al-ʿAṣr (103), Al-Kawthar (108).
 - **Exit Proof:** Chapters 1–5 passed at `≥80%` + 2-minute unscripted spoken routine in MSA + Fātiḥah & 3 Quls caught cold by ear.
 
 ### Stage 2 — Work, Plans, Past Narratives & Short Juz' 'Amma
 - **Chapters 6–8:** Work, Meetings & Schedules; Shopping, Numbers & Quantities; Health, Feelings & Making Plans.
 - **Core Systems:** `كَانَ` ("was/were"), dual & sound/broken plurals, `لِأَنَّ / لِكَيْ` ("because / in order to"), object & preposition-pronoun chains (`لِي / عِنْدِي / مَعِي / فِيهِ`), root-family pattern recognition (Forms I, II, IV, V, VIII, X).
-- **Qur'ān by Ear:** Āyat al-Kursī (2:255), Al-Qadr (97), Al-Fīl (105), Quraysh (106), Al-Māʿūn (107), Al-Kāfirūn (109), An-Naṣr (110), Al-Masad (111).
+- **Qur'ān by Ear (Engine Stage 2):** Plural Story (`lc:quran-plural-story`), Verb Form Shifts II/IV/X (`lc:quran-verb-shifts`), Core Words 51–110 (`qc:50..109`), plus remaining 13 Salah Surahs: Āyat al-Kursī (2:255), Al-Qadr (97), Al-Fīl (105), Quraysh (106), Al-Māʿūn (107), Al-Kāfirūn (109), An-Naṣr (110), Al-Masad (111).
 - **Exit Proof:** Chapters 6–8 passed at `≥80%` + `350+` held words + `50+` proven spoken sentences + 12 salah surahs by ear.
 
 ### Stage 3 — Connected Conversation, Opinions & Deeper Juz' 'Amma
 - **Chapters 9–10 + Structured Story Dialogues:** Travel narratives, hosting guests, expressing opinions (`أَظُنُّ أَنَّ`, `مِنَ الأَفْضَلِ`), conditional sentences (`إِذَا / لَوْ`), relative clauses (`الَّذِي / الَّتِي`), comparative/superlative (`أَكْبَرُ / أَفْضَلُ`).
-- **Qur'ān by Ear:** Remaining Juz' 'Amma surahs (Ad-Ḍuḥā, Ash-Sharḥ, At-Tīn, Al-ʿAlaq, Az-Zalzalah, Al-ʿĀdiyāt, Al-Qāriʿah, At-Takāthur, Al-Humazah, Ash-Shams, Al-Layl, Al-Aʿlā, Al-Ghāshiyah).
+- **Qur'ān by Ear (Engine Stage 3):** Core Words 111–151 (`qc:110..150`, reaching ~45.8% Mushaf token coverage) + `i + 1` Composable Juz' 'Amma Surahs unlocked automatically as core vocabulary turns green (Ad-Ḍuḥā, Ash-Sharḥ, At-Tīn, Al-ʿAlaq, Az-Zalzalah, Al-ʿĀdiyāt, Al-Qāriʿah, At-Takāthur, Al-Humazah, Ash-Shams, Al-Layl, Al-Aʿlā, Al-Ghāshiyah).
 - **Exit Proof:** All 10 Chapters mastered + `600+` held words + 5-minute free MSA conversation at `≥80%` comprehension.
 
 ### Stage 4 — Spontaneous MSA Fluency & Live Recitation Comprehension
@@ -51,7 +51,7 @@ Progress is **milestone-based, never calendar-guilt-based** (busy work/family we
 
 Because Reza's weekday time is scarce, **every channel has one distinct job**:
 
-1. **Weekday `⚡ Practice` (`index.html` Home, 5–10 min, 3–4x/week) + Optional Direct Review (`words.html` / `sentences.html`):** Primary classroom. `index.html` teaches unseen Lesson Cards, Chapter sentences, high-frequency vocab, and Qur'ān ayahs; tests recall; collects capability telemetry; and dynamically loads focused batches from any other tab (`?chap=`, `?surah=`, `?lc=`, `?set=`, `?grammar=`, `?class=`, `?focus=words`, `?filter=`, `?keys=`). Whenever Reza prefers reviewing directly in `words.html` or `sentences.html` (`🇬🇧 EN → AR` / `🇸🇦 AR → EN`), every `✗ · ≈ · ✓` verdict updates the exact same **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)** across all 7 tabs (`615` alias groups / `2,219` keys).
+1. **Weekday `⚡ Practice` (`index.html` Home, 5–10 min, 3–4x/week) + Optional Direct Review (`words.html` / `sentences.html`):** Primary classroom. `index.html` teaches unseen Lesson Cards, Chapter sentences, high-frequency vocab, and Qur'ān ayahs; tests recall; collects capability telemetry; and dynamically loads focused batches from any other tab (`?chap=`, `?surah=`, `?qpillar=`, `?lc=`, `?set=`, `?grammar=`, `?class=`, `?focus=words`, `?filter=`, `?keys=`). Whenever Reza prefers reviewing directly in `words.html` or `sentences.html` (`🇬🇧 EN → AR` / `🇸🇦 AR → EN`), every `✗ · ≈ · ✓` verdict updates the exact same **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)** across all 7 tabs (`615` alias groups / `2,219` keys).
 2. **Hands-Free `🚗 Commute` (`audio.html?commute=1`, ~13 min):** Eyes-free reinforcement on drives/walks. Next screen `Practice` automatically compensates for missed visual spelling/diagrams (`🚗→📱 Screen Check`).
 3. **Sunday 25-Minute Preply Class = "Spoken Match Day" via the `🧑‍🏫 Teacher` Tab (`class.html`):**
    - **Rule 1 — Flip the Classroom (~20 Mins Net Lesson Time, Zero Rigid Stopwatch):** `Practice` teaches vocabulary and grammar during the week; the **`🧑‍🏫 Teacher`** tab (`class.html`) auto-generates a **daily-updating 20-minute brief** (`#teacherBrief`, copyable in **🇬🇧 English**, **🇸🇦 العربية**, or **🌐 Both**) — plus a **collapsed-by-default Live AI Practice Session Brief (`#aiPracticeBriefCard`)** for 5-min ChatGPT/Claude Voice sparring — built directly from what Reza actually practised in `ats-log` / `ats-srs`:

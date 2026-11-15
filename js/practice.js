@@ -32,8 +32,101 @@
   const DAY = 86400000;
   const EFFORT = { word: 0.5, sentence: 1.0, grammar: 1.0, "lesson-card": 1.0, quran: 1.5 };
   const SALAH_RE = /^s:q:(fatiha|ikhlas|falaq|nas|kawthar|asr|nasr|kafirun|qadr|maun|quraysh|fil|kursi):/;
+  const MUSHAF_TOTAL_TOKENS = 77430;
 
-  const stripAr = s => String(s || "").replace(/[ً-ْٰـ]/g, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/[؟،؛.،«»!]/g, "").replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
+  const stripAr = s => String(s || "").replace(/[ً-ْٰـۖ-ۭ]/g, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/[؟،؛.،«»!]/g, "").replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
+
+  const QURAN_GLUE_AR = new Set([
+    "من", "ما", "لا", "في", "ان", "علي", "كان", "الذين", "الي", "هو", "هم", "لم", "الا",
+    "ثم", "قد", "اذا", "لن", "او", "حتى", "مع", "عند", "بين", "كل", "بعض", "غير", "ذلك",
+    "هذا", "هذه", "اولئك", "انت", "انتم", "نحن", "انا", "هي", "الذي", "التي", "قبل", "بعد",
+    "فوق", "تحت", "دون", "بل", "ام", "لعل", "كي", "لو", "لولا", "اي", "منذ", "نعم", "بلى"
+  ]);
+  const QURAN_BASIC_CLITIC_RE = /^(من|في|ما|لا|ان|علي|الي|هو|هم|لم|الا|قد|اذا|ثم|او|كل)$/;
+
+  function classifyQuranWord(ar, en) {
+    const enLow = String(en || "").trim().toLowerCase();
+    const norm = stripAr(ar).replace(/^و|^ف|^ل|^ب|^ك/, "");
+    const rawNorm = stripAr(ar);
+    // Active verbs (data/quran-core.json glosses verbs as "he said", "he was", "he believed", "to ...", etc.)
+    if (/^(he\s+(?!\(pron)|she\s|they\s+(?!\()|to\s+[a-z]|be\s|is\s+not)/.test(enLow) && enLow !== "he") return "verb";
+    if (QURAN_GLUE_AR.has(rawNorm) || QURAN_GLUE_AR.has(norm) ||
+        /\b(preposition|particle|pronoun|relative|demonstrative|conjunction|negation)\b/.test(enLow) ||
+        /^(from|in\b|what|not\b|no\b|to\s*\/|on\s*\/|upon|indeed|that\b|who\b|those who|he$|they$|you\b|we$|this\b|except|when|if\b|or\b|then|until|with\b|at\b|before|after|between|other than|every|all\b|some|rather|already|did not|will not)/.test(enLow)) {
+      return "glue";
+    }
+    return "noun";
+  }
+
+  function isHeldCard(c) {
+    if (!c) return false;
+    return c.b === "never" || (c.box || 0) >= 1;
+  }
+
+  function buildKnownNormLookup(words) {
+    const map = new Map();
+    (words || []).forEach(w => {
+      if (!w || !w.ar || !w.key) return;
+      const n = stripAr(w.ar);
+      const bare = n.replace(/^ال/, "");
+      if (n && !map.has(n)) map.set(n, w.key);
+      if (bare && !map.has(bare)) map.set(bare, w.key);
+      if (w.qcKey) {
+        if (n) map.set(n, w.qcKey);
+        if (bare) map.set(bare, w.qcKey);
+      }
+    });
+    return map;
+  }
+
+  /* Measure how ready Reza is to catch a Qur'ān ayah by ear (`i + 1` comprehensible input):
+     Counts how many tokens in sent.ar match keys already held in SRS. */
+  function ayahReadiness(sent, srs, knownNormLookup) {
+    const s = sent || {};
+    const key = String(s.key || "");
+    const isSalah = SALAH_RE.test(key) || !!(s.surah && /^(al-?fatiha|fatiha|ikhlas|al-?ikhlas|falaq|al-?falaq|nas|an-?nas|kawthar|al-?kawthar|asr|al-?asr|nasr|an-?nasr|kafirun|al-?kafirun|qadr|al-?qadr|ma'?un|al-?maun|quraysh|fil|al-?fil|kursi)$/i.test(String(s.surah).trim()));
+    const rawTokens = String(s.ar || "").replace(/[\u06D6-\u06ED.،؟!«»]/g, "").trim().split(/\s+/).filter(Boolean);
+    const totalWords = rawTokens.length;
+    if (!totalWords) return { isSalah, totalWords: 0, knownWords: 0, unknownWords: 0, knownRatio: 0, isComposable: false, tokenKnown: [] };
+
+    const map = knownNormLookup instanceof Map ? knownNormLookup : new Map();
+    const sObj = srs || {};
+    const wkArr = Array.isArray(s.wk) ? s.wk : [];
+    const wordKeysArr = Array.isArray(s.wordKeys) ? s.wordKeys : [];
+    const heldToken = (tok, idx) => {
+      if (wkArr[idx]) {
+        const list = Array.isArray(wkArr[idx]) ? wkArr[idx] : [wkArr[idx]];
+        if (list.some(k => isHeldCard(sObj[k]))) return true;
+      }
+      if (wordKeysArr[idx] && isHeldCard(sObj[wordKeysArr[idx]])) return true;
+      const n = stripAr(tok);
+      if (!n) return true;
+      const candidates = [n, n.replace(/^ال/, "")];
+      // Peel common 1-letter prefixes (و، ف، ب، ل، ك) + attached pronoun tails (هم، كم، نا، ها، ه) to check underlying root/glue
+      const deprefix = n.replace(/^(و|ف|ب|ل|ك)/, "").replace(/^ال/, "");
+      if (deprefix && deprefix.length >= 2) candidates.push(deprefix);
+      const detailed = deprefix.replace(/(هم|كم|نا|ها)$/, "");
+      if (detailed && detailed.length >= 2) candidates.push(detailed);
+      for (const cand of candidates) {
+        if (isHeldCard(sObj[cand]) || isHeldCard(sObj["tw:" + cand])) return true;
+        const mapped = map.get(cand);
+        if (mapped && isHeldCard(sObj[mapped])) return true;
+      }
+      // If user holds top glue core (at least 3 of qc:0..10), ultra-common 1-token clitics count as transparent
+      if (QURAN_BASIC_CLITIC_RE.test(deprefix)) {
+        const mappedBasic = map.get(deprefix);
+        if (mappedBasic && isHeldCard(sObj[mappedBasic])) return true;
+      }
+      return false;
+    };
+
+    const tokenKnown = rawTokens.map((tok, i) => heldToken(tok, i));
+    const knownWords = tokenKnown.filter(Boolean).length;
+    const unknownWords = totalWords - knownWords;
+    const knownRatio = knownWords / totalWords;
+    const isComposable = unknownWords <= 2 && (knownRatio >= 0.5 || totalWords <= 3);
+    return { isSalah, totalWords, knownWords, unknownWords, knownRatio, isComposable, tokenKnown };
+  }
 
   function startOfLocalDay(ts) {
     const d = new Date(ts);
@@ -611,9 +704,43 @@
     });
     const topError = Object.keys(errCounts).sort((a, b) => errCounts[b] - errCounts[a])[0] || null;
 
-    // 4. Qur'an by ear
+    // 4. Qur'an by ear + 4-Layer Engine (Glue/Structures, Core 151 Words, Salah Surahs, Unlocked i+1 Ayahs)
+    const knownNormLookup = buildKnownNormLookup(words);
     const quranSents = sentences.filter(s => s.track === "quran");
     const quranHeld = quranSents.filter(s => ((srs[s.key] || {}).box || 0) >= 3 || (srs[s.key] || {}).b === "never").length;
+    const salahSents = quranSents.filter(s => SALAH_RE.test(s.key || ""));
+    const salahAyahsHeld = salahSents.filter(s => ((srs[s.key] || {}).box || 0) >= 2 || (srs[s.key] || {}).b === "never").length;
+    const nonSalahSents = quranSents.filter(s => !SALAH_RE.test(s.key || ""));
+    const composableAyahsUnlocked = nonSalahSents.filter(s => isHeldCard(srs[s.key]) || ayahReadiness(s, srs, knownNormLookup).isComposable).length;
+
+    const qCoreList = Array.isArray(ctx.quranCore) && ctx.quranCore.length ? ctx.quranCore : null;
+    let coreWordsTotal = qCoreList ? qCoreList.length : 0;
+    let coreWordsHeld = 0;
+    let mushafTokensHeld = 0;
+    if (qCoreList) {
+      qCoreList.forEach((w, idx) => {
+        const k = "qc:" + idx;
+        const norm = stripAr(w.ar);
+        const mapped = knownNormLookup.get(norm) || knownNormLookup.get(norm.replace(/^ال/, ""));
+        const held = isHeldCard(srs[k]) || (mapped && isHeldCard(srs[mapped]));
+        if (held) {
+          coreWordsHeld++;
+          mushafTokensHeld += (w.n || 0);
+        }
+      });
+    } else {
+      const coreFromWords = words.filter(w => w.src === "quran" || /^qc:/.test(w.key || ""));
+      coreWordsTotal = coreFromWords.length;
+      coreFromWords.forEach(w => {
+        if (isHeldCard(srs[w.key])) {
+          coreWordsHeld++;
+          mushafTokensHeld += (w.qcFreq || 0);
+        }
+      });
+    }
+    const mushafCoveragePct = mushafTokensHeld ? Math.round((mushafTokensHeld / MUSHAF_TOTAL_TOKENS) * 1000) / 10 : 0;
+    const quranCards = lessonCards.filter(lc => lc && lc.category === "quran");
+    const quranCardsHeld = quranCards.filter(lc => isHeldCard(srs[lc.key])).length;
     const earChecks7d = log.filter(x => x && x.t >= now - 7 * DAY && (x.e === "alisten-grade" || x.e === "qlisten-test" || x.e === "qtest-done")).length;
 
     // Build honest "Can Do" vs "Focus / Cannot Yet Do" statements
@@ -621,6 +748,7 @@
     const gaps = [];
 
     if (vocabHeld > 0) canDo.push(`Recognise ${vocabHeld} vocabulary words reliably (${vocabLearning} in active learning)`);
+    if (coreWordsHeld > 0) canDo.push(`Hold ${coreWordsHeld}/${coreWordsTotal || 151} Core Qur'ān words${mushafCoveragePct ? ` (~${mushafCoveragePct}% of Mushaf word occurrences)` : ""}`);
     if (sentProvenActive > 0) canDo.push(`Say or write ${sentProvenActive} Arabic sentences from English prompts`);
     else if (sentHeld > 0) canDo.push(`Recall ${sentHeld} sentences on recognition (${sentProvenActive} proven spoken/typed)`);
     if (lcHeld > 0) canDo.push(`Hold ${lcHeld}/${lessonCards.length} Lesson Card mental maps`);
@@ -663,6 +791,15 @@
       quran: {
         ayahsHeld: quranHeld,
         ayahsTotal: quranSents.length,
+        salahAyahsHeld,
+        salahAyahsTotal: salahSents.length,
+        composableAyahsUnlocked,
+        coreWordsHeld,
+        coreWordsTotal,
+        mushafTokensHeld,
+        mushafCoveragePct,
+        quranCardsHeld,
+        quranCardsTotal: quranCards.length,
         earChecks7d
       },
       modality: {
@@ -1028,20 +1165,31 @@
       }
     }
 
-    // 3. Pick Qur'an Ayats by ear
+    const batchKnownNormLookup = buildKnownNormLookup(ctx.words || []);
+
+    // 3. Pick Qur'an Ayats by ear ("Engine First, Surahs as Proving Ground": Salah first, i+1 composable next, cold dense verses gated)
     const nQuranTarget = Math.floor((diag.targets.quranUnits + 0.01) / EFFORT.quran);
     if (nQuranTarget > 0) {
       const qPool = (ctx.sentences || []).filter(s => s.track === "quran" && !usedKeys.has(s.key));
       const qScored = qPool
-        .map(q => ({
-          q,
-          sc: scoreCandidate(q, srs, now, hwSet, diag.allowNew || SALAH_RE.test(q.key), it =>
-            (unvSentKeys.has(it.key) ? 5.0 : 0) +
-            (SALAH_RE.test(it.key) ? 3.0 : 0) + (it.ref ? 1.0 : 0), reviewBias)
-        }))
+        .map(q => {
+          const rd = ayahReadiness(q, srs, batchKnownNormLookup);
+          const seen = !!(srs[q.key] && srs[q.key].u);
+          const sc = scoreCandidate(q, srs, now, hwSet, diag.allowNew || rd.isSalah || rd.isComposable, it => {
+            const c = srs[it.key];
+            const dueOrSlip = !!(c && c.u && (isSlip(c, now) || isDue(c, now)));
+            let b = unvSentKeys.has(it.key) ? 5.0 : 0;
+            if (dueOrSlip) b += 5.0;
+            else if (rd.isSalah) b += 4.5;
+            else if (rd.isComposable) b += 2.6 + rd.knownRatio * 1.5;
+            else if (!seen) b -= (12.0 + Math.min(4, rd.unknownWords * 0.4));
+            return b + (it.ref ? 0.5 : 0);
+          }, reviewBias);
+          return { q, rd, sc };
+        })
         .filter(x => x.sc > -500)
         .sort((a, b) => b.sc - a.sc);
-      for (const { q } of qScored) {
+      for (const { q, rd } of qScored) {
         if (chosen.filter(x => x.kind === "quran").length >= nQuranTarget) break;
         if (effort + EFFORT.quran > diag.budget + 0.5) break;
         const isCommuteUnv = unvSentKeys.has(q.key);
@@ -1049,12 +1197,14 @@
           : isSlip(srs[q.key], now) ? "ayah review"
           : isDue(srs[q.key], now) ? "due ayah"
           : (srs[q.key] && srs[q.key].u) ? "ayah consolidation"
+          : rd.isSalah ? "salah ayah — Qur'an by ear"
+          : rd.isComposable ? `unlocked i+1 ayah (${rd.knownWords}/${rd.totalWords} words known)`
           : "new ayah — Qur'an by ear";
         addItem(q, "quran", why, isCommuteUnv ? "commute-verify" : undefined);
       }
     }
 
-    // 3b. Lesson Cards (1.0 effort unit, max 1 per batch — boosted when compensating for heavy commutes!)
+    // 3b. Lesson Cards (1.0 effort unit, max 1 per batch — teaches Foundations & Qur'ān Moulds before unseen applications!)
     const lcRawPool = (ctx.lessonCards || []).filter(lc =>
       lc && lc.key && !usedKeys.has(lc.key) && !exclude.has(lc.key) && !(srs[lc.key] && srs[lc.key].b === "never")
     );
@@ -1064,6 +1214,8 @@
         if (x.pattern && x.pattern !== "-") chosenPatterns.add(x.pattern);
         if (x.patId) chosenPatterns.add(x.patId);
       });
+      const hasQuranInBatch = chosen.some(x => x.kind === "quran");
+      const firstUnseenQuranLc = lcRawPool.find(lc => lc.category === "quran" && !(srs[lc.key] && srs[lc.key].u));
       const lcCandidates = [];
       lcRawPool.forEach(lc => {
         const c = srs[lc.key];
@@ -1072,15 +1224,19 @@
         const patHit = (trig.patterns || []).some(p => chosenPatterns.has(p));
         const wordHit = (trig.words || []).some(w => coveredNormWords.has(stripAr(w).replace(/^ال/, "")));
         const chapHit = !!(diag.activeChapNum && (trig.chapters || []).includes(diag.activeChapNum));
-        const matchesBatch = patHit || wordHit || chapHit;
+        const quranFoundationHit = !seen && firstUnseenQuranLc && lc.key === firstUnseenQuranLc.key && (hasQuranInBatch || diag.focus === "ear" || diag.batchNum === 1);
+        const matchesBatch = patHit || wordHit || chapHit || quranFoundationHit;
 
         if (seen && (isSlip(c, now) || isDue(c, now))) {
           const r = recallNow(c, now);
           const sc = (isSlip(c, now) ? 24 : 18) + (matchesBatch ? 5 : 0) + (diag.commuteHeavy ? 4 : 0) + (1 - r) * 4;
           lcCandidates.push({ lc, sc, lcMode: "review", autoReveal: false, why: isSlip(c, now) ? "lesson card slip" : "lesson card review" });
-        } else if (!seen && !diag.light && (matchesBatch || diag.commuteHeavy) && (diag.batchNum <= 2 || patHit || diag.commuteHeavy)) {
-          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0) + (diag.commuteHeavy ? 5 : 0);
-          const why = diag.commuteHeavy && !matchesBatch ? "visual lesson card — missed on commute" : "new lesson card — teach";
+        } else if (!seen && !diag.light && (matchesBatch || diag.commuteHeavy) && (diag.batchNum <= 2 || patHit || diag.commuteHeavy || quranFoundationHit)) {
+          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0) + (quranFoundationHit ? 5.5 : 0) + (diag.commuteHeavy ? 5 : 0);
+          const why = quranFoundationHit && !patHit && !wordHit
+            ? "Qur'ān decoding system — teach first"
+            : diag.commuteHeavy && !matchesBatch ? "visual lesson card — missed on commute"
+            : "new lesson card — teach";
           lcCandidates.push({ lc, sc, lcMode: "teach", autoReveal: true, why });
         } else if (seen && (diag.batchNum >= 2 || diag.commuteHeavy) && (c.box || 0) <= 1 && (matchesBatch || diag.commuteHeavy) && (now - c.u > 2 * 3600000)) {
           lcCandidates.push({ lc, sc: 12 + (diag.commuteHeavy ? 4 : 0), lcMode: "review", autoReveal: false, why: diag.commuteHeavy ? "visual map check after commute" : "lesson card consolidation" });
@@ -1094,7 +1250,13 @@
       }
     }
 
-    // 4. Fill remaining effort budget with Vocabulary words (0.5 each — unverified commute words pulled first!)
+    // 4. Fill remaining effort budget with Vocabulary words (0.5 each — Core Qur'ānic frequency rank + commute verification)
+    const qcRankOf = (w) => {
+      if (!w) return null;
+      if (typeof w.qcRank === "number") return w.qcRank;
+      const m = /^qc:(\d+)$/.exec(w.key || "");
+      return m ? +m[1] : null;
+    };
     const wordPool = (ctx.words || []).filter(w => {
       if (usedKeys.has(w.key)) return false;
       if (unvWordKeys.has(w.key)) return true; // always allow explicit check of pocket-heard commute word
@@ -1102,16 +1264,53 @@
       return !coveredNormWords.has(n);
     });
     const wordScored = wordPool
-      .map(w => ({
-        w,
-        sc: scoreCandidate(w, srs, now, hwSet, diag.allowNew || unvWordKeys.has(w.key), it =>
-          (unvWordKeys.has(it.key) ? 8.0 : 0) +
-          (it.src === "teacher" ? 1.2 : it.src === "quran" ? 1.0 : 0.6), reviewBias)
-      }))
+      .map(w => {
+        const qRank = qcRankOf(w);
+        return {
+          w,
+          qRank,
+          sc: scoreCandidate(w, srs, now, hwSet, diag.allowNew || unvWordKeys.has(w.key), it => {
+            let b = unvWordKeys.has(it.key) ? 8.0 : 0;
+            if (qRank !== null) {
+              if (qRank < 35) b += 3.0 - (qRank / 35) * 0.4;
+              else if (qRank < 90) b += 2.1 - ((qRank - 35) / 55) * 0.5;
+              else b += 1.3;
+            } else if (it.src === "quran") {
+              b += 1.2;
+            } else {
+              b += it.src === "teacher" ? 1.2 : 0.6;
+            }
+            return b;
+          }, reviewBias)
+        };
+      })
       .filter(x => x.sc > -500)
       .sort((a, b) => b.sc - a.sc);
 
     const maxWords = Math.min(wordScored.length, Math.max(0, Math.round((diag.budget - effort) / EFFORT.word)));
+    const pushWordItem = (w, why) => {
+      const isCommuteUnv = unvWordKeys.has(w.key);
+      const qRank = qcRankOf(w);
+      addItem({
+        key: w.key,
+        ar: w.ar,
+        en: w.en,
+        tr: w.tr || "",
+        note: w.note || (w.qcFreq ? `Top 151 Qur'ān Core #${(qRank != null ? qRank + 1 : "?")} (${Number(w.qcFreq).toLocaleString()}× in Mushaf)` : w.root ? `Root: ${w.root}` : ""),
+        words: [[w.ar, w.en]],
+        src: "vocab",
+        wordSrc: (w.src === "quran" || qRank !== null) ? "quran" : (w.src || "everyday"),
+        track: (w.src === "quran" || qRank !== null) ? "quran-word" : "vocab"
+      }, "word", why, isCommuteUnv ? "commute-verify" : undefined);
+    };
+
+    // Ensure steady daily progress through the Top 151 Core Qur'ānic Words in Batch 1 when >= 2 word slots exist
+    let reservedTopQc = null;
+    if (diag.batchNum === 1 && !diag.light && maxWords >= 2) {
+      const topQcEntry = wordScored.find(x => x.qRank !== null && x.qRank < 90);
+      if (topQcEntry) reservedTopQc = topQcEntry;
+    }
+
     for (let i = 0; i < wordScored.length && effort + EFFORT.word <= diag.budget + 0.01; i++) {
       const w = wordScored[i].w;
       const c = srs[w.key];
@@ -1119,23 +1318,24 @@
       const isCommuteUnv = unvWordKeys.has(w.key);
       if (!seen && !isCommuteUnv && !canTakeNew(w) && wordScored.slice(i + 1).some(x => srs[x.w.key] && srs[x.w.key].u)) continue;
       if (chosen.filter(x => x.kind === "word").length >= maxWords) break;
+      const remainingSlots = maxWords - chosen.filter(x => x.kind === "word").length;
+      const hasQcPicked = chosen.some(x => x.kind === "word" && (x.wordSrc === "quran" || /^qc:/.test(x.key || "")));
+      if (reservedTopQc && !hasQcPicked && remainingSlots === 1 && !usedKeys.has(reservedTopQc.w.key) && wordScored[i].qRank === null && !isCommuteUnv && !isSlip(c, now)) {
+        const qrw = reservedTopQc.w;
+        const qrc = srs[qrw.key];
+        const qrSeen = !!(qrc && qrc.u);
+        pushWordItem(qrw, qrSeen ? (isDue(qrc, now) ? "due core Qur'ān word" : "core Qur'ān review") : "top Qur'ān core — teach");
+        continue;
+      }
+      const qRank = wordScored[i].qRank;
       const why = isCommuteUnv ? "heard on commute — screen check"
         : hwSet.has(w.key) ? (seen ? "class vocab review" : "new class word — teach")
         : isSlip(c, now) ? "word slip"
-        : isDue(c, now) ? "due word"
+        : isDue(c, now) ? (qRank !== null ? "due core Qur'ān word" : "due word")
         : seen ? "word review"
+        : qRank !== null ? "top Qur'ān core — teach"
         : "new word — teach";
-      addItem({
-        key: w.key,
-        ar: w.ar,
-        en: w.en,
-        tr: w.tr || "",
-        note: w.note || (w.root ? `Root: ${w.root}` : ""),
-        words: [[w.ar, w.en]],
-        src: "vocab",
-        wordSrc: w.src || "everyday",
-        track: w.src === "quran" ? "quran-word" : "vocab"
-      }, "word", why, isCommuteUnv ? "commute-verify" : undefined);
+      pushWordItem(w, why);
     }
 
     // 5. Top up if effort is still short of budget
@@ -1299,7 +1499,7 @@
       usedAr.add(stripAr(fs.ar));
     }
 
-    // Part 2: 1 Spoken Lesson Card Golden Rule cue matching active chapter or today's sentences
+    // Part 2: 1 Spoken Lesson Card Golden Rule cue matching active chapter, today's sentences, or foundational Qur'ān decoding
     const sayPatterns = new Set(sayList.map(s => s.pattern).filter(p => p && p !== "-"));
     const lcMatch = lessonCards.find(lc => {
       if (!lc || (srs[lc.key] && srs[lc.key].b === "never")) return false;
@@ -1307,6 +1507,10 @@
       if (c && (c.box || 0) >= 3 && !isDue(c, now)) return false;
       const trig = lc.triggers || {};
       return (trig.patterns || []).some(p => sayPatterns.has(p)) || (activeChapNum && (trig.chapters || []).includes(activeChapNum));
+    }) || lessonCards.find(lc => {
+      if (!lc || lc.category !== "quran" || (srs[lc.key] && srs[lc.key].b === "never")) return false;
+      const c = srs[lc.key];
+      return !c || !c.u || isDue(c, now);
     });
     if (lcMatch) {
       const card = lcMatch.lcCard || lcMatch;
@@ -1336,13 +1540,19 @@
       });
     });
 
-    // Part 4: 1–2 Qur'an by Ear ayahs (Mishary Rashid Alafasy recitation)
+    // Part 4: 1–2 Qur'an by Ear ayahs (Mishary Rashid Alafasy — Salah anchors + unlocked i+1 composable ayahs)
+    const commuteKnownLookup = buildKnownNormLookup(words);
     const quranPool = allSentences
       .filter(s => s.track === "quran" && s.ref && !(srs[s.key] && srs[s.key].b === "never"))
-      .map(qItem => ({
-        qItem,
-        sc: scoreCandidate(qItem, srs, now, hwSet, true, it => (SALAH_RE.test(it.key) ? 3.5 : 1.0), 1.2)
-      }))
+      .map(qItem => {
+        const rd = ayahReadiness(qItem, srs, commuteKnownLookup);
+        const c = srs[qItem.key];
+        const seen = !!(c && c.u);
+        const dueOrSlip = !!(c && c.u && (isSlip(c, now) || isDue(c, now)));
+        const sc = scoreCandidate(qItem, srs, now, hwSet, true, () =>
+          dueOrSlip ? 5.0 : rd.isSalah ? 4.5 : rd.isComposable ? (2.5 + rd.knownRatio * 1.5) : (!seen ? -12.0 : 0.5), 1.2);
+        return { qItem, sc };
+      })
       .sort((a, b) => b.sc - a.sc);
     quranPool.slice(0, 2).forEach(({ qItem }) => {
       const seen = !!(srs[qItem.key] && srs[qItem.key].u);
@@ -1355,7 +1565,7 @@
       });
     });
 
-    // Part 5: Vocabulary words (due/weakest + up to 2 unseen class/chapter words taught audio-first), interleaved with sentences
+    // Part 5: Vocabulary words (due/weakest + up to 2 unseen class/top-60 Qur'ān core words taught audio-first), interleaved
     const wordCandidates = [];
     let newWordCount = 0;
     words.forEach(w => {
@@ -1363,8 +1573,14 @@
       const c = srs[w.key];
       if (c && c.b === "never") return;
       const seen = !!(c && c.u);
-      if (!seen && !hwSet.has(w.key) && w.src !== "teacher") return;
-      const sc = scoreCandidate(w, srs, now, hwSet, true, it => (it.src === "teacher" ? 2.0 : 0.5), 1.1);
+      const qRank = typeof w.qcRank === "number" ? w.qcRank : (/^qc:(\d+)$/.test(w.key) ? +RegExp.$1 : null);
+      const isTopQuranNew = qRank !== null && qRank < 60;
+      if (!seen && !hwSet.has(w.key) && w.src !== "teacher" && !isTopQuranNew) return;
+      const sc = scoreCandidate(w, srs, now, hwSet, true, it => {
+        if (it.src === "teacher") return 2.0;
+        if (qRank !== null && qRank < 60) return 2.1 - (qRank / 60) * 0.6;
+        return 0.5;
+      }, 1.1);
       wordCandidates.push({ w, seen, sc });
     });
     wordCandidates.sort((a, b) => b.sc - a.sc);
@@ -1478,6 +1694,11 @@
 
   return {
     EFFORT,
+    SALAH_RE,
+    MUSHAF_TOTAL_TOKENS,
+    classifyQuranWord,
+    ayahReadiness,
+    buildKnownNormLookup,
     diagnose,
     summarizeMotivation,
     analyzeCommuteBalance,

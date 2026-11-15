@@ -58,8 +58,8 @@
      2. Boosting visual **Lesson Cards** (`lc:*`) and **Grammar** vowel checks (`gt:*`).
      3. Nudging active `🎯 Try it` spoken/typed production.
 
-5. **Visual Lesson Cards (`data/lesson-cards.json`, `js/lesson-cards.js`, `sets.html`):**
-   - 9 structured visual cards (`lc:negation`, `lc:verb-tenses`, `lc:price-triplet`, `lc:pronoun-attachments`, `lc:idafa-vs-adjective`, `lc:lookalike-roots`, `lc:sadr-vs-qalb`, `lc:requests-and-modals`, `lc:days-and-clock`) with diagrams (`timeline`, `lanes`, `fortress`), neural audio tables, trap warnings, pure-English commute `audioCue`s, and SRS review bars. Shelved at the top of `sets.html` (`#lc-<id>`), taught at `#1` in `Practice`, and reviewed via SRS.
+5. **Visual Lesson Cards (`data/lesson-cards.json`, `js/lesson-cards.js`, `sets.html` & `quran.html`):**
+   - 13 structured visual cards (`lc:negation`, `lc:verb-tenses`, `lc:price-triplet`, `lc:pronoun-attachments`, `lc:idafa-vs-adjective`, `lc:lookalike-roots`, `lc:sadr-vs-qalb`, `lc:requests-and-modals`, `lc:days-and-clock`, plus 4 Qur'ān Decoding moulds: `lc:quran-glue-chains`, `lc:quran-active-passive`, `lc:quran-plural-story`, `lc:quran-verb-shifts`) with diagrams (`timeline`, `lanes`, `fortress`), neural audio tables (plus Mishary Alafasy `reciteVerse` on `ayahRef` rows), trap warnings, pure-English commute `audioCue`s, and SRS review bars. Shelved at the top of `sets.html` (`#lc-<id>`) and mirrored on `quran.html`, taught at `#1` in `Practice`, and reviewed via SRS.
 
 6. **`🧑‍🏫 Teacher` Tab & Headmaster Master Plan (`class.html`):**
    - Top nav (`js/app.js`) exposes **`🧑‍🏫 Teacher`** (`class.html`), combining:
@@ -69,7 +69,7 @@
      - **📥 Paste Preply Chat Notes (`#pasteLessonSection`)** + collapsible **📚 Captured Preply Lessons & Mastery Tests Archive (`#pastClassesArchive`)**.
 
 7. **Universal Dynamic `Practice` Deep-Linking (`index.html` `loadFocusedPracticeFromUrl` + `sourceLinkMeta`):**
-   - Every tab dynamically links into `index.html` (`?chap=chap-N`, `?surah=<id>`, `?lc=<id>`, `?set=<id>`, `?grammar=<id>`, `?class=<id>`, `?focus=words&wsrc=...&dot=...`, `?filter=...&dot=...`, `?keys=...`), opening unseen items in Teach mode and seen items in Review mode with a 1-tap `⚡ Back to Daily Adaptive Batch` banner; every card in `index.html` also carries a clickable source badge linking back to its home tab.
+   - Every tab dynamically links into `index.html` (`?chap=chap-N`, `?surah=<id>`, `?qpillar=structures|core|salah|composable`, `?lc=<id>`, `?set=<id>`, `?grammar=<id>`, `?class=<id>`, `?focus=words&wsrc=...&dot=...`, `?filter=...&dot=...`, `?keys=...`), opening unseen items in Teach mode and seen items in Review mode with a 1-tap `⚡ Back to Daily Adaptive Batch` banner; every card in `index.html` also carries a clickable source badge linking back to its home tab.
 
 8. **Direct Standalone Review Anywhere, Same Earned Dots (`words.html`, `sentences.html`, `chapters.html`, `quran.html`, `sets.html`, `grammar.html`, `class.html`):**
    - Both `words.html` (`📋 All Words` + `⚡ Quick 10-Word Drill`) and `sentences.html` feature direct **`Review: [All | 🇬🇧 EN → AR | 🇸🇦 AR → EN]`** tap-to-reveal prompts (auto-playing audio on reveal) and frozen **`📉 Weakest First`** sorting (`↻ Resort` when ready) so rows never jump while marking `✗ · ≈ · ✓`.
@@ -90,6 +90,7 @@
   - **#67:** Enlarged inline Arabic via `.ar-inline` + `enhanceInlineArabic()` across hints, grammar boxes, and Lesson Cards (`19–28px` `Noto Sans Arabic`, preserving mid-word `<b>` cursive joining).
   - **#68:** Added direct `✗ · ≈ · ✓` word rating buttons (`rateSurahWord`) to every word row in `quran.html` Study mode alongside ayah ratings.
   - **#69:** Upgraded `fuzzyEn()` (`js/app.js`) with multi-group Qur'ānic synonym matching (`wrath / anger / angered`, `astray / lost / misguided`, `favoured / blessed`, etc.) and included `aiMeaning` head glosses in `quran.html` `gradeVerse()`.
+- **15 Nov 2026 — 4-Layer Qur'ān-by-Ear Engine Re-Gear:** Re-geared `Practice` (`js/practice.js`, `index.html`) and `Commute` (`audio.html`) so Qur'ān-by-ear builds foundational decoding leverage first: Glue & Pronoun Chains (`lc:quran-glue-chains`) + Qur'ān Ear Moulds (`lc:quran-active-passive`, `lc:quran-plural-story`, `lc:quran-verb-shifts`, proactively taught at `#1`), frequency-ranked Top 151 Core Words (`qc:0..150`, ~45.8% of the 77,430-word Mushaf), the 13 Salah Surahs, and `i + 1` Composable Juz' 'Amma Ayahs (`Practice.ayahReadiness` gating cold dense verses). Upgraded `quran.html` into the visual 4-Layer Engine Strip & reference/review hub (`🧱 Structures & Moulds`, `📊 Top 151 Core Words`, `🕋 13 Salah Surahs`, `🔓 Unlocked i+1 Ayahs`) with `?qpillar=` deep-links into `Practice`.
 
 ---
 

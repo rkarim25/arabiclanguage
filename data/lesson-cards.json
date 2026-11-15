@@ -815,6 +815,394 @@
         ]
       },
       "audioCue": "Lesson card rule: Sunday to Thursday count one to five, Friday means gathering, and clock hours use feminine ordinal numbers."
+    },
+    {
+      "id": "quran-glue-chains",
+      "category": "quran",
+      "categoryLabel": "Qur'ān Decoding",
+      "icon": "🔗",
+      "title": "The Qur'ān Glue & Pronoun Skeleton",
+      "arTitle": "الرَّوَابِطُ وَالضَّمَائِرُ فِي القُرْآن",
+      "summary": "Nearly a third of every surah is tiny prepositions and openers (فِي · عَلَى · لِ · مِنْ · بِ · إِنَّ · رَبّ) fused to pronoun tails (-hu, -hā, -hum, -kum, -nā). Peel the tail first to hear the root clearly.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "فِي / عَلَى + pronoun",
+            "title": "فِيهَا · عَلَيْهِمْ",
+            "desc": "fī-hā (in it) · ʿalay-him (upon them) — long vowel shifts (-ay-him) before -hum/-kum."
+          },
+          {
+            "badge": "لِ / مِنْ + pronoun",
+            "title": "لَهُمْ · مِنْهُمْ",
+            "desc": "la-hum (for them — li- opens to la-!) · min-hum (from / among them)."
+          },
+          {
+            "badge": "إِنَّ / رَبّ + pronoun",
+            "title": "إِنَّهُمْ · رَبُّهُمْ",
+            "desc": "inna-hum (indeed they) · rabbu-hum (their Sustainer) — opener or Lord fused directly to owner."
+          }
+        ]
+      },
+      "columns": [
+        "Glue + Tail",
+        "Pronoun Shift",
+        "Qur'ānic Ayah",
+        "Literal Anatomy"
+      ],
+      "rows": [
+        {
+          "col1": "<b>فِيهَا</b>",
+          "col2": "<code>فِي</code> + <code>ـهَا</code> (it, f.)",
+          "ar": "فِيهَا سُرُرٌ مَّرْفُوعَةٌ",
+          "tr": "fī-hā sururun marfūʿah",
+          "ayahRef": "88:13",
+          "col4": "<b>In it</b> (the Garden) are raised couches — <i>fī</i> + <i>hā</i> = 1 word"
+        },
+        {
+          "col1": "<b>عَلَيْهِمْ</b>",
+          "col2": "<code>عَلَى</code> + <code>ـهِمْ</code> (them)",
+          "ar": "صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ",
+          "tr": "ṣirāṭa lladhīna anʿamta ʿalay-him",
+          "ayahRef": "1:7",
+          "col4": "The path of those You favoured <b>upon them</b> — <i>ʿalā</i> bends to <i>ʿalay-</i>"
+        },
+        {
+          "col1": "<b>لَهُمْ</b>",
+          "col2": "<code>لِ</code> + <code>ـهُمْ</code> (them)",
+          "ar": "لَهُمۡ أَجۡرٌ غَيۡرُ مَمۡنُونٍ",
+          "tr": "la-hum ajrun ghayru mamnūn",
+          "ayahRef": "84:25",
+          "col4": "<b>For them</b> is an unfailing reward — <i>li-</i> opens to <i>la-</i> before pronouns"
+        },
+        {
+          "col1": "<b>رَبَّهُمْ · بِهِمْ</b>",
+          "col2": "<code>رَبّ</code>/<code>بِ</code> + <code>ـهُمْ</code>",
+          "ar": "إِنَّ رَبَّهُم بِهِمۡ يَوۡمَئِذٍ لَّخَبِيرٌ",
+          "tr": "inna rabba-hum bi-him yawmaʾidhin la-khabīr",
+          "ayahRef": "100:11",
+          "col4": "Indeed <b>their Lord</b>, <b>about them</b>, that Day is All-Aware"
+        }
+      ],
+      "trap": "English hears 2–3 separate words ('in it', 'upon them', 'for them', 'indeed they'), so the ear hunts for a long obscure root inside عَلَيْهِمْ or إِنَّهُمْ. Peel -hu / -hā / -hum / -kum / -nā off the end first!",
+      "quickCheck": {
+        "prompt": "How does the Qur'ān fuse 'upon' (عَلَى) + 'them' (هُمْ) as one word in Al-Fātiḥah 1:7?",
+        "answerAr": "عَلَيْهِمْ",
+        "speakAr": "صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ",
+        "tr": "ʿalay-him",
+        "answerEn": "عَلَى bends to عَلَيْـ before هِمْ: عَلَيْهِمْ (upon them)."
+      },
+      "triggers": {
+        "patterns": [
+          "pronouns",
+          "inna"
+        ],
+        "words": [
+          "فِيهَا",
+          "فِيهِ",
+          "عَلَيْهِمْ",
+          "لَهُمْ",
+          "مِنْهُمْ",
+          "إِنَّهُمْ",
+          "رَبُّهُمْ",
+          "بِهِمْ"
+        ],
+        "chapters": [
+          1,
+          5
+        ]
+      },
+      "audioCue": "Lesson Card: The Quran Glue Skeleton. Nearly a third of every surah is tiny glue words fused with pronoun tails: fiha means in it, alayhim means upon them, lahum means for them, minhum means from them, and innahum means indeed they. Whenever a word sounds long by ear, peel off hum, kum, ha, or hu first."
+    },
+    {
+      "id": "quran-active-passive",
+      "category": "quran",
+      "categoryLabel": "Qur'ān Decoding",
+      "icon": "🎭",
+      "title": "Doer (فَاعِل) vs. Done-To (مَفْعُول) Ear Moulds",
+      "arTitle": "صِيغَةُ الفَاعِلِ وَالمَفْعُولِ",
+      "summary": "Arabic stamps its two biggest role-labels right onto the sound of a root: long ā after letter 1 (CāCiC) marks the active Doer, while starting with ma- plus long -ū- (maCCūC) marks the Done-To object.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "فَاعِل · Doer (CāCiC)",
+            "title": "حَاسِد · عَابِد · مَالِك",
+            "desc": "Long ā right after the 1st root letter = the active Doer (envier · worshipper · master)."
+          },
+          {
+            "badge": "مَفْعُول · Done-To (maCCūC)",
+            "title": "مَغْضُوب · مَرْفُوع · مَمْنُون",
+            "desc": "Prefix ma- + long -ū- before the last root letter = Done-To (angered-upon · raised · cut off)."
+          },
+          {
+            "badge": "فُعُل · Broken Plural",
+            "title": "سَرِير ← سُرُر",
+            "desc": "Short u-u reshapes familiar singular nouns into crisp Qur'ānic plurals (couch → couches)."
+          }
+        ]
+      },
+      "columns": [
+        "Sound Mould",
+        "3-Letter Root",
+        "Qur'ānic Ayah",
+        "How the Ear Decodes It"
+      ],
+      "rows": [
+        {
+          "col1": "<b>Doer</b> (<code>CāCiC</code>)",
+          "col2": "ح-س-د (envy)",
+          "ar": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+          "tr": "wa-min sharri ḥāsidin idhā ḥasad",
+          "ayahRef": "113:5",
+          "col4": "And from the evil of an <b>envier</b> (ḥāsid = Doer) when he envies"
+        },
+        {
+          "col1": "<b>Doer pl.</b> (<code>CāCiCūn</code>)",
+          "col2": "ع-ب-د (worship)",
+          "ar": "وَلَا أَنتُمۡ عَٰبِدُونَ مَا أَعۡبُدُ",
+          "tr": "wa-lā antum ʿābidūna mā aʿbud",
+          "ayahRef": "109:3",
+          "col4": "Nor are you <b>worshippers</b> (ʿābidūn = Doers) of what I worship"
+        },
+        {
+          "col1": "<b>Done-To</b> (<code>maCCūC</code>)",
+          "col2": "غ-ض-ب (anger)",
+          "ar": "غَيۡرِ ٱلۡمَغۡضُوبِ عَلَيۡهِمۡ",
+          "tr": "ghayri l-maghḍūbi ʿalay-him",
+          "ayahRef": "1:7",
+          "col4": "Not those <b>angered-upon</b> (al-maghḍūb = Done-To) — strip ma- and -ū- to hear غ-ض-ب!"
+        },
+        {
+          "col1": "<b>Plural + Done-To</b>",
+          "col2": "س-ر-ر + ر-ف-ع",
+          "ar": "فِيهَا سُرُرٌ مَّرۡفُوعَةٌ",
+          "tr": "fī-hā sururun marfūʿah",
+          "ayahRef": "88:13",
+          "col4": "In it are <b>couches</b> (surur from سَرِير) <b>raised high</b> (marfūʿah = Done-To)"
+        }
+      ],
+      "trap": "Never treat مَغْضُوب or مَرْفُوعَة as unrelated dictionary words! The 'مَـ' prefix is a sound-badge, not a root letter: strip ma- and -ū- and your ear hears غ-ض-ب (anger) and ر-ف-ع (raise) immediately.",
+      "quickCheck": {
+        "prompt": "You hear the 'ma-…-ū-' mould in مَرْفُوعَةٌ (88:13, root ر-ف-ع 'raise'). What does مَرْفُوعَةٌ mean?",
+        "answerAr": "مَرْفُوعَةٌ (ر-ف-ع · مَفْعُولَة)",
+        "speakAr": "فِيهَا سُرُرٌ مَّرۡفُوعَةٌ",
+        "tr": "marfūʿah — raised high (Done-To)",
+        "answerEn": "مَرْفُوعَةٌ uses the maCCūCah Done-To mould on ر-ف-ع ('raise') → 'raised high'."
+      },
+      "triggers": {
+        "patterns": [],
+        "words": [
+          "الْمَغْضُوبِ",
+          "مَرْفُوعَةٌ",
+          "حَاسِدٍ",
+          "عَابِدُونَ",
+          "مَمْنُونٍ",
+          "سُرُرٌ",
+          "مَالِكِ"
+        ],
+        "chapters": [
+          4,
+          6
+        ]
+      },
+      "audioCue": "Lesson Card: Doer versus Done-To Moulds. Long aa after the first letter marks the active Doer: hasid is an envier, abid is a worshipper, malik is a master. Starting with ma and ending with long oo marks Done-To: maghdub means angered upon, and marfuah means raised high."
+    },
+    {
+      "id": "quran-plural-story",
+      "category": "quran",
+      "categoryLabel": "Qur'ān Decoding",
+      "icon": "🌊",
+      "title": "The Qur'ān Plural & Story Engine (-ū / -ūna)",
+      "arTitle": "ضَمَائِرُ الجَمْعِ وَأُسْلُوبُ القَصَص",
+      "summary": "Notice the Qur'ān switching effortlessly between 'I / he' and whole communities: past actions add -ū (آمَنُوا they believed), present groups wrap ya-…-ūna (they do) vs ta-…-ūna (you all do), and إِذَا flips past verbs into future certainty.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          {
+            "era": "Past Plural (-ū)",
+            "ar": "آمَنُوا · عَمِلُوا · قَالُوا",
+            "sub": "āmanū · ʿamilū · qālū = they believed / did / said",
+            "tone": "teal"
+          },
+          {
+            "era": "Present 'They' (ya-…-ūna)",
+            "ar": "يَعْلَمُونَ · يَعْبُدُونَ",
+            "sub": "Starts with يَـ (ya-) + ends -ūna = THEY know / worship",
+            "tone": "blue"
+          },
+          {
+            "era": "Present 'You All' (ta-…-ūna)",
+            "ar": "تَعْلَمُونَ · تَعْبُدُونَ",
+            "sub": "Starts with تَـ (ta-) + ends -ūna = YOU ALL know / worship",
+            "tone": "amber"
+          }
+        ],
+        "danger": "After إِذَا ('when'), Arabic uses the PAST verb shape (إِذَا جَاءَ = 'when it comes') to portray a coming reality as already guaranteed."
+      },
+      "columns": [
+        "Verb Engine",
+        "Prefix & Tail",
+        "Qur'ānic Ayah",
+        "What It Unlocks"
+      ],
+      "rows": [
+        {
+          "col1": "<b>Past plural</b> (they)",
+          "col2": "<code>…ـُوا</code> (<i>-ū</i>)",
+          "ar": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ",
+          "tr": "illā lladhīna āmanū wa-ʿamilū ṣ-ṣāliḥāt",
+          "ayahRef": "103:3",
+          "col4": "Except those who <b>believed</b> and <b>did</b> righteous deeds (103:3)"
+        },
+        {
+          "col1": "<b>Present plural</b> (you all)",
+          "col2": "<code>تَـ…ـُونَ</code> (<i>ta-…-ūn</i>)",
+          "ar": "كَلَّا سَوۡفَ تَعۡلَمُونَ",
+          "tr": "kallā sawfa taʿlamūn",
+          "ayahRef": "102:3",
+          "col4": "No indeed! Soon <b>you all will know</b> (سَوْفَ + present)"
+        },
+        {
+          "col1": "<b>I vs. You all</b>",
+          "col2": "<code>أَـ</code> vs <code>تَـ…ـُونَ</code>",
+          "ar": "لَا أَعۡبُدُ مَا تَعۡبُدُونَ",
+          "tr": "lā aʿbudu mā taʿbudūn",
+          "ayahRef": "109:2",
+          "col4": "I do not worship (<b>a</b>ʿbudu) what <b>you all worship</b> (<b>ta</b>ʿbudūn)"
+        },
+        {
+          "col1": "<b>Future certainty</b>",
+          "col2": "<code>إِذَا</code> + Past",
+          "ar": "إِذَا جَآءَ نَصۡرُ ٱللَّهِ وَٱلۡفَتۡحُ",
+          "tr": "idhā jāʾa naṣru llāhi wa-l-fatḥ",
+          "ayahRef": "110:1",
+          "col4": "<b>When</b> the help of Allah and victory <b>comes</b> (past shape = guaranteed)"
+        }
+      ],
+      "trap": "In fast recitation, يَعْلَمُونَ (THEY know) and تَعْلَمُونَ (YOU ALL know) sound identical except for the very first letter: listen cleanly for y- vs t-!",
+      "quickCheck": {
+        "prompt": "Complete Sūrat al-ʿAṣr 103:3: إِلَّا الَّذِينَ ___ ('except those who believed' — past plural '-ū')",
+        "answerAr": "آمَنُوا",
+        "speakAr": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ",
+        "tr": "āmanū",
+        "answerEn": "آمَنُوا (past verb + plural -ū) = they believed."
+      },
+      "triggers": {
+        "patterns": [
+          "alladhina",
+          "past-present"
+        ],
+        "words": [
+          "آمَنُوا",
+          "عَمِلُوا",
+          "قَالُوا",
+          "يَعْلَمُونَ",
+          "تَعْلَمُونَ",
+          "تَعْبُدُونَ",
+          "جَاءَ"
+        ],
+        "chapters": [
+          5,
+          6
+        ]
+      },
+      "audioCue": "Lesson Card: The Quran Plural and Story Engine. Ending a past verb with long oo means they did: amanu is they believed, amilu is they did, qalu is they said. In the present, ya plus una means they do, while ta plus una means you all do: ya'lamuna is they know, ta'lamuna is you all know."
+    },
+    {
+      "id": "quran-verb-shifts",
+      "category": "quran",
+      "categoryLabel": "Qur'ān Decoding",
+      "icon": "🎛️",
+      "title": "Root Multiplier: 3 Verb Shifts That Unlock Hundreds of Ayahs",
+      "arTitle": "مِيزَانُ الأَفْعَالِ فِي القُرْآن",
+      "summary": "One 3-letter root multiplies cleanly: Form I is the base action (knew / came down), Form II/IV makes someone else do it (taught / sent down), and Form X 'ista- / nasta-' means earnestly seeking that root.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "Form I · Base",
+            "title": "عَلِمَ · نَزَلَ · غَفَرَ",
+            "desc": "Plain root = base action: knew · came down · forgave."
+          },
+          {
+            "badge": "Form II / IV · Causative",
+            "title": "عَلَّمَ · أَنْزَلَ",
+            "desc": "Doubled middle letter (ـلّـ) OR 'a-' prefix (أَـ) = He taught (caused to know) · He sent down."
+          },
+          {
+            "badge": "Form X · اِسْتَـ (Seeking)",
+            "title": "اِسْتَغْفَرَ · نَسْتَعِينُ",
+            "desc": "Prefix '-st-' (ista- / nasta-) = earnestly seek / ask for the root (forgiveness · help)."
+          }
+        ]
+      },
+      "columns": [
+        "Verb Shift",
+        "Sound Marker",
+        "Qur'ānic Ayah",
+        "One Root, Multiplied"
+      ],
+      "rows": [
+        {
+          "col1": "<b>Form II vs. I</b>",
+          "col2": "Shaddah (<code>عَلَّمَ</code>)",
+          "ar": "عَلَّمَ ٱلۡإِنسَٰنَ مَا لَمۡ يَعۡلَمۡ",
+          "tr": "ʿallama l-insāna mā lam yaʿlam",
+          "ayahRef": "96:5",
+          "col4": "He <b>taught</b> (ʿallama, II) man what he did not <b>know</b> (yaʿlam, I) — 1 root ع-ل-م!"
+        },
+        {
+          "col1": "<b>Form IV</b> (Causative)",
+          "col2": "<code>أَـ</code> prefix",
+          "ar": "إِنَّآ أَنزَلۡنَٰهُ فِي لَيۡلَةِ ٱلۡقَدۡرِ",
+          "tr": "innā anzalnā-hu fī laylati l-qadr",
+          "ayahRef": "97:1",
+          "col4": "Indeed We <b>sent it down</b> (anzalnā-hu, IV) — causative of نَزَلَ (came down)"
+        },
+        {
+          "col1": "<b>Form X</b> (Seek)",
+          "col2": "<code>وَاسْتَـ</code> + root",
+          "ar": "فَسَبِّحۡ بِحَمۡدِ رَبِّكَ وَٱسۡتَغۡفِرۡهُ",
+          "tr": "fa-sabbiḥ bi-ḥamdi rabbika wa-staghfir-hu",
+          "ayahRef": "110:3",
+          "col4": "Glorify your Lord's praise and <b>seek His forgiveness</b> (istaghfir-hu, X from غ-ف-ر)"
+        },
+        {
+          "col1": "<b>Form X</b> (We seek)",
+          "col2": "<code>نَسْتَـ</code> + ع-و-ن",
+          "ar": "إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ",
+          "tr": "iyyāka naʿbudu wa-iyyāka nastaʿīn",
+          "ayahRef": "1:5",
+          "col4": "You alone we worship (Form I) and You alone <b>we seek help</b> (nastaʿīn, X)"
+        }
+      ],
+      "trap": "Don't learn عَلِمَ (knew), عَلَّمَ (taught), أَنْزَلَ (sent down), and اسْتَغْفَرَ (seek forgiveness) as four unrelated words. Your ear only needs the sound marker: middle shaddah (taught), 'a-' front (sent down), '-st-' front (seek).",
+      "quickCheck": {
+        "prompt": "In Al-ʿAlaq 96:5, يَعْلَمْ means 'he knows' — what Form II verb from the same ع-ل-م root means 'He TAUGHT'?",
+        "answerAr": "عَلَّمَ",
+        "speakAr": "عَلَّمَ ٱلۡإِنسَٰنَ مَا لَمۡ يَعۡلَمۡ",
+        "tr": "ʿallama",
+        "answerEn": "Double the middle root letter لّ: عَلَّمَ (ʿallama = He taught)."
+      },
+      "triggers": {
+        "patterns": [
+          "imperative"
+        ],
+        "words": [
+          "عَلَّمَ",
+          "أَنْزَلْنَاهُ",
+          "اسْتَغْفِرْهُ",
+          "نَسْتَعِينُ",
+          "فَسَبِّحْ",
+          "أَعْطَيْنَاكَ"
+        ],
+        "chapters": [
+          6,
+          7
+        ]
+      },
+      "audioCue": "Lesson Card: Three Verb Shifts That Multiply Every Root. Doubling the middle letter or adding an a prefix makes a root causative: alima means he knew, allama means He taught; nazala means came down, anzala means sent down. Adding ista or nasta means seeking: ghafara is forgave, istaghfir is seek forgiveness, and nasta'inu in Fatiha means we seek help."
     }
   ]
 }
