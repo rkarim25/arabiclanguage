@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
-  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
+  <link rel="stylesheet" href="css/style.css?v=mwiequte">
   <style>
     main { max-width: 980px; }
     .wk-controls {
@@ -44,7 +44,7 @@
     .wk-title .ar-sub { font-family: var(--font-ar); font-size: 21px; color: var(--muted); font-weight: 400; }
     .wk-meta { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
-    .wk-sec { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .wk-sec { margin-top: 30px; padding-top: 18px; border-top: 1.5px solid var(--border-strong); }
     .wk-sec:first-of-type { margin-top: 0; border-top: 0; padding-top: 0; }
     .wk-sec-h {
       font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--ink);
@@ -61,7 +61,7 @@
     .wk-list { display: flex; flex-direction: column; gap: 0; }
     .wk-row {
       display: grid; grid-template-columns: 24px minmax(0, 1fr) minmax(0, 1.05fr) auto;
-      gap: 6px 14px; align-items: baseline; padding: 9px 2px; border-bottom: 1px solid var(--border);
+      gap: 6px 14px; align-items: baseline; padding: 10px 2px; border-bottom: 1px solid var(--border-subtle, #eff1f4);
       break-inside: avoid; page-break-inside: avoid;
     }
     .wk-row:last-child { border-bottom: 0; }
@@ -126,10 +126,10 @@
     /* Tables: Core 12 + Glue Matrix */
     .wk-tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
     .wk-tbl th {
-      text-align: left; padding: 6px 8px; border-bottom: 1.5px solid var(--border);
+      text-align: left; padding: 6px 8px; border-bottom: 1.5px solid var(--border-strong);
       font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
     }
-    .wk-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .wk-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle, #eff1f4); vertical-align: middle; }
     .wk-tbl tr { break-inside: avoid; page-break-inside: avoid; }
     .wk-tbl .ar-td { font-family: var(--font-ar); font-size: 21px; direction: rtl; text-align: right; cursor: pointer; }
     .wk-glue th, .wk-glue td { text-align: center; padding: 5px 6px; }
@@ -184,8 +184,8 @@
       .wk-print-shell > tbody > tr > td.wk-print-body { display: table-cell !important; padding: 0 14mm !important; border: 0 !important; }
       .wk-print-margin { height: 13mm; }
       .m-dot { display: none !important; }
-      .wk-sec { margin-top: 16pt; padding-top: 10pt; }
-      .wk-row { padding: 5pt 0; gap: 4pt 10pt; }
+      .wk-sec { margin-top: 18pt; padding-top: 12pt; border-top-color: #9ca3af; }
+      .wk-row { padding: 5pt 0; gap: 4pt 10pt; border-bottom-color: #e4e7eb; }
       .wk-ar { font-size: 17pt; line-height: 1.55; }
       .wk-tr { font-size: 9.5pt; }
       .wk-ayah-ar { font-size: 18pt; line-height: 1.6; }
@@ -216,12 +216,12 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwie9rm3"></script>
-<script src="js/practice.js?v=mwie9rm3"></script>
-<script src="js/lesson-cards.js?v=mwie9rm3"></script>
-<script src="js/app.js?v=mwie9rm3"></script>
-<script src="js/tracker.js?v=mwie9rm3"></script>
-<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwiequte"></script>
+<script src="js/practice.js?v=mwiequte"></script>
+<script src="js/lesson-cards.js?v=mwiequte"></script>
+<script src="js/app.js?v=mwiequte"></script>
+<script src="js/tracker.js?v=mwiequte"></script>
+<script src="js/plan.js?v=mwiequte"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -580,13 +580,12 @@ function renderBooklet() {
       <section class="wk-sec">
         <h2 class="wk-sec-h"><span>II. Priority Mental Maps (${lcPicks.length} Lesson Cards)</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Unmastered systems for this week</span></h2>
         <p class="wk-sec-sub">Study the pattern once as a single picture before drilling individual sentences in Practice.</p>
-        ${lcPicks.map(p => `
-          <div class="wk-lc-slot">
-            <h3 class="wk-lc-head">${esc(p.card.icon || "📇")} ${esc(p.card.title)} ${mdot(p.key)}</h3>
-            ${LessonCards.renderBodyHtml(p.card, { hideHeader: true })}
-            ${p.card.quickCheck ? `<div class="wk-lc-check-note"><b>Quick check:</b> ${esc(p.card.quickCheck.prompt || "")}<span style="display:block;margin-top:3px"><span class="arabic" style="font-size:18px;color:var(--ink)">${esc(p.card.quickCheck.answerAr || "")}</span> — ${esc(p.card.quickCheck.answerEn || "")}</span></div>` : ""}
-          </div>
-        `).join("")}
+        ${lcPicks.map(p => {
+          const qc = p.card.quickCheck
+            ? `<b>Quick check:</b> ${esc(p.card.quickCheck.prompt || "")}<span style="display:block;margin-top:3px"><span class="arabic" dir="rtl" style="font-size:19px;color:var(--ink)">${esc(p.card.quickCheck.answerAr || "")}</span> — ${esc(p.card.quickCheck.answerEn || "")}</span>`
+            : "";
+          return `<div class="wk-lc-slot">${LessonCards.renderBodyHtml(p.card, { extraBodyHtml: qc })}</div>`;
+        }).join("")}
       </section>
     ` : ""}
 

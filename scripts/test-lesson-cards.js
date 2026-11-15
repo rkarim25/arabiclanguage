@@ -144,6 +144,16 @@ check("sets.html, index.html (Practice), and sentences.html load js/lesson-cards
   global.SRS = require(path.join(ROOT, "js", "srs.js"));
   const cardHtml = LessonCards.renderBodyHtml(lcData.cards[0], {});
   assert(cardHtml.includes('data-mkey="lc:' + lcData.cards[0].id + '"'), "Lesson Card header must include Earned Mastery Dot");
+  const rootWrapped = LessonCards.enhanceInlineArabic("ع-ق-د");
+  assert((rootWrapped.match(/class="ar-inline"/g) || []).length === 1 && rootWrapped.includes('dir="rtl">ع-ق-د<'),
+    "Hyphenated Arabic roots must stay in a single RTL ar-inline span");
+  const cardWithFoot = LessonCards.renderBodyHtml(lcData.cards[0], {
+    numBadge: 1,
+    extraBodyHtml: "Quick check preview",
+    footerHtml: "<span>Footer controls</span>"
+  });
+  assert(cardWithFoot.includes('class="lc-foot"') && cardWithFoot.includes("Footer controls") && cardWithFoot.includes('class="lc-extra"') && cardWithFoot.includes('class="lc-num">#1<'),
+    "Lesson Card supports docked lc-foot, lc-extra, and numBadge inside .lc-wrap");
   const mosqueCards = (lcData.cards || []).filter(c => c.category === "mosque");
   assert(mosqueCards.some(c => c.id === "khutbah-roadmap") && mosqueCards.some(c => c.id === "duas-and-imam"),
     "Lesson Cards must include khutbah-roadmap & duas-and-imam in category 'mosque'");

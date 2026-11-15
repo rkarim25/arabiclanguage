@@ -12,6 +12,7 @@
   --red: #d73333;
   --red-soft: #fee7e6;
   --border: #eaecf0;
+  --border-subtle: #eff1f4;
   --border-strong: #a2a9b1;
   --radius: 2px;
   --shadow: none;
@@ -35,6 +36,7 @@
     --red: #f87171;
     --red-soft: rgba(248, 113, 113, 0.14);
     --border: #27292d;
+    --border-subtle: #1e242b;
     --border-strong: #54595d;
   }
 }
@@ -185,11 +187,11 @@ main {
 .card {
   background: transparent;
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1.5px solid var(--border-strong);
   border-radius: 0;
   box-shadow: none;
-  padding: 16px 0;
-  margin-bottom: 16px;
+  padding: 20px 0 18px;
+  margin-bottom: 24px;
 }
 h1, h2 {
   font-family: var(--font-serif);
@@ -211,9 +213,9 @@ h1 .arabic {
 }
 h2 {
   font-size: 21px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin: 20px 0 10px;
+  border-bottom: 1.5px solid var(--border-strong);
+  padding-bottom: 5px;
+  margin: 28px 0 12px;
 }
 summary h2, .wiki-article-bar h2 {
   border-bottom: 0;
@@ -270,8 +272,9 @@ button.primary:disabled:hover { background: var(--accent); color: #fff; }
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 8px 16px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 10px;
+  border-bottom: 1.5px solid var(--border-strong);
+  padding-bottom: 6px;
+  margin-bottom: 14px;
 }
 .wiki-tabs {
   display: inline-flex;
@@ -323,7 +326,7 @@ button.primary:disabled:hover { background: var(--accent); color: #fff; }
 }
 .wikitable td {
   padding: 8px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-subtle);
   vertical-align: middle;
 }
 
@@ -349,7 +352,7 @@ button.primary:disabled:hover { background: var(--accent); color: #fff; }
 /* ---------- Clean Book-Reader & Badge Dock System ---------- */
 .book-line {
   padding: 12px 4px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-subtle);
   position: relative;
   transition: background-color 0.15s ease;
 }
@@ -734,7 +737,7 @@ input.heard { border-color: var(--amber) !important; background: var(--amber-sof
   border-bottom: 1px solid var(--border-strong);
 }
 .vocab-table th.ar-col { text-align: right; }
-.vocab-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.vocab-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
 .vocab-table tr:nth-child(even) td { background: transparent; }
 .vocab-table td.ar-cell {
   direction: rtl; text-align: right; font-family: var(--font-ar);
@@ -1419,12 +1422,11 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  padding: 8px 0 12px;
+  padding: 6px 0 10px;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--border);
   border-radius: 0;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 #btnPauseAudio.paused {
@@ -1614,7 +1616,7 @@ body:has(#planBar) #notePen { bottom: calc(70px + env(safe-area-inset-bottom)); 
 
 
 /* ---- 🎯 sentence variation drill (Daily Reader) ---- */
-.s-drill { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 2px; background: var(--paper-elevated); }
+.s-drill { margin-top: 10px; padding: 10px 14px; border: 0; border-left: 3px solid var(--accent); border-radius: 0; background: var(--paper-elevated); }
 .drill-rungs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
 .drill-rung { padding: 2px 9px; border-radius: 2px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer; font-size: 12px; line-height: 1.6; }
 .drill-rung.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
@@ -1870,7 +1872,7 @@ body .tryit-badge:not(.active):not(.done):hover {
   background: var(--paper-elevated);
 }
 @media (hover: hover) {
-  .s-card .srs-btn:not(.sel),
+  .s-card:not(.s-lc-open) .srs-btn:not(.sel),
   .s-card .tryit-badge:not(.active):not(.done),
   .s-card .sym-badge:not(.active),
   .m-table tr .srs-btn:not(.sel),

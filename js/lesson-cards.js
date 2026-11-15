@@ -15,8 +15,9 @@
 
   const STYLE_ID = "lesson-cards-styles";
   const CSS = `
-    .lc-wrap { background: var(--paper-elevated, #f8f9fa); border: 1px solid var(--border, #eaecf0); border-radius: 2px; padding: 12px 16px; margin: 6px 0; text-align: left; }
-    .lc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .lc-wrap { background: var(--paper-elevated, #f8f9fa); border: 1px solid var(--border-strong, #a2a9b1); border-top: 3px solid var(--accent, #3366cc); border-radius: 3px; padding: 16px 20px; margin: 10px 0 22px; text-align: left; }
+    .lc-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border, #eaecf0); }
+    .lc-num { font-family: var(--font-sans, sans-serif); font-size: 13px; font-weight: 700; color: var(--muted, #54595d); }
     .lc-cat { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 1px 0; border-radius: 0; background: transparent; color: var(--muted, #54595d); }
     .lc-cat.cat-nuance { background: transparent; color: var(--muted, #54595d); }
     .lc-cat.cat-quran { background: transparent; color: var(--accent, #3366cc); }
@@ -25,12 +26,12 @@
     .lc-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; width: 100%; }
     .lc-title { font-family: var(--font-serif, 'Linux Libertine', Georgia, serif); font-size: 19px; font-weight: 400; color: var(--ink, #202122); margin: 2px 0 0; }
     .lc-ar-title { font-family: var(--font-ar, serif); font-size: 22px; color: var(--ink, #202122); direction: rtl; font-weight: 400; }
-    .lc-summary { font-family: var(--font-ui, sans-serif); font-size: 15px; color: var(--ink, #202122); line-height: 1.6; margin: 0 0 10px; padding: 6px 12px; background: var(--bg, #ffffff); border-left: 3px solid var(--accent, #3366cc); border-radius: 0; }
+    .lc-summary { font-family: var(--font-ui, sans-serif); font-size: 15px; color: var(--ink, #202122); line-height: 1.6; margin: 10px 0 12px; padding: 6px 12px; background: transparent; border-left: 3px solid var(--accent, #3366cc); border-radius: 0; }
 
-    /* Diagrams (Wikipedia infobox panels) */
+    /* Diagrams (clean unboxed panels) */
     .lc-diagram { margin: 8px 0 10px; }
-    .lc-timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 8px; }
-    .lc-tl-node { border: 1px solid var(--border, #eaecf0); border-top: 2px solid var(--border-strong, #a2a9b1); border-radius: 2px; padding: 8px 10px; background: var(--bg, #ffffff); position: relative; }
+    .lc-timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; }
+    .lc-tl-node { border: none; border-top: 2px solid var(--border-strong, #a2a9b1); border-radius: 0; padding: 8px 10px; background: var(--bg, #ffffff); position: relative; }
     .lc-tl-node.tone-teal { border-top: 2px solid var(--green, #14866d); background: var(--bg, #ffffff); }
     .lc-tl-node.tone-blue { border-top: 2px solid var(--accent, #3366cc); background: var(--bg, #ffffff); }
     .lc-tl-node.tone-amber { border-top: 2px solid var(--amber, #ac6600); background: var(--bg, #ffffff); }
@@ -40,37 +41,39 @@
     .lc-tl-sub { font-size: 12.5px; color: var(--muted, #54595d); margin-top: 2px; }
     .lc-danger-pill { margin-top: 6px; padding: 6px 10px; border-radius: 0; background: var(--red-soft, #fee7e6); border: none; border-left: 3px solid var(--red, #d73333); color: var(--ink, #202122); font-size: 13.5px; font-weight: 500; line-height: 1.5; }
 
-    .lc-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
-    .lc-lane { border: 1px solid var(--border, #eaecf0); border-top: 2px solid var(--border-strong, #a2a9b1); border-radius: 2px; padding: 8px 10px; background: var(--bg, #ffffff); }
+    .lc-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+    .lc-lane { border: none; border-top: 2px solid var(--border-strong, #a2a9b1); border-radius: 0; padding: 8px 10px; background: var(--bg, #ffffff); }
     .lc-lane-badge { display: inline-block; font-family: var(--font-ar, serif); font-size: 18px; font-weight: 600; color: var(--ink, #202122); background: transparent; border-bottom: 1px dotted var(--border-strong, #a2a9b1); border-radius: 0; padding: 1px 4px; margin-bottom: 4px; }
     .lc-lane-title { font-family: var(--font-ui, sans-serif); font-size: 14.5px; font-weight: 600; color: var(--ink, #202122); margin-bottom: 2px; }
     .lc-lane-desc { font-family: var(--font-ui, sans-serif); font-size: 13.5px; color: var(--muted, #54595d); line-height: 1.5; }
 
-    .lc-fortress { border: 1px solid var(--border, #eaecf0); border-radius: 2px; padding: 9px 11px; background: var(--bg, #ffffff); }
+    .lc-fortress { border: none; border-left: 2px solid var(--border-strong, #a2a9b1); border-radius: 0; padding: 9px 12px; background: var(--bg, #ffffff); }
     .lc-fort-layer { font-size: 13.5px; line-height: 1.55; color: var(--ink, #202122); margin-bottom: 6px; }
     .lc-fort-shield { border-left: 3px solid var(--green, #14866d); padding: 5px 10px; background: var(--paper-elevated, #f8f9fa); font-size: 13.5px; font-weight: 500; line-height: 1.55; color: var(--ink, #202122); margin-bottom: 6px; }
     .lc-fort-inner { border-left: 3px solid var(--amber, #ac6600); padding: 5px 10px; background: var(--amber-soft, #fef6e7); font-size: 13.5px; font-weight: 500; line-height: 1.55; color: var(--ink, #202122); }
 
     /* Wikipedia wikitable Comparison Table */
-    .lc-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--border, #eaecf0); border-radius: 2px; background: var(--bg, #ffffff); margin: 8px 0; }
+    .lc-table-wrap { width: 100%; overflow-x: auto; border: none; border-top: 1px solid var(--border, #eaecf0); border-bottom: 1px solid var(--border, #eaecf0); border-radius: 0; background: var(--bg, #ffffff); margin: 10px 0; }
     .lc-table { width: 100%; border-collapse: collapse; font-size: 14.5px; background: var(--bg, #ffffff); }
-    .lc-table th { text-align: left; padding: 7px 10px; background: var(--paper-elevated, #f8f9fa); border-bottom: 1px solid var(--border-strong, #a2a9b1); font-size: 12.5px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--ink, #202122); white-space: nowrap; }
-    .lc-table td { padding: 7px 10px; border-bottom: 1px solid var(--border, #eaecf0); vertical-align: middle; line-height: 1.55; color: var(--ink, #202122); font-size: 15px; }
+    .lc-table th { text-align: left; padding: 8px 10px; background: var(--paper-elevated, #f8f9fa); border-bottom: 1px solid var(--border-strong, #a2a9b1); font-size: 12px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--muted, #54595d); white-space: nowrap; }
+    .lc-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-subtle, #eff1f4); vertical-align: middle; line-height: 1.55; color: var(--ink, #202122); font-size: 15px; }
     .lc-table tr:last-child td { border-bottom: none; }
     .lc-table code { background: var(--paper-elevated, #f8f9fa); border: 1px solid var(--border, #eaecf0); border-radius: 2px; padding: 1px 5px; font-family: var(--font-ar, monospace); font-size: 18px; line-height: 1.5; color: var(--ink, #202122); }
     .lc-ex-cell { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .lc-ex-ar { font-family: var(--font-ar, serif); font-size: 21px; color: var(--ink, #202122); direction: rtl; line-height: 1.65; }
-    .lc-ex-tr { font-size: 12.5px; color: var(--muted, #54595d); font-style: italic; }
+    .lc-ex-tr { font-size: 12.5px; color: var(--muted, #54595d); font-style: italic; direction: ltr; text-align: right; }
     .lc-speak-btn { border: 1px solid transparent; background: transparent; border-radius: 2px; padding: 2px 6px; font-size: 12.5px; cursor: pointer; flex-shrink: 0; color: var(--muted); opacity: 0.78; }
     .lc-speak-btn:hover { border-color: var(--accent, #3366cc); color: var(--accent, #3366cc); background: var(--paper-elevated, #f8f9fa); opacity: 1; }
 
     .lc-trap { margin-top: 8px; padding: 6px 12px; border-radius: 0; background: var(--amber-soft, #fef6e7); border: none; border-left: 3px solid var(--amber, #ac6600); font-size: 13.5px; color: var(--ink, #202122); line-height: 1.55; }
+    .lc-extra { margin-top: 10px; padding: 8px 12px; border-left: 3px solid var(--border-strong, #a2a9b1); background: var(--bg, #ffffff); font-size: 14px; color: var(--ink, #202122); line-height: 1.55; }
+    .lc-foot { margin: 14px -20px -16px; padding: 10px 20px; background: rgba(127, 127, 127, 0.06); border-top: 1px solid var(--border, #eaecf0); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-radius: 0 0 2px 2px; }
   `;
 
   const _AR_CHARS = "\\u0600-\\u06FF\\u0750-\\u077F\\uFB50-\\uFDFF\\uFE70-\\uFEFF";
   const _AR_ATOM = `(?:<(?:b|strong)>[${_AR_CHARS}]+<\\/(?:b|strong)>|[${_AR_CHARS}]+)`;
   const _AR_CONTAINER = `<code\\b[^>]*>[\\s\\S]*?<\\/code>|<(span|div|p|b|strong|td|th|a)\\b[^>]*\\bclass="[^"]*\\b(?:arabic|ar-inline|lc-ex-ar|lc-tl-ar|lc-ar-title|lc-lane-badge|w-ar|s-ar-text)\\b[^"]*"[^>]*>[\\s\\S]*?<\\/\\2>|<!--[\\s\\S]*?-->`;
-  const _AR_RUN = `${_AR_ATOM}(?:(?:[\\s\\/،؛؟!ـ]+|…|\\.{2,3})(?=${_AR_ATOM})|${_AR_ATOM})*`;
+  const _AR_RUN = `${_AR_ATOM}(?:(?:[\\s\\/،؛؟!ـ\\-–]+|…|\\.{2,3})(?=${_AR_ATOM})|${_AR_ATOM})*`;
   const _AR_ENHANCE_RE = new RegExp(`(${_AR_CONTAINER})|(${_AR_RUN})|(<[^>]+>)`, "gi");
 
   function enhanceInlineArabic(html) {
@@ -147,8 +150,11 @@
       <div class="lc-wrap" onclick="event.stopPropagation()">
         ${!o.hideHeader ? `
           <div class="lc-top">
-            <span style="display:inline-flex;align-items:center;gap:7px">${typeof SRS === "object" && SRS && SRS.dotHtml ? SRS.dotHtml("lc:" + card.id, { lg: true }) : ""}<span class="lc-cat cat-${card.category || "grammar"}">${card.icon || "📇"} Lesson Card · ${card.categoryLabel || card.category || "Concept"}</span></span>
-            ${o.setsLink ? `<a href="sets.html#lc-${card.id}" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none">View in Sets →</a>` : ""}
+            <span style="display:inline-flex;align-items:center;gap:7px">${o.numBadge != null ? `<span class="lc-num">#${o.numBadge}</span>` : ""}${typeof SRS === "object" && SRS && SRS.dotHtml ? SRS.dotHtml("lc:" + card.id, { lg: true }) : ""}<span class="lc-cat cat-${card.category || "grammar"}">${card.icon || "📇"} Lesson Card · ${card.categoryLabel || card.category || "Concept"}</span></span>
+            <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap">
+              ${o.headerRightHtml || ""}
+              ${o.setsLink ? `<a href="sets.html#lc-${card.id}" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none">View in Sets →</a>` : ""}
+            </span>
           </div>
           <div class="lc-title-row">
             <div class="lc-title">${enhanceInlineArabic(card.title)}</div>
@@ -171,7 +177,7 @@
                     <div class="lc-ex-cell">
                       <div>
                         <div class="lc-ex-ar">${r.ar || ""}</div>
-                        ${r.tr ? `<div class="lc-ex-tr">(${r.tr})</div>` : ""}
+                        ${r.tr ? `<div class="lc-ex-tr" dir="ltr">(${r.tr})</div>` : ""}
                       </div>
                       ${r.ar ? `<button type="button" class="lc-speak-btn" onclick="event.stopPropagation(); ${r.ayahRef && speakFn === "LessonCards.speakEncoded" ? `LessonCards.reciteOrSpeak('${r.ayahRef}', '${escAttr(r.ar)}')` : `${speakFn}('${escAttr(r.ar)}')`}" title="${r.ayahRef ? `Listen to Mishary Rashid Alafasy recitation (${r.ayahRef})` : "Listen"}">🔊</button>` : ""}
                     </div>
@@ -183,6 +189,8 @@
           </table>
         </div>
         ${card.trap ? `<div class="lc-trap">⚠️ <b>Watch out:</b> ${enhanceInlineArabic(card.trap)}</div>` : ""}
+        ${o.extraBodyHtml ? `<div class="lc-extra">${o.extraBodyHtml}</div>` : ""}
+        ${o.footerHtml ? `<div class="lc-foot" onclick="event.stopPropagation()">${o.footerHtml}</div>` : ""}
       </div>
     `;
   }

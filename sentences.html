@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
-  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
+  <link rel="stylesheet" href="css/style.css?v=mwiequte">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -31,8 +31,8 @@
     }
     .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
     .m-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .m-table th { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border-strong); font-size: 12px; color: var(--muted); background: var(--surface-2); font-weight: 600; }
-    .m-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table th { text-align: left; padding: 7px 10px; border-bottom: 1.5px solid var(--border-strong); font-size: 12px; color: var(--muted); background: var(--surface-2); font-weight: 600; }
+    .m-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
     .m-table tr:hover { background: var(--surface-2); }
     .m-en-cell { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.5; }
     .m-ar-cell { font-family: var(--font-ar); font-size: 24px; color: var(--ink); line-height: 1.7; }
@@ -76,7 +76,7 @@
   <div id="sentMasteryBar" style="margin-bottom:10px"></div>
 
   <div class="card" style="padding:10px 0;border-top:0">
-    <div class="calm-row" style="padding-bottom:10px;border-bottom:1px solid var(--border)">
+    <div class="calm-row" style="padding-bottom:12px;margin-bottom:14px;border-bottom:1.5px solid var(--border-strong)">
       <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, or grammar…" oninput="renderMasterBank()">
       <span style="display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap">
         <button type="button" class="chip active s-rmode" id="btnSentModeAll" onclick="setSentReviewMode('all')">All</button>
@@ -130,16 +130,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwie9rm3"></script>
-<script src="js/curriculum.js?v=mwie9rm3"></script>
-<script src="js/srs.js?v=mwie9rm3"></script>
-<script src="js/frames.js?v=mwie9rm3"></script>
-<script src="js/practice.js?v=mwie9rm3"></script>
-<script src="js/lesson-cards.js?v=mwie9rm3"></script>
-<script src="js/app.js?v=mwie9rm3"></script>
-<script src="js/tracker.js?v=mwie9rm3"></script>
-<script src="js/plan.js?v=mwie9rm3"></script>
-<script src="js/account.js?v=mwie9rm3"></script>
+<script src="js/progress-model.js?v=mwiequte"></script>
+<script src="js/curriculum.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiequte"></script>
+<script src="js/frames.js?v=mwiequte"></script>
+<script src="js/practice.js?v=mwiequte"></script>
+<script src="js/lesson-cards.js?v=mwiequte"></script>
+<script src="js/app.js?v=mwiequte"></script>
+<script src="js/tracker.js?v=mwiequte"></script>
+<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/account.js?v=mwiequte"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");

@@ -8,17 +8,17 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
-  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
+  <link rel="stylesheet" href="css/style.css?v=mwiequte">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
        logical way of organising things are grouped together so that I can revise and
        learn from there. You can put in others and make grammar a sub page there."
        Book-like: section headings, one row per set, the table opens in place. */
-    .set-section { margin: 22px 0 6px; }
-    .set-section h2 { font-family: var(--font-serif); font-size: 19px; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); color: var(--ink); font-weight: 400; letter-spacing: 0; text-transform: none; }
-    .set-row { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; margin-bottom: 0; overflow: hidden; }
+    .set-section { margin: 28px 0 8px; }
+    .set-section h2 { font-family: var(--font-serif); font-size: 20px; margin: 24px 0 10px; padding-bottom: 5px; border-bottom: 1.5px solid var(--border-strong); color: var(--ink); font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .set-row { background: transparent; border: 0; border-bottom: 1px solid var(--border-subtle); border-radius: 0; margin-bottom: 0; overflow: hidden; }
     .set-head { display: flex; align-items: center; gap: 10px; padding: 12px 2px; cursor: pointer; user-select: none; }
     .set-head:hover { background: var(--accent-soft, rgba(13,122,95,.05)); }
     .set-head .ic { font-size: 18px; width: 26px; text-align: center; }
@@ -28,7 +28,7 @@
     .set-head .cnt { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .set-head .chev { color: var(--muted); font-size: 12px; transition: transform .15s; }
     .set-row.open .set-head .chev { transform: rotate(90deg); }
-    .set-body { display: none; border-top: 1px dashed var(--border); padding: 8px 2px 14px; }
+    .set-body { display: none; border-top: 0; padding: 8px 2px 16px; }
     .set-row.open .set-body { display: block; }
     .set-body .vocab-table { font-size: 14.5px; }
     .set-body .vocab-table td.ar-cell { font-size: 23px; }
@@ -58,11 +58,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwie9rm3"></script>
-<script src="js/lesson-cards.js?v=mwie9rm3"></script>
-<script src="js/app.js?v=mwie9rm3"></script>
-<script src="js/tracker.js?v=mwie9rm3"></script>
-<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwiequte"></script>
+<script src="js/lesson-cards.js?v=mwiequte"></script>
+<script src="js/app.js?v=mwiequte"></script>
+<script src="js/tracker.js?v=mwiequte"></script>
+<script src="js/plan.js?v=mwiequte"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -245,15 +245,15 @@ function buildLessonCard(lcId) {
   const body = document.getElementById("setbody-lc-" + lcId);
   if (!card || !body || !window.LessonCards) return;
   const srsKey = "lc:" + card.id;
-  body.innerHTML = `
-    ${LessonCards.renderBodyHtml(card, { hideHeader: true })}
-    <div class="set-links" id="lc-rate-wrap-${card.id}" style="justify-content:space-between">
+  const footerHtml = `
+    <div id="lc-rate-wrap-${card.id}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;width:100%">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-size:12.5px;font-weight:600;color:var(--ink)">Mark Lesson Card for spaced review:</span>
         <span class="lc-rate-slot">${SRS.rateBarHtml(srsKey, "rateSetLessonCard", [card.id])}</span>
       </div>
       <a href="index.html?lc=${encodeURIComponent(card.id)}" style="font-weight:500">⚡ Practise Lesson Card in Practice →</a>
     </div>`;
+  body.innerHTML = LessonCards.renderBodyHtml(card, { hideHeader: true, footerHtml });
 }
 
 function refreshSetHeaders() {

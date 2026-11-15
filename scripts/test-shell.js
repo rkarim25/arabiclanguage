@@ -981,6 +981,7 @@ const bank = D("sentence-bank.json");
   yes(/id="navPrintWeek"/.test(appSrcNow) && /class="print-week-cta"/.test(indexSrcNow) && /autoPrint/.test(weeklySrcNow) && /toggleWkMode/.test(weeklySrcNow), "top nav & Practice expose 1-click Print Week with ?print=1 auto-print and Book Chapter mode");
   yes(/\.s-col-prompt/.test(indexSrcNow) && /\.s-col-answer/.test(indexSrcNow) && /\.s-col-dock/.test(indexSrcNow) && /\.book-cue/.test(cssSrcNow), "Practice cards put target content first in a horizontal parallel book spread with quiet margin controls");
   yes(/<div class="wk-ar-col">[\s\S]*class="wk-tr" dir="ltr"/.test(weeklySrcNow) && /\.wk-hint\s*\{\s*display:\s*none;?\s*\}/.test(weeklySrcNow) && /<div class="s-ar-side">[\s\S]*id="day-tr-/.test(chapsSrcNow), "Transliteration renders LTR directly under Arabic and noisy row tags are hidden");
+  yes(/footerHtml:\s*lcFooter/.test(indexSrcNow) && !/class="s-lc-foot"/.test(indexSrcNow) && /footerHtml/.test(setsSrcNow) && /--border-subtle/.test(cssSrcNow) && /\.lc-foot/.test(fs.readFileSync(path.join(ROOT, "js", "lesson-cards.js"), "utf8")), "Lesson Cards render rating controls inside self-contained .lc-foot without orphan .s-lc-foot bars, using clear section vs. subtle row separation");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

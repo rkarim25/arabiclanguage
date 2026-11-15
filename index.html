@@ -8,10 +8,10 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
-  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
+  <link rel="stylesheet" href="css/style.css?v=mwiequte">
   <style>
-    .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--border-strong); }
+    .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
     .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
@@ -23,7 +23,7 @@
     .tab-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
 
     /* Unified Sleek Practice Toolbar */
-    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 6px 0 10px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
+    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 16px; padding: 6px 0 12px; background: transparent; border: 0; border-bottom: 1.5px solid var(--border-strong); border-radius: 0; }
     .pt-group { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
     .dir-toggle { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 2px; background: var(--paper-elevated); padding: 0; }
@@ -43,13 +43,13 @@
     .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     /* Wikipedia Parallel Reading Table Rows */
-    .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 2px; }
+    .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 6px; }
     .s-card {
       background: transparent;
       border: 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-subtle);
       border-radius: 0;
-      padding: 10px 4px;
+      padding: 12px 4px;
       display: grid;
       grid-template-columns: 28px minmax(240px, 1fr) minmax(260px, 1.15fr) auto;
       column-gap: 22px;
@@ -57,7 +57,8 @@
       align-items: baseline;
       transition: background 0.15s;
     }
-    .s-card.s-lc-open { display: block; padding: 12px 4px; }
+    .s-card.s-lc-open { display: block; padding: 4px 0; border-bottom: 0; }
+    .s-card.s-lc-open:hover { background: transparent; }
     .s-card:last-child { border-bottom: 0; }
     .s-card:hover { background: var(--paper-elevated); }
     .s-card.revealed { background: transparent; }
@@ -82,8 +83,7 @@
     .s-col-dock { grid-column: 4; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; justify-self: end; }
     .s-row-extras { grid-column: 2 / -1; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
     .s-card > .tryit { grid-column: 2 / -1; }
-    .s-lc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-    .s-lc-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border); }
+    #homeChapStrip:not(:empty) { margin-top: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--border-strong); }
 
     .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; flex-wrap: wrap; }
@@ -155,8 +155,8 @@
     .mot-link { border: 0; background: transparent; color: var(--accent); padding: 0 2px; font-size: 13px; font-weight: 400; cursor: pointer; border-radius: 0; font-family: var(--font-ui); }
     .mot-link:hover { color: var(--accent); background: transparent; border-color: transparent; text-decoration: underline; }
     .mot-link.active { color: var(--ink); font-weight: 600; text-decoration: underline; }
-    .batch-progress-footer { margin-top: 16px; padding: 14px 2px; border-radius: 0; background: transparent; border: 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .batch-ai-nudge { margin-top: 14px; padding: 12px 0; background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; text-align: left; }
+    .batch-progress-footer { margin-top: 22px; padding: 16px 2px; border-radius: 0; background: transparent; border: 0; border-top: 1.5px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .batch-ai-nudge { margin-top: 16px; padding: 14px 0; background: transparent; border: 0; border-top: 1.5px solid var(--border-strong); border-radius: 0; text-align: left; }
     .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 12px; line-height: 1.5; color: var(--ink); background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 2px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
     .mode-pill-teach, .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 2px; background: var(--paper-elevated); color: var(--muted); border: 1px solid var(--border); }
     .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 10px; margin-top: 8px; }
@@ -168,15 +168,15 @@
     .line-toggle-btn.active { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); font-weight: 600; }
 
     /* Master Bank Table & Controls */
-    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent; margin-top: 6px; }
+    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 0; border-top: 1.5px solid var(--border-strong); border-radius: 0; background: transparent; margin-top: 10px; }
     .m-search { width: 100%; max-width: 380px; padding: 7px 12px; border: 1px solid var(--border-strong); border-radius: 2px; font-size: 14px; background: var(--bg); color: var(--ink); }
     .m-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 4px; background: var(--bg); }
-    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border-strong); color: var(--ink); font-size: 13px; font-weight: 600; text-transform: none; letter-spacing: 0; background: var(--paper-elevated); }
-    .m-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--border-strong); color: var(--ink); font-size: 13px; font-weight: 600; text-transform: none; letter-spacing: 0; background: var(--paper-elevated); }
+    .m-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
     .m-table tr:hover { background: var(--paper-elevated); }
 
     /* Completion Banner */
-    .done-banner { text-align: center; padding: 18px 4px; background: transparent; border: 0; border-top: 1px solid var(--accent); border-radius: 0; margin-top: 16px; }
+    .done-banner { text-align: center; padding: 18px 4px; background: transparent; border: 0; border-top: 1.5px solid var(--accent); border-radius: 0; margin-top: 18px; }
 
     /* Mobile & Flexible Responsive Layout */
     @media (max-width: 768px) {
@@ -193,7 +193,7 @@
       .s-action-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
       .s-reveal-btn { flex: 1; min-width: 140px; justify-content: center; }
       .s-rate-bar { width: auto; justify-content: flex-end; margin-left: auto; }
-      .s-card { grid-template-columns: 24px 1fr; column-gap: 10px; row-gap: 6px; padding: 10px 2px; }
+      .s-card { grid-template-columns: 24px 1fr; column-gap: 10px; row-gap: 6px; padding: 12px 2px; }
       .s-col-prompt { grid-column: 2; }
       .s-col-answer { grid-column: 2; align-items: flex-start; }
       .s-ans-row { width: 100%; justify-content: space-between; }
@@ -282,7 +282,7 @@
   </div>
 
   <!-- ACTIVE CHAPTER EARNED GREEN BAR & COACH'S NOTE (AT END OF PRACTICE PAGE) -->
-  <div id="homeChapStrip" style="margin-top:14px;margin-bottom:12px"></div>
+  <div id="homeChapStrip"></div>
 
   <details class="coach-details" id="coachCard" style="display:none;margin-bottom:12px">
     <summary>
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwie9rm3"></script>
-<script src="js/curriculum.js?v=mwie9rm3"></script>
-<script src="js/srs.js?v=mwie9rm3"></script>
-<script src="js/frames.js?v=mwie9rm3"></script>
-<script src="js/freetry.js?v=mwie9rm3"></script>
-<script src="js/practice.js?v=mwie9rm3"></script>
-<script src="js/lesson-cards.js?v=mwie9rm3"></script>
-<script src="js/match.js?v=mwie9rm3"></script>
-<script src="js/errors.js?v=mwie9rm3"></script>
-<script src="js/tryit.js?v=mwie9rm3"></script>
-<script src="js/app.js?v=mwie9rm3"></script>
-<script src="js/tracker.js?v=mwie9rm3"></script>
-<script src="js/plan.js?v=mwie9rm3"></script>
-<script src="js/account.js?v=mwie9rm3"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwiequte"></script>
+<script src="js/curriculum.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiequte"></script>
+<script src="js/frames.js?v=mwiequte"></script>
+<script src="js/freetry.js?v=mwiequte"></script>
+<script src="js/practice.js?v=mwiequte"></script>
+<script src="js/lesson-cards.js?v=mwiequte"></script>
+<script src="js/match.js?v=mwiequte"></script>
+<script src="js/errors.js?v=mwiequte"></script>
+<script src="js/tryit.js?v=mwiequte"></script>
+<script src="js/app.js?v=mwiequte"></script>
+<script src="js/tracker.js?v=mwiequte"></script>
+<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/account.js?v=mwiequte"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -1488,8 +1488,6 @@ function cardHtml(s, idx) {
   const isRevealed = REVEALED.has(idx);
   const isOpen = isReadView || isRevealed;
   if (s.kind === "lesson-card") {
-    const escLcKey = String(s.key || "").replace(/'/g, "\\'");
-    const lcRated = BATCH_RATED.has(s.key);
     const noteEnhanced = s.note ? (typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note) : "";
     const lcTitle = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.lcMode === "teach" ? (s.title || s.en) : s.en) : (s.lcMode === "teach" ? (s.title || s.en) : s.en);
     const lcHref = (sourceLinkMeta(s) || {}).href || "sets.html";
@@ -1501,10 +1499,7 @@ function cardHtml(s, idx) {
           <div class="s-col-prompt">
             <div class="s-prompt-main">
               <span class="s-prompt-text">${lcTitle}</span>
-            </div>
-            <div class="s-src-foot">
-              ${s.lcMode === "teach" ? `<span class="s-flag-inline">New concept</span>` : ""}
-              <a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets">${lcSrc} ↗</a>
+              <a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets (${lcSrc})" style="font-size:12px;color:var(--muted);text-decoration:none">↗</a>
             </div>
           </div>
           <div class="s-col-answer">
@@ -1519,30 +1514,31 @@ function cardHtml(s, idx) {
         </div>
       `;
     }
+    const lcActionsRight = `<button type="button" class="pt-btn" onclick="event.stopPropagation(); REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`;
+    const lcQuickCheck = s.lcMode !== "teach" && s.ar ? `✓ <b>Quick Check:</b> <span class="arabic" dir="rtl" style="font-size:21px;color:var(--ink)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}` : "";
+    const lcFooter = `
+      <span style="font-size:12.5px;color:var(--muted);font-weight:500">${s.lcMode === "teach" ? "Read the mental map above, then rate below:" : "Rate recall for this Lesson Card:"}</span>
+      <div style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: false })}</div>
+        <button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Collapse ▴</button>
+      </div>
+    `;
     return `
       <div class="s-card revealed s-lc-open" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
-        <div class="s-lc-head">
-          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-            <span class="s-col-num">${idx + 1}</span>
-            <span class="s-prompt-text">${lcTitle}</span>
-            <span class="s-src-foot"><a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets">${lcSrc} ↗</a></span>
-          </div>
-          <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap" onclick="event.stopPropagation()">
-            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:500;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`}
-            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
-          </div>
-        </div>
-        <div class="s-revealed-body">
-          ${window.LessonCards && s.lcCard ? LessonCards.renderBodyHtml(s.lcCard, { setsLink: true }) : `<div class="s-hint-line">${noteEnhanced}</div>`}
-          ${s.lcMode !== "teach" && s.ar ? `<div class="s-hint-line">✓ <b>Quick Check:</b> <span class="arabic" dir="rtl" style="font-size:21px;color:var(--ink)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}</div>` : ""}
-        </div>
-        <div class="s-lc-foot" onclick="event.stopPropagation()">
-          <span style="font-size:12px;color:var(--muted)">${s.lcMode === "teach" ? "Mark understood to collapse &amp; continue:" : "Rate recall:"}</span>
-          <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:500;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">✓ Collapse</button>`}
-            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
-          </div>
-        </div>
+        ${window.LessonCards && s.lcCard
+          ? LessonCards.renderBodyHtml(s.lcCard, {
+              setsLink: true,
+              numBadge: idx + 1,
+              headerRightHtml: lcActionsRight,
+              extraBodyHtml: lcQuickCheck,
+              footerHtml: lcFooter
+            })
+          : `<div class="lc-wrap" onclick="event.stopPropagation()">
+               <div class="lc-top"><span style="display:inline-flex;align-items:center;gap:7px"><span class="lc-num">#${idx + 1}</span><span>${lcTitle}</span></span>${lcActionsRight}</div>
+               <div class="s-hint-line">${noteEnhanced}</div>
+               ${lcQuickCheck ? `<div class="lc-extra">${lcQuickCheck}</div>` : ""}
+               <div class="lc-foot" onclick="event.stopPropagation()">${lcFooter}</div>
+             </div>`}
         ${TryIt.slotHtml(idx)}
       </div>
     `;
