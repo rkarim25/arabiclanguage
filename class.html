@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d7a5f">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
-  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/fonts.css?v=mwidpt4o">
+  <link rel="stylesheet" href="css/style.css?v=mwidpt4o">
   <style>
-    .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 500; margin-bottom: 8px; }
     .passage-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 14px 0; }
     .passage-line { padding: 12px 0; border-bottom: 1px dashed var(--border); }
     .passage-line:last-child { border-bottom: none; }
@@ -21,16 +21,16 @@
     .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
     .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--ink); display: block; }
     .wbw-chip .w-en { font-size: 11.5px; color: var(--muted); display: block; }
-    .p-en { font-family: var(--font-serif); font-size: 14.5px; color: var(--ink); margin-top: 4px; }
+    .p-en { font-family: var(--font-ui); font-size: 15.5px; color: var(--ink); margin-top: 4px; }
     .p-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 3px; }
     
-    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 999px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
+    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 500; border-radius: var(--radius); cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
-    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
     
     .tbl { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14.5px; }
     .tbl td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    .tbl .ar { font-family: var(--font-ar); font-size: 22px; width: 25%; text-align: right; direction: rtl; color: var(--accent); }
+    .tbl .ar { font-family: var(--font-ar); font-size: 23px; width: 25%; text-align: right; direction: rtl; color: var(--ink); }
     @media (max-width: 600px) {
       .tbl .ar { width: 28%; font-size: 20px; }
       .tbl td { padding: 10px 6px; }
@@ -85,8 +85,8 @@
     .rate-feedback { font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 5px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
 
     /* Vocab Practice Mode Reveal Button */
-    .vocab-reveal-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-soft); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px dashed var(--accent); user-select: none; transition: all 0.12s; }
-    .vocab-reveal-btn:hover { background: var(--accent); color: #fff; }
+    .vocab-reveal-btn { display: inline-flex; align-items: center; gap: 4px; background: transparent; color: var(--accent); padding: 2px 2px; border-radius: 0; font-size: 13px; font-weight: 500; cursor: pointer; border: 0; border-bottom: 1px dotted var(--accent); user-select: none; transition: color 0.12s; }
+    .vocab-reveal-btn:hover { color: var(--ink); border-bottom-color: var(--ink); background: transparent; }
 
     /* Vocab Meaning & Inline Note */
     .vocab-en-wrap { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; line-height: 1.5; }
@@ -99,7 +99,7 @@
     .concept-card { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 12px 0; box-shadow: none; }
     .concept-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 8px; }
     .concept-ar { font-family: var(--font-ar); font-size: 26px; color: var(--ink); font-weight: 700; direction: rtl; }
-    .concept-root { font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .concept-root { font-size: 12px; background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); padding: 1px 7px; border-radius: var(--radius); font-weight: 500; }
     .concept-teacher-note { font-size: 13px; background: transparent; border-left: 2.5px solid var(--amber); padding: 4px 10px; border-radius: 0; margin: 8px 0; color: var(--amber); font-weight: 500; }
     .concept-body { font-size: 14px; line-height: 1.65; color: var(--ink); }
     .concept-contrast-card { grid-column: 1 / -1; background: transparent; border: 0; border-left: 3px solid var(--accent); border-radius: 0; padding: 10px 14px; }
@@ -118,19 +118,19 @@
     .tb-card { background: transparent; border: 0; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin-bottom: 16px; box-shadow: none; }
     .tb-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
     .tb-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .tb-pill-group { display: inline-flex; background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 999px; padding: 2px; gap: 2px; }
-    .tb-pill { border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; cursor: pointer; transition: all 0.12s; }
+    .tb-pill-group { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 2px; gap: 2px; }
+    .tb-pill { border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: var(--radius); cursor: pointer; transition: all 0.12s; }
     .tb-pill:hover { color: var(--ink); }
-    .tb-pill.active { background: var(--accent); color: #fff; }
+    .tb-pill.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
     .tb-section { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 10px 0; margin-bottom: 6px; }
-    .tb-sec-title { font-family: var(--font-serif); font-weight: 600; font-size: 15px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .tb-sec-title { font-family: var(--font-ui); font-weight: 600; font-size: 15px; color: var(--ink); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
     .tb-item-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--border); flex-wrap: wrap; }
     .tb-item-row:last-child { border-bottom: none; padding-bottom: 2px; }
     .tb-ar { font-family: var(--font-ar); font-size: 23px; color: var(--ink); direction: rtl; line-height: 1.8; }
     .tb-word-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
-    .tb-word-chip { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; font-size: 13px; }
+    .tb-word-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--paper-elevated); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px 10px; font-size: 13px; }
     .tb-word-chip.shaky { border-color: var(--amber); background: rgba(161,106,18,0.08); }
-    .tb-tag { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+    .tb-tag { font-size: 11px; font-weight: 500; padding: 1px 6px; border-radius: var(--radius); white-space: nowrap; }
     .tb-tag.slip { background: rgba(185,28,28,0.08); color: var(--red); border: 1px solid rgba(185,28,28,0.22); }
     .tb-tag.ok { background: var(--accent-soft); color: var(--accent); }
     .tb-ar-preview { direction: rtl; text-align: right; background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; font-size: 14.5px; line-height: 1.85; white-space: pre-wrap; margin-top: 8px; }
@@ -139,12 +139,12 @@
     .mp-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; margin: 12px 0 14px; }
     .mp-stat { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 8px 2px; }
     .mp-stat-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
-    .mp-stat-val { font-size: 19px; font-weight: 800; color: var(--accent); margin: 3px 0 2px; }
+    .mp-stat-val { font-size: 19px; font-weight: 600; color: var(--ink); margin: 3px 0 2px; }
     .mp-stat-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
     .mp-chap-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px; }
-    .mp-chap-pill { font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--muted); text-decoration: none; font-weight: 600; }
-    .mp-chap-pill.done { background: var(--accent-soft); border-color: rgba(13,122,95,0.35); color: var(--accent); }
-    .mp-chap-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+    .mp-chap-pill { font-size: 12px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--paper-elevated); color: var(--muted); text-decoration: none; font-weight: 500; }
+    .mp-chap-pill.done { background: var(--surface-2); border-color: var(--green); color: var(--green); }
+    .mp-chap-pill.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
     .mp-horizon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 10px; }
     .mp-horizon { border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 10px 0; background: transparent; }
     .mp-horizon.now { border-top: 2px solid var(--accent); background: transparent; }
@@ -157,13 +157,13 @@
       <span class="class-tag">🧑‍🏫 Headmaster Plan &amp; Preply Direction</span>
       <h1 style="margin:4px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <span>Teacher &amp; Master Plan</span>
-        <span class="arabic" style="color:var(--accent);font-size:26px">خُطَّةُ التَّعَلُّمِ وَدَرْسُ الأُسْتَاذَةِ</span>
+        <span class="arabic" style="color:var(--muted);font-weight:400;font-size:21px">خُطَّةُ التَّعَلُّمِ وَدَرْسُ الأُسْتَاذَةِ</span>
       </h1>
       <p class="sub" style="margin:2px 0">Daily-updating 20-minute brief for your Preply teacher (from what you practised) + your live progress &amp; coming-weeks plan.</p>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <a href="index.html" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Open Practice →</a>
-      <a href="weekly.html" class="book-toggle-pill" style="text-decoration:none;font-weight:600" title="Open printable weekly booklet for the coming week">🖨️ Weekly Booklet (PDF)</a>
+      <a href="index.html" class="book-toggle-pill" style="text-decoration:none;font-weight:500;color:var(--accent);border-color:var(--accent)">⚡ Open Practice →</a>
+      <a href="weekly.html" class="book-toggle-pill" style="text-decoration:none;font-weight:500" title="Open printable weekly booklet for the coming week">🖨️ Weekly Booklet (PDF)</a>
       <button type="button" class="book-toggle-pill" onclick="document.getElementById('pasteLessonSection').scrollIntoView({behavior:'smooth'})">📥 Paste Class Notes ↓</button>
     </div>
   </div>
@@ -201,7 +201,7 @@
     <p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">
       Right after your 25-minute Preply lesson, paste the new/corrected words &amp; sentences from chat (or upload slide photos). Your Headmaster weaves them straight into Practice.
     </p>
-    <textarea id="pasteText" placeholder="Paste class notes, corrected sentences, or word list here..." style="width:100%;min-height:85px;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box"></textarea>
+    <textarea id="pasteText" placeholder="Paste class notes, corrected sentences, or word list here..." style="width:100%;min-height:85px;padding:10px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;margin-bottom:10px;box-sizing:border-box"></textarea>
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <label style="font-size:13px;color:var(--muted);cursor:pointer">
         📷 Upload Slides / Photos: <input type="file" id="pasteImages" multiple accept="image/*" style="font-size:12px">
@@ -212,26 +212,26 @@
   </div>
 
   <!-- 4. PAST PREPLY LESSONS & MASTERY TESTS ARCHIVE -->
-  <details id="pastClassesArchive" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:24px">
-    <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+  <details id="pastClassesArchive" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:24px">
+    <summary style="cursor:pointer;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <span>📚 Captured Preply Lessons, Reading Dialogues &amp; Mastery Tests</span>
-      <span id="lessonStatusBadge" class="status-pill" style="font-size:12.5px;padding:4px 12px">Checking status…</span>
+      <span id="lessonStatusBadge" class="status-pill" style="font-size:12.5px;padding:3px 10px">Checking status…</span>
     </summary>
     <div style="margin-top:14px">
       <!-- LESSON SELECTOR SWITCHER -->
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px">
         <span id="lessonSwitcher" style="display:contents"></span>
       </div>
 
       <!-- ACTIVE LESSON CONTAINER -->
-      <div class="card" id="lessonCard" style="border-top: 4px solid var(--accent)">
+      <div class="card" id="lessonCard" style="border-top: 2px solid var(--border-strong)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
       <div>
         <span id="lessonMetaDate" style="font-size:12.5px;color:var(--muted);font-weight:600">LESSON 2 · 27 SEP 2026</span>
         <h2 id="lessonTitle" style="margin:2px 0 6px">A Working Day &amp; The Protection Surahs (يَوْمُ العَمَل والمعوذتان)</h2>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <a id="practiseClassLink" href="index.html?filter=teacher" class="book-toggle-pill" style="text-decoration:none;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Practise Lesson in Practice →</a>
+        <a id="practiseClassLink" href="index.html?filter=teacher" class="book-toggle-pill" style="text-decoration:none;font-weight:500;color:var(--accent);border-color:var(--accent)">⚡ Practise Lesson in Practice →</a>
         <button type="button" class="primary" onclick="scrollToTest()">📝 Class Mastery Test</button>
       </div>
     </div>
@@ -242,8 +242,8 @@
     </details>
 
     <!-- 1. The Reading Passage -->
-    <details class="sec" open style="border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px">
-      <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between">
+    <details class="sec" open style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px">
+      <summary style="cursor:pointer;font-weight:600;font-size:16px;display:flex;justify-content:space-between">
         <span id="passageTitleHeader">📖 Reading Dialogue: A Working Day &amp; The Day Off</span>
         <span style="color:var(--accent);font-size:13px">Tap any word for English</span>
       </summary>
@@ -252,11 +252,11 @@
 
     <!-- 2. DEDICATED QUR'AN SECTION (Lesson 2: Falaq & Nas with Deep Concepts) -->
     <div id="quranClassSection" style="margin-bottom:14px">
-      <details class="sec" open style="border:1.5px solid var(--accent);border-radius:12px;padding:12px 16px">
-        <summary style="cursor:pointer;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <details class="sec" open style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px">
+        <summary style="cursor:pointer;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
           <div style="display:flex;align-items:center;gap:8px">
-            <span style="color:var(--accent)">🛡️ Qur'an Section: The Two Surahs of Protection (المُعَوِّذَتَانِ)</span>
-            <span style="font-size:12px;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:999px;font-weight:600">Surah 113 &amp; 114</span>
+            <span style="color:var(--ink)">🛡️ Qur'an Section: The Two Surahs of Protection (المُعَوِّذَتَانِ)</span>
+            <span style="font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:1px 7px;border-radius:var(--radius);font-weight:500">Surah 113 &amp; 114</span>
           </div>
           <span style="color:var(--muted);font-size:12.5px">Mishary Rashid Alafasy · Real Qari Recitation</span>
         </summary>
@@ -566,18 +566,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwicuqza"></script>
-<script src="js/curriculum.js?v=mwicuqza"></script>
-<script src="js/srs.js?v=mwicuqza"></script>
-<script src="js/frames.js?v=mwicuqza"></script>
-<script src="js/freetry.js?v=mwicuqza"></script>
-<script src="js/practice.js?v=mwicuqza"></script>
-<script src="js/lesson-cards.js?v=mwicuqza"></script>
-<script src="js/app.js?v=mwicuqza"></script>
-<script src="js/tracker.js?v=mwicuqza"></script>
-<script src="js/errors.js?v=mwicuqza"></script>
-<script src="js/plan.js?v=mwicuqza"></script>
-<script src="js/account.js?v=mwicuqza"></script>
+<script src="js/progress-model.js?v=mwidpt4o"></script>
+<script src="js/curriculum.js?v=mwidpt4o"></script>
+<script src="js/srs.js?v=mwidpt4o"></script>
+<script src="js/frames.js?v=mwidpt4o"></script>
+<script src="js/freetry.js?v=mwidpt4o"></script>
+<script src="js/practice.js?v=mwidpt4o"></script>
+<script src="js/lesson-cards.js?v=mwidpt4o"></script>
+<script src="js/app.js?v=mwidpt4o"></script>
+<script src="js/tracker.js?v=mwidpt4o"></script>
+<script src="js/errors.js?v=mwidpt4o"></script>
+<script src="js/plan.js?v=mwidpt4o"></script>
+<script src="js/account.js?v=mwidpt4o"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -873,7 +873,7 @@ function renderQuranSection() {
                 <div id="qen-${surahObj.id}-${vi}" class="p-en" style="display:none;font-size:14.5px;color:var(--ink);line-height:1.5">${v.en}</div>
               </div>
               <div class="s-ar-side">
-                <div class="p-ar" style="margin:0;font-size:26px;color:var(--accent)">${v.ar}</div>
+                <div class="p-ar" style="margin:0;font-size:26px;color:var(--ink)">${v.ar}</div>
               </div>
             </div>
           </div>
@@ -1320,7 +1320,7 @@ async function renderTeacherBrief() {
               <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
                 ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
                 <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
-                <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
+                <span class="arabic" dir="rtl" style="font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
                 <span style="color:var(--muted)">— ${esc(w.en)}</span>
               </span>
             `).join("")}
@@ -1357,7 +1357,7 @@ async function renderTeacherBrief() {
                   <span class="tb-tag ok">${esc(pickedAyah.surah ? "Surah " + pickedAyah.surah + " (" + pickedAyah.ref + ")" : pickedAyah.ref || "Qur'an")}</span>
                 </div>
               </div>
-              <div class="tb-ar" style="color:var(--accent)">${esc(pickedAyah.ar)}</div>
+              <div class="tb-ar" style="color:var(--ink)">${esc(pickedAyah.ar)}</div>
             </div>
           ` : ""}
           ${pickedQWords.length ? `
@@ -1368,7 +1368,7 @@ async function renderTeacherBrief() {
                   <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
                     ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
                     <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)">🔊</button>
-                    <span class="arabic" dir="rtl" style="font-size:19px;color:var(--accent);font-weight:700">${esc(w.ar)}</span>
+                    <span class="arabic" dir="rtl" style="font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
                     <span style="color:var(--muted)">— ${esc(w.en)}</span>
                   </span>
                 `).join("")}
@@ -1489,8 +1489,8 @@ function renderAiPracticeBrief(ctx) {
       </div>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      ${(ctx.pickedSents || []).map(s => `<span class="tb-word-chip ${s.shaky ? 'shaky' : ''}" style="font-size:12px">${s.key && window.SRS ? SRS.dotHtml(s.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--accent)">${esc(s.ar)}</span></span>`).join("")}
-      ${(ctx.pickedWords || []).map(w => `<span class="tb-word-chip ${w.shaky ? 'shaky' : ''}" style="font-size:12px">${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--accent)">${esc(w.ar)}</span> <span style="color:var(--muted)">${esc(w.en)}</span></span>`).join("")}
+      ${(ctx.pickedSents || []).map(s => `<span class="tb-word-chip ${s.shaky ? 'shaky' : ''}" style="font-size:12px">${s.key && window.SRS ? SRS.dotHtml(s.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${esc(s.ar)}</span></span>`).join("")}
+      ${(ctx.pickedWords || []).map(w => `<span class="tb-word-chip ${w.shaky ? 'shaky' : ''}" style="font-size:12px">${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}<span class="arabic" dir="rtl" style="font-size:16px;color:var(--ink)">${esc(w.ar)}</span> <span style="color:var(--muted)">${esc(w.en)}</span></span>`).join("")}
     </div>
     <pre style="white-space:pre-wrap;margin:0;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--ink);font-family:monospace;font-size:12px;line-height:1.5;max-height:220px;overflow:auto">${esc(aiLines)}</pre>
   `;
@@ -1590,7 +1590,7 @@ function renderMasterPlan() {
             </div>
           </div>
           <span style="display:inline-flex;gap:12px;align-items:center;flex-wrap:wrap">
-            <a href="weekly.html" style="font-size:12.5px;color:var(--ink);font-weight:600;text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:3px 10px">🖨️ Print Weekly PDF</a>
+            <a href="weekly.html" style="font-size:12.5px;color:var(--ink);font-weight:500;text-decoration:none;border:1px solid var(--border);border-radius:var(--radius);padding:3px 10px">🖨️ Print Weekly PDF</a>
             <a href="MASTER_PLAN.md" target="_blank" style="font-size:12.5px;color:var(--accent);font-weight:600;text-decoration:none">📘 Full Syllabus Doc →</a>
           </span>
         </div>
@@ -2048,7 +2048,7 @@ function renderClassSentences() {
       if (clsSentPracticeMode === "en-only" && !isRevealed) {
         arContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
       } else {
-        arContent = `<span class="arabic" dir="rtl" style="font-size:23px;color:var(--accent);line-height:1.5;display:block">${s.ar}</span>`;
+        arContent = `<span class="arabic" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.65;display:block">${s.ar}</span>`;
       }
 
       let enContent;
@@ -2336,7 +2336,7 @@ function renderVocabTable() {
             arContent = `
               <div>
                 <div style="display:flex;align-items:center;gap:6px">
-                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen">
+                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:24px;color:var(--ink);line-height:1.5" title="Click to listen">
                     ${v.ar}
                   </span>
                   <div class="sym-group">
@@ -2761,7 +2761,7 @@ function buildClassMasteryQuestions() {
       const cIdx = v.opts.indexOf(v.en);
       qList.push({
         section: "🏷️ Routine Vocabulary",
-        q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
+        q: `What does <b class='arabic' style='font-size:23px;color:var(--ink)'>${v.ar}</b> mean?`,
         opts: v.opts,
         correct: cIdx
       });
@@ -2782,7 +2782,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "Why is the daybreak called <b class='arabic' style='font-size:22px;color:var(--accent)'>الْفَلَقِ</b> rather than simply morning (<i>ṣabāḥ</i>)?",
+      q: "Why is the daybreak called <b class='arabic' style='font-size:22px;color:var(--ink)'>الْفَلَقِ</b> rather than simply morning (<i>ṣabāḥ</i>)?",
       opts: [
         "Because it means the violent, unstoppable splitting open of pitch darkness by radiant light",
         "Because morning is always cold",
@@ -2794,7 +2794,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "According to your teacher's handwriting, what is the meaning of <b class='arabic' style='font-size:22px;color:var(--accent)'>غَاسِقٍ إِذَا وَقَبَ</b>?",
+      q: "According to your teacher's handwriting, what is the meaning of <b class='arabic' style='font-size:22px;color:var(--ink)'>غَاسِقٍ إِذَا وَقَبَ</b>?",
       opts: [
         "The night entering and growing dark, with darkness penetrating into everything",
         "The sun rising above the horizon",
@@ -2806,7 +2806,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "What does <b class='arabic' style='font-size:22px;color:var(--accent)'>النَّفَّاثَاتِ فِي الْعُقَدِ</b> conceptually describe?",
+      q: "What does <b class='arabic' style='font-size:22px;color:var(--ink)'>النَّفَّاثَاتِ فِي الْعُقَدِ</b> conceptually describe?",
       opts: [
         "Blowing with saliva while tying knots to cast spells, and the entangled knots of life",
         "Tailors sewing buttons onto clothing",
@@ -2818,7 +2818,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "What is the toxic spiritual reality of <b class='arabic' style='font-size:22px;color:var(--accent)'>حَاسِدٍ إِذَا حَسَدَ</b>?",
+      q: "What is the toxic spiritual reality of <b class='arabic' style='font-size:22px;color:var(--ink)'>حَاسِدٍ إِذَا حَسَدَ</b>?",
       opts: [
         "Maliciously wishing another person's blessings to be stripped away, especially when manifested",
         "Wanting to work hard to achieve success",
@@ -2830,7 +2830,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "Why does Surah An-Nas say whispers occur in the <b class='arabic' style='font-size:22px;color:var(--accent)'>صُدُور</b> (chests) rather than the <b class='arabic' style='font-size:22px;color:var(--accent)'>قُلُوب</b> (hearts)?",
+      q: "Why does Surah An-Nas say whispers occur in the <b class='arabic' style='font-size:22px;color:var(--ink)'>صُدُور</b> (chests) rather than the <b class='arabic' style='font-size:22px;color:var(--ink)'>قُلُوب</b> (hearts)?",
       opts: [
         "The chest is the outer perimeter/courtyard; waswas cannot enter the heart unless invited",
         "Because the heart cannot feel thoughts",
@@ -2842,7 +2842,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "🛡️ Qur'an Deep Concepts",
-      q: "How does <b class='arabic' style='font-size:22px;color:var(--accent)'>الْخَنَّاسِ</b> (the slinker) behave when Allah is remembered?",
+      q: "How does <b class='arabic' style='font-size:22px;color:var(--ink)'>الْخَنَّاسِ</b> (the slinker) behave when Allah is remembered?",
       opts: [
         "It cowers, shrinks back and retreats into hiding, returning only when heedlessness occurs",
         "It gets angry and argues aloud",
@@ -2867,7 +2867,7 @@ function buildClassMasteryQuestions() {
     // 4. Class Sentences
     qList.push({
       section: "💬 Class Sentences",
-      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أُسَاعِدُ أُمِّي فِي كَنَسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ.</b>",
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--ink)'>أُسَاعِدُ أُمِّي فِي كَنَسِ البَيْتِ وَغَسْلِ الأَطْبَاقِ.</b>",
       opts: [
         "I help my mother sweep the house and wash the dishes.",
         "I go with my mother to buy new furniture.",
@@ -2879,7 +2879,7 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "💬 Class Sentences",
-      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>أَمَّا فِي يَوْمِ العُطْلَةِ، فَأَسْتَيْقِظُ مُتَأَخِّرًا.</b>",
+      q: "Translate: <b class='arabic' style='font-size:22px;color:var(--ink)'>أَمَّا فِي يَوْمِ العُطْلَةِ، فَأَسْتَيْقِظُ مُتَأَخِّرًا.</b>",
       opts: [
         "As for on the day off, I wake up late.",
         "On the work day, I wake up early.",
@@ -2904,14 +2904,14 @@ function buildClassMasteryQuestions() {
     chosen.forEach(v => {
       const opts = pickN(ens, 3, v.en).concat([v.en]);
       for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(seedRnd() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
-      qList.push({ section: "🏷️ Class Vocabulary", q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`, opts, correct: opts.indexOf(v.en) });
+      qList.push({ section: "🏷️ Class Vocabulary", q: `What does <b class='arabic' style='font-size:23px;color:var(--ink)'>${v.ar}</b> mean?`, opts, correct: opts.indexOf(v.en) });
     });
     const sents = (cls.sentences || []).filter(s => s.from === "teacher" && s.ar && s.en);
     const sEns = [...new Set(sents.map(s => s.en))];
     pickN(sents, Math.min(3, sents.length)).forEach(s => {
       const opts = pickN(sEns, 3, s.en).concat([s.en]);
       for (let i = opts.length - 1; i > 0; i--) { const j = Math.floor(seedRnd() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
-      qList.push({ section: "💬 Class Sentences", q: `Translate: <b class='arabic' style='font-size:22px;color:var(--accent)'>${s.ar}</b>`, opts, correct: opts.indexOf(s.en) });
+      qList.push({ section: "💬 Class Sentences", q: `Translate: <b class='arabic' style='font-size:22px;color:var(--ink)'>${s.ar}</b>`, opts, correct: opts.indexOf(s.en) });
     });
   } else {
     // LESSON 1 (30 Aug 2026): The Flat, Week & Family
@@ -2942,7 +2942,7 @@ function buildClassMasteryQuestions() {
       const correctIdx = v.opts.indexOf(v.en);
       qList.push({
         section: "🏷️ Vocabulary Meaning",
-        q: `What does <b class='arabic' style='font-size:23px;color:var(--accent)'>${v.ar}</b> mean?`,
+        q: `What does <b class='arabic' style='font-size:23px;color:var(--ink)'>${v.ar}</b> mean?`,
         opts: v.opts,
         correct: correctIdx
       });
@@ -2950,14 +2950,14 @@ function buildClassMasteryQuestions() {
 
     qList.push({
       section: "💬 Class Sentences",
-      q: "Translate the class sentence: <b class='arabic' style='font-size:22px;color:var(--accent)'>لَيْسَ عِنْدِي</b>",
+      q: "Translate the class sentence: <b class='arabic' style='font-size:22px;color:var(--ink)'>لَيْسَ عِنْدِي</b>",
       opts: ["I have two", "I don't have", "I want to look for", "I live here"],
       correct: 1
     });
 
     qList.push({
       section: "📐 Grammar & Patterns",
-      q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--accent)'>خَال</b> (maternal uncle)?",
+      q: "What is the dual of <b class='arabic' style='font-size:22px;color:var(--ink)'>خَال</b> (maternal uncle)?",
       opts: ["خَالَانِ", "أَخَوَات", "إِخْوَة", "خَالَات"],
       correct: 0
     });

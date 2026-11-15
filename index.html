@@ -3,75 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d7a5f">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
-  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/fonts.css?v=mwidpt4o">
+  <link rel="stylesheet" href="css/style.css?v=mwidpt4o">
   <style>
-    .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--border-strong); }
+    .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
     .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
     .stat-strip .lbl { font-size: 12px; color: var(--muted); }
 
     /* Top View Switcher */
-    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--paper-elevated); padding: 2px; gap: 4px; margin-bottom: 12px; }
-    .tab-btn { border: none; background: transparent; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
-    .tab-btn.active { background: var(--accent); color: #fff; }
+    .tab-bar { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 2px; background: var(--paper-elevated); padding: 0; gap: 0; margin-bottom: 12px; }
+    .tab-btn { border: none; background: transparent; padding: 5px 14px; border-radius: 0; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .tab-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
 
     /* Unified Sleek Practice Toolbar */
     .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 6px 0 10px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
     .pt-group { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
-    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--paper-elevated); padding: 2px; }
-    .dir-btn { border: none; background: transparent; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.12s; }
-    .dir-btn.active { background: var(--accent); color: #fff; }
+    .dir-toggle { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 2px; background: var(--paper-elevated); padding: 0; }
+    .dir-btn { border: none; background: transparent; padding: 4px 10px; border-radius: 0; font-size: 12px; font-weight: 500; cursor: pointer; color: var(--muted); transition: all 0.12s; }
+    .dir-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
 
     .filter-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin: 0; }
-    .chip { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--muted); transition: all 0.1s; }
-    .chip:hover { border-color: var(--accent); color: var(--ink); }
-    .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+    .chip { border: 1px solid var(--border-strong); background: var(--paper-elevated); border-radius: 2px; padding: 3px 9px; font-size: 12px; cursor: pointer; color: var(--ink); transition: all 0.1s; }
+    .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--bg); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
 
-    .pt-btn { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
-    .pt-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .pt-btn { border: 1px solid var(--border-strong); background: var(--paper-elevated); border-radius: 2px; padding: 4px 10px; font-size: 12.5px; font-weight: 500; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
+    .pt-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg); }
     .pt-btn.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
-    .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
+    .speed-sw button { padding: 4px 7px; font-size: 12px; border-radius: 2px; border: 1px solid var(--border-strong); background: var(--paper-elevated); cursor: pointer; }
     .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    /* Quiet Open-Book Spread Entries (Parallel Left/Right Layout, Divided by Hairlines) */
-    .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
+    /* Wikipedia Parallel Reading Table Rows */
+    .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 2px; }
     .s-card {
       background: transparent;
       border: 0;
       border-bottom: 1px solid var(--border);
       border-radius: 0;
-      padding: 9px 2px;
+      padding: 10px 4px;
       display: grid;
-      grid-template-columns: 28px minmax(220px, 1fr) minmax(240px, 1.15fr) auto;
-      column-gap: 18px;
+      grid-template-columns: 28px minmax(240px, 1fr) minmax(260px, 1.15fr) auto;
+      column-gap: 22px;
       row-gap: 4px;
       align-items: baseline;
       transition: background 0.15s;
     }
-    .s-card.s-lc-open { display: block; padding: 12px 2px; }
+    .s-card.s-lc-open { display: block; padding: 12px 4px; }
     .s-card:last-child { border-bottom: 0; }
-    .s-card:hover { background: rgba(13, 122, 95, 0.015); }
+    .s-card:hover { background: var(--paper-elevated); }
     .s-card.revealed { background: transparent; }
-    .s-card.playing { background: rgba(13, 122, 95, 0.05); border-left: 3px solid var(--accent); padding-left: 12px; }
+    .s-card.playing { background: var(--accent-soft); border-left: 3px solid var(--accent); padding-left: 10px; }
 
-    .s-col-num { grid-column: 1; color: var(--muted); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; user-select: none; }
+    .s-col-num { grid-column: 1; color: var(--muted); font-size: 12.5px; font-weight: 400; font-variant-numeric: tabular-nums; user-select: none; }
     .s-col-prompt { grid-column: 2; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .s-prompt-main { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
-    .s-prompt-text { font-family: var(--font-serif); font-size: 17px; font-weight: 500; color: var(--ink); line-height: 1.45; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 25px; color: var(--ink); direction: rtl; text-align: right; line-height: 1.65; }
-    .s-src-foot { font-size: 11px; color: var(--muted); opacity: 0.58; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; transition: opacity 0.14s ease; }
+    .s-prompt-text { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.55; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 25px; font-weight: 400; color: var(--ink); direction: rtl; text-align: right; line-height: 1.8; }
+    .s-word-note { font-size: 12.5px; color: var(--muted); line-height: 1.4; margin-top: 1px; }
+    .s-src-foot { font-size: 11.5px; color: var(--muted); opacity: 0.68; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; transition: opacity 0.14s ease; }
     .s-card:hover .s-src-foot, .s-card:focus-within .s-src-foot { opacity: 1; }
     .s-src-foot a { color: inherit; text-decoration: none; border-bottom: 1px dotted transparent; }
-    .s-src-foot a:hover { color: var(--ink); border-bottom-color: var(--muted); }
-    .s-flag-inline { font-size: 10.5px; font-weight: 600; color: var(--accent); }
+    .s-src-foot a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .s-flag-inline { font-size: 11px; font-weight: 600; color: var(--accent); }
     .s-flag-inline.commute { color: var(--amber); }
 
     .s-col-answer { grid-column: 3; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
@@ -81,11 +83,11 @@
     .s-row-extras { grid-column: 2 / -1; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
     .s-card > .tryit { grid-column: 2 / -1; }
     .s-lc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-    .s-lc-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); }
+    .s-lc-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border); }
 
     .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; flex-wrap: wrap; }
-    .s-num { color: var(--muted); font-size: 12px; font-weight: 600; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .s-num { color: var(--muted); font-size: 12.5px; font-weight: 400; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
     .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
@@ -93,8 +95,8 @@
     .src-tag { color: var(--muted); font-weight: 500; font-size: 11.5px; }
 
     .s-action-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.12s; user-select: none; }
-    .s-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 2px; border: 1px dashed var(--border-strong); background: transparent; color: var(--accent); font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 0.12s; user-select: none; }
+    .s-reveal-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
 
     /* Colored SRS Rating Dots */
     .s-rate-bar, .sheet-rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
@@ -126,61 +128,52 @@
     .leg-dot.learning { background: #dc2626; }
     .leg-dot.never { background: #64748b; }
 
-    .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 0 4px; border-top: 1px dashed var(--border); }
+    .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 0 4px; border-top: 1px solid var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 24px; color: var(--ink); line-height: 1.6; text-align: right; }
-    .s-en-line { font-family: var(--font-serif); font-size: 16.5px; font-weight: 500; color: var(--ink); line-height: 1.45; }
-    .s-tr-line { font-size: 12.5px; color: var(--muted); font-style: italic; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 25px; font-weight: 400; color: var(--ink); line-height: 1.8; text-align: right; }
+    .s-en-line { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.55; }
+    .s-tr-line { font-size: 13px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
     .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin-top: 4px; }
-    .wbw-chip-sm { border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 3px 7px; background: transparent; font-size: 12px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.1s; }
+    .wbw-chip-sm { border: 0; border-bottom: 1px solid var(--border); border-radius: 2px; padding: 3px 7px; background: transparent; font-size: 12px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.1s; }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.45; }
-    .wbw-chip-sm .w-en { font-size: 11.5px; color: var(--muted); direction: ltr; }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 20px; color: var(--ink); line-height: 1.5; }
+    .wbw-chip-sm .w-en { font-size: 12px; color: var(--muted); direction: ltr; }
 
-    .s-hint-line { font-size: 14px; color: var(--ink); background: transparent; border-left: 2.5px solid rgba(13, 122, 95, 0.35); padding: 4px 12px; border-radius: 0; line-height: 1.7; margin-top: 4px; }
-    .s-gram-box { font-size: 14px; color: var(--ink); background: rgba(161, 106, 18, 0.05); border: 0; border-left: 2.5px solid var(--amber); padding: 6px 12px; border-radius: 0; line-height: 1.7; margin-top: 4px; }
+    .s-hint-line { font-size: 14px; color: var(--ink); background: var(--paper-elevated); border-left: 3px solid var(--border-strong); padding: 6px 12px; border-radius: 0; line-height: 1.6; margin-top: 4px; }
+    .s-gram-box { font-size: 14px; color: var(--ink); background: var(--amber-soft); border: 0; border-left: 3px solid var(--amber); padding: 6px 12px; border-radius: 0; line-height: 1.6; margin-top: 4px; }
     .s-gram-box summary { cursor: pointer; font-weight: 600; color: var(--amber); user-select: none; }
     .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 12.5px; }
     .s-gram-link:hover { text-decoration: underline; }
 
-    /* Running Header Strip: Rhythm & Energy */
-    .mot-strip { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 4px 0 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
-    .mot-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 240px; }
-    .mot-top-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; }
-    .mot-week { display: inline-flex; align-items: center; gap: 3px; }
-    .mot-day { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
-    .mot-day.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .mot-day.today { box-shadow: 0 0 0 2px rgba(13, 122, 95, 0.22); }
-    .mot-mode-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
-    .mot-mode-badge.light { background: var(--accent-soft); color: var(--accent); }
-    .mot-mode-badge.surge { background: rgba(161, 106, 18, 0.12); color: var(--amber); }
-    .mot-nurture { font-size: 12px; color: var(--muted); line-height: 1.45; }
-    .mot-right { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-    .mot-pill { border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 999px; padding: 2px 9px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
-    .mot-pill:hover { border-color: var(--accent); color: var(--ink); }
-    .mot-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    /* Quiet Wikipedia Hatnote Strip: Rhythm & Pace */
+    .mot-strip { background: transparent; border: 0; border-bottom: 0; border-radius: 0; padding: 2px 0 8px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+    .mot-left { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; flex: 1; min-width: 240px; }
+    .mot-nurture { font-size: 12.5px; color: var(--muted); line-height: 1.45; flex-basis: 100%; }
+    .mot-right { display: inline-flex; align-items: baseline; gap: 4px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+    .mot-link { border: 0; background: transparent; color: var(--accent); padding: 0 2px; font-size: 13px; font-weight: 400; cursor: pointer; border-radius: 0; font-family: var(--font-ui); }
+    .mot-link:hover { color: var(--accent); background: transparent; border-color: transparent; text-decoration: underline; }
+    .mot-link.active { color: var(--ink); font-weight: 600; text-decoration: underline; }
     .batch-progress-footer { margin-top: 16px; padding: 14px 2px; border-radius: 0; background: transparent; border: 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
     .batch-ai-nudge { margin-top: 14px; padding: 12px 0; background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; text-align: left; }
-    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
-    .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(13,122,95,0.22); }
-    .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 12px; line-height: 1.5; color: var(--ink); background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 2px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
+    .mode-pill-teach, .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 2px; background: var(--paper-elevated); color: var(--muted); border: 1px solid var(--border); }
     .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 10px; margin-top: 8px; }
-    .cap-cell { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 6px 2px; font-size: 12px; line-height: 1.45; }
-    .cap-cell b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
+    .cap-cell { background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 2px; padding: 8px 10px; font-size: 12.5px; line-height: 1.5; }
+    .cap-cell b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 2px; }
 
-    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
-    .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
-    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 500; border-radius: 2px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
+    .line-toggle-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg); }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); font-weight: 600; }
 
     /* Master Bank Table & Controls */
     .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent; margin-top: 6px; }
-    .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--paper-elevated); color: var(--ink); }
-    .m-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
-    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--border); color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; background: transparent; }
-    .m-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .m-table tr:hover { background: rgba(13, 122, 95, 0.03); }
+    .m-search { width: 100%; max-width: 380px; padding: 7px 12px; border: 1px solid var(--border-strong); border-radius: 2px; font-size: 14px; background: var(--bg); color: var(--ink); }
+    .m-table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 4px; background: var(--bg); }
+    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border-strong); color: var(--ink); font-size: 13px; font-weight: 600; text-transform: none; letter-spacing: 0; background: var(--paper-elevated); }
+    .m-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table tr:hover { background: var(--paper-elevated); }
 
     /* Completion Banner */
     .done-banner { text-align: center; padding: 18px 4px; background: transparent; border: 0; border-top: 1px solid var(--accent); border-radius: 0; margin-top: 16px; }
@@ -214,12 +207,12 @@
 <main>
   <div class="s-header">
     <div>
-      <h1 style="display:flex;align-items:center;gap:10px;margin:0">
+      <h1 style="display:flex;align-items:baseline;gap:10px;margin:0">
         <span>Practice</span>
-        <span class="arabic" style="color:var(--accent);font-size:26px">بِنَاءُ الجُمَل</span>
+        <span class="arabic" style="color:var(--muted);font-weight:400;font-size:21px">بِنَاءُ الجُمَل</span>
       </h1>
     </div>
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="stat-strip">
         <div><div class="num" id="statHeld">0</div><div class="lbl">Sentences Held</div></div>
         <div><div class="num" id="statDue">0</div><div class="lbl">Due for Review</div></div>
@@ -237,15 +230,19 @@
     <div id="motivationStrip"></div>
 
     <!-- Session Progress & List -->
-    <div class="card" style="padding:10px 0;border-top:0">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">
-        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-          <h2 style="margin:0;font-size:15.5px;font-weight:600" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
+    <div class="card" style="padding:6px 0;border-top:0">
+      <div class="wiki-article-bar">
+        <div class="wiki-article-left">
+          <div class="wiki-tabs" role="tablist" aria-label="Reading mode">
+            <button type="button" class="wiki-tab active" id="tabModeRead" role="tab" aria-selected="true" onclick="setPracticeViewMode('read')" title="Book-first reading view — English and Arabic side-by-side without tapping">Read</button>
+            <button type="button" class="wiki-tab" id="tabModeQuiz" role="tab" aria-selected="false" onclick="setPracticeViewMode('quiz')" title="Recall test view — hide the answer until you click to check">Test recall</button>
+          </div>
+          <span style="font-size:12.5px;color:var(--muted)" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</span>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
         <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span style="font-size:12px;font-weight:600;color:var(--muted)" id="sessionCount">0 rated</span>
-          <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">▶ Next Batch →</button>
+          <span style="font-size:12px;color:var(--muted)" id="sessionCount">0 rated</span>
+          <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:500;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">Next Batch →</button>
           <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
           <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
           <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
@@ -304,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwicuqza"></script>
-<script src="js/curriculum.js?v=mwicuqza"></script>
-<script src="js/srs.js?v=mwicuqza"></script>
-<script src="js/frames.js?v=mwicuqza"></script>
-<script src="js/freetry.js?v=mwicuqza"></script>
-<script src="js/practice.js?v=mwicuqza"></script>
-<script src="js/lesson-cards.js?v=mwicuqza"></script>
-<script src="js/match.js?v=mwicuqza"></script>
-<script src="js/errors.js?v=mwicuqza"></script>
-<script src="js/tryit.js?v=mwicuqza"></script>
-<script src="js/app.js?v=mwicuqza"></script>
-<script src="js/tracker.js?v=mwicuqza"></script>
-<script src="js/plan.js?v=mwicuqza"></script>
-<script src="js/account.js?v=mwicuqza"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwidpt4o"></script>
+<script src="js/curriculum.js?v=mwidpt4o"></script>
+<script src="js/srs.js?v=mwidpt4o"></script>
+<script src="js/frames.js?v=mwidpt4o"></script>
+<script src="js/freetry.js?v=mwidpt4o"></script>
+<script src="js/practice.js?v=mwidpt4o"></script>
+<script src="js/lesson-cards.js?v=mwidpt4o"></script>
+<script src="js/match.js?v=mwidpt4o"></script>
+<script src="js/errors.js?v=mwidpt4o"></script>
+<script src="js/tryit.js?v=mwidpt4o"></script>
+<script src="js/app.js?v=mwidpt4o"></script>
+<script src="js/tracker.js?v=mwidpt4o"></script>
+<script src="js/plan.js?v=mwidpt4o"></script>
+<script src="js/account.js?v=mwidpt4o"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -368,6 +365,7 @@ let SESSION_COOLDOWN = new Set();
 let currentFilter = "balanced";
 let bankFilter = "all";
 let promptDirection = "en-first";
+let practiceViewMode = (typeof store !== "undefined" && store.get("ats-practice-view", "read") === "quiz") ? "quiz" : "read";
 let audioIdx = 0;
 const BATCH_SIZE = 10;
 
@@ -806,27 +804,21 @@ function renderMotivationStrip(adjustNotice, offerRebuild) {
     activeChapNum: activeChap ? activeChap.num : null,
     easyDay: easy
   });
-  const modeCls = (mot.activeMode === "light" || mot.activeMode === "comeback") ? "light" : mot.activeMode === "surge" ? "surge" : "";
-  const weekDots = (mot.weekDays || []).map(d =>
-    `<span class="mot-day ${d.on ? "on" : ""} ${d.today ? "today" : ""}" title="${d.on ? "Active study day" : "Rest day — zero guilt"}">${d.label}</span>`
-  ).join("");
   const curMood = mot.todayMood || "";
   el.innerHTML = `
     <div class="mot-strip" title="${escBriefHtml(mot.nurtureText)}">
       <div class="mot-left">
-        <div class="mot-top-line">
-          <span class="mot-week" title="${mot.activeDays7d} of ${mot.targetDays} target days active in the last 7 days (4 mornings = a full week)">${weekDots}</span>
-          <span style="font-weight:600;color:var(--ink)">${mot.activeDays7d}/${mot.targetDays} days</span>
-          <span class="mot-mode-badge ${modeCls}">${escBriefHtml(mot.modeLabel)}</span>
-          ${adjustNotice ? `<span style="font-size:12px;font-weight:700;color:var(--accent)">✓ ${escBriefHtml(adjustNotice)}</span>` : ""}
-          ${offerRebuild ? `<button type="button" class="pt-btn" onclick="rebuildBatchForMood()" style="font-size:11.5px;padding:2px 8px;color:var(--accent);border-color:var(--accent);font-weight:700">↻ Adjust current batch now</button>` : ""}
-        </div>
-        ${(adjustNotice || offerRebuild) ? `<div class="mot-nurture">${escBriefHtml(mot.nurtureText)}</div>` : ""}
+        <span>Active <strong>${mot.activeDays7d}/${mot.targetDays}</strong> days · ${escBriefHtml(mot.modeLabel)}</span>
+        ${adjustNotice ? `<span style="color:var(--green);font-weight:500">· ✓ ${escBriefHtml(adjustNotice)}</span>` : ""}
+        ${offerRebuild ? `<button type="button" class="mot-link active" onclick="rebuildBatchForMood()">Adjust batch</button>` : ""}
       </div>
       <div class="mot-right" role="group" aria-label="How is your energy today?">
-        <button type="button" class="mot-pill ${curMood === "heavy" ? "active" : ""}" onclick="setPracticeMood('heavy')" title="Tired or pressed for time — switches Practice immediately to a calm 6-unit review round (no new items)">Low</button>
-        <button type="button" class="mot-pill ${curMood === "fine" ? "active" : ""}" onclick="setPracticeMood('fine')" title="Normal day — balanced 10-unit Daily Core advancing weekly Chapter sentences + review">Steady</button>
-        <button type="button" class="mot-pill ${curMood === "good" ? "active" : ""}" onclick="setPracticeMood('good')" title="Feeling sharp — full pace advancing weekly Chapter, Lesson Cards &amp; active recall">Energised</button>
+        <span>Pace:</span>
+        <button type="button" class="mot-link ${curMood === "heavy" ? "active" : ""}" onclick="setPracticeMood('heavy')" title="Tired or pressed for time — switches Practice immediately to a calm 6-unit review round (no new items)">Low</button>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="mot-link ${curMood === "fine" ? "active" : ""}" onclick="setPracticeMood('fine')" title="Normal day — balanced 10-unit Daily Core advancing weekly Chapter sentences + review">Steady</button>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="mot-link ${curMood === "good" ? "active" : ""}" onclick="setPracticeMood('good')" title="Feeling sharp — full pace advancing weekly Chapter, Lesson Cards &amp; active recall">Energised</button>
       </div>
     </div>
   `;
@@ -1381,11 +1373,11 @@ function loadFocusedPracticeFromUrl(searchStr) {
   if (fb) {
     fb.style.display = "block";
     fb.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);border:1.5px solid var(--accent);font-size:13px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;border-radius:var(--radius);background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);font-size:13px">
         <span><b>${escBriefHtml(title)}</b> <span style="color:var(--muted)">· ${list.length} items · syncs across all tabs</span></span>
         <span style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
           ${backHref ? `<a href="${backHref}" class="pt-btn" style="font-size:12px;padding:4px 10px;text-decoration:none">${escBriefHtml(backLabel)}</a>` : ""}
-          <button type="button" class="pt-btn" onclick="clearPracticeFocus()" style="font-size:12px;padding:4px 10px;font-weight:700;color:var(--accent);border-color:var(--accent)">⚡ Back to Daily Adaptive Batch</button>
+          <button type="button" class="pt-btn" onclick="clearPracticeFocus()" style="font-size:12px;padding:4px 10px;font-weight:500;color:var(--accent);border-color:var(--accent)">Back to Daily Practice</button>
         </span>
       </div>
     `;
@@ -1451,6 +1443,7 @@ function redoBatch() {
 }
 
 function render10Cards() {
+  syncPracticeViewTabs();
   const container = document.getElementById("sentenceList");
   container.innerHTML = ACTIVE_SENTENCES.map(cardHtml).join("");
   if (window.TryIt) TryIt.rewire();
@@ -1491,7 +1484,9 @@ function playChipAudio(idx, wIdx, encodedWord) {
 /* one card's HTML. revealCard swaps ONLY this card in place */
 function cardHtml(s, idx) {
   const isEnFirst = promptDirection === "en-first";
+  const isReadView = practiceViewMode === "read";
   const isRevealed = REVEALED.has(idx);
+  const isOpen = isReadView || isRevealed;
   if (s.kind === "lesson-card") {
     const escLcKey = String(s.key || "").replace(/'/g, "\\'");
     const lcRated = BATCH_RATED.has(s.key);
@@ -1533,7 +1528,7 @@ function cardHtml(s, idx) {
             <span class="s-src-foot"><a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets">${lcSrc} ↗</a></span>
           </div>
           <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap" onclick="event.stopPropagation()">
-            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:600;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`}
+            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:500;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`}
             <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
           </div>
         </div>
@@ -1544,7 +1539,7 @@ function cardHtml(s, idx) {
         <div class="s-lc-foot" onclick="event.stopPropagation()">
           <span style="font-size:12px;color:var(--muted)">${s.lcMode === "teach" ? "Mark understood to collapse &amp; continue:" : "Rate recall:"}</span>
           <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:600;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">✓ Collapse</button>`}
+            ${!lcRated ? `<button type="button" class="pt-btn" onclick="rateSentence('${escLcKey}', 'yes', ${idx}); REVEALED.delete(${idx}); render10Cards();" style="font-weight:500;color:var(--accent);border-color:var(--accent)">✓ Got it</button>` : `<button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">✓ Collapse</button>`}
             <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
           </div>
         </div>
@@ -1558,14 +1553,20 @@ function cardHtml(s, idx) {
   const cleanSrcLbl = srcMeta ? String(srcMeta.label || "").replace(/^[^\p{L}\p{N}]+/u, "") : "";
   const hasMultiWbw = !!(s.words && s.words.length > 1);
   const hasSingleRoot = !!(s.words && s.words.length === 1 && famLookup(s.words[0][0]));
-  const showWbwOpen = isTeach ? (hasMultiWbw || hasSingleRoot) : false;
-  const showTrOpen = isTeach && !!s.tr;
-  const gramHtml = isRevealed ? renderGrammarRuleHtml(s, false) : "";
+  const showWbwOpen = (!isReadView && isTeach) ? (hasMultiWbw || hasSingleRoot) : false;
+  const showTrOpen = !isReadView && isTeach && !!s.tr;
+  const gramHtml = isOpen ? renderGrammarRuleHtml(s, false) : "";
   const hasWbwBlock = hasMultiWbw || hasSingleRoot;
-  const hasExtras = isRevealed && (hasWbwBlock || !!s.note || !!gramHtml);
+  const wordNoteHtml = (s.kind === "word" && s.note)
+    ? `<div class="s-word-note">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>`
+    : "";
+  const sentNoteHtml = (s.kind !== "word" && s.note)
+    ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>`
+    : "";
+  const hasExtras = isOpen && (hasWbwBlock || !!wordNoteHtml || !!sentNoteHtml || !!gramHtml);
 
   return `
-      <div class="s-card ${isRevealed ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+      <div class="s-card ${isOpen ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
         <div class="s-col-num">${idx + 1}</div>
         <div class="s-col-prompt">
           <div class="s-prompt-main">
@@ -1583,7 +1584,7 @@ function cardHtml(s, idx) {
         </div>
 
         <div class="s-col-answer">
-          ${!isRevealed ? `
+          ${!isOpen ? `
             <div class="s-ans-row ${isEnFirst ? '' : 'en-side'}">
               <button type="button" class="book-cue ${isEnFirst ? 'ar-side' : ''}" onclick="event.stopPropagation(); revealCard(${idx})">
                 ${isEnFirst ? 'Show Arabic →' : 'Show meaning →'}
@@ -1635,7 +1636,8 @@ function cardHtml(s, idx) {
                 <div class="wbw-drawer-slot" id="wbw-drawer-slot-drill-${idx}"></div>
               </div>
             ` : ''}
-            ${s.note ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>` : ''}
+            ${wordNoteHtml}
+            ${sentNoteHtml}
             ${gramHtml}
           </div>
         ` : ''}
@@ -1647,6 +1649,15 @@ function cardHtml(s, idx) {
 
 function handleCardClick(idx, e) {
   if (e.target.closest("button") || e.target.closest("a") || e.target.closest("details") || e.target.closest("summary") || e.target.closest(".s-gram-box") || e.target.closest(".lc-wrap") || e.target.closest(".tryit") || e.target.closest(".s-rate-bar") || e.target.closest(".rate-btn") || e.target.closest(".wbw-chip-sm") || e.target.closest(".wbw-chip") || e.target.closest(".line-toggle-btn")) return;
+  if (practiceViewMode === "read") {
+    const s = ACTIVE_SENTENCES[idx];
+    if (s && s.kind === "lesson-card" && !REVEALED.has(idx)) {
+      revealCard(idx);
+      return;
+    }
+    playCardAudio(idx);
+    return;
+  }
   if (!REVEALED.has(idx)) {
     revealCard(idx);
   }
@@ -1670,6 +1681,26 @@ function revealCard(idx) {
 
 function revealAllCards() {
   ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
+  render10Cards();
+}
+
+function syncPracticeViewTabs() {
+  const r = document.getElementById("tabModeRead");
+  const q = document.getElementById("tabModeQuiz");
+  if (r) {
+    r.classList.toggle("active", practiceViewMode === "read");
+    r.setAttribute("aria-selected", practiceViewMode === "read" ? "true" : "false");
+  }
+  if (q) {
+    q.classList.toggle("active", practiceViewMode === "quiz");
+    q.setAttribute("aria-selected", practiceViewMode === "quiz" ? "true" : "false");
+  }
+}
+
+function setPracticeViewMode(mode) {
+  practiceViewMode = mode === "quiz" ? "quiz" : "read";
+  if (typeof store !== "undefined") store.set("ats-practice-view", practiceViewMode);
+  syncPracticeViewTabs();
   render10Cards();
 }
 
@@ -2308,21 +2339,21 @@ function renderHomeChapStrip() {
   const rPct = sc.total ? Math.round((sc.red / sc.total) * 100) : 0;
   const readyTest = sc.green >= 8;
   el.innerHTML = `
-    <div class="card" style="padding:11px 15px;margin-bottom:0">
+    <div class="card" style="padding:10px 14px;margin-bottom:0;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius)">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:13px">
         <span style="display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap">
-          <a href="chapters.html?chap=${activeChap.id}" style="font-weight:700;color:var(--ink);text-decoration:none">📖 ${activeChap.title}</a>
+          <a href="chapters.html?chap=${activeChap.id}" style="font-weight:600;color:var(--ink);text-decoration:none">📖 ${activeChap.title}</a>
           <span><span class="m-dot m-green"></span> <b>${sc.green}/${sc.total}</b></span>
           <span><span class="m-dot m-amber"></span> <b>${sc.amber}</b></span>
           <span><span class="m-dot m-red"></span> <b>${sc.red}</b></span>
           <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b></span>
         </span>
         <span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px">
-          ${new Date().getDay() === 6 ? `<a href="index.html?myday=1&amp;rehearse=1" style="color:var(--accent);font-weight:600;text-decoration:none">🎤 Rehearse for Sunday →</a>` : new Date().getDay() === 0 ? `<a href="class.html" style="color:var(--accent);font-weight:600;text-decoration:none">🧑‍🏫 Lesson Brief →</a>` : ""}
-          ${readyTest ? `<a href="chapters.html?chap=${activeChap.id}#testBox" style="color:var(--accent);font-weight:700;text-decoration:none">🔥 Test Ready →</a>` : ""}
-          <button type="button" class="pt-btn" onclick="focusPracticeUrl('?chap=${activeChap.id}')" style="font-size:11.5px;padding:2px 9px;color:var(--accent);border-color:var(--accent);font-weight:700" title="Focus Practice exclusively on Chapter ${activeChap.num} sentences &amp; Lesson Cards">⚡ Focus Ch ${activeChap.num}</button>
-          <a href="weekly.html?chap=${activeChap.num}&amp;print=1" class="pt-btn" style="font-size:11.5px;padding:2px 9px;text-decoration:none" title="Print Chapter ${activeChap.num}'s weekly booklet">🖨️ Print</a>
-          <a href="chapters.html?chap=${activeChap.id}" style="color:var(--accent);font-weight:600;text-decoration:none">Open Chapter →</a>
+          ${new Date().getDay() === 6 ? `<a href="index.html?myday=1&amp;rehearse=1" style="color:var(--accent);font-weight:500;text-decoration:none">🎤 Rehearse for Sunday →</a>` : new Date().getDay() === 0 ? `<a href="class.html" style="color:var(--accent);font-weight:500;text-decoration:none">🧑‍🏫 Lesson Brief →</a>` : ""}
+          ${readyTest ? `<a href="chapters.html?chap=${activeChap.id}#testBox" style="color:var(--accent);font-weight:500;text-decoration:none">🔥 Test Ready →</a>` : ""}
+          <button type="button" class="pt-btn" onclick="focusPracticeUrl('?chap=${activeChap.id}')" style="font-size:11.5px;padding:2px 8px;color:var(--accent);border-color:var(--accent);font-weight:500" title="Focus Practice exclusively on Chapter ${activeChap.num} sentences &amp; Lesson Cards">Focus Ch ${activeChap.num}</button>
+          <a href="weekly.html?chap=${activeChap.num}&amp;print=1" class="pt-btn" style="font-size:11.5px;padding:2px 8px;text-decoration:none" title="Print Chapter ${activeChap.num}'s weekly booklet">🖨️ Print</a>
+          <a href="chapters.html?chap=${activeChap.id}" style="color:var(--accent);font-weight:500;text-decoration:none">Open Chapter →</a>
         </span>
       </div>
       <div class="m-progress-track" title="Chapter ${activeChap.num}: ${sc.green} mastered · ${sc.amber} building · ${sc.red} needs work · ${sc.grey} unseen">

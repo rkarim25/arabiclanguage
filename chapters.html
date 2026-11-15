@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d7a5f">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwicuqza">
-  <link rel="stylesheet" href="css/style.css?v=mwicuqza">
+  <link rel="stylesheet" href="css/fonts.css?v=mwidpt4o">
+  <link rel="stylesheet" href="css/style.css?v=mwidpt4o">
   <style>
-    .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
-    .chap-select { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--paper-elevated); color: var(--ink); }
-    .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; background: var(--accent-soft); color: var(--accent); }
-    .status-pill.done { background: var(--accent); color: #fff; }
+    .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
+    .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
+    .chap-select { font-size: 14px; font-weight: 500; padding: 5px 10px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--paper-elevated); color: var(--ink); }
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; border-radius: var(--radius); padding: 2px 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink); }
+    .status-pill.done { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
 
     /* Collapsible Coach Card */
     details.coach-details { border: 0; border-left: 2.5px solid var(--accent); background: var(--accent-soft); border-radius: 0; padding: 8px 14px; margin-bottom: 14px; cursor: pointer; }
@@ -33,7 +34,7 @@
     .s-ar-wrap { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex: 1; min-width: 240px; }
     .s-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
     .s-meta { flex: 1; min-width: 220px; }
-    .s-en { font-family: var(--font-serif); font-size: 17.5px; font-weight: 500; color: var(--ink); margin-bottom: 1px; line-height: 1.45; }
+    .s-en { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); margin-bottom: 1px; line-height: 1.5; }
     .s-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-bottom: 2px; }
     .s-hint { font-size: 12px; color: var(--muted); }
     .s-actions { display: flex; gap: 6px; align-items: center; }
@@ -43,9 +44,9 @@
     .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--ink); display: block; line-height: 1.45; }
     .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; margin-top: 2px; }
 
-    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 999px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
+    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 500; border-radius: var(--radius); cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
-    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+    .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
 
     /* Audio Toolbar */
     .audio-bar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 4px 0 10px; padding: 6px 0 8px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
@@ -61,7 +62,7 @@
     .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
     .q-chip .ar-w { font-family: var(--font-ar); font-size: 19px; color: var(--ink); display: block; }
     .q-chip .en-w { font-size: 11px; color: var(--muted); display: block; direction: ltr; }
-    .q-trans { font-family: var(--font-serif); font-size: 15px; color: var(--ink); line-height: 1.55; }
+    .q-trans { font-family: var(--font-ui); font-size: 15.5px; color: var(--ink); line-height: 1.55; }
     .q-ref { font-size: 11.5px; font-weight: 600; color: var(--amber); }
 
     /* Conditional Grammar Box */
@@ -75,9 +76,9 @@
 
     /* Chapter Test */
     .test-box { border: 0; border-top: 2px solid var(--accent); border-radius: 0; padding: 16px 0; background: transparent; margin-top: 18px; }
-    .q-opt { display: block; width: 100%; text-align: left; padding: 9px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--paper-elevated); cursor: pointer; font-size: 14px; }
+    .q-opt { display: block; width: 100%; text-align: left; padding: 9px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--paper-elevated); cursor: pointer; font-size: 14px; }
     .q-opt:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .q-opt.correct { background: var(--accent-soft); border-color: var(--accent); font-weight: 700; color: var(--accent); }
+    .q-opt.correct { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; color: var(--accent); }
     .q-opt.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
   </style>
 </head>
@@ -87,7 +88,7 @@
     <div>
       <h1 style="display:flex;align-items:center;gap:10px;margin:0">
         <span>Chapters</span>
-        <span class="arabic" style="color:var(--accent);font-size:24px">الفُصُولُ الدِّرَاسِيَّةُ</span>
+        <span class="arabic" style="color:var(--muted);font-weight:400;font-size:21px">الفُصُولُ الدِّرَاسِيَّةُ</span>
       </h1>
       <p class="sub" style="margin:2px 0 0">10 high-frequency sentences + Qur'an by ear + AI speak + 5-min test</p>
     </div>
@@ -109,7 +110,7 @@
         <div class="resume-sub" id="resumeSub"></div>
       </div>
       <div class="resume-actions">
-        <a href="index.html" id="btnPractiseChapter" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Practise this chapter dynamically in Practice (auto-syncs sentences, words &amp; dots)">⚡ Practise Chapter</a>
+        <a href="index.html" id="btnPractiseChapter" class="btn-resume" style="color:var(--accent);border-color:var(--accent);text-decoration:none" title="Practise this chapter dynamically in Practice (auto-syncs sentences, words &amp; dots)">⚡ Practise Chapter</a>
         <a href="weekly.html?print=1" id="btnPrintChapterWeek" class="btn-resume" style="text-decoration:none" title="Print or save this chapter's weekly booklet as PDF">🖨️ Print Week</a>
         <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
         <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
@@ -157,7 +158,7 @@
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <h2 style="margin:0;font-size:17px" id="chapSectionTitle">1. Chapter Sentences &amp; Vocabulary</h2>
-        <div class="view-switch-pills" style="display:inline-flex;border:1px solid var(--border);border-radius:999px;background:var(--bg);padding:2px">
+        <div class="view-switch-pills" style="display:inline-flex;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);padding:2px">
           <button type="button" class="view-switch-btn active" id="btnViewSentences" onclick="switchChapView('sentences')">📖 Sentences (10)</button>
           <button type="button" class="view-switch-btn" id="btnViewVocab" onclick="switchChapView('vocab')">🔤 Chapter Vocabulary</button>
         </div>
@@ -252,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwicuqza"></script>
-<script src="js/curriculum.js?v=mwicuqza"></script>
-<script src="js/srs.js?v=mwicuqza"></script>
-<script src="js/match.js?v=mwicuqza"></script>
-<script src="js/errors.js?v=mwicuqza"></script>
-<script src="js/frames.js?v=mwicuqza"></script>
-<script src="js/app.js?v=mwicuqza"></script>
-<script src="js/tracker.js?v=mwicuqza"></script>
-<script src="js/plan.js?v=mwicuqza"></script>
-<script src="js/account.js?v=mwicuqza"></script>
+<script src="js/progress-model.js?v=mwidpt4o"></script>
+<script src="js/curriculum.js?v=mwidpt4o"></script>
+<script src="js/srs.js?v=mwidpt4o"></script>
+<script src="js/match.js?v=mwidpt4o"></script>
+<script src="js/errors.js?v=mwidpt4o"></script>
+<script src="js/frames.js?v=mwidpt4o"></script>
+<script src="js/app.js?v=mwidpt4o"></script>
+<script src="js/tracker.js?v=mwidpt4o"></script>
+<script src="js/plan.js?v=mwidpt4o"></script>
+<script src="js/account.js?v=mwidpt4o"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -4094,7 +4095,7 @@ function renderQuranSection(surahId) {
   const surah = (VERSES_DATA.surahs || []).find(s => s.id === targetId);
   if (!surah) { qDiv.textContent = "Surah data not found."; return; }
 
-  document.getElementById("quranTitle").innerHTML = `2. Qur'an: ${surah.nameEn} <span style="font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;margin-left:6px">🎙 Qari: Mishary Rashid Alafasy</span>`;
+  document.getElementById("quranTitle").innerHTML = `2. Qur'an: ${surah.nameEn} <span style="font-size:12px;font-weight:400;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);padding:1px 7px;border-radius:var(--radius);margin-left:6px">🎙 Qari: Mishary Rashid Alafasy</span>`;
   document.getElementById("quranSubtitle").textContent = surah.why || "Understand every word in prayer";
 
   qDiv.innerHTML = `
@@ -4429,7 +4430,7 @@ function renderDailySentences() {
       if (dayPracticeMode === "en-only" && !isRevealed) {
         arContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
       } else {
-        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;display:block;cursor:pointer" title="${dayPracticeMode === 'all' ? 'Tap for the English' : 'Tap again to hide'}">${s.ar}</span>`;
+        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:25px;color:var(--ink);line-height:1.8;display:block;cursor:pointer" title="${dayPracticeMode === 'all' ? 'Tap for the English' : 'Tap again to hide'}">${s.ar}</span>`;
       }
 
       let enContent;
@@ -4437,7 +4438,7 @@ function renderDailySentences() {
         enContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
       } else {
         enContent = `
-          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">
+          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:16px;color:var(--ink);line-height:1.5">
             ${s.en}
           </div>
           ${s.tr ? `<div class="s-tr" id="day-tr-${origIdx}" style="display:${allDayTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
@@ -4689,7 +4690,7 @@ function renderDayDrillHtml(idx) {
     body = `
       <div class="drill-prompt" style="font-size:14px;color:var(--muted)">${drillEsc(item.en)}</div>
       <div class="drill-answer">
-        <span class="arabic" dir="rtl" style="font-size:24px;color:var(--accent);line-height:1.5;cursor:pointer" onclick="speak('${encodeURIComponent(item.ar)}', 0.8)" title="Listen">${item.ar}</span>
+        <span class="arabic" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.65;cursor:pointer" onclick="speak('${encodeURIComponent(item.ar)}', 0.8)" title="Listen">${item.ar}</span>
         <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(item.ar)}', 0.8)" title="Listen" aria-label="Listen">🔊</button>
         ${item.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic">${drillEsc(item.tr)}</div>` : ""}
       </div>
@@ -5081,7 +5082,7 @@ function renderChapterVocab() {
           } else {
             arContent = `
               <div style="display:flex;align-items:center;gap:6px">
-                <span class="arabic" dir="rtl" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" style="cursor:pointer;font-size:24px;color:var(--accent);line-height:1.3" title="Click to listen (${vocabAudioModeTitle})">
+                <span class="arabic" dir="rtl" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" style="cursor:pointer;font-size:24px;color:var(--ink);line-height:1.5" title="Click to listen (${vocabAudioModeTitle})">
                   ${v.ar}
                 </span>
                 <button type="button" class="sym-badge" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" title="Listen (${vocabAudioModeTitle})" aria-label="Listen">🔊</button>
