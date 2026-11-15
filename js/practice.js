@@ -32,7 +32,14 @@
   const DAY = 86400000;
   const EFFORT = { word: 0.5, sentence: 1.0, grammar: 1.0, "lesson-card": 1.0, quran: 1.5 };
   const SALAH_RE = /^s:q:(fatiha|ikhlas|falaq|nas|kawthar|asr|nasr|kafirun|qadr|maun|quraysh|fil|kursi):/;
+  const MOSQUE_KEY_RE = /^ev-(khutba|duas|masjid):/;
+  const KHUTBAH_IMAM_RE = /^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/;
   const MUSHAF_TOTAL_TOKENS = 77430;
+
+  function isJumuahWindow(now) {
+    const d = new Date(now || Date.now()).getDay();
+    return d === 4 || d === 5;
+  }
 
   const stripAr = s => String(s || "").replace(/[ً-ْٰـۖ-ۭ]/g, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/[؟،؛.،«»!]/g, "").replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
 
@@ -743,6 +750,21 @@
     const quranCardsHeld = quranCards.filter(lc => isHeldCard(srs[lc.key])).length;
     const earChecks7d = log.filter(x => x && x.t >= now - 7 * DAY && (x.e === "alisten-grade" || x.e === "qlisten-test" || x.e === "qtest-done")).length;
 
+    // 4b. Mosque, Friday Khutbah & Common Du'as
+    const mosqueItemKeys = new Set();
+    sentences.forEach(s => { if (s && MOSQUE_KEY_RE.test(s.key || "")) mosqueItemKeys.add(s.key); });
+    words.forEach(w => { if (w && MOSQUE_KEY_RE.test(w.key || "")) mosqueItemKeys.add(w.key); });
+    const mosqueTotal = mosqueItemKeys.size;
+    let mosqueHeld = 0, mosqueSeen = 0;
+    mosqueItemKeys.forEach(k => {
+      const c = srs[k];
+      if (!c || !c.u) return;
+      mosqueSeen++;
+      if (isHeldCard(c)) mosqueHeld++;
+    });
+    const mosqueCards = lessonCards.filter(lc => lc && lc.category === "mosque");
+    const mosqueCardsHeld = mosqueCards.filter(lc => isHeldCard(srs[lc.key])).length;
+
     // Build honest "Can Do" vs "Focus / Cannot Yet Do" statements
     const canDo = [];
     const gaps = [];
@@ -753,6 +775,7 @@
     else if (sentHeld > 0) canDo.push(`Recall ${sentHeld} sentences on recognition (${sentProvenActive} proven spoken/typed)`);
     if (lcHeld > 0) canDo.push(`Hold ${lcHeld}/${lessonCards.length} Lesson Card mental maps`);
     if (quranHeld > 0) canDo.push(`Recognise ${quranHeld} Qur'an ayahs (${earChecks7d} ear checks in 7d)`);
+    if (mosqueHeld > 0) canDo.push(`Follow ${mosqueHeld}/${mosqueTotal} Friday khutbah, du'ā & imam cues`);
 
     if (vocabSlips > 0) gaps.push(`${vocabSlips} word slip(s) need reinforcement`);
     if (sentSlips > 0) gaps.push(`${sentSlips} sentence slip(s) marked shaky recently`);
@@ -801,6 +824,15 @@
         quranCardsHeld,
         quranCardsTotal: quranCards.length,
         earChecks7d
+      },
+      mosque: {
+        held: mosqueHeld,
+        seen: mosqueSeen,
+        total: mosqueTotal,
+        cardsHeld: mosqueCardsHeld,
+        cardsTotal: mosqueCards.length,
+        salahAyahsHeld,
+        salahAyahsTotal: salahSents.length
       },
       modality: {
         commuteSessions7d: cb.commuteSessions7d,
@@ -1061,6 +1093,39 @@
       }
     }
 
+    // 1b2. Systematic Mosque, Friday Khutbah & Common Du'ā slot (with Thu/Fri Jumu'ah boost)
+    const jumuahBoost = isJumuahWindow(now);
+    const hasMosquePool = everydayPool.length > 20 && everydayPool.some(s => MOSQUE_KEY_RE.test(s.key || ""));
+    if (!diag.light && hasMosquePool && chosen.filter(x => x.kind === "sentence").length < nSentTarget) {
+      const mosqueSents = everydayPool
+        .filter(s => !usedKeys.has(s.key) && MOSQUE_KEY_RE.test(s.key || ""))
+        .map(s => ({
+          s,
+          sc: scoreCandidate(s, srs, now, hwSet, diag.allowNew, it => {
+            const k = String(it.key || "");
+            const c = srs[k];
+            const isDueOrSlip = c && c.u && (isSlip(c, now) || isDue(c, now));
+            return (/^ev-khutba:/.test(k) ? (jumuahBoost ? 3.2 : 1.6) : /^ev-duas:/.test(k) ? 1.5 : 1.3) + (isDueOrSlip ? 1.4 : 0);
+          }, reviewBias)
+        }))
+        .filter(x => x.sc > -500)
+        .sort((a, b) => b.sc - a.sc)
+        .map(x => x.s);
+      if (mosqueSents.length) {
+        const ms = mosqueSents[0];
+        const mc = srs[ms.key];
+        const mSeen = !!(mc && mc.u);
+        if (mSeen || canTakeNew(ms)) {
+          const mWhy = /^ev-khutba:/.test(ms.key || "")
+            ? (mSeen ? "Friday khutbah review" : (jumuahBoost ? "Friday khutbah prep" : "Friday khutbah landmark"))
+            : /^ev-duas:/.test(ms.key || "")
+              ? (mSeen ? "du'ā review" : "common du'ā")
+              : (mSeen ? "imam cue review" : "what the imam says");
+          addItem(ms, "sentence", mWhy);
+        }
+      }
+    }
+
     // 1c. Fill remaining sentence target via FreeTry + review-weighted fallback
     const remSentTarget = Math.max(0, nSentTarget - chosen.filter(x => x.kind === "sentence").length);
     let pickedSents = [];
@@ -1079,6 +1144,7 @@
           (unvSentKeys.has(key) || heardEns.has(byEn.get(key)) ? 4.5 : 0) +
           (diag.commuteHeavy && srs[key] && srs[key].u && !activeProvenKeys.has(key) ? 2.2 : 0) +
           (chapPrefix && String(key).startsWith(chapPrefix) ? 2.6 : 0) +
+          (MOSQUE_KEY_RE.test(key) ? (jumuahBoost ? 1.9 : 0.8) : 0) +
           (/^md:/.test(key) ? 1.8 : 0) +
           (/^cls:/.test(key) ? 1.5 : 0) +
           (diag.batchNum >= 2 && srs[key] && srs[key].u ? 3.0 : 0)
@@ -1100,6 +1166,7 @@
             (unvSentKeys.has(it.key) || heardEns.has(String(it.en || "").trim().toLowerCase()) ? 5 : 0) +
             (diag.commuteHeavy && srs[it.key] && srs[it.key].u && !activeProvenKeys.has(it.key) ? 2.2 : 0) +
             (chapPrefix && String(it.key || "").startsWith(chapPrefix) ? 2.5 : 0) +
+            (MOSQUE_KEY_RE.test(it.key || "") ? (jumuahBoost ? 1.8 : 0.8) : 0) +
             (/^md:/.test(it.key) ? 1.8 : 0), reviewBias)
         }))
         .filter(x => x.sc > -500)
@@ -1216,6 +1283,8 @@
       });
       const hasQuranInBatch = chosen.some(x => x.kind === "quran");
       const firstUnseenQuranLc = lcRawPool.find(lc => lc.category === "quran" && !(srs[lc.key] && srs[lc.key].u));
+      const hasMosqueInBatch = chosen.some(x => MOSQUE_KEY_RE.test(x.key || ""));
+      const firstUnseenMosqueLc = lcRawPool.find(lc => lc.category === "mosque" && !(srs[lc.key] && srs[lc.key].u));
       const lcCandidates = [];
       lcRawPool.forEach(lc => {
         const c = srs[lc.key];
@@ -1225,18 +1294,21 @@
         const wordHit = (trig.words || []).some(w => coveredNormWords.has(stripAr(w).replace(/^ال/, "")));
         const chapHit = !!(diag.activeChapNum && (trig.chapters || []).includes(diag.activeChapNum));
         const quranFoundationHit = !seen && firstUnseenQuranLc && lc.key === firstUnseenQuranLc.key && (hasQuranInBatch || diag.focus === "ear" || diag.batchNum === 1);
-        const matchesBatch = patHit || wordHit || chapHit || quranFoundationHit;
+        const mosqueFoundationHit = !seen && firstUnseenMosqueLc && lc.key === firstUnseenMosqueLc.key && (hasMosqueInBatch || jumuahBoost || diag.batchNum === 1);
+        const matchesBatch = patHit || wordHit || chapHit || quranFoundationHit || mosqueFoundationHit;
 
         if (seen && (isSlip(c, now) || isDue(c, now))) {
           const r = recallNow(c, now);
           const sc = (isSlip(c, now) ? 24 : 18) + (matchesBatch ? 5 : 0) + (diag.commuteHeavy ? 4 : 0) + (1 - r) * 4;
           lcCandidates.push({ lc, sc, lcMode: "review", autoReveal: false, why: isSlip(c, now) ? "lesson card slip" : "lesson card review" });
-        } else if (!seen && !diag.light && (matchesBatch || diag.commuteHeavy) && (diag.batchNum <= 2 || patHit || diag.commuteHeavy || quranFoundationHit)) {
-          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0) + (quranFoundationHit ? 5.5 : 0) + (diag.commuteHeavy ? 5 : 0);
+        } else if (!seen && !diag.light && (matchesBatch || diag.commuteHeavy) && (diag.batchNum <= 2 || patHit || diag.commuteHeavy || quranFoundationHit || mosqueFoundationHit)) {
+          const sc = 15 + (patHit ? 6 : 0) + (wordHit ? 3 : 0) + (chapHit ? 2 : 0) + (quranFoundationHit ? 5.5 : 0) + (mosqueFoundationHit ? 3.5 : 0) + (diag.commuteHeavy ? 5 : 0);
           const why = quranFoundationHit && !patHit && !wordHit
             ? "Qur'ān decoding system — teach first"
-            : diag.commuteHeavy && !matchesBatch ? "visual lesson card — missed on commute"
-            : "new lesson card — teach";
+            : mosqueFoundationHit && !patHit && !wordHit
+              ? "Khutbah & du'ā roadmap — teach first"
+              : diag.commuteHeavy && !matchesBatch ? "visual lesson card — missed on commute"
+              : "new lesson card — teach";
           lcCandidates.push({ lc, sc, lcMode: "teach", autoReveal: true, why });
         } else if (seen && (diag.batchNum >= 2 || diag.commuteHeavy) && (c.box || 0) <= 1 && (matchesBatch || diag.commuteHeavy) && (now - c.u > 2 * 3600000)) {
           lcCandidates.push({ lc, sc: 12 + (diag.commuteHeavy ? 4 : 0), lcMode: "review", autoReveal: false, why: diag.commuteHeavy ? "visual map check after commute" : "lesson card consolidation" });
@@ -1277,6 +1349,8 @@
               else b += 1.3;
             } else if (it.src === "quran") {
               b += 1.2;
+            } else if (MOSQUE_KEY_RE.test(it.key || "")) {
+              b += jumuahBoost ? 1.5 : 1.0;
             } else {
               b += it.src === "teacher" ? 1.2 : 0.6;
             }
@@ -1488,8 +1562,20 @@
       }
     }
 
+    // Weave in 1 Mosque / Friday Khutbah / Common Du'ā phrase on commute
+    const mosquePick = !chapPicked.some(s => MOSQUE_KEY_RE.test(s.key || ""))
+      ? (freeTrySents.find(s => MOSQUE_KEY_RE.test(s.key || "") && !usedSentKeys.has(s.key)) ||
+         allSentences.find(s => MOSQUE_KEY_RE.test(s.key || "") && !usedSentKeys.has(s.key) && !(srs[s.key] && (srs[s.key].box || 0) >= 3 && !isDue(srs[s.key], now))))
+      : null;
+
     // Merge with FreeTry Say-Your-Day sentences (up to 6 total spoken sentences)
     const sayList = chapPicked.slice();
+    if (mosquePick && !usedAr.has(stripAr(mosquePick.ar))) {
+      const seen = !!(mosquePick.key && srs[mosquePick.key] && srs[mosquePick.key].u);
+      sayList.push(Object.assign({}, mosquePick, { isNew: !seen, isMosque: true }));
+      if (mosquePick.key) usedSentKeys.add(mosquePick.key);
+      usedAr.add(stripAr(mosquePick.ar));
+    }
     for (const fs of freeTrySents) {
       if (sayList.length >= 6) break;
       if (!fs || !fs.ar || usedSentKeys.has(fs.key) || usedAr.has(stripAr(fs.ar))) continue;
@@ -1499,7 +1585,7 @@
       usedAr.add(stripAr(fs.ar));
     }
 
-    // Part 2: 1 Spoken Lesson Card Golden Rule cue matching active chapter, today's sentences, or foundational Qur'ān decoding
+    // Part 2: 1 Spoken Lesson Card Golden Rule cue matching active chapter, today's sentences, or foundational Qur'ān / Mosque decoding
     const sayPatterns = new Set(sayList.map(s => s.pattern).filter(p => p && p !== "-"));
     const lcMatch = lessonCards.find(lc => {
       if (!lc || (srs[lc.key] && srs[lc.key].b === "never")) return false;
@@ -1508,7 +1594,7 @@
       const trig = lc.triggers || {};
       return (trig.patterns || []).some(p => sayPatterns.has(p)) || (activeChapNum && (trig.chapters || []).includes(activeChapNum));
     }) || lessonCards.find(lc => {
-      if (!lc || lc.category !== "quran" || (srs[lc.key] && srs[lc.key].b === "never")) return false;
+      if (!lc || (lc.category !== "quran" && lc.category !== "mosque") || (srs[lc.key] && srs[lc.key].b === "never")) return false;
       const c = srs[lc.key];
       return !c || !c.u || isDue(c, now);
     });
@@ -1695,6 +1781,8 @@
   return {
     EFFORT,
     SALAH_RE,
+    MOSQUE_KEY_RE,
+    KHUTBAH_IMAM_RE,
     MUSHAF_TOTAL_TOKENS,
     classifyQuranWord,
     ayahReadiness,

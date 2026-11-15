@@ -21,6 +21,7 @@
     .lc-cat.cat-nuance { background: #eff6ff; color: #1d4ed8; }
     .lc-cat.cat-quran { background: #fef3c7; color: #b45309; }
     .lc-cat.cat-conversation { background: #f3e8ff; color: #7e22ce; }
+    .lc-cat.cat-mosque { background: #ecfdf5; color: #047857; }
     .lc-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; width: 100%; }
     .lc-title { font-size: 17px; font-weight: 700; color: var(--ink, #111827); margin: 3px 0 0; }
     .lc-ar-title { font-family: var(--font-ar, serif); font-size: 24px; color: var(--accent, #0d7a5f); direction: rtl; }

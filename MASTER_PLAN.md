@@ -16,8 +16,8 @@ Computed directly from `data:rkarim88@gmail.com` (`4,063` logged events):
 | **Weekly Chapters** | **Ch 1–3 passed (100%)** · **Ch 4 active** (`0/10` solid) | **Ch 1–10** (`≥80%` test) | Survival greetings, food/requests, and hotel/taxi mastered; **Daily Routine, Time & Tenses** now active. |
 | **Vocabulary** | **199 / 873** held (`23` learning, `116` slips) | **600+** core words held | Strong passive recognition base; `Practice` recycles slips automatically. |
 | **Sentences & Speaking** | **41** held (**39 passive**, **2 proven active**) · **90 min** spoken | **150+** proven spoken | **#1 Bottleneck:** Passive recognition is far ahead of active spoken production. |
-| **Lesson Cards & Grammar** | **0 / 13** Lesson Cards solid · **1 / 22** grammar frames solid | **13+ cards** · **22 frames** | Priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)** & **5 Qur'ān Decoding Moulds**. |
-| **Qur'ān by Ear** | **4-Layer Engine** active in `Practice` · tracked live on `quran.html` | **Structures + Top 151 Core (~45.8% Mushaf) + 13 Salah Surahs + `i+1` Juz' 'Amma** | Engine-first order: Structures & Glue Chains → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (`Practice` & `🚗 Commute`). |
+| **Lesson Cards & Grammar** | **0 / 15** Lesson Cards solid · **1 / 22** grammar frames solid | **15+ cards** · **22 frames** | Priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)**, **Qur'ān Decoding Moulds**, & **Khutbah/Du'ā Roadmaps (`lc:khutbah-roadmap`, `lc:duas-and-imam`)**. |
+| **Qur'ān, Khutbah & Du'ās by Ear** | **4-Layer Qur'ān Engine + 5th Pillar (60 Mosque/Khutbah/Du'ā cues)** live in `Practice` & `quran.html` | **Structures + Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs → Friday Khutbah, Common Du'ās & Imam cues (`Practice` with Thu/Fri Jumu'ah boost + `🚗 Commute`). |
 
 ---
 

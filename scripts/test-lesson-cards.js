@@ -144,6 +144,9 @@ check("sets.html, index.html (Practice), and sentences.html load js/lesson-cards
   global.SRS = require(path.join(ROOT, "js", "srs.js"));
   const cardHtml = LessonCards.renderBodyHtml(lcData.cards[0], {});
   assert(cardHtml.includes('data-mkey="lc:' + lcData.cards[0].id + '"'), "Lesson Card header must include Earned Mastery Dot");
+  const mosqueCards = (lcData.cards || []).filter(c => c.category === "mosque");
+  assert(mosqueCards.some(c => c.id === "khutbah-roadmap") && mosqueCards.some(c => c.id === "duas-and-imam"),
+    "Lesson Cards must include khutbah-roadmap & duas-and-imam in category 'mosque'");
 });
 
 console.log(`\n✓ ${passed} Lesson Card assertions passed.`);

@@ -304,6 +304,8 @@ const SPEC = [
       { title: "Mosque and worship", src: { ph: "deen" } },
       { title: "Inside the Haram", src: { ev: "haram" } },
       { title: "What the imam says", src: { ev: "masjid" } },
+      { title: "Friday khutbah landmarks", src: { ev: "khutba" } },
+      { title: "Common Qur'ānic & salah du'ās", src: { ev: "duas" } },
     ] },
 
   { id: "ms-health", track: "conv", level: "conv-b1",

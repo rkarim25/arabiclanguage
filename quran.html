@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
-  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -38,7 +38,7 @@
     .wbw .g-btn { cursor: pointer; color: var(--amber); font-size: 13px; user-select: none; }
     .wbw .g-row td { background: var(--amber-soft); font-size: 13px; direction: ltr; text-align: left; color: var(--ink); line-height: 1.5; }
     .wbw .g-row .g-root { color: var(--amber); font-weight: 600; display: block; margin-top: 4px; }
-    .q-engine-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 10px; margin: 14px 0; }
+    .q-engine-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 10px; margin: 14px 0; }
     .q-pillar { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 13px; cursor: pointer; text-align: left; transition: all 0.14s; }
     .q-pillar:hover { border-color: var(--accent); transform: translateY(-1px); }
     .q-pillar.active { border-color: var(--accent); background: rgba(13, 122, 95, 0.045); box-shadow: 0 2px 10px rgba(13, 122, 95, 0.09); }
@@ -79,12 +79,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwi55dtu"></script>
-<script src="js/practice.js?v=mwi55dtu"></script>
-<script src="js/lesson-cards.js?v=mwi55dtu"></script>
-<script src="js/app.js?v=mwi55dtu"></script>
-<script src="js/tracker.js?v=mwi55dtu"></script>
-<script src="js/plan.js?v=mwi55dtu"></script>
+<script src="js/srs.js?v=mwi7yu2g"></script>
+<script src="js/practice.js?v=mwi7yu2g"></script>
+<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
+<script src="js/app.js?v=mwi7yu2g"></script>
+<script src="js/tracker.js?v=mwi7yu2g"></script>
+<script src="js/plan.js?v=mwi7yu2g"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -93,6 +93,8 @@ const content = document.getElementById("content");
 let DATA = null;
 let QCORE = [];
 let QCARDS = [];
+let MCARDS = [];
+let MOSQUE_ITEMS = [];
 let QGRAMMAR = [];
 let QSENTS = [];
 let QC_LOOKUP = new Map();
@@ -138,6 +140,14 @@ let unlockedFilter = "ready";
 let unlockedReviewMode = "all";
 const UNLOCKED_REVEALED = new Set();
 
+let mosqueSubFilter = "all";
+let mosqueDotFilter = "all";
+let mosqueReviewMode = "all";
+let mosqueSortWeakest = false;
+let mosqueFrozenKeys = null;
+let mosqueSearch = "";
+const MOSQUE_REVEALED = new Set();
+
 // word roots arrive as rich strings ("ق-و-ل (q-w-l) — to say…"); reduce to the bare Arabic letters
 const rootKey = s => ((s || "").split("(")[0]).replace(/[^ء-ي]/g, "").replace(/ـ/g, "").replace(/[أإآٱ]/g, "ا");
 
@@ -148,8 +158,9 @@ Promise.all([
   fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
   fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
   fetch("data/quran-sentences.json").then(r => r.json()).catch(() => ({ sentences: [] })),
-  fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] }))
-]).then(([vRes, qcRes, lcRes, grRes, qsRes, famRes]) => {
+  fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
+  fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] }))
+]).then(([vRes, qcRes, lcRes, grRes, qsRes, famRes, evRes]) => {
   DATA = vRes.surahs || [];
   QCORE = (qcRes.words || []).map((w, i) => ({
     rank: i,
@@ -162,6 +173,32 @@ Promise.all([
     pillar: (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en, i) : "noun"
   }));
   QCARDS = (lcRes.cards || []).filter(c => c && c.category === "quran");
+  MCARDS = (lcRes.cards || []).filter(c => c && c.category === "mosque");
+  const EV_MOSQUE_ORDER = [
+    { id: "khutba", sub: "khutba", subLabel: "🕌 Friday Khutbah" },
+    { id: "duas", sub: "duas", subLabel: "🤲 Common Du'ā" },
+    { id: "masjid", sub: "imam", subLabel: "📢 What the Imam Says" }
+  ];
+  MOSQUE_ITEMS = [];
+  let mOrd = 0;
+  EV_MOSQUE_ORDER.forEach(cfg => {
+    const g = (evRes.groups || []).find(x => x.id === cfg.id);
+    if (!g) return;
+    (g.members || []).forEach((m, i) => {
+      MOSQUE_ITEMS.push({
+        order: mOrd++,
+        group: cfg.id,
+        key: `ev-${cfg.id}:${i}`,
+        sub: cfg.sub,
+        subLabel: cfg.subLabel,
+        ar: m.ar,
+        tr: m.tr || "",
+        en: m.en || "",
+        note: m.note || "",
+        ayahRef: m.ayahRef || ""
+      });
+    });
+  });
   QGRAMMAR = (grRes.patterns || []).filter(p => QURAN_GRAMMAR_IDS.includes(p.id));
   QSENTS = qsRes.sentences || [];
   (famRes.families || []).forEach(f => { FAM_BY_ROOT[rootKey(f.root)] = f; });
@@ -170,6 +207,12 @@ Promise.all([
   QCORE.forEach(w => {
     const n = normalizeAr(w.ar).replace(/^ال/, "");
     if (n && !wkMap[n]) wkMap[n] = w.key;
+  });
+  MOSQUE_ITEMS.forEach(it => {
+    if (String(it.ar || "").trim().split(/\s+/).length === 1) {
+      const n = normalizeAr(it.ar).replace(/^ال/, "");
+      if (n && !wkMap[n]) wkMap[n] = it.key;
+    }
   });
   if (typeof registerWordKeys === "function" && Object.keys(wkMap).length) registerWordKeys(wkMap);
 
@@ -189,10 +232,13 @@ Promise.all([
   const params = new URLSearchParams(location.search);
   const s = DATA.find(x => x.id === params.get("s"));
   const urlTab = params.get("tab");
-  if (urlTab && ["structures", "words", "surahs", "unlocked"].includes(urlTab)) {
+  const urlSub = params.get("sub");
+  if (urlSub && ["all", "khutba", "duas", "imam"].includes(urlSub)) mosqueSubFilter = urlSub;
+  if (urlTab && ["structures", "words", "surahs", "unlocked", "mosque"].includes(urlTab)) {
     currentQuranTab = urlTab;
   } else if (location.hash && location.hash.startsWith("#lc-")) {
-    currentQuranTab = "structures";
+    const hid = location.hash.slice(4);
+    currentQuranTab = MCARDS.some(c => c.id === hid) ? "mosque" : "structures";
   }
   if (s) renderSurah(s, params.get("mode") || "study");
   else if (params.get("listen")) renderListenQueue();
@@ -317,11 +363,18 @@ function computeEngineMetrics() {
   const unlockedList = computeUnlockedAyahs(srs);
   const readyNowCount = unlockedList.filter(x => x.rd.unknownWords <= 1).length;
 
+  const mosqueCounts = window.SRS && SRS.summaryCounts
+    ? SRS.summaryCounts(MOSQUE_ITEMS.map(x => x.key))
+    : { green: 0, amber: 0, red: 0, grey: MOSQUE_ITEMS.length, total: MOSQUE_ITEMS.length };
+  const mosqueHeldCount = MOSQUE_ITEMS.filter(x => { const c = srs[x.key]; return c && (c.b === "never" || (c.box || 0) >= 1); }).length;
+  const mosqueLcCounts = window.SRS && SRS.summaryCounts ? SRS.summaryCounts(MCARDS.map(c => "lc:" + c.id)) : { green: 0, total: MCARDS.length };
+
   return {
     lcCounts, gramHeldCount, gramTotal: QGRAMMAR.length,
     coreCounts, coreHeldCount, heldTokens, mushafPct,
     salahTotalAyahs, salahGreenAyahs,
-    unlockedCount: unlockedList.length, readyNowCount
+    unlockedCount: unlockedList.length, readyNowCount,
+    mosqueCounts, mosqueHeldCount, mosqueLcCounts
   };
 }
 
@@ -366,6 +419,11 @@ function renderEngineStripHtml(m) {
         <div class="q-pillar-top"><span>🔓 4. Unlocked i+1 Ayahs</span><span>Auto-Gated</span></div>
         <div class="q-pillar-num">${m.unlockedCount} <span style="font-size:13px;font-weight:600;color:var(--muted)">unlocked (${m.readyNowCount} ≤1 new)</span></div>
         <div class="q-pillar-sub">Juz' 'Amma ayahs gated until your held words reach comprehension</div>
+      </button>
+      <button type="button" class="q-pillar ${currentQuranTab === 'mosque' ? 'active' : ''}" onclick="switchQuranTab('mosque')">
+        <div class="q-pillar-top"><span>🕌 5. Khutbah &amp; Du'ās</span><span>Friday &amp; Imam</span></div>
+        <div class="q-pillar-num">${m.mosqueHeldCount}/${MOSQUE_ITEMS.length || 60} <span style="font-size:13px;font-weight:600;color:var(--muted)">cues</span></div>
+        <div class="q-pillar-sub">${m.mosqueLcCounts.green}/${MCARDS.length || 2} roadmaps · ${m.mosqueCounts.green} 🟢 mastered</div>
       </button>
     </div>
   `;
@@ -849,6 +907,216 @@ function renderUnlockedTab() {
   `;
 }
 
+function setMosqueSub(s) { mosqueSubFilter = s; mosqueFrozenKeys = null; renderMosqueTab(); }
+function setMosqueDotFilter(d) { mosqueDotFilter = d; mosqueFrozenKeys = null; renderMosqueTab(); }
+function setMosqueReviewMode(m) { mosqueReviewMode = m; MOSQUE_REVEALED.clear(); renderMosqueTab(); }
+function toggleMosqueWeakest() { mosqueSortWeakest = !mosqueSortWeakest; mosqueFrozenKeys = null; renderMosqueTab(); }
+function resortMosqueItems() { mosqueFrozenKeys = null; renderMosqueTab(); }
+function revealMosqueItem(key, encodedAr) {
+  MOSQUE_REVEALED.add(key);
+  renderMosqueTab();
+  if (encodedAr && mosqueReviewMode === "en-only") speak(decodeURIComponent(encodedAr), 0.82);
+}
+function reciteAyahRef(ref, encodedAr) {
+  const p = String(ref || "").split(":").map(Number);
+  const ar = decodeURIComponent(encodedAr || "");
+  if (p[0] && p[1] && typeof reciteVerse === "function") {
+    reciteVerse(p[0], p[1], ar, 0.85);
+  } else if (ar) {
+    speak(ar, 0.82);
+  }
+}
+function rateMosqueItem(key, g) {
+  const it = MOSQUE_ITEMS.find(x => x.key === key);
+  const wasVeiled = mosqueReviewMode !== "all" && !MOSQUE_REVEALED.has(key);
+  MOSQUE_REVEALED.add(key);
+  let nc = null;
+  if (it && window.Practice && typeof Practice.syncVerdict === "function") {
+    const tokens = String(it.ar || "").trim().split(/\s+/).filter(Boolean);
+    const res = Practice.syncVerdict({
+      item: {
+        key: it.key,
+        kind: tokens.length >= 2 ? "sentence" : "word",
+        ar: it.ar,
+        en: it.en,
+        tr: it.tr,
+        src: "everyday",
+        words: tokens.map(w => [w])
+      },
+      key,
+      grade: g,
+      srsApi: SRS,
+      getSrs,
+      store,
+      logEvent,
+      normalizeAr,
+      wordKeyFor: ar => (typeof _wordKeyFor === "function" && ar) ? _wordKeyFor(normalizeAr(ar).replace(/^ال/, "")) : null,
+      via: "quran-mosque"
+    });
+    nc = res ? res.nc : SRS.rate(key, g);
+  } else {
+    nc = SRS.rate(key, g);
+    logEvent({ e: "sentence-rate", key, g, box: nc.box, src: "quran-mosque", t: Date.now() });
+  }
+  autoSync();
+  const domId = "mosq-" + key.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const card = document.getElementById(domId);
+  if (wasVeiled) renderMosqueTab();
+  else if (card) SRS.paintBar(card, key, nc);
+  refreshEngineStrip();
+}
+
+function renderMosqueTab() {
+  const body = document.getElementById("qTabBody");
+  if (!body) return;
+  const srs = getSrs();
+  const now = Date.now();
+  const m = computeEngineMetrics();
+  const dotMap = { red: 0, grey: 1, amber: 2, green: 3 };
+
+  let rows = MOSQUE_ITEMS.slice();
+  if (mosqueSubFilter !== "all") rows = rows.filter(x => x.sub === mosqueSubFilter);
+  if (mosqueDotFilter !== "all") rows = rows.filter(x => SRS.masteryState(x.key, { srs, now }).level === mosqueDotFilter);
+  const q = mosqueSearch.trim().toLowerCase();
+  if (q) {
+    const qNorm = normalizeAr(q);
+    rows = rows.filter(x =>
+      x.en.toLowerCase().includes(q) ||
+      x.tr.toLowerCase().includes(q) ||
+      (x.note && x.note.toLowerCase().includes(q)) ||
+      (qNorm && normalizeAr(x.ar).includes(qNorm)) ||
+      x.ar.includes(q)
+    );
+  }
+  if (mosqueSortWeakest) {
+    if (!mosqueFrozenKeys) {
+      const sorted = rows.slice().sort((a, b) => {
+        const sa = SRS.masteryState(a.key, { srs, now }).level;
+        const sb = SRS.masteryState(b.key, { srs, now }).level;
+        return (dotMap[sa] ?? 1) - (dotMap[sb] ?? 1) || a.order - b.order;
+      });
+      mosqueFrozenKeys = sorted.map(x => x.key);
+    }
+    const orderIdx = new Map(mosqueFrozenKeys.map((k, i) => [k, i]));
+    rows.sort((a, b) => (orderIdx.has(a.key) ? orderIdx.get(a.key) : 9999) - (orderIdx.has(b.key) ? orderIdx.get(b.key) : 9999));
+  }
+
+  const practiceHref = `index.html?qpillar=mosque&sub=${encodeURIComponent(mosqueSubFilter)}${mosqueDotFilter !== "all" ? "&dot=" + encodeURIComponent(mosqueDotFilter) : ""}`;
+  const cardsHtml = MCARDS.map(c => {
+    const key = "lc:" + c.id;
+    const cardBody = window.LessonCards ? LessonCards.renderBodyHtml(c, {}) : `<p>${c.summary || ""}</p>`;
+    return `
+      <div class="card" id="lc-${c.id}" style="padding:14px 16px;margin-bottom:14px">
+        <div id="qstruct-${c.id}">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <span style="display:inline-flex;align-items:center;gap:8px">
+              ${SRS.dotHtml(key, { lg: true })}
+              <strong style="font-size:15.5px">${c.icon || "🕌"} ${c.title}</strong>
+            </span>
+            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+              ${SRS.rateBarHtml(key, "rateQuranStructure", [c.id], { compact: true, noDot: true, retire: false })}
+              <a href="index.html?lc=${encodeURIComponent(c.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise →</a>
+            </div>
+          </div>
+          ${cardBody}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const khutbaCnt = MOSQUE_ITEMS.filter(x => x.sub === "khutba").length;
+  const duasCnt = MOSQUE_ITEMS.filter(x => x.sub === "duas").length;
+  const imamCnt = MOSQUE_ITEMS.filter(x => x.sub === "imam").length;
+
+  body.innerHTML = `
+    <div class="q-toolbar">
+      <div style="font-size:13px">
+        <b>Layer 5 · Friday Khutbah, Common Du'ās &amp; What the Imam Says</b> — <b>${m.mosqueHeldCount}/${MOSQUE_ITEMS.length}</b> cues held · Practice weaves these in daily (with an extra Jumu'ah boost on Thursdays &amp; Fridays).
+        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Verdicts here sync live across Practice, Commute, Sets, Words &amp; Sentences.</div>
+      </div>
+      <a href="${practiceHref}" class="pill" style="text-decoration:none;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:6px 14px;font-size:12.5px">⚡ Practise Filtered in Practice →</a>
+    </div>
+    ${cardsHtml}
+    <div class="q-toolbar">
+      <input type="text" id="qMosqueSearch" value="${mosqueSearch.replace(/"/g, "&quot;")}" placeholder="🔍 Search khutbah, du'ā, or imam cue…" style="padding:6px 11px;border:1px solid var(--border);border-radius:9px;font-size:13px;min-width:210px;background:var(--bg);color:var(--ink)">
+      <div class="q-chips">
+        <button type="button" class="q-chip ${mosqueSubFilter === 'all' ? 'active' : ''}" onclick="setMosqueSub('all')">All (${MOSQUE_ITEMS.length})</button>
+        <button type="button" class="q-chip ${mosqueSubFilter === 'khutba' ? 'active' : ''}" onclick="setMosqueSub('khutba')">🕌 Friday Khutbah (${khutbaCnt})</button>
+        <button type="button" class="q-chip ${mosqueSubFilter === 'duas' ? 'active' : ''}" onclick="setMosqueSub('duas')">🤲 Common Du'ās (${duasCnt})</button>
+        <button type="button" class="q-chip ${mosqueSubFilter === 'imam' ? 'active' : ''}" onclick="setMosqueSub('imam')">📢 Imam Says (${imamCnt})</button>
+      </div>
+      <div class="q-chips">
+        <button type="button" class="q-chip ${mosqueDotFilter === 'all' ? 'active' : ''}" onclick="setMosqueDotFilter('all')">All Dots</button>
+        <button type="button" class="q-chip ${mosqueDotFilter === 'green' ? 'active' : ''}" onclick="setMosqueDotFilter('green')"><span class="m-dot m-green sm"></span> ${m.mosqueCounts.green}</button>
+        <button type="button" class="q-chip ${mosqueDotFilter === 'amber' ? 'active' : ''}" onclick="setMosqueDotFilter('amber')"><span class="m-dot m-amber sm"></span> ${m.mosqueCounts.amber}</button>
+        <button type="button" class="q-chip ${mosqueDotFilter === 'red' ? 'active' : ''}" onclick="setMosqueDotFilter('red')"><span class="m-dot m-red sm"></span> ${m.mosqueCounts.red}</button>
+        <button type="button" class="q-chip ${mosqueDotFilter === 'grey' ? 'active' : ''}" onclick="setMosqueDotFilter('grey')"><span class="m-dot m-grey sm"></span> ${m.mosqueCounts.grey}</button>
+      </div>
+    </div>
+    <div class="q-toolbar" style="padding:7px 13px">
+      <div class="q-chips">
+        <span style="font-size:12px;color:var(--muted);font-weight:600">Review:</span>
+        <button type="button" class="q-chip ${mosqueReviewMode === 'all' ? 'active' : ''}" onclick="setMosqueReviewMode('all')">All</button>
+        <button type="button" class="q-chip ${mosqueReviewMode === 'ar-only' ? 'active' : ''}" onclick="setMosqueReviewMode('ar-only')">🇸🇦 By Ear (AR → EN)</button>
+        <button type="button" class="q-chip ${mosqueReviewMode === 'en-only' ? 'active' : ''}" onclick="setMosqueReviewMode('en-only')">🇬🇧 EN → AR</button>
+      </div>
+      <div class="q-chips">
+        <button type="button" class="q-chip ${mosqueSortWeakest ? 'active' : ''}" onclick="toggleMosqueWeakest()">📉 Weakest First</button>
+        ${mosqueSortWeakest ? `<button type="button" class="q-chip" onclick="resortMosqueItems()">↻ Re-sort</button>` : ""}
+        <span style="font-size:12px;color:var(--muted)">Showing ${rows.length}</span>
+      </div>
+    </div>
+    ${rows.length ? rows.map(it => {
+      const rev = mosqueReviewMode === "all" || MOSQUE_REVEALED.has(it.key);
+      const hideAr = mosqueReviewMode === "en-only" && !rev;
+      const hideEn = mosqueReviewMode === "ar-only" && !rev;
+      const domId = "mosq-" + it.key.replace(/[^a-zA-Z0-9_-]/g, "_");
+      const encAr = encodeURIComponent(it.ar);
+      return `
+        <div class="q-ayah-card" id="${domId}">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+            <span style="display:inline-flex;align-items:center;gap:7px">
+              ${SRS.dotHtml(it.key, { lg: true })}
+              <span class="q-pillar-tag">${it.subLabel}</span>
+              ${it.ayahRef ? `<span class="q-freq-pill">Q ${it.ayahRef}</span>` : ""}
+            </span>
+            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <button type="button" class="lc-speak-btn" onclick="speak(decodeURIComponent('${encAr}'), 0.85)" title="Play exact phrase audio">🔊 Speak</button>
+              ${it.ayahRef ? `<button type="button" class="lc-speak-btn" onclick="reciteAyahRef('${it.ayahRef}', '${encAr}')" title="Listen to Mishary Rashid Alafasy recite full ayah (${it.ayahRef})">🎧 Alafasy (${it.ayahRef})</button>` : ""}
+              ${SRS.rateBarHtml(it.key, "rateMosqueItem", [], { compact: true, noDot: true, retire: false })}
+            </div>
+          </div>
+          ${hideAr
+            ? `<div style="margin:6px 0"><button type="button" class="q-reveal-btn" onclick="revealMosqueItem('${it.key}', '${encAr}')">👁️ Reveal Arabic &amp; Speak</button></div>`
+            : `<div class="arabic" style="font-size:24px;line-height:1.75;text-align:right;margin:4px 0" dir="rtl">${it.ar}</div>
+               ${it.tr ? `<div style="font-size:12.5px;color:var(--muted);font-style:italic;text-align:right">${it.tr}</div>` : ""}`
+          }
+          ${hideEn
+            ? `<div style="margin:6px 0"><button type="button" class="q-reveal-btn" onclick="revealMosqueItem('${it.key}')">👁️ Check English Meaning</button></div>`
+            : `<div style="font-size:14.5px;color:var(--ink);margin:4px 0"><b>${it.en}</b></div>
+               ${it.note ? `<div style="font-size:12.5px;color:var(--muted);margin-top:3px">💡 ${it.note}</div>` : ""}`
+          }
+        </div>
+      `;
+    }).join("") : `
+      <div class="card" style="text-align:center;padding:24px">
+        <p style="margin:0">No mosque, khutbah, or du'ā items match this filter.</p>
+      </div>
+    `}
+  `;
+
+  const inp = document.getElementById("qMosqueSearch");
+  if (inp) {
+    inp.oninput = () => {
+      const pos = inp.selectionStart || 0;
+      mosqueSearch = inp.value;
+      renderMosqueTab();
+      const restored = document.getElementById("qMosqueSearch");
+      if (restored) { restored.focus(); try { restored.setSelectionRange(pos, pos); } catch (_) {} }
+    };
+  }
+}
+
 function renderList() {
   trackPage("quran:list");
   const m = computeEngineMetrics();
@@ -857,19 +1125,21 @@ function renderList() {
       <h1 style="margin:0">Understand the Quran <span class="arabic" style="color:var(--accent)">كما يُتْلَى</span></h1>
       <a href="index.html?filter=quran" class="pill" style="text-decoration:none;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 13px;font-size:13px">⚡ Practise Qur'ān in Practice →</a>
     </div>
-    <p class="sub">All teaching &amp; review flows automatically through daily <strong>⚡ Practice</strong> &amp; <strong>🚗 Commute</strong>. Use this page as your visual map &amp; standalone review library for every structure, common word, Salah surah, and unlocked ayah.</p>
+    <p class="sub">All teaching &amp; review flows automatically through daily <strong>⚡ Practice</strong> &amp; <strong>🚗 Commute</strong>. Use this page as your visual map &amp; standalone review library for every structure, common word, Salah surah, unlocked ayah, and Friday khutbah / du'ā cue.</p>
     ${renderEngineStripHtml(m)}
     <div class="q-tabs" role="tablist">
       <button type="button" class="q-tab ${currentQuranTab === 'structures' ? 'active' : ''}" onclick="switchQuranTab('structures')">🧱 Structures &amp; Moulds</button>
       <button type="button" class="q-tab ${currentQuranTab === 'words' ? 'active' : ''}" onclick="switchQuranTab('words')">📊 Top 151 Core Words (${m.mushafPct}%)</button>
       <button type="button" class="q-tab ${currentQuranTab === 'surahs' ? 'active' : ''}" onclick="switchQuranTab('surahs')">🕋 13 Salah Surahs</button>
       <button type="button" class="q-tab ${currentQuranTab === 'unlocked' ? 'active' : ''}" onclick="switchQuranTab('unlocked')">🔓 Unlocked i+1 Ayahs (${m.unlockedCount})</button>
+      <button type="button" class="q-tab ${currentQuranTab === 'mosque' ? 'active' : ''}" onclick="switchQuranTab('mosque')">🕌 Khutbah, Du'ās &amp; Imam (${MOSQUE_ITEMS.length})</button>
     </div>
     <div id="qTabBody"></div>
   `;
   if (currentQuranTab === "words") renderCoreWordsTab();
   else if (currentQuranTab === "surahs") renderSurahsTab();
   else if (currentQuranTab === "unlocked") renderUnlockedTab();
+  else if (currentQuranTab === "mosque") renderMosqueTab();
   else renderStructuresTab();
 }
 

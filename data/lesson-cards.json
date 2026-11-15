@@ -1203,6 +1203,207 @@
         ]
       },
       "audioCue": "Lesson Card: Three Verb Shifts That Multiply Every Root. Doubling the middle letter or adding an a prefix makes a root causative: alima means he knew, allama means He taught; nazala means came down, anzala means sent down. Adding ista or nasta means seeking: ghafara is forgave, istaghfir is seek forgiveness, and nasta'inu in Fatiha means we seek help."
+    },
+    {
+      "id": "khutbah-roadmap",
+      "category": "mosque",
+      "categoryLabel": "Mosque & Khutbah",
+      "icon": "🕌",
+      "title": "How Every Friday Khutbah Unfolds",
+      "arTitle": "خَرِيطَةُ خُطْبَةِ الجُمُعَة",
+      "summary": "A Friday khutbah is not an unpredictable lecture — it marches through 5 fixed Arabic signposts by ear: Opening Praise & Taqwā, the pivot 'أَمَّا بَعْدُ', Pause & 2nd Khutbah, Ṣalawāt & Du'ās (ending 'آمِينَ'), and Closing Āyah '16:90' + 'وَأَقِمِ الصَّلَاةَ'.",
+      "diagram": {
+        "type": "timeline",
+        "nodes": [
+          {
+            "era": "1️⃣ Opening & Taqwā",
+            "ar": "الحَمْدُ لِلَّهِ ... يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ",
+            "sub": "Khuṭbat al-Ḥājah — praising Allah + taqwā verses",
+            "tone": "teal"
+          },
+          {
+            "era": "2️⃣ THE HINGE (Topic Starts!)",
+            "ar": "أَمَّا بَعْدُ · عِبَادَ اللَّهِ",
+            "sub": "Opening ends -> main Friday message starts right here",
+            "tone": "amber"
+          },
+          {
+            "era": "3️⃣ Pause -> 2nd Khutbah",
+            "ar": "أَقُولُ قَوْلِي هَذَا ... إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ",
+            "sub": "Imam sits, then returns for ṣalawāt & congregational du'ās",
+            "tone": "blue"
+          },
+          {
+            "era": "4️⃣ Closing Cue -> Stand!",
+            "ar": "إِنَّ اللَّهَ يَأْمُرُ بِالعَدْلِ وَالإِحْسَانِ ... وَأَقِمِ الصَّلَاةَ",
+            "sub": "Remember Allah (2:152), then stand for iqāmah",
+            "tone": "slate"
+          }
+        ],
+        "danger": "Ear cue: Do NOT tune out during the fast opening Arabic! Wait for أَمَّا بَعْدُ ('now then') and عِبَادَ اللَّهِ ('O servants of Allah') — that is where today's topic begins."
+      },
+      "columns": [
+        "Stage",
+        "What It Signals",
+        "Arabic Landmark",
+        "Meaning"
+      ],
+      "rows": [
+        {
+          "col1": "<b>1. Opening Book</b>",
+          "col2": "Khuṭbat al-Ḥājah creed line",
+          "ar": "إِنَّ أَصْدَقَ الحَدِيثِ كِتَابُ اللَّهِ",
+          "tr": "inna aṣdaqa l-ḥadīthi kitābu llāh",
+          "col4": "Truly the most truthful speech is the Book of Allah"
+        },
+        {
+          "col1": "<b>2. Sermon Pivot</b>",
+          "col2": "Main subject begins right now",
+          "ar": "أَمَّا بَعْدُ",
+          "tr": "ammā baʿdu",
+          "col4": "Now then / as for what follows"
+        },
+        {
+          "col1": "<b>3. 2nd Khutbah Ṣalawāt</b>",
+          "col2": "Send blessings on the Prophet (33:56)",
+          "ar": "إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ",
+          "tr": "inna llāha wa-malāʾikatahu yuṣallūna ʿalā n-nabiyy",
+          "col4": "Indeed Allah &amp; His angels send blessings upon the Prophet"
+        },
+        {
+          "col1": "<b>4. Closing Ayah</b>",
+          "col2": "Signature closing verse (16:90)",
+          "ar": "إِنَّ اللَّهَ يَأْمُرُ بِالعَدْلِ وَالإِحْسَانِ",
+          "tr": "inna llāha yaʾmuru bi-l-ʿadli wa-l-iḥsān",
+          "col4": "Indeed Allah commands justice and excellence"
+        },
+        {
+          "col1": "<b>5. Stand Cue</b>",
+          "col2": "Final 2 words -> Iqāmah starts",
+          "ar": "وَأَقِمِ الصَّلَاةَ",
+          "tr": "wa-aqimi ṣ-ṣalāh",
+          "col4": "And establish the prayer"
+        }
+      ],
+      "trap": "Notice أَقِمِ الصَّلَاةَ at the very end takes a kasrah on مِ (wa-aqimi ṣ-ṣalāh) only because the next word starts with silent alif-lām — it is still a bare imperative command to the mu'adhdhin!",
+      "quickCheck": {
+        "prompt": "What does أَمَّا بَعْدُ signal in a khutbah — and what are the final words telling everyone the iqāmah is next?",
+        "answerAr": "أَمَّا بَعْدُ (المَوْضُوعُ يَبْدَأُ) · وَأَقِمِ الصَّلَاةَ",
+        "speakAr": "أَمَّا بَعْدُ",
+        "tr": "ammā baʿdu (topic starts) · wa-aqimi ṣ-ṣalāh (establish the prayer)",
+        "answerEn": "أَمَّا بَعْدُ pivots from opening praise to today's topic; وَأَقِمِ الصَّلَاةَ closes the khutbah right before iqāmah."
+      },
+      "triggers": {
+        "patterns": [
+          "imperative",
+          "idaafa",
+          "verbless"
+        ],
+        "words": [
+          "خُطْبَة",
+          "الجُمُعَة",
+          "اتَّقُوا",
+          "عِبَاد",
+          "صَلَاة"
+        ],
+        "chapters": []
+      },
+      "audioCue": "Lesson Card: How Every Friday Khutbah Unfolds. Every khutbah follows five landmarks you can hear by ear. First the khatib praises Allah and recites the taqwa verses calling O you who believe. Second comes amma ba'du, which literally means now then and marks the exact start of today's topic. Third, he sits briefly and opens the second khutbah, reciting inna llaha wa mala'ikatahu to trigger blessings on the Prophet followed by community du'as ending in Amin. Finally, he closes with inna llaha ya'muru bil-adli wal-ihsan and wa-aqimi s-salah, signalling everyone to stand for prayer."
+    },
+    {
+      "id": "duas-and-imam",
+      "category": "mosque",
+      "categoryLabel": "Mosque & Khutbah",
+      "icon": "🤲",
+      "title": "The Du'ā & Imam Command Kit",
+      "arTitle": "مَفَاتِيحُ الدُّعَاءِ وَالإِمَام",
+      "summary": "Du'ās and imam announcements run on two grammatical switches you already know: direct vocative + bare command when calling Allah (رَبَّنَا ... آتِنَا / اِغْفِرْ), and plural -ū commands (اِسْتَوُوا / أَقِيمُوا) when the imam directs the rows.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "🤲 Call + Bare Command",
+            "title": "رَبَّنَا / رَبِّ / اللَّهُمَّ + فِعْلُ أَمْر",
+            "desc": "rabbana ātinā (grant us!) · rabbi zidnī (increase me!) · allāhumma ghfir (forgive!) — vocative drops the ي."
+          },
+          {
+            "badge": "👥 Row Commands (-ū)",
+            "title": "اِسْتَوُوا · تَقَدَّمُوا · سُدُّوا · أَقِيمُوا",
+            "desc": "Plural command ending -ū means 'you all [do it]!' — straight rows, step forward, close gaps."
+          },
+          {
+            "badge": "🕌 Salah Transitions",
+            "title": "قَدْ قَامَتِ الصَّلَاةُ · رَبَّنَا وَلَكَ الحَمْدُ",
+            "desc": "Fixed congregation cues for iqāmah, rising from rukūʿ, sajdah tilāwah, and 4 takbīrs in janāzah."
+          }
+        ]
+      },
+      "columns": [
+        "Switch Type",
+        "Grammar Key",
+        "Arabic Phrase",
+        "Meaning"
+      ],
+      "rows": [
+        {
+          "col1": "<b>Qur'ānic Rabbanā</b>",
+          "col2": "<code>رَبَّنَا</code> + command <code>آتِنَا</code>",
+          "ar": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً",
+          "tr": "rabbanā ātinā fī d-dunyā ḥasana",
+          "col4": "Our Lord, grant us good in this world (2:201)"
+        },
+        {
+          "col1": "<b>Personal Du'ā</b>",
+          "col2": "<code>رَبِّ</code> + command + <code>ـنِي</code> (me)",
+          "ar": "رَبِّ زِدْنِي عِلْمًا",
+          "tr": "rabbi zidnī ʿilmā",
+          "col4": "My Lord, increase me in knowledge (20:114)"
+        },
+        {
+          "col1": "<b>Laylat al-Qadr / Qunūt</b>",
+          "col2": "<code>اللَّهُمَّ</code> ... <code>فَاعْفُ</code> (so pardon!)",
+          "ar": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ العَفْوَ فَاعْفُ عَنِّي",
+          "tr": "allāhumma innaka ʿafuwwun tuḥibbu l-ʿafwa fa-ʿfu ʿannī",
+          "col4": "O Allah, You are Pardoning, You love pardon, so pardon me"
+        },
+        {
+          "col1": "<b>Imam Row Command</b>",
+          "col2": "Plural imperative ending <code>ـُوا</code> (-ū)",
+          "ar": "أَقِيمُوا الصُّفُوفَ",
+          "tr": "aqīmū ṣ-ṣufūf",
+          "col4": "Make the prayer rows straight"
+        },
+        {
+          "col1": "<b>Rising from Rukūʿ</b>",
+          "col2": "Congregation answer to سَمِعَ اللَّهُ...",
+          "ar": "رَبَّنَا وَلَكَ الحَمْدُ",
+          "tr": "rabbanā wa-laka l-ḥamd",
+          "col4": "Our Lord, and to You belongs all praise"
+        }
+      ],
+      "trap": "Don't look for يَا ('O!') inside اللَّهُمَّ or رَبَّنَا — اللَّهُمَّ puts ـمَّ at the end instead of يَا, and رَبِّ ('my Lord') drops its trailing ي in supplication for immediacy.",
+      "quickCheck": {
+        "prompt": "Translate by ear: رَبِّ زِدْنِي عِلْمًا — and explain the ending of أَقِيمُوا الصُّفُوفَ:",
+        "answerAr": "رَبِّ زِدْنِي عِلْمًا · أَقِيمُوا الصُّفُوفَ",
+        "speakAr": "رَبِّ زِدْنِي عِلْمًا",
+        "tr": "rabbi zidnī ʿilmā · aqīmū ṣ-ṣufūf",
+        "answerEn": "'My Lord, increase me in knowledge' (زِدْ command + ـنِي me); أَقِيمُوا uses plural -ū ('you all straighten the rows!')."
+      },
+      "triggers": {
+        "patterns": [
+          "imperative"
+        ],
+        "words": [
+          "رَبَّنَا",
+          "اللَّهُمَّ",
+          "اِغْفِرْ",
+          "اِسْتَوُوا",
+          "آمِينَ",
+          "صُفُوف"
+        ],
+        "chapters": []
+      },
+      "audioCue": "Lesson Card: The Du'a and Imam Command Kit. Almost every du'a opens with Rabbi meaning my Lord, Rabbana meaning our Lord, or Allahumma meaning O Allah, followed immediately by a bare Arabic command such as ighfir meaning forgive or zidni meaning increase me. When the imam faces the congregation, he switches to plural commands ending in u: istawu means stand straight, taqaddamu means step forward, and aqimu s-sufuf means straighten the rows. Knowing those two command switches unlocks both du'a and live masjid speech."
     }
   ]
 }

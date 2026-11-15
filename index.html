@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
-  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
@@ -282,20 +282,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwi55dtu"></script>
-<script src="js/curriculum.js?v=mwi55dtu"></script>
-<script src="js/srs.js?v=mwi55dtu"></script>
-<script src="js/frames.js?v=mwi55dtu"></script>
-<script src="js/freetry.js?v=mwi55dtu"></script>
-<script src="js/practice.js?v=mwi55dtu"></script>
-<script src="js/lesson-cards.js?v=mwi55dtu"></script>
-<script src="js/match.js?v=mwi55dtu"></script>
-<script src="js/errors.js?v=mwi55dtu"></script>
-<script src="js/tryit.js?v=mwi55dtu"></script>
-<script src="js/app.js?v=mwi55dtu"></script>
-<script src="js/tracker.js?v=mwi55dtu"></script>
-<script src="js/plan.js?v=mwi55dtu"></script>
-<script src="js/account.js?v=mwi55dtu"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwi7yu2g"></script>
+<script src="js/curriculum.js?v=mwi7yu2g"></script>
+<script src="js/srs.js?v=mwi7yu2g"></script>
+<script src="js/frames.js?v=mwi7yu2g"></script>
+<script src="js/freetry.js?v=mwi7yu2g"></script>
+<script src="js/practice.js?v=mwi7yu2g"></script>
+<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
+<script src="js/match.js?v=mwi7yu2g"></script>
+<script src="js/errors.js?v=mwi7yu2g"></script>
+<script src="js/tryit.js?v=mwi7yu2g"></script>
+<script src="js/app.js?v=mwi7yu2g"></script>
+<script src="js/tracker.js?v=mwi7yu2g"></script>
+<script src="js/plan.js?v=mwi7yu2g"></script>
+<script src="js/account.js?v=mwi7yu2g"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -730,6 +730,13 @@ function renderCapabilityDrawerHTML() {
           <div><b>${cap.quran.coreWordsHeld || 0}/${cap.quran.coreWordsTotal || 151}</b> Core Words (<b>${cap.quran.mushafCoveragePct || 0}%</b> Mushaf) · <b>${cap.quran.ayahsHeld}</b> ayahs</div>
           <div style="color:var(--muted);font-size:11px">${cap.quran.quranCardsHeld || 0}/${cap.quran.quranCardsTotal || 5} moulds · ${cap.quran.composableAyahsUnlocked || 0} unlocked i+1 · <a href="quran.html" style="color:var(--accent);font-weight:600;text-decoration:none">Details →</a></div>
         </div>
+        ${cap.mosque ? `
+        <div class="cap-cell">
+          <b>🕋 Khutbah, Du'ās &amp; Imam</b>
+          <div><b>${cap.mosque.held}/${cap.mosque.total}</b> mosque cues · <b>${cap.mosque.cardsHeld || 0}/${cap.mosque.cardsTotal || 2}</b> roadmaps</div>
+          <div style="color:var(--muted);font-size:11px">Friday khutbah landmarks, Rabbanā/Qunūt du'ās &amp; imam commands · <a href="quran.html?tab=mosque" style="color:var(--accent);font-weight:600;text-decoration:none">Details →</a></div>
+        </div>
+        ` : ""}
         <div class="cap-cell">
           <b>🚗 Screen &amp; Commute Balance</b>
           <div><b>${cap.modality.commuteSessions7d}</b> commute / <b>${cap.modality.screenSessions7d}</b> screen (7d)</div>
@@ -937,8 +944,12 @@ function sourceLinkMeta(s) {
   const k = String(s.key || "");
   if (s.kind === "lesson-card") {
     const id = (s.lcCard && s.lcCard.id) || k.replace(/^lc:/, "");
-    if (s.category === "quran" || (s.lcCard && s.lcCard.category === "quran")) {
+    const cat = s.category || (s.lcCard && s.lcCard.category);
+    if (cat === "quran") {
       return { href: "quran.html?tab=structures#lc-" + id, label: "🧱 Qur'ān Structure", title: "Open in Qur'ān Structures & Moulds" };
+    }
+    if (cat === "mosque") {
+      return { href: "quran.html?tab=mosque#lc-" + id, label: "🕋 Khutbah & Du'ā Map", title: "Open in Khutbah, Du'ās & Imam" };
     }
     return { href: "sets.html#lc-" + id, label: "📇 Lesson Card · " + (s.categoryLabel || "Concept"), title: "Open Lesson Card in Sets" };
   }
@@ -946,6 +957,10 @@ function sourceLinkMeta(s) {
     if (/^qc:/.test(k) || s.wordSrc === "quran") {
       if (s.surahId) return { href: "quran.html?s=" + s.surahId, label: "🔤 Qur'ān Word", title: "Open Surah in Qur'ān" };
       return { href: "quran.html?tab=words", label: "📊 Core Qur'ān Word", title: "Open in Top 151 Core Qur'ān Words" };
+    }
+    if (/^ev-(khutba|duas|masjid):/.test(k)) {
+      const sub = k.startsWith("ev-khutba:") ? "khutba" : k.startsWith("ev-duas:") ? "duas" : "imam";
+      return { href: "quran.html?tab=mosque&sub=" + sub, label: "🕋 Mosque & Du'ā Word", title: "Open in Khutbah, Du'ās & Imam" };
     }
     if (/^ev-([^:]+):/.test(k)) {
       const gid = k.match(/^ev-([^:]+):/)[1];
@@ -974,6 +989,10 @@ function sourceLinkMeta(s) {
   if (s.src === "teacher" || k.startsWith("cls:")) {
     const cid = k.startsWith("cls:") ? k.split(":")[1] : "";
     return { href: cid ? ("class.html?class=" + encodeURIComponent(cid)) : "class.html", label: "🧑‍🏫 Class", title: "Open in Teacher tab" };
+  }
+  if (/^ev-(khutba|duas|masjid):/.test(k)) {
+    const sub = k.startsWith("ev-khutba:") ? "khutba" : k.startsWith("ev-duas:") ? "duas" : "imam";
+    return { href: "quran.html?tab=mosque&sub=" + sub, label: "🕋 Khutbah & Du'ās", title: "Open in Khutbah, Du'ās & Imam" };
   }
   return { href: "sentences.html", label: "💬 Sentence", title: "Open in Sentence Library" };
 }
@@ -1121,6 +1140,34 @@ function loadFocusedPracticeFromUrl(searchStr) {
         backLabel = "🔓 Back to Unlocked Ayahs";
         forceDir = "ar-first";
       }
+    } else if (qpillarParam === "mosque") {
+      const subParam = q.get("sub") || "all";
+      const subMatch = key => {
+        const k = String(key || "");
+        if (subParam === "khutba") return k.startsWith("ev-khutba:");
+        if (subParam === "duas") return k.startsWith("ev-duas:");
+        if (subParam === "imam") return k.startsWith("ev-masjid:");
+        return /^ev-(khutba|duas|masjid):/.test(k);
+      };
+      const mCards = subParam === "all" ? PRACTICE_LESSON_CARDS.filter(c => c.category === "mosque" && !(srs[c.key] && srs[c.key].u && (srs[c.key].box || 0) >= 2)) : [];
+      const mSents = MASTER_SENTENCES.filter(s => subMatch(s.key));
+      const mSentKeys = new Set(mSents.map(s => s.key));
+      const mWords = PRACTICE_WORDS.filter(w => subMatch(w.key) && !mSentKeys.has(w.key));
+      let mPool = mSents.concat(mWords);
+      if (dotParam && dotParam !== "all") {
+        mPool = mPool.filter(it => SRS.masteryState(it.key, { srs, now }).level === dotParam);
+      }
+      const combined = mCards.concat(mPool);
+      if (combined.length) {
+        const picked = mCards.slice(0, 2).concat(rankFocusItems(mPool, srs, now, 10, true));
+        list = picked.map(it => decorateFocusItem(it, srs, now) || it).filter(Boolean);
+        const subLbl = subParam === "khutba" ? "Friday Khutbah Landmarks" : subParam === "duas" ? "Common Du'ās" : subParam === "imam" ? "What the Imam Says" : "Friday Khutbah, Common Du'ās & Imam Cues";
+        title = "🕋 Practice — " + subLbl;
+        sub = "Train by ear & phrase anatomy · Verdicts sync automatically across Qur'ān, Sets, Words & Sentences.";
+        backHref = "quran.html?tab=mosque" + (subParam !== "all" ? "&sub=" + encodeURIComponent(subParam) : "");
+        backLabel = "🕋 Back to Khutbah & Du'ās";
+        forceDir = "ar-first";
+      }
     }
   } else if (chapParam) {
     const ch = CHAPTERS_LIST.find(c => c.id === chapParam || String(c.num) === String(chapParam).replace(/^chap-/, ""));
@@ -1264,6 +1311,7 @@ function loadFocusedPracticeFromUrl(searchStr) {
     if (f === "chapters") sPool = sPool.filter(s => s.src === "chapters");
     else if (f === "teacher") sPool = sPool.filter(s => s.src === "teacher");
     else if (f === "everyday") sPool = sPool.filter(s => s.track === "everyday" && s.src !== "chapters");
+    else if (f === "mosque") { sPool = sPool.filter(s => /^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || "")); forceDir = "ar-first"; }
     else if (f === "quran") { sPool = sPool.filter(s => s.track === "quran"); forceDir = "ar-first"; }
     else if (f === "due") sPool = sPool.filter(s => { const c = srs[s.key]; return c && c.b !== "never" && c.due && c.due <= now; });
     if (dotParam && dotParam !== "all") {

@@ -386,6 +386,76 @@ console.log("\n-- Practice: effort equivalence & adaptive behaviour --");
   });
   yes(qCaps.quran.coreWordsHeld >= 2 && qCaps.quran.coreWordsTotal === 151 && qCaps.quran.mushafCoveragePct > 0 && qCaps.quran.composableAyahsUnlocked >= 1,
     `summarizeCapabilities reports real Core 151 coverage (${qCaps.quran.coreWordsHeld}/151 = ${qCaps.quran.mushafCoveragePct}% Mushaf, ${qCaps.quran.composableAyahsUnlocked} i+1 unlocked)`);
+
+  // Mosque, Friday Khutbah & Common Du'ās integration
+  yes(Practice.MOSQUE_KEY_RE && Practice.MOSQUE_KEY_RE.test("ev-khutba:0") && Practice.MOSQUE_KEY_RE.test("ev-duas:0") && Practice.MOSQUE_KEY_RE.test("ev-masjid:0"),
+    "Practice.MOSQUE_KEY_RE matches Friday khutbah, du'ā, and imam keys");
+
+  const evJson = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "everyday.json"), "utf8"));
+  const mosqueWords = [];
+  const mosqueSents = [];
+  ["khutba", "duas", "masjid"].forEach(gid => {
+    const g = (evJson.groups || []).find(x => x.id === gid);
+    (g ? g.members : []).forEach((m, i) => {
+      const k = `ev-${gid}:${i}`;
+      const toks = String(m.ar || "").trim().split(/\s+/);
+      if (toks.length >= 2) {
+        mosqueSents.push({ key: k, kind: "sentence", track: "conv", ar: m.ar, en: m.en, tr: m.tr || "", words: toks.map(w => [w]), src: "everyday", pattern: "imperative" });
+      } else {
+        mosqueWords.push({ key: k, kind: "word", ar: m.ar, en: m.en, tr: m.tr || "", words: [[m.ar, m.en]], src: "everyday" });
+      }
+    });
+  });
+
+  const mosqueCaps = Practice.summarizeCapabilities({
+    now,
+    srs: { "ev-khutba:0": { box: 2, s: 7, u: now - DAY, due: now + 5 * DAY }, "lc:khutbah-roadmap": { box: 2, s: 7, u: now - DAY, due: now + 5 * DAY } },
+    log: [], words: mosqueWords, sentences: mosqueSents, grammar: [], lessonCards: lcPool
+  });
+  yes(mosqueCaps.mosque && mosqueCaps.mosque.total === 60 && mosqueCaps.mosque.held >= 1 && mosqueCaps.mosque.cardsTotal === 2 && mosqueCaps.mosque.cardsHeld >= 1,
+    `summarizeCapabilities reports Mosque/Khutbah/Du'ā progress (${mosqueCaps.mosque.held}/${mosqueCaps.mosque.total} cues, ${mosqueCaps.mosque.cardsHeld}/${mosqueCaps.mosque.cardsTotal} roadmaps)`);
+
+  // Friday Jumu'ah window weaves Mosque sentence and teaches lc:khutbah-roadmap when Quran cards are already held
+  const fridayNow = Date.UTC(2026, 10, 13, 9, 0, 0); // Friday 2026-11-13
+  const qHeldSrs = { "qc:0": { box: 3, s: 14, u: fridayNow - DAY, due: fridayNow + 10 * DAY } };
+  lcPool.filter(c => c.category === "quran").forEach(c => {
+    qHeldSrs[c.key] = { box: 3, s: 14, u: fridayNow - DAY, due: fridayNow + 10 * DAY };
+  });
+  const fridayBatch = Practice.buildBatch({
+    now: fridayNow,
+    batchNum: 1,
+    srs: qHeldSrs,
+    log: [{ e: "sent-drill", ok: true, how: "mic", t: fridayNow - DAY }],
+    words: qcWords.concat(mosqueWords),
+    quranCore: qcData.words,
+    sentences: chapPool.slice(30, 38).concat(mosqueSents),
+    grammar: [],
+    lessonCards: lcPool,
+    freq: freqData.words,
+    FreeTry
+  });
+  yes(fridayBatch.list.some(x => Practice.MOSQUE_KEY_RE.test(x.key || "")),
+    "Friday buildBatch weaves in a Mosque, Friday Khutbah, or Common Du'ā cue");
+  yes(fridayBatch.list.some(x => x.key === "lc:khutbah-roadmap"),
+    "Friday buildBatch proactively teaches lc:khutbah-roadmap");
+
+  const commuteMosque = Practice.buildCommuteQueue({
+    now: fridayNow,
+    srs: qHeldSrs,
+    log: [
+      { e: "chap-test", chap: "chap-1", pass: true, t: fridayNow - 10 * DAY },
+      { e: "chap-test", chap: "chap-2", pass: true, t: fridayNow - 8 * DAY },
+      { e: "chap-test", chap: "chap-3", pass: true, t: fridayNow - 5 * DAY }
+    ],
+    scriptLines: [chapPool[0]],
+    sentences: chapPool.slice(30, 34).concat(mosqueSents),
+    freeTrySentences: chapPool.slice(30, 34),
+    words: mosqueWords,
+    lessonCards: lcPool,
+    FreeTry
+  });
+  yes(Array.isArray(commuteMosque) && commuteMosque.some(x => Practice.MOSQUE_KEY_RE.test(x.key || "")),
+    "buildCommuteQueue weaves a Mosque/Khutbah/Du'ā phrase into commute rotation");
 }
 
 console.log(`\n✓ ${passed} Practice assertions passed.\n`);

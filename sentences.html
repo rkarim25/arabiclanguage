@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi55dtu">
-  <link rel="stylesheet" href="css/style.css?v=mwi55dtu">
+  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
     .m-search {
@@ -79,6 +79,7 @@
         <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">📖 Chapters</button>
         <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">🧑‍🏫 Preply</button>
         <button type="button" class="chip b-filter" data-bfilter="everyday" onclick="setBankFilter('everyday', this)">🗣 Everyday</button>
+        <button type="button" class="chip b-filter" data-bfilter="mosque" onclick="setBankFilter('mosque', this)">🕋 Mosque &amp; Du'ās</button>
         <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">🕌 Qur'ān</button>
         <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">⏰ Due</button>
       </div>
@@ -128,16 +129,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwi55dtu"></script>
-<script src="js/curriculum.js?v=mwi55dtu"></script>
-<script src="js/srs.js?v=mwi55dtu"></script>
-<script src="js/frames.js?v=mwi55dtu"></script>
-<script src="js/practice.js?v=mwi55dtu"></script>
-<script src="js/lesson-cards.js?v=mwi55dtu"></script>
-<script src="js/app.js?v=mwi55dtu"></script>
-<script src="js/tracker.js?v=mwi55dtu"></script>
-<script src="js/plan.js?v=mwi55dtu"></script>
-<script src="js/account.js?v=mwi55dtu"></script>
+<script src="js/progress-model.js?v=mwi7yu2g"></script>
+<script src="js/curriculum.js?v=mwi7yu2g"></script>
+<script src="js/srs.js?v=mwi7yu2g"></script>
+<script src="js/frames.js?v=mwi7yu2g"></script>
+<script src="js/practice.js?v=mwi7yu2g"></script>
+<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
+<script src="js/app.js?v=mwi7yu2g"></script>
+<script src="js/tracker.js?v=mwi7yu2g"></script>
+<script src="js/plan.js?v=mwi7yu2g"></script>
+<script src="js/account.js?v=mwi7yu2g"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -397,6 +398,7 @@ function renderMasterBank() {
     if (bankFilter === "chapters" && s.src !== "chapters") return false;
     if (bankFilter === "teacher" && s.src !== "teacher") return false;
     if (bankFilter === "everyday" && !(s.track === "everyday" && s.src !== "chapters")) return false;
+    if (bankFilter === "mosque" && !/^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || "")) return false;
     if (bankFilter === "quran" && s.track !== "quran") return false;
     if (bankFilter === "due") {
       const item = srs[s.key] || {};
@@ -499,7 +501,7 @@ function renderMasterBank() {
         <td>${enCellHtml}</td>
         <td>
           <span style="font-size:11.5px;color:var(--muted);white-space:nowrap">
-            ${s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'ān" : '🗣 Everyday'}
+            ${/^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || '') ? "🕋 Mosque" : s.src === 'chapters' ? '📖 Chapter' : s.src === 'teacher' ? '🧑‍🏫 Preply' : s.track === 'quran' ? "🕌 Qur'ān" : '🗣 Everyday'}
           </span>
         </td>
         <td style="text-align:right;white-space:nowrap">

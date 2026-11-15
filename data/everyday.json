@@ -1298,6 +1298,66 @@
           "ar": "صَلَاةُ الجِنَازَة",
           "tr": "ṣalāt al-jināza",
           "en": "the funeral (janazah) prayer"
+        },
+        {
+          "ar": "تَرَاصُّوا",
+          "tr": "tarāṣṣū",
+          "en": "stand shoulder to shoulder",
+          "note": "imam row-alignment command; stand compactly without gaps"
+        },
+        {
+          "ar": "سُدُّوا الفُرَجَ",
+          "tr": "suddū l-furaj",
+          "en": "close the gaps (in the prayer row)",
+          "note": "imam alignment phrase; فُرْجَة = gap"
+        },
+        {
+          "ar": "أَقِيمُوا الصُّفُوفَ",
+          "tr": "aqīmū ṣ-ṣufūf",
+          "en": "make the prayer rows straight",
+          "note": "صُفُوف pl. of صَفّ (row); أَقِيمُوا = straighten / establish"
+        },
+        {
+          "ar": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ",
+          "tr": "samiʿa llāhu li-man ḥamidah",
+          "en": "Allah hears the one who praises Him",
+          "note": "spoken aloud by the imam when rising from bowing (rukūʿ)"
+        },
+        {
+          "ar": "حَيَّ عَلَى الصَّلَاةِ",
+          "tr": "ḥayya ʿalā ṣ-ṣalāh",
+          "en": "come to prayer (adhān & iqāmah)",
+          "note": "the central call inside every adhān and iqāmah"
+        },
+        {
+          "ar": "أَغْلِقُوا الهَوَاتِفَ",
+          "tr": "aghliqū l-hawātif",
+          "en": "turn off your mobile phones",
+          "note": "common imam reminder before the takbīr; هَوَاتِف pl. of هَاتِف"
+        },
+        {
+          "ar": "رَبَّنَا وَلَكَ الحَمْدُ",
+          "tr": "rabbanā wa-laka l-ḥamd",
+          "en": "our Lord, and to You belongs all praise",
+          "note": "congregation's response right after the imam says سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ"
+        },
+        {
+          "ar": "سَجْدَةُ التِّلَاوَةِ",
+          "tr": "sajdatu t-tilāwa",
+          "en": "the prostration of recitation",
+          "note": "announcement when the imam recites a sajdah ayah during prayer"
+        },
+        {
+          "ar": "أَرْبَعُ تَكْبِيرَاتٍ",
+          "tr": "arbaʿu takbīrāt",
+          "en": "four takbīrs (in the funeral prayer)",
+          "note": "reminds the congregation that janāzah has 4 Allāhu Akbars with no rukūʿ"
+        },
+        {
+          "ar": "جَزَاكُمُ اللَّهُ خَيْرًا",
+          "tr": "jazākumu llāhu khayran",
+          "en": "may Allah reward you with goodness",
+          "note": "common imam blessing after announcements or community appeals"
         }
       ]
     },
@@ -1355,6 +1415,81 @@
           "ar": "رَحِمَكُمُ اللَّه",
           "tr": "raḥimakumu llāh",
           "en": "may Allah have mercy on you"
+        },
+        {
+          "ar": "أُوصِيكُمْ وَنَفْسِي بِتَقْوَى اللَّهِ",
+          "tr": "ūṣīkum wa-nafsī bi-taqwā llāh",
+          "en": "I counsel you and myself to be mindful of Allah",
+          "note": "spoken in almost every Friday khutbah right after أَمَّا بَعْدُ"
+        },
+        {
+          "ar": "يَا أَيُّهَا النَّاسُ",
+          "tr": "yā ayyuhā n-nās",
+          "en": "O mankind / O people",
+          "note": "universal address used by the khatib to call everyone's attention"
+        },
+        {
+          "ar": "بَارَكَ اللَّهُ لِي وَلَكُمْ فِي القُرْآنِ العَظِيمِ",
+          "tr": "bāraka llāhu lī wa-lakum fī l-qurʾāni l-ʿaẓīm",
+          "en": "may Allah bless me and you through the Great Qur'ān",
+          "note": "classic closing blessing of the first khutbah before the khatib sits"
+        },
+        {
+          "ar": "مَعَاشِرَ المُسْلِمِينَ",
+          "tr": "maʿāshira l-muslimīn",
+          "en": "O assembly of Muslims",
+          "note": "formal khutbah address to the congregation"
+        },
+        {
+          "ar": "إِنَّ أَصْدَقَ الحَدِيثِ كِتَابُ اللَّهِ",
+          "tr": "inna aṣdaqa l-ḥadīthi kitābu llāh",
+          "en": "truly the most truthful speech is the Book of Allah",
+          "note": "core line of Khuṭbat al-Ḥājah spoken at the start of almost every khutbah"
+        },
+        {
+          "ar": "وَتُوبُوا إِلَى اللَّهِ",
+          "tr": "wa-tūbū ilā llāh",
+          "en": "and turn in repentance to Allah",
+          "note": "repeated Qur'ānic & sermon call after a reminder or warning"
+        },
+        {
+          "ar": "يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ",
+          "tr": "yā ayyuhā lladhīna āmanū ttaqū llāh",
+          "en": "O you who believe, be mindful of Allah",
+          "note": "the taqwā verse recited in every Jumu'ah opening",
+          "ayahRef": "3:102"
+        },
+        {
+          "ar": "إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ",
+          "tr": "inna llāha wa-malāʾikatahu yuṣallūna ʿalā n-nabiyy",
+          "en": "indeed Allah and His angels send blessings upon the Prophet",
+          "note": "the exact cue in the second khutbah before ṣalawāt and the closing du'ās",
+          "ayahRef": "33:56"
+        },
+        {
+          "ar": "اللَّهُمَّ أَعِزَّ الإِسْلَامَ وَالمُسْلِمِينَ",
+          "tr": "allāhumma aʿizza l-islāma wa-l-muslimīn",
+          "en": "O Allah, honour Islam and the Muslims",
+          "note": "signature congregational du'ā near the close of the second khutbah"
+        },
+        {
+          "ar": "إِنَّ اللَّهَ يَأْمُرُ بِالعَدْلِ وَالإِحْسَانِ",
+          "tr": "inna llāha yaʾmuru bi-l-ʿadli wa-l-iḥsān",
+          "en": "indeed Allah commands justice and excellence",
+          "note": "classic closing Qur'ānic ayah of the Friday khutbah",
+          "ayahRef": "16:90"
+        },
+        {
+          "ar": "فَاذْكُرُوا اللَّهَ يَذْكُرْكُمْ",
+          "tr": "fa-dhkurū llāha yadhkurkum",
+          "en": "so remember Allah and He will remember you",
+          "note": "echoing 2:152 right at the end of the khutbah before standing for salah"
+        },
+        {
+          "ar": "وَأَقِمِ الصَّلَاةَ",
+          "tr": "wa-aqimi ṣ-ṣalāh",
+          "en": "and establish the prayer (stand for iqāmah)",
+          "note": "the final cue ending the Friday khutbah — tells the mu'adhdhin to call iqāmah"
         }
       ]
     },
@@ -2349,6 +2484,130 @@
           "tr": "iṭʿām",
           "note": "verbal noun of أَطْعَمَ to feed; root ط-ع-م as in طَعَام",
           "from": "teacher"
+        }
+      ]
+    },
+    {
+      "id": "duas",
+      "title": "الأَدْعِيَة وَالأَذْكَار",
+      "theme": "Common Qur'ānic & salah du'ās — the Rabbanā, Qunūt, rukūʿ/sujūd, and daily supplications",
+      "source": "quran",
+      "members": [
+        {
+          "ar": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً",
+          "tr": "rabbanā ātinā fī d-dunyā ḥasana",
+          "en": "our Lord, grant us good in this world",
+          "note": "first half of the most frequent du'ā in Tawaf, Salah, and Jumu'ah",
+          "ayahRef": "2:201"
+        },
+        {
+          "ar": "وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+          "tr": "wa-fī l-ākhirati ḥasanatan wa-qinā ʿadhāba n-nār",
+          "en": "and good in the Hereafter, and protect us from the Fire",
+          "note": "second half of 2:201; قِنَا is command 'protect us!' from وَقَى",
+          "ayahRef": "2:201"
+        },
+        {
+          "ar": "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا",
+          "tr": "rabbanā lā tuzigh qulūbanā baʿda idh hadaytanā",
+          "en": "our Lord, do not let our hearts deviate after You guided us",
+          "note": "negative request لَا + jussive; بَعْدَ إِذْ = after when",
+          "ayahRef": "3:8"
+        },
+        {
+          "ar": "رَبِّ زِدْنِي عِلْمًا",
+          "tr": "rabbi zidnī ʿilmā",
+          "en": "my Lord, increase me in knowledge",
+          "note": "زِدْ command from زَادَ (increase) + ـنِي (me); عِلْمًا = in knowledge",
+          "ayahRef": "20:114"
+        },
+        {
+          "ar": "رَبِّ اشْرَحْ لِي صَدْرِي",
+          "tr": "rabbi shraḥ lī ṣadrī",
+          "en": "my Lord, expand my chest (for me)",
+          "note": "du'ā of Mūsā before speaking; command اِشْرَحْ from شَرَحَ",
+          "ayahRef": "20:25"
+        },
+        {
+          "ar": "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ",
+          "tr": "rabbi jʿalnī muqīma ṣ-ṣalāh",
+          "en": "my Lord, make me one who establishes prayer",
+          "note": "du'ā of Ibrāhīm; مُقِيم from أَقَامَ (doer who establishes)",
+          "ayahRef": "14:40"
+        },
+        {
+          "ar": "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا قُرَّةَ أَعْيُنٍ",
+          "tr": "rabbanā hab lanā min azwājinā qurrata aʿyun",
+          "en": "our Lord, grant us from our spouses comfort of our eyes",
+          "note": "هَبْ command from وَهَبَ (gift); قُرَّةُ أَعْيُن = joy/coolness of eyes",
+          "ayahRef": "25:74"
+        },
+        {
+          "ar": "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ",
+          "tr": "rabbi ghfir lī wa-li-wālidayya",
+          "en": "my Lord, forgive me and my parents",
+          "note": "du'ā of Nūḥ; وَالِدَيْنِ + ي = my two parents",
+          "ayahRef": "71:28"
+        },
+        {
+          "ar": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ العَفْوَ فَاعْفُ عَنِّي",
+          "tr": "allāhumma innaka ʿafuwwun tuḥibbu l-ʿafwa fa-ʿfu ʿannī",
+          "en": "O Allah, You are Pardoning, You love pardon, so pardon me",
+          "note": "Laylat al-Qadr Prophetic du'ā heard throughout Ramadan & Qunūt"
+        },
+        {
+          "ar": "اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ",
+          "tr": "allāhumma hdinī fīman hadayt",
+          "en": "O Allah, guide me among those You have guided",
+          "note": "opening line of Du'ā al-Qunūt in Witr prayer"
+        },
+        {
+          "ar": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ",
+          "tr": "allāhumma aʿinnī ʿalā dhikrika wa-shukrik",
+          "en": "O Allah, help me to remember You and thank You",
+          "note": "taught to Muʿādh to say at the end of every prayer"
+        },
+        {
+          "ar": "اللَّهُمَّ اغْفِرْ لِلْمُؤْمِنِينَ وَالمُؤْمِنَاتِ",
+          "tr": "allāhumma ghfir li-l-muʾminīna wa-l-muʾmināt",
+          "en": "O Allah, forgive the believing men and believing women",
+          "note": "said in almost every Friday khutbah du'ā"
+        },
+        {
+          "ar": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+          "tr": "allāhumma ṣalli ʿalā muḥammad",
+          "en": "O Allah, send blessings upon Muhammad",
+          "note": "core formula of Tashahhud and Friday ṣalawāt"
+        },
+        {
+          "ar": "رَبِّ اغْفِرْ لِي",
+          "tr": "rabbi ghfir lī",
+          "en": "my Lord, forgive me",
+          "note": "said twice while sitting between the two prostrations in salah"
+        },
+        {
+          "ar": "سُبْحَانَ رَبِّيَ العَظِيمِ",
+          "tr": "subḥāna rabbiya l-ʿaẓīm",
+          "en": "glory be to my Lord, the Tremendous",
+          "note": "spoken three times in bowing (rukūʿ) in every rak'ah"
+        },
+        {
+          "ar": "سُبْحَانَ رَبِّيَ الأَعْلَى",
+          "tr": "subḥāna rabbiya l-aʿlā",
+          "en": "glory be to my Lord, the Most High",
+          "note": "spoken three times in prostration (sujūd)"
+        },
+        {
+          "ar": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+          "tr": "lā ḥawla wa-lā quwwata illā bi-llāh",
+          "en": "there is no power nor strength except through Allah",
+          "note": "a treasure from the treasures of Paradise"
+        },
+        {
+          "ar": "آمِينَ",
+          "tr": "āmīn",
+          "en": "O Allah, answer / accept this du'ā",
+          "note": "spoken aloud after Al-Fātiḥah and during the khatib's du'ā"
         }
       ]
     }

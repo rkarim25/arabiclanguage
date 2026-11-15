@@ -846,9 +846,9 @@
    "name": "In the masjid and the Haram",
    "can": "understand what is said around you in the masjid and the Haram",
    "why": "Where you will actually be, hearing Arabic spoken for real.",
-   "items": 29,
-   "plannedMin": 42,
-   "plannedWeek": 7,
+   "items": 79,
+   "plannedMin": 105,
+   "plannedWeek": 8,
    "lessons": [
     {
      "id": "ms-masjid-l1",
@@ -895,7 +895,7 @@
     },
     {
      "id": "ms-masjid-l5",
-     "title": "What the imam says (1 of 2)",
+     "title": "What the imam says (1 of 4)",
      "keys": [
       "ev-masjid:0",
       "ev-masjid:1",
@@ -906,13 +906,117 @@
     },
     {
      "id": "ms-masjid-l6",
-     "title": "What the imam says (2 of 2)",
+     "title": "What the imam says (2 of 4)",
      "keys": [
       "ev-masjid:5",
       "ev-masjid:6",
       "ev-masjid:7",
       "ev-masjid:8",
       "ev-masjid:9"
+     ]
+    },
+    {
+     "id": "ms-masjid-l7",
+     "title": "What the imam says (3 of 4)",
+     "keys": [
+      "ev-masjid:10",
+      "ev-masjid:11",
+      "ev-masjid:12",
+      "ev-masjid:13",
+      "ev-masjid:14"
+     ]
+    },
+    {
+     "id": "ms-masjid-l8",
+     "title": "What the imam says (4 of 4)",
+     "keys": [
+      "ev-masjid:15",
+      "ev-masjid:16",
+      "ev-masjid:17",
+      "ev-masjid:18",
+      "ev-masjid:19"
+     ]
+    },
+    {
+     "id": "ms-masjid-l9",
+     "title": "Friday khutbah landmarks (1 of 4)",
+     "keys": [
+      "ev-khutba:0",
+      "ev-khutba:1",
+      "ev-khutba:2",
+      "ev-khutba:3",
+      "ev-khutba:4",
+      "ev-khutba:5"
+     ]
+    },
+    {
+     "id": "ms-masjid-l10",
+     "title": "Friday khutbah landmarks (2 of 4)",
+     "keys": [
+      "ev-khutba:6",
+      "ev-khutba:7",
+      "ev-khutba:8",
+      "ev-khutba:9",
+      "ev-khutba:10",
+      "ev-khutba:11"
+     ]
+    },
+    {
+     "id": "ms-masjid-l11",
+     "title": "Friday khutbah landmarks (3 of 4)",
+     "keys": [
+      "ev-khutba:12",
+      "ev-khutba:13",
+      "ev-khutba:14",
+      "ev-khutba:15",
+      "ev-khutba:16"
+     ]
+    },
+    {
+     "id": "ms-masjid-l12",
+     "title": "Friday khutbah landmarks (4 of 4)",
+     "keys": [
+      "ev-khutba:17",
+      "ev-khutba:18",
+      "ev-khutba:19",
+      "ev-khutba:20",
+      "ev-khutba:21"
+     ]
+    },
+    {
+     "id": "ms-masjid-l13",
+     "title": "Common Qur'ānic & salah du'ās (1 of 3)",
+     "keys": [
+      "ev-duas:0",
+      "ev-duas:1",
+      "ev-duas:2",
+      "ev-duas:3",
+      "ev-duas:4",
+      "ev-duas:5"
+     ]
+    },
+    {
+     "id": "ms-masjid-l14",
+     "title": "Common Qur'ānic & salah du'ās (2 of 3)",
+     "keys": [
+      "ev-duas:6",
+      "ev-duas:7",
+      "ev-duas:8",
+      "ev-duas:9",
+      "ev-duas:10",
+      "ev-duas:11"
+     ]
+    },
+    {
+     "id": "ms-masjid-l15",
+     "title": "Common Qur'ānic & salah du'ās (3 of 3)",
+     "keys": [
+      "ev-duas:12",
+      "ev-duas:13",
+      "ev-duas:14",
+      "ev-duas:15",
+      "ev-duas:16",
+      "ev-duas:17"
      ]
     }
    ]
@@ -927,7 +1031,7 @@
    "why": "This is the difference between a conversation that survives an unknown word and one that dies on it. It comes early on purpose.",
    "items": 22,
    "plannedMin": 28,
-   "plannedWeek": 8,
+   "plannedWeek": 9,
    "lessons": [
     {
      "id": "ms-repair-l1",
@@ -987,7 +1091,7 @@
    "why": "Three surahs you already know by heart. Once the meaning is attached, you understand them every time you pray them.",
    "items": 58,
    "plannedMin": 77,
-   "plannedWeek": 9,
+   "plannedWeek": 10,
    "lessons": [
     {
      "id": "ms-short-surahs-l1",
@@ -1125,7 +1229,7 @@
    "why": "Questions are how you get anything done in a language you only half speak.",
    "items": 31,
    "plannedMin": 42,
-   "plannedWeek": 10,
+   "plannedWeek": 11,
    "lessons": [
     {
      "id": "ms-ask-l1",
@@ -1206,7 +1310,7 @@
    "why": "These fifty words are roughly a third of every page. Nothing else you learn pays back this fast.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 11,
+   "plannedWeek": 13,
    "lessons": [
     {
      "id": "ms-core-50-l1",
@@ -1330,7 +1434,7 @@
    "why": "The opening thirty seconds of every conversation you will ever have in Arabic.",
    "items": 22,
    "plannedMin": 28,
-   "plannedWeek": 12,
+   "plannedWeek": 13,
    "lessons": [
     {
      "id": "ms-hello-l1",
@@ -1390,7 +1494,7 @@
    "why": "Two more of your memorised surahs — short, and Al-Asr is a complete argument in three verses.",
    "items": 24,
    "plannedMin": 35,
-   "plannedWeek": 13,
+   "plannedWeek": 14,
    "lessons": [
     {
      "id": "ms-asr-kawthar-l1",
@@ -1458,7 +1562,7 @@
    "why": "Numbers are the half of shopping people forget to learn, so they are in here too.",
    "items": 30,
    "plannedMin": 42,
-   "plannedWeek": 14,
+   "plannedWeek": 15,
    "lessons": [
     {
      "id": "ms-shop-l1",
@@ -1538,7 +1642,7 @@
    "why": "Three or four times a day on any trip, and the words repeat endlessly.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 14,
+   "plannedWeek": 15,
    "lessons": [
     {
      "id": "ms-food-l1",
@@ -1593,7 +1697,7 @@
    "why": "Understanding the answer is the hard half, so the direction words come with the questions.",
    "items": 20,
    "plannedMin": 28,
-   "plannedWeek": 15,
+   "plannedWeek": 16,
    "lessons": [
     {
      "id": "ms-directions-l1",
@@ -1651,7 +1755,7 @@
    "why": "The second fifty take you from catching fragments to following the shape of a verse.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 16,
+   "plannedWeek": 17,
    "lessons": [
     {
      "id": "ms-core-100-l1",
@@ -1775,7 +1879,7 @@
    "why": "Opposites double your descriptive range for almost no effort.",
    "items": 17,
    "plannedMin": 28,
-   "plannedWeek": 17,
+   "plannedWeek": 18,
    "lessons": [
     {
      "id": "ms-state-l1",
@@ -1830,7 +1934,7 @@
    "why": "Arranging anything — a lesson, a meal, a taxi — runs on these.",
    "items": 18,
    "plannedMin": 28,
-   "plannedWeek": 17,
+   "plannedWeek": 19,
    "lessons": [
     {
      "id": "ms-time-l1",
@@ -1886,7 +1990,7 @@
    "why": "The Umrah logistics that happen whether or not you have the words.",
    "items": 24,
    "plannedMin": 35,
-   "plannedWeek": 18,
+   "plannedWeek": 19,
    "lessons": [
     {
      "id": "ms-travel-l1",
@@ -1954,7 +2058,7 @@
    "why": "The first thing anyone asks you, and the material your teacher started with.",
    "items": 46,
    "plannedMin": 56,
-   "plannedWeek": 19,
+   "plannedWeek": 20,
    "lessons": [
     {
      "id": "ms-family-l1",
@@ -2062,7 +2166,7 @@
    "why": "Rarely needed, badly missed when it is.",
    "items": 10,
    "plannedMin": 14,
-   "plannedWeek": 19,
+   "plannedWeek": 21,
    "lessons": [
     {
      "id": "ms-health-l1",
@@ -2098,7 +2202,7 @@
    "why": "Three more short surahs, moving you past the ones you recite daily.",
    "items": 70,
    "plannedMin": 84,
-   "plannedWeek": 21,
+   "plannedWeek": 22,
    "lessons": [
     {
      "id": "ms-qadr-l1",
@@ -2254,7 +2358,7 @@
    "why": "Past this point most verses have only one or two words you have never met.",
    "items": 50,
    "plannedMin": 70,
-   "plannedWeek": 23,
+   "plannedWeek": 24,
    "lessons": [
     {
      "id": "ms-core-150-l1",
@@ -2378,7 +2482,7 @@
    "why": "The single most recited verse outside the short surahs, and long enough to be a real test of connected listening.",
    "items": 50,
    "plannedMin": 63,
-   "plannedWeek": 24,
+   "plannedWeek": 25,
    "lessons": [
     {
      "id": "ms-kursi-l1",

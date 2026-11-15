@@ -353,6 +353,8 @@ everyday.groups.forEach(g => g.members.forEach((m, i) => {
       pattern: patternFor(m.ar),
       src: "everyday",
       theme: g.theme || g.title || g.id,
+      ...(m.note ? { note: m.note } : {}),
+      ...(m.ayahRef ? { ayahRef: m.ayahRef } : {}),
     });
   }
 }));
