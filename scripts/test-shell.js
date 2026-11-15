@@ -980,6 +980,7 @@ const bank = D("sentence-bank.json");
   yes(/weekly\.html/.test(indexSrcNow) && /weekly\.html/.test(chapsSrcNow) && /weekly\.html/.test(quranSrcNow) && /weekly\.html/.test(teacherSrcNow), "Practice, Chapters, Qur'an and Teacher tabs link to weekly.html");
   yes(/id="navPrintWeek"/.test(appSrcNow) && /class="print-week-cta"/.test(indexSrcNow) && /autoPrint/.test(weeklySrcNow) && /toggleWkMode/.test(weeklySrcNow), "top nav & Practice expose 1-click Print Week with ?print=1 auto-print and Book Chapter mode");
   yes(/\.s-col-prompt/.test(indexSrcNow) && /\.s-col-answer/.test(indexSrcNow) && /\.s-col-dock/.test(indexSrcNow) && /\.book-cue/.test(cssSrcNow), "Practice cards put target content first in a horizontal parallel book spread with quiet margin controls");
+  yes(/<div class="wk-ar-col">[\s\S]*class="wk-tr" dir="ltr"/.test(weeklySrcNow) && /\.wk-hint\s*\{\s*display:\s*none;?\s*\}/.test(weeklySrcNow) && /<div class="s-ar-side">[\s\S]*id="day-tr-/.test(chapsSrcNow), "Transliteration renders LTR directly under Arabic and noisy row tags are hidden");
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

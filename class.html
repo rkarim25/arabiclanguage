@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 500; margin-bottom: 8px; }
     .passage-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 14px 0; }
@@ -566,18 +566,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwidwev5"></script>
-<script src="js/curriculum.js?v=mwidwev5"></script>
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/frames.js?v=mwidwev5"></script>
-<script src="js/freetry.js?v=mwidwev5"></script>
-<script src="js/practice.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/errors.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
-<script src="js/account.js?v=mwidwev5"></script>
+<script src="js/progress-model.js?v=mwie9rm3"></script>
+<script src="js/curriculum.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/frames.js?v=mwie9rm3"></script>
+<script src="js/freetry.js?v=mwie9rm3"></script>
+<script src="js/practice.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/errors.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/account.js?v=mwie9rm3"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -1704,10 +1704,10 @@ function renderPassage() {
           <div class="s-content-wrap">
             <div class="s-meta-side">
               <div class="p-en" id="en-${idx}" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-              ${s.tr ? `<div class="p-tr" id="tr-${idx}" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
             </div>
             <div class="s-ar-side">
               <div class="p-ar" style="margin:0">${s.ar}</div>
+              ${s.tr ? `<div class="p-tr" id="tr-${idx}" dir="ltr" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
             </div>
           </div>
         </div>
@@ -2057,7 +2057,6 @@ function renderClassSentences() {
       } else {
         enContent = `
           <div id="cls-en-${origIdx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-          ${s.tr ? `<div id="cls-tr-${origIdx}" class="cls-tr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
         `;
       }
 
@@ -2084,6 +2083,7 @@ function renderClassSentences() {
               </div>
               <div class="s-ar-side">
                 ${arContent}
+                ${(s.tr && !(clsSentPracticeMode === "en-only" && !isRevealed)) ? `<div id="cls-tr-${origIdx}" class="cls-tr" dir="ltr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
               </div>
             </div>
           </div>
@@ -2344,7 +2344,7 @@ function renderVocabTable() {
                     ${v.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${v.key}" onclick="toggleWordTr('${v.key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
                   </div>
                 </div>
-                ${v.tr ? `<div id="vtr-${v.key}" class="vocab-tr-line" style="display:${isTrActive ? 'block' : 'none'}">${v.tr}</div>` : ''}
+                ${v.tr ? `<div id="vtr-${v.key}" class="vocab-tr-line" dir="ltr" style="display:${isTrActive ? 'block' : 'none'};text-align:right">${v.tr}</div>` : ''}
               </div>
             `;
           }
@@ -2356,7 +2356,7 @@ function renderVocabTable() {
             enContent = `
               <div class="vocab-en-wrap">
                 <span class="vocab-en-main">${v.en}</span>
-                ${v.note ? `<span class="vocab-en-note">— ${v.note}</span>` : ''}
+                ${(v.note && !/^Qur['’]?an\s+core$/i.test(String(v.note).trim())) ? `<span class="vocab-en-note">— ${v.note}</span>` : ''}
                 ${vote.vote === -1 ? `<span class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</span>` : vote.vote === 1 ? `<span class="vote-status-tag strong" style="margin-top:3px">✓ Solid (+${vote.score || 1})</span>` : ''}
               </div>
             `;

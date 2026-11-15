@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwidwev5"></script>
-<script src="js/curriculum.js?v=mwidwev5"></script>
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/frames.js?v=mwidwev5"></script>
-<script src="js/freetry.js?v=mwidwev5"></script>
-<script src="js/practice.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/match.js?v=mwidwev5"></script>
-<script src="js/errors.js?v=mwidwev5"></script>
-<script src="js/tryit.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
-<script src="js/account.js?v=mwidwev5"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwie9rm3"></script>
+<script src="js/curriculum.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/frames.js?v=mwie9rm3"></script>
+<script src="js/freetry.js?v=mwie9rm3"></script>
+<script src="js/practice.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/match.js?v=mwie9rm3"></script>
+<script src="js/errors.js?v=mwie9rm3"></script>
+<script src="js/tryit.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/account.js?v=mwie9rm3"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -1557,11 +1557,13 @@ function cardHtml(s, idx) {
   const showTrOpen = !isReadView && isTeach && !!s.tr;
   const gramHtml = isOpen ? renderGrammarRuleHtml(s, false) : "";
   const hasWbwBlock = hasMultiWbw || hasSingleRoot;
-  const wordNoteHtml = (s.kind === "word" && s.note)
-    ? `<div class="s-word-note">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>`
+  const isBoilerplateNote = txt => /^(Top\s+\d+\s+Qur['’]?ān\s+Core|Root:|Chapter\s+\d+:|Preply:|Surah\s+\d+|Qur['’]?an\s+core)/i.test(String(txt || "").trim());
+  const visibleNote = (s.note && !isBoilerplateNote(s.note)) ? s.note : "";
+  const wordNoteHtml = (s.kind === "word" && visibleNote)
+    ? `<div class="s-word-note">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visibleNote) : visibleNote}</div>`
     : "";
-  const sentNoteHtml = (s.kind !== "word" && s.note)
-    ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>`
+  const sentNoteHtml = (s.kind !== "word" && visibleNote)
+    ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visibleNote) : visibleNote}</div>`
     : "";
   const hasExtras = isOpen && (hasWbwBlock || !!wordNoteHtml || !!sentNoteHtml || !!gramHtml);
 
@@ -1575,12 +1577,7 @@ function cardHtml(s, idx) {
               : `<span class="arabic s-prompt-text ar" dir="rtl">${s.ar}</span><button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen" aria-label="Listen">🔊</button>`
             }
           </div>
-          ${(isTeach || isCommuteVerify || srcMeta) ? `
-            <div class="s-src-foot">
-              ${isTeach ? `<span class="s-flag-inline" title="New unseen item — taught first before scheduling review">New</span>` : isCommuteVerify ? `<span class="s-flag-inline commute" title="Heard passively on a commute — verify visual Arabic script &amp; meaning">Screen check</span>` : ""}
-              ${srcMeta ? `<a href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}">${cleanSrcLbl} ↗</a>` : ""}
-            </div>
-          ` : ""}
+          ${(!isEnFirst && isOpen && s.tr) ? `<div class="s-tr-line" id="drill-tr-${idx}" dir="ltr" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
         </div>
 
         <div class="s-col-answer">
@@ -1597,18 +1594,19 @@ function cardHtml(s, idx) {
                 <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
                 ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                ${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}
               </div>
             </div>
-            ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
+            ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" dir="ltr" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
           ` : `
             <div class="s-ans-row en-side">
               <span class="s-en-line">${s.en}</span>
               <div class="sym-group">
                 ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
                 ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                ${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}
               </div>
             </div>
-            ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" style="display:${showTrOpen ? 'block' : 'none'}">${s.tr}</div>` : ''}
           `}
         </div>
 
@@ -2001,7 +1999,7 @@ function renderMasterBank() {
               ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
             </div>
           </div>
-          ${s.tr ? `<div id="tbl-tr-${idx}" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px">${s.tr}</div>` : ''}
+          ${s.tr ? `<div id="tbl-tr-${idx}" dir="ltr" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
           ${s.words && s.words.length ? `
             <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:none;margin-top:3px">
               <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">

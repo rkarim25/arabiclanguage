@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     main { max-width: 980px; }
     .wk-controls {
@@ -68,12 +68,12 @@
     .wk-num { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
     .wk-en-col { min-width: 0; }
     .wk-en { font-family: var(--font-ui); font-size: 15.5px; color: var(--ink); line-height: 1.5; }
-    .wk-tr { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 2px; }
-    .wk-hint { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+    .wk-tr { font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-style: italic; margin-top: 2px; direction: ltr; text-align: right; line-height: 1.4; }
+    .wk-hint { display: none; }
     .wk-ar-col { direction: rtl; text-align: right; min-width: 0; }
     .wk-ar {
       font-family: var(--font-ar); font-size: 23px; line-height: 1.7; color: var(--ink);
-      cursor: pointer; display: inline;
+      cursor: pointer; display: block;
     }
     .wk-ar:hover { color: var(--accent); }
     .wk-aux { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
@@ -187,6 +187,7 @@
       .wk-sec { margin-top: 16pt; padding-top: 10pt; }
       .wk-row { padding: 5pt 0; gap: 4pt 10pt; }
       .wk-ar { font-size: 17pt; line-height: 1.55; }
+      .wk-tr { font-size: 9.5pt; }
       .wk-ayah-ar { font-size: 18pt; line-height: 1.6; }
       .wk-vocab-item .v-ar, .wk-tbl .ar-td { font-size: 15pt; }
       .wk-lc-slot .lc-check-btn, .wk-lc-slot .lc-speak-btn { display: none !important; }
@@ -215,12 +216,12 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/practice.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/practice.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -513,15 +514,14 @@ function renderBooklet() {
   const renderSentRows = (rows) => rows.map((r, i) => {
     const encAr = encodeURIComponent(r.ar || "");
     return `
-      <div class="wk-row">
+      <div class="wk-row" data-hint="${esc(r.hint || "")}">
         <span class="wk-num">${i + 1}.</span>
         <div class="wk-en-col">
           <div class="wk-en">${esc(r.en)}</div>
-          ${r.tr ? `<div class="wk-tr">${esc(r.tr)}</div>` : ""}
-          ${r.hint ? `<div class="wk-hint">${esc(r.hint)}</div>` : ""}
         </div>
         <div class="wk-ar-col">
           <span class="wk-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)" title="Tap to listen">${esc(r.ar)}</span>
+          ${r.tr ? `<div class="wk-tr" dir="ltr">${esc(r.tr)}</div>` : ""}
         </div>
         <div class="wk-aux">
           <button type="button" class="wk-audio-btn" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">🔊</button>
@@ -598,18 +598,19 @@ function renderBooklet() {
       ${core12.length ? `
         <h3 class="wk-subh">12 Core Qur'ānic Words Due This Week</h3>
         <table class="wk-tbl">
-          <thead><tr><th style="width:42px">Rank</th><th>Arabic</th><th class="wk-tr">Translit</th><th>Meaning</th><th>Pillar</th><th>Mushaf Freq</th></tr></thead>
+          <thead><tr><th style="width:48px">#</th><th>Meaning</th><th style="text-align:right">Arabic</th><th style="text-align:right;width:110px">Mushaf Freq</th></tr></thead>
           <tbody>
             ${core12.map(item => {
               const encAr = encodeURIComponent(item.w.ar);
               return `
                 <tr>
                   <td>#${item.i + 1} ${mdot(item.key)}</td>
-                  <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(item.w.ar)}</td>
-                  <td class="wk-tr">${esc(item.w.tr || "")}</td>
                   <td>${esc(item.w.en)}</td>
-                  <td>${esc(item.pillar)}</td>
-                  <td>${Number(item.w.n || 0).toLocaleString()}×</td>
+                  <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">
+                    <div>${esc(item.w.ar)}</div>
+                    ${item.w.tr ? `<div class="wk-tr" dir="ltr">${esc(item.w.tr)}</div>` : ""}
+                  </td>
+                  <td style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">${Number(item.w.n || 0).toLocaleString()}×</td>
                 </tr>
               `;
             }).join("")}
@@ -628,7 +629,7 @@ function renderBooklet() {
               <td><span class="arabic" style="font-size:18px;font-weight:700">${esc(row.base)}</span> <span style="font-size:11.5px;color:var(--muted)">(${esc(row.en)})</span></td>
               ${row.cells.map(([ar, tr]) => {
                 const encAr = encodeURIComponent(ar);
-                return `<td><span class="g-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(ar)}</span><span class="g-tr">${esc(tr)}</span></td>`;
+                return `<td><span class="g-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(ar)}</span><span class="g-tr" dir="ltr">${esc(tr)}</span></td>`;
               }).join("")}
             </tr>
           `).join("")}
@@ -642,7 +643,7 @@ function renderBooklet() {
           return `
             <div class="wk-ayah">
               <div class="wk-ayah-top">
-                <span class="wk-ayah-ref">${esc(a.surahName)} (${esc(a.ref)}) · <span style="font-weight:500;color:var(--muted)">${esc(a.kind)}</span> ${mdot(a.key)}</span>
+                <span class="wk-ayah-ref">${esc(a.surahName)} (${esc(a.ref)}) ${mdot(a.key)}</span>
                 <button type="button" class="wk-audio-btn" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">🎧 Alafasy</button>
               </div>
               <div class="wk-ayah-ar" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">${esc(a.ar)}</div>

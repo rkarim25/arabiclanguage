@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -88,12 +88,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/practice.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/practice.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -684,10 +684,8 @@ function renderCoreWordsTab() {
         <thead>
           <tr>
             <th style="width:44px">#</th>
-            <th>Arabic</th>
-            ${coreShowTr ? "<th>Translit</th>" : ""}
+            <th style="text-align:right">Arabic</th>
             <th>Meaning</th>
-            <th>Pillar</th>
             <th>Qur'ān Freq</th>
             <th style="text-align:right">Verdict</th>
           </tr>
@@ -698,33 +696,31 @@ function renderCoreWordsTab() {
             const rev = coreReviewMode === "all" || CORE_REVEALED.has(w.key);
             const hideAr = coreReviewMode === "en-only" && !rev;
             const hideEn = coreReviewMode === "ar-only" && !rev;
-            const pillarLbl = w.pillar === "glue" ? "Glue" : w.pillar === "verb" ? "Verb" : "Noun";
             const fam = w.famId ? FAM_BY_ROOT[rootKey(w.famId)] : null;
             return `
               <tr>
                 <td style="color:var(--muted);font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums">${w.rank + 1}</td>
-                <td>
+                <td style="text-align:right">
                   ${hideAr
                     ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}', '${encAr}')">Show Arabic →</button>`
                     : `<span style="display:inline-flex;align-items:center;gap:7px">
-                        <span class="arabic" style="font-size:22px;color:var(--ink)" dir="rtl">${w.ar}</span>
                         <button type="button" class="lc-speak-btn" onclick="speakQuranCoreWord('${encAr}')" title="Listen">🔊</button>
-                       </span>`
+                        <span class="arabic" style="font-size:22px;color:var(--ink)" dir="rtl">${w.ar}</span>
+                       </span>
+                       ${(coreShowTr && w.tr) ? `<div dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${w.tr}</div>` : ""}`
                   }
                 </td>
-                ${coreShowTr ? `<td style="color:var(--muted);font-style:italic">${hideAr ? "···" : w.tr}</td>` : ""}
                 <td>
                   ${hideEn
                     ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}')">Show meaning →</button>`
                     : `<span style="font-family:var(--font-ui);font-size:16px;font-weight:400">${w.en}${fam ? ` <span style="font-size:11px;color:var(--muted)">🌿 ${fam.root}</span>` : ""}</span>`
                   }
                 </td>
-                <td><span class="q-pillar-tag">${pillarLbl}</span></td>
                 <td><span class="q-freq-pill">${Number(w.n || 0).toLocaleString()}×</span></td>
                 <td style="text-align:right;white-space:nowrap">${SRS.rateBarHtml(w.key, "rateCoreQuranWord", [encAr], { compact: true, altKeys: quranWordAltKeys(w.ar) })}</td>
               </tr>
             `;
-          }).join("") : `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No matching words for this filter.</td></tr>`}
+          }).join("") : `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No matching words for this filter.</td></tr>`}
         </tbody>
       </table>
     </div>
@@ -1081,13 +1077,12 @@ function renderMosqueTab() {
               : `<div style="font-family:var(--font-ui);font-size:16px;font-weight:400;color:var(--ink);line-height:1.5">${it.en}</div>
                  ${it.note ? `<div class="q-ayah-sub">💡 ${it.note}</div>` : ""}`
             }
-            <div class="q-ayah-sub">${it.subLabel}${it.ayahRef ? ` · Q ${it.ayahRef}` : ""}</div>
           </div>
           <div class="q-ayah-ar-col">
             ${hideAr
               ? `<button type="button" class="q-reveal-btn" onclick="revealMosqueItem('${it.key}', '${encAr}')">Show Arabic &amp; Speak →</button>`
               : `<div class="arabic" style="font-size:24px;line-height:1.65;text-align:right;color:var(--ink)" dir="rtl">${it.ar}</div>
-                 ${it.tr ? `<div style="font-size:12px;color:var(--muted);font-style:italic;text-align:right">${it.tr}</div>` : ""}`
+                 ${it.tr ? `<div dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;text-align:right;margin-top:2px">${it.tr}</div>` : ""}`
             }
           </div>
           <div class="q-ayah-dock">

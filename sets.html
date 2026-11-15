@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -58,11 +58,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -298,7 +298,7 @@ function buildTable(id) {
   body.innerHTML = `
     <div class="vocab-table-wrap">
       <table class="vocab-table">
-        <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>know?</th></tr></thead>
+        <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>know?</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -314,16 +314,15 @@ function buildTable(id) {
     const mn = typeof mnemFor === "function" ? mnemFor(m.ar) : null;
     tr.innerHTML = `
       <td class="en-cell">${m.en}${m.note ? `<div class="note-cell">${m.note}</div>` : ""}</td>
-      <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
+      <td class="ar-cell"><div>${m.ar}</div>${m.tr ? `<div class="tr-cell" dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${m.tr}</div>` : ""}${m.hear ? `<div style="font-size:13px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
       <td><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
-      <td class="tr-cell">${m.tr || ""}</td>
       <td><div class="bucket-slot"></div></td>`;
     tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
     mountBucketBar(tr.querySelector(".bucket-slot"), `ev-${id}:${mi}`);
     tbody.appendChild(tr);
     if (mn) {
       const mrow = document.createElement("tr"); mrow.style.display = "none";
-      const cell = document.createElement("td"); cell.colSpan = 5;
+      const cell = document.createElement("td"); cell.colSpan = 4;
       const box = document.createElement("div"); box.className = "mnem-cell"; box.textContent = "💡 " + mn;
       cell.appendChild(box); mrow.appendChild(cell); tbody.appendChild(mrow);
       tr.querySelector(".mnem-btn").onclick = () => { mrow.style.display = mrow.style.display === "none" ? "table-row" : "none"; };

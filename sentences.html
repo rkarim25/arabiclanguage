@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -116,14 +116,13 @@
         <thead>
           <tr>
             <th style="width:34px">#</th>
-            <th style="width:35%">English Meaning</th>
-            <th style="width:37%">Arabic</th>
-            <th style="width:10%">Source</th>
-            <th style="width:18%;text-align:right">Verdict</th>
+            <th style="width:41%">English Meaning</th>
+            <th style="width:41%;text-align:right">Arabic</th>
+            <th style="width:14%;text-align:right">Verdict</th>
           </tr>
         </thead>
         <tbody id="bankTableBody">
-          <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">Loading master sentence library…</td></tr>
+          <tr><td colspan="4" style="text-align:center;padding:24px;color:var(--muted)">Loading master sentence library…</td></tr>
         </tbody>
       </table>
     </div>
@@ -131,16 +130,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwidwev5"></script>
-<script src="js/curriculum.js?v=mwidwev5"></script>
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/frames.js?v=mwidwev5"></script>
-<script src="js/practice.js?v=mwidwev5"></script>
-<script src="js/lesson-cards.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
-<script src="js/account.js?v=mwidwev5"></script>
+<script src="js/progress-model.js?v=mwie9rm3"></script>
+<script src="js/curriculum.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/frames.js?v=mwie9rm3"></script>
+<script src="js/practice.js?v=mwie9rm3"></script>
+<script src="js/lesson-cards.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/account.js?v=mwie9rm3"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -440,12 +439,13 @@ function renderMasterBank() {
   }
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No sentences found matching criteria.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--muted)">No sentences found matching criteria.</td></tr>`;
     if (footer) footer.innerHTML = "";
     return;
   }
 
   const displaySlice = filtered.slice(0, showLimit);
+  const isTagSentNote = txt => /^(Chapter\s+\d+:|Preply:|Surah\s+\d+)/i.test(String(txt || "").trim());
   tbody.innerHTML = displaySlice.map((s, idx) => {
     const encAr = encodeURIComponent(s.ar);
     const playCall = s.ref
@@ -454,6 +454,7 @@ function renderMasterBank() {
     const isRevealed = sentReviewMode === "all" || SENT_REVEALED.has(s.key);
     const escKey = String(s.key).replace(/'/g, "\\'");
     const escRef = String(s.ref || "").replace(/'/g, "\\'");
+    const visNote = (s.note && !isTagSentNote(s.note)) ? s.note : "";
     const arCellHtml = (sentReviewMode === "en-only" && !isRevealed)
       ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
            <button type="button" class="book-cue ar-side" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')">Show Arabic →</button>
@@ -467,7 +468,7 @@ function renderMasterBank() {
              ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
            </div>
          </div>
-         ${s.tr ? `<div id="tbl-tr-${idx}" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
+         ${s.tr ? `<div id="tbl-tr-${idx}" dir="ltr" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
          ${s.words && s.words.length ? `
            <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:${allTblWbwVisible ? 'flex' : 'none'};margin-top:4px">
              <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
@@ -488,7 +489,7 @@ function renderMasterBank() {
     const enCellHtml = (sentReviewMode === "ar-only" && !isRevealed)
       ? `<button type="button" class="book-cue" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')">Show meaning →</button>`
       : `<div class="m-en-cell">${s.en}</div>
-         ${s.note ? `<div style="font-size:13px;line-height:1.55;color:var(--muted);margin-top:3px">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.note) : s.note}</div>` : ''}
+         ${visNote ? `<div style="font-size:13px;line-height:1.55;color:var(--muted);margin-top:3px">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visNote) : visNote}</div>` : ''}
          ${renderGrammarRuleHtml(s)}`;
 
     return `
@@ -496,11 +497,6 @@ function renderMasterBank() {
         <td style="color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums">${idx + 1}</td>
         <td>${enCellHtml}</td>
         <td>${arCellHtml}</td>
-        <td>
-          <span class="m-src-tag">
-            ${/^(ev-(khutba|duas|masjid|worship|haram):|ph-deen:)/.test(s.key || '') ? "Mosque" : s.src === 'chapters' ? 'Chapter' : s.src === 'teacher' ? 'Preply' : s.track === 'quran' ? "Qur'ān" : 'Everyday'}
-          </span>
-        </td>
         <td style="text-align:right;white-space:nowrap">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true })}</div>
         </td>

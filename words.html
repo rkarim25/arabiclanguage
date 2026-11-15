@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
-  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/fonts.css?v=mwie9rm3">
+  <link rel="stylesheet" href="css/style.css?v=mwie9rm3">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .v-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -266,14 +266,13 @@
           <thead>
             <tr>
               <th style="width:34px">#</th>
-              <th style="width:34%">English Meaning</th>
-              <th style="width:30%">Arabic</th>
-              <th style="width:14%">Category</th>
+              <th style="width:40%">English Meaning</th>
+              <th style="width:40%;text-align:right">Arabic</th>
               <th style="text-align:right">Verdict</th>
             </tr>
           </thead>
           <tbody id="masterTableBody">
-            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Loading master vocabulary…</td></tr>
           </tbody>
         </table>
       </div>
@@ -282,16 +281,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwidwev5"></script>
-<script src="js/curriculum.js?v=mwidwev5"></script>
-<script src="js/srs.js?v=mwidwev5"></script>
-<script src="js/match.js?v=mwidwev5"></script>
-<script src="js/errors.js?v=mwidwev5"></script>
-<script src="js/tryit.js?v=mwidwev5"></script>
-<script src="js/app.js?v=mwidwev5"></script>
-<script src="js/tracker.js?v=mwidwev5"></script>
-<script src="js/plan.js?v=mwidwev5"></script>
-<script src="js/account.js?v=mwidwev5"></script>
+<script src="js/progress-model.js?v=mwie9rm3"></script>
+<script src="js/curriculum.js?v=mwie9rm3"></script>
+<script src="js/srs.js?v=mwie9rm3"></script>
+<script src="js/match.js?v=mwie9rm3"></script>
+<script src="js/errors.js?v=mwie9rm3"></script>
+<script src="js/tryit.js?v=mwie9rm3"></script>
+<script src="js/app.js?v=mwie9rm3"></script>
+<script src="js/tracker.js?v=mwie9rm3"></script>
+<script src="js/plan.js?v=mwie9rm3"></script>
+<script src="js/account.js?v=mwie9rm3"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -554,6 +553,7 @@ function render10Cards() {
   const srs = getSrs();
   const container = document.getElementById("wordList");
   const isEnFirst = promptDirection === "en-first";
+  const isTagWordNote = txt => /^(Top\s+\d+\s+Qur['’]?ān\s+Core|Root:|Qur['’]?an\s+core)/i.test(String(txt || "").trim());
 
   container.innerHTML = ACTIVE_WORDS.map((w, idx) => {
     const item = srs[w.key] || {};
@@ -561,6 +561,7 @@ function render10Cards() {
     const exp = getExposure(w.key, w.ar);
     const isRevealed = REVEALED.has(idx);
     const dots = [1, 2, 3, 4, 5].map(b => b <= exp.box ? "●" : "○").join("");
+    const visNote = (w.note && !isTagWordNote(w.note)) ? w.note : "";
 
     return `
       <tr class="sheet-row ${isRevealed ? 'revealed' : ''}" id="wrow-${idx}" onclick="handleCardClick(${idx}, event)">
@@ -573,6 +574,7 @@ function render10Cards() {
               <span class="arabic" dir="rtl">${w.ar}</span>
               <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
             </div>
+            ${(isRevealed && w.tr) ? `<div class="tr-text" dir="ltr" style="text-align:right;margin-top:2px">${w.tr}</div>` : ''}
           `}
         </td>
         <td>
@@ -585,12 +587,12 @@ function render10Cards() {
               <div class="revealed-wrap">
                 <span class="arabic revealed-ar" dir="rtl">${w.ar}</span>
                 <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encodeURIComponent(w.ar)}')">🔊</button>
-                ${w.tr ? `<span class="tr-text">${w.tr}</span>` : ''}
               </div>
-              ${w.note ? `<div class="revealed-note" dir="rtl">${w.note}</div>` : ''}
+              ${w.tr ? `<div class="tr-text" dir="ltr" style="text-align:right;margin-top:2px">${w.tr}</div>` : ''}
+              ${visNote ? `<div class="revealed-note" dir="rtl">${visNote}</div>` : ''}
             ` : `
-              <div class="revealed-en">${w.en} ${w.tr ? `<span class="tr-text">(${w.tr})</span>` : ''}</div>
-              ${w.note ? `<div class="revealed-note">${w.note}</div>` : ''}
+              <div class="revealed-en">${w.en}</div>
+              ${visNote ? `<div class="revealed-note">${visNote}</div>` : ''}
             `}
             ${(() => {
               const fam = w.fam || famLookup(w.ar);
@@ -771,51 +773,50 @@ function renderMasterTable() {
   }
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--muted)">No words found matching criteria.</td></tr>`;
     if (footer) footer.innerHTML = "";
     return;
   }
 
   const displaySlice = filtered.slice(0, wordShowLimit);
+  const isTagWordNote = txt => /^(Top\s+\d+\s+Qur['’]?ān\s+Core|Root:|Qur['’]?an\s+core)/i.test(String(txt || "").trim());
 
   tbody.innerHTML = displaySlice.map((w, idx) => {
     const fam = w.fam || famLookup(w.ar);
     const encAr = encodeURIComponent(w.ar);
     const escKey = String(w.key).replace(/'/g, "\\'");
     const isRevealed = wordReviewMode === "all" || MASTER_REVEALED.has(w.key);
+    const visNote = (w.note && !isTagWordNote(w.note)) ? w.note : "";
     const arCellHtml = (wordReviewMode === "en-only" && !isRevealed)
       ? `<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
            <button type="button" class="book-cue ar-side" onclick="revealMasterWord('${escKey}', '${encAr}')">Show Arabic →</button>
            <button type="button" class="small icon-btn" onclick="event.stopPropagation(); playSingle('${encAr}')" title="Listen hint">🔊</button>
          </div>`
-      : `<div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
-           <span class="arabic m-ar-cell" dir="rtl">${w.ar}</span>
-           <button type="button" class="small icon-btn" onclick="playSingle('${encAr}')">🔊</button>
+      : `<div>
+           <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+             ${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}
+             <button type="button" class="small icon-btn" onclick="playSingle('${encAr}')">🔊</button>
+             <span class="arabic m-ar-cell" dir="rtl">${w.ar}</span>
+           </div>
+           ${(w.tr && allMasterTrVisible) ? `<div dir="ltr" style="font-size:11.5px;color:var(--muted);font-style:italic;text-align:right;margin-top:2px">${w.tr}</div>` : ''}
          </div>`;
     const enCellHtml = (wordReviewMode === "ar-only" && !isRevealed)
       ? `<button type="button" class="book-cue" onclick="revealMasterWord('${escKey}', '${encAr}')">Show meaning →</button>`
       : `<div class="m-en-cell">${w.en}</div>
-         ${(w.tr && allMasterTrVisible) ? `<div style="font-size:11.5px;color:var(--muted);font-style:italic">${w.tr}</div>` : ''}
-         ${w.note ? `<div style="font-size:11.5px;color:var(--muted)">${w.note}</div>` : ''}`;
+         ${visNote ? `<div style="font-size:11.5px;color:var(--muted)">${visNote}</div>` : ''}`;
 
     return `
       <tr>
         <td style="color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums">${idx + 1}</td>
         <td>${enCellHtml}</td>
         <td>${arCellHtml}</td>
-        <td>
-          <span style="font-size:11.5px;color:var(--muted)">
-            ${w.src === 'teacher' ? 'Preply' : w.src === 'quran' ? "Qur'ān" : w.src === 'root' ? 'Root' : 'Everyday'}
-          </span>
-          ${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none;margin-top:4px" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}
-        </td>
         <td style="text-align:right;white-space:nowrap">
           <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(w.key, "rateMasterWord", [encAr], { compact: true, altKeys: wordAltKeys(w.ar) })}</div>
         </td>
       </tr>
       ${fam ? `
         <tr id="m-rf-${idx}" style="display:none;background:var(--surface-2)">
-          <td colspan="5" style="padding:10px 16px">
+          <td colspan="4" style="padding:10px 16px">
             <div class="rf-info-line">
               <b>🌿 Root ${fam.root}</b> <i>(${fam.rootTr || ''})</i> — <span style="color:var(--muted)">${fam.theme}</span>
             </div>
