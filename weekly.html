@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d7a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Weekly Learning Booklet — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
+  <style>
+    .wk-controls {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      padding: 8px 0 14px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+    }
+    .wk-ctrl-group { display: inline-flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+    .wk-pill {
+      border: 1px solid var(--border); background: transparent; color: var(--ink);
+      border-radius: 999px; padding: 5px 12px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+    }
+    .wk-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .wk-pill.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .wk-pill.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .wk-pill.primary:hover { background: #0a614c; color: #fff; }
+    .wk-select {
+      padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px;
+      font-size: 12.5px; font-weight: 600; background: var(--paper-elevated); color: var(--ink);
+    }
+
+    /* Editorial Booklet Typography */
+    .wk-titleplate { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+    .wk-kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .wk-title {
+      font-family: var(--font-serif); font-size: 28px; line-height: 1.2; margin: 0;
+      display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px;
+    }
+    .wk-title .ar-sub { font-family: var(--font-ar); font-size: 24px; color: var(--accent); font-weight: 600; }
+    .wk-meta { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+    .wk-sec { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .wk-sec:first-of-type { margin-top: 0; border-top: 0; padding-top: 0; }
+    .wk-sec-h {
+      font-family: var(--font-serif); font-size: 19px; font-weight: 700; color: var(--ink);
+      margin: 0 0 4px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;
+      page-break-after: avoid; break-after: avoid;
+    }
+    .wk-sec-sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; page-break-after: avoid; break-after: avoid; }
+    .wk-subh {
+      font-family: var(--font-serif); font-size: 15px; font-weight: 700; color: var(--accent);
+      margin: 18px 0 8px; page-break-after: avoid; break-after: avoid;
+    }
+
+    /* Two-Column Spreads for Chapter Sentences & Cues */
+    .wk-list { display: flex; flex-direction: column; gap: 0; }
+    .wk-row {
+      display: grid; grid-template-columns: 24px minmax(0, 1fr) minmax(0, 1.05fr) auto;
+      gap: 6px 14px; align-items: baseline; padding: 9px 2px; border-bottom: 1px solid var(--border);
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .wk-row:last-child { border-bottom: 0; }
+    .wk-num { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .wk-en-col { min-width: 0; }
+    .wk-en { font-family: var(--font-serif); font-size: 15px; color: var(--ink); line-height: 1.45; }
+    .wk-tr { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 2px; }
+    .wk-hint { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+    .wk-ar-col { direction: rtl; text-align: right; min-width: 0; }
+    .wk-ar {
+      font-family: var(--font-ar); font-size: 23px; line-height: 1.7; color: var(--ink);
+      cursor: pointer; display: inline;
+    }
+    .wk-ar:hover { color: var(--accent); }
+    .wk-aux { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .wk-audio-btn {
+      border: 1px solid var(--border); background: transparent; color: var(--muted);
+      border-radius: 999px; padding: 2px 7px; font-size: 11px; cursor: pointer;
+    }
+    .wk-audio-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .wk-boxes {
+      display: inline-flex; gap: 7px; font-size: 11px; color: var(--muted); font-family: var(--font-ui);
+      white-space: nowrap; user-select: none;
+    }
+    .wk-boxes span { display: inline-flex; align-items: center; gap: 2px; }
+    .wk-box { display: inline-block; width: 10px; height: 10px; border: 1.2px solid var(--muted); border-radius: 2px; }
+
+    /* Vocab Glossary Grid */
+    .wk-vocab-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 6px 16px;
+      margin-top: 6px;
+    }
+    .wk-vocab-item {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+      padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 13px;
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .wk-vocab-item .v-en { font-family: var(--font-serif); color: var(--ink); }
+    .wk-vocab-item .v-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); direction: rtl; cursor: pointer; }
+    .wk-vocab-item .v-ar:hover { color: var(--accent); }
+
+    /* Grammar Note + Verses */
+    .wk-grammar-note {
+      border-left: 2.5px solid var(--amber); padding: 6px 14px; margin: 10px 0 14px;
+      font-size: 13.5px; line-height: 1.65; color: var(--ink);
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .wk-ayah {
+      padding: 9px 2px; border-bottom: 1px solid var(--border);
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .wk-ayah:last-child { border-bottom: 0; }
+    .wk-ayah-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .wk-ayah-ref { font-size: 11.5px; font-weight: 700; color: var(--amber); }
+    .wk-ayah-ar {
+      font-family: var(--font-ar); font-size: 24px; line-height: 1.85; direction: rtl; text-align: right;
+      color: var(--ink); margin: 3px 0; cursor: pointer;
+    }
+    .wk-ayah-ar:hover { color: var(--accent); }
+    .wk-ayah-en { font-family: var(--font-serif); font-size: 13.5px; color: var(--ink); line-height: 1.5; }
+
+    /* Tables: Core 12 + Glue Matrix */
+    .wk-tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .wk-tbl th {
+      text-align: left; padding: 6px 8px; border-bottom: 1.5px solid var(--border);
+      font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+    }
+    .wk-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .wk-tbl tr { break-inside: avoid; page-break-inside: avoid; }
+    .wk-tbl .ar-td { font-family: var(--font-ar); font-size: 21px; direction: rtl; text-align: right; cursor: pointer; }
+    .wk-glue th, .wk-glue td { text-align: center; padding: 5px 6px; }
+    .wk-glue th:first-child, .wk-glue td:first-child { text-align: left; }
+    .wk-glue .g-ar { font-family: var(--font-ar); font-size: 18px; display: block; line-height: 1.3; cursor: pointer; }
+    .wk-glue .g-tr { font-size: 10.5px; color: var(--muted); display: block; }
+
+    /* Lesson Cards inside Booklet */
+    .wk-lc-slot { margin-bottom: 16px; break-inside: avoid; page-break-inside: avoid; }
+    .wk-lc-head { font-family: var(--font-serif); font-size: 15px; font-weight: 700; margin: 0 0 6px; color: var(--accent); }
+    .wk-lc-check-note { font-size: 12.5px; color: var(--muted); border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 8px; }
+
+    .wk-colophon {
+      margin-top: 28px; padding-top: 10px; border-top: 1px solid var(--border);
+      font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+
+    body.wk-hide-tr .wk-tr, body.wk-hide-tr .g-tr, body.wk-hide-tr .lc-tr, body.wk-hide-tr .lc-ex-tr { display: none !important; }
+    body.wk-hide-boxes .wk-boxes { display: none !important; }
+
+    @media (max-width: 680px) {
+      .wk-row { grid-template-columns: 22px minmax(0, 1fr); }
+      .wk-ar-col { grid-column: 2; }
+      .wk-aux { grid-column: 2; }
+      .wk-title { font-size: 23px; }
+    }
+
+    /* Clean A4 PDF Output */
+    @media print {
+      @page { size: A4 portrait; margin: 13mm 14mm; }
+      html, body {
+        background: #fff !important; color: #111 !important;
+        --bg: #fff; --card: transparent; --paper-elevated: #fff;
+        --ink: #111; --muted: #555; --border: #d5cfc4; --accent: #0d7a5f; --amber: #8a5600;
+        font-size: 10.5pt;
+      }
+      nav, .no-print, #notePen, #noteOverlay, #wordPop, .gloss-pop, #planBar,
+      .lc-speak-btn, .wk-audio-btn, footer { display: none !important; }
+      main { max-width: none !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .m-dot { display: none !important; }
+      .wk-sec { margin-top: 16pt; padding-top: 10pt; }
+      .wk-row { padding: 5pt 0; gap: 4pt 10pt; }
+      .wk-ar { font-size: 17pt; line-height: 1.55; }
+      .wk-ayah-ar { font-size: 18pt; line-height: 1.6; }
+      .wk-vocab-item .v-ar, .wk-tbl .ar-td { font-size: 15pt; }
+      .wk-lc-slot .lc-check-btn, .wk-lc-slot .lc-speak-btn { display: none !important; }
+      .wk-lc-slot .lc-check-answer { display: block !important; }
+      .wk-pagebreak { break-before: page; page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <div class="wk-controls no-print">
+    <div class="wk-ctrl-group">
+      <a href="index.html" class="wk-pill" title="Return to live Practice">← Practice</a>
+      <select id="wkChapSelect" class="wk-select" title="Choose Chapter for this booklet"></select>
+      <button type="button" id="btnWkTr" class="wk-pill active" onclick="toggleWkTr()" title="Show or hide transliteration in screen &amp; PDF">🔤 Translit</button>
+      <button type="button" id="btnWkBoxes" class="wk-pill active" onclick="toggleWkBoxes()" title="Include Mon/Wed/Fri pen review checkboxes on printed PDF">☐ Checkboxes</button>
+    </div>
+    <div class="wk-ctrl-group">
+      <button type="button" class="wk-pill primary" onclick="window.print()" title="Print cleanly or Save as PDF (A4)">🖨️ Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div id="weeklyBook">
+    <p style="color:var(--muted);padding:24px 0">Assembling your Weekly Learning Booklet…</p>
+  </div>
+</main>
+
+<script src="js/srs.js?v=mwibvv6x"></script>
+<script src="js/practice.js?v=mwibvv6x"></script>
+<script src="js/lesson-cards.js?v=mwibvv6x"></script>
+<script src="js/app.js?v=mwibvv6x"></script>
+<script src="js/tracker.js?v=mwibvv6x"></script>
+<script src="js/plan.js?v=mwibvv6x"></script>
+<script>
+renderNav("weekly");
+trackPage("weekly");
+
+const GLUE_MATRIX = [
+  { base: "فِي", en: "in", cells: [
+    ["فِيَّ", "fiyya"], ["فِيكَ", "fīka"], ["فِيهِ", "fīhi"], ["فِيهَا", "fīhā"], ["فِينَا", "fīnā"], ["فِيكُمْ", "fīkum"], ["فِيهِمْ", "fīhim"]
+  ]},
+  { base: "عَلَى", en: "upon", cells: [
+    ["عَلَيَّ", "ʿalayya"], ["عَلَيْكَ", "ʿalayka"], ["عَلَيْهِ", "ʿalayhi"], ["عَلَيْهَا", "ʿalayhā"], ["عَلَيْنَا", "ʿalaynā"], ["عَلَيْكُمْ", "ʿalaykum"], ["عَلَيْهِمْ", "ʿalayhim"]
+  ]},
+  { base: "لِ", en: "for / to", cells: [
+    ["لِي", "lī"], ["لَكَ", "laka"], ["لَهُ", "lahu"], ["لَهَا", "lahā"], ["لَنَا", "lanā"], ["لَكُمْ", "lakum"], ["لَهُمْ", "lahum"]
+  ]},
+  { base: "مِنْ", en: "from", cells: [
+    ["مِنِّي", "minnī"], ["مِنْكَ", "minka"], ["مِنْهُ", "minhu"], ["مِنْهَا", "minhā"], ["مِنَّا", "minnā"], ["مِنْكُمْ", "minkum"], ["مِنْهُمْ", "minhum"]
+  ]},
+  { base: "بِ", en: "by / with", cells: [
+    ["بِي", "bī"], ["بِكَ", "bika"], ["بِهِ", "bihi"], ["بِهَا", "bihā"], ["بِنَا", "binā"], ["بِكُمْ", "bikum"], ["بِهِمْ", "bihim"]
+  ]}
+];
+
+const esc = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]));
+let WK_STATE = { chaps: [], lcCards: [], qCore: [], verses: [], qSents: [], evGroups: [], myday: [], activeChapNum: 1 };
+let showTr = localStorage.getItem("wk-show-tr") !== "0";
+let showBoxes = localStorage.getItem("wk-show-boxes") !== "0";
+
+function applyWkToggles() {
+  document.body.classList.toggle("wk-hide-tr", !showTr);
+  document.body.classList.toggle("wk-hide-boxes", !showBoxes);
+  const bTr = document.getElementById("btnWkTr");
+  const bBx = document.getElementById("btnWkBoxes");
+  if (bTr) bTr.classList.toggle("active", showTr);
+  if (bBx) bBx.classList.toggle("active", showBoxes);
+}
+function toggleWkTr() {
+  showTr = !showTr;
+  localStorage.setItem("wk-show-tr", showTr ? "1" : "0");
+  applyWkToggles();
+}
+function toggleWkBoxes() {
+  showBoxes = !showBoxes;
+  localStorage.setItem("wk-show-boxes", showBoxes ? "1" : "0");
+  applyWkToggles();
+}
+
+function getSelectedChapter(chaps) {
+  const qsChap = new URLSearchParams(location.search).get("chap");
+  if (qsChap) {
+    const byNum = chaps.find(c => String(c.num) === String(qsChap) || String(c.id) === String(qsChap));
+    if (byNum) return byNum;
+  }
+  const log = store.get("ats-log", []);
+  const passed = new Set(log.filter(x => x && x.e === "chap-test" && x.chap && (x.score >= 80 || x.pass === true)).map(x => String(x.chap)));
+  const saved = store.get("ats-current-chap-id") || localStorage.getItem("ats-current-chap-id");
+  if (saved) {
+    const hit = chaps.find(c => c.id === saved && !passed.has(c.id));
+    if (hit) return hit;
+  }
+  return chaps.find(c => !passed.has(c.id)) || chaps[0];
+}
+
+function mdot(key, opts) {
+  return (window.SRS && SRS.dotHtml) ? SRS.dotHtml(key, opts) : "";
+}
+
+function isGreen(key, srs, altKeys) {
+  if (!window.SRS || !SRS.masteryState) return false;
+  return SRS.masteryState(key, { srs, altKeys: altKeys || [] }).level === "green";
+}
+
+function boxesHtml() {
+  return `<span class="wk-boxes" aria-hidden="true"><span><i class="wk-box"></i>M</span><span><i class="wk-box"></i>W</span><span><i class="wk-box"></i>F</span></span>`;
+}
+
+function extractChapterVocab(chap) {
+  const map = new Map();
+  (chap.sentences || []).forEach(s => {
+    (s.words || []).forEach(pair => {
+      if (!Array.isArray(pair) || !pair[0] || !pair[1]) return;
+      const ar = String(pair[0]).trim();
+      const en = String(pair[1]).trim();
+      const norm = typeof normalizeAr === "function" ? normalizeAr(ar) : ar;
+      if (norm && !map.has(norm)) map.set(norm, { ar, en });
+    });
+  });
+  return Array.from(map.values()).slice(0, 18);
+}
+
+function selectLessonCards(cards, chapNum, srs) {
+  const scored = (cards || []).map((c, idx) => {
+    const key = "lc:" + c.id;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs }) : { level: "grey" };
+    if (st.level === "green") return null;
+    const chMatch = Array.isArray(c.triggers && c.triggers.chapters) && c.triggers.chapters.includes(chapNum);
+    const isPriority = c.category === "quran" || c.category === "mosque";
+    const rank = (chMatch ? 100 : 0) + (st.level === "red" ? 60 : st.level === "amber" ? 40 : 20) + (isPriority ? 15 : 0) - idx * 0.1;
+    return { card: c, key, st, rank };
+  }).filter(Boolean).sort((a, b) => b.rank - a.rank);
+  return scored.slice(0, 2);
+}
+
+function selectCoreQuranWords(qCore, srs) {
+  const items = (qCore || []).map((w, i) => {
+    const key = "qc:" + i;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [w.ar] }) : { level: "grey" };
+    if (st.level === "green") return null;
+    const pillar = (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en) : "word";
+    const pri = st.level === "red" ? 0 : st.level === "amber" ? 1 : 2;
+    return { w, i, key, st, pillar, pri };
+  }).filter(Boolean).sort((a, b) => a.pri - b.pri || a.i - b.i);
+  return items.slice(0, 12);
+}
+
+function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
+  const wordsForLookup = (qCore || []).map((w, i) => ({ ar: w.ar, key: "qc:" + i, qcKey: "qc:" + i }));
+  const knownLookup = (window.Practice && Practice.buildKnownNormLookup) ? Practice.buildKnownNormLookup(wordsForLookup) : new Map();
+  const out = [];
+  const chapSurah = (versesSurahs || []).find(s => s.id === chap.surahId);
+  if (chapSurah && Array.isArray(chapSurah.verses)) {
+    chapSurah.verses.forEach((v, vi) => {
+      const key = "s:q:" + chapSurah.id + ":" + vi;
+      out.push({
+        kind: "Salah / Chapter Surah",
+        surahName: chapSurah.nameEn || chapSurah.name,
+        surahNum: chapSurah.n,
+        ayahNum: Number(String(v.ref || "").split(":")[1] || (vi + 1)),
+        ref: v.ref || (chapSurah.n + ":" + (vi + 1)),
+        ar: v.ar,
+        en: v.en,
+        key,
+        unknownWords: 0,
+        green: isGreen(key, srs)
+      });
+    });
+  }
+  const unlocked = [];
+  (qSents || []).forEach(s => {
+    const key = "qs:" + s.surah + ":" + s.ayah;
+    if (isGreen(key, srs)) return;
+    const rd = (window.Practice && Practice.ayahReadiness) ? Practice.ayahReadiness(Object.assign({}, s, { key }), srs, knownLookup) : { unknownWords: 2, knownWords: 0, totalWords: 3 };
+    if (rd.unknownWords <= 2) {
+      unlocked.push({
+        kind: "Unlocked i+1 (" + rd.knownWords + "/" + rd.totalWords + " words held)",
+        surahName: s.surahName,
+        surahNum: s.surah,
+        ayahNum: s.ayah,
+        ref: s.ref || (s.surah + ":" + s.ayah),
+        ar: s.ar,
+        en: s.en,
+        key,
+        unknownWords: rd.unknownWords,
+        green: false
+      });
+    }
+  });
+  unlocked.sort((a, b) => a.unknownWords - b.unknownWords || a.surahNum - b.surahNum || a.ayahNum - b.ayahNum);
+  const picked = [];
+  const seenRef = new Set();
+  for (const x of out.filter(v => !v.green).concat(unlocked).concat(out)) {
+    if (picked.length >= 5) break;
+    if (seenRef.has(x.ref)) continue;
+    seenRef.add(x.ref);
+    picked.push(x);
+  }
+  return picked;
+}
+
+function selectMosqueCues(evGroups, srs) {
+  const pool = [];
+  const labels = { khutba: "Friday Khutbah", duas: "Common Du'ā", masjid: "Imam / Mosque" };
+  ["khutba", "duas", "masjid"].forEach(gid => {
+    const g = (evGroups || []).find(x => x.id === gid);
+    if (!g) return;
+    (g.members || []).forEach((m, i) => {
+      const key = "ev-" + gid + ":" + i;
+      const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [m.ar] }) : { level: "grey" };
+      if (st.level === "green") return;
+      const pri = st.level === "red" ? 0 : st.level === "amber" ? 1 : 2;
+      pool.push({ m, key, label: labels[gid], pri, idx: i });
+    });
+  });
+  pool.sort((a, b) => a.pri - b.pri || a.idx - b.idx);
+  return pool.slice(0, 6);
+}
+
+function selectSayYourDay(mydaySents, srs) {
+  const pool = (mydaySents || []).map((s, idx) => {
+    const key = "myday:" + s.id;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [s.id, s.ar] }) : { level: "grey" };
+    if (st.level === "green") return null;
+    const pri = st.level === "red" ? 0 : st.level === "amber" ? 1 : 2;
+    return { s, key, st, pri, idx };
+  }).filter(Boolean).sort((a, b) => a.pri - b.pri || a.idx - b.idx);
+  return pool.slice(0, 6);
+}
+
+function renderBooklet() {
+  const { chaps, lcCards, qCore, verses, qSents, evGroups, myday, activeChapNum } = WK_STATE;
+  const chap = chaps.find(c => Number(c.num) === Number(activeChapNum)) || chaps[0];
+  if (!chap) return;
+  const srs = typeof getSrs === "function" ? getSrs() : {};
+  if (window.LessonCards && LessonCards.ensureStyles) LessonCards.ensureStyles();
+
+  const chapVocab = extractChapterVocab(chap);
+  const chapGreen = (chap.sentences || []).filter((_, i) => isGreen("chap:" + chap.num + ":" + i, srs)).length;
+  const lcPicks = selectLessonCards(lcCards, chap.num, srs);
+  const core12 = selectCoreQuranWords(qCore, srs);
+  const ayahs5 = selectAyahs(verses, qSents, chap, qCore, srs);
+  const mosque6 = selectMosqueCues(evGroups, srs);
+  const day6 = selectSayYourDay(myday, srs);
+  const preply3 = (chap.sentences || [])
+    .map((s, i) => ({ s, key: "chap:" + chap.num + ":" + i, green: isGreen("chap:" + chap.num + ":" + i, srs) }))
+    .filter(x => !x.green)
+    .slice(0, 2)
+    .map(x => ({ ar: x.s.ar, en: x.s.en, tr: x.s.tr, tag: "Ch " + chap.num }))
+    .concat(day6.slice(0, 3).map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, tag: "Say Your Day" })))
+    .slice(0, 3);
+
+  const chapSurah = (verses || []).find(s => s.id === chap.surahId);
+  const todayLabel = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+
+  const renderSentRows = (rows) => rows.map((r, i) => {
+    const encAr = encodeURIComponent(r.ar || "");
+    return `
+      <div class="wk-row">
+        <span class="wk-num">${i + 1}.</span>
+        <div class="wk-en-col">
+          <div class="wk-en">${esc(r.en)}</div>
+          ${r.tr ? `<div class="wk-tr">${esc(r.tr)}</div>` : ""}
+          ${r.hint ? `<div class="wk-hint">${esc(r.hint)}</div>` : ""}
+        </div>
+        <div class="wk-ar-col">
+          <span class="wk-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)" title="Tap to listen">${esc(r.ar)}</span>
+        </div>
+        <div class="wk-aux">
+          <button type="button" class="wk-audio-btn" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">🔊</button>
+          ${r.key ? mdot(r.key) : ""}
+          ${boxesHtml()}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const html = `
+    <div class="wk-titleplate">
+      <div class="wk-kicker">Weekly Study Booklet · Arabic Mastery Programme</div>
+      <h1 class="wk-title">
+        <span>${esc(chap.title)}</span>
+        <span class="ar-sub" dir="rtl">كُرَّاسَةُ الأُسْبُوع</span>
+      </h1>
+      <div class="wk-meta">
+        Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green) ·
+        Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save as PDF</b> for A4 paper.
+      </div>
+    </div>
+
+    <!-- SECTION I: ACTIVE CHAPTER -->
+    <section class="wk-sec">
+      <h2 class="wk-sec-h"><span>I. This Week's Chapter — 10 Core Sentences</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Speak aloud before looking</span></h2>
+      <p class="wk-sec-sub">Read the English line on the left, produce the Arabic aloud, then glance right to verify.</p>
+      <div class="wk-list">
+        ${renderSentRows((chap.sentences || []).map((s, i) => ({ ar: s.ar, en: s.en, tr: s.tr, hint: s.hint, key: "chap:" + chap.num + ":" + i })))}
+      </div>
+
+      ${chapVocab.length ? `
+        <h3 class="wk-subh">Chapter Vocabulary (${chapVocab.length} key tokens)</h3>
+        <div class="wk-vocab-grid">
+          ${chapVocab.map(v => {
+            const encAr = encodeURIComponent(v.ar);
+            return `<div class="wk-vocab-item"><span class="v-en">${esc(v.en)}</span><span class="v-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(v.ar)}</span></div>`;
+          }).join("")}
+        </div>
+      ` : ""}
+
+      ${chap.grammar ? `
+        <h3 class="wk-subh">Grammar Frame: ${esc(chap.grammar.title)}</h3>
+        <div class="wk-grammar-note">${chap.grammar.text}</div>
+      ` : ""}
+    </section>
+
+    <!-- SECTION II: 2 PRIORITY LESSON CARDS -->
+    ${lcPicks.length ? `
+      <section class="wk-sec wk-pagebreak">
+        <h2 class="wk-sec-h"><span>II. Priority Mental Maps (${lcPicks.length} Lesson Cards)</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Unmastered systems for this week</span></h2>
+        <p class="wk-sec-sub">Study the pattern once as a single picture before drilling individual sentences in Practice.</p>
+        ${lcPicks.map(p => `
+          <div class="wk-lc-slot">
+            <h3 class="wk-lc-head">${esc(p.card.icon || "📇")} ${esc(p.card.title)} ${mdot(p.key)}</h3>
+            ${LessonCards.renderBodyHtml(p.card, { hideHeader: true })}
+            ${p.card.quickCheck ? `<div class="wk-lc-check-note"><b>Quick check:</b> ${esc(p.card.quickCheck.prompt || "")}<span style="display:block;margin-top:3px"><span class="arabic" style="font-size:18px;color:var(--ink)">${esc(p.card.quickCheck.answerAr || "")}</span> — ${esc(p.card.quickCheck.answerEn || "")}</span></div>` : ""}
+          </div>
+        `).join("")}
+      </section>
+    ` : ""}
+
+    <!-- SECTION III: QUR'AN COMPREHENSION ENGINE -->
+    <section class="wk-sec">
+      <h2 class="wk-sec-h"><span>III. Qur'ān by Ear &amp; Core Structures</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Structures → Top 151 Words → Ayahs</span></h2>
+      <p class="wk-sec-sub">High-leverage Mushaf words + attached pronouns + ayahs unlocked at your current vocabulary level.</p>
+
+      ${core12.length ? `
+        <h3 class="wk-subh">12 Core Qur'ānic Words Due This Week</h3>
+        <table class="wk-tbl">
+          <thead><tr><th style="width:42px">Rank</th><th>Arabic</th><th class="wk-tr">Translit</th><th>Meaning</th><th>Pillar</th><th>Mushaf Freq</th></tr></thead>
+          <tbody>
+            ${core12.map(item => {
+              const encAr = encodeURIComponent(item.w.ar);
+              return `
+                <tr>
+                  <td>#${item.i + 1} ${mdot(item.key)}</td>
+                  <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(item.w.ar)}</td>
+                  <td class="wk-tr">${esc(item.w.tr || "")}</td>
+                  <td>${esc(item.w.en)}</td>
+                  <td>${esc(item.pillar)}</td>
+                  <td>${Number(item.w.n || 0).toLocaleString()}×</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      ` : ""}
+
+      <h3 class="wk-subh">Preposition + Attached Pronoun Glue Matrix</h3>
+      <table class="wk-tbl wk-glue">
+        <thead>
+          <tr><th>Root</th><th>-ī (me)</th><th>-ka (you)</th><th>-hu (him)</th><th>-hā (her)</th><th>-nā (us)</th><th>-kum (y'all)</th><th>-hum (them)</th></tr>
+        </thead>
+        <tbody>
+          ${GLUE_MATRIX.map(row => `
+            <tr>
+              <td><span class="arabic" style="font-size:18px;font-weight:700">${esc(row.base)}</span> <span style="font-size:11.5px;color:var(--muted)">(${esc(row.en)})</span></td>
+              ${row.cells.map(([ar, tr]) => {
+                const encAr = encodeURIComponent(ar);
+                return `<td><span class="g-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(ar)}</span><span class="g-tr">${esc(tr)}</span></td>`;
+              }).join("")}
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      ${ayahs5.length ? `
+        <h3 class="wk-subh">5 Salah &amp; Unlocked i+1 Ayahs (${chapSurah ? esc(chapSurah.nameEn) + " + " : ""}Comprehensible Input)</h3>
+        ${ayahs5.map(a => {
+          const encAr = encodeURIComponent(a.ar);
+          return `
+            <div class="wk-ayah">
+              <div class="wk-ayah-top">
+                <span class="wk-ayah-ref">${esc(a.surahName)} (${esc(a.ref)}) · <span style="font-weight:500;color:var(--muted)">${esc(a.kind)}</span> ${mdot(a.key)}</span>
+                <button type="button" class="wk-audio-btn" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">🎧 Alafasy</button>
+              </div>
+              <div class="wk-ayah-ar" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">${esc(a.ar)}</div>
+              <div class="wk-ayah-en">${esc(a.en)}</div>
+            </div>
+          `;
+        }).join("")}
+      ` : ""}
+    </section>
+
+    <!-- SECTION IV: FRIDAY KHUTBAH, EVERYDAY & PREPLY -->
+    <section class="wk-sec">
+      <h2 class="wk-sec-h"><span>IV. Friday Khutbah, Say Your Day &amp; Sunday Preply</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Mosque cues &amp; live speech</span></h2>
+
+      ${mosque6.length ? `
+        <h3 class="wk-subh">6 Friday Khutbah, Common Du'ā &amp; Imam Cues</h3>
+        <div class="wk-list">
+          ${renderSentRows(mosque6.map(c => ({ ar: c.m.ar, en: c.m.en, tr: c.m.tr, hint: c.label + (c.m.note ? " — " + c.m.note : ""), key: c.key })))}
+        </div>
+      ` : ""}
+
+      ${day6.length ? `
+        <h3 class="wk-subh">6 Everyday "Say Your Day" Lines</h3>
+        <div class="wk-list">
+          ${renderSentRows(day6.map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, hint: d.s.swap ? "Swap: " + d.s.swap : "", key: d.key })))}
+        </div>
+      ` : ""}
+
+      ${preply3.length ? `
+        <h3 class="wk-subh">3 Sunday Preply Warm-Up Prompts</h3>
+        <div class="wk-list">
+          ${renderSentRows(preply3.map(p => ({ ar: p.ar, en: p.en, tr: p.tr, hint: p.tag })))}
+        </div>
+      ` : ""}
+    </section>
+
+    <div class="wk-colophon">
+      <span>Arabic Learning System · rkarim25.github.io/arabiclanguage</span>
+      <span>Active Study Edition · Mishary Rashid Alafasy Qur'ān &amp; Natural MSA</span>
+    </div>
+  `;
+
+  document.getElementById("weeklyBook").innerHTML = html;
+  applyWkToggles();
+}
+
+(async () => {
+  try {
+    const [chRes, lcRes, qcRes, vRes, qsRes, evRes, mdRes] = await Promise.all([
+      fetch("data/chapters.json").then(r => r.json()).catch(() => ({ chapters: [] })),
+      fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
+      fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
+      fetch("data/verses.json").then(r => r.json()).catch(() => ({ surahs: [] })),
+      fetch("data/quran-sentences.json").then(r => r.json()).catch(() => ({ ayahs: [] })),
+      fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
+      fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] }))
+    ]);
+    const chaps = chRes.chapters || [];
+    const cur = getSelectedChapter(chaps);
+    WK_STATE = {
+      chaps,
+      lcCards: lcRes.cards || [],
+      qCore: qcRes.words || [],
+      verses: vRes.surahs || [],
+      qSents: qsRes.ayahs || [],
+      evGroups: evRes.groups || [],
+      myday: mdRes.sentences || [],
+      activeChapNum: cur ? cur.num : 1
+    };
+
+    const sel = document.getElementById("wkChapSelect");
+    if (sel) {
+      sel.innerHTML = chaps.map(c => `<option value="${c.num}" ${c.num === WK_STATE.activeChapNum ? "selected" : ""}>Ch ${c.num}: ${esc(String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, ""))}</option>`).join("");
+      sel.onchange = () => {
+        WK_STATE.activeChapNum = Number(sel.value) || 1;
+        renderBooklet();
+      };
+    }
+    renderBooklet();
+  } catch (e) {
+    document.getElementById("weeklyBook").innerHTML = `<p style="color:var(--red)">Could not load booklet data: ${esc(e.message || e)}</p>`;
+  }
+})();
+</script>
+</body>
+</html>

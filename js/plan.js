@@ -663,7 +663,7 @@ function planPaintBar() {
 }
 /* sentences.html hosts the primary multi-batch Practice session with its own completion card;
    mounting #planBar underneath created redundant bottom dots & links (13 Nov pen note). */
-const PLAN_BAR_QUIET = ["index.html", "chapters.html", "map.html", "more.html", "class.html", "placement.html", "sets.html", "sentences.html", "quran.html", "words.html"];
+const PLAN_BAR_QUIET = ["index.html", "chapters.html", "map.html", "more.html", "class.html", "placement.html", "sets.html", "sentences.html", "quran.html", "words.html", "weekly.html"];
 function planMountBar() {
   if (document.getElementById("planBar")) return;
   const p = planGet();

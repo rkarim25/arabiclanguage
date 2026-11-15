@@ -8,95 +8,79 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
-  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
   <style>
-    .s-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .stat-strip { display: flex; gap: 20px; align-items: baseline; }
     .stat-strip .num { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
     .stat-strip .lbl { font-size: 12px; color: var(--muted); }
 
     /* Top View Switcher */
-    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 3px; gap: 4px; margin-bottom: 12px; }
+    .tab-bar { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--paper-elevated); padding: 2px; gap: 4px; margin-bottom: 12px; }
     .tab-btn { border: none; background: transparent; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.15s; }
-    .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(13,122,95,0.25); }
+    .tab-btn.active { background: var(--accent); color: #fff; }
 
     /* Unified Sleek Practice Toolbar */
-    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 7px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+    .practice-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 12px; padding: 6px 0 10px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
     .pt-group { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    
-    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); padding: 2px; }
+
+    .dir-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--paper-elevated); padding: 2px; }
     .dir-btn { border: none; background: transparent; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.12s; }
     .dir-btn.active { background: var(--accent); color: #fff; }
 
     .filter-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin: 0; }
-    .chip { border: 1px solid var(--border); background: var(--bg); border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--muted); transition: all 0.1s; }
+    .chip { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--muted); transition: all 0.1s; }
     .chip:hover { border-color: var(--accent); color: var(--ink); }
     .chip.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
-    .pt-btn { border: 1px solid var(--border); background: var(--bg); border-radius: 6px; padding: 4px 9px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
+    .pt-btn { border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.1s; }
     .pt-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
     .pt-btn.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
-    .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+    .speed-sw button { padding: 4px 7px; font-size: 11.5px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
     .speed-sw button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    /* Compact Sentence Cards (One Below Another, Sleek & Neat) */
-    .sentence-list { display: flex; flex-direction: column; gap: 9px; margin-top: 6px; }
-    .s-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.15s; }
-    .s-card:hover { border-color: var(--accent); }
-    .s-card.revealed { background: rgba(13, 122, 95, 0.02); }
-    .s-card.playing { border-color: var(--accent); background: rgba(13, 122, 95, 0.08); border-left: 4px solid var(--accent); }
+    /* Quiet Book Reading Entries (One Below Another, Divided by Hairlines) */
+    .sentence-list { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
+    .s-card { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 14px 2px; display: flex; flex-direction: column; gap: 8px; transition: background 0.15s; }
+    .s-card:last-child { border-bottom: 0; }
+    .s-card:hover { background: rgba(13, 122, 95, 0.015); }
+    .s-card.revealed { background: transparent; }
+    .s-card.playing { background: rgba(13, 122, 95, 0.05); border-left: 3px solid var(--accent); padding-left: 12px; }
 
     .s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
     .s-prompt-wrap { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 260px; flex-wrap: wrap; }
-    .s-num { color: var(--muted); font-size: 12.5px; font-weight: 700; flex-shrink: 0; }
-    .s-prompt-text { font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.45; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 26px; color: var(--accent); direction: rtl; text-align: right; line-height: 1.55; }
-    
+    .s-num { color: var(--muted); font-size: 12px; font-weight: 600; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .s-prompt-text { font-family: var(--font-serif); font-size: 17px; font-weight: 500; color: var(--ink); line-height: 1.5; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 27px; color: var(--ink); direction: rtl; text-align: right; line-height: 1.8; }
+
     .s-meta-wrap { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .exp-dots-only { font-size: 11px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; user-select: none; }
     .exp-dots-only.new { color: #94a3b8; }
-    .src-tag { color: var(--accent); font-weight: 600; font-size: 11px; }
+    .src-tag { color: var(--muted); font-weight: 500; font-size: 11.5px; }
 
     .s-action-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: 1px dashed var(--border); background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; user-select: none; }
+    .s-reveal-btn { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.12s; user-select: none; }
     .s-reveal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
-    /* Colored SRS Rating Dots (Replaces wordy pills) */
+    /* Colored SRS Rating Dots */
     .s-rate-bar, .sheet-rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
     .rate-btn {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
-      border-radius: 50%;
-      padding: 0;
-      border: 2px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1;
-      transition: all 0.12s ease-in-out;
-      user-select: none;
+      width: 22px; height: 22px; min-width: 22px; border-radius: 50%; padding: 0;
+      border: 2px solid transparent; background: transparent; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; line-height: 1; transition: all 0.12s ease-in-out; user-select: none;
     }
     .rate-btn:hover { transform: scale(1.2); }
-    
     .rate-btn[data-b="strong"] { border-color: #10b981; background: #ecfdf5; color: transparent; }
     .rate-btn[data-b="strong"].selected { background: #059669; border-color: #059669; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
-
     .rate-btn[data-b="medium"] { border-color: #0284c7; background: #f0f9ff; color: transparent; }
     .rate-btn[data-b="medium"].selected { background: #0284c7; border-color: #0284c7; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(2,132,199,0.25); }
-
     .rate-btn[data-b="weak"] { border-color: #d97706; background: #fffbeb; color: transparent; }
     .rate-btn[data-b="weak"].selected { background: #d97706; border-color: #d97706; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(217,119,6,0.25); }
-
     .rate-btn[data-b="learning"] { border-color: #ef4444; background: #fef2f2; color: transparent; }
     .rate-btn[data-b="learning"].selected { background: #dc2626; border-color: #dc2626; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(220,38,38,0.25); }
-
     .rate-btn[data-b="never"] { border-color: #94a3b8; background: #f8fafc; color: transparent; }
     .rate-btn[data-b="never"].selected { background: #64748b; border-color: #64748b; color: #fff; transform: scale(1.1); box-shadow: 0 0 0 2px rgba(100,116,139,0.25); }
 
@@ -110,75 +94,75 @@
     .leg-dot.learning { background: #dc2626; }
     .leg-dot.never { background: #64748b; }
 
-    .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 9px 0 5px; border-top: 1px dashed var(--border); }
+    .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 0 4px; border-top: 1px dashed var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 28px; color: var(--accent); line-height: 1.6; flex: 1; text-align: right; }
-    .s-en-line { font-size: 15.5px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 28px; color: var(--ink); line-height: 1.8; flex: 1; text-align: right; }
+    .s-en-line { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--ink); line-height: 1.5; }
     .s-tr-line { font-size: 13.5px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
     .s-wbw-wrap { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin-top: 4px; }
-    .wbw-chip-sm { border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; background: var(--bg); font-size: 12px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.1s; }
+    .wbw-chip-sm { border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 3px 7px; background: transparent; font-size: 12px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.1s; }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--accent); line-height: 1.35; }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.45; }
     .wbw-chip-sm .w-en { font-size: 11.5px; color: var(--muted); direction: ltr; }
 
-    .s-hint-line { font-size: 14px; color: var(--ink); background: rgba(13, 122, 95, 0.04); border-left: 3px solid rgba(13, 122, 95, 0.32); padding: 7px 11px; border-radius: 6px; line-height: 1.75; margin-top: 3px; }
-    .s-gram-box { font-size: 14px; color: var(--ink); background: #fffbeb; border: 1px solid rgba(217,119,6,0.28); border-left: 3px solid var(--amber); padding: 8px 12px; border-radius: 7px; line-height: 1.75; margin-top: 3px; }
-    .s-gram-box summary { cursor: pointer; font-weight: 600; color: #b45309; user-select: none; }
+    .s-hint-line { font-size: 14px; color: var(--ink); background: transparent; border-left: 2.5px solid rgba(13, 122, 95, 0.35); padding: 4px 12px; border-radius: 0; line-height: 1.7; margin-top: 4px; }
+    .s-gram-box { font-size: 14px; color: var(--ink); background: rgba(161, 106, 18, 0.05); border: 0; border-left: 2.5px solid var(--amber); padding: 6px 12px; border-radius: 0; line-height: 1.7; margin-top: 4px; }
+    .s-gram-box summary { cursor: pointer; font-weight: 600; color: var(--amber); user-select: none; }
     .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; font-size: 12.5px; }
     .s-gram-link:hover { text-decoration: underline; }
 
-    /* Motivation, Rhythm & Live Energy Pacing Strip */
-    .mot-strip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px 14px; flex-wrap: wrap; }
-    .mot-left { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 240px; }
+    /* Running Header Strip: Rhythm & Energy */
+    .mot-strip { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 4px 0 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
+    .mot-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 240px; }
     .mot-top-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; }
     .mot-week { display: inline-flex; align-items: center; gap: 3px; }
-    .mot-day { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+    .mot-day { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
     .mot-day.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .mot-day.today { box-shadow: 0 0 0 2px rgba(13, 122, 95, 0.25); }
-    .mot-mode-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
-    .mot-mode-badge.light { background: #ecfdf5; color: #047857; }
-    .mot-mode-badge.surge { background: #fffbeb; color: #b45309; }
-    .mot-nurture { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-    .mot-right { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .mot-pill { border: 1px solid var(--border); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
-    .mot-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .mot-day.today { box-shadow: 0 0 0 2px rgba(13, 122, 95, 0.22); }
+    .mot-mode-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+    .mot-mode-badge.light { background: var(--accent-soft); color: var(--accent); }
+    .mot-mode-badge.surge { background: rgba(161, 106, 18, 0.12); color: var(--amber); }
+    .mot-nurture { font-size: 12px; color: var(--muted); line-height: 1.45; }
+    .mot-right { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .mot-pill { border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 999px; padding: 2px 9px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
+    .mot-pill:hover { border-color: var(--accent); color: var(--ink); }
     .mot-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .batch-progress-footer { margin-top: 14px; padding: 13px 16px; border-radius: 12px; background: var(--bg); border: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .batch-ai-nudge { margin-top: 14px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-align: left; }
-    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
-    .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #ecfdf5; color: var(--accent); border: 1px solid rgba(13,122,95,0.28); }
-    .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; border: 1px solid rgba(29,78,216,0.25); }
-    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 8px; margin-top: 8px; }
-    .cap-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; }
+    .batch-progress-footer { margin-top: 16px; padding: 14px 2px; border-radius: 0; background: transparent; border: 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .batch-ai-nudge { margin-top: 14px; padding: 12px 0; background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; text-align: left; }
+    .batch-ai-pre { white-space: pre-wrap; font-family: monospace; font-size: 11.5px; line-height: 1.45; color: var(--ink); background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 260px; overflow-y: auto; }
+    .mode-pill-teach { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(13,122,95,0.22); }
+    .mode-pill-commute { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 10px; margin-top: 8px; }
+    .cap-cell { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 6px 2px; font-size: 12px; line-height: 1.45; }
     .cap-cell b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
 
-    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
+    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 7px; font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; user-select: none; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
     .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
     /* Master Bank Table & Controls */
-    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: var(--card); margin-top: 6px; }
-    .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--card); color: var(--ink); }
+    .sheet-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent; margin-top: 6px; }
+    .m-search { width: 100%; max-width: 380px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: var(--paper-elevated); color: var(--ink); }
     .m-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
-    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(0,0,0,0.02); }
+    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--border); color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; background: transparent; }
     .m-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .m-table tr:hover { background: rgba(13, 122, 95, 0.04); }
+    .m-table tr:hover { background: rgba(13, 122, 95, 0.03); }
 
     /* Completion Banner */
-    .done-banner { text-align: center; padding: 22px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; margin-top: 16px; }
+    .done-banner { text-align: center; padding: 18px 4px; background: transparent; border: 0; border-top: 1px solid var(--accent); border-radius: 0; margin-top: 16px; }
 
     /* Mobile & Flexible Responsive Layout */
     @media (max-width: 768px) {
-      .s-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .s-header { flex-direction: column; align-items: flex-start; gap: 8px; }
       .stat-strip { width: 100%; justify-content: space-between; }
       .practice-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
       .pt-group { width: 100%; justify-content: space-between; }
       .dir-toggle { display: flex; flex: 1; }
       .dir-btn { flex: 1; text-align: center; }
       .filter-chips { width: 100%; justify-content: flex-start; }
-      
+
       .s-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .s-meta-wrap { align-self: flex-end; }
       .s-action-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -215,22 +199,20 @@
     <div id="motivationStrip"></div>
 
     <!-- Session Progress & List -->
-    <div class="card" style="padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div class="card" style="padding:10px 0;border-top:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
         <div>
           <h2 style="margin:0;font-size:16px" id="sessionTitle" title="⚪ unseen · 🔴 needs work · 🟡 building · 🟢 mastered — earn green by passing across 2+ days (✗ · ≈ · ✓)">⚡ Practice</h2>
           <div class="srs-legend-bar" id="srsLegend"></div>
         </div>
-        <span style="display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap">
-          <span style="font-size:13px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="font-size:12.5px;font-weight:600;color:var(--accent)" id="sessionCount">0 rated</span>
           <button type="button" class="pt-btn" id="btnTopNextBatch" onclick="advanceToNextBatch()" style="font-weight:700;color:var(--accent);border-color:var(--accent)" title="Finish this batch and start the next incremental Practice batch">▶ Next Batch →</button>
           <a class="pt-btn" href="audio.html?commute=1" style="text-decoration:none" title="Hands-free Commute version of Practice — active chapter sentences, Qur'an by ear, vocab &amp; spoken golden rules">🚗 Commute</a>
-          <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
-          <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards, Qur'an &amp; Motivation">📊 Capabilities</button>
-          <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo</button>
+          <a class="pt-btn" href="weekly.html" style="text-decoration:none" title="Read or print your learning booklet for the coming week">🖨️ Weekly Print</a>
           <button type="button" class="pt-btn" id="btnPause" style="display:none" title="Pause or Resume playback">⏸ Pause</button>
           <button type="button" class="pt-btn" id="btnStop" style="display:none">⏹</button>
-          <details class="more"><summary title="Direction, stream filters &amp; audio controls">⋯</summary><div class="more-body">
+          <details class="more"><summary title="Direction, stream filters, speak brief, capabilities &amp; audio controls">⋯</summary><div class="more-body">
             <div class="dir-toggle">
               <button type="button" class="dir-btn active" id="dirEnFirst" onclick="setDirection('en-first')">🇬🇧 EN → AR</button>
               <button type="button" class="dir-btn" id="dirArFirst" onclick="setDirection('ar-first')">🇸🇦 AR → EN</button>
@@ -245,6 +227,9 @@
               <button type="button" class="chip" data-filter="quran">Qur'an</button>
               <button type="button" class="chip" data-filter="everyday">Everyday</button>
             </div>
+            <button type="button" class="pt-btn" onclick="toggleTopVoiceBrief()" title="Copy or view a 3–5 min AI Voice Brief built from the exact sentences, words &amp; grammar in this batch">🗣 Speak Brief</button>
+            <button type="button" class="pt-btn" onclick="toggleCapabilityDrawer()" title="See what Practice knows you can and cannot do across Vocabulary, Sentences, Lesson Cards, Qur'an &amp; Motivation">📊 Capabilities</button>
+            <button type="button" class="pt-btn" onclick="redoBatch()" title="The same batch again, weakest first — your last verdicts decide the order">↻ Redo</button>
             <button type="button" class="pt-btn" id="btnPlayAll" title="Play batch continuously">▶ Play</button>
             <button type="button" class="pt-btn" id="btnPlayPauses" title="Plays Arabic, pauses 3s for recall, then says English">⏸ Gap</button>
             <span class="speed-sw" style="display:inline-flex;gap:3px;align-items:center">
@@ -282,20 +267,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwi7yu2g"></script>
-<script src="js/curriculum.js?v=mwi7yu2g"></script>
-<script src="js/srs.js?v=mwi7yu2g"></script>
-<script src="js/frames.js?v=mwi7yu2g"></script>
-<script src="js/freetry.js?v=mwi7yu2g"></script>
-<script src="js/practice.js?v=mwi7yu2g"></script>
-<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
-<script src="js/match.js?v=mwi7yu2g"></script>
-<script src="js/errors.js?v=mwi7yu2g"></script>
-<script src="js/tryit.js?v=mwi7yu2g"></script>
-<script src="js/app.js?v=mwi7yu2g"></script>
-<script src="js/tracker.js?v=mwi7yu2g"></script>
-<script src="js/plan.js?v=mwi7yu2g"></script>
-<script src="js/account.js?v=mwi7yu2g"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwibvv6x"></script>
+<script src="js/curriculum.js?v=mwibvv6x"></script>
+<script src="js/srs.js?v=mwibvv6x"></script>
+<script src="js/frames.js?v=mwibvv6x"></script>
+<script src="js/freetry.js?v=mwibvv6x"></script>
+<script src="js/practice.js?v=mwibvv6x"></script>
+<script src="js/lesson-cards.js?v=mwibvv6x"></script>
+<script src="js/match.js?v=mwibvv6x"></script>
+<script src="js/errors.js?v=mwibvv6x"></script>
+<script src="js/tryit.js?v=mwibvv6x"></script>
+<script src="js/app.js?v=mwibvv6x"></script>
+<script src="js/tracker.js?v=mwibvv6x"></script>
+<script src="js/plan.js?v=mwibvv6x"></script>
+<script src="js/account.js?v=mwibvv6x"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -790,22 +775,21 @@ function renderMotivationStrip(adjustNotice, offerRebuild) {
   ).join("");
   const curMood = mot.todayMood || "";
   el.innerHTML = `
-    <div class="mot-strip">
+    <div class="mot-strip" title="${escBriefHtml(mot.nurtureText)}">
       <div class="mot-left">
         <div class="mot-top-line">
           <span class="mot-week" title="${mot.activeDays7d} of ${mot.targetDays} target days active in the last 7 days (4 mornings = a full week)">${weekDots}</span>
-          <span style="font-weight:600;color:var(--ink)">${mot.activeDays7d}/${mot.targetDays} target days</span>
+          <span style="font-weight:600;color:var(--ink)">${mot.activeDays7d}/${mot.targetDays} days</span>
           <span class="mot-mode-badge ${modeCls}">${escBriefHtml(mot.modeLabel)}</span>
           ${adjustNotice ? `<span style="font-size:12px;font-weight:700;color:var(--accent)">✓ ${escBriefHtml(adjustNotice)}</span>` : ""}
           ${offerRebuild ? `<button type="button" class="pt-btn" onclick="rebuildBatchForMood()" style="font-size:11.5px;padding:2px 8px;color:var(--accent);border-color:var(--accent);font-weight:700">↻ Adjust current batch now</button>` : ""}
         </div>
-        <div class="mot-nurture">${escBriefHtml(mot.nurtureText)}</div>
+        ${(adjustNotice || offerRebuild) ? `<div class="mot-nurture">${escBriefHtml(mot.nurtureText)}</div>` : ""}
       </div>
       <div class="mot-right" role="group" aria-label="How is your energy today?">
-        <span style="font-size:12px;color:var(--muted);font-weight:600">Energy:</span>
-        <button type="button" class="mot-pill ${curMood === "heavy" ? "active" : ""}" onclick="setPracticeMood('heavy')" title="Tired or pressed for time — switches Practice immediately to a calm 6-unit review round (no new items)">😮‍💨 Low energy</button>
-        <button type="button" class="mot-pill ${curMood === "fine" ? "active" : ""}" onclick="setPracticeMood('fine')" title="Normal day — balanced 10-unit Daily Core advancing weekly Chapter sentences + review">🙂 Steady</button>
-        <button type="button" class="mot-pill ${curMood === "good" ? "active" : ""}" onclick="setPracticeMood('good')" title="Feeling sharp — full pace advancing weekly Chapter, Lesson Cards &amp; active recall">⚡ Energised</button>
+        <button type="button" class="mot-pill ${curMood === "heavy" ? "active" : ""}" onclick="setPracticeMood('heavy')" title="Tired or pressed for time — switches Practice immediately to a calm 6-unit review round (no new items)">Low</button>
+        <button type="button" class="mot-pill ${curMood === "fine" ? "active" : ""}" onclick="setPracticeMood('fine')" title="Normal day — balanced 10-unit Daily Core advancing weekly Chapter sentences + review">Steady</button>
+        <button type="button" class="mot-pill ${curMood === "good" ? "active" : ""}" onclick="setPracticeMood('good')" title="Feeling sharp — full pace advancing weekly Chapter, Lesson Cards &amp; active recall">Energised</button>
       </div>
     </div>
   `;

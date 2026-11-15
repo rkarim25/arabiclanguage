@@ -15,42 +15,42 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
-  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
   <style>
-    .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
     .m-search {
-      padding: 8px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px;
-      width: 300px; max-width: 100%; background: var(--bg); color: var(--ink);
+      padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 13.5px;
+      width: 270px; max-width: 100%; background: var(--paper-elevated); color: var(--ink);
     }
     .chip {
-      border: 1px solid var(--border); background: var(--card); color: var(--muted);
-      border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--border); background: transparent; color: var(--muted);
+      border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; cursor: pointer;
       display: inline-flex; align-items: center; gap: 5px;
     }
     .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .m-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-    .m-table th { text-align: left; padding: 9px 10px; border-bottom: 2px solid var(--border); font-size: 11.5px; text-transform: uppercase; color: var(--muted); }
-    .m-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .m-table tr:hover { background: rgba(0,0,0,0.015); }
+    .m-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .m-table th { text-align: left; padding: 8px 10px; border-bottom: 1.5px solid var(--border); font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: transparent; }
+    .m-table td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .m-table tr:hover { background: rgba(13, 122, 95, 0.02); }
     .line-toggle-btn {
-      border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+      border: 1px solid var(--border); background: transparent; color: var(--muted);
       border-radius: 6px; padding: 2px 6px; font-size: 11.5px; cursor: pointer; line-height: 1.2;
     }
     .line-toggle-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
     .s-gram-box {
-      margin-top: 5px; padding: 6px 10px; border-radius: 7px; font-size: 13.5px; line-height: 1.7;
-      background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.16); color: var(--ink);
+      margin-top: 5px; padding: 5px 10px; border-radius: 0; font-size: 13.5px; line-height: 1.65;
+      background: transparent; border: 0; border-left: 2.5px solid var(--accent); color: var(--ink);
     }
-    .s-gram-box summary { cursor: pointer; font-weight: 600; color: #1d4ed8; list-style: none; }
+    .s-gram-box summary { cursor: pointer; font-weight: 600; color: var(--accent); list-style: none; }
     .s-gram-box summary::-webkit-details-marker { display: none; }
-    .s-gram-link { color: #1d4ed8; font-weight: 600; text-decoration: none; margin-left: 4px; white-space: nowrap; }
+    .s-gram-link { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 4px; white-space: nowrap; }
     .wbw-chip-sm {
-      display: inline-flex; flex-direction: column; align-items: center; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; cursor: pointer; transition: all 0.12s;
+      display: inline-flex; flex-direction: column; align-items: center; background: transparent;
+      border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; cursor: pointer; transition: all 0.12s;
     }
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.35; }
+    .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.45; }
     .wbw-chip-sm .w-en { font-size: 11.5px; color: var(--muted); }
     @media (max-width: 720px) { .m-table { min-width: 620px; } }
   </style>
@@ -69,32 +69,12 @@
     </div>
   </div>
 
-  <div id="sentMasteryBar" style="margin-bottom:12px"></div>
+  <div id="sentMasteryBar" style="margin-bottom:10px"></div>
 
-  <div class="card" style="padding:16px 18px">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
-      <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, transliteration, or grammar…" oninput="renderMasterBank()">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All Sources</button>
-        <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">📖 Chapters</button>
-        <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">🧑‍🏫 Preply</button>
-        <button type="button" class="chip b-filter" data-bfilter="everyday" onclick="setBankFilter('everyday', this)">🗣 Everyday</button>
-        <button type="button" class="chip b-filter" data-bfilter="mosque" onclick="setBankFilter('mosque', this)">🕋 Mosque &amp; Du'ās</button>
-        <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">🕌 Qur'ān</button>
-        <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">⏰ Due</button>
-      </div>
-    </div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center" id="dotFilterBar">
-        <button type="button" class="chip active d-filter" data-dfilter="all" onclick="setDotFilter('all', this)">All Dots</button>
-        <button type="button" class="chip d-filter" data-dfilter="green" onclick="setDotFilter('green', this)"><span class="m-dot m-green sm"></span> Mastered <span id="cnt-green"></span></button>
-        <button type="button" class="chip d-filter" data-dfilter="amber" onclick="setDotFilter('amber', this)"><span class="m-dot m-amber sm"></span> Building <span id="cnt-amber"></span></button>
-        <button type="button" class="chip d-filter" data-dfilter="red" onclick="setDotFilter('red', this)"><span class="m-dot m-red sm"></span> Needs work <span id="cnt-red"></span></button>
-        <button type="button" class="chip d-filter" data-dfilter="grey" onclick="setDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="cnt-grey"></span></button>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <span style="font-size:11.5px;color:var(--muted)">Review:</span>
+  <div class="card" style="padding:10px 0;border-top:0">
+    <div class="calm-row" style="padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <input type="text" id="bankSearch" class="m-search" placeholder="🔍 Search English, Arabic, or grammar…" oninput="renderMasterBank()">
+      <span style="display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap">
         <button type="button" class="chip active s-rmode" id="btnSentModeAll" onclick="setSentReviewMode('all')">All</button>
         <button type="button" class="chip s-rmode" id="btnSentModeEn" onclick="setSentReviewMode('en-only')" title="Hide Arabic — produce Arabic from English, tap to check">🇬🇧 EN → AR</button>
         <button type="button" class="chip s-rmode" id="btnSentModeAr" onclick="setSentReviewMode('ar-only')" title="Hide English — recognise meaning from Arabic, tap to check">🇸🇦 AR → EN</button>
@@ -102,11 +82,29 @@
           <button type="button" class="chip" onclick="toggleAllSentReveal(true)">👁 Reveal All</button>
           <button type="button" class="chip" onclick="toggleAllSentReveal(false)">🙈 Hide All</button>
         </span>
+      </span>
+      <details class="more"><summary>Filter &amp; Tools</summary><div class="more-body">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;width:100%">
+          <button type="button" class="chip active b-filter" data-bfilter="all" onclick="setBankFilter('all', this)">All Sources</button>
+          <button type="button" class="chip b-filter" data-bfilter="chapters" onclick="setBankFilter('chapters', this)">📖 Chapters</button>
+          <button type="button" class="chip b-filter" data-bfilter="teacher" onclick="setBankFilter('teacher', this)">🧑‍🏫 Preply</button>
+          <button type="button" class="chip b-filter" data-bfilter="everyday" onclick="setBankFilter('everyday', this)">🗣 Everyday</button>
+          <button type="button" class="chip b-filter" data-bfilter="mosque" onclick="setBankFilter('mosque', this)">🕋 Mosque &amp; Du'ās</button>
+          <button type="button" class="chip b-filter" data-bfilter="quran" onclick="setBankFilter('quran', this)">🕌 Qur'ān</button>
+          <button type="button" class="chip b-filter" data-bfilter="due" onclick="setBankFilter('due', this)">⏰ Due</button>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center" id="dotFilterBar">
+          <button type="button" class="chip active d-filter" data-dfilter="all" onclick="setDotFilter('all', this)">All Dots</button>
+          <button type="button" class="chip d-filter" data-dfilter="green" onclick="setDotFilter('green', this)"><span class="m-dot m-green sm"></span> Mastered <span id="cnt-green"></span></button>
+          <button type="button" class="chip d-filter" data-dfilter="amber" onclick="setDotFilter('amber', this)"><span class="m-dot m-amber sm"></span> Building <span id="cnt-amber"></span></button>
+          <button type="button" class="chip d-filter" data-dfilter="red" onclick="setDotFilter('red', this)"><span class="m-dot m-red sm"></span> Needs work <span id="cnt-red"></span></button>
+          <button type="button" class="chip d-filter" data-dfilter="grey" onclick="setDotFilter('grey', this)"><span class="m-dot m-grey sm"></span> Unseen <span id="cnt-grey"></span></button>
+        </div>
         <button type="button" class="chip" id="btnSortWeakest" onclick="toggleWeakestSort()">📉 Weakest First</button>
         <button type="button" class="chip" id="btnToggleAllTblWbw" onclick="toggleAllTblWbw()" title="Show/hide word breakdown">🧩 Words</button>
         <button type="button" class="chip" id="btnToggleAllTblTr" onclick="toggleAllTblTr()" title="Show/hide transliteration">🔤 Translit</button>
         <button type="button" class="chip" onclick="resortMasterSentences()" title="Re-sort / refresh list">↻ Resort</button>
-      </div>
+      </div></details>
     </div>
 
     <div style="overflow-x:auto">
@@ -129,16 +127,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwi7yu2g"></script>
-<script src="js/curriculum.js?v=mwi7yu2g"></script>
-<script src="js/srs.js?v=mwi7yu2g"></script>
-<script src="js/frames.js?v=mwi7yu2g"></script>
-<script src="js/practice.js?v=mwi7yu2g"></script>
-<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
-<script src="js/app.js?v=mwi7yu2g"></script>
-<script src="js/tracker.js?v=mwi7yu2g"></script>
-<script src="js/plan.js?v=mwi7yu2g"></script>
-<script src="js/account.js?v=mwi7yu2g"></script>
+<script src="js/progress-model.js?v=mwibvv6x"></script>
+<script src="js/curriculum.js?v=mwibvv6x"></script>
+<script src="js/srs.js?v=mwibvv6x"></script>
+<script src="js/frames.js?v=mwibvv6x"></script>
+<script src="js/practice.js?v=mwibvv6x"></script>
+<script src="js/lesson-cards.js?v=mwibvv6x"></script>
+<script src="js/app.js?v=mwibvv6x"></script>
+<script src="js/tracker.js?v=mwibvv6x"></script>
+<script src="js/plan.js?v=mwibvv6x"></script>
+<script src="js/account.js?v=mwibvv6x"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -282,16 +280,16 @@ function renderSentMasterySummary() {
   const aPct = sc.total ? ((sc.amber / sc.total) * 100).toFixed(1) : 0;
   const rPct = sc.total ? ((sc.red / sc.total) * 100).toFixed(1) : 0;
   el.innerHTML = `
-    <div class="card" style="padding:11px 15px;margin-bottom:0">
+    <div style="padding:2px 0 8px">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-size:12.5px">
         <span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap">
           <b>${sc.total.toLocaleString()} Sentences</b>
-          <span><span class="m-dot m-green"></span> <b>${sc.green}</b> Mastered</span>
-          <span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> Building</span>
-          <span><span class="m-dot m-red"></span> <b>${sc.red}</b> Needs work</span>
-          <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> Unseen</span>
+          <span><span class="m-dot m-green"></span> <b>${sc.green}</b> mastered</span>
+          <span><span class="m-dot m-amber"></span> <b>${sc.amber}</b> building</span>
+          <span><span class="m-dot m-red"></span> <b>${sc.red}</b> needs work</span>
+          <span><span class="m-dot m-grey"></span> <b>${sc.grey}</b> unseen</span>
         </span>
-        <span style="color:var(--muted);font-size:12px">Review directly below, in Chapters, Qur'ān, or in ⚡ Practice — all update the same dots</span>
+        <span style="color:var(--muted);font-size:12px">Tap any line to hear or rate</span>
       </div>
       <div class="m-progress-track">
         <div class="m-progress-seg green" style="width:${gPct}%"></div>

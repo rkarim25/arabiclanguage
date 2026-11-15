@@ -8,34 +8,34 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
-  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
        logical way of organising things are grouped together so that I can revise and
        learn from there. You can put in others and make grammar a sub page there."
        Book-like: section headings, one row per set, the table opens in place. */
-    .set-section { margin: 18px 0 6px; }
-    .set-section h2 { font-size: 15px; margin: 0 0 6px; color: var(--muted); font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
-    .set-row { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
-    .set-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; user-select: none; }
-    .set-head:hover { background: var(--accent-soft, rgba(13,122,95,.06)); }
+    .set-section { margin: 22px 0 6px; }
+    .set-section h2 { font-family: var(--font-serif); font-size: 16px; margin: 0 0 6px; color: var(--muted); font-weight: 600; letter-spacing: .01em; text-transform: none; }
+    .set-row { background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; margin-bottom: 0; overflow: hidden; }
+    .set-head { display: flex; align-items: center; gap: 10px; padding: 12px 2px; cursor: pointer; user-select: none; }
+    .set-head:hover { background: var(--accent-soft, rgba(13,122,95,.05)); }
     .set-head .ic { font-size: 18px; width: 26px; text-align: center; }
-    .set-head .ttl { font-weight: 600; font-size: 15px; flex: 1; }
-    .set-head .ttl small { display: block; font-weight: 400; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
-    .set-head .ar { font-family: var(--font-ar); font-size: 21px; color: var(--accent); direction: rtl; }
+    .set-head .ttl { font-family: var(--font-serif); font-weight: 600; font-size: 15.5px; flex: 1; }
+    .set-head .ttl small { font-family: var(--font-ui); display: block; font-weight: 400; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+    .set-head .ar { font-family: var(--font-ar); font-size: 22px; color: var(--ink); direction: rtl; }
     .set-head .cnt { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .set-head .chev { color: var(--muted); font-size: 12px; transition: transform .15s; }
     .set-row.open .set-head .chev { transform: rotate(90deg); }
-    .set-body { display: none; border-top: 1px dashed var(--border); padding: 6px 10px 12px; }
+    .set-body { display: none; border-top: 1px dashed var(--border); padding: 8px 2px 14px; }
     .set-row.open .set-body { display: block; }
     .set-body .vocab-table { font-size: 14.5px; }
     .set-body .vocab-table td.ar-cell { font-size: 23px; }
-    .set-body .vocab-table td { padding: 6px 8px; }
+    .set-body .vocab-table td { padding: 7px 8px; }
     .set-body .note-cell { font-size: 12px; color: var(--muted); }
     .set-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
-    .set-links a { font-size: 13px; color: var(--accent); text-decoration: none; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; background: var(--bg); }
+    .set-links a { font-size: 13px; color: var(--accent); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; background: transparent; }
     .set-links a:hover { border-color: var(--accent); }
     .g-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 14px; padding: 6px 4px 2px; }
     .g-list a { text-decoration: none; color: inherit; font-size: 13.5px; display: flex; gap: 8px; align-items: baseline; padding: 4px 2px; border-bottom: 1px dotted var(--border); }
@@ -58,11 +58,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwi7yu2g"></script>
-<script src="js/lesson-cards.js?v=mwi7yu2g"></script>
-<script src="js/app.js?v=mwi7yu2g"></script>
-<script src="js/tracker.js?v=mwi7yu2g"></script>
-<script src="js/plan.js?v=mwi7yu2g"></script>
+<script src="js/srs.js?v=mwibvv6x"></script>
+<script src="js/lesson-cards.js?v=mwibvv6x"></script>
+<script src="js/app.js?v=mwibvv6x"></script>
+<script src="js/tracker.js?v=mwibvv6x"></script>
+<script src="js/plan.js?v=mwibvv6x"></script>
 <script>
 renderNav("sets");
 trackPage("sets");

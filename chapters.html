@@ -8,74 +8,74 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwi7yu2g">
-  <link rel="stylesheet" href="css/style.css?v=mwi7yu2g">
+  <link rel="stylesheet" href="css/fonts.css?v=mwibvv6x">
+  <link rel="stylesheet" href="css/style.css?v=mwibvv6x">
   <style>
-    .reader-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
-    .chap-select { font-size: 14.5px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
+    .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
+    .chap-select { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--paper-elevated); color: var(--ink); }
     .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; background: var(--accent-soft); color: var(--accent); }
     .status-pill.done { background: var(--accent); color: #fff; }
 
     /* Collapsible Coach Card */
-    details.coach-details { border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 12px; padding: 9px 14px; margin-bottom: 14px; cursor: pointer; }
+    details.coach-details { border: 0; border-left: 2.5px solid var(--accent); background: var(--accent-soft); border-radius: 0; padding: 8px 14px; margin-bottom: 14px; cursor: pointer; }
     details.coach-details > summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; color: var(--accent); }
     details.coach-details > summary::-webkit-details-marker { display: none; }
-    details.coach-details[open] { background: var(--card); border-color: var(--border); }
+    details.coach-details[open] { background: transparent; border-color: var(--border); }
     details.coach-details .coach-body { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); cursor: default; }
 
-    /* Sentences Table */
-    .sentence-list { display: flex; flex-direction: column; gap: 10px; }
-    .s-row { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); transition: all 0.15s; }
-    .s-row:hover { border-color: var(--accent); }
-    .s-row.active { border-color: var(--accent); background: var(--accent-soft); }
+    /* Quiet Interactive Book Reader Spread */
+    .sentence-list { display: flex; flex-direction: column; gap: 0; }
+    .s-row { display: flex; flex-direction: column; gap: 8px; padding: 14px 2px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent; transition: background 0.15s; }
+    .s-row:last-child { border-bottom: 0; }
+    .s-row:hover { background: rgba(13, 122, 95, 0.015); }
+    .s-row.active { border-left: 3px solid var(--accent); padding-left: 12px; background: var(--accent-soft); }
     .s-main { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; width: 100%; flex-wrap: wrap; }
     .s-ar-wrap { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex: 1; min-width: 240px; }
-    .s-ar { font-family: var(--font-ar); font-size: 24px; line-height: 1.6; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
+    .s-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
     .s-meta { flex: 1; min-width: 220px; }
-    .s-en { font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .s-en { font-family: var(--font-serif); font-size: 15.5px; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.5; }
     .s-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-bottom: 2px; }
     .s-hint { font-size: 12px; color: var(--muted); }
     .s-actions { display: flex; gap: 6px; align-items: center; }
     .s-wbw { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 2px; }
-    .wbw-chip { border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; background: var(--bg); font-size: 13px; cursor: pointer; text-align: center; transition: all 0.12s; }
-    .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
-    .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 17px; color: var(--accent); display: block; line-height: 1.35; }
+    .wbw-chip { border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; background: transparent; font-size: 13px; cursor: pointer; text-align: center; transition: all 0.12s; }
+    .wbw-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .wbw-chip .w-ar { font-family: var(--font-ar); font-size: 18px; color: var(--ink); display: block; line-height: 1.45; }
     .wbw-chip .w-en { font-size: 10.5px; color: var(--muted); display: block; direction: ltr; margin-top: 2px; }
 
-    .line-toggle-btn { border: 1px solid var(--border); background: var(--card); color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
+    .line-toggle-btn { border: 1px solid var(--border); background: transparent; color: var(--muted); padding: 2px 8px; font-size: 11.5px; font-weight: 600; border-radius: 999px; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
     .line-toggle-btn:hover { border-color: var(--accent); color: var(--ink); }
     .line-toggle-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 
     /* Audio Toolbar */
-    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 14px; padding: 8px 12px; background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px; }
-    @media (prefers-color-scheme: dark) { .audio-bar { background: rgba(255,255,255,0.04); } }
+    .audio-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 14px; padding: 8px 0 12px; background: transparent; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
     .audio-bar button { padding: 5px 12px; font-size: 13px; font-weight: 500; }
     .audio-bar button.playing { background: var(--amber); color: #fff; border-color: var(--amber); }
 
     /* Quran Verse Card */
-    .q-verse { padding: 10px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+    .q-verse { padding: 12px 0; border-bottom: 1px solid var(--border); }
     .q-verse:last-child { border-bottom: none; }
-    .q-ar { font-family: var(--font-ar); font-size: 24px; line-height: 1.9; direction: rtl; text-align: right; color: var(--ink); }
+    .q-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.95; direction: rtl; text-align: right; color: var(--ink); }
     .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0 4px; }
-    .q-chip { border: 1px solid var(--border); border-radius: 8px; padding: 3px 8px; background: var(--card); text-align: center; cursor: pointer; }
+    .q-chip { border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; background: transparent; text-align: center; cursor: pointer; }
     .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .q-chip .ar-w { font-family: var(--font-ar); font-size: 19px; color: var(--accent); display: block; }
+    .q-chip .ar-w { font-family: var(--font-ar); font-size: 19px; color: var(--ink); display: block; }
     .q-chip .en-w { font-size: 11px; color: var(--muted); display: block; direction: ltr; }
-    .q-trans { font-size: 14.5px; color: var(--ink); line-height: 1.5; }
-    .q-ref { font-size: 11.5px; font-weight: 700; color: var(--amber); }
+    .q-trans { font-family: var(--font-serif); font-size: 15px; color: var(--ink); line-height: 1.55; }
+    .q-ref { font-size: 11.5px; font-weight: 600; color: var(--amber); }
 
     /* Conditional Grammar Box */
-    .grammar-box { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 14px 0; }
+    .grammar-box { background: transparent; border-left: 2.5px solid var(--amber); border-radius: 0; padding: 8px 14px; margin: 14px 0; }
     .grammar-box h3 { margin: 0 0 4px; font-size: 15px; color: var(--amber); }
     .grammar-box p { margin: 0; font-size: 13.5px; line-height: 1.6; }
 
     /* AI Conversation Box */
-    .ai-box { background: #fdfaf4; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
-    .ai-prompt-pre { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; color: var(--ink); margin: 8px 0; }
+    .ai-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 12px 0; }
+    .ai-prompt-pre { background: var(--paper-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; color: var(--ink); margin: 8px 0; }
 
     /* Chapter Test */
-    .test-box { border: 2px solid var(--accent); border-radius: 14px; padding: 16px 18px; background: var(--card); margin-top: 18px; }
-    .q-opt { display: block; width: 100%; text-align: left; padding: 9px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-size: 14px; }
+    .test-box { border: 0; border-top: 2px solid var(--accent); border-radius: 0; padding: 16px 0; background: transparent; margin-top: 18px; }
+    .q-opt { display: block; width: 100%; text-align: left; padding: 9px 14px; margin: 6px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--paper-elevated); cursor: pointer; font-size: 14px; }
     .q-opt:hover { border-color: var(--accent); background: var(--accent-soft); }
     .q-opt.correct { background: var(--accent-soft); border-color: var(--accent); font-weight: 700; color: var(--accent); }
     .q-opt.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
@@ -110,6 +110,7 @@
       </div>
       <div class="resume-actions">
         <a href="index.html" id="btnPractiseChapter" class="btn-resume" style="background:var(--accent);color:#fff;border-color:var(--accent);text-decoration:none" title="Practise this chapter dynamically in Practice (auto-syncs sentences, words &amp; dots)">⚡ Practise Chapter</a>
+        <a href="weekly.html" id="btnPrintChapterWeek" class="btn-resume" style="text-decoration:none" title="Print or save this chapter's weekly booklet as PDF">🖨️ Print Week</a>
         <button type="button" class="btn-resume" id="btnResumeLine" onclick="jumpToSavedLine()" title="Jump to saved sentence row">📍 Line <span id="lblResumeLineNum">1</span></button>
         <button type="button" class="btn-resume audio" id="btnResumeAudio" onclick="playFromSavedLine()" title="Play audio continuously starting from this sentence">▶ Play from <span id="lblResumeAudioNum">1</span></button>
       </div>
@@ -251,16 +252,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwi7yu2g"></script>
-<script src="js/curriculum.js?v=mwi7yu2g"></script>
-<script src="js/srs.js?v=mwi7yu2g"></script>
-<script src="js/match.js?v=mwi7yu2g"></script>
-<script src="js/errors.js?v=mwi7yu2g"></script>
-<script src="js/frames.js?v=mwi7yu2g"></script>
-<script src="js/app.js?v=mwi7yu2g"></script>
-<script src="js/tracker.js?v=mwi7yu2g"></script>
-<script src="js/plan.js?v=mwi7yu2g"></script>
-<script src="js/account.js?v=mwi7yu2g"></script>
+<script src="js/progress-model.js?v=mwibvv6x"></script>
+<script src="js/curriculum.js?v=mwibvv6x"></script>
+<script src="js/srs.js?v=mwibvv6x"></script>
+<script src="js/match.js?v=mwibvv6x"></script>
+<script src="js/errors.js?v=mwibvv6x"></script>
+<script src="js/frames.js?v=mwibvv6x"></script>
+<script src="js/app.js?v=mwibvv6x"></script>
+<script src="js/tracker.js?v=mwibvv6x"></script>
+<script src="js/plan.js?v=mwibvv6x"></script>
+<script src="js/account.js?v=mwibvv6x"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3707,11 +3708,15 @@ function loadChapter(chap, resumeLineIdx) {
   resetTestArea();
   renderAiReportHistory();
 
-  // Update dynamic Practice link for this chapter
+  // Update dynamic Practice & Weekly Print links for this chapter
   const btnPracChap = document.getElementById("btnPractiseChapter");
   if (btnPracChap && chap) {
     btnPracChap.href = "index.html?chap=" + encodeURIComponent(chap.id);
     btnPracChap.textContent = "⚡ Practise Ch " + chap.num;
+  }
+  const btnPrintWeek = document.getElementById("btnPrintChapterWeek");
+  if (btnPrintWeek && chap) {
+    btnPrintWeek.href = "weekly.html?chap=" + encodeURIComponent(chap.num);
   }
 
   // Update Selector and Resume Banner
