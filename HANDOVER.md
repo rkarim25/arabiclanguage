@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-14  
+**Last Updated:** 2026-11-15  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,11 +77,11 @@
 
 ---
 
-## 2. Current Verified State (14 Nov 2026 — Saturday Evening & Preply Prep)
+## 2. Current Verified State (15 Nov 2026 — Sunday Evening & Post-Lesson Review)
 
-- **Telemetry & SRS Progress:** 4,258 total telemetry events (+189 in last 24h); 1,265 tracked SRS cards (682 cleared: 618 active solid in Box 3–5 + 64 retired/never; 422 active learning in Box 1–2: 366 Box 1 + 56 Box 2, 161 in Box 0). Scored **28/29** on Al-Fātiḥah word-by-word test and completed Saturday Practice Batches (`mood: "good"`).
-- **Saturday 14 Nov Slips Queue:** `مِصْعَد` (lift/elevator), `الآنَ` (now), `مَرَّة` (time/occasion), `الاثْنَيْن` (Monday), `كَيْفَ كَانَ يَوْمُكِ؟` (to Saba, -ki), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (88:13), and `ٱلْمَغْضُوبِ` (1:7 wrath/anger root).
-- **Sunday 15 Nov 07:00 UK Preply Lesson:** Rehearsal and warmup primed in `SPEAK_WITH_AI.md` (Prompt JJ), `chapters.html`, and `class.html` (Village breakfast, time, ordinals, past verbs, negative past).
+- **Telemetry & SRS Progress:** 4,269 total telemetry events; 1,266 tracked SRS cards (215 green/mastered incl. 64 retired, 890 amber building, 161 red needs work). Completed Sunday Practice and awaiting Sunday 15 Nov Preply lesson notes/photos to ingest.
+- **Recent Slips Queue:** `مِصْعَد` (lift/elevator), `طَابِق` (floor), `الآنَ` (now), `مَرَّة` (time/occasion), `الاثْنَيْن` (Monday), `يَوْمَ الثُّلَاثَاءِ` (Tuesday), `أُرَتِّبُ` (I arrange/tidy), `حَفْلَة` (party), `كَيْفَ كَانَ يَوْمُكِ؟` (to Saba, -ki), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (88:13), and `ٱلْمَغْضُوبِ` (1:7 wrath/anger root).
+- **Sunday 15 Nov 07:00 UK Preply Lesson:** Post-lesson debrief & 4-Pillar Qur'ān Decoding prompt primed in `SPEAK_WITH_AI.md` (Prompt KK), `chapters.html`, and `class.html` (Village breakfast, time, ordinals, past verbs, negative past).
 - **Chapters 1–3:** Mastered at 100% on chapter tests; **Chapter 4 (Daily Routine, Time & Tenses)** is the active weekly Chapter advancing automatically via Practice.
 - **Motivation, Energy & Session-Adjustment Engine (`Practice.summarizeMotivation`, `#motivationStrip`):** Live 7-day consistency rhythm (`X/4 target days` — zero guilt on rest days) + 1-tap `😮‍💨 Low energy / 🙂 Steady / ⚡ Energised` selector at the top of Practice that immediately scales session budget (`6.0` light confidence review vs `10.0` daily core vs `surge`) and feeds post-batch check-ins (`planMoodHTML`) + `📊 Capabilities`.
 - **Decluttered Practice Layout & Next-Batch Flow (`index.html`):** Removed confusing `"🎯 Try them all · ✨ Free try · 🎧 By ear"` row, moved Chapter 4 progress (`#homeChapStrip`) and Coach's Note (`#coachCard`) below `#viewPractice`, and added always-visible **`▶ Batch N →`** controls in both the Practice header and `#doneArea` (even on partially rated batches).
