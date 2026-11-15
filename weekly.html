@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwidpt4o">
-  <link rel="stylesheet" href="css/style.css?v=mwidpt4o">
+  <link rel="stylesheet" href="css/fonts.css?v=mwidwev5">
+  <link rel="stylesheet" href="css/style.css?v=mwidwev5">
   <style>
     main { max-width: 980px; }
     .wk-controls {
@@ -150,6 +150,12 @@
     body.wk-hide-tr .wk-tr, body.wk-hide-tr .g-tr, body.wk-hide-tr .lc-tr, body.wk-hide-tr .lc-ex-tr { display: none !important; }
     body.wk-hide-boxes .wk-boxes { display: none !important; }
 
+    /* Screen layout treats the print margin shell as a transparent block */
+    .wk-print-shell, .wk-print-shell > tbody, .wk-print-shell > tbody > tr, .wk-print-shell > tbody > tr > td.wk-print-body {
+      display: block; width: 100%; margin: 0; padding: 0; border: 0;
+    }
+    .wk-print-shell > thead, .wk-print-shell > tfoot { display: none; }
+
     @media (max-width: 680px) {
       .wk-row { grid-template-columns: 22px minmax(0, 1fr); }
       .wk-ar-col { grid-column: 2; }
@@ -157,9 +163,9 @@
       .wk-title { font-size: 23px; }
     }
 
-    /* Clean A4 PDF Output */
+    /* Clean A4 PDF Output — margin:0 hides browser date/time header & URL footer; table spacers restore 13mm/14mm margins on every page */
     @media print {
-      @page { size: A4 portrait; margin: 13mm 14mm; }
+      @page { size: A4 portrait; margin: 0; }
       html, body {
         background: #fff !important; color: #111 !important;
         --bg: #fff; --card: transparent; --paper-elevated: #fff;
@@ -169,6 +175,14 @@
       nav, .no-print, #notePen, #noteOverlay, #wordPop, .gloss-pop, #planBar,
       .lc-speak-btn, .wk-audio-btn, footer { display: none !important; }
       main { max-width: none !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .wk-print-shell { display: table !important; width: 100% !important; border-collapse: collapse; }
+      .wk-print-shell > thead { display: table-header-group !important; }
+      .wk-print-shell > tfoot { display: table-footer-group !important; }
+      .wk-print-shell > tbody { display: table-row-group !important; }
+      .wk-print-shell > thead > tr, .wk-print-shell > tbody > tr, .wk-print-shell > tfoot > tr { display: table-row !important; }
+      .wk-print-shell > thead > tr > td, .wk-print-shell > tfoot > tr > td { display: table-cell !important; padding: 0 !important; border: 0 !important; }
+      .wk-print-shell > tbody > tr > td.wk-print-body { display: table-cell !important; padding: 0 14mm !important; border: 0 !important; }
+      .wk-print-margin { height: 13mm; }
       .m-dot { display: none !important; }
       .wk-sec { margin-top: 16pt; padding-top: 10pt; }
       .wk-row { padding: 5pt 0; gap: 4pt 10pt; }
@@ -201,12 +215,12 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwidpt4o"></script>
-<script src="js/practice.js?v=mwidpt4o"></script>
-<script src="js/lesson-cards.js?v=mwidpt4o"></script>
-<script src="js/app.js?v=mwidpt4o"></script>
-<script src="js/tracker.js?v=mwidpt4o"></script>
-<script src="js/plan.js?v=mwidpt4o"></script>
+<script src="js/srs.js?v=mwidwev5"></script>
+<script src="js/practice.js?v=mwidwev5"></script>
+<script src="js/lesson-cards.js?v=mwidwev5"></script>
+<script src="js/app.js?v=mwidwev5"></script>
+<script src="js/tracker.js?v=mwidwev5"></script>
+<script src="js/plan.js?v=mwidwev5"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -519,20 +533,24 @@ function renderBooklet() {
   }).join("");
 
   const html = `
-    <div class="wk-titleplate">
-      <div class="wk-kicker">${bookMode ? "Book Chapter Edition · Arabic Mastery Programme" : "Weekly Study Booklet · Arabic Mastery Programme"}</div>
-      <h1 class="wk-title">
-        <span>${esc(chap.title)}</span>
-        <span class="ar-sub" dir="rtl">كُرَّاسَةُ الأُسْبُوع</span>
-      </h1>
-      <div class="wk-meta">
-        ${bookMode ? `Standalone Book Chapter · <b>Ch ${chap.num}</b>` : `Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green)`} ·
-        Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save This Week's PDF</b> for A4 paper.
-      </div>
-    </div>
+    <table class="wk-print-shell" role="presentation">
+      <thead><tr><td><div class="wk-print-margin"></div></td></tr></thead>
+      <tbody>
+        <tr><td class="wk-print-body">
+          <div class="wk-titleplate">
+            <div class="wk-kicker">${bookMode ? "Book Chapter Edition · Arabic Mastery Programme" : "Weekly Study Booklet · Arabic Mastery Programme"}</div>
+            <h1 class="wk-title">
+              <span>${esc(chap.title)}</span>
+              <span class="ar-sub" dir="rtl">كُرَّاسَةُ الأُسْبُوع</span>
+            </h1>
+            <div class="wk-meta">
+              ${bookMode ? `Standalone Book Chapter · <b>Ch ${chap.num}</b>` : `Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green)`}<span class="no-print"> ·
+              Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save This Week's PDF</b> for A4 paper.</span>
+            </div>
+          </div>
 
-    <!-- SECTION I: ACTIVE CHAPTER -->
-    <section class="wk-sec">
+          <!-- SECTION I: ACTIVE CHAPTER -->
+          <section class="wk-sec">
       <h2 class="wk-sec-h"><span>I. This Week's Chapter — 10 Core Sentences</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Speak aloud before looking</span></h2>
       <p class="wk-sec-sub">Read the English line on the left, produce the Arabic aloud, then glance right to verify.</p>
       <div class="wk-list">
@@ -554,10 +572,12 @@ function renderBooklet() {
         <div class="wk-grammar-note">${chap.grammar.text}</div>
       ` : ""}
     </section>
+        </td></tr>
 
-    <!-- SECTION II: 2 PRIORITY LESSON CARDS -->
+        <!-- SECTION II: 2 PRIORITY LESSON CARDS -->
+        <tr class="${lcPicks.length ? "wk-pagebreak" : ""}"><td class="wk-print-body">
     ${lcPicks.length ? `
-      <section class="wk-sec wk-pagebreak">
+      <section class="wk-sec">
         <h2 class="wk-sec-h"><span>II. Priority Mental Maps (${lcPicks.length} Lesson Cards)</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Unmastered systems for this week</span></h2>
         <p class="wk-sec-sub">Study the pattern once as a single picture before drilling individual sentences in Practice.</p>
         ${lcPicks.map(p => `
@@ -663,6 +683,10 @@ function renderBooklet() {
       <span>Arabic Learning System · rkarim25.github.io/arabiclanguage</span>
       <span>Active Study Edition · Mishary Rashid Alafasy Qur'ān &amp; Natural MSA</span>
     </div>
+        </td></tr>
+      </tbody>
+      <tfoot><tr><td><div class="wk-print-margin"></div></td></tr></tfoot>
+    </table>
   `;
 
   document.getElementById("weeklyBook").innerHTML = html;
