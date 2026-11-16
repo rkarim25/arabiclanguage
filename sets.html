@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
-  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/fonts.css?v=mwix2wit">
+  <link rel="stylesheet" href="css/style.css?v=mwix2wit">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -37,10 +37,12 @@
     .set-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
     .set-links a { font-size: 13px; color: var(--accent); text-decoration: none; border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 10px; background: var(--paper-elevated); }
     .set-links a:hover { border-color: var(--accent); }
-    .g-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 14px; padding: 6px 4px 2px; }
-    .g-list a { text-decoration: none; color: inherit; font-size: 13.5px; display: flex; gap: 8px; align-items: baseline; padding: 4px 2px; border-bottom: 1px dotted var(--border); }
-    .g-list a .ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); direction: rtl; min-width: 60px; text-align: right; }
-    .g-list a .ok { color: var(--accent); font-size: 12px; margin-inline-start: auto; }
+    .g-list { display: flex; flex-direction: column; gap: 0; padding: 4px 2px; }
+    .g-list a { text-decoration: none; color: inherit; font-size: 15.5px; display: flex; justify-content: space-between; gap: 14px; align-items: baseline; padding: 9px 4px; border-bottom: 1px solid var(--border-subtle); }
+    .g-list a:hover { background: var(--paper-elevated); }
+    .g-list a:last-child { border-bottom: 0; }
+    .g-list a .ar { font-family: var(--font-ar); font-size: 22px; color: var(--ink); direction: rtl; margin-left: auto; }
+    .g-list a .ok { color: var(--accent); font-size: 12px; }
     .row-speak { cursor: pointer; }
     @media (max-width: 700px) {
       .set-head { padding: 10px 11px; }
@@ -58,11 +60,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwiwpwad"></script>
-<script src="js/lesson-cards.js?v=mwiwpwad"></script>
-<script src="js/app.js?v=mwiwpwad"></script>
-<script src="js/tracker.js?v=mwiwpwad"></script>
-<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwix2wit"></script>
+<script src="js/lesson-cards.js?v=mwix2wit"></script>
+<script src="js/app.js?v=mwix2wit"></script>
+<script src="js/tracker.js?v=mwix2wit"></script>
+<script src="js/plan.js?v=mwix2wit"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -208,7 +210,7 @@ function render() {
         <div class="g-list">
           ${PATTERNS.map(p => {
       const gAlt = Array.from({ length: 6 }, (_, gi) => `gt:${p.id}:${gi}`);
-      return `<a href="grammar.html?g=${p.id}">${SRS.dotHtml("gt:" + p.id + ":0", { altKeys: gAlt })}<span class="ar">${p.ar || ""}</span><span>${p.name || p.id}</span>${(typeof stepsDone === "function" && stepsDone("gr-" + p.id).test) ? `<span class="ok">✓</span>` : ""}</a>`;
+      return `<a href="grammar.html?g=${p.id}"><span style="font-weight:450;color:var(--ink)">${p.name || p.id}</span><span class="ar">${p.ar || ""}</span><span style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">${(typeof stepsDone === "function" && stepsDone("gr-" + p.id).test) ? `<span class="ok">✓</span>` : ""}${SRS.dotHtml("gt:" + p.id + ":0", { altKeys: gAlt })}</span></a>`;
     }).join("")}
         </div>
         <div class="set-links">

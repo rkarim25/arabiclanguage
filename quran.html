@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
-  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/fonts.css?v=mwix2wit">
+  <link rel="stylesheet" href="css/style.css?v=mwix2wit">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -80,6 +80,21 @@
     .q-tok-chip { display: inline-flex; flex-direction: column; align-items: center; padding: 2px 7px; border-radius: 4px; border: 0; border-bottom: 1px solid var(--border); background: transparent; margin: 2px; font-size: 12px; }
     .q-tok-chip.known { border-bottom-color: rgba(13,122,95,0.45); background: rgba(13,122,95,0.04); }
     .q-tok-chip.new-tok { border-bottom-color: #d97706; background: rgba(161,106,18,0.06); }
+    .q-gram-list { display: flex; flex-direction: column; gap: 0; }
+    .q-gram-row {
+      display: grid;
+      grid-template-columns: minmax(300px, 1.35fr) minmax(240px, 0.95fr) auto;
+      column-gap: 24px;
+      row-gap: 8px;
+      align-items: baseline;
+      padding: 14px 4px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .q-gram-row:last-child { border-bottom: 0; }
+    .q-gram-row:hover { background: var(--paper-elevated); }
+    @media (max-width: 760px) {
+      .q-gram-row { grid-template-columns: 1fr; row-gap: 8px; }
+    }
     @media (max-width: 600px) { .verse-ar { font-size: 25px; } .wbw .w-ar { font-size: 20px; } .q-glue-tbl, .q-core-tbl { min-width: 580px; } }
   </style>
 </head>
@@ -88,12 +103,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwiwpwad"></script>
-<script src="js/practice.js?v=mwiwpwad"></script>
-<script src="js/lesson-cards.js?v=mwiwpwad"></script>
-<script src="js/app.js?v=mwiwpwad"></script>
-<script src="js/tracker.js?v=mwiwpwad"></script>
-<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwix2wit"></script>
+<script src="js/practice.js?v=mwix2wit"></script>
+<script src="js/lesson-cards.js?v=mwix2wit"></script>
+<script src="js/app.js?v=mwix2wit"></script>
+<script src="js/tracker.js?v=mwix2wit"></script>
+<script src="js/plan.js?v=mwix2wit"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -472,7 +487,7 @@ function renderStructuresTab() {
   }).join("");
 
   const glueHtml = `
-    <div class="card" style="padding:14px 16px;margin-bottom:14px">
+    <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
         <div>
           <strong style="font-size:15.5px">🔗 Glue &amp; Pronoun Fusion Reference Matrix</strong>
@@ -510,32 +525,35 @@ function renderStructuresTab() {
   `;
 
   const gramHtml = `
-    <div class="card" style="padding:14px 16px">
+    <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
         <div>
           <strong style="font-size:15.5px">📐 Core Qur'ānic Grammar Patterns</strong>
           <div style="font-size:12.5px;color:var(--muted)">High-yield sentence patterns shared between the Qur'ān and everyday Arabic (synced with <a href="grammar.html" style="color:var(--accent)">Grammar</a>).</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:10px">
+      <div class="q-gram-list">
         ${QGRAMMAR.map(p => {
           const tKeys = (p.test || []).map((_, i) => `gt:${p.id}:${i}`);
           const gs = SRS.summaryCounts(tKeys);
           const ex = (p.examples && p.examples[0]) || null;
           return `
-            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:11px 13px;background:var(--surface-2)">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px">
-                <strong style="font-size:14px">${p.name}</strong>
-                <span class="arabic" style="font-size:21px;color:var(--ink)" dir="rtl">${p.ar}</span>
+            <div class="q-gram-row">
+              <div>
+                <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+                  <strong style="font-size:16.5px;font-weight:600;color:var(--ink)">${p.name}</strong>
+                  <span class="arabic" style="font-size:23px;color:var(--ink)" dir="rtl">${p.ar}</span>
+                </div>
+                <div style="font-size:14.5px;color:var(--ink);opacity:0.88;line-height:1.65;margin-top:4px">${window.LessonCards ? LessonCards.enhanceInlineArabic(p.cardRule || p.what) : (p.cardRule || p.what)}</div>
               </div>
-              <div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:8px">${window.LessonCards ? LessonCards.enhanceInlineArabic(p.cardRule || p.what) : (p.cardRule || p.what)}</div>
-              ${ex ? `<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 8px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);margin-bottom:8px">
-                <div><div class="arabic" style="font-size:18px" dir="rtl">${ex.ar}</div><div style="font-size:11.5px;color:var(--muted)">${ex.en}</div></div>
-                <button type="button" class="lc-speak-btn" onclick="speak('${ex.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
-              </div>` : ""}
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px">
-                <span>${gs.green}/${gs.total} test items 🟢</span>
-                <a href="index.html?grammar=${encodeURIComponent(p.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise Pattern →</a>
+              <div>
+                ${ex ? `<div class="arabic" style="font-size:23px;color:var(--ink);line-height:1.65;text-align:right;cursor:pointer" dir="rtl" onclick="speak('${ex.ar.replace(/'/g, "\\'")}', 0.85)" title="Tap to listen">${ex.ar}</div><div style="font-size:13px;color:var(--muted);line-height:1.45;text-align:right;margin-top:2px">${ex.en}</div>` : ""}
+              </div>
+              <div style="display:inline-flex;align-items:center;gap:8px;justify-self:end;white-space:nowrap">
+                ${ex ? `<button type="button" class="sym-badge" onclick="speak('${ex.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen" aria-label="Listen">🔊</button>` : ""}
+                <span style="font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums">${gs.green}/${gs.total}</span>
+                ${SRS.dotHtml("gt:" + p.id + ":0", { altKeys: tKeys })}
+                <a href="index.html?grammar=${encodeURIComponent(p.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise →</a>
               </div>
             </div>
           `;
@@ -767,13 +785,15 @@ function renderSurahsTab() {
     const words = s.verses.reduce((n, v) => n + v.words.length, 0);
     const mi = surahMasteryInfo(s);
     a.innerHTML = `
-      <div class="num" style="display:flex;justify-content:space-between;align-items:center;gap:6px">
-        <span style="display:inline-flex;align-items:center;gap:6px"><span class="m-dot m-${mi.level} lg" title="Surah mastery: ${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words mastered"></span>${s.verses.length} verses · ${words} words</span>
-        <span style="font-weight:700;color:${mi.greenAyahs > 0 || mi.wc.green > 0 ? 'var(--accent)' : 'var(--muted)'}">${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words</span>
+      <div style="flex:1;min-width:220px">
+        <div class="title-en"><span style="color:var(--muted);font-size:12.5px;font-weight:400;margin-right:8px;font-variant-numeric:tabular-nums">${s.n}.</span>${s.nameEn}</div>
+        <div class="meta">${s.why}</div>
       </div>
-      <div class="title-ar">${s.name}</div>
-      <div class="title-en">${s.nameEn}</div>
-      <div class="meta">${s.why}</div>
+      <div class="title-ar" dir="rtl">سُورَة ${s.name}</div>
+      <div style="display:inline-flex;align-items:center;gap:8px;flex-shrink:0;white-space:nowrap">
+        <span style="font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums">${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words</span>
+        <span class="m-dot m-${mi.level} lg" title="Surah mastery: ${mi.greenAyahs}/${s.verses.length} ayahs · ${mi.wc.green}/${words} words mastered"></span>
+      </div>
     `;
     grid.appendChild(a);
   });

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Stories — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
-  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/fonts.css?v=mwix2wit">
+  <link rel="stylesheet" href="css/style.css?v=mwix2wit">
 </head>
 <body>
 <main>
@@ -31,10 +31,10 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwiwpwad"></script>
-<script src="js/app.js?v=mwiwpwad"></script>
-<script src="js/tracker.js?v=mwiwpwad"></script>
-<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwix2wit"></script>
+<script src="js/app.js?v=mwix2wit"></script>
+<script src="js/tracker.js?v=mwix2wit"></script>
+<script src="js/plan.js?v=mwix2wit"></script>
 <script>
 renderNav("stories");
 trackPage("stories");
@@ -49,11 +49,12 @@ STORY_LIST.forEach(s => {
   a.className = "story-card" + (s.locked ? " locked" : "");
   a.href = s.locked ? "#" : `story.html?id=${s.id}`;
   a.innerHTML = `
-    <div class="num">Story ${s.n}${s.locked ? " · locked" : ""}</div>
+    <div style="flex:1;min-width:220px">
+      <div class="title-en"><span style="color:var(--muted);font-size:12.5px;font-weight:400;margin-right:8px">${s.n}.</span>${s.titleEn}</div>
+      <div class="meta">${s.locked ? "Added in the next batch" : (s.desc || "")}</div>
+    </div>
     <div class="title-ar">${s.titleAr}</div>
-    <div class="title-en">${s.titleEn}</div>
-    <div class="progress-bar"><div style="width:${s.locked ? 0 : pct}%"></div></div>
-    <div class="meta">${s.locked ? "Added in the next batch" : (pct === 100 ? "✓ Completed" : pct > 0 ? pct + "% complete" : (s.desc || ""))}</div>
+    <div style="font-size:12.5px;color:var(--muted);white-space:nowrap">${s.locked ? "locked" : (pct === 100 ? `<span style="color:var(--accent);font-weight:600">✓ Completed</span>` : pct > 0 ? `${pct}% complete` : "Read →")}</div>
   `;
   grid.appendChild(a);
 });

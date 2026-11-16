@@ -8,18 +8,21 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
-  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/fonts.css?v=mwix2wit">
+  <link rel="stylesheet" href="css/style.css?v=mwix2wit">
   <style>
-    .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .fam-grid { display: flex; flex-direction: column; gap: 0; }
     .fam-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-      box-shadow: var(--shadow); padding: 16px; cursor: pointer; transition: transform .12s;
+      background: transparent; border: 0; border-bottom: 1px solid var(--border-subtle); border-radius: 0;
+      box-shadow: none; padding: 12px 4px; cursor: pointer;
+      display: flex; align-items: baseline; justify-content: space-between; gap: 8px 18px; flex-wrap: wrap;
+      transition: background-color .12s;
     }
-    .fam-card:hover { transform: translateY(-2px); border-color: var(--accent); }
-    .fam-card .root { font-family: var(--font-ar); font-size: 30px; color: var(--accent); direction: rtl; }
-    .fam-card .theme { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
-    .fam-card .meta { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .fam-card:last-child { border-bottom: 0; }
+    .fam-card:hover { background: var(--paper-elevated); transform: none; }
+    .fam-card .root { font-family: var(--font-ar); font-size: 25px; color: var(--ink); direction: rtl; }
+    .fam-card .theme { font-size: 16px; font-weight: 450; color: var(--ink); margin: 0; flex: 1; min-width: 200px; }
+    .fam-card .meta { font-size: 12.5px; color: var(--muted); margin: 0; white-space: nowrap; }
     .verse-card {
       background: #f6f2ea; border: 1px solid var(--border); border-radius: 12px;
       padding: 14px 16px; margin-top: 10px;
@@ -52,10 +55,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwiwpwad"></script>
-<script src="js/app.js?v=mwiwpwad"></script>
-<script src="js/tracker.js?v=mwiwpwad"></script>
-<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwix2wit"></script>
+<script src="js/app.js?v=mwix2wit"></script>
+<script src="js/tracker.js?v=mwix2wit"></script>
+<script src="js/plan.js?v=mwix2wit"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -229,8 +232,8 @@ function groupCard(obj, prefix, arTitle, metaText) {
   const div = document.createElement("div");
   div.className = "fam-card";
   div.innerHTML = `
-    <div class="root">${arTitle}</div>
     <div class="theme">${obj.theme}</div>
+    <div class="root">${arTitle}</div>
     <div class="meta">${metaText} ${groupDone(prefix, obj.id) ? "· ✓" : ""}</div>
   `;
   const q = prefix === "fam-" ? "fam" : prefix === "ph-" ? "ph" : "ev";

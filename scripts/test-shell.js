@@ -1005,6 +1005,17 @@ const bank = D("sentence-bank.json");
     !/<td style="width:34px"><button class="small" data-say=/.test(mfLearnSrc),
     "Material-first layout across index, words, sentences, quran, story, vocab, review & learn puts all controls at row end"
   );
+  yes(
+    /class="q-gram-list"/.test(quranSrcNow) &&
+    /class="q-gram-row"/.test(quranSrcNow) &&
+    !/minmax\(270px,\s*1fr\)/.test(quranSrcNow) &&
+    /\.story-grid\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(cssSrcNow) &&
+    /\.g-grid\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(grammarSrcNow) &&
+    /\.g-list\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(setsSrcNow) &&
+    /\.concept-grid\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(teacherSrcNow) &&
+    /\.fam-grid\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(mfVocabSrc),
+    "Grammar patterns, Surahs, Stories, Sets grammar list, Concept notes & Vocab sets use breathable full-width horizontal lists instead of squashed multi-column grids"
+  );
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
