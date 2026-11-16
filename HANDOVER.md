@@ -77,7 +77,24 @@
 
 ---
 
-## 2. Current Verified State (15 Nov 2026 — Sunday Evening & Post-Lesson Review)
+## 2. Current Verified State (16 Nov 2026 — Monday Mid-Week Session & Link Continuity Fix)
+
+- **Telemetry & SRS Progress:** 4,338 total telemetry events; 1,268 tracked SRS cards (796 green/mastered incl. 64 retired, 311 amber building, 161 red needs work). Practice session active this morning (rated `lc:quran-glue-chains` and `qc:0`).
+- **Recent Slips Queue:** `مِصْعَد` (lift/elevator), `طَابِق` (floor), `الآنَ` (now), `مَرَّة` (time/occasion: `مَرَّةً أُخْرَى`), `الاثْنَيْن` (Monday), `يَوْمَ الثُّلَاثَاءِ` (Tuesday), `أُرَتِّبُ` (I arrange/tidy), `حَفْلَة` (party), `عَبَدْتُ اللهَ` (I worshipped Allah), `كَيْفَ كَانَ يَوْمُكِ؟` (to Saba, -ki), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (88:13), and `ٱلْمَغْضُوبِ` (1:7 wrath/anger root).
+- **Pen Note #70 (Processed & Verified):** Reza reported that in Practice, clicking "Full rule →" on a word with a grammar note navigated to the general list rather than the dedicated rule section, and pressing Back scrambled the Practice page to a different batch.
+  - *Root Cause 1:* `index.html` (lines 950, 952) and `sentences.html` (line 348) used `grammar.html#${g.id}` instead of `grammar.html?g=${g.id}`, while `grammar.html` only checked `URLSearchParams.get("g")` and lacked hash routing or `popstate` listeners.
+  - *Root Cause 2:* `index.html` had no in-flight batch persistence; navigating away and pressing Back triggered a fresh `loadPracticeBatch()`, which re-randomized the 10 cards and wiped progress.
+  - *Fix Deployed:*
+    1. Updated all grammar links across `index.html` and `sentences.html` to `grammar.html?g=${encodeURIComponent(g.id)}`.
+    2. Enhanced `grammar.html` with `getRoutePatternId()` (supporting both `?g=` and `#` hashes), a prominent `← Back to Practice` link calling `history.back()`, and active `popstate`/`hashchange` event listeners.
+    3. Implemented robust session batch persistence (`savePracticeBatchSession` / `restorePracticeBatchFromSession` via `sessionStorage['ats-live-practice-batch']`) in `index.html` so leaving Practice and returning via Back restores the exact 10 cards, revealed state, and ratings without re-randomizing or emitting duplicate batch logs.
+    4. Enhanced routing and `hashchange`/`popstate` listeners in `sets.html`, `quran.html`, and `chapters.html` to ensure site-wide linking continuity.
+    5. Added 4 automated regression assertions in `scripts/test-shell.js`.
+- **Speak with AI Updated:** Added **Prompt LL (Monday 16 Nov Mid-Week Spoken Reinforcement & Continuity Workout)** in `SPEAK_WITH_AI.md` covering Chapter 4 routine & times, Monday/Tuesday work routines, past negation (`لَمْ` vs `مَا`), recent slips (`مِصْعَد`, `الآن`, `مَرَّة`), and 4-Pillar Qur'ān Decoding + Mosque landmarks.
+- **Learner Dossier Synchronized:** Updated `LEARNER_CONTEXT.md` with verified 4,338 telemetry events, 1,268 SRS cards, and prompt references.
+- **Sunday 15 Nov Preply Lesson Check:** Lesson passed yesterday; awaiting lesson notes/photos to run ingestion pipeline.
+
+## 2.1. Historical Milestones & Features Added (15 Nov 2026)
 
 - **Telemetry & SRS Progress:** 4,269 total telemetry events; 1,266 tracked SRS cards (215 green/mastered incl. 64 retired, 890 amber building, 161 red needs work). Completed Sunday Practice and awaiting Sunday 15 Nov Preply lesson notes/photos to ingest.
 - **Recent Slips Queue:** `مِصْعَد` (lift/elevator), `طَابِق` (floor), `الآنَ` (now), `مَرَّة` (time/occasion), `الاثْنَيْن` (Monday), `يَوْمَ الثُّلَاثَاءِ` (Tuesday), `أُرَتِّبُ` (I arrange/tidy), `حَفْلَة` (party), `كَيْفَ كَانَ يَوْمُكِ؟` (to Saba, -ki), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (88:13), and `ٱلْمَغْضُوبِ` (1:7 wrath/anger root).

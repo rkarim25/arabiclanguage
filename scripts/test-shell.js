@@ -1028,6 +1028,41 @@ const bank = D("sentence-bank.json");
     /href="weekly\.html"/.test(moreSrcNow),
     "weekly.html acts as a dedicated Printed Week Versions shelf with cloud-synced edition snapshots, 10-week book mode, and more.html link"
   );
+
+  // Pen Note continuity & link routing audit: connecting links must navigate to dedicated sections and preserve Practice session on Back
+  const grammarSrcPen = fs.readFileSync(path.join(ROOT, "grammar.html"), "utf8");
+  const setsSrcPen = fs.readFileSync(path.join(ROOT, "sets.html"), "utf8");
+  const quranSrcPen = fs.readFileSync(path.join(ROOT, "quran.html"), "utf8");
+  const sentSrcPen = fs.readFileSync(path.join(ROOT, "sentences.html"), "utf8");
+  const indexSrcPen = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  yes(
+    /href="grammar\.html\?g=\$\{encodeURIComponent\(g\.id\)\}"/.test(indexSrcPen) &&
+    !/href="grammar\.html#\$\{g\.id\}"/.test(indexSrcPen) &&
+    /href="grammar\.html\?g=\$\{encodeURIComponent\(g\.id\)\}"/.test(sentSrcPen) &&
+    !/href="grammar\.html#\$\{g\.id\}"/.test(sentSrcPen),
+    "Practice and Sentences links to Grammar rules use dedicated query params grammar.html?g=... (no broken hash links)"
+  );
+  yes(
+    /function getRoutePatternId\(/.test(grammarSrcPen) &&
+    /route\(/.test(grammarSrcPen) &&
+    /popstate/.test(grammarSrcPen) &&
+    /hashchange/.test(grammarSrcPen) &&
+    /← Back to Practice/.test(grammarSrcPen),
+    "grammar.html resolves both ?g= and #hash routes, exposes ← Back to Practice, and listens to popstate & hashchange"
+  );
+  yes(
+    /function savePracticeBatchSession\(/.test(indexSrcPen) &&
+    /function restorePracticeBatchFromSession\(/.test(indexSrcPen) &&
+    /sessionStorage\.setItem\("ats-live-practice-batch"/.test(indexSrcPen),
+    "index.html persists active in-flight practice batch to sessionStorage so Back navigation preserves exact cards, ratings & continuity"
+  );
+  yes(
+    /handleHashRoute/.test(setsSrcPen) &&
+    /window\.addEventListener\("hashchange",\s*handleHashRoute\)/.test(setsSrcPen) &&
+    /routeQuran/.test(quranSrcPen) &&
+    /window\.addEventListener\("hashchange",\s*routeQuran\)/.test(quranSrcPen),
+    "sets.html and quran.html dynamically handle hash & popstate routing for seamless inter-tab continuity"
+  );
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

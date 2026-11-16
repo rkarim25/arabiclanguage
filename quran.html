@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
-  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -103,12 +103,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwixhwf0"></script>
-<script src="js/practice.js?v=mwixhwf0"></script>
-<script src="js/lesson-cards.js?v=mwixhwf0"></script>
-<script src="js/app.js?v=mwixhwf0"></script>
-<script src="js/tracker.js?v=mwixhwf0"></script>
-<script src="js/plan.js?v=mwixhwf0"></script>
+<script src="js/srs.js?v=mwjl16e0"></script>
+<script src="js/practice.js?v=mwjl16e0"></script>
+<script src="js/lesson-cards.js?v=mwjl16e0"></script>
+<script src="js/app.js?v=mwjl16e0"></script>
+<script src="js/tracker.js?v=mwjl16e0"></script>
+<script src="js/plan.js?v=mwjl16e0"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -253,26 +253,31 @@ Promise.all([
   });
   loadQuranWordAudio();
 
-  const params = new URLSearchParams(location.search);
-  const s = DATA.find(x => x.id === params.get("s"));
-  const urlTab = params.get("tab");
-  const urlSub = params.get("sub");
-  if (urlSub && ["all", "khutba", "duas", "imam"].includes(urlSub)) mosqueSubFilter = urlSub;
-  if (urlTab && ["structures", "words", "surahs", "unlocked", "mosque"].includes(urlTab)) {
-    currentQuranTab = urlTab;
-  } else if (location.hash && location.hash.startsWith("#lc-")) {
-    const hid = location.hash.slice(4);
-    currentQuranTab = MCARDS.some(c => c.id === hid) ? "mosque" : "structures";
-  }
-  if (s) renderSurah(s, params.get("mode") || "study");
-  else if (params.get("listen")) renderListenQueue();
-  else {
-    renderList();
-    if (location.hash && location.hash.startsWith("#lc-")) {
-      const target = document.getElementById(location.hash.slice(1));
-      if (target && target.scrollIntoView) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  function routeQuran() {
+    const params = new URLSearchParams(location.search);
+    const s = DATA.find(x => x.id === params.get("s"));
+    const urlTab = params.get("tab");
+    const urlSub = params.get("sub");
+    if (urlSub && ["all", "khutba", "duas", "imam"].includes(urlSub)) mosqueSubFilter = urlSub;
+    if (urlTab && ["structures", "words", "surahs", "unlocked", "mosque"].includes(urlTab)) {
+      currentQuranTab = urlTab;
+    } else if (location.hash && location.hash.startsWith("#lc-")) {
+      const hid = location.hash.slice(4);
+      currentQuranTab = MCARDS.some(c => c.id === hid) ? "mosque" : "structures";
+    }
+    if (s) renderSurah(s, params.get("mode") || "study");
+    else if (params.get("listen")) renderListenQueue();
+    else {
+      renderList();
+      if (location.hash && location.hash.startsWith("#lc-")) {
+        const target = document.getElementById(location.hash.slice(1));
+        if (target && target.scrollIntoView) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+      }
     }
   }
+  routeQuran();
+  window.addEventListener("hashchange", routeQuran);
+  window.addEventListener("popstate", routeQuran);
 });
 
 function surahDone(id, step) { return !!stepsDone("q-" + id)[step]; }

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
-  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -60,11 +60,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwixhwf0"></script>
-<script src="js/lesson-cards.js?v=mwixhwf0"></script>
-<script src="js/app.js?v=mwixhwf0"></script>
-<script src="js/tracker.js?v=mwixhwf0"></script>
-<script src="js/plan.js?v=mwixhwf0"></script>
+<script src="js/srs.js?v=mwjl16e0"></script>
+<script src="js/lesson-cards.js?v=mwjl16e0"></script>
+<script src="js/app.js?v=mwjl16e0"></script>
+<script src="js/tracker.js?v=mwjl16e0"></script>
+<script src="js/plan.js?v=mwjl16e0"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -125,11 +125,16 @@ Promise.all([
   PATTERNS = g.patterns || [];
   LESSON_CARDS = (lc && lc.cards) || [];
   render();
-  const rawWant = (location.hash || "").replace(/^#/, "") || new URLSearchParams(location.search).get("set") || (new URLSearchParams(location.search).get("lc") ? "lc-" + new URLSearchParams(location.search).get("lc") : "");
-  if (rawWant) {
-    const targetId = document.getElementById("set-" + rawWant) ? rawWant : (document.getElementById("set-lc-" + rawWant) ? "lc-" + rawWant : rawWant);
-    openSet(targetId, true);
+  function handleHashRoute() {
+    const rawWant = (location.hash || "").replace(/^#/, "") || new URLSearchParams(location.search).get("set") || (new URLSearchParams(location.search).get("lc") ? "lc-" + new URLSearchParams(location.search).get("lc") : "");
+    if (rawWant) {
+      const targetId = document.getElementById("set-" + rawWant) ? rawWant : (document.getElementById("set-lc-" + rawWant) ? "lc-" + rawWant : rawWant);
+      openSet(targetId, true);
+    }
   }
+  handleHashRoute();
+  window.addEventListener("hashchange", handleHashRoute);
+  window.addEventListener("popstate", handleHashRoute);
 });
 
 function lcStatusText(id) {

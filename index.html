@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
-  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwixhwf0"></script>
-<script src="js/curriculum.js?v=mwixhwf0"></script>
-<script src="js/srs.js?v=mwixhwf0"></script>
-<script src="js/frames.js?v=mwixhwf0"></script>
-<script src="js/freetry.js?v=mwixhwf0"></script>
-<script src="js/practice.js?v=mwixhwf0"></script>
-<script src="js/lesson-cards.js?v=mwixhwf0"></script>
-<script src="js/match.js?v=mwixhwf0"></script>
-<script src="js/errors.js?v=mwixhwf0"></script>
-<script src="js/tryit.js?v=mwixhwf0"></script>
-<script src="js/app.js?v=mwixhwf0"></script>
-<script src="js/tracker.js?v=mwixhwf0"></script>
-<script src="js/plan.js?v=mwixhwf0"></script>
-<script src="js/account.js?v=mwixhwf0"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwjl16e0"></script>
+<script src="js/curriculum.js?v=mwjl16e0"></script>
+<script src="js/srs.js?v=mwjl16e0"></script>
+<script src="js/frames.js?v=mwjl16e0"></script>
+<script src="js/freetry.js?v=mwjl16e0"></script>
+<script src="js/practice.js?v=mwjl16e0"></script>
+<script src="js/lesson-cards.js?v=mwjl16e0"></script>
+<script src="js/match.js?v=mwjl16e0"></script>
+<script src="js/errors.js?v=mwjl16e0"></script>
+<script src="js/tryit.js?v=mwjl16e0"></script>
+<script src="js/app.js?v=mwjl16e0"></script>
+<script src="js/tracker.js?v=mwjl16e0"></script>
+<script src="js/plan.js?v=mwjl16e0"></script>
+<script src="js/account.js?v=mwjl16e0"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -647,7 +647,115 @@ function updateOverallStats() {
 }
 
 /* ADAPTIVE PRACTICE + FILTERED SENTENCE BATCH ENGINE */
+function savePracticeBatchSession() {
+  try {
+    if (!IS_ADAPTIVE_PRACTICE || !CURRENT_BUILT_BATCH || !ACTIVE_SENTENCES || !ACTIVE_SENTENCES.length) return;
+    const sessionData = {
+      batchNum: CURRENT_BUILT_BATCH.batchNum || 1,
+      title: CURRENT_BUILT_BATCH.title || "Daily Adaptive Practice",
+      summary: CURRENT_BUILT_BATCH.summary || "",
+      items: ACTIVE_SENTENCES.map(s => ({
+        key: s.key,
+        _autoReveal: !!s._autoReveal,
+        lcMode: s.lcMode || null,
+        practiceMode: s.practiceMode || null
+      })),
+      revealed: Array.from(REVEALED),
+      rated: Array.from(BATCH_RATED),
+      doneLogged: !!BATCH_DONE_LOGGED,
+      effort: CURRENT_BUILT_BATCH.effort,
+      budget: CURRENT_BUILT_BATCH.budget,
+      teachCount: CURRENT_BUILT_BATCH.teachCount,
+      reviewPct: CURRENT_BUILT_BATCH.reviewPct,
+      counts: CURRENT_BUILT_BATCH.counts,
+      mode: (CURRENT_BUILT_BATCH.diag && CURRENT_BUILT_BATCH.diag.mode) || "steady",
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem("ats-live-practice-batch", JSON.stringify(sessionData));
+  } catch (e) {}
+}
+
+function clearPracticeBatchSession() {
+  try {
+    sessionStorage.removeItem("ats-live-practice-batch");
+  } catch (e) {}
+}
+
+function restorePracticeBatchFromSession() {
+  try {
+    const raw = sessionStorage.getItem("ats-live-practice-batch");
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.items) || data.items.length === 0) return false;
+    if (Date.now() - (data.savedAt || 0) > 4 * 3600 * 1000) {
+      clearPracticeBatchSession();
+      return false;
+    }
+    const restoredItems = [];
+    for (const entry of data.items) {
+      const base = KEY_ITEM_MAP.get(entry.key);
+      if (!base) return false;
+      const clone = Object.assign({}, base);
+      if (entry._autoReveal) clone._autoReveal = true;
+      if (entry.lcMode) clone.lcMode = entry.lcMode;
+      if (entry.practiceMode) clone.practiceMode = entry.practiceMode;
+      restoredItems.push(clone);
+    }
+
+    stopAudio();
+    if (window.TryIt) TryIt.endFree();
+    FOCUSED_PRACTICE_SPEC = null;
+    const fb = document.getElementById("focusBanner");
+    if (fb) { fb.style.display = "none"; fb.innerHTML = ""; }
+
+    IS_ADAPTIVE_PRACTICE = true;
+    REVEALED = new Set(data.revealed || []);
+    BATCH_RATED = new Set(data.rated || []);
+    BATCH_DONE_LOGGED = !!data.doneLogged;
+    ACTIVE_SENTENCES = restoredItems;
+    LAST_BATCH_KEYS = restoredItems.map(x => x.key);
+
+    CURRENT_BUILT_BATCH = {
+      batchNum: data.batchNum || 1,
+      title: data.title,
+      summary: data.summary,
+      list: restoredItems,
+      effort: data.effort,
+      budget: data.budget,
+      teachCount: data.teachCount,
+      reviewPct: data.reviewPct,
+      counts: data.counts,
+      diag: { mode: data.mode }
+    };
+
+    const titleEl = document.getElementById("sessionTitle");
+    if (titleEl) titleEl.textContent = data.title;
+    const lg = document.getElementById("srsLegend");
+    if (lg) lg.innerHTML = `<span class="srs-legend"><span class="leg">${data.summary}</span></span>`;
+
+    const topDrawer = document.getElementById("topVoiceBriefDrawer");
+    if (topDrawer && topDrawer.style.display !== "none") {
+      topDrawer.innerHTML = renderBatchVoiceBriefHTML("top");
+    }
+    const capDrawer = document.getElementById("capabilityDrawer");
+    if (capDrawer && capDrawer.style.display !== "none") {
+      capDrawer.innerHTML = renderCapabilityDrawerHTML();
+    }
+
+    render10Cards();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function loadPracticeBatch(explicitBatchNum) {
+  if (explicitBatchNum == null) {
+    if (restorePracticeBatchFromSession()) return;
+  } else {
+    clearPracticeBatchSession();
+  }
+
   stopAudio();
   if (window.TryIt) TryIt.endFree();
   FOCUSED_PRACTICE_SPEC = null;
@@ -706,6 +814,7 @@ function loadPracticeBatch(explicitBatchNum) {
   }
   logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, teachCount: built.teachCount, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, commuteDebt: !!built.diag.commuteDebt, t: Date.now() });
   render10Cards();
+  savePracticeBatchSession();
 }
 
 function renderCapabilityDrawerHTML() {
@@ -947,9 +1056,9 @@ function renderGrammarRuleHtml(s, forceCompact) {
   const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
   const isSolid = gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
   if (!forceCompact && (!isSolid || g.id === "negation")) {
-    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${arBadge} (${g.shortName}):</b> ${ruleHtml} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div>`;
+    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${arBadge} (${g.shortName}):</b> ${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div>`;
   }
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${arBadge} (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
+  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${arBadge} (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div></details>`;
 }
 
 function sourceLinkMeta(s) {
@@ -1049,6 +1158,7 @@ function rankFocusItems(pool, srs, now, limit, preserveOrder) {
 }
 
 function clearPracticeFocus() {
+  clearPracticeBatchSession();
   FOCUSED_PRACTICE_SPEC = null;
   if (history && history.replaceState) history.replaceState({}, "", location.pathname);
   if (promptDirection !== "en-first") setDirection("en-first");
@@ -1438,6 +1548,7 @@ function redoBatch() {
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   logEvent({ e: "redo-batch", kind: IS_ADAPTIVE_PRACTICE ? "practice" : "sentences", n: chosen.length, t: Date.now() });
   render10Cards();
+  savePracticeBatchSession();
   const list = document.getElementById("sentenceList");
   if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -1666,12 +1777,14 @@ function revealCard(idx) {
     updateSessionProgress();
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
   } else render10Cards();
+  savePracticeBatchSession();
   if (s) playCardAudio(idx);
 }
 
 function revealAllCards() {
   ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
   render10Cards();
+  savePracticeBatchSession();
 }
 
 function syncPracticeViewTabs() {
@@ -1783,6 +1896,7 @@ function rateSentence(key, g, cardIdx, how, meta) {
     SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
   }
   updateSessionProgress();
+  savePracticeBatchSession();
 }
 
 function jumpToNextUnrated() {
@@ -2311,9 +2425,13 @@ function playStep(withPause) {
 document.getElementById("filterChips").addEventListener("click", e => {
   const b = e.target.closest("[data-filter]");
   if (!b) return;
+  const wasActive = b.classList.contains("active");
   document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
   b.classList.add("active");
   currentFilter = b.dataset.filter;
+  if (wasActive && currentFilter === "balanced") {
+    clearPracticeBatchSession();
+  }
   load10Sentences();
 });
 

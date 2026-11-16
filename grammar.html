@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
-  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
   <style>
     .g-grid { display: flex; flex-direction: column; gap: 0; }
     .g-card {
@@ -37,10 +37,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwixhwf0"></script>
-<script src="js/app.js?v=mwixhwf0"></script>
-<script src="js/tracker.js?v=mwixhwf0"></script>
-<script src="js/plan.js?v=mwixhwf0"></script>
+<script src="js/srs.js?v=mwjl16e0"></script>
+<script src="js/app.js?v=mwjl16e0"></script>
+<script src="js/tracker.js?v=mwjl16e0"></script>
+<script src="js/plan.js?v=mwjl16e0"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -48,15 +48,38 @@ trackPage("grammar");
 const content = document.getElementById("content");
 let PATTERNS = null;
 
-fetch("data/grammar.json").then(r => r.json()).then(async d => {
-  PATTERNS = d.patterns;
+function getRoutePatternId() {
   const params = new URLSearchParams(location.search);
-  if (params.get("g") === "verbears") return renderVerbEars();
-  const p = PATTERNS.find(x => x.id === params.get("g"));
-  if (p) return renderPattern(p);
+  const gParam = params.get("g");
+  if (gParam) return gParam.trim();
+  const rawHash = (location.hash || "").replace(/^#/, "").replace(/^g=/, "").trim();
+  return rawHash || null;
+}
+
+async function route() {
+  const targetId = getRoutePatternId();
+  if (targetId === "verbears") {
+    renderVerbEars();
+    return;
+  }
+  if (targetId) {
+    const p = PATTERNS.find(x => x.id === targetId || x.id === ("pat-" + targetId) || x.id.replace(/^pat-/, "") === targetId);
+    if (p) {
+      renderPattern(p);
+      return;
+    }
+  }
   await loadReach();          // the list is ordered by it, so wait for it
   renderList();
+}
+
+fetch("data/grammar.json").then(r => r.json()).then(async d => {
+  PATTERNS = d.patterns;
+  await route();
 });
+
+window.addEventListener("popstate", () => { route(); });
+window.addEventListener("hashchange", () => { route(); });
 
 function gDone(id) { return !!stepsDone("gr-" + id).test; }
 
@@ -149,7 +172,10 @@ function renderPattern(p) {
   window.scrollTo({ top: 0 });
   content.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
-      <a href="grammar.html" style="color:var(--accent);text-decoration:none">← All patterns</a>
+      <div style="display:inline-flex;align-items:center;gap:12px">
+        <a href="index.html" onclick="if (history.length > 1) { history.back(); return false; } else { location.href = 'index.html'; return false; }" style="color:var(--accent);text-decoration:none;font-weight:600">← Back to Practice</a>
+        <a href="grammar.html" onclick="history.pushState({}, '', 'grammar.html'); route(); return false;" style="color:var(--muted);text-decoration:none;font-size:13px">All rules</a>
+      </div>
       <a href="index.html?grammar=${encodeURIComponent(p.id)}" style="background:var(--accent);color:#fff;text-decoration:none;font-weight:700;border-radius:999px;padding:5px 14px;font-size:13px">⚡ Practise Pattern in Practice →</a>
     </div>
     <h1 style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">

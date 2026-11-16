@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
-  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -131,16 +131,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwixhwf0"></script>
-<script src="js/curriculum.js?v=mwixhwf0"></script>
-<script src="js/srs.js?v=mwixhwf0"></script>
-<script src="js/frames.js?v=mwixhwf0"></script>
-<script src="js/practice.js?v=mwixhwf0"></script>
-<script src="js/lesson-cards.js?v=mwixhwf0"></script>
-<script src="js/app.js?v=mwixhwf0"></script>
-<script src="js/tracker.js?v=mwixhwf0"></script>
-<script src="js/plan.js?v=mwixhwf0"></script>
-<script src="js/account.js?v=mwixhwf0"></script>
+<script src="js/progress-model.js?v=mwjl16e0"></script>
+<script src="js/curriculum.js?v=mwjl16e0"></script>
+<script src="js/srs.js?v=mwjl16e0"></script>
+<script src="js/frames.js?v=mwjl16e0"></script>
+<script src="js/practice.js?v=mwjl16e0"></script>
+<script src="js/lesson-cards.js?v=mwjl16e0"></script>
+<script src="js/app.js?v=mwjl16e0"></script>
+<script src="js/tracker.js?v=mwjl16e0"></script>
+<script src="js/plan.js?v=mwjl16e0"></script>
+<script src="js/account.js?v=mwjl16e0"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -345,7 +345,7 @@ function renderGrammarRuleHtml(s) {
   const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
   const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
   const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 <span class="ar-inline" dir="rtl">${g.ar}</span> (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html#${g.id}">Full rule →</a>${lcLink}</div></details>`;
+  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 <span class="ar-inline" dir="rtl">${g.ar}</span> (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div></details>`;
 }
 
 function setBankFilter(filt, btn) {
