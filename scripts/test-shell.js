@@ -1016,6 +1016,18 @@ const bank = D("sentence-bank.json");
     /\.fam-grid\s*\{\s*display:\s*flex;\s*flex-direction:\s*column/.test(mfVocabSrc),
     "Grammar patterns, Surahs, Stories, Sets grammar list, Concept notes & Vocab sets use breathable full-width horizontal lists instead of squashed multi-column grids"
   );
+  const moreSrcNow = fs.readFileSync(path.join(ROOT, "more.html"), "utf8");
+  yes(
+    /function renderShelf\(/.test(weeklySrcNow) &&
+    /function saveCurrentWeekEdition\(/.test(weeklySrcNow) &&
+    /ats-weekly-editions/.test(weeklySrcNow) &&
+    /\?book=all/.test(weeklySrcNow) &&
+    /\?edition=/.test(weeklySrcNow) &&
+    /weeklyEditions:\s*store\.get\("ats-weekly-editions"/.test(trackerSrcPen) &&
+    /remote\.weeklyEditions/.test(trackerSrcPen) &&
+    /href="weekly\.html"/.test(moreSrcNow),
+    "weekly.html acts as a dedicated Printed Week Versions shelf with cloud-synced edition snapshots, 10-week book mode, and more.html link"
+  );
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

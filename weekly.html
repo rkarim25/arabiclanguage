@@ -7,28 +7,61 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwix2wit">
-  <link rel="stylesheet" href="css/style.css?v=mwix2wit">
+  <title>Printed Week Versions — Arabic العربية</title>
+  <link rel="stylesheet" href="css/fonts.css?v=mwixhwf0">
+  <link rel="stylesheet" href="css/style.css?v=mwixhwf0">
   <style>
-    main { max-width: 980px; }
+    /* Dedicated Shelf View */
+    .wk-shelf-hero {
+      border-left: 3px solid var(--accent);
+      background: var(--paper-elevated);
+      padding: 14px 18px;
+      margin: 12px 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px 20px;
+      flex-wrap: wrap;
+    }
+    .wk-ed-list { display: flex; flex-direction: column; gap: 0; }
+    .wk-ed-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px 20px;
+      flex-wrap: wrap;
+      padding: 13px 4px;
+      border-bottom: 1px solid var(--border-subtle, #eff1f4);
+      transition: background-color 0.14s;
+    }
+    .wk-ed-row:last-child { border-bottom: 0; }
+    .wk-ed-row:hover { background: var(--paper-elevated); }
+    .wk-ed-main { flex: 1 1 360px; min-width: 220px; }
+    .wk-ed-title { font-family: var(--font-ui); font-size: 16.5px; font-weight: 500; color: var(--ink); line-height: 1.45; }
+    .wk-ed-sub { font-size: 13.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+    .wk-ed-ar { font-family: var(--font-ar); font-size: 24px; color: var(--ink); direction: rtl; text-align: right; }
+    .wk-ed-dock { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; white-space: nowrap; margin-left: auto; }
+    .wk-toc-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 2px; border-bottom: 1px dotted var(--border); font-size: 14.5px; break-inside: avoid; page-break-inside: avoid; }
+    .wk-toc-row:last-child { border-bottom: 0; }
+
+    /* Reader / Print Toolbar */
     .wk-controls {
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
-      padding: 8px 0 14px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+      padding: 8px 0 14px; border-bottom: 1.5px solid var(--border-strong); margin-bottom: 20px;
     }
     .wk-ctrl-group { display: inline-flex; gap: 7px; flex-wrap: wrap; align-items: center; }
     .wk-pill {
-      border: 1px solid var(--border); background: transparent; color: var(--ink);
+      border: 1px solid var(--border-strong); background: var(--paper-elevated); color: var(--ink);
       border-radius: var(--radius); padding: 4px 10px; font-size: 12.5px; font-weight: 500;
       cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
     }
-    .wk-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
-    .wk-pill.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .wk-pill:hover { border-color: var(--accent); background: var(--bg); color: var(--accent); }
+    .wk-pill.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 600; }
     .wk-pill.primary { background: var(--accent); color: #fff; border-color: var(--accent); padding: 5px 12px; font-size: 13px; font-weight: 500; }
-    .wk-pill.primary:hover { opacity: 0.9; color: #fff; }
+    .wk-pill.primary:hover { opacity: 0.9; color: #fff; background: var(--accent); }
     .wk-select {
-      padding: 4px 10px; border: 1px solid var(--border); border-radius: var(--radius);
-      font-size: 12.5px; font-weight: 600; background: var(--paper-elevated); color: var(--ink);
+      padding: 4px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius);
+      font-size: 12.5px; font-weight: 500; background: var(--paper-elevated); color: var(--ink); max-width: 280px;
     }
 
     /* Editorial Booklet Typography */
@@ -40,6 +73,7 @@
     .wk-title {
       font-family: var(--font-serif); font-size: 28px; font-weight: 400; line-height: 1.25; margin: 0;
       display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px;
+      border-bottom: 0; padding-bottom: 0;
     }
     .wk-title .ar-sub { font-family: var(--font-ar); font-size: 21px; color: var(--muted); font-weight: 400; }
     .wk-meta { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
@@ -49,6 +83,7 @@
     .wk-sec-h {
       font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--ink);
       margin: 0 0 4px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;
+      border-bottom: 0; padding-bottom: 0;
       page-break-after: avoid; break-after: avoid;
     }
     .wk-sec-sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; page-break-after: avoid; break-after: avoid; }
@@ -67,12 +102,12 @@
     .wk-row:last-child { border-bottom: 0; }
     .wk-num { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
     .wk-en-col { min-width: 0; }
-    .wk-en { font-family: var(--font-ui); font-size: 15.5px; color: var(--ink); line-height: 1.5; }
+    .wk-en { font-family: var(--font-ui); font-size: 16px; color: var(--ink); line-height: 1.5; }
     .wk-tr { font-family: var(--font-ui); font-size: 12px; color: var(--muted); font-style: italic; margin-top: 2px; direction: ltr; text-align: right; line-height: 1.4; }
     .wk-hint { display: none; }
     .wk-ar-col { direction: rtl; text-align: right; min-width: 0; }
     .wk-ar {
-      font-family: var(--font-ar); font-size: 23px; line-height: 1.7; color: var(--ink);
+      font-family: var(--font-ar); font-size: 24px; line-height: 1.7; color: var(--ink);
       cursor: pointer; display: block;
     }
     .wk-ar:hover { color: var(--accent); }
@@ -96,7 +131,7 @@
     }
     .wk-vocab-item {
       display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
-      padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 13px;
+      padding: 5px 0; border-bottom: 1px dotted var(--border); font-size: 13.5px;
       break-inside: avoid; page-break-inside: avoid;
     }
     .wk-vocab-item .v-en { font-family: var(--font-ui); color: var(--ink); }
@@ -121,15 +156,15 @@
       color: var(--ink); margin: 3px 0; cursor: pointer;
     }
     .wk-ayah-ar:hover { color: var(--accent); }
-    .wk-ayah-en { font-family: var(--font-ui); font-size: 14.5px; color: var(--ink); line-height: 1.5; }
+    .wk-ayah-en { font-family: var(--font-ui); font-size: 15px; color: var(--ink); line-height: 1.5; }
 
     /* Tables: Core 12 + Glue Matrix */
-    .wk-tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .wk-tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 6px; }
     .wk-tbl th {
       text-align: left; padding: 6px 8px; border-bottom: 1.5px solid var(--border-strong);
       font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
     }
-    .wk-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle, #eff1f4); vertical-align: middle; }
+    .wk-tbl td { padding: 7px 8px; border-bottom: 1px solid var(--border-subtle, #eff1f4); vertical-align: middle; }
     .wk-tbl tr { break-inside: avoid; page-break-inside: avoid; }
     .wk-tbl .ar-td { font-family: var(--font-ar); font-size: 21px; direction: rtl; text-align: right; cursor: pointer; }
     .wk-glue th, .wk-glue td { text-align: center; padding: 5px 6px; }
@@ -139,9 +174,6 @@
 
     /* Lesson Cards inside Booklet */
     .wk-lc-slot { margin-bottom: 16px; break-inside: avoid; page-break-inside: avoid; }
-    .wk-lc-head { font-family: var(--font-ui); font-size: 15px; font-weight: 600; margin: 0 0 6px; color: var(--ink); }
-    .wk-lc-check-note { font-size: 12.5px; color: var(--muted); border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 8px; }
-
     .wk-colophon {
       margin-top: 28px; padding-top: 10px; border-top: 1px solid var(--border);
       font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
@@ -161,6 +193,8 @@
       .wk-ar-col { grid-column: 2; }
       .wk-aux { grid-column: 2; }
       .wk-title { font-size: 23px; }
+      .wk-ed-row { gap: 8px 12px; padding: 12px 2px; }
+      .wk-ed-dock { width: 100%; justify-content: flex-end; }
     }
 
     /* Clean A4 PDF Output — margin:0 hides browser date/time header & URL footer; table spacers restore 13mm/14mm margins on every page */
@@ -198,30 +232,37 @@
 </head>
 <body>
 <main>
-  <div class="wk-controls no-print">
-    <div class="wk-ctrl-group">
-      <a href="index.html" class="wk-pill" title="Return to live Practice">← Practice</a>
-      <select id="wkChapSelect" class="wk-select" title="Choose Chapter for this booklet"></select>
-      <button type="button" id="btnWkMode" class="wk-pill" onclick="toggleWkMode()" title="Switch between your personalized SRS week and a standalone Book Chapter edition">⚡ My Week</button>
-      <button type="button" id="btnWkTr" class="wk-pill active" onclick="toggleWkTr()" title="Show or hide transliteration in screen &amp; PDF">🔤 Translit</button>
-      <button type="button" id="btnWkBoxes" class="wk-pill active" onclick="toggleWkBoxes()" title="Include Mon/Wed/Fri pen review checkboxes on printed PDF">☐ Checkboxes</button>
-    </div>
-    <div class="wk-ctrl-group">
-      <button type="button" class="wk-pill primary" onclick="window.print()" title="Print cleanly or Save as PDF (A4)">🖨️ Print / Save This Week's PDF</button>
-    </div>
+  <div id="weeklyShelf" class="no-print">
+    <p style="color:var(--muted);padding:24px 0">Loading your Printed Week Versions library…</p>
   </div>
 
-  <div id="weeklyBook">
-    <p style="color:var(--muted);padding:24px 0">Assembling your Weekly Learning Booklet…</p>
+  <div id="weeklyReader" style="display:none">
+    <div class="wk-controls no-print">
+      <div class="wk-ctrl-group">
+        <button type="button" class="wk-pill" onclick="openShelf()" title="Back to all Printed Week Versions">← All Printed Weeks</button>
+        <select id="wkChapSelect" class="wk-select" title="Choose Week or Edition"></select>
+        <button type="button" id="btnWkMode" class="wk-pill" onclick="toggleWkMode()" title="Switch between your personalized SRS week and a standalone Book Chapter edition">⚡ My Week</button>
+        <button type="button" id="btnWkTr" class="wk-pill active" onclick="toggleWkTr()" title="Show or hide transliteration in screen &amp; PDF">🔤 Translit</button>
+        <button type="button" id="btnWkBoxes" class="wk-pill active" onclick="toggleWkBoxes()" title="Include Mon/Wed/Fri pen review checkboxes on printed PDF">☐ Checkboxes</button>
+      </div>
+      <div class="wk-ctrl-group">
+        <button type="button" id="btnSaveSnap" class="wk-pill" onclick="saveSnapshotManual()" title="Save a permanent dated snapshot of this week's sheet">📌 Save Snapshot</button>
+        <button type="button" class="wk-pill primary" onclick="printCurrentBooklet()" title="Print cleanly or Save as PDF (A4)">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+
+    <div id="weeklyBook">
+      <p style="color:var(--muted);padding:24px 0">Assembling your Weekly Learning Booklet…</p>
+    </div>
   </div>
 </main>
 
-<script src="js/srs.js?v=mwix2wit"></script>
-<script src="js/practice.js?v=mwix2wit"></script>
-<script src="js/lesson-cards.js?v=mwix2wit"></script>
-<script src="js/app.js?v=mwix2wit"></script>
-<script src="js/tracker.js?v=mwix2wit"></script>
-<script src="js/plan.js?v=mwix2wit"></script>
+<script src="js/srs.js?v=mwixhwf0"></script>
+<script src="js/practice.js?v=mwixhwf0"></script>
+<script src="js/lesson-cards.js?v=mwixhwf0"></script>
+<script src="js/app.js?v=mwixhwf0"></script>
+<script src="js/tracker.js?v=mwixhwf0"></script>
+<script src="js/plan.js?v=mwixhwf0"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -245,10 +286,44 @@ const GLUE_MATRIX = [
 ];
 
 const esc = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]));
-let WK_STATE = { chaps: [], lcCards: [], qCore: [], verses: [], qSents: [], evGroups: [], myday: [], activeChapNum: 1 };
+let WK_STATE = { ready: false, chaps: [], lcCards: [], qCore: [], verses: [], qSents: [], evGroups: [], myday: [], activeChapNum: 1 };
+let WK_ROUTE = { kind: "shelf", chapNum: 1, editionId: null };
 let showTr = localStorage.getItem("wk-show-tr") !== "0";
 let showBoxes = localStorage.getItem("wk-show-boxes") !== "0";
 let bookMode = new URLSearchParams(location.search).get("mode") === "book";
+
+function parseRouteFromSearch(search) {
+  const params = new URLSearchParams(search || "");
+  if (params.get("book") === "all") {
+    return { kind: "fullbook", chapNum: WK_STATE.activeChapNum || 1, editionId: null };
+  }
+  if (params.get("edition")) {
+    return { kind: "edition", chapNum: WK_STATE.activeChapNum || 1, editionId: params.get("edition") };
+  }
+  if (params.get("chap")) {
+    bookMode = params.get("mode") === "book";
+    return { kind: "chapter", chapNum: Number(params.get("chap")) || 1, editionId: null };
+  }
+  if (params.get("week") === "current" || params.get("print") === "1") {
+    bookMode = params.get("mode") === "book";
+    return { kind: "myweek", chapNum: WK_STATE.activeChapNum || 1, editionId: null };
+  }
+  return { kind: "shelf", chapNum: WK_STATE.activeChapNum || 1, editionId: null };
+}
+
+function isoWeekInfo(ts) {
+  const d = ts ? new Date(ts) : new Date();
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+  const mon = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const monShift = (mon.getUTCDay() || 7) - 1;
+  mon.setUTCDate(mon.getUTCDate() - monShift);
+  const weekLabel = "Week of " + mon.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  return { weekId: `wk-${date.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`, weekLabel };
+}
 
 function applyWkToggles() {
   document.body.classList.toggle("wk-hide-tr", !showTr);
@@ -256,16 +331,40 @@ function applyWkToggles() {
   const bMode = document.getElementById("btnWkMode");
   const bTr = document.getElementById("btnWkTr");
   const bBx = document.getElementById("btnWkBoxes");
+  const bSnap = document.getElementById("btnSaveSnap");
+  const sel = document.getElementById("wkChapSelect");
   if (bMode) {
+    const showModeToggle = WK_ROUTE.kind === "myweek" || WK_ROUTE.kind === "chapter";
+    bMode.style.display = showModeToggle ? "" : "none";
     bMode.classList.toggle("active", bookMode);
     bMode.textContent = bookMode ? "📖 Book Chapter" : "⚡ My Week";
   }
+  if (bSnap) {
+    bSnap.style.display = (WK_ROUTE.kind === "myweek" || WK_ROUTE.kind === "chapter") ? "" : "none";
+  }
   if (bTr) bTr.classList.toggle("active", showTr);
   if (bBx) bBx.classList.toggle("active", showBoxes);
+  if (sel) {
+    if (WK_ROUTE.kind === "fullbook") sel.value = "book-all";
+    else if (WK_ROUTE.kind === "myweek") sel.value = "myweek";
+    else if (WK_ROUTE.kind === "chapter") sel.value = "chap-" + (WK_ROUTE.chapNum || 1);
+  }
 }
+
 function toggleWkMode() {
   bookMode = !bookMode;
-  renderBooklet();
+  if (WK_ROUTE.kind === "myweek" || WK_ROUTE.kind === "chapter") {
+    const chapNum = WK_ROUTE.kind === "chapter" ? WK_ROUTE.chapNum : (WK_STATE.activeChapNum || 1);
+    if (bookMode && WK_ROUTE.kind === "myweek") {
+      WK_ROUTE = { kind: "chapter", chapNum, editionId: null };
+      history.replaceState(null, "", `weekly.html?chap=${chapNum}&mode=book`);
+    } else if (!bookMode && WK_ROUTE.kind === "chapter") {
+      history.replaceState(null, "", `weekly.html?chap=${chapNum}&mode=myweek`);
+    }
+    renderBooklet();
+  } else {
+    applyWkToggles();
+  }
 }
 function toggleWkTr() {
   showTr = !showTr;
@@ -284,9 +383,9 @@ function getSelectedChapter(chaps) {
     const byNum = chaps.find(c => String(c.num) === String(qsChap) || String(c.id) === String(qsChap));
     if (byNum) return byNum;
   }
-  const log = store.get("ats-log", []);
-  const passed = new Set(log.filter(x => x && x.e === "chap-test" && x.chap && (x.score >= 80 || x.pass === true)).map(x => String(x.chap)));
-  const saved = store.get("ats-current-chap-id") || localStorage.getItem("ats-current-chap-id");
+  const log = typeof store !== "undefined" ? store.get("ats-log", []) : [];
+  const passed = new Set((log || []).filter(x => x && x.e === "chap-test" && x.chap && (x.score >= 80 || x.pass === true)).map(x => String(x.chap)));
+  const saved = (typeof store !== "undefined" && store.get("ats-current-chap-id")) || localStorage.getItem("ats-current-chap-id");
   if (saved) {
     const hit = chaps.find(c => c.id === saved && !passed.has(c.id));
     if (hit) return hit;
@@ -321,9 +420,10 @@ function extractChapterVocab(chap) {
   return Array.from(map.values()).slice(0, 18);
 }
 
-function selectLessonCards(cards, chapNum, srs) {
+function selectLessonCards(cards, chapNum, srs, useBook) {
   const all = cards || [];
-  if (bookMode && all.length) {
+  const isBook = typeof useBook === "boolean" ? useBook : bookMode;
+  if (isBook && all.length) {
     const chMatches = all.filter(c => Array.isArray(c.triggers && c.triggers.chapters) && c.triggers.chapters.includes(chapNum));
     const picks = chMatches.slice(0, 2);
     let cursor = ((Math.max(1, chapNum) - 1) * 2) % all.length;
@@ -349,9 +449,10 @@ function selectLessonCards(cards, chapNum, srs) {
   return scored.slice(0, 2);
 }
 
-function selectCoreQuranWords(qCore, srs, chapNum) {
+function selectCoreQuranWords(qCore, srs, chapNum, useBook) {
   const list = qCore || [];
-  if (bookMode && list.length) {
+  const isBook = typeof useBook === "boolean" ? useBook : bookMode;
+  if (isBook && list.length) {
     const start = ((Math.max(1, chapNum || 1) - 1) * 12) % list.length;
     const picked = [];
     for (let k = 0; k < Math.min(12, list.length); k++) {
@@ -375,7 +476,8 @@ function selectCoreQuranWords(qCore, srs, chapNum) {
   return items.slice(0, 12);
 }
 
-function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
+function selectAyahs(versesSurahs, qSents, chap, qCore, srs, useBook) {
+  const isBook = typeof useBook === "boolean" ? useBook : bookMode;
   const wordsForLookup = (qCore || []).map((w, i) => ({ ar: w.ar, key: "qc:" + i, qcKey: "qc:" + i }));
   const knownLookup = (window.Practice && Practice.buildKnownNormLookup) ? Practice.buildKnownNormLookup(wordsForLookup) : new Map();
   const out = [];
@@ -400,9 +502,9 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   const unlocked = [];
   (qSents || []).forEach(s => {
     const key = "qs:" + s.surah + ":" + s.ayah;
-    if (!bookMode && isGreen(key, srs)) return;
+    if (!isBook && isGreen(key, srs)) return;
     const rd = (window.Practice && Practice.ayahReadiness) ? Practice.ayahReadiness(Object.assign({}, s, { key }), srs, knownLookup) : { unknownWords: 2, knownWords: 0, totalWords: 3 };
-    if (rd.unknownWords <= (bookMode ? 4 : 2)) {
+    if (rd.unknownWords <= (isBook ? 4 : 2)) {
       unlocked.push({
         kind: "Unlocked i+1 (" + rd.knownWords + "/" + rd.totalWords + " words held)",
         surahName: s.surahName,
@@ -420,7 +522,7 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   unlocked.sort((a, b) => a.unknownWords - b.unknownWords || a.surahNum - b.surahNum || a.ayahNum - b.ayahNum);
   const picked = [];
   const seenRef = new Set();
-  const ordered = bookMode ? out.concat(unlocked) : out.filter(v => !v.green).concat(unlocked).concat(out);
+  const ordered = isBook ? out.concat(unlocked) : out.filter(v => !v.green).concat(unlocked).concat(out);
   for (const x of ordered) {
     if (picked.length >= 5) break;
     if (seenRef.has(x.ref)) continue;
@@ -430,10 +532,11 @@ function selectAyahs(versesSurahs, qSents, chap, qCore, srs) {
   return picked;
 }
 
-function selectMosqueCues(evGroups, srs, chapNum) {
+function selectMosqueCues(evGroups, srs, chapNum, useBook) {
+  const isBook = typeof useBook === "boolean" ? useBook : bookMode;
   const pool = [];
   const labels = { khutba: "Friday Khutbah", duas: "Common Du'ā", masjid: "Imam / Mosque" };
-  if (bookMode) {
+  if (isBook) {
     const offset = Math.max(0, (chapNum || 1) - 1) * 2;
     ["khutba", "duas", "masjid"].forEach(gid => {
       const g = (evGroups || []).find(x => x.id === gid);
@@ -461,9 +564,10 @@ function selectMosqueCues(evGroups, srs, chapNum) {
   return pool.slice(0, 6);
 }
 
-function selectSayYourDay(mydaySents, srs, chapNum) {
+function selectSayYourDay(mydaySents, srs, chapNum, useBook) {
+  const isBook = typeof useBook === "boolean" ? useBook : bookMode;
   const list = mydaySents || [];
-  if (bookMode && list.length) {
+  if (isBook && list.length) {
     const start = ((Math.max(1, chapNum || 1) - 1) * 6) % list.length;
     const picked = [];
     for (let k = 0; k < Math.min(6, list.length); k++) {
@@ -485,33 +589,165 @@ function selectSayYourDay(mydaySents, srs, chapNum) {
   return pool.slice(0, 6);
 }
 
-function renderBooklet() {
-  const { chaps, lcCards, qCore, verses, qSents, evGroups, myday, activeChapNum } = WK_STATE;
-  const chap = chaps.find(c => Number(c.num) === Number(activeChapNum)) || chaps[0];
-  if (!chap) return;
-  const srs = typeof getSrs === "function" ? getSrs() : {};
-  if (window.LessonCards && LessonCards.ensureStyles) LessonCards.ensureStyles();
-
-  const chapVocab = extractChapterVocab(chap);
+function buildChapterSpec(chap, useBook, srs) {
+  const { lcCards, qCore, verses, qSents, evGroups, myday } = WK_STATE;
   const chapGreen = (chap.sentences || []).filter((_, i) => isGreen("chap:" + chap.num + ":" + i, srs)).length;
-  const lcPicks = selectLessonCards(lcCards, chap.num, srs);
-  const core12 = selectCoreQuranWords(qCore, srs, chap.num);
-  const ayahs5 = selectAyahs(verses, qSents, chap, qCore, srs);
-  const mosque6 = selectMosqueCues(evGroups, srs, chap.num);
-  const day6 = selectSayYourDay(myday, srs, chap.num);
+  const lcPicks = selectLessonCards(lcCards, chap.num, srs, useBook);
+  const core12 = selectCoreQuranWords(qCore, srs, chap.num, useBook);
+  const ayahs5 = selectAyahs(verses, qSents, chap, qCore, srs, useBook);
+  const mosque6 = selectMosqueCues(evGroups, srs, chap.num, useBook);
+  const day6 = selectSayYourDay(myday, srs, chap.num, useBook);
   const chapPromptPool = (chap.sentences || [])
     .map((s, i) => ({ s, key: "chap:" + chap.num + ":" + i, green: isGreen("chap:" + chap.num + ":" + i, srs) }));
-  const chapPromptFiltered = bookMode ? chapPromptPool : chapPromptPool.filter(x => !x.green);
+  const chapPromptFiltered = useBook ? chapPromptPool : chapPromptPool.filter(x => !x.green);
   const preply3 = (chapPromptFiltered.length ? chapPromptFiltered : chapPromptPool)
     .slice(0, 2)
     .map(x => ({ ar: x.s.ar, en: x.s.en, tr: x.s.tr, tag: "Ch " + chap.num }))
     .concat(day6.slice(0, 3).map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, tag: "Say Your Day" })))
     .slice(0, 3);
+  return { chap, chapGreen, lcPicks, core12, ayahs5, mosque6, day6, preply3, useBook };
+}
 
-  const chapSurah = (verses || []).find(s => s.id === chap.surahId);
-  const todayLabel = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+function buildCurrentWeekSnapshot(srs) {
+  const srsUse = srs || (typeof getSrs === "function" ? getSrs() : {});
+  const chap = WK_STATE.chaps.find(c => Number(c.num) === Number(WK_STATE.activeChapNum)) || WK_STATE.chaps[0];
+  const spec = buildChapterSpec(chap, false, srsUse);
+  const now = Date.now();
+  const info = isoWeekInfo(now);
+  return {
+    id: info.weekId,
+    weekLabel: info.weekLabel,
+    createdAt: now,
+    chapNum: chap.num,
+    chapTitle: chap.title,
+    lcIds: spec.lcPicks.map(p => p.card.id),
+    coreIdxs: spec.core12.map(c => c.i),
+    ayahRefs: spec.ayahs5.map(a => a.ref),
+    mosqueKeys: spec.mosque6.map(m => m.key),
+    mydayIds: spec.day6.map(d => d.s.id)
+  };
+}
 
-  const renderSentRows = (rows) => rows.map((r, i) => {
+function saveCurrentWeekEdition(showToast) {
+  if (!WK_STATE.ready || !WK_STATE.chaps.length) return null;
+  const snap = buildCurrentWeekSnapshot();
+  const eds = (typeof store !== "undefined" && store.get) ? store.get("ats-weekly-editions", []) : [];
+  const next = [snap].concat((eds || []).filter(e => e && e.id !== snap.id)).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 52);
+  if (typeof store !== "undefined" && store.set) store.set("ats-weekly-editions", next);
+  if (typeof logEvent === "function") logEvent({ e: "weekly-edition", id: snap.id, chapNum: snap.chapNum, t: Date.now() });
+  if (typeof autoSync === "function") { try { autoSync(); } catch (_) {} }
+  const btn = document.getElementById("btnSaveSnap");
+  if (showToast && btn) {
+    btn.textContent = "✓ Saved";
+    btn.classList.add("active");
+    setTimeout(() => { btn.textContent = "📌 Save Snapshot"; btn.classList.remove("active"); }, 1800);
+  }
+  if (WK_ROUTE.kind === "shelf") renderShelf();
+  return snap;
+}
+
+function saveSnapshotManual() {
+  if (WK_ROUTE.kind === "chapter") {
+    const chap = WK_STATE.chaps.find(c => Number(c.num) === Number(WK_ROUTE.chapNum)) || WK_STATE.chaps[0];
+    const srs = typeof getSrs === "function" ? getSrs() : {};
+    const spec = buildChapterSpec(chap, bookMode, srs);
+    const now = Date.now();
+    const info = isoWeekInfo(now);
+    const snap = {
+      id: `${info.weekId}-ch${chap.num}`,
+      weekLabel: `${info.weekLabel} · Ch ${chap.num}`,
+      createdAt: now,
+      chapNum: chap.num,
+      chapTitle: chap.title,
+      lcIds: spec.lcPicks.map(p => p.card.id),
+      coreIdxs: spec.core12.map(c => c.i),
+      ayahRefs: spec.ayahs5.map(a => a.ref),
+      mosqueKeys: spec.mosque6.map(m => m.key),
+      mydayIds: spec.day6.map(d => d.s.id)
+    };
+    const eds = (typeof store !== "undefined" && store.get) ? store.get("ats-weekly-editions", []) : [];
+    const next = [snap].concat((eds || []).filter(e => e && e.id !== snap.id)).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 52);
+    if (typeof store !== "undefined" && store.set) store.set("ats-weekly-editions", next);
+    if (typeof logEvent === "function") logEvent({ e: "weekly-edition", id: snap.id, chapNum: snap.chapNum, t: Date.now() });
+    if (typeof autoSync === "function") { try { autoSync(); } catch (_) {} }
+    const btn = document.getElementById("btnSaveSnap");
+    if (btn) {
+      btn.textContent = "✓ Saved";
+      btn.classList.add("active");
+      setTimeout(() => { btn.textContent = "📌 Save Snapshot"; btn.classList.remove("active"); }, 1800);
+    }
+    return;
+  }
+  saveCurrentWeekEdition(true);
+}
+
+function hydrateEditionSpec(ed, srs) {
+  const { chaps, lcCards, qCore, verses, qSents, evGroups, myday } = WK_STATE;
+  const chap = chaps.find(c => Number(c.num) === Number(ed.chapNum)) || chaps[0];
+  const chapGreen = (chap.sentences || []).filter((_, i) => isGreen("chap:" + chap.num + ":" + i, srs)).length;
+  const lcPicks = (ed.lcIds || []).map(id => {
+    const c = lcCards.find(x => x.id === id);
+    if (!c) return null;
+    const key = "lc:" + c.id;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs }) : { level: "grey" };
+    return { card: c, key, st, rank: 0 };
+  }).filter(Boolean);
+  const core12 = (ed.coreIdxs || []).map(i => {
+    const w = qCore[i];
+    if (!w) return null;
+    const key = "qc:" + i;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [w.ar] }) : { level: "grey" };
+    const pillar = (window.Practice && Practice.classifyQuranWord) ? Practice.classifyQuranWord(w.ar, w.en) : "word";
+    return { w, i, key, st, pillar, pri: 0 };
+  }).filter(Boolean);
+
+  // Build ref index from verses + qSents to rehydrate frozen ayahRefs
+  const ayahByRef = new Map();
+  (verses || []).forEach(s => (s.verses || []).forEach((v, vi) => {
+    const ref = v.ref || (s.n + ":" + (vi + 1));
+    ayahByRef.set(ref, {
+      surahName: s.nameEn || s.name, surahNum: s.n, ayahNum: Number(String(ref).split(":")[1] || (vi + 1)),
+      ref, ar: v.ar, en: v.en, key: "s:q:" + s.id + ":" + vi
+    });
+  }));
+  (qSents || []).forEach(s => {
+    const ref = s.ref || (s.surah + ":" + s.ayah);
+    if (!ayahByRef.has(ref)) {
+      ayahByRef.set(ref, {
+        surahName: s.surahName, surahNum: s.surah, ayahNum: s.ayah,
+        ref, ar: s.ar, en: s.en, key: "qs:" + s.surah + ":" + s.ayah
+      });
+    }
+  });
+  const ayahs5 = (ed.ayahRefs || []).map(ref => ayahByRef.get(ref)).filter(Boolean);
+
+  const labels = { khutba: "Friday Khutbah", duas: "Common Du'ā", masjid: "Imam / Mosque" };
+  const mosque6 = (ed.mosqueKeys || []).map(k => {
+    const m = /^ev-([^:]+):(\d+)$/.exec(k);
+    if (!m) return null;
+    const g = (evGroups || []).find(x => x.id === m[1]);
+    const item = g && g.members && g.members[Number(m[2])];
+    return item ? { m: item, key: k, label: labels[m[1]] || m[1], pri: 0, idx: Number(m[2]) } : null;
+  }).filter(Boolean);
+
+  const day6 = (ed.mydayIds || []).map((id, idx) => {
+    const s = (myday || []).find(x => String(x.id) === String(id));
+    if (!s) return null;
+    const key = "myday:" + s.id;
+    const st = (window.SRS && SRS.masteryState) ? SRS.masteryState(key, { srs, altKeys: [s.id, s.ar] }) : { level: "grey" };
+    return { s, key, st, pri: 0, idx };
+  }).filter(Boolean);
+
+  const chapPromptPool = (chap.sentences || []).map((s, i) => ({ s, key: "chap:" + chap.num + ":" + i }));
+  const preply3 = chapPromptPool.slice(0, 2).map(x => ({ ar: x.s.ar, en: x.s.en, tr: x.s.tr, tag: "Ch " + chap.num }))
+    .concat(day6.slice(0, 3).map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, tag: "Say Your Day" })))
+    .slice(0, 3);
+
+  return { chap, chapGreen, lcPicks, core12, ayahs5, mosque6, day6, preply3, useBook: false };
+}
+
+function renderSentRowsHtml(rows) {
+  return (rows || []).map((r, i) => {
     const encAr = encodeURIComponent(r.ar || "");
     return `
       <div class="wk-row" data-hint="${esc(r.hint || "")}">
@@ -531,166 +767,431 @@ function renderBooklet() {
       </div>
     `;
   }).join("");
+}
 
-  const html = `
-    <table class="wk-print-shell" role="presentation">
-      <thead><tr><td><div class="wk-print-margin"></div></td></tr></thead>
+function glueMatrixHtml() {
+  return `
+    <h3 class="wk-subh">Preposition + Attached Pronoun Glue Matrix</h3>
+    <table class="wk-tbl wk-glue">
+      <thead>
+        <tr><th>Root</th><th>-ī (me)</th><th>-ka (you)</th><th>-hu (him)</th><th>-hā (her)</th><th>-nā (us)</th><th>-kum (y'all)</th><th>-hum (them)</th></tr>
+      </thead>
       <tbody>
-        <tr><td class="wk-print-body">
-          <div class="wk-titleplate">
-            <div class="wk-kicker">${bookMode ? "Book Chapter Edition · Arabic Mastery Programme" : "Weekly Study Booklet · Arabic Mastery Programme"}</div>
-            <h1 class="wk-title">
-              <span>${esc(chap.title)}</span>
-              <span class="ar-sub" dir="rtl">كُرَّاسَةُ الأُسْبُوع</span>
-            </h1>
-            <div class="wk-meta">
-              ${bookMode ? `Standalone Book Chapter · <b>Ch ${chap.num}</b>` : `Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green)`}<span class="no-print"> ·
-              Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save This Week's PDF</b> for A4 paper.</span>
-            </div>
-          </div>
+        ${GLUE_MATRIX.map(row => `
+          <tr>
+            <td><span class="arabic" style="font-size:18px;font-weight:700">${esc(row.base)}</span> <span style="font-size:11.5px;color:var(--muted)">(${esc(row.en)})</span></td>
+            ${row.cells.map(([ar, tr]) => {
+              const encAr = encodeURIComponent(ar);
+              return `<td><span class="g-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(ar)}</span><span class="g-tr" dir="ltr">${esc(tr)}</span></td>`;
+            }).join("")}
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
 
-          <!-- SECTION I: ACTIVE CHAPTER -->
-          <section class="wk-sec">
-      <h2 class="wk-sec-h"><span>I. This Week's Chapter — 10 Core Sentences</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Speak aloud before looking</span></h2>
-      <p class="wk-sec-sub">Read the English line on the left, produce the Arabic aloud, then glance right to verify.</p>
-      <div class="wk-list">
-        ${renderSentRows((chap.sentences || []).map((s, i) => ({ ar: s.ar, en: s.en, tr: s.tr, hint: s.hint, key: "chap:" + chap.num + ":" + i })))}
+function renderChapterBodyRowsHtml(spec, opts) {
+  const o = opts || {};
+  const { chap, chapGreen, lcPicks, core12, ayahs5, mosque6, day6, preply3, useBook } = spec;
+  const chapVocab = extractChapterVocab(chap);
+  const chapSurah = (WK_STATE.verses || []).find(s => s.id === chap.surahId);
+  const todayLabel = o.edition ? o.edition.weekLabel : new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const kickerText = o.edition
+    ? `Saved Printed Edition · ${esc(o.edition.weekLabel || o.edition.id)}`
+    : useBook
+      ? `Book Chapter Edition · Week ${chap.num}`
+      : "Weekly Study Booklet · Arabic Mastery Programme";
+  const metaText = o.edition
+    ? `Frozen snapshot from <b>${esc(new Date(o.edition.createdAt || Date.now()).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))}</b> · <b>Ch ${chap.num}</b>`
+    : useBook
+      ? `Standalone Book Chapter · <b>Ch ${chap.num}</b>`
+      : `Prepared ${esc(todayLabel)} · Active spine: <b>Ch ${chap.num}</b> (${chapGreen}/${(chap.sentences || []).length} lines green)`;
+
+  const trStart = o.pageBreakBefore ? `<tr class="wk-pagebreak"><td class="wk-print-body">` : `<tr><td class="wk-print-body">`;
+
+  return `
+    ${trStart}
+      <div class="wk-titleplate">
+        <div class="wk-kicker">${kickerText}</div>
+        <h1 class="wk-title">
+          <span>${esc(chap.title)}</span>
+          <span class="ar-sub" dir="rtl">${chapSurah ? "سُورَةُ " + esc(chapSurah.name) : "كُرَّاسَةُ الأُسْبُوع"}</span>
+        </h1>
+        <div class="wk-meta">
+          ${metaText}<span class="no-print"> ·
+          Click any Arabic phrase on screen to hear natural voice, or press <b>Print / Save PDF</b> for A4 paper.</span>
+        </div>
       </div>
 
-      ${chapVocab.length ? `
-        <h3 class="wk-subh">Chapter Vocabulary (${chapVocab.length} key tokens)</h3>
-        <div class="wk-vocab-grid">
-          ${chapVocab.map(v => {
-            const encAr = encodeURIComponent(v.ar);
-            return `<div class="wk-vocab-item"><span class="v-en">${esc(v.en)}</span><span class="v-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(v.ar)}</span></div>`;
+      <!-- SECTION I: ACTIVE CHAPTER -->
+      <section class="wk-sec">
+        <h2 class="wk-sec-h"><span>I. This Week's Chapter — 10 Core Sentences</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Speak aloud before looking</span></h2>
+        <p class="wk-sec-sub">Read the English line on the left, produce the Arabic aloud, then glance right to verify.</p>
+        <div class="wk-list">
+          ${renderSentRowsHtml((chap.sentences || []).map((s, i) => ({ ar: s.ar, en: s.en, tr: s.tr, hint: s.hint, key: "chap:" + chap.num + ":" + i })))}
+        </div>
+
+        ${chapVocab.length ? `
+          <h3 class="wk-subh">Chapter Vocabulary (${chapVocab.length} key tokens)</h3>
+          <div class="wk-vocab-grid">
+            ${chapVocab.map(v => {
+              const encAr = encodeURIComponent(v.ar);
+              return `<div class="wk-vocab-item"><span class="v-en">${esc(v.en)}</span><span class="v-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(v.ar)}</span></div>`;
+            }).join("")}
+          </div>
+        ` : ""}
+
+        ${chap.grammar ? `
+          <h3 class="wk-subh">Grammar Frame: ${esc(chap.grammar.title)}</h3>
+          <div class="wk-grammar-note">${chap.grammar.text}</div>
+        ` : ""}
+      </section>
+    </td></tr>
+
+    <!-- SECTION II: 2 PRIORITY LESSON CARDS -->
+    <tr class="${lcPicks.length ? "wk-pagebreak" : ""}"><td class="wk-print-body">
+      ${lcPicks.length ? `
+        <section class="wk-sec">
+          <h2 class="wk-sec-h"><span>II. Priority Mental Maps (${lcPicks.length} Lesson Cards)</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">${useBook ? "Core system visuals for this chapter" : "Unmastered systems for this week"}</span></h2>
+          <p class="wk-sec-sub">Study the pattern once as a single picture before drilling individual sentences in Practice.</p>
+          ${lcPicks.map(p => {
+            const qc = p.card.quickCheck
+              ? `<b>Quick check:</b> ${esc(p.card.quickCheck.prompt || "")}<span style="display:block;margin-top:3px"><span class="arabic" dir="rtl" style="font-size:19px;color:var(--ink)">${esc(p.card.quickCheck.answerAr || "")}</span> — ${esc(p.card.quickCheck.answerEn || "")}</span>`
+              : "";
+            return `<div class="wk-lc-slot">${LessonCards.renderBodyHtml(p.card, { extraBodyHtml: qc })}</div>`;
           }).join("")}
+        </section>
+      ` : ""}
+
+      <!-- SECTION III: QUR'AN COMPREHENSION ENGINE -->
+      <section class="wk-sec">
+        <h2 class="wk-sec-h"><span>III. Qur'ān by Ear &amp; Core Structures</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Structures → Top 151 Words → Ayahs</span></h2>
+        <p class="wk-sec-sub">High-leverage Mushaf words + ${o.showGlue !== false ? "attached pronouns + " : ""}ayahs unlocked at your current vocabulary level.</p>
+
+        ${core12.length ? `
+          <h3 class="wk-subh">12 Core Qur'ānic Words${useBook ? ` — Chapter ${chap.num} Set` : " Due This Week"}</h3>
+          <table class="wk-tbl">
+            <thead><tr><th style="width:44px">#</th><th>Meaning</th><th style="text-align:right">Arabic</th><th style="text-align:right;width:130px">Mushaf Freq</th></tr></thead>
+            <tbody>
+              ${core12.map(item => {
+                const encAr = encodeURIComponent(item.w.ar);
+                return `
+                  <tr>
+                    <td>#${item.i + 1}</td>
+                    <td>${esc(item.w.en)}</td>
+                    <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">
+                      <div>${esc(item.w.ar)}</div>
+                      ${item.w.tr ? `<div class="wk-tr" dir="ltr">${esc(item.w.tr)}</div>` : ""}
+                    </td>
+                    <td style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">${Number(item.w.n || 0).toLocaleString()}× ${mdot(item.key)}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        ` : ""}
+
+        ${o.showGlue !== false ? glueMatrixHtml() : ""}
+
+        ${ayahs5.length ? `
+          <h3 class="wk-subh">5 Salah &amp; Unlocked i+1 Ayahs (${chapSurah ? esc(chapSurah.nameEn) + " + " : ""}Comprehensible Input)</h3>
+          ${ayahs5.map(a => {
+            const encAr = encodeURIComponent(a.ar);
+            return `
+              <div class="wk-ayah">
+                <div class="wk-ayah-top">
+                  <span class="wk-ayah-ref">${esc(a.surahName)} (${esc(a.ref)}) ${mdot(a.key)}</span>
+                  <button type="button" class="wk-audio-btn" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">🎧 Alafasy</button>
+                </div>
+                <div class="wk-ayah-ar" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">${esc(a.ar)}</div>
+                <div class="wk-ayah-en">${esc(a.en)}</div>
+              </div>
+            `;
+          }).join("")}
+        ` : ""}
+      </section>
+
+      <!-- SECTION IV: FRIDAY KHUTBAH, EVERYDAY & PREPLY -->
+      <section class="wk-sec">
+        <h2 class="wk-sec-h"><span>IV. Friday Khutbah, Say Your Day &amp; Sunday Preply</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Mosque cues &amp; live speech</span></h2>
+
+        ${mosque6.length ? `
+          <h3 class="wk-subh">6 Friday Khutbah, Common Du'ā &amp; Imam Cues</h3>
+          <div class="wk-list">
+            ${renderSentRowsHtml(mosque6.map(c => ({ ar: c.m.ar, en: c.m.en, tr: c.m.tr, hint: c.label + (c.m.note ? " — " + c.m.note : ""), key: c.key })))}
+          </div>
+        ` : ""}
+
+        ${day6.length ? `
+          <h3 class="wk-subh">6 Everyday "Say Your Day" Lines</h3>
+          <div class="wk-list">
+            ${renderSentRowsHtml(day6.map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, hint: d.s.swap ? "Swap: " + d.s.swap : "", key: d.key })))}
+          </div>
+        ` : ""}
+
+        ${preply3.length ? `
+          <h3 class="wk-subh">3 Sunday Preply Warm-Up Prompts</h3>
+          <div class="wk-list">
+            ${renderSentRowsHtml(preply3.map(p => ({ ar: p.ar, en: p.en, tr: p.tr, hint: p.tag })))}
+          </div>
+        ` : ""}
+      </section>
+
+      ${!o.omitColophon ? `
+        <div class="wk-colophon">
+          <span>Arabic Learning System · rkarim25.github.io/arabiclanguage</span>
+          <span>Active Study Edition · Mishary Rashid Alafasy Qur'ān &amp; Natural MSA</span>
         </div>
       ` : ""}
+    </td></tr>
+  `;
+}
 
-      ${chap.grammar ? `
-        <h3 class="wk-subh">Grammar Frame: ${esc(chap.grammar.title)}</h3>
-        <div class="wk-grammar-note">${chap.grammar.text}</div>
+function renderShelf() {
+  const shelf = document.getElementById("weeklyShelf");
+  const reader = document.getElementById("weeklyReader");
+  if (!shelf || !reader) return;
+  shelf.style.display = "block";
+  reader.style.display = "none";
+
+  const { chaps, lcCards, qCore, verses } = WK_STATE;
+  const srs = typeof getSrs === "function" ? getSrs() : {};
+  const activeChap = chaps.find(c => Number(c.num) === Number(WK_STATE.activeChapNum)) || chaps[0];
+  const curSpec = activeChap ? buildChapterSpec(activeChap, false, srs) : null;
+  const weekInfo = isoWeekInfo(Date.now());
+  const editions = (typeof store !== "undefined" && store.get) ? store.get("ats-weekly-editions", []) : [];
+
+  const lcNamesCur = curSpec ? curSpec.lcPicks.map(p => p.card.title).join(" + ") : "";
+  const curChapTitleClean = activeChap ? String(activeChap.title || "").replace(/^Chapter\s+\d+:\s*/i, "") : "";
+
+  shelf.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;border-bottom:1.5px solid var(--border-strong);padding-bottom:8px;margin-bottom:14px">
+      <h1 style="margin:0;border-bottom:0;padding-bottom:0">Printed Week Versions <span class="arabic" style="color:var(--muted);font-weight:400" dir="rtl">كُرَّاسَاتُ الأَسَابِيع</span></h1>
+      <span style="display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <a href="index.html" class="wk-pill" style="text-decoration:none">← Back to Practice</a>
+      </span>
+    </div>
+    <p class="sub" style="margin-top:0">Your personalized weekly A4 study booklets, saved snapshots of every week you've printed, and the complete standalone 10-week book series.</p>
+
+    <!-- SECTION I: THIS COMING WEEK -->
+    <section class="wk-sec" style="margin-top:16px;padding-top:0;border-top:0">
+      <h2 class="wk-sec-h">
+        <span>I. This Coming Week's Personalized Sheet</span>
+        <span style="font-size:12.5px;color:var(--muted)">${esc(weekInfo.weekLabel)}</span>
+      </h2>
+      ${curSpec ? `
+        <div class="wk-shelf-hero">
+          <div class="wk-ed-main">
+            <div class="wk-ed-title"><b>Ch ${activeChap.num}: ${esc(curChapTitleClean)}</b> — Personalized to your current SRS</div>
+            <div class="wk-ed-sub">
+              ${curSpec.chapGreen}/${(activeChap.sentences || []).length} chapter lines green ·
+              Lesson Cards: ${esc(lcNamesCur || "All mastered")} ·
+              ${curSpec.core12.length} Core Qur'ān words · ${curSpec.ayahs5.length} ayahs · ${curSpec.mosque6.length} Khutbah &amp; Du'ā cues · ${curSpec.day6.length} Say Your Day lines
+            </div>
+          </div>
+          <div class="wk-ed-dock">
+            <button type="button" class="wk-pill" onclick="navigateWeekly('?week=current')">📖 Open Sheet</button>
+            <button type="button" id="btnSaveSnap" class="wk-pill" onclick="saveCurrentWeekEdition(true)" title="Freeze this week's exact selection into your archive">📌 Save Snapshot</button>
+            <button type="button" class="wk-pill primary" onclick="navigateWeekly('?week=current', true)">🖨️ Print This Week's PDF</button>
+          </div>
+        </div>
       ` : ""}
     </section>
-        </td></tr>
 
-        <!-- SECTION II: 2 PRIORITY LESSON CARDS -->
-        <tr class="${lcPicks.length ? "wk-pagebreak" : ""}"><td class="wk-print-body">
-    ${lcPicks.length ? `
-      <section class="wk-sec">
-        <h2 class="wk-sec-h"><span>II. Priority Mental Maps (${lcPicks.length} Lesson Cards)</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Unmastered systems for this week</span></h2>
-        <p class="wk-sec-sub">Study the pattern once as a single picture before drilling individual sentences in Practice.</p>
-        ${lcPicks.map(p => {
-          const qc = p.card.quickCheck
-            ? `<b>Quick check:</b> ${esc(p.card.quickCheck.prompt || "")}<span style="display:block;margin-top:3px"><span class="arabic" dir="rtl" style="font-size:19px;color:var(--ink)">${esc(p.card.quickCheck.answerAr || "")}</span> — ${esc(p.card.quickCheck.answerEn || "")}</span>`
-            : "";
-          return `<div class="wk-lc-slot">${LessonCards.renderBodyHtml(p.card, { extraBodyHtml: qc })}</div>`;
-        }).join("")}
-      </section>
-    ` : ""}
-
-    <!-- SECTION III: QUR'AN COMPREHENSION ENGINE -->
+    <!-- SECTION II: SAVED & PRINTED WEEKLY EDITIONS ARCHIVE -->
     <section class="wk-sec">
-      <h2 class="wk-sec-h"><span>III. Qur'ān by Ear &amp; Core Structures</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Structures → Top 151 Words → Ayahs</span></h2>
-      <p class="wk-sec-sub">High-leverage Mushaf words + attached pronouns + ayahs unlocked at your current vocabulary level.</p>
-
-      ${core12.length ? `
-        <h3 class="wk-subh">12 Core Qur'ānic Words Due This Week</h3>
-        <table class="wk-tbl">
-          <thead><tr><th style="width:44px">#</th><th>Meaning</th><th style="text-align:right">Arabic</th><th style="text-align:right;width:130px">Mushaf Freq</th></tr></thead>
-          <tbody>
-            ${core12.map(item => {
-              const encAr = encodeURIComponent(item.w.ar);
-              return `
-                <tr>
-                  <td>#${item.i + 1}</td>
-                  <td>${esc(item.w.en)}</td>
-                  <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">
-                    <div>${esc(item.w.ar)}</div>
-                    ${item.w.tr ? `<div class="wk-tr" dir="ltr">${esc(item.w.tr)}</div>` : ""}
-                  </td>
-                  <td style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">${Number(item.w.n || 0).toLocaleString()}× ${mdot(item.key)}</td>
-                </tr>
-              `;
-            }).join("")}
-          </tbody>
-        </table>
-      ` : ""}
-
-      <h3 class="wk-subh">Preposition + Attached Pronoun Glue Matrix</h3>
-      <table class="wk-tbl wk-glue">
-        <thead>
-          <tr><th>Root</th><th>-ī (me)</th><th>-ka (you)</th><th>-hu (him)</th><th>-hā (her)</th><th>-nā (us)</th><th>-kum (y'all)</th><th>-hum (them)</th></tr>
-        </thead>
-        <tbody>
-          ${GLUE_MATRIX.map(row => `
-            <tr>
-              <td><span class="arabic" style="font-size:18px;font-weight:700">${esc(row.base)}</span> <span style="font-size:11.5px;color:var(--muted)">(${esc(row.en)})</span></td>
-              ${row.cells.map(([ar, tr]) => {
-                const encAr = encodeURIComponent(ar);
-                return `<td><span class="g-ar" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">${esc(ar)}</span><span class="g-tr" dir="ltr">${esc(tr)}</span></td>`;
-              }).join("")}
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-
-      ${ayahs5.length ? `
-        <h3 class="wk-subh">5 Salah &amp; Unlocked i+1 Ayahs (${chapSurah ? esc(chapSurah.nameEn) + " + " : ""}Comprehensible Input)</h3>
-        ${ayahs5.map(a => {
-          const encAr = encodeURIComponent(a.ar);
-          return `
-            <div class="wk-ayah">
-              <div class="wk-ayah-top">
-                <span class="wk-ayah-ref">${esc(a.surahName)} (${esc(a.ref)}) ${mdot(a.key)}</span>
-                <button type="button" class="wk-audio-btn" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">🎧 Alafasy</button>
+      <h2 class="wk-sec-h">
+        <span>II. Saved &amp; Printed Weekly Editions (${editions.length})</span>
+        <span style="font-size:12.5px;color:var(--muted)">Frozen weekly snapshots · cloud-synced</span>
+      </h2>
+      ${editions.length ? `
+        <div class="wk-ed-list">
+          ${editions.map(ed => {
+            const lcLabels = (ed.lcIds || []).map(id => {
+              const card = lcCards.find(x => x.id === id);
+              return card ? card.title : id;
+            }).join(" + ");
+            const dateStr = ed.createdAt ? new Date(ed.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+            const encId = encodeURIComponent(ed.id);
+            const cleanEdChap = String(ed.chapTitle || ("Chapter " + ed.chapNum)).replace(/^Chapter\s+\d+:\s*/i, "");
+            return `
+              <div class="wk-ed-row">
+                <div class="wk-ed-main">
+                  <div class="wk-ed-title">${esc(ed.weekLabel || ed.id)} — Ch ${ed.chapNum}: ${esc(cleanEdChap)}</div>
+                  <div class="wk-ed-sub">
+                    Saved ${esc(dateStr)} · ${(ed.coreIdxs || []).length} Core Qur'ān words · ${(ed.ayahRefs || []).length} ayahs${lcLabels ? " · Cards: " + esc(lcLabels) : ""}
+                  </div>
+                </div>
+                <div class="wk-ed-dock">
+                  <button type="button" class="wk-pill" onclick="navigateWeekly('?edition=${encId}')">📖 Open</button>
+                  <button type="button" class="wk-pill" onclick="navigateWeekly('?edition=${encId}', true)">🖨️ Print PDF</button>
+                </div>
               </div>
-              <div class="wk-ayah-ar" onclick="reciteVerse(${a.surahNum}, ${a.ayahNum}, decodeURIComponent('${encAr}'), 0.85)">${esc(a.ar)}</div>
-              <div class="wk-ayah-en">${esc(a.en)}</div>
+            `;
+          }).join("")}
+        </div>
+      ` : `<p style="font-size:14px;color:var(--muted);margin:8px 0">No saved editions yet — printing This Coming Week or pressing <b>Save Snapshot</b> freezes that week's sheet here forever so your past weeks become a permanent series.</p>`}
+    </section>
+
+    <!-- SECTION III: COMPLETE 10-WEEK STANDALONE BOOK SERIES -->
+    <section class="wk-sec">
+      <h2 class="wk-sec-h">
+        <span>III. Complete 10-Week Standalone Book Series</span>
+        <span style="display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button type="button" class="wk-pill" onclick="navigateWeekly('?book=all')">📘 Open Full 10-Week Book</button>
+          <button type="button" class="wk-pill primary" onclick="navigateWeekly('?book=all', true)">🖨️ Print Full Book PDF</button>
+        </span>
+      </h2>
+      <p class="wk-sec-sub">Fixed curriculum chapters designed to work cleanly as a printed self-study book from Week 1 to Week 10.</p>
+      <div class="wk-ed-list">
+        ${chaps.map(c => {
+          const cleanTitle = String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, "");
+          const chapSurah = (verses || []).find(s => s.id === c.surahId);
+          const surahName = chapSurah ? chapSurah.nameEn.split("—")[0].trim() : (c.surahId || "");
+          const lcForChap = selectLessonCards(lcCards, c.num, srs, true).map(p => p.card.title).join(" & ");
+          const coreStart = (((Math.max(1, c.num) - 1) * 12) % Math.max(1, qCore.length)) + 1;
+          const coreEnd = qCore.length ? ((coreStart + 10) % qCore.length) + 1 : coreStart + 11;
+          const chapKeys = (c.sentences || []).map((_, i) => "chap:" + c.num + ":" + i);
+          const counts = (window.SRS && SRS.summaryCounts) ? SRS.summaryCounts(chapKeys) : { green: 0, total: chapKeys.length };
+          const chapDot = mdot("chap:" + c.num + ":0", { lg: true, altKeys: chapKeys });
+          return `
+            <div class="wk-ed-row">
+              <div class="wk-ed-main">
+                <div class="wk-ed-title"><span style="color:var(--muted);font-size:13px;font-weight:400;margin-right:8px">Week ${c.num}.</span>${esc(cleanTitle)}</div>
+                <div class="wk-ed-sub">
+                  Surah ${esc(surahName)} · Lesson Cards: ${esc(lcForChap)} · Core Qur'ān Words #${coreStart}–#${coreEnd} · 6 Khutbah &amp; Du'ā cues
+                </div>
+              </div>
+              <div class="wk-ed-ar">${chapSurah ? "سُورَةُ " + esc(chapSurah.name) : ""}</div>
+              <div class="wk-ed-dock">
+                <span style="font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums">${counts.green}/${counts.total} green</span>
+                ${chapDot}
+                <button type="button" class="wk-pill" onclick="navigateWeekly('?chap=${c.num}&amp;mode=book')">📖 Open</button>
+                <button type="button" class="wk-pill" onclick="navigateWeekly('?chap=${c.num}&amp;mode=book', true)">🖨️ Print PDF</button>
+              </div>
             </div>
           `;
         }).join("")}
-      ` : ""}
+      </div>
     </section>
+  `;
+}
 
-    <!-- SECTION IV: FRIDAY KHUTBAH, EVERYDAY & PREPLY -->
-    <section class="wk-sec">
-      <h2 class="wk-sec-h"><span>IV. Friday Khutbah, Say Your Day &amp; Sunday Preply</span><span style="font-size:12.5px;font-weight:500;color:var(--muted)">Mosque cues &amp; live speech</span></h2>
+function renderBooklet() {
+  const shelf = document.getElementById("weeklyShelf");
+  const reader = document.getElementById("weeklyReader");
+  if (!shelf || !reader) return;
+  shelf.style.display = "none";
+  reader.style.display = "block";
 
-      ${mosque6.length ? `
-        <h3 class="wk-subh">6 Friday Khutbah, Common Du'ā &amp; Imam Cues</h3>
-        <div class="wk-list">
-          ${renderSentRows(mosque6.map(c => ({ ar: c.m.ar, en: c.m.en, tr: c.m.tr, hint: c.label + (c.m.note ? " — " + c.m.note : ""), key: c.key })))}
+  const { chaps, activeChapNum } = WK_STATE;
+  const srs = typeof getSrs === "function" ? getSrs() : {};
+  if (window.LessonCards && LessonCards.ensureStyles) LessonCards.ensureStyles();
+
+  let bodyRowsHtml = "";
+  if (WK_ROUTE.kind === "fullbook") {
+    const tocHtml = `
+      <tr><td class="wk-print-body">
+        <div class="wk-titleplate">
+          <div class="wk-kicker">Complete 10-Week Study Book · Arabic Mastery Programme</div>
+          <h1 class="wk-title">
+            <span>Arabic for Conversation &amp; the Qur'ān as Recited</span>
+            <span class="ar-sub" dir="rtl">كِتَابُ العَرَبِيَّةِ لِلْمُحَادَثَةِ وَالقُرْآنِ</span>
+          </h1>
+          <div class="wk-meta">Complete 10-chapter book edition with parallel English &amp; vowelled MSA sentences, high-frequency Qur'ānic core words, selected Lesson Cards, Salah surahs, Friday Khutbah cues, and Daily Speech drills.</div>
         </div>
-      ` : ""}
-
-      ${day6.length ? `
-        <h3 class="wk-subh">6 Everyday "Say Your Day" Lines</h3>
-        <div class="wk-list">
-          ${renderSentRows(day6.map(d => ({ ar: d.s.ar, en: d.s.en, tr: d.s.tr, hint: d.s.swap ? "Swap: " + d.s.swap : "", key: d.key })))}
+        <section class="wk-sec" style="border-top:0;padding-top:0;margin-top:10px">
+          <h2 class="wk-sec-h"><span>Contents — 10 Weekly Chapters</span><span style="font-size:12.5px;color:var(--muted)">10 Weeks + Glue Appendix</span></h2>
+          <div style="margin-top:10px">
+            ${chaps.map(c => {
+              const chapSurah = (WK_STATE.verses || []).find(s => s.id === c.surahId);
+              const cleanTitle = String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, "");
+              return `<div class="wk-toc-row"><span><b>Week ${c.num}.</b> ${esc(cleanTitle)}${chapSurah ? ` <span style="color:var(--muted);font-size:12.5px">(${esc(chapSurah.nameEn.split("—")[0].trim())})</span>` : ""}</span><span class="arabic" style="font-size:19px" dir="rtl">${chapSurah ? "سُورَةُ " + esc(chapSurah.name) : ""}</span></div>`;
+            }).join("")}
+          </div>
+        </section>
+      </td></tr>
+    `;
+    const chaptersHtml = chaps.map(c => {
+      const spec = buildChapterSpec(c, true, srs);
+      return renderChapterBodyRowsHtml(spec, { pageBreakBefore: true, showGlue: false, omitColophon: true });
+    }).join("");
+    const appendixHtml = `
+      <tr class="wk-pagebreak"><td class="wk-print-body">
+        <section class="wk-sec" style="border-top:0;padding-top:0">
+          <h2 class="wk-sec-h"><span>Reference Appendix — Qur'ānic Glue &amp; Attached Pronouns</span><span class="ar-sub arabic" style="font-size:20px" dir="rtl">الضَّمَائِرُ المُتَّصِلَةُ</span></h2>
+          <p class="wk-sec-sub">Prepositions bend systematically when personal pronoun endings attach. Use this one-page reference across all 10 weeks.</p>
+          ${glueMatrixHtml()}
+        </section>
+        <div class="wk-colophon">
+          <span>Arabic Learning System · rkarim25.github.io/arabiclanguage</span>
+          <span>Complete 10-Week Book Edition · Mishary Rashid Alafasy Qur'ān &amp; Natural MSA</span>
         </div>
-      ` : ""}
+      </td></tr>
+    `;
+    bodyRowsHtml = tocHtml + chaptersHtml + appendixHtml;
+  } else if (WK_ROUTE.kind === "edition") {
+    const eds = (typeof store !== "undefined" && store.get) ? store.get("ats-weekly-editions", []) : [];
+    const ed = eds.find(x => x && x.id === WK_ROUTE.editionId);
+    if (!ed) {
+      document.getElementById("weeklyBook").innerHTML = `<p style="padding:20px 0;color:var(--muted)">Saved edition "${esc(WK_ROUTE.editionId)}" not found on this device. <a href="weekly.html" style="color:var(--accent)">Return to Printed Week Versions →</a></p>`;
+      applyWkToggles();
+      return;
+    }
+    const spec = hydrateEditionSpec(ed, srs);
+    bodyRowsHtml = renderChapterBodyRowsHtml(spec, { edition: ed, showGlue: true });
+  } else {
+    const targetNum = WK_ROUTE.kind === "chapter" ? WK_ROUTE.chapNum : activeChapNum;
+    const chap = chaps.find(c => Number(c.num) === Number(targetNum)) || chaps[0];
+    if (!chap) return;
+    const useBook = WK_ROUTE.kind === "chapter" ? bookMode : false;
+    const spec = buildChapterSpec(chap, useBook, srs);
+    bodyRowsHtml = renderChapterBodyRowsHtml(spec, { showGlue: true });
+  }
 
-      ${preply3.length ? `
-        <h3 class="wk-subh">3 Sunday Preply Warm-Up Prompts</h3>
-        <div class="wk-list">
-          ${renderSentRows(preply3.map(p => ({ ar: p.ar, en: p.en, tr: p.tr, hint: p.tag })))}
-        </div>
-      ` : ""}
-    </section>
-
-    <div class="wk-colophon">
-      <span>Arabic Learning System · rkarim25.github.io/arabiclanguage</span>
-      <span>Active Study Edition · Mishary Rashid Alafasy Qur'ān &amp; Natural MSA</span>
-    </div>
-        </td></tr>
+  document.getElementById("weeklyBook").innerHTML = `
+    <table class="wk-print-shell" role="presentation">
+      <thead><tr><td><div class="wk-print-margin"></div></td></tr></thead>
+      <tbody>
+        ${bodyRowsHtml}
       </tbody>
       <tfoot><tr><td><div class="wk-print-margin"></div></td></tr></tfoot>
     </table>
   `;
-
-  document.getElementById("weeklyBook").innerHTML = html;
   applyWkToggles();
+}
+
+function renderActiveRoute() {
+  if (!WK_STATE.ready) return;
+  if (WK_ROUTE.kind === "shelf") renderShelf();
+  else renderBooklet();
+}
+
+function triggerPrintAfterFonts(shouldArchiveMyWeek) {
+  if (shouldArchiveMyWeek) saveCurrentWeekEdition(false);
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
+    .then(() => setTimeout(() => window.print(), 200));
+}
+
+function printCurrentBooklet() {
+  if (WK_ROUTE.kind === "myweek") saveCurrentWeekEdition(false);
+  window.print();
+}
+
+function openShelf() {
+  navigateWeekly("", false);
+}
+
+function navigateWeekly(urlSearch, triggerPrint) {
+  const qs = urlSearch || "";
+  history.pushState(null, "", "weekly.html" + qs);
+  WK_ROUTE = parseRouteFromSearch(qs);
+  renderActiveRoute();
+  window.scrollTo({ top: 0 });
+  if (triggerPrint) {
+    triggerPrintAfterFonts(WK_ROUTE.kind === "myweek");
+  }
 }
 
 (async () => {
@@ -707,6 +1208,7 @@ function renderBooklet() {
     const chaps = chRes.chapters || [];
     const cur = getSelectedChapter(chaps);
     WK_STATE = {
+      ready: true,
       chaps,
       lcCards: lcRes.cards || [],
       qCore: qcRes.words || [],
@@ -719,13 +1221,24 @@ function renderBooklet() {
 
     const sel = document.getElementById("wkChapSelect");
     if (sel) {
-      sel.innerHTML = chaps.map(c => `<option value="${c.num}" ${c.num === WK_STATE.activeChapNum ? "selected" : ""}>Ch ${c.num}: ${esc(String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, ""))}</option>`).join("");
+      sel.innerHTML =
+        `<option value="myweek">⚡ This Coming Week (Personalized)</option>` +
+        `<option value="book-all">📘 Full 10-Week Book (All Chapters)</option>` +
+        chaps.map(c => `<option value="chap-${c.num}">Week ${c.num}: ${esc(String(c.title || "").replace(/^Chapter\s+\d+:\s*/i, ""))}</option>`).join("");
       sel.onchange = () => {
-        WK_STATE.activeChapNum = Number(sel.value) || 1;
-        renderBooklet();
+        const val = sel.value;
+        if (val === "book-all") navigateWeekly("?book=all", false);
+        else if (val === "myweek") navigateWeekly("?week=current", false);
+        else if (val.startsWith("chap-")) {
+          const n = Number(val.slice(5)) || 1;
+          navigateWeekly(`?chap=${n}&mode=${bookMode ? "book" : "myweek"}`, false);
+        }
       };
     }
-    renderBooklet();
+
+    WK_ROUTE = parseRouteFromSearch(location.search);
+    renderActiveRoute();
+
     const autoPrint = new URLSearchParams(location.search).get("print") === "1";
     if (autoPrint) {
       try {
@@ -733,11 +1246,21 @@ function renderBooklet() {
         cleanUrl.searchParams.delete("print");
         history.replaceState(null, "", cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
       } catch (_) {}
-      (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
-        .then(() => setTimeout(() => window.print(), 200));
+      triggerPrintAfterFonts(WK_ROUTE.kind === "myweek");
     }
+
+    window.addEventListener("popstate", () => {
+      WK_ROUTE = parseRouteFromSearch(location.search);
+      renderActiveRoute();
+    });
+    window.addEventListener("ats-synced", () => { renderActiveRoute(); });
+    window.addEventListener("ats-mastery-updated", () => { renderActiveRoute(); });
   } catch (e) {
-    document.getElementById("weeklyBook").innerHTML = `<p style="color:var(--red)">Could not load booklet data: ${esc(e.message || e)}</p>`;
+    const errMsg = `<p style="color:var(--red)">Could not load Printed Week Versions: ${esc(e.message || e)}</p>`;
+    const s = document.getElementById("weeklyShelf");
+    const b = document.getElementById("weeklyBook");
+    if (s) s.innerHTML = errMsg;
+    if (b) b.innerHTML = errMsg;
   }
 })();
 </script>

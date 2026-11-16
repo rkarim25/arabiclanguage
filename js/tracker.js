@@ -199,6 +199,17 @@ function _mergeRemoteState(remote) {
     h.sort((a, b) => (a.date < b.date ? -1 : 1));
     store.set("ats-plan-hist", h.slice(-5));
   }
+  if (Array.isArray(remote.weeklyEditions)) {
+    const localEds = store.get("ats-weekly-editions", []);
+    const byId = new Map();
+    localEds.concat(remote.weeklyEditions).forEach(ed => {
+      if (!ed || !ed.id) return;
+      const prev = byId.get(ed.id);
+      if (!prev || (ed.createdAt || 0) >= (prev.createdAt || 0)) byId.set(ed.id, ed);
+    });
+    const merged = Array.from(byId.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 52);
+    store.set("ats-weekly-editions", merged);
+  }
 }
 
 function _payload(log) {
@@ -219,6 +230,7 @@ function _payload(log) {
     currentChapId: curChapId,
     plan: store.get("ats-plan", null),
     planHist: store.get("ats-plan-hist", []),
+    weeklyEditions: store.get("ats-weekly-editions", []),
     hwDone: store.get("ats-hw-done", {}),
     log,
     savedAt: Date.now()
