@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocab Lab — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
     .fam-card {
@@ -52,10 +52,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav(new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "vocab");
 
@@ -260,7 +260,7 @@ function renderCoreView(body) {
     <div class="card">
       <div class="vocab-table-wrap" style="max-height:520px;overflow-y:auto">
         <table class="vocab-table">
-          <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>freq.</th><th>learnt?</th></tr></thead>
+          <thead><tr><th>#</th><th>English</th><th class="ar-col">Arabic</th><th>Transliteration</th><th>freq.</th><th></th><th style="text-align:right">learnt?</th></tr></thead>
           <tbody id="coreBody"></tbody>
         </table>
       </div>
@@ -273,10 +273,10 @@ function renderCoreView(body) {
       <td style="color:var(--muted);font-size:12px">${i + 1}</td>
       <td class="en-cell">${w.en}</td>
       <td class="ar-cell">${w.ar}</td>
-      <td><span class="row-speak">🔊</span></td>
-      <td class="tr-cell">${w.tr}</td>
+      <td class="tr-cell" dir="ltr">${w.tr}</td>
       <td style="color:var(--muted);font-size:12px;white-space:nowrap">≈${w.n}×</td>
-      <td><div class="bucket-slot"></div></td>
+      <td style="text-align:right;white-space:nowrap"><span class="row-speak">🔊</span></td>
+      <td style="text-align:right"><div class="bucket-slot"></div></td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(w.ar, 0.8);
     coreBody.appendChild(tr);
@@ -447,29 +447,29 @@ async function renderSheet() {
         : `<td class="ar-cell">${v.ar}</td>`;
       tr.innerHTML = `
         ${arCell}
-        <td><span class="row-speak">🔊</span></td>
-        <td class="tr-cell">${v.tr || ""}</td>
+        <td class="tr-cell" dir="ltr">${v.tr || ""}</td>
         <td style="min-width:150px">
           <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="meaning…" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
           <span class="shown-answer" style="display:none;font-size:14px"></span>
           <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
+        <td style="text-align:right;white-space:nowrap"><span class="row-speak">🔊</span></td>
       `;
     } else if (sheetMode === "ears") {
       tr.innerHTML = `
-        <td style="white-space:nowrap"><button class="small ears-play" data-i="${i}">🔊 play</button></td>
         <td style="min-width:150px">
           <div style="display:flex;gap:6px;align-items:center"><input class="phonetic-box" style="margin-top:0" data-i="${i}" placeholder="what did it mean?" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
           <span class="shown-answer" style="display:none;font-size:14px"></span>
           <span class="correct-answer" style="font-family:var(--font-ui);font-size:14px;direction:ltr;color:var(--ink);display:none"></span><div class="bucket-slot"></div></td>
+        <td style="text-align:right;white-space:nowrap"><button class="small ears-play" data-i="${i}">🔊 play</button></td>
       `;
     } else {
       tr.innerHTML = `
         <td class="en-cell">${v.en}${isNew ? ' <span style="color:var(--amber);font-size:11px">new</span>' : ""}</td>
+        <td class="tr-cell" dir="ltr">${v.tr || ""}</td>
         <td style="text-align:right">
-          <div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><button class="small show-btn" data-i="${i}">show</button><input class="fill-input" data-i="${i}" autocomplete="off"></div>
+          <div style="display:flex;gap:6px;align-items:center;justify-content:flex-end"><input class="fill-input" data-i="${i}" autocomplete="off"><button class="small show-btn" data-i="${i}">show</button></div>
           <span class="shown-answer" style="display:none"></span>
           <span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
-        <td class="tr-cell">${v.tr || ""}</td>
       `;
     }
     const spk = tr.querySelector(".row-speak");
@@ -667,11 +667,11 @@ async function renderBrowseView(body) {
     rows.slice(0, 200).forEach(({ key, v }) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td class="ar-cell">${v.ar}</td>
-        <td><span class="row-speak">🔊</span></td>
-        <td class="tr-cell">${v.tr || ""}</td>
         <td class="en-cell">${v.en}<span class="note-inline">${v.note || ""}</span></td>
-        <td><div class="bucket-slot"></div></td>
+        <td class="ar-cell">${v.ar}</td>
+        <td class="tr-cell" dir="ltr">${v.tr || ""}</td>
+        <td style="text-align:right;white-space:nowrap"><span class="row-speak">🔊</span></td>
+        <td style="text-align:right"><div class="bucket-slot"></div></td>
       `;
       tr.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
       const slot = tr.querySelector(".bucket-slot");
@@ -736,7 +736,7 @@ function renderGroupStudy(obj, prefix) {
       <h2>${prefix === "fam-" ? "The family" : "The cluster"} — say each one aloud</h2>
       <div class="vocab-table-wrap">
         <table class="vocab-table">
-          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th><th>know?</th></tr></thead>
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th>Transliteration</th><th></th><th style="text-align:right">know?</th></tr></thead>
           <tbody id="vtBody"></tbody>
         </table>
       </div>
@@ -760,9 +760,9 @@ function renderGroupStudy(obj, prefix) {
     tr.innerHTML = `
       <td class="en-cell">${m.en}</td>
       <td class="ar-cell">${m.ar}${m.hear ? `<div style="font-size:13.5px;color:var(--amber);font-weight:600">🗣 ${m.hear}</div>` : ""}</td>
-      <td><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
-      <td class="tr-cell">${m.tr}</td>
-      <td><div class="bucket-slot"></div></td>
+      <td class="tr-cell" dir="ltr">${m.tr}</td>
+      <td style="text-align:right;white-space:nowrap"><span class="row-speak" title="hear it">🔊</span>${mn ? ` <span class="mnem-btn" title="memory hook">💡</span>` : ""}</td>
+      <td style="text-align:right"><div class="bucket-slot"></div></td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(m.ar, 0.8);
     // his verdict feeds the same SRS as Learn/Review: ✓ = out of the new pool
@@ -1052,12 +1052,12 @@ function renderGroupDrill(obj, prefix, opts) {
 /* English | Arabic 🔊 | transliteration — the shape he asks for every time */
 function drillRowsHTML(obj, idxs) {
   return `<div class="vocab-table-wrap"><table class="vocab-table">
-    <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+    <thead><tr><th>English</th><th class="ar-col">Arabic</th><th>Transliteration</th><th></th></tr></thead>
     <tbody>${idxs.map(i => {
       const m = obj.members[i];
       return `<tr><td class="en-cell">${m.en}</td><td class="ar-cell">${m.ar}</td>
-        <td><span class="row-speak" data-i="${i}" style="cursor:pointer">🔊</span></td>
-        <td class="tr-cell">${m.tr}</td></tr>`;
+        <td class="tr-cell" dir="ltr">${m.tr}</td>
+        <td style="text-align:right;white-space:nowrap"><span class="row-speak" data-i="${i}" style="cursor:pointer">🔊</span></td></tr>`;
     }).join("")}</tbody></table></div>`;
 }
 function bindDrillRows(root, obj) {

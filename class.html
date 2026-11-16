@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 500; margin-bottom: 8px; }
     .passage-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 14px 0; }
@@ -566,18 +566,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwiequte"></script>
-<script src="js/curriculum.js?v=mwiequte"></script>
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/frames.js?v=mwiequte"></script>
-<script src="js/freetry.js?v=mwiequte"></script>
-<script src="js/practice.js?v=mwiequte"></script>
-<script src="js/lesson-cards.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/errors.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
-<script src="js/account.js?v=mwiequte"></script>
+<script src="js/progress-model.js?v=mwiwpwad"></script>
+<script src="js/curriculum.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/frames.js?v=mwiwpwad"></script>
+<script src="js/freetry.js?v=mwiwpwad"></script>
+<script src="js/practice.js?v=mwiwpwad"></script>
+<script src="js/lesson-cards.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/errors.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/account.js?v=mwiwpwad"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -858,22 +858,22 @@ function renderQuranSection() {
     container.innerHTML = surahObj.verses.map((v, vi) => {
       const ayahNum = vi + 1;
       return `
-        <div class="book-line passage-line" style="padding:10px 0;border-bottom:1px dashed var(--border)">
+        <div class="book-line passage-line">
           <div class="book-line-row">
+            <div class="s-content-wrap">
+              <span class="line-num-badge" title="Ayah ${ayahNum}">${ayahNum}.</span>
+              <div class="s-meta-side">
+                <div id="qen-${surahObj.id}-${vi}" class="p-en" style="display:none;font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.5">${v.en}</div>
+              </div>
+              <div class="s-ar-side">
+                <div class="p-ar" onclick="reciteVerse(${surahObj.n}, ${ayahNum}, '${encodeURIComponent(v.ar)}')" style="cursor:pointer;margin:0;font-size:26px;color:var(--ink)" title="Tap to hear Alafasy recitation">${v.ar}</div>
+              </div>
+            </div>
             <div class="line-badge-dock" aria-label="Ayah tools">
-              <span class="line-num-badge" title="Ayah ${ayahNum}">${ayahNum}</span>
               <div class="sym-group">
                 <button type="button" class="sym-badge" onclick="reciteVerse(${surahObj.n}, ${ayahNum}, '${encodeURIComponent(v.ar)}')" title="Recite Ayah (Alafasy)" aria-label="Listen">🔊</button>
                 <button type="button" class="sym-badge" onclick="toggleAyahEn('${surahObj.id}', ${vi})" title="Toggle English" aria-label="Translation">🌐</button>
                 <button type="button" class="sym-badge" onclick="toggleAyahWbw('${surahObj.id}', ${vi})" title="Toggle word breakdown" aria-label="Words">🧩</button>
-              </div>
-            </div>
-            <div class="s-content-wrap">
-              <div class="s-meta-side">
-                <div id="qen-${surahObj.id}-${vi}" class="p-en" style="display:none;font-size:14.5px;color:var(--ink);line-height:1.5">${v.en}</div>
-              </div>
-              <div class="s-ar-side">
-                <div class="p-ar" style="margin:0;font-size:26px;color:var(--ink)">${v.ar}</div>
               </div>
             </div>
           </div>
@@ -1301,15 +1301,14 @@ async function renderTeacherBrief() {
           <div>
             ${pickedSents.map(s => `
               <div class="tb-item-row">
-                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
-                  ${s.key && window.SRS ? SRS.dotHtml(s.key, { lg: true }) : ""}
-                  <button type="button" class="sym-badge" onclick="speak('${s.ar.replace(/'/g, "\\'")}', 0.85)" title="Preview audio">🔊</button>
-                  <div>
-                    <div style="font-size:14px;font-weight:600;color:var(--ink)">${esc(s.en)}</div>
-                    <span class="tb-tag ${s.shaky ? 'slip' : 'ok'}">${esc(s.badge)}</span>
-                  </div>
+                <div style="flex:1;min-width:200px">
+                  <div style="font-size:15.5px;font-weight:450;color:var(--ink);line-height:1.5">${esc(s.en)}</div>
                 </div>
-                <div class="tb-ar">${esc(s.ar)}</div>
+                <div class="tb-ar" onclick="speak('${s.ar.replace(/'/g, "\\'")}', 0.85)" style="cursor:pointer" title="Tap to listen">${esc(s.ar)}</div>
+                <span style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
+                  <button type="button" class="sym-badge" onclick="speak('${s.ar.replace(/'/g, "\\'")}', 0.85)" title="Preview audio">🔊</button>
+                  ${s.key && window.SRS ? SRS.dotHtml(s.key, { lg: true }) : ""}
+                </span>
               </div>
             `).join("")}
           </div>
@@ -1318,10 +1317,10 @@ async function renderTeacherBrief() {
           <div class="tb-word-grid">
             ${pickedWords.map(w => `
               <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
-                ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
-                <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
-                <span class="arabic" dir="rtl" style="font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
+                <span class="arabic" dir="rtl" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" style="cursor:pointer;font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
                 <span style="color:var(--muted)">— ${esc(w.en)}</span>
+                <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" title="Listen">🔊</button>
+                ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
               </span>
             `).join("")}
           </div>
@@ -1349,15 +1348,15 @@ async function renderTeacherBrief() {
           </div>
           ${pickedAyah ? `
             <div class="tb-item-row" style="border-bottom:${pickedQWords.length ? '1px dashed var(--border)' : 'none'}">
-              <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
-                ${pickedAyah.key && window.SRS ? SRS.dotHtml(pickedAyah.key, { lg: true }) : ""}
-                ${ayahPlayBtn}
-                <div>
-                  <div style="font-size:13.5px;font-weight:600;color:var(--ink)">${esc(pickedAyah.en)}</div>
-                  <span class="tb-tag ok">${esc(pickedAyah.surah ? "Surah " + pickedAyah.surah + " (" + pickedAyah.ref + ")" : pickedAyah.ref || "Qur'an")}</span>
-                </div>
+              <div style="flex:1;min-width:200px">
+                <div style="font-size:15.5px;font-weight:450;color:var(--ink);line-height:1.5">${esc(pickedAyah.en)}</div>
+                <span style="font-size:12px;color:var(--muted)">${esc(pickedAyah.surah ? "Surah " + pickedAyah.surah + " (" + pickedAyah.ref + ")" : pickedAyah.ref || "Qur'an")}</span>
               </div>
               <div class="tb-ar" style="color:var(--ink)">${esc(pickedAyah.ar)}</div>
+              <span style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
+                ${ayahPlayBtn}
+                ${pickedAyah.key && window.SRS ? SRS.dotHtml(pickedAyah.key, { lg: true }) : ""}
+              </span>
             </div>
           ` : ""}
           ${pickedQWords.length ? `
@@ -1366,10 +1365,10 @@ async function renderTeacherBrief() {
               <div class="tb-word-grid">
                 ${pickedQWords.map(w => `
                   <span class="tb-word-chip ${w.shaky ? 'shaky' : ''}">
-                    ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
-                    <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)">🔊</button>
-                    <span class="arabic" dir="rtl" style="font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
+                    <span class="arabic" dir="rtl" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)" style="cursor:pointer;font-size:20px;color:var(--ink);font-weight:600">${esc(w.ar)}</span>
                     <span style="color:var(--muted)">— ${esc(w.en)}</span>
+                    <button type="button" class="sym-badge" style="padding:1px 5px;font-size:11px" onclick="speak('${w.ar.replace(/'/g, "\\'")}', 0.85)">🔊</button>
+                    ${w.key && window.SRS ? SRS.dotHtml(w.key) : ""}
                   </span>
                 `).join("")}
               </div>
@@ -1692,22 +1691,22 @@ function renderPassage() {
     ${STORY_DATA.sentences.map((s, idx) => `
       <div class="book-line passage-line" id="pline-${idx}">
         <div class="book-line-row">
+          <div class="s-content-wrap">
+            <span class="line-num-badge" title="Line ${idx + 1}">${idx + 1}.</span>
+            <div class="s-meta-side">
+              <div class="p-en" id="en-${idx}" style="display:none;font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.5">${s.en}</div>
+            </div>
+            <div class="s-ar-side">
+              <div class="p-ar" onclick="speak('${encodeURIComponent(s.ar)}')" style="cursor:pointer;margin:0;font-size:25px" title="Tap to listen">${s.ar}</div>
+              ${s.tr ? `<div class="p-tr" id="tr-${idx}" dir="ltr" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
+            </div>
+          </div>
           <div class="line-badge-dock" aria-label="Line tools">
-            <span class="line-num-badge" title="Line ${idx + 1}">${idx + 1}</span>
             <div class="sym-group">
               <button type="button" class="sym-badge" onclick="speak('${encodeURIComponent(s.ar)}')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
               <button type="button" class="sym-badge" id="btnEn-${idx}" onclick="togglePassageEn(${idx})" title="Toggle English translation" aria-label="Translation">🌐</button>
               <button type="button" class="sym-badge" id="btnWbw-${idx}" onclick="togglePassageWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
               ${s.tr ? `<button type="button" class="sym-badge" id="btnTr-${idx}" onclick="togglePassageTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-            </div>
-          </div>
-          <div class="s-content-wrap">
-            <div class="s-meta-side">
-              <div class="p-en" id="en-${idx}" style="display:none;font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
-            </div>
-            <div class="s-ar-side">
-              <div class="p-ar" style="margin:0">${s.ar}</div>
-              ${s.tr ? `<div class="p-tr" id="tr-${idx}" dir="ltr" style="display:none;font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
             </div>
           </div>
         </div>
@@ -2046,44 +2045,39 @@ function renderClassSentences() {
 
       let arContent;
       if (clsSentPracticeMode === "en-only" && !isRevealed) {
-        arContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
+        arContent = `<span class="book-cue ar-side vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check Arabic sentence">Show Arabic →</span>`;
       } else {
-        arContent = `<span class="arabic" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.65;display:block">${s.ar}</span>`;
+        arContent = `<span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" style="cursor:pointer;font-size:25px;color:var(--ink);line-height:1.7;display:block" title="Tap to listen">${s.ar}</span>`;
       }
 
       let enContent;
       if (clsSentPracticeMode === "ar-only" && !isRevealed) {
-        enContent = `<span class="vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+        enContent = `<span class="book-cue vocab-reveal-btn" onclick="revealClsSentence(${origIdx})" title="Tap to check English translation">Show meaning →</span>`;
       } else {
         enContent = `
-          <div id="cls-en-${origIdx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:15px;color:var(--ink);line-height:1.5">${s.en}</div>
+          <div id="cls-en-${origIdx}" class="cls-en" style="display:${isEnShown ? 'block' : 'none'};font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.55">${s.en}</div>
         `;
       }
 
       return `
-        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="cls-srow-${origIdx}" style="padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)">
+        <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="cls-srow-${origIdx}">
           <div class="book-line-row">
-            <div class="line-badge-dock" aria-label="Sentence tools">
-              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
-              <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                ${SRS.rateBarHtml(sKey, "gradeClassSentence", [origIdx], { compact: true, retire: false })}
-                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${origIdx}" onclick="toggleClsSentenceEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-                ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${origIdx}" onclick="toggleClsSentenceTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                <div class="vote-badge-group">
-                  <button type="button" class="vote-btn down ${isWeak ? 'active' : ''}" onclick="voteClassSentence(${origIdx}, 'weak')" title="Mark weak / downvote (need review)" aria-label="Mark weak">👎</button>
-                  <button type="button" class="vote-btn up ${isStrong ? 'active' : ''}" onclick="voteClassSentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
-                </div>
-              </div>
-            </div>
             <div class="s-content-wrap">
+              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}.</span>
               <div class="s-meta-side">
                 ${enContent}
-                ${isWeak ? `<span class="vote-status-tag weak" style="margin-top:4px">⚠️ Weak Review Priority</span>` : isStrong ? `<span class="vote-status-tag strong" style="margin-top:4px">✓ Solid Recall</span>` : ''}
               </div>
               <div class="s-ar-side">
                 ${arContent}
                 ${(s.tr && !(clsSentPracticeMode === "en-only" && !isRevealed)) ? `<div id="cls-tr-${origIdx}" class="cls-tr" dir="ltr" style="display:${allClsTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
+              </div>
+            </div>
+            <div class="line-badge-dock" aria-label="Sentence tools">
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(s.ar)}', 'class-sentence')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btnClsEn-${origIdx}" onclick="toggleClsSentenceEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                ${s.tr ? `<button type="button" class="sym-badge ${allClsTrVisible ? 'active' : ''}" id="btnClsTr-${origIdx}" onclick="toggleClsSentenceTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                ${SRS.rateBarHtml(sKey, "gradeClassSentence", [origIdx], { compact: true, retire: false })}
               </div>
             </div>
           </div>
@@ -2313,10 +2307,10 @@ function renderVocabTable() {
     </div>
     <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
       <thead>
-        <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
-          <th style="width:26%">Arabic</th>
+        <tr style="text-align:left;color:var(--muted);font-size:12px;border-bottom:1.5px solid var(--border-strong)">
           <th style="width:46%">English Meaning</th>
-          <th style="width:28%;text-align:right">Recall &amp; Rating</th>
+          <th style="width:30%;text-align:right">Arabic</th>
+          <th style="width:24%;text-align:right">Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -2331,19 +2325,13 @@ function renderVocabTable() {
 
           let arContent;
           if (vocabPracticeMode === "en-only" && !isRevealed) {
-            arContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check Arabic word">👁️ Check Arabic</span>`;
+            arContent = `<span class="book-cue ar-side vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check Arabic word">Show Arabic →</span>`;
           } else {
             arContent = `
-              <div>
-                <div style="display:flex;align-items:center;gap:6px">
-                  <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:24px;color:var(--ink);line-height:1.5" title="Click to listen">
-                    ${v.ar}
-                  </span>
-                  <div class="sym-group">
-                    <button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                    ${v.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${v.key}" onclick="toggleWordTr('${v.key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                  </div>
-                </div>
+              <div style="text-align:right">
+                <span class="arabic" dir="rtl" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" style="cursor:pointer;font-size:25px;color:var(--ink);line-height:1.55;display:inline-block" title="Click to listen">
+                  ${v.ar}
+                </span>
                 ${v.tr ? `<div id="vtr-${v.key}" class="vocab-tr-line" dir="ltr" style="display:${isTrActive ? 'block' : 'none'};text-align:right">${v.tr}</div>` : ''}
               </div>
             `;
@@ -2351,27 +2339,23 @@ function renderVocabTable() {
 
           let enContent;
           if (vocabPracticeMode === "ar-only" && !isRevealed) {
-            enContent = `<span class="vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check English meaning">👁️ Check English</span>`;
+            enContent = `<span class="book-cue vocab-reveal-btn" onclick="revealVocabWord('${v.key}')" title="Tap to check English meaning">Show meaning →</span>`;
           } else {
             enContent = `
-              <div class="vocab-en-wrap">
+              <div class="vocab-en-wrap" style="font-size:16.5px;font-weight:450;color:var(--ink)">
                 <span class="vocab-en-main">${v.en}</span>
                 ${(v.note && !/^Qur['’]?an\s+core$/i.test(String(v.note).trim())) ? `<span class="vocab-en-note">— ${v.note}</span>` : ''}
-                ${vote.vote === -1 ? `<span class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</span>` : vote.vote === 1 ? `<span class="vote-status-tag strong" style="margin-top:3px">✓ Solid (+${vote.score || 1})</span>` : ''}
               </div>
             `;
           }
 
           return `
             <tr class="${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}">
-              <td style="vertical-align:middle">${arContent}</td>
               <td style="vertical-align:middle">${enContent}</td>
+              <td style="text-align:right;vertical-align:middle">${arContent}</td>
               <td style="text-align:right;vertical-align:middle">
                 <div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end">
-                  <div class="vote-badge-group">
-                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'weak', this)" title="Mark weak / downvote (struggling recall)" aria-label="Mark weak">👎</button>
-                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteClassWord('${v.key}', 'strong', this)" title="Mark strong / upvote (solid recall)" aria-label="Mark strong">👍</button>
-                  </div>
+                  ${(vocabPracticeMode !== "en-only" || isRevealed) ? `<button type="button" class="sym-badge" onclick="playClassItem('${encodeURIComponent(v.ar)}', 'class-vocab')" title="Listen to pronunciation" aria-label="Listen">🔊</button>${v.tr ? `<button type="button" class="sym-badge ${isTrActive ? 'active' : ''}" id="btnVTr-${v.key}" onclick="toggleWordTr('${v.key}')" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}` : ''}
                   <div class="rate-bar" data-key="${v.key}">${SRS.rateBarHtml(v.key, "gradeClassWord", [])}</div>
                 </div>
               </td>

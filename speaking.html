@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Speaking — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     .chips button { border-radius: 999px; font-size: 13px; padding: 5px 12px; }
@@ -69,10 +69,10 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("speaking");
 trackPage("speaking");
@@ -248,9 +248,9 @@ function renderDrill() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="en-cell">${v.en}</td>
-      <td>${MIC ? `<button class="small mic">🎤 say it</button>` : `<button class="small reveal">👁 reveal</button>`}</td>
-      <td style="min-width:150px"><span class="res" style="font-size:13.5px"></span><span class="correct-answer" style="display:none"></span><div class="bucket-slot"></div></td>
-      <td class="tr-cell">${v.tr || ""}</td>
+      <td class="tr-cell" dir="ltr">${v.tr || ""}</td>
+      <td style="min-width:130px"><span class="res" style="font-size:13.5px"></span><span class="correct-answer" style="display:none"></span></td>
+      <td style="text-align:right;white-space:nowrap"><div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">${MIC ? `<button class="small mic">🎤 say it</button>` : `<button class="small reveal">👁 reveal</button>`}<div class="bucket-slot"></div></div></td>
     `;
     tbody.appendChild(tr);
     mountBucketBar(tr.querySelector(".bucket-slot"), key);

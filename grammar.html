@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
     .g-card {
@@ -34,10 +34,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -131,8 +131,8 @@ function renderList() {
     const gDot = (window.SRS && SRS.dotHtml) ? SRS.dotHtml(`gt:${p.id}:0`, { lg: true, altKeys: gAlt }) : "";
     div.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <span style="display:inline-flex;align-items:center;gap:6px">${gDot}<span class="g-name" style="margin:0">${p.name}</span></span>
-        <span class="g-ar" style="margin:0">${p.ar}</span>
+        <span class="g-name" style="margin:0">${p.name}</span>
+        <span style="display:inline-flex;align-items:center;gap:8px"><span class="g-ar" style="margin:0">${p.ar}</span>${gDot}</span>
       </div>
       <div class="meta" style="margin-top:6px">${n ? `used by <b>${n}</b> sentences you have to learn` : "from your class"}
         · ${p.test.length}-question test<br>${status}</div>
@@ -188,7 +188,7 @@ function renderPattern(p) {
     div.className = "gt";
     const tDot = (window.SRS && SRS.dotHtml) ? SRS.dotHtml(`gt:${p.id}:${i}`, { lg: true }) : "";
     div.innerHTML = `
-      <div class="prompt" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">${tDot}<span>${t.prompt}</span><span class="hint">${t.hint}</span></div>
+      <div class="prompt" style="display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap"><span>${t.prompt}<span class="hint">${t.hint}</span></span><span style="margin-left:auto">${tDot}</span></div>
       <input class="fill-input" data-i="${i}" autocomplete="off" style="max-width:260px">
       <span class="correct-answer" style="display:none"></span>
     `;

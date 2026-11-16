@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -32,9 +32,9 @@
     .s-row.active { border-left: 3px solid var(--accent); padding-left: 12px; background: var(--accent-soft); }
     .s-main { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; width: 100%; flex-wrap: wrap; }
     .s-ar-wrap { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex: 1; min-width: 240px; }
-    .s-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
+    .s-ar { font-family: var(--font-ar); font-size: 26px; line-height: 1.8; direction: rtl; text-align: right; color: var(--ink); flex: 1; }
     .s-meta { flex: 1; min-width: 220px; }
-    .s-en { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); margin-bottom: 1px; line-height: 1.5; }
+    .s-en { font-family: var(--font-ui); font-size: 16.5px; font-weight: 450; color: var(--ink); margin-bottom: 1px; line-height: 1.55; }
     .s-tr { font-size: 12.5px; color: var(--muted); font-style: italic; margin-bottom: 2px; }
     .s-hint { font-size: 12px; color: var(--muted); }
     .s-actions { display: flex; gap: 6px; align-items: center; }
@@ -56,7 +56,7 @@
     /* Quran Verse Card */
     .q-verse { padding: 10px 0; border-bottom: 1px solid var(--border-subtle); }
     .q-verse:last-child { border-bottom: none; }
-    .q-ar { font-family: var(--font-ar); font-size: 25px; line-height: 1.95; direction: rtl; text-align: right; color: var(--ink); }
+    .q-ar { font-family: var(--font-ar); font-size: 26px; line-height: 1.95; direction: rtl; text-align: right; color: var(--ink); }
     .q-wbw-tray { display: flex; flex-wrap: wrap; gap: 6px; direction: rtl; margin: 8px 0 4px; }
     .q-chip { border: 0; border-bottom: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; background: transparent; text-align: center; cursor: pointer; }
     .q-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwiequte"></script>
-<script src="js/curriculum.js?v=mwiequte"></script>
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/match.js?v=mwiequte"></script>
-<script src="js/errors.js?v=mwiequte"></script>
-<script src="js/frames.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
-<script src="js/account.js?v=mwiequte"></script>
+<script src="js/progress-model.js?v=mwiwpwad"></script>
+<script src="js/curriculum.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/match.js?v=mwiwpwad"></script>
+<script src="js/errors.js?v=mwiwpwad"></script>
+<script src="js/frames.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/account.js?v=mwiwpwad"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -4119,36 +4119,36 @@ function renderQuranSection(surahId) {
 
       let arContent;
       if (quranPracticeMode === "en-only" && !isRevealed) {
-        arContent = `<span class="vocab-reveal-btn" onclick="revealQuranAyah(${vIdx})" title="Tap to check Arabic verse">👁️ Check Ayah</span>`;
+        arContent = `<span class="book-cue ar-side" onclick="revealQuranAyah(${vIdx})" title="Tap to check Arabic verse">Show Arabic →</span>`;
       } else {
-        arContent = `<span class="arabic q-ar" dir="rtl" style="font-size:24px;color:var(--ink);line-height:1.9;display:block">${v.ar}</span>`;
+        arContent = `<span class="arabic q-ar" dir="rtl" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" style="font-size:26px;color:var(--ink);line-height:1.9;display:block;cursor:pointer" title="Tap to hear recitation">${v.ar}</span>`;
       }
 
       let enContent;
       if (quranPracticeMode === "ar-only" && !isRevealed) {
-        enContent = `<span class="vocab-reveal-btn" onclick="revealQuranAyah(${vIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+        enContent = `<span class="book-cue" onclick="revealQuranAyah(${vIdx})" title="Tap to check English translation">Show meaning →</span>`;
       } else {
-        enContent = `<div class="q-trans" id="q-en-${vIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:14.5px;color:var(--ink);line-height:1.5">${v.en}</div>`;
+        enContent = `<div class="q-trans" id="q-en-${vIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.55">${v.en}</div>`;
       }
 
       return `
         <div class="book-line q-verse" id="qrow-${vIdx}">
           <div class="book-line-row">
-            <div class="line-badge-dock" aria-label="Ayah tools">
-              <span class="line-num-badge" style="width:auto;min-width:32px;padding:0 6px;border-radius:10px;font-size:11px" title="Ayah ${v.ref}">${v.ref}</span>
-              <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" title="Recitation by Mishary Rashid Alafasy" aria-label="Recite">🔊</button>
-                ${SRS.rateBarHtml(`s:q:${surah.id}:${vIdx + 1}`, "rateChapQuranAyah", [surah.id, vIdx], { compact: true, retire: false })}
-                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-qen-${vIdx}" onclick="toggleQuranEn(${vIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-                <button type="button" class="sym-badge ${allQuranWbwVisible ? 'active' : ''}" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
-              </div>
-            </div>
             <div class="s-content-wrap">
+              <span class="line-num-badge" title="Ayah ${v.ref}">${v.ref}</span>
               <div class="s-meta-side">
                 ${enContent}
               </div>
               <div class="s-ar-side">
                 ${arContent}
+              </div>
+            </div>
+            <div class="line-badge-dock" aria-label="Ayah tools">
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playQuranAyah(${surah.n}, ${vIdx + 1})" title="Recitation by Mishary Rashid Alafasy" aria-label="Recite">🔊</button>
+                <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-qen-${vIdx}" onclick="toggleQuranEn(${vIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                <button type="button" class="sym-badge ${allQuranWbwVisible ? 'active' : ''}" id="btn-qwbw-${vIdx}" onclick="toggleQuranWbw(${vIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>
+                ${SRS.rateBarHtml(`s:q:${surah.id}:${vIdx + 1}`, "rateChapQuranAyah", [surah.id, vIdx], { compact: true, retire: false })}
               </div>
             </div>
           </div>
@@ -4398,10 +4398,12 @@ function renderDailySentences() {
   }
 
   sList.innerHTML = `
-    <div class="calm-row">
-      ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
-      <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
+    <div class="calm-row" style="justify-content:space-between">
       <button type="button" class="book-toggle-pill ${dayPracticeMode === 'en-only' ? 'active' : ''}" id="btnDaySwapEn" onclick="swapDayEnglish()" title="${dayPracticeMode === 'en-only' ? 'Back to Arabic — show the Arabic sentences again' : 'Swap: show the English, hide the Arabic — say the Arabic, then tap a line to check'}">${dayPracticeMode === 'en-only' ? '🔁 Show Arabic' : '🔁 English → Arabic'}</button>
+      <div style="display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap">
+        ${chapHasDrills() ? `<button type="button" class="book-toggle-pill ${dayDrillRound ? 'active' : ''}" id="btnDayDrillRound" onclick="startDayDrillRound()" title="Say a variation of every sentence in turn — recall first, then reveal. Three rungs each, a little harder every time.">🎯 Try them all${drillRoundProgressLabel()}</button>` : ''}
+        <button type="button" class="book-toggle-pill ${dayRedoOrder ? 'active' : ''}" id="btnDayRedo" onclick="redoDayBatch()" title="The same ten again, weakest first — your ✗ ≈ ✓ ★ verdicts decide the order; prompts are hidden again">↻ Redo batch</button>
+      </div>
       <details class="more"><summary>⋯</summary><div class="more-body">
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'all' ? 'active' : ''}" id="btnDayModeAll" onclick="setDayPracticeMode('all')" title="Show both Arabic and English">All</button>
         <button type="button" class="book-toggle-pill ${dayPracticeMode === 'ar-only' ? 'active' : ''}" id="btnDayModeAr" onclick="setDayPracticeMode('ar-only')" title="Show Arabic prompt only; tap to reveal English">Arabic prompt</button>
@@ -4428,17 +4430,17 @@ function renderDailySentences() {
 
       let arContent;
       if (dayPracticeMode === "en-only" && !isRevealed) {
-        arContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">👁️ Check Arabic</span>`;
+        arContent = `<span class="book-cue ar-side vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check Arabic sentence">Show Arabic →</span>`;
       } else {
-        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:25px;color:var(--ink);line-height:1.8;display:block;cursor:pointer" title="${dayPracticeMode === 'all' ? 'Tap for the English' : 'Tap again to hide'}">${s.ar}</span>`;
+        arContent = `<span class="arabic s-ar" dir="rtl" style="font-size:26px;color:var(--ink);line-height:1.8;display:block;cursor:pointer" title="${dayPracticeMode === 'all' ? 'Tap for the English' : 'Tap again to hide'}">${s.ar}</span>`;
       }
 
       let enContent;
       if (dayPracticeMode === "ar-only" && !isRevealed) {
-        enContent = `<span class="vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check English translation">👁️ Check Translation</span>`;
+        enContent = `<span class="book-cue vocab-reveal-btn" onclick="revealDaySentence(${origIdx})" title="Tap to check English translation">Show meaning →</span>`;
       } else {
         enContent = `
-          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:16px;color:var(--ink);line-height:1.5">
+          <div class="s-en" id="day-en-${origIdx}" style="display:${isEnShown ? 'block' : 'none'};font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.55">
             ${s.en}
           </div>
         `;
@@ -4449,32 +4451,27 @@ function renderDailySentences() {
       return `
         <div class="book-line s-row ${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}" id="srow-${origIdx}" onclick="handleSentenceRowClick(event, ${origIdx})">
           <div class="book-line-row">
-            <div class="line-badge-dock" aria-label="Sentence tools">
-              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}</span>
-              <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="${audioTitle}" aria-label="Listen">🔊</button>
-                ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Try it — a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Try it">🎯</button>` : ''}
-                ${SRS.rateBarHtml(sKey, "rateDaySentence", [origIdx], { compact: true, retire: false })}
-                <button type="button" class="sym-badge sym-more" onclick="this.closest('.sym-group').classList.toggle('open')" title="More — translation, words, transliteration, weak/solid" aria-label="More">⋯</button>
-                <span class="sym-hid">
-                  <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
-                  ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                  ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                  <div class="vote-badge-group">
-                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
-                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteDaySentence(${origIdx}, 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
-                  </div>
-                </span>
-              </div>
-            </div>
             <div class="s-content-wrap">
+              <span class="line-num-badge" title="Sentence ${origIdx + 1}">${origIdx + 1}.</span>
               <div class="s-meta-side">
                 ${enContent}
-                ${vote.vote === -1 ? `<span class="vote-status-tag weak" style="margin-top:4px">⚠️ Weak Review Priority (${vote.score || -1})</span>` : vote.vote === 1 ? `<span class="vote-status-tag strong" style="margin-top:4px">✓ Solid Recall</span>` : ''}
               </div>
               <div class="s-ar-side">
                 ${arContent}
                 ${(s.tr && !(dayPracticeMode === "en-only" && !isRevealed)) ? `<div class="s-tr" id="day-tr-${origIdx}" dir="ltr" style="display:${allDayTrVisible ? 'block' : 'none'};font-size:12.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
+              </div>
+            </div>
+            <div class="line-badge-dock" aria-label="Sentence tools">
+              <div class="sym-group">
+                <button type="button" class="sym-badge" onclick="playSingleSentence('${encodeURIComponent(s.ar)}', ${origIdx})" title="${audioTitle}" aria-label="Listen">🔊</button>
+                ${sentenceDrills(origIdx).length ? `<button type="button" class="sym-badge drill-badge ${dayDrillOpen[origIdx] ? 'active' : ''} ${drillRungDone(origIdx) >= 3 ? 'done' : ''}" id="btn-ddrill-${origIdx}" onclick="toggleDayDrill(${origIdx})" title="Try it — a variation of this sentence (${drillRungDone(origIdx)}/3 rungs done)" aria-label="Try it">🎯</button>` : ''}
+                ${SRS.rateBarHtml(sKey, "rateDaySentence", [origIdx], { compact: true, retire: false })}
+                <button type="button" class="sym-badge sym-more" onclick="this.closest('.sym-group').classList.toggle('open')" title="More — translation, words, transliteration" aria-label="More">⋯</button>
+                <span class="sym-hid">
+                  <button type="button" class="sym-badge ${isEnShown ? 'active' : ''}" id="btn-den-${origIdx}" onclick="toggleDayEn(${origIdx})" title="Toggle English translation" aria-label="Translation">🌐</button>
+                  ${s.words && s.words.length ? `<button type="button" class="sym-badge ${allDayWbwVisible ? 'active' : ''}" id="btn-dwbw-${origIdx}" onclick="toggleDayWbw(${origIdx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
+                  ${s.tr ? `<button type="button" class="sym-badge ${allDayTrVisible ? 'active' : ''}" id="btn-dtr-${origIdx}" onclick="toggleDayTr(${origIdx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
+                </span>
               </div>
             </div>
           </div>
@@ -5059,14 +5056,15 @@ function renderChapterVocab() {
     </div>
     <table class="tbl" style="width:100%;border-collapse:collapse;margin-top:6px">
       <thead>
-        <tr style="text-align:left;color:var(--muted);font-size:11.5px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.5px">
-          <th style="width:30%">Arabic Word</th>
-          <th style="width:42%">English Meaning</th>
-          <th style="width:28%;text-align:right">Recall &amp; Rating</th>
+        <tr style="text-align:left;color:var(--muted);font-size:12px;border-bottom:1.5px solid var(--border-strong)">
+          <th style="width:28px">#</th>
+          <th style="width:44%">English Meaning</th>
+          <th style="width:32%;text-align:right">Arabic</th>
+          <th style="text-align:right">Rating</th>
         </tr>
       </thead>
       <tbody>
-        ${list.map(v => {
+        ${list.map((v, vi) => {
           const vote = (typeof getItemVote === "function") ? getItemVote(v.ar) : { vote: 0, score: 0 };
           const canonKey = resolveChapVocabKey(v.ar);
           let srsItem = lookupChapVocabSrs(v.ar, srs);
@@ -5078,41 +5076,31 @@ function renderChapterVocab() {
 
           let arContent;
           if (chapVocabPracticeMode === "en-only" && !isRevealed) {
-            arContent = `<span class="vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check Arabic word">👁️ Check Arabic</span>`;
+            arContent = `<span class="book-cue ar-side vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check Arabic word">Show Arabic →</span>`;
           } else {
             arContent = `
-              <div style="display:flex;align-items:center;gap:6px">
-                <span class="arabic" dir="rtl" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" style="cursor:pointer;font-size:24px;color:var(--ink);line-height:1.5" title="Click to listen (${vocabAudioModeTitle})">
-                  ${v.ar}
-                </span>
-                <button type="button" class="sym-badge" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" title="Listen (${vocabAudioModeTitle})" aria-label="Listen">🔊</button>
-              </div>
+              <span class="arabic" dir="rtl" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" style="cursor:pointer;font-size:25px;color:var(--ink);line-height:1.55;display:inline-block" title="Click to listen (${vocabAudioModeTitle})">
+                ${v.ar}
+              </span>
             `;
           }
 
           let enContent;
           if (chapVocabPracticeMode === "ar-only" && !isRevealed) {
-            enContent = `<span class="vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check English translation">👁️ Check English</span>`;
+            enContent = `<span class="book-cue vocab-reveal-btn" onclick="toggleChapVocabReveal(${v.origIdx}, true)" title="Tap to check English translation">Show meaning →</span>`;
           } else {
-            enContent = `
-              <div>
-                <span style="font-size:14.5px;color:var(--ink);font-weight:500">${v.en}</span>
-                ${fam ? `<span class="wbw-rf-badge" style="margin-left:6px;font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
-                ${vote.vote === -1 ? `<div class="vote-status-tag weak" style="margin-top:3px">⚠️ Weak (${vote.score || -1})</div>` : vote.vote === 1 ? `<div class="vote-status-tag strong" style="margin-top:3px">✓ Solid (+${vote.score || 1})</div>` : ''}
-              </div>
-            `;
+            enContent = `<div style="font-size:16.5px;color:var(--ink);font-weight:450;line-height:1.5">${v.en}</div>`;
           }
 
           return `
             <tr class="${isWeak ? 'weak-item' : ''} ${isStrong ? 'strong-item' : ''}">
-              <td style="vertical-align:middle;padding:8px 6px">${arContent}</td>
-              <td style="vertical-align:middle;padding:8px 6px">${enContent}</td>
-              <td style="text-align:right;vertical-align:middle;padding:8px 6px">
+              <td style="color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;vertical-align:middle;padding:9px 6px">${vi + 1}.</td>
+              <td style="vertical-align:middle;padding:9px 6px">${enContent}</td>
+              <td style="text-align:right;vertical-align:middle;padding:9px 6px">${arContent}</td>
+              <td style="text-align:right;vertical-align:middle;padding:9px 6px">
                 <div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end">
-                  <div class="vote-badge-group">
-                    <button type="button" class="vote-btn down ${vote.vote === -1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'weak')" title="Mark weak / downvote (review first)" aria-label="Mark weak">👎</button>
-                    <button type="button" class="vote-btn up ${vote.vote === 1 ? 'active' : ''}" onclick="voteChapVocabWord('${encodeURIComponent(v.ar)}', 'strong')" title="Mark solid / upvote" aria-label="Mark solid">👍</button>
-                  </div>
+                  ${fam ? `<span class="wbw-rf-badge" style="font-size:11px" title="Root ${fam.root}">🌿 ${fam.root}</span>` : ''}
+                  ${(chapVocabPracticeMode !== "en-only" || isRevealed) ? `<button type="button" class="sym-badge" onclick="playVocabWord('${encodeURIComponent(v.ar)}', '${encodeURIComponent(v.en || '')}')" title="Listen (${vocabAudioModeTitle})" aria-label="Listen">🔊</button>` : ''}
                   <div class="rate-bar" data-key="${canonKey}">${SRS.rateBarHtml(canonKey, "gradeChapVocabWord", [encodeURIComponent(v.ar)], { compact: true, altKeys: [v.ar] })}</div>
                 </div>
               </td>

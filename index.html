@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -67,8 +67,8 @@
     .s-col-num { grid-column: 1; color: var(--muted); font-size: 12.5px; font-weight: 400; font-variant-numeric: tabular-nums; user-select: none; }
     .s-col-prompt { grid-column: 2; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .s-prompt-main { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
-    .s-prompt-text { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.55; }
-    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 25px; font-weight: 400; color: var(--ink); direction: rtl; text-align: right; line-height: 1.8; }
+    .s-prompt-text { font-family: var(--font-ui); font-size: 16.5px; font-weight: 450; color: var(--ink); line-height: 1.55; }
+    .s-prompt-text.ar { font-family: var(--font-ar); font-size: 26px; font-weight: 400; color: var(--ink); direction: rtl; text-align: right; line-height: 1.8; }
     .s-word-note { font-size: 12.5px; color: var(--muted); line-height: 1.4; margin-top: 1px; }
     .s-src-foot { font-size: 11.5px; color: var(--muted); opacity: 0.68; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; transition: opacity 0.14s ease; }
     .s-card:hover .s-src-foot, .s-card:focus-within .s-src-foot { opacity: 1; }
@@ -80,7 +80,7 @@
     .s-col-answer { grid-column: 3; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
     .s-ans-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .s-ans-row.en-side { justify-content: flex-start; }
-    .s-col-dock { grid-column: 4; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; justify-self: end; }
+    .s-col-dock { grid-column: 4; display: inline-flex; align-items: center; gap: 6px; justify-self: end; justify-content: flex-end; }
     .s-row-extras { grid-column: 2 / -1; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
     .s-card > .tryit { grid-column: 2 / -1; }
     #homeChapStrip:not(:empty) { margin-top: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--border-strong); }
@@ -130,8 +130,8 @@
 
     .s-revealed-body { display: flex; flex-direction: column; gap: 7px; padding: 10px 0 4px; border-top: 1px solid var(--border); }
     .s-ar-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    .s-ar-text { font-family: var(--font-ar); font-size: 25px; font-weight: 400; color: var(--ink); line-height: 1.8; text-align: right; }
-    .s-en-line { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.55; }
+    .s-ar-text { font-family: var(--font-ar); font-size: 26px; font-weight: 400; color: var(--ink); line-height: 1.8; text-align: right; }
+    .s-en-line { font-family: var(--font-ui); font-size: 16.5px; font-weight: 450; color: var(--ink); line-height: 1.55; }
     .s-tr-line { font-size: 13px; color: var(--muted); font-style: italic; }
 
     /* Compact Word-by-Word Chips */
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwiequte"></script>
-<script src="js/curriculum.js?v=mwiequte"></script>
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/frames.js?v=mwiequte"></script>
-<script src="js/freetry.js?v=mwiequte"></script>
-<script src="js/practice.js?v=mwiequte"></script>
-<script src="js/lesson-cards.js?v=mwiequte"></script>
-<script src="js/match.js?v=mwiequte"></script>
-<script src="js/errors.js?v=mwiequte"></script>
-<script src="js/tryit.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
-<script src="js/account.js?v=mwiequte"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwiwpwad"></script>
+<script src="js/curriculum.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/frames.js?v=mwiwpwad"></script>
+<script src="js/freetry.js?v=mwiwpwad"></script>
+<script src="js/practice.js?v=mwiwpwad"></script>
+<script src="js/lesson-cards.js?v=mwiwpwad"></script>
+<script src="js/match.js?v=mwiwpwad"></script>
+<script src="js/errors.js?v=mwiwpwad"></script>
+<script src="js/tryit.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/account.js?v=mwiwpwad"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -1562,6 +1562,9 @@ function cardHtml(s, idx) {
     ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visibleNote) : visibleNote}</div>`
     : "";
   const hasExtras = isOpen && (hasWbwBlock || !!wordNoteHtml || !!sentNoteHtml || !!gramHtml);
+  const dockToolsHtml = isOpen && ((s.words && s.words.length > 1) || s.tr || srcMeta)
+    ? `<button type="button" class="sym-badge sym-more" onclick="event.stopPropagation(); this.closest('.sym-group').classList.toggle('open')" title="Word breakdown, transliteration &amp; source" aria-label="More">⋯</button><span class="sym-hid">${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}</span>`
+    : '';
 
   return `
       <div class="s-card ${isOpen ? 'revealed' : ''}" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
@@ -1570,7 +1573,7 @@ function cardHtml(s, idx) {
           <div class="s-prompt-main">
             ${isEnFirst
               ? `<span class="s-prompt-text">${s.en}</span>`
-              : `<span class="arabic s-prompt-text ar" dir="rtl">${s.ar}</span><button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen" aria-label="Listen">🔊</button>`
+              : `<span class="arabic s-prompt-text ar" dir="rtl" style="cursor:pointer" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Tap to listen">${s.ar}</span>`
             }
           </div>
           ${(!isEnFirst && isOpen && s.tr) ? `<div class="s-tr-line" id="drill-tr-${idx}" dir="ltr" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
@@ -1585,30 +1588,23 @@ function cardHtml(s, idx) {
             </div>
           ` : isEnFirst ? `
             <div class="s-ans-row">
-              <span class="arabic s-ar-text" dir="rtl">${s.ar}</span>
-              <div class="sym-group">
-                <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>
-                ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                ${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}
-              </div>
+              <span class="arabic s-ar-text" dir="rtl" style="cursor:pointer" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Tap to listen">${s.ar}</span>
             </div>
             ${s.tr ? `<div class="s-tr-line" id="drill-tr-${idx}" dir="ltr" style="display:${showTrOpen ? 'block' : 'none'};text-align:right">${s.tr}</div>` : ''}
           ` : `
             <div class="s-ans-row en-side">
               <span class="s-en-line">${s.en}</span>
-              <div class="sym-group">
-                ${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}
-                ${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}
-                ${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}
-              </div>
             </div>
           `}
         </div>
 
         <div class="s-col-dock" onclick="event.stopPropagation()">
-          ${TryIt.badgeHtml(idx)}
-          <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+          <div class="sym-group" style="justify-content:flex-end">
+            ${(!isEnFirst || isOpen) ? `<button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to pronunciation" aria-label="Listen">🔊</button>` : ''}
+            ${TryIt.badgeHtml(idx)}
+            <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+            ${dockToolsHtml}
+          </div>
         </div>
 
         ${hasExtras ? `
@@ -1987,15 +1983,10 @@ function renderMasterBank() {
       <tr>
         <td style="color:var(--muted);font-size:11.5px">${idx + 1}</td>
         <td>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <span class="arabic" dir="rtl" style="font-size:22px;color:var(--accent);line-height:1.4">${s.ar}</span>
-            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
-              <button type="button" class="small icon-btn" onclick="playSingle('${encodeURIComponent(s.ar)}')">🔊</button>
-              ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
-              ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
-            </div>
+          <div style="text-align:right">
+            <span class="arabic" dir="rtl" onclick="playSingle('${encodeURIComponent(s.ar)}')" style="cursor:pointer;font-size:24px;color:var(--ink);line-height:1.5;display:inline-block" title="Tap to listen">${s.ar}</span>
           </div>
-          ${s.tr ? `<div id="tbl-tr-${idx}" dir="ltr" style="display:none;font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
+          ${s.tr ? `<div id="tbl-tr-${idx}" dir="ltr" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
           ${s.words && s.words.length ? `
             <div id="tbl-wbw-${idx}" class="s-wbw-compact" style="display:none;margin-top:3px">
               <div class="wbw-chips-wrap" style="display:flex;gap:4px;flex-wrap:wrap">
@@ -2015,8 +2006,8 @@ function renderMasterBank() {
           ` : ''}
         </td>
         <td>
-          <div style="font-weight:600;font-size:13.5px;color:var(--ink)">${s.en}</div>
-          ${s.note ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
+          <div style="font-weight:450;font-size:16px;color:var(--ink)">${s.en}</div>
+          ${s.note ? `<div style="font-size:11.5px;color:var(--muted);margin-top:2px">💡 ${s.note}</div>` : ''}
           ${renderGrammarRuleHtml(s, true)}
         </td>
         <td>
@@ -2030,8 +2021,13 @@ function renderMasterBank() {
             exp.box >= 4 ? `<span class="exp-badge" style="background:#ecfdf5;color:#059669;font-size:10.5px;padding:2px 6px">Mastered</span>` :
             `<span style="color:var(--muted);font-size:11px">—</span>`}
         </td>
-        <td style="text-align:right">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [])}</div>
+        <td style="text-align:right;white-space:nowrap">
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">
+            <button type="button" class="sym-badge" onclick="playSingle('${encodeURIComponent(s.ar)}')" title="Listen" aria-label="Listen">🔊</button>
+            ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
+            ${s.tr ? `<button type="button" class="line-toggle-btn" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
+            ${SRS.rateBarHtml(s.key, "rateMasterSentence", [])}
+          </div>
         </td>
       </tr>
     `;

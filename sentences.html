@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -34,8 +34,8 @@
     .m-table th { text-align: left; padding: 7px 10px; border-bottom: 1.5px solid var(--border-strong); font-size: 12px; color: var(--muted); background: var(--surface-2); font-weight: 600; }
     .m-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
     .m-table tr:hover { background: var(--surface-2); }
-    .m-en-cell { font-family: var(--font-ui); font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.5; }
-    .m-ar-cell { font-family: var(--font-ar); font-size: 24px; color: var(--ink); line-height: 1.7; }
+    .m-en-cell { font-family: var(--font-ui); font-size: 16.5px; font-weight: 450; color: var(--ink); line-height: 1.5; }
+    .m-ar-cell { font-family: var(--font-ar); font-size: 25px; color: var(--ink); line-height: 1.7; }
     .m-src-tag { font-size: 11px; color: var(--muted); font-weight: 500; white-space: nowrap; }
     .line-toggle-btn {
       border: 1px solid var(--border); background: transparent; color: var(--muted);
@@ -56,6 +56,7 @@
     .wbw-chip-sm:hover { border-color: var(--accent); background: var(--accent-soft); }
     .wbw-chip-sm .w-ar { font-family: var(--font-ar); font-size: 19px; color: var(--ink); line-height: 1.45; }
     .wbw-chip-sm .w-en { font-size: 11.5px; color: var(--muted); }
+    .sheet-rate-bar { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
     @media (max-width: 720px) { .m-table { min-width: 620px; } }
   </style>
 </head>
@@ -130,16 +131,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwiequte"></script>
-<script src="js/curriculum.js?v=mwiequte"></script>
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/frames.js?v=mwiequte"></script>
-<script src="js/practice.js?v=mwiequte"></script>
-<script src="js/lesson-cards.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
-<script src="js/account.js?v=mwiequte"></script>
+<script src="js/progress-model.js?v=mwiwpwad"></script>
+<script src="js/curriculum.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/frames.js?v=mwiwpwad"></script>
+<script src="js/practice.js?v=mwiwpwad"></script>
+<script src="js/lesson-cards.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
+<script src="js/account.js?v=mwiwpwad"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -456,17 +457,11 @@ function renderMasterBank() {
     const escRef = String(s.ref || "").replace(/'/g, "\\'");
     const visNote = (s.note && !isTagSentNote(s.note)) ? s.note : "";
     const arCellHtml = (sentReviewMode === "en-only" && !isRevealed)
-      ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">
+      ? `<div style="text-align:right">
            <button type="button" class="book-cue ar-side" onclick="revealMasterSentence('${escKey}', '${escRef}', '${encAr}')">Show Arabic →</button>
-           <button type="button" class="small icon-btn" onclick="event.stopPropagation(); ${playCall}" title="Listen hint">🔊</button>
          </div>`
-      : `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-           <span class="arabic m-ar-cell" dir="rtl">${s.ar}</span>
-           <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
-             <button type="button" class="small icon-btn" onclick="${playCall}" title="Listen">🔊</button>
-             ${s.words && s.words.length ? `<button type="button" class="line-toggle-btn ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown">🧩</button>` : ''}
-             ${s.tr ? `<button type="button" class="line-toggle-btn ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration">🔤</button>` : ''}
-           </div>
+      : `<div style="text-align:right">
+           <span class="arabic m-ar-cell" dir="rtl" onclick="${playCall}" style="cursor:pointer" title="Tap to listen">${s.ar}</span>
          </div>
          ${s.tr ? `<div id="tbl-tr-${idx}" dir="ltr" style="display:${allTblTrVisible ? 'block' : 'none'};font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${s.tr}</div>` : ''}
          ${s.words && s.words.length ? `
@@ -498,7 +493,7 @@ function renderMasterBank() {
         <td>${enCellHtml}</td>
         <td>${arCellHtml}</td>
         <td style="text-align:right;white-space:nowrap">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true })}</div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${!(sentReviewMode === "en-only" && !isRevealed) ? `<button type="button" class="sym-badge" onclick="${playCall}" title="Listen" aria-label="Listen">🔊</button>${s.words && s.words.length ? `<button type="button" class="sym-badge ${allTblWbwVisible ? 'active' : ''}" id="btn-tbl-wbw-${idx}" onclick="toggleTblWbw(${idx})" title="Toggle word breakdown" aria-label="Word breakdown">🧩</button>` : ''}${s.tr ? `<button type="button" class="sym-badge ${allTblTrVisible ? 'active' : ''}" id="btn-tbl-tr-${idx}" onclick="toggleTblTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}` : ''}${SRS.rateBarHtml(s.key, "rateMasterSentence", [], { compact: true })}</div>
         </td>
       </tr>
     `;

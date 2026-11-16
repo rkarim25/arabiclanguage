@@ -982,6 +982,29 @@ const bank = D("sentence-bank.json");
   yes(/\.s-col-prompt/.test(indexSrcNow) && /\.s-col-answer/.test(indexSrcNow) && /\.s-col-dock/.test(indexSrcNow) && /\.book-cue/.test(cssSrcNow), "Practice cards put target content first in a horizontal parallel book spread with quiet margin controls");
   yes(/<div class="wk-ar-col">[\s\S]*class="wk-tr" dir="ltr"/.test(weeklySrcNow) && /\.wk-hint\s*\{\s*display:\s*none;?\s*\}/.test(weeklySrcNow) && /<div class="s-ar-side">[\s\S]*id="day-tr-/.test(chapsSrcNow), "Transliteration renders LTR directly under Arabic and noisy row tags are hidden");
   yes(/footerHtml:\s*lcFooter/.test(indexSrcNow) && !/class="s-lc-foot"/.test(indexSrcNow) && /footerHtml/.test(setsSrcNow) && /--border-subtle/.test(cssSrcNow) && /\.lc-foot/.test(fs.readFileSync(path.join(ROOT, "js", "lesson-cards.js"), "utf8")), "Lesson Cards render rating controls inside self-contained .lc-foot without orphan .s-lc-foot bars, using clear section vs. subtle row separation");
+  const mfStorySrc = fs.readFileSync(path.join(ROOT, "story.html"), "utf8");
+  const mfVocabSrc = fs.readFileSync(path.join(ROOT, "vocab.html"), "utf8");
+  const mfReviewSrc = fs.readFileSync(path.join(ROOT, "review.html"), "utf8");
+  const mfLearnSrc = fs.readFileSync(path.join(ROOT, "learn.html"), "utf8");
+  yes(
+    !/book-line-row">\s*<div class="line-badge-dock"/.test(chapsSrcNow) &&
+    /book-line-row">\s*<div class="s-content-wrap">/.test(chapsSrcNow) &&
+    !/book-line-row">\s*<div class="line-badge-dock"/.test(teacherSrcNow) &&
+    /book-line-row">\s*<div class="s-content-wrap">/.test(teacherSrcNow),
+    "chapters.html & class.html render content (.s-content-wrap) first and dock all controls (.line-badge-dock) at row end"
+  );
+  yes(
+    /const dockToolsHtml\b/.test(indexSrcNow) &&
+    /class="sym-group" style="justify-content:flex-end"[\s\S]{0,450}dockToolsHtml/.test(indexSrcNow) &&
+    !/class="small icon-btn"/.test(wordsSrcNow) &&
+    !/class="small icon-btn"/.test(sentSrcNow) &&
+    /speakQuranCoreWord\([\s\S]{0,160}rateCoreQuranWord/.test(quranSrcNow) &&
+    /<td class="tr-cell" dir="ltr">[\s\S]{0,100}class="row-speak"/.test(mfStorySrc) &&
+    /<th style="text-align:right">learnt\?<\/th>/.test(mfVocabSrc) &&
+    /<td class="en-cell veiled">[\s\S]{0,180}class="row-speak"/.test(mfReviewSrc) &&
+    !/<td style="width:34px"><button class="small" data-say=/.test(mfLearnSrc),
+    "Material-first layout across index, words, sentences, quran, story, vocab, review & learn puts all controls at row end"
+  );
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

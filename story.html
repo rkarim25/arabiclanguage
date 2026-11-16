@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Story — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
 </head>
 <body>
 <main>
@@ -22,10 +22,10 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("stories");
 
@@ -305,7 +305,7 @@ function renderMemorize() {
       </div>
       <div class="vocab-table-wrap">
         <table class="vocab-table">
-          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th></th><th>Transliteration</th></tr></thead>
+          <thead><tr><th>English</th><th class="ar-col">Arabic</th><th>Transliteration</th><th></th></tr></thead>
           <tbody id="vtBody"></tbody>
         </table>
       </div>
@@ -328,8 +328,8 @@ function renderMemorize() {
     tr.innerHTML = `
       <td class="en-cell">${v.en}${v.note ? `<span class="note-inline">${v.note}</span>` : ""}</td>
       <td class="ar-cell">${v.ar}</td>
-      <td><span class="row-speak" title="hear it">🔊</span></td>
-      <td class="tr-cell">${v.tr || ""}</td>
+      <td class="tr-cell" dir="ltr">${v.tr || ""}</td>
+      <td style="text-align:right;white-space:nowrap"><span class="row-speak" title="hear it">🔊</span></td>
     `;
     tr.querySelector(".row-speak").onclick = () => speak(v.ar, 0.8);
     const enCell = tr.querySelector(".en-cell");

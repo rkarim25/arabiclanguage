@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Learn — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .crumb { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
     .q-ar { font-size: 30px; line-height: 1.8; text-align: center; margin: 16px 0 10px; }
@@ -33,12 +33,12 @@
 <body>
 <main><div id="app"><p>Loading…</p></div></main>
 
-<script src="js/progress-model.js?v=mwiequte"></script>
-<script src="js/curriculum.js?v=mwiequte"></script>
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/progress-model.js?v=mwiwpwad"></script>
+<script src="js/curriculum.js?v=mwiwpwad"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("learn");
 trackPage("learn");
@@ -1488,10 +1488,9 @@ async function runVocabBurst(ctx, state) {
       <table class="tbl">${words.map((w, i) => `
         <tr>
           <td class="ar arabic">${esc(w.ar)}</td>
-          <td style="width:34px"><button class="small" data-say="${i}">🔊</button></td>
           <td><span class="veil" data-veil="${i}">${esc(w.en)}</span>
-            <div style="font-size:12.5px;color:var(--muted)">${esc(w.tr)} · ${rank(w)}</div>
-            <div class="bucket-slot" data-b="${i}"></div></td>
+            <div style="font-size:12.5px;color:var(--muted)">${esc(w.tr)} · ${rank(w)}</div></td>
+          <td style="text-align:right;white-space:nowrap"><div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end"><button class="small" data-say="${i}">🔊</button><div class="bucket-slot" data-b="${i}"></div></div></td>
         </tr>`).join("")}</table>
       <div class="row"><button id="all">Reveal all</button><button class="primary" id="go">Now recall them →</button></div>
     </div>`;

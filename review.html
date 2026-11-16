@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Review — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
 </head>
 <body>
 <main>
@@ -20,10 +20,10 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("review");
 trackPage("review");
@@ -101,7 +101,7 @@ function renderTable(queue) {
     <div class="toggles"><label><input type="checkbox" id="tgTr"> Transliteration</label></div>
     <div class="vocab-table-wrap">
       <table class="vocab-table">
-        <thead><tr><th class="ar-col" style="text-align:right">Arabic</th><th></th><th class="tr-head" style="display:none">Transliteration</th><th>English</th></tr></thead>
+        <thead><tr><th class="ar-col" style="text-align:right">Arabic</th><th class="tr-head" style="display:none">Transliteration</th><th>English</th><th></th></tr></thead>
         <tbody id="rvBody"></tbody>
       </table>
     </div>
@@ -130,9 +130,9 @@ function renderTable(queue) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="ar-cell">${v.ar}</td>
-      <td><span class="row-speak" title="hear it">🔊</span></td>
-      <td class="tr-cell" style="display:none">${v.tr || ""}</td>
+      <td class="tr-cell" dir="ltr" style="display:none">${v.tr || ""}</td>
       <td class="en-cell veiled"><span>${v.en}${v.note ? `<span class="note-inline">${v.note}</span>` : ""}</span></td>
+      <td style="text-align:right;white-space:nowrap"><span class="row-speak" title="hear it">🔊</span></td>
     `;
     tr.querySelector(".row-speak").onclick = (e) => { e.stopPropagation(); speak(v.ar, 0.8); };
     const enCell = tr.querySelector(".en-cell");
@@ -143,7 +143,7 @@ function renderTable(queue) {
     // control strip — its own full-width row so nothing hides off-screen on a phone
     const ctr = document.createElement("tr");
     const td = document.createElement("td");
-    td.colSpan = 4; td.className = "rv-ctrl";
+    td.colSpan = 4; td.className = "rv-ctrl"; td.style.textAlign = "right";
     const slot = document.createElement("div");
     slot.className = "bucket-slot";
     td.appendChild(slot);

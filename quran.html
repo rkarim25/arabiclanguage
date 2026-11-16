@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Quran — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     .verse-block { border-bottom: 1px dashed var(--border); padding: 18px 0; }
     .verse-block:last-child { border-bottom: none; }
@@ -88,12 +88,12 @@
   <div id="content">Loading…</div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/practice.js?v=mwiequte"></script>
-<script src="js/lesson-cards.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/practice.js?v=mwiwpwad"></script>
+<script src="js/lesson-cards.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("quran");
 trackPage("quran");
@@ -456,21 +456,16 @@ function renderStructuresTab() {
   if (!body) return;
   const cardsHtml = QCARDS.map(c => {
     const key = "lc:" + c.id;
-    const cardBody = window.LessonCards ? LessonCards.renderBodyHtml(c, {}) : `<p>${c.summary || ""}</p>`;
+    const footerHtml = `
+      <span style="font-size:12.5px;color:var(--muted);font-weight:500">Rate recall for this mental map:</span>
+      <div style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap">
+        ${SRS.rateBarHtml(key, "rateQuranStructure", [c.id], { compact: false, noDot: true, retire: false })}
+        <a href="index.html?lc=${encodeURIComponent(c.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise →</a>
+      </div>`;
     return `
-      <div class="card" id="lc-${c.id}" style="padding:14px 16px;margin-bottom:14px">
+      <div id="lc-${c.id}" style="margin-bottom:16px">
         <div id="qstruct-${c.id}">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-            <span style="display:inline-flex;align-items:center;gap:8px">
-              ${SRS.dotHtml(key, { lg: true })}
-              <strong style="font-size:15.5px">${c.icon || "🧱"} ${c.title}</strong>
-            </span>
-            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
-              ${SRS.rateBarHtml(key, "rateQuranStructure", [c.id], { compact: true, noDot: true, retire: false })}
-              <a href="index.html?lc=${encodeURIComponent(c.id)}" class="q-chip active" style="text-decoration:none">⚡ Practise →</a>
-            </div>
-          </div>
-          ${cardBody}
+          ${window.LessonCards ? LessonCards.renderBodyHtml(c, { footerHtml }) : `<p>${c.summary || ""}</p>`}
         </div>
       </div>
     `;
@@ -683,10 +678,10 @@ function renderCoreWordsTab() {
       <table class="q-core-tbl">
         <thead>
           <tr>
-            <th style="width:44px">#</th>
-            <th style="text-align:right">Arabic</th>
-            <th>Meaning</th>
-            <th>Qur'ān Freq</th>
+            <th style="width:40px">#</th>
+            <th style="width:40%">Meaning</th>
+            <th style="width:32%;text-align:right">Arabic</th>
+            <th style="width:90px;text-align:right">Qur'ān Freq</th>
             <th style="text-align:right">Verdict</th>
           </tr>
         </thead>
@@ -700,24 +695,27 @@ function renderCoreWordsTab() {
             return `
               <tr>
                 <td style="color:var(--muted);font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums">${w.rank + 1}</td>
-                <td style="text-align:right">
-                  ${hideAr
-                    ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}', '${encAr}')">Show Arabic →</button>`
-                    : `<span style="display:inline-flex;align-items:center;gap:7px">
-                        <button type="button" class="lc-speak-btn" onclick="speakQuranCoreWord('${encAr}')" title="Listen">🔊</button>
-                        <span class="arabic" style="font-size:22px;color:var(--ink)" dir="rtl">${w.ar}</span>
-                       </span>
-                       ${(coreShowTr && w.tr) ? `<div dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${w.tr}</div>` : ""}`
-                  }
-                </td>
                 <td>
                   ${hideEn
                     ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}')">Show meaning →</button>`
-                    : `<span style="font-family:var(--font-ui);font-size:16px;font-weight:400">${w.en}${fam ? ` <span style="font-size:11px;color:var(--muted)">🌿 ${fam.root}</span>` : ""}</span>`
+                    : `<span style="font-family:var(--font-ui);font-size:16.5px;font-weight:450;color:var(--ink)">${w.en}</span>`
                   }
                 </td>
-                <td><span class="q-freq-pill">${Number(w.n || 0).toLocaleString()}×</span></td>
-                <td style="text-align:right;white-space:nowrap">${SRS.rateBarHtml(w.key, "rateCoreQuranWord", [encAr], { compact: true, altKeys: quranWordAltKeys(w.ar) })}</td>
+                <td style="text-align:right">
+                  ${hideAr
+                    ? `<button type="button" class="q-reveal-btn" onclick="revealCoreRow('${w.key}', '${encAr}')">Show Arabic →</button>`
+                    : `<span class="arabic" style="font-size:25px;color:var(--ink);cursor:pointer" dir="rtl" onclick="speakQuranCoreWord('${encAr}')" title="Tap to listen">${w.ar}</span>
+                       ${(coreShowTr && w.tr) ? `<div dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;text-align:right">${w.tr}</div>` : ""}`
+                  }
+                </td>
+                <td style="text-align:right"><span class="q-freq-pill">${Number(w.n || 0).toLocaleString()}×</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <div style="display:inline-flex;align-items:center;gap:6px;justify-content:flex-end">
+                    ${fam ? `<span style="font-size:11px;color:var(--muted)">🌿 ${fam.root}</span>` : ""}
+                    ${!hideAr ? `<button type="button" class="sym-badge" onclick="speakQuranCoreWord('${encAr}')" title="Listen" aria-label="Listen">🔊</button>` : ""}
+                    ${SRS.rateBarHtml(w.key, "rateCoreQuranWord", [encAr], { compact: true, altKeys: quranWordAltKeys(w.ar) })}
+                  </div>
+                </td>
               </tr>
             `;
           }).join("") : `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No matching words for this filter.</td></tr>`}
@@ -870,14 +868,14 @@ function renderUnlockedTab() {
           <div class="q-ayah-en-col">
             ${hideEn
               ? `<button type="button" class="q-reveal-btn" onclick="revealUnlockedAyah('${item.key}')">Show meaning →</button>`
-              : `<div style="font-family:var(--font-ui);font-size:16px;font-weight:400;color:var(--ink);line-height:1.5">${a.en}</div>`
+              : `<div style="font-family:var(--font-ui);font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.5">${a.en}</div>`
             }
             <div class="q-ayah-sub">${a.surahName} (${a.ref}) · ${item.rd.knownWords}/${item.rd.totalWords} words held</div>
           </div>
           <div class="q-ayah-ar-col">
             ${hideAr
               ? `<button type="button" class="q-reveal-btn" onclick="revealUnlockedAyah('${item.key}'); reciteVerse(${a.surah}, ${a.ayah}, '${escAr}', 0.85)">Show Arabic &amp; Play Alafasy →</button>`
-              : `<div class="arabic" style="font-size:24px;line-height:1.65;text-align:right;color:var(--ink)" dir="rtl">${a.ar}</div>`
+              : `<div class="arabic" style="font-size:25px;line-height:1.65;text-align:right;color:var(--ink);cursor:pointer" dir="rtl" onclick="reciteVerse(${a.surah}, ${a.ayah}, '${escAr}', 0.85)" title="Tap to hear Alafasy recitation">${a.ar}</div>`
             }
           </div>
           <div class="q-ayah-dock">
@@ -1074,14 +1072,14 @@ function renderMosqueTab() {
           <div class="q-ayah-en-col">
             ${hideEn
               ? `<button type="button" class="q-reveal-btn" onclick="revealMosqueItem('${it.key}')">Show meaning →</button>`
-              : `<div style="font-family:var(--font-ui);font-size:16px;font-weight:400;color:var(--ink);line-height:1.5">${it.en}</div>
+              : `<div style="font-family:var(--font-ui);font-size:16.5px;font-weight:450;color:var(--ink);line-height:1.5">${it.en}</div>
                  ${it.note ? `<div class="q-ayah-sub">💡 ${it.note}</div>` : ""}`
             }
           </div>
           <div class="q-ayah-ar-col">
             ${hideAr
               ? `<button type="button" class="q-reveal-btn" onclick="revealMosqueItem('${it.key}', '${encAr}')">Show Arabic &amp; Speak →</button>`
-              : `<div class="arabic" style="font-size:24px;line-height:1.65;text-align:right;color:var(--ink)" dir="rtl">${it.ar}</div>
+              : `<div class="arabic" style="font-size:25px;line-height:1.65;text-align:right;color:var(--ink);cursor:pointer" dir="rtl" onclick="speak(decodeURIComponent('${encAr}'), 0.85)" title="Tap to listen">${it.ar}</div>
                  ${it.tr ? `<div dir="ltr" style="font-size:12px;color:var(--muted);font-style:italic;text-align:right;margin-top:2px">${it.tr}</div>` : ""}`
             }
           </div>
@@ -1374,8 +1372,11 @@ function renderSurah(s, mode) {
       `<span class="vw" data-qkey="qw:${s.id}:${vi}:${wi}"${mode === "study" ? ` data-tip="${esc(w[2])}"` : ""}>${w[0]}</span>`).join(" ");
     block.innerHTML = `
       <div class="verse-ref" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`s:q:${s.id}:${vi + 1}`, { lg: true })}<span>${v.ref}</span></span>
-        ${mode === "study" ? SRS.rateBarHtml(`s:q:${s.id}:${vi + 1}`, "rateSurahAyah", [s.id, vi], { compact: true, noDot: true, retire: false }) : ""}
+        <span>${v.ref}</span>
+        <span style="display:inline-flex;align-items:center;gap:7px">
+          ${SRS.dotHtml(`s:q:${s.id}:${vi + 1}`, { lg: true })}
+          ${mode === "study" ? SRS.rateBarHtml(`s:q:${s.id}:${vi + 1}`, "rateSurahAyah", [s.id, vi], { compact: true, noDot: true, retire: false }) : ""}
+        </span>
       </div>
       <div class="verse-ar"${mode === "test" ? " data-nopeek" : ""}>${arHtml} <span class="sent-play">🔊</span></div>
       <div class="verse-en" style="display:${mode === "study" ? "block" : "none"}">${v.en}</div>
@@ -1397,10 +1398,10 @@ function renderSurah(s, mode) {
       if (mode === "study") {
         // aiMeaning = the concept-level AI translation from Reza's Quran site (scripts/import-ai-wbw.js)
         const ai = aiMeaning ? `<div class="w-ai">${aiMeaning}</div>` : "";
-        const wBar = SRS.rateBarHtml(`qw:${s.id}:${vi}:${wi}`, "rateSurahWord", [s.id, vi, wi], { compact: true, noDot: true, retire: false });
-        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><span>${en} ${gBtn}</span>${wBar}</div>${ai}</td>`;
+        const wBar = SRS.rateBarHtml(`qw:${s.id}:${vi}:${wi}`, "rateSurahWord", [s.id, vi, wi], { compact: true, retire: false });
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr" dir="ltr">${tr}</td><td class="w-en"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><span style="font-size:16px;color:var(--ink)">${en}</span><span style="display:inline-flex;align-items:center;gap:6px;margin-left:auto">${gBtn}${wBar}</span></div>${ai}</td>`;
       } else {
-        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}"><span style="display:inline-flex;align-items:center;gap:7px">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}<span>${ar}</span></span></td><td class="w-tr">${tr}</td><td class="w-en"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span></td>`;
+        row.innerHTML = `<td class="w-ar" data-qkey="qw:${s.id}:${vi}:${wi}">${ar}</td><td class="w-tr" dir="ltr">${tr}</td><td class="w-en"><div style="display:flex;align-items:center;gap:8px"><input placeholder="meaning..." data-v="${vi}" data-w="${wi}" autocomplete="off"><span class="true-en" style="display:none"></span><span style="margin-left:auto">${SRS.dotHtml(`qw:${s.id}:${vi}:${wi}`)}</span></div></td>`;
       }
       row.querySelector(".w-ar").onclick = () => {
         speakQuranWord(s.id, vi, wi, ar, 0.75);

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Weekly Learning Booklet — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwiequte">
-  <link rel="stylesheet" href="css/style.css?v=mwiequte">
+  <link rel="stylesheet" href="css/fonts.css?v=mwiwpwad">
+  <link rel="stylesheet" href="css/style.css?v=mwiwpwad">
   <style>
     main { max-width: 980px; }
     .wk-controls {
@@ -216,12 +216,12 @@
   </div>
 </main>
 
-<script src="js/srs.js?v=mwiequte"></script>
-<script src="js/practice.js?v=mwiequte"></script>
-<script src="js/lesson-cards.js?v=mwiequte"></script>
-<script src="js/app.js?v=mwiequte"></script>
-<script src="js/tracker.js?v=mwiequte"></script>
-<script src="js/plan.js?v=mwiequte"></script>
+<script src="js/srs.js?v=mwiwpwad"></script>
+<script src="js/practice.js?v=mwiwpwad"></script>
+<script src="js/lesson-cards.js?v=mwiwpwad"></script>
+<script src="js/app.js?v=mwiwpwad"></script>
+<script src="js/tracker.js?v=mwiwpwad"></script>
+<script src="js/plan.js?v=mwiwpwad"></script>
 <script>
 renderNav("weekly");
 trackPage("weekly");
@@ -597,19 +597,19 @@ function renderBooklet() {
       ${core12.length ? `
         <h3 class="wk-subh">12 Core Qur'ānic Words Due This Week</h3>
         <table class="wk-tbl">
-          <thead><tr><th style="width:48px">#</th><th>Meaning</th><th style="text-align:right">Arabic</th><th style="text-align:right;width:110px">Mushaf Freq</th></tr></thead>
+          <thead><tr><th style="width:44px">#</th><th>Meaning</th><th style="text-align:right">Arabic</th><th style="text-align:right;width:130px">Mushaf Freq</th></tr></thead>
           <tbody>
             ${core12.map(item => {
               const encAr = encodeURIComponent(item.w.ar);
               return `
                 <tr>
-                  <td>#${item.i + 1} ${mdot(item.key)}</td>
+                  <td>#${item.i + 1}</td>
                   <td>${esc(item.w.en)}</td>
                   <td class="ar-td" onclick="speak(decodeURIComponent('${encAr}'), 0.85)">
                     <div>${esc(item.w.ar)}</div>
                     ${item.w.tr ? `<div class="wk-tr" dir="ltr">${esc(item.w.tr)}</div>` : ""}
                   </td>
-                  <td style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">${Number(item.w.n || 0).toLocaleString()}×</td>
+                  <td style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">${Number(item.w.n || 0).toLocaleString()}× ${mdot(item.key)}</td>
                 </tr>
               `;
             }).join("")}
