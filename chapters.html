@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
-  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwl0djvk">
+  <link rel="stylesheet" href="css/style.css?v=mwl0djvk">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwjl16e0"></script>
-<script src="js/curriculum.js?v=mwjl16e0"></script>
-<script src="js/srs.js?v=mwjl16e0"></script>
-<script src="js/match.js?v=mwjl16e0"></script>
-<script src="js/errors.js?v=mwjl16e0"></script>
-<script src="js/frames.js?v=mwjl16e0"></script>
-<script src="js/app.js?v=mwjl16e0"></script>
-<script src="js/tracker.js?v=mwjl16e0"></script>
-<script src="js/plan.js?v=mwjl16e0"></script>
-<script src="js/account.js?v=mwjl16e0"></script>
+<script src="js/progress-model.js?v=mwl0djvk"></script>
+<script src="js/curriculum.js?v=mwl0djvk"></script>
+<script src="js/srs.js?v=mwl0djvk"></script>
+<script src="js/match.js?v=mwl0djvk"></script>
+<script src="js/errors.js?v=mwl0djvk"></script>
+<script src="js/frames.js?v=mwl0djvk"></script>
+<script src="js/app.js?v=mwl0djvk"></script>
+<script src="js/tracker.js?v=mwl0djvk"></script>
+<script src="js/plan.js?v=mwl0djvk"></script>
+<script src="js/account.js?v=mwl0djvk"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3781,79 +3781,27 @@ function buildChapterAiPrompt(chap) {
   p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
-  p += `   - Priority Drill Challenge: Weave in Reza's recent diagnostic slips to check retention:\n`;
-  p += `     * Friday Eve / Saturday 14 Nov Weekend Sprint & Sunday 15 Nov Preply Warmup (Prompt II):\n`;
-  p += `       - 1. Core Negation Grammar & The 9 Visual Lesson Cards:\n`;
-  p += `         * Past Negation (lc:negation): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
-  p += `           a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present, Qur'anic standard like لَمْ يَلِدْ).\n`;
-  p += `           b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb, natural spoken MSA).\n`;
-  p += `           c) Contrast: لَا أَذْهَبُ (I don't go — present) vs لَنْ أَذْهَبَ (I won't go — future) vs لَيْسَ عِنْدِي (I don't have — nominal).\n`;
-  p += `         * Verb Tenses (lc:verb-tenses): Past puts person on back (ذَهَبْتُ / عَبَدْتُ); Present puts person on front (أَذْهَبُ); Future clips سَـ (سَأَذْهَبُ).\n`;
-  p += `         * Price Triplet (lc:price-triplet): ثَمَن (intrinsic value / 2:41) vs سِعْر (market shop tag) vs أُجْرَة (taxi / transit fare).\n`;
-  p += `         * Pronoun Attachments (lc:pronoun-attachments): -ka to man vs -ki to Saba (كَيْفَ كَانَ يَوْمُكِ؟).\n`;
-  p += `         * Look-Alike Roots (lc:lookalike-roots): أَعُودُ (plain dāl = return home) vs أَعُوذُ (dotted dhāl = seek refuge); جَوْزَة (walnut) vs زَوْجَة (wife).\n`;
-  p += `         * Requests & Modals (lc:requests-and-modals): هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me?) + تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (Speak slowly).\n`;
-  p += `         * Days & Clock (lc:days-and-clock): يَوْمُ السَّبْتِ (Saturday) & يَوْمُ الأَحَدِ (Sunday Preply 07:00 UK warmup).\n`;
-  p += `         * Sadr vs Qalb (lc:sadr-vs-qalb): صُدُور (outer chest courtyard where waswās hovers) vs قُلُوب (inner locked heart).\n`;
-  p += `         * Idafa vs Adjective (lc:idafa-vs-adjective): مِفْتَاحُ الغُرْفَةِ (possession, ال on 2nd) vs الغُرْفَةُ الجَدِيدَةُ (adjective, ال on both).\n`;
-  p += `       - 2. Saturday 14 Nov Telemetry Slips & Target Items (drill each in a crisp 1-line exchange):\n`;
-  p += `         1. مِصْعَد (miṣʿad — lift/elevator, root ص-ع-د; machine that ascends vs طَابِق floor).\n`;
-  p += `         2. الآنَ (al-āna — right now: أَيْنَ أَنْتَ الآنَ؟).\n`;
-  p += `         3. مَرَّة (marrah — time/occasion: مَرَّةً أُخْرَى once more).\n`;
-  p += `         4. الاثْنَيْن (al-ithnayn — Monday, root ث-ن-ي two).\n`;
-  p += `         5. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? [to Saba, feminine -ki]).\n`;
-  p += `         6. فِيهَا سُرُرٌ مَرْفُوعَةٌ (Surah Al-Ghāshiyah 88:13 — thrones raised high; سُرُر plural of سَرِير bed!).\n`;
-  p += `         7. ٱلْمَغْضُوبِ (those who earned wrath/anger — passive participle of غ-ض-ب anger vs active أَنْعَمْتَ in Al-Fātiḥah 1:7).\n`;
-  p += `         8. عَبَدْتُ اللهَ (I worshipped Allah — past -tu of إِيَّاكَ نَعْبُدُ).\n`;
-  p += `         9. تَقَبَّلَ اللهُ (May Allah accept — greeting du'a; Bengali kobul / qabūl cognate; reply: مِنَّا وَمِنْكُمْ).\n`;
-  p += `         10. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb order) + حَفْلَة (party / gathering).\n`;
-  p += `         11. عُقَد (knots, 113:4) + حَاسِد (envier, 113:5) + غَاسِق (intense nightfall, 113:3).\n`;
-  p += `       - 3. Sunday 15 Nov 07:00 UK Preply Class Warmup (Trip to Village & Breakfast):\n`;
-  p += `         * Breakfast items: بَيْضَة (egg — oval white abyaḍ), تَمْر (dates), جَوْز (walnuts), خُبْز (bread), جُبْن (cheese), كُوب حَلِيب (glass of milk).\n`;
-  p += `         * Shopping & provisions: دَجَاج (chicken), سَمَك (fish), سَلَطَة (salad), سَمْن (ghee), سُكَّر (sugar), وَجْبَة (meal), بُقُولِيَّات (legumes).\n`;
-  p += `         * Ordinals: الأَوَّل (1st), الثَّانِي (2nd), الثَّالِث (3rd).\n`;
-  p += `         * Past board verbs (-tu): قَرَأْتُ، صَلَّيْتُ، أَكَلْتُ، شَرِبْتُ، ذَهَبْتُ، عُدْتُ، سَاعَدْتُ.\n`;
-  p += `       - Earlier Midweek Work & Politeness Slips:\n`;
-  p += `         1. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (I have a meeting in the morning — root ج-م-ع / Jumu'ah assembly).\n`;
-  p += `         2. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? — to wife Saba; feminine suffix «ـكِ» vs masculine «ـكَ»).\n`;
-  p += `         3. هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear AID in mu-sa-AID-ah).\n`;
-  p += `         4. تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِك (Speak slowly, please — root ب-ط-ء / with slowness).\n`;
-  p += `       - Celebrated Verb Promotions out of Box 0 into Box 1 (11 Nov morning wins!):\n`;
-  p += `         * أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (I learn a little every day — s: 1.179, Box 1, Bengali তালিম ta'lim hook!).\n`;
-  p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — s: 1.632, Box 1, plain dāl refuge hook!).\n`;
-  p += `       - Proven Routine & Commute Anchors:\n`;
-  p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven commute anchor, held strong!).\n`;
-  p += `         * قَرَأْتُ القُرْآنَ بَعْدَ العِشَاءِ (I read the Qur'an after Isha — Box 3, s: 7.001).\n`;
-  p += `         * أَتَعَلَّمُ العَرَبِيَّةَ عَشْرَ دَقَائِقَ (I learn Arabic for ten minutes — Box 3, s: 11.509).\n`;
-  p += `         * هَذَا الكِتَابُ لِي (This book is mine — Box 3, s: 8.403; possessive preposition لِي).\n`;
-  p += `         * عِنْدِي أَوْلَادٌ صِغَارٌ (I have young children — Box 1, s: 2.0).\n`;
-  p += `         * يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park).\n`;
-  p += `         * عِنْدِي حَجْزٌ فِي المَطْعَمِ (I have a reservation at the restaurant — proven letter-perfect!).\n`;
-  p += `       - Class Adjective Contrasts & Descriptions:\n`;
-  p += `         * غَنِيّ (ghaniyy — rich/wealthy) vs فَقِير (faqīr — poor/in need; Qur'anic hook 28:24).\n`;
-  p += `         * كَرِيم (karīm — generous/noble; Al-Karīm) vs بَخِيل (bakhīl — stingy).\n`;
-  p += `         * صِحِّيّ (ṣiḥḥiyy — healthy; طَعَامٌ صِحِّيّ — healthy food) vs جَوْعَان (jawʿān — hungry; rhymes with عَطْشَان ʿaṭshān / thirsty).\n`;
-  p += `         * فِكْرَة (fikrah — idea / thought; فِكْرَةٌ جَيِّدَة — good idea!).\n`;
-  p += `       - Village Breakfast & Food Slips Reinforcement:\n`;
-  p += `         * Weak Egg Slip: بَيْضَة (bayḍah — egg; rated weak; mnemonic: oval white أَبْيَض abyaḍ).\n`;
-  p += `         * Mirror-Letter Hook: جَوْزَة (jawzah — walnut snack: ج leads) vs زَوْجَة (zawjah — wife partner: ز leads).\n`;
-  p += `         * Price Triplet: ثَمَن (thaman — value/price 2:41; هَذَا ثَمَنُ الفَاكِهَةِ) vs سِعْر (siʿr — market tag: كَمِ السِّعْرُ لِهَذَا؟) vs أُجْرَة (ujrah — taxi fare: كَمِ الأُجْرَةُ إِلَى هُنَاكَ؟).\n`;
-  p += `         * Spoken 1st-Person Narration: "أَنَا جَوْعَان، أُرِيدُ فَطُورًا صِحِّيًّا وَلَذِيذًا" and "أَكَلْتُ بَيْضَةً وَثَلَاثَ تَمَرَاتٍ وَجَوْزَةً".\n`;
-  p += `       - Daily Routine & Commute Anchors:\n`;
-  p += `         * الأَحَدُ لِدَرْسِ العَرَبِيَّةِ (Sunday is for the Arabic lesson — proven 14-min drive line!)\n`;
-  p += `         * أَعُودُ إِلَى البَيْتِ فِي المَسَاءِ (I return home in the evening — plain dāl refuge hook, 1 letter from أَعُوذُ)\n`;
-  p += `         * يَوْمَ السَّبْتِ نَذْهَبُ إِلَى الحَدِيقَةِ (On Saturday we go to the park — Saturday day-off routine anchor)\n`;
-  p += `         * هَذَا الكِتَابُ لِي (This book is mine — possessive attached preposition لِي)\n`;
-  p += `         * المَسَاءُ لِلْعَائِلَةِ (The evening is for the family — grammar pattern لِـ / لِلْ)\n`;
-  p += `         * هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (Can you help me? — Bengali মুমকিন mumkin cognate + hear the AID in mu-sa-AID-ah)\n`;
-  p += `         * تَفَضَّلْ، هَذَا مَالُكَ (Here you go, this is your money — mnemonic: مَال like Bayt al-Māl wealth)\n`;
-  p += `         * Building & Vertical Movement: طَابِق (floor / storey), مِصْعَد (lift / elevator — machine that ascends), سُلَّم (stairs — solemn climb / salām safe steps)\n`;
-  p += `       - Proven Chapter 3 Hotel Mastery (Tested 100% 9/9!):\n`;
-  p += `         * خُذْنِي إِلَى الفُنْدُقِ مِنْ فَضْلِكَ (Take me to the hotel), عِنْدِي حَجْزٌ فِي الفُنْدُقِ (I have a reservation), أَيْنَ مِفْتَاحُ الغُرْفَةِ؟ (Where is the room key?), هَلْ تَحْتَاجُ إِلَى خِدْمَةٍ؟ (Do you need any service?), تَوَقَّفْ هُنَا، لَوْ سَمَحْتَ (Stop here, please), هَذِهِ أَمْتِعَتِي فِي السَّيَّارَةِ (This is my luggage in the car), جَوَازُ سَفَرِي مَفْقُودٌ (My passport is missing)\n`;
-  p += `       - Qur'an Ear Anchors:\n`;
-  p += `         * Surah Al-ʿAsr Verse 2 (إِنَّ الْإِنسَانَ لَفِي خُسْرٍ)\n`;
-  p += `         * Al-Falaq & An-Nas protection concepts: أَعُوذُ (I seek refuge), غَاسِق (intense nightfall), وَقَبَ (penetrating darkness), عُقَد (knots), حَاسِد (envier), الْوَسْوَاس (repetitive whisperer), الْخَنَّاس (slinker), صُدُور النَّاس (chests of people)\n`;
-  p += `       - Celebrated Win: الفَطُور (breakfast) is solid thanks to the 'mini-iftar' / 'FAT TOUR' mnemonic!\n\n`;
+  p += `   - Priority Drill Challenge (Tuesday 17 Nov Mid-Week Spoken Unlock — Prompt MM):\n`;
+  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + Past Negation & 15 Visual Lesson Cards:\n`;
+  p += `       - 1. Past Negation (lc:negation — unseen on site, priority teach!): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
+  p += `         a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present, standard MSA & Qur'an like لَمْ يَلِدْ).\n`;
+  p += `         b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb, natural spoken MSA).\n`;
+  p += `         c) Contrast: لَا أَذْهَبُ (present don't) vs لَنْ أَذْهَبَ (future won't) vs لَيْسَ عِنْدِي (nominal don't have).\n`;
+  p += `       - 2. Verb Tenses incl. She & They (lc:verb-tenses): Past puts person on back (ذَهَبْتُ / ذَهَبَتْ / ذَهَبُوا); Present puts person on front (أَذْهَبُ / تَذْهَبُ / يَذْهَبُونَ); Future clips سَـ (سَأَذْهَبُ). Note: only هُمْ takes plural tail ـُونَ / ـُوا; نَحْنُ is نَذْهَبُ!\n`;
+  p += `       - 3. Core Concept Cards: Price Triplet (ثَمَن value vs سِعْر shop tag vs أُجْرَة taxi fare) · Pronoun Attachments (-ka to man vs -ki to Saba: كَيْفَ كَانَ يَوْمُكِ؟) · Look-Alikes (أَعُودُ plain د return vs أَعُوذُ dotted ذ seek refuge; جَوْزَة walnut vs زَوْجَة wife) · Ṣadr vs Qalb (صُدُور chest courtyard vs قُلُوب locked heart) · Iḍāfah vs Adjective (مِفْتَاحُ الغُرْفَةِ vs الغُرْفَةُ الجَدِيدَةُ).\n`;
+  p += `       - 4. 4-Pillar Qur'ān Decoding & Pillar 5 Mosque Landmarks:\n`;
+  p += `         * Glue Chains (lc:quran-glue-chains): فِيهَا (in it, 88:13) · عَلَيْهِمْ (upon them, 1:7) · لَهُمْ (for them) · إِنَّهُمْ (indeed they) · إِلَّا (except/but — promoted ✓!).\n`;
+  p += `         * Active Doer vs Passive Done-To (lc:quran-active-passive): حَاسِد (envier 113:5) vs مَغْضُوب (angered-upon 1:7) / مَرْفُوعَة (raised high 88:13: فِيهَا سُرُرٌ مَرْفُوعَةٌ).\n`;
+  p += `         * Khutbah & Du'ā Cues (lc:khutbah-roadmap, lc:duas-and-imam): أَمَّا بَعْدُ (as for what follows) · عِبَادَ اللَّهِ (servants of Allah) · رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً.\n`;
+  p += `     * Recent Telemetry Slips Queue (test cleanly out loud twice):\n`;
+  p += `       1. مِصْعَد (miṣʿad — lift/elevator, root ص-ع-د) vs طَابِق (floor/storey).\n`;
+  p += `       2. الآنَ (al-āna — now/right now: أَيْنَ أَنْتَ الآنَ؟) & مَرَّة (marrah — time/occasion: مَرَّةً أُخْرَى).\n`;
+  p += `       3. الاثْنَيْن (al-ithnayn — Monday) & يَوْمُ الثُّلَاثَاءِ (Tuesday — today's work routine!) vs يَوْمُ العُطْلَةِ (day off).\n`;
+  p += `       4. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? [to wife Saba, feminine -ki, NEVER -ka!]).\n`;
+  p += `       5. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb) & حَفْلَة (party/gathering — mahfil root).\n`;
+  p += `       6. عُقَد (knots, 113:4) + حَاسِد (envier, 113:5) + غَاسِق (intense nightfall, 113:3).\n`;
+  p += `       7. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (morning meeting — root ج-م-ع) & تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
+  p += `       8. Proven Wins to Recycle: عَبَدْتُ اللهَ (I worshipped Allah — promoted ✓ Monday!), تَقَبَّلَ اللهُ (May Allah accept — reply مِنَّا وَمِنْكُمْ!), الأَحَدُ لِدَرْسِ العَرَبِيَّةِ.\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;

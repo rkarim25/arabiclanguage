@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwjl16e0";
+const DATA_V = "mwl0djvk";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4388,7 +4388,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `  - *Protection Concepts (Falaq & Nas, 27 Sep):* refuge (أَعُوذُ), daybreak (الْفَلَق), nightfall (غَاسِق), penetrating darkness (وَقَبَ), knots (عُقَد), envier (حَاسِد), King (مَلِك), whisperer (الْوَسْوَاس), whispers (يُوَسْوِسُ), slinker (الْخَنَّاس), chests (صُدُور)\n`;
   md += `- **Core High-Frequency Verbs:** يَبْحَثُ عَنْ (looks for), يَسْكُنُ / أَسْكُنُ (lives), تَتَكَلَّمُ / أَتَكَلَّمُ (speaks), فَهِمَ / أَفْهَمُ (understands), نَسِيتُ (forgot), يَشْرَبُ / أَشْرَبُ (drinks), يَقْرَأُ / قَرَأْتُ (reads), ذَهَبَ / ذَهَبُوا / يَذْهَبُ / يَذْهَبُونَ / سَأَذْهَبُ (goes across all persons including هُمْ plural), أَسْتَيْقِظُ (I wake up), أَعُودُ (I return), أُسَاعِدُ (I help), أُرَتِّبُ (I arrange)\n`;
   md += `- **Core High-Frequency Frames:** Greetings (*السَّلَامُ عَلَيْكُمْ*), Wants (*أُرِيدُ أَنْ*), Directions (*أَيْنَ*), Price & Shopping (*كَمِ السِّعْرُ*), Time & Routine (*مَتَى* / *فِي السَّاعَةِ*), Possession (*عِنْدِي*), Repair (*لَمْ أَفْهَمْ، تَكَلَّمْ بِبُطْءٍ*), Worship & Mosque (*أَيْنَ مَكَانُ الوُضُوءِ*)\n`;
-  md += `- **Qur'an Surahs by Ear:** Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Asr, Al-Kawthar, Al-Qadr, Quraysh, Al-Kafirun, An-Nasr\n\n`;
+  md += `- **Qur'an Surahs & Mosque Listening:** 13 Salah Surahs (Al-Fatiha 1, Ayat al-Kursi 2:255, Al-Qadr 97, Al-Asr 103, Al-Fil 105, Quraysh 106, Al-Ma'un 107, Al-Kawthar 108, Al-Kafirun 109, An-Nasr 110, Al-Masad 111, Al-Ikhlas 112, Al-Falaq 113, An-Nas 114) + 4-Layer Qur'an Decoding Engine + Pillar 5 (Friday Khutbahs, Common Du'as & What the Imam Says)\n\n`;
   md += `## 3. Strict Rules for AI Voice Sessions\n`;
   md += `1. **Max 2 Sentences:** Never exceed 2 short sentences per turn in voice mode.\n`;
   md += `2. **Modern Standard Arabic (الفصحى):** Use clear MSA with full vowels (tashkeel). No slang/regional dialects.\n`;
@@ -4401,17 +4401,20 @@ function generateLearnerDossierMarkdown(currentContext) {
     md += `## 4. Live Practice Capability & Motivation Snapshot\n`;
     md += `- **Vocabulary:** ${caps.vocab.held} solid, ${caps.vocab.learning} learning, ${caps.vocab.slips} active slips\n`;
     md += `- **Sentences:** ${caps.sentences.held} solid (${caps.sentences.provenActive} proven spoken/typed), ${caps.sentences.slips} slips\n`;
-    md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 9} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
+    md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 15} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
+    if (caps.quran) md += `- **Qur'an by Ear:** ${caps.quran.coreWordsHeld || 0}/${caps.quran.coreWordsTotal || 151} Core Words (${caps.quran.mushafCoveragePct || 0}% Mushaf coverage) · ${caps.quran.salahAyahsHeld || 0}/${caps.quran.salahAyahsTotal || 61} Salah ayahs held\n`;
+    if (caps.mosque) md += `- **Mosque, Khutbah & Du'as:** ${caps.mosque.seen || 0}/${caps.mosque.total || 54} cues seen · ${caps.mosque.cardsHeld || 0}/${caps.mosque.cardsTotal || 2} cards held\n`;
     if (caps.motivation) md += `- **Motivation & Rhythm:** ${caps.motivation.activeDays7d}/4 target days active (7d) · Feeling: ${caps.motivation.todayMood || caps.motivation.lastMood || "steady"} · Mode: ${caps.motivation.modeLabel}\n`;
     if (caps.gaps && caps.gaps.length) md += `- **Current Priority Gaps:** ${caps.gaps.join(" · ")}\n`;
     md += `\n`;
   }
 
-  md += `## 5. Active Focus, Lesson Cards & High-Value Mnemonics\n`;
+  md += `## 5. Active Focus, 15 Lesson Cards & High-Value Mnemonics\n`;
   md += `- **Active Chapter 4 (Daily Routine, Time & Tenses):** Advancing weekly sentences automatically via unified Practice & Commute sessions (Chapters 1–3 mastered 100%).\n`;
-  md += `- **5 Negation Pairings (Lesson Card #1):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
-  md += `- **Verb Tenses incl. They (هُمْ) (Lesson Card #2):** Past = **ذَهَبُوا** (-ū), Present = **يَذْهَبُونَ** (ya-...-ūna), Future = **سَيَذْهَبُونَ** (only هُمْ takes the plural tail -ūna/-ū; نَحْنُ is plain **نَذْهَبُ**).\n`;
-  md += `- **Priority Slips to Weave In:** مِصْعَد (lift/elevator — صَعِدَ ascend / Mi'raj ladder), الآن (now — al-āna), عَبَدْتُ اللهَ (I worshipped Allah — past -tu of نَعْبُدُ), أُرَتِّبُ (I tidy — tartīb order), حَفْلَة (party — mahfil root ح-ف-ل), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟ (mumkin + mu-sa-AID-ah), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
+  md += `- **5 Negation Pairings (lc:negation):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
+  md += `- **Verb Tenses incl. She & They (lc:verb-tenses):** Past = **ذَهَبَتْ / ذَهَبُوا** (-at / -ū), Present = **تَذْهَبُ / يَذْهَبُونَ**, Future = **سَتَذْهَبُ / سَيَذْهَبُونَ** (only هُمْ takes the plural tail -ūna/-ū; نَحْنُ is plain **نَذْهَبُ**).\n`;
+  md += `- **4-Pillar Qur'an Ear Moulds & Pillar 5 Mosque Maps:** Glue & Pronoun Chains (**فِيهَا / عَلَيْهِمْ / لَهُمْ / إِنَّهُمْ** — *lc:quran-glue-chains*), Active Doer vs Passive Done-To (**حَاسِد** vs **مَغْضُوب / مَرْفُوعَة** — *lc:quran-active-passive*), Plural Story (*lc:quran-plural-story*), Verb Form Shifts II/IV/X (**عَلَّمَ / أَنْزَلَ / اسْتَغْفَرَ** — *lc:quran-verb-shifts*), plus Friday Khutbah & Imam cues (**أَمَّا بَعْدُ / عِبَادَ اللَّهِ / رَبَّنَا آتِنَا** — *lc:khutbah-roadmap*, *lc:duas-and-imam*).\n`;
+  md += `- **Priority Slips to Weave In:** مِصْعَد (lift/elevator — صَعِدَ ascend), طَابِق (floor/storey), الآنَ (now), مَرَّة (time/occasion: مَرَّةً أُخْرَى), الاثْنَيْن (Monday) / يَوْمَ الثُّلَاثَاءِ (Tuesday), فِيهَا سُرُرٌ مَرْفُوعَةٌ (88:13 thrones raised high), ٱلْمَغْضُوبِ (1:7 angered-upon), أُرَتِّبُ (I tidy — tartīb), حَفْلَة (party — mahfil), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟, تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ. (Recent wins: إِلَّا except/but, عَبَدْتُ اللهَ I worshipped Allah!)\n`;
   md += `- **Look-Alike & Nuance Anchors:** أَعُودُ (plain د = return home) vs أَعُوذُ (dotted ذ = seek refuge); جَوْزَة (ج leads walnut) vs زَوْجَة (ز leads wife); price triplet ثَمَن (value) vs سِعْر (shop tag) vs أُجْرَة (taxi fare); Surah An-Nās صُدُور (outer chest courtyard) vs قُلُوب (locked heart).\n\n`;
   if (currentContext && currentContext.sentences) {
     md += `\n## 6. Current Target Sentences to Practice\n`;

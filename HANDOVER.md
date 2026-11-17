@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-15  
+**Last Updated:** 2026-11-17  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,7 +77,22 @@
 
 ---
 
-## 2. Current Verified State (16 Nov 2026 — Monday Mid-Week Session & Link Continuity Fix)
+## 2. Current Verified State (17 Nov 2026 — Tuesday Health Audit, `sets.html` Fix & Speak with AI Prompt MM)
+
+- **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-16T20:21Z`):** `4,344` total telemetry events (**`5/4` active days** in the last 7 days — weekly rhythm hit!); `1,268` tracked SRS cards (**`380` 🟢 green** across 2+ days & `R ≥ 85%` incl. `64` retired, **`727` 🟡 amber** building/due refresh, **`140` 🔴 red** needs work, **`21` ⚪ grey** unseen; `821` Box ≥ 2 ignoring recall decay).
+- **Capabilities & #1 Bottleneck Gap (`Practice.summarizeCapabilities`):**
+  - **Qur'ān Top 151 Core:** `57/151` words held (**`39.7%`** of Mushaf occurrences, `30,737` tokens); `308` composable `i+1` ayahs unlocked; `4/15` Lesson Cards seen (`lc:verb-tenses`, `lc:pronoun-attachments`, `lc:sadr-vs-qalb`, `lc:quran-glue-chains` all `🟡` amber, `lc:negation` still `⚪` unseen).
+  - **#1 Gap:** **`0` proven active spoken/typed sentences** out of `41` held (`39` passive-only), **Chapter 4 (`Time, Routine & Actions`) still at `0/10` rated**, and `140` `🔴` slips (recent: `مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`, `كَيْفَ كَانَ يَوْمُكِ؟`, `فِيهَا سُرُرٌ مَرْفُوعَةٌ`, `ٱلْمَغْضُوبِ`). Monday evening Practice promoted `qc:12 إِلَّا` and `s:vb:19 عَبَدْتُ اللهَ` to ✓.
+- **Pen Notes & Live Website Health Audit:**
+  - Zero new pen notes (`#71+`) or uploaded images since Pen Note #70 (`2026-11-16`, already resolved and verified).
+  - **Live Browser Bug Caught & Fixed (`sets.html`):** Headless Chromium audit caught `TypeError: Cannot read properties of null (reading 'forEach')` in `refreshSetHeaders()` (`sets.html:268`) whenever `aliases.json` fired `ats-mastery-updated` before `everyday.json` populated `EV`. Added `Array.isArray(EV)` guards in `refreshSetHeaders()` and `held()`.
+- **Speak with AI & Associated Docs Updated:**
+  - Updated `chapters.html` (`buildChapterAiPrompt`) and `class.html` (`buildClassAiPrompt`) from the stale Nov 14 weekend block to **Tuesday 17 Nov Mid-Week Spoken Unlock (Prompt MM)** covering Chapter 4, past negation `لَمْ` vs `مَا`, 15 Lesson Cards, 4-Pillar Qur'ān Decoding + Pillar 5 Mosque Landmarks, and recent slips/wins.
+  - Updated `js/app.js` (`generateLearnerDossierMarkdown`) to reflect `15` Lesson Cards, all `13` Salah Surahs + Pillar 5 Mosque cues, live `caps.quran` / `caps.mosque` telemetry, and current slips/anchors.
+  - Updated `SPEAK_WITH_AI.md` (Prompt MM current, Prompt LL archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
+- **Sunday 15 Nov Preply Lesson Check:** Passed 2 days ago (`classes.json` latest still `c-2026-10-11`); awaiting Reza's notes/photos to run the ingestion pipeline.
+
+## 2.1. Historical Milestones & Features Added (16 Nov 2026 — Monday Mid-Week Session & Link Continuity Fix)
 
 - **Telemetry & SRS Progress:** 4,338 total telemetry events; 1,268 tracked SRS cards (796 green/mastered incl. 64 retired, 311 amber building, 161 red needs work). Practice session active this morning (rated `lc:quran-glue-chains` and `qc:0`).
 - **Recent Slips Queue:** `مِصْعَد` (lift/elevator), `طَابِق` (floor), `الآنَ` (now), `مَرَّة` (time/occasion: `مَرَّةً أُخْرَى`), `الاثْنَيْن` (Monday), `يَوْمَ الثُّلَاثَاءِ` (Tuesday), `أُرَتِّبُ` (I arrange/tidy), `حَفْلَة` (party), `عَبَدْتُ اللهَ` (I worshipped Allah), `كَيْفَ كَانَ يَوْمُكِ؟` (to Saba, -ki), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (88:13), and `ٱلْمَغْضُوبِ` (1:7 wrath/anger root).

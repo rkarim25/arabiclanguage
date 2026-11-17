@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Sets — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwjl16e0">
-  <link rel="stylesheet" href="css/style.css?v=mwjl16e0">
+  <link rel="stylesheet" href="css/fonts.css?v=mwl0djvk">
+  <link rel="stylesheet" href="css/style.css?v=mwl0djvk">
   <style>
     /* 🗂 SETS — his 2 Nov 2026 pen note from Say your day: "I want to learn days of the
        week, numbers, directions. For sets like this can you create a tab where the
@@ -60,11 +60,11 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwjl16e0"></script>
-<script src="js/lesson-cards.js?v=mwjl16e0"></script>
-<script src="js/app.js?v=mwjl16e0"></script>
-<script src="js/tracker.js?v=mwjl16e0"></script>
-<script src="js/plan.js?v=mwjl16e0"></script>
+<script src="js/srs.js?v=mwl0djvk"></script>
+<script src="js/lesson-cards.js?v=mwl0djvk"></script>
+<script src="js/app.js?v=mwl0djvk"></script>
+<script src="js/tracker.js?v=mwl0djvk"></script>
+<script src="js/plan.js?v=mwl0djvk"></script>
 <script>
 renderNav("sets");
 trackPage("sets");
@@ -148,6 +148,7 @@ function lcStatusText(id) {
 }
 
 function held(id) {
+  if (!Array.isArray(EV)) return { n: 0, k: 0 };
   const g = EV.find(x => x.id === id); if (!g) return { n: 0, k: 0 };
   const srs = getSrs();
   let k = 0;
@@ -264,7 +265,7 @@ function buildLessonCard(lcId) {
 }
 
 function refreshSetHeaders() {
-  if (!window.SRS || !SRS.summaryCounts) return;
+  if (!window.SRS || !SRS.summaryCounts || !Array.isArray(EV)) return;
   EV.forEach(g => {
     const dotEl = document.getElementById("set-dot-" + g.id);
     const cntEl = document.getElementById("set-cnt-" + g.id);
