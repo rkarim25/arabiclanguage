@@ -122,7 +122,7 @@ fs.readdirSync(DATA).filter(f => /^story-\d+\.json$/.test(f)).forEach(f => {
 read("verses.json").surahs.forEach(s => s.verses.forEach(v => v.words.forEach(w => put(w[0], w[1], w[2], s.id))));
 // 6b. the imported short surahs (Al-Fatiha + juz' 'Amma) — word-by-word for
 //     every ayah. Their verse tie-ins appear inside class lessons, so
-//     tap-any-word must answer for them (wtap miss on مَّرْفُوعَةٞ, his note
+//     tap-any-word must answer for them (wtap miss on مَّرْفُوعَةٌ, his note
 //     2026-08-31: "the word by word should work"). Same contextual tier as
 //     verses.json, which stays ahead of it. No tr: the corpus transliteration
 //     ("l-naba-i", "mukh'talifūna") is not the site's own convention and would

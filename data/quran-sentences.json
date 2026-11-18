@@ -129,7 +129,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 6,
-   "ar": "أَلَمۡ نَجۡعَلِ ٱلۡأَرۡضَ مِهَٰدٗا",
+   "ar": "أَلَمۡ نَجۡعَلِ ٱلۡأَرۡضَ مِهَٰدًا",
    "en": "Have We not smoothed out the earth ˹like a bed˺,",
    "words": [
     [
@@ -148,7 +148,7 @@
      "the earth"
     ],
     [
-     "مِهَٰدٗا",
+     "مِهَٰدًا",
      "mihādan",
      "a resting place"
     ]
@@ -159,7 +159,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 7,
-   "ar": "وَٱلۡجِبَالَ أَوۡتَادٗا",
+   "ar": "وَٱلۡجِبَالَ أَوۡتَادًا",
    "en": "and ˹made˺ the mountains as ˹its˺ pegs,",
    "words": [
     [
@@ -168,7 +168,7 @@
      "And the mountains"
     ],
     [
-     "أَوۡتَادٗا",
+     "أَوۡتَادًا",
      "awtādan",
      "(as) pegs"
     ]
@@ -179,7 +179,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 8,
-   "ar": "وَخَلَقۡنَٰكُمۡ أَزۡوَٰجٗا",
+   "ar": "وَخَلَقۡنَٰكُمۡ أَزۡوَٰجًا",
    "en": "and created you in pairs,",
    "words": [
     [
@@ -188,7 +188,7 @@
      "And We created you"
     ],
     [
-     "أَزۡوَٰجٗا",
+     "أَزۡوَٰجًا",
      "azwājan",
      "(in) pairs"
     ]
@@ -199,7 +199,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 9,
-   "ar": "وَجَعَلۡنَا نَوۡمَكُمۡ سُبَاتٗا",
+   "ar": "وَجَعَلۡنَا نَوۡمَكُمۡ سُبَاتًا",
    "en": "and made your sleep for rest,",
    "words": [
     [
@@ -213,7 +213,7 @@
      "your sleep"
     ],
     [
-     "سُبَاتٗا",
+     "سُبَاتًا",
      "subātan",
      "(for) rest"
     ]
@@ -224,7 +224,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 10,
-   "ar": "وَجَعَلۡنَا ٱلَّيۡلَ لِبَاسٗا",
+   "ar": "وَجَعَلۡنَا ٱلَّيۡلَ لِبَاسًا",
    "en": "and made the night as a cover,",
    "words": [
     [
@@ -238,7 +238,7 @@
      "the night"
     ],
     [
-     "لِبَاسٗا",
+     "لِبَاسًا",
      "libāsan",
      "(as) covering"
     ]
@@ -249,7 +249,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 11,
-   "ar": "وَجَعَلۡنَا ٱلنَّهَارَ مَعَاشٗا",
+   "ar": "وَجَعَلۡنَا ٱلنَّهَارَ مَعَاشًا",
    "en": "and made the day for livelihood,",
    "words": [
     [
@@ -263,7 +263,7 @@
      "the day"
     ],
     [
-     "مَعَاشٗا",
+     "مَعَاشًا",
      "maʿāshan",
      "(for) livelihood"
     ]
@@ -274,7 +274,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 12,
-   "ar": "وَبَنَيۡنَا فَوۡقَكُمۡ سَبۡعٗا شِدَادٗا",
+   "ar": "وَبَنَيۡنَا فَوۡقَكُمۡ سَبۡعًا شِدَادًا",
    "en": "and built above you seven mighty ˹heavens˺,",
    "words": [
     [
@@ -288,12 +288,12 @@
      "over you"
     ],
     [
-     "سَبۡعٗا",
+     "سَبۡعًا",
      "sabʿan",
      "seven"
     ],
     [
-     "شِدَادٗا",
+     "شِدَادًا",
      "shidādan",
      "strong"
     ]
@@ -304,7 +304,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 13,
-   "ar": "وَجَعَلۡنَا سِرَاجٗا وَهَّاجٗا",
+   "ar": "وَجَعَلۡنَا سِرَاجًا وَهَّاجًا",
    "en": "and placed ˹in them˺ a shining lamp,",
    "words": [
     [
@@ -313,12 +313,12 @@
      "And We placed"
     ],
     [
-     "سِرَاجٗا",
+     "سِرَاجًا",
      "sirājan",
      "a lamp"
     ],
     [
-     "وَهَّاجٗا",
+     "وَهَّاجًا",
      "wahhājan",
      "burning"
     ]
@@ -329,7 +329,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 14,
-   "ar": "وَأَنزَلۡنَا مِنَ ٱلۡمُعۡصِرَٰتِ مَآءٗ ثَجَّاجٗا",
+   "ar": "وَأَنزَلۡنَا مِنَ ٱلۡمُعۡصِرَٰتِ مَآءً ثَجَّاجًا",
    "en": "and sent down from rainclouds pouring water,",
    "words": [
     [
@@ -348,12 +348,12 @@
      "the rain clouds"
     ],
     [
-     "مَآءٗ",
+     "مَآءً",
      "māan",
      "water"
     ],
     [
-     "ثَجَّاجٗا",
+     "ثَجَّاجًا",
      "thajjājan",
      "pouring abundantly"
     ]
@@ -364,7 +364,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 15,
-   "ar": "لِّنُخۡرِجَ بِهِۦ حَبّٗا وَنَبَاتٗا",
+   "ar": "لِّنُخۡرِجَ بِهِۦ حَبًّا وَنَبَاتًا",
    "en": "producing by it grain and ˹various˺ plants,",
    "words": [
     [
@@ -378,12 +378,12 @@
      "thereby"
     ],
     [
-     "حَبّٗا",
+     "حَبًّا",
      "ḥabban",
      "grain"
     ],
     [
-     "وَنَبَاتٗا",
+     "وَنَبَاتًا",
      "wanabātan",
      "and vegetation"
     ]
@@ -414,7 +414,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 17,
-   "ar": "إِنَّ يَوۡمَ ٱلۡفَصۡلِ كَانَ مِيقَٰتٗا",
+   "ar": "إِنَّ يَوۡمَ ٱلۡفَصۡلِ كَانَ مِيقَٰتًا",
    "en": "Indeed, the Day of ˹Final˺ Decision is an appointed time—",
    "words": [
     [
@@ -438,7 +438,7 @@
      "is"
     ],
     [
-     "مِيقَٰتٗا",
+     "مِيقَٰتًا",
      "mīqātan",
      "an appointed time"
     ]
@@ -449,7 +449,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 18,
-   "ar": "يَوۡمَ يُنفَخُ فِي ٱلصُّورِ فَتَأۡتُونَ أَفۡوَاجٗا",
+   "ar": "يَوۡمَ يُنفَخُ فِي ٱلصُّورِ فَتَأۡتُونَ أَفۡوَاجًا",
    "en": "˹it is˺ the Day the Trumpet will be blown, and you will ˹all˺ come forth in crowds.",
    "words": [
     [
@@ -478,7 +478,7 @@
      "and you will come forth"
     ],
     [
-     "أَفۡوَاجٗا",
+     "أَفۡوَاجًا",
      "afwājan",
      "(in) crowds"
     ]
@@ -489,7 +489,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 19,
-   "ar": "وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتۡ أَبۡوَٰبٗا",
+   "ar": "وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتۡ أَبۡوَٰبًا",
    "en": "The sky will be ˹split˺ open, becoming ˹many˺ gates,",
    "words": [
     [
@@ -508,7 +508,7 @@
      "and becomes"
     ],
     [
-     "أَبۡوَٰبٗا",
+     "أَبۡوَٰبًا",
      "abwāban",
      "gateways"
     ]
@@ -549,7 +549,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 21,
-   "ar": "إِنَّ جَهَنَّمَ كَانَتۡ مِرۡصَادٗا",
+   "ar": "إِنَّ جَهَنَّمَ كَانَتۡ مِرۡصَادًا",
    "en": "Indeed, Hell is lying in ambush",
    "words": [
     [
@@ -568,7 +568,7 @@
      "is"
     ],
     [
-     "مِرۡصَادٗا",
+     "مِرۡصَادًا",
      "mir'ṣādan",
      "lying in wait"
     ]
@@ -579,7 +579,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 22,
-   "ar": "لِّلطَّٰغِينَ مَـَٔابٗا",
+   "ar": "لِّلطَّٰغِينَ مَـَٔابًا",
    "en": "as a home for the transgressors,",
    "words": [
     [
@@ -588,7 +588,7 @@
      "For the transgressors"
     ],
     [
-     "مَـَٔابٗا",
+     "مَـَٔابًا",
      "maāban",
      "a place of return"
     ]
@@ -599,7 +599,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 23,
-   "ar": "لَّٰبِثِينَ فِيهَآ أَحۡقَابٗا",
+   "ar": "لَّٰبِثِينَ فِيهَآ أَحۡقَابًا",
    "en": "where they will remain for ˹endless˺ ages.",
    "words": [
     [
@@ -613,7 +613,7 @@
      "therein"
     ],
     [
-     "أَحۡقَابٗا",
+     "أَحۡقَابًا",
      "aḥqāban",
      "(for) ages"
     ]
@@ -624,7 +624,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 24,
-   "ar": "لَّا يَذُوقُونَ فِيهَا بَرۡدٗا وَلَا شَرَابًا",
+   "ar": "لَّا يَذُوقُونَ فِيهَا بَرۡدًا وَلَا شَرَابًا",
    "en": "There they will not taste any coolness or drink,",
    "words": [
     [
@@ -643,7 +643,7 @@
      "therein"
     ],
     [
-     "بَرۡدٗا",
+     "بَرۡدًا",
      "bardan",
      "coolness"
     ],
@@ -664,7 +664,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 25,
-   "ar": "إِلَّا حَمِيمٗا وَغَسَّاقٗا",
+   "ar": "إِلَّا حَمِيمًا وَغَسَّاقًا",
    "en": "except boiling water and ˹oozing˺ pus—",
    "words": [
     [
@@ -673,12 +673,12 @@
      "Except"
     ],
     [
-     "حَمِيمٗا",
+     "حَمِيمًا",
      "ḥamīman",
      "scalding water"
     ],
     [
-     "وَغَسَّاقٗا",
+     "وَغَسَّاقًا",
      "waghassāqan",
      "and purulence"
     ]
@@ -689,11 +689,11 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 26,
-   "ar": "جَزَآءٗ وِفَاقًا",
+   "ar": "جَزَآءً وِفَاقًا",
    "en": "a fitting reward.",
    "words": [
     [
-     "جَزَآءٗ",
+     "جَزَآءً",
      "jazāan",
      "A recompense"
     ],
@@ -709,7 +709,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 27,
-   "ar": "إِنَّهُمۡ كَانُواْ لَا يَرۡجُونَ حِسَابٗا",
+   "ar": "إِنَّهُمۡ كَانُواْ لَا يَرۡجُونَ حِسَابًا",
    "en": "For they never expected any reckoning,",
    "words": [
     [
@@ -733,7 +733,7 @@
      "expecting"
     ],
     [
-     "حِسَابٗا",
+     "حِسَابًا",
      "ḥisāban",
      "an account"
     ]
@@ -744,7 +744,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 28,
-   "ar": "وَكَذَّبُواْ بِـَٔايَٰتِنَا كِذَّابٗا",
+   "ar": "وَكَذَّبُواْ بِـَٔايَٰتِنَا كِذَّابًا",
    "en": "and totally rejected Our signs.",
    "words": [
     [
@@ -758,7 +758,7 @@
      "Our Signs"
     ],
     [
-     "كِذَّابٗا",
+     "كِذَّابًا",
      "kidhāban",
      "(with) denial"
     ]
@@ -769,7 +769,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 29,
-   "ar": "وَكُلَّ شَيۡءٍ أَحۡصَيۡنَٰهُ كِتَٰبٗا",
+   "ar": "وَكُلَّ شَيۡءٍ أَحۡصَيۡنَٰهُ كِتَٰبًا",
    "en": "And We have everything recorded precisely.",
    "words": [
     [
@@ -788,7 +788,7 @@
      "We have enumerated it"
     ],
     [
-     "كِتَٰبٗا",
+     "كِتَٰبًا",
      "kitāban",
      "(in) a Book"
     ]
@@ -859,7 +859,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 32,
-   "ar": "حَدَآئِقَ وَأَعۡنَٰبٗا",
+   "ar": "حَدَآئِقَ وَأَعۡنَٰبًا",
    "en": "Gardens, vineyards,",
    "words": [
     [
@@ -868,7 +868,7 @@
      "Gardens"
     ],
     [
-     "وَأَعۡنَٰبٗا",
+     "وَأَعۡنَٰبًا",
      "wa-aʿnāban",
      "and grapevines"
     ]
@@ -879,7 +879,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 33,
-   "ar": "وَكَوَاعِبَ أَتۡرَابٗا",
+   "ar": "وَكَوَاعِبَ أَتۡرَابًا",
    "en": "and full-bosomed maidens of equal age,",
    "words": [
     [
@@ -888,7 +888,7 @@
      "And splendid companions"
     ],
     [
-     "أَتۡرَابٗا",
+     "أَتۡرَابًا",
      "atrāban",
      "well-matched"
     ]
@@ -899,16 +899,16 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 34,
-   "ar": "وَكَأۡسٗا دِهَاقٗا",
+   "ar": "وَكَأۡسًا دِهَاقًا",
    "en": "and full cups ˹of pure wine˺,",
    "words": [
     [
-     "وَكَأۡسٗا",
+     "وَكَأۡسًا",
      "wakasan",
      "And a cup"
     ],
     [
-     "دِهَاقٗا",
+     "دِهَاقًا",
      "dihāqan",
      "full"
     ]
@@ -919,7 +919,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 35,
-   "ar": "لَّا يَسۡمَعُونَ فِيهَا لَغۡوٗا وَلَا كِذَّٰبٗا",
+   "ar": "لَّا يَسۡمَعُونَ فِيهَا لَغۡوًا وَلَا كِذَّٰبًا",
    "en": "never to hear any idle talk or lying therein—",
    "words": [
     [
@@ -938,7 +938,7 @@
      "therein"
     ],
     [
-     "لَغۡوٗا",
+     "لَغۡوًا",
      "laghwan",
      "any vain talk"
     ],
@@ -948,7 +948,7 @@
      "and not"
     ],
     [
-     "كِذَّٰبٗا",
+     "كِذَّٰبًا",
      "kidhāban",
      "any falsehood"
     ]
@@ -959,11 +959,11 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 36,
-   "ar": "جَزَآءٗ مِّن رَّبِّكَ عَطَآءً حِسَابٗا",
+   "ar": "جَزَآءً مِّن رَّبِّكَ عَطَآءً حِسَابًا",
    "en": "a ˹fitting˺ reward as a generous gift from your Lord,",
    "words": [
     [
-     "جَزَآءٗ",
+     "جَزَآءً",
      "jazāan",
      "(As) a reward"
     ],
@@ -983,7 +983,7 @@
      "a gift"
     ],
     [
-     "حِسَابٗا",
+     "حِسَابًا",
      "ḥisāban",
      "(according to) account"
     ]
@@ -994,7 +994,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 37,
-   "ar": "رَّبِّ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ وَمَا بَيۡنَهُمَا ٱلرَّحۡمَٰنِۖ لَا يَمۡلِكُونَ مِنۡهُ خِطَابٗا",
+   "ar": "رَّبِّ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ وَمَا بَيۡنَهُمَا ٱلرَّحۡمَٰنِۖ لَا يَمۡلِكُونَ مِنۡهُ خِطَابًا",
    "en": "the Lord of the heavens and the earth and everything in between, the Most Compassionate. No one will dare speak to Him",
    "words": [
     [
@@ -1043,7 +1043,7 @@
      "from Him"
     ],
     [
-     "خِطَابٗا",
+     "خِطَابًا",
      "khiṭāban",
      "(to) address"
     ]
@@ -1054,7 +1054,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 38,
-   "ar": "يَوۡمَ يَقُومُ ٱلرُّوحُ وَٱلۡمَلَٰٓئِكَةُ صَفّٗاۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنۡ أَذِنَ لَهُ ٱلرَّحۡمَٰنُ وَقَالَ صَوَابٗا",
+   "ar": "يَوۡمَ يَقُومُ ٱلرُّوحُ وَٱلۡمَلَٰٓئِكَةُ صَفًّاۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنۡ أَذِنَ لَهُ ٱلرَّحۡمَٰنُ وَقَالَ صَوَابًا",
    "en": "on the Day the ˹holy˺ spirit and the angels will stand in ranks. None will talk, except those granted permission by the Most Compassionate and whose words are true.",
    "words": [
     [
@@ -1078,7 +1078,7 @@
      "and the Angels"
     ],
     [
-     "صَفّٗاۖ",
+     "صَفًّاۖ",
      "ṣaffan",
      "(in) rows"
     ],
@@ -1123,7 +1123,7 @@
      "and he (will) say"
     ],
     [
-     "صَوَابٗا",
+     "صَوَابًا",
      "ṣawāban",
      "(what is) correct"
     ]
@@ -1189,7 +1189,7 @@
    "surah": 78,
    "surahName": "An-Naba",
    "ayah": 40,
-   "ar": "إِنَّآ أَنذَرۡنَٰكُمۡ عَذَابٗا قَرِيبٗا يَوۡمَ يَنظُرُ ٱلۡمَرۡءُ مَا قَدَّمَتۡ يَدَاهُ وَيَقُولُ ٱلۡكَافِرُ يَٰلَيۡتَنِي كُنتُ تُرَٰبَۢا",
+   "ar": "إِنَّآ أَنذَرۡنَٰكُمۡ عَذَابًا قَرِيبًا يَوۡمَ يَنظُرُ ٱلۡمَرۡءُ مَا قَدَّمَتۡ يَدَاهُ وَيَقُولُ ٱلۡكَافِرُ يَٰلَيۡتَنِي كُنتُ تُرَٰبَۢا",
    "en": "Indeed, We have warned you of an imminent punishment—the Day every person will see ˹the consequences of˺ what their hands have done, and the disbelievers will cry, “I wish I were dust.”",
    "words": [
     [
@@ -1203,12 +1203,12 @@
      "[We] have warned you"
     ],
     [
-     "عَذَابٗا",
+     "عَذَابًا",
      "ʿadhāban",
      "(of) a punishment"
     ],
     [
-     "قَرِيبٗا",
+     "قَرِيبًا",
      "qarīban",
      "near"
     ],
@@ -1274,7 +1274,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 1,
-   "ar": "وَٱلنَّٰزِعَٰتِ غَرۡقٗا",
+   "ar": "وَٱلنَّٰزِعَٰتِ غَرۡقًا",
    "en": "By those ˹angels˺ stripping out ˹evil souls˺ harshly,",
    "words": [
     [
@@ -1283,7 +1283,7 @@
      "By those who extract"
     ],
     [
-     "غَرۡقٗا",
+     "غَرۡقًا",
      "gharqan",
      "violently"
     ]
@@ -1294,7 +1294,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 2,
-   "ar": "وَٱلنَّٰشِطَٰتِ نَشۡطٗا",
+   "ar": "وَٱلنَّٰشِطَٰتِ نَشۡطًا",
    "en": "and those pulling out ˹good souls˺ gently,",
    "words": [
     [
@@ -1303,7 +1303,7 @@
      "And those who draw out"
     ],
     [
-     "نَشۡطٗا",
+     "نَشۡطًا",
      "nashṭan",
      "gently"
     ]
@@ -1314,7 +1314,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 3,
-   "ar": "وَٱلسَّٰبِحَٰتِ سَبۡحٗا",
+   "ar": "وَٱلسَّٰبِحَٰتِ سَبۡحًا",
    "en": "and those gliding ˹through heavens˺ swiftly,",
    "words": [
     [
@@ -1323,7 +1323,7 @@
      "And those who glide"
     ],
     [
-     "سَبۡحٗا",
+     "سَبۡحًا",
      "sabḥan",
      "swimming"
     ]
@@ -1334,7 +1334,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 4,
-   "ar": "فَٱلسَّٰبِقَٰتِ سَبۡقٗا",
+   "ar": "فَٱلسَّٰبِقَٰتِ سَبۡقًا",
    "en": "and those taking the lead vigorously,",
    "words": [
     [
@@ -1343,7 +1343,7 @@
      "And those who race each other"
     ],
     [
-     "سَبۡقٗا",
+     "سَبۡقًا",
      "sabqan",
      "(in) a race"
     ]
@@ -1354,7 +1354,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 5,
-   "ar": "فَٱلۡمُدَبِّرَٰتِ أَمۡرٗا",
+   "ar": "فَٱلۡمُدَبِّرَٰتِ أَمۡرًا",
    "en": "and those conducting affairs ˹obediently˺!",
    "words": [
     [
@@ -1363,7 +1363,7 @@
      "And those who arrange"
     ],
     [
-     "أَمۡرٗا",
+     "أَمۡرًا",
      "amran",
      "(the) matter"
     ]
@@ -1419,16 +1419,16 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 8,
-   "ar": "قُلُوبٞ يَوۡمَئِذٖ وَاجِفَةٌ",
+   "ar": "قُلُوبٌ يَوۡمَئِذٍ وَاجِفَةٌ",
    "en": "˹The deniers’˺ hearts on that Day will be trembling ˹in horror˺,",
    "words": [
     [
-     "قُلُوبٞ",
+     "قُلُوبٌ",
      "qulūbun",
      "Hearts"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
@@ -1444,7 +1444,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 9,
-   "ar": "أَبۡصَٰرُهَا خَٰشِعَةٞ",
+   "ar": "أَبۡصَٰرُهَا خَٰشِعَةٌ",
    "en": "with their eyes downcast.",
    "words": [
     [
@@ -1453,7 +1453,7 @@
      "Their eyes"
     ],
     [
-     "خَٰشِعَةٞ",
+     "خَٰشِعَةٌ",
      "khāshiʿatun",
      "humbled"
     ]
@@ -1499,7 +1499,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 11,
-   "ar": "أَءِذَا كُنَّا عِظَٰمٗا نَّخِرَةٗ",
+   "ar": "أَءِذَا كُنَّا عِظَٰمًا نَّخِرَةً",
    "en": "even after we have been reduced to decayed bones?”",
    "words": [
     [
@@ -1513,12 +1513,12 @@
      "we are"
     ],
     [
-     "عِظَٰمٗا",
+     "عِظَٰمًا",
      "ʿiẓāman",
      "bones"
     ],
     [
-     "نَّخِرَةٗ",
+     "نَّخِرَةً",
      "nakhiratan",
      "decayed"
     ]
@@ -1529,7 +1529,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 12,
-   "ar": "قَالُواْ تِلۡكَ إِذٗا كَرَّةٌ خَاسِرَةٞ",
+   "ar": "قَالُواْ تِلۡكَ إِذًا كَرَّةٌ خَاسِرَةٌ",
    "en": "Adding, “Then such a return would be a ˹total˺ loss ˹for us˺!”",
    "words": [
     [
@@ -1543,7 +1543,7 @@
      "This"
     ],
     [
-     "إِذٗا",
+     "إِذًا",
      "idhan",
      "then"
     ],
@@ -1553,7 +1553,7 @@
      "(would be) a return"
     ],
     [
-     "خَاسِرَةٞ",
+     "خَاسِرَةٌ",
      "khāsiratun",
      "losing"
     ]
@@ -1564,7 +1564,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 13,
-   "ar": "فَإِنَّمَا هِيَ زَجۡرَةٞ وَٰحِدَةٞ",
+   "ar": "فَإِنَّمَا هِيَ زَجۡرَةٌ وَٰحِدَةٌ",
    "en": "But indeed, it will take only one ˹mighty˺ Blast,",
    "words": [
     [
@@ -1578,12 +1578,12 @@
      "it"
     ],
     [
-     "زَجۡرَةٞ",
+     "زَجۡرَةٌ",
      "zajratun",
      "(will be) a shout"
     ],
     [
-     "وَٰحِدَةٞ",
+     "وَٰحِدَةٌ",
      "wāḥidatun",
      "single"
     ]
@@ -1949,7 +1949,7 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 26,
-   "ar": "إِنَّ فِي ذَٰلِكَ لَعِبۡرَةٗ لِّمَن يَخۡشَىٰٓ",
+   "ar": "إِنَّ فِي ذَٰلِكَ لَعِبۡرَةً لِّمَن يَخۡشَىٰٓ",
    "en": "Surely in this is a lesson for whoever stands in awe of ˹Allah˺.",
    "words": [
     [
@@ -1968,7 +1968,7 @@
      "that"
     ],
     [
-     "لَعِبۡرَةٗ",
+     "لَعِبۡرَةً",
      "laʿib'ratan",
      "surely (is) a lesson"
     ],
@@ -2164,11 +2164,11 @@
    "surah": 79,
    "surahName": "An-Nazi'at",
    "ayah": 33,
-   "ar": "مَتَٰعٗا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
+   "ar": "مَتَٰعًا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
    "en": "all as ˹a means of˺ sustenance for you and your animals.",
    "words": [
     [
-     "مَتَٰعٗا",
+     "مَتَٰعًا",
      "matāʿan",
      "(As) a provision"
     ],
@@ -2889,7 +2889,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 11,
-   "ar": "كـَلَّآ إِنَّهَا تَذۡكِرَةٞ",
+   "ar": "كـَلَّآ إِنَّهَا تَذۡكِرَةٌ",
    "en": "But no! This ˹revelation˺ is truly a reminder.",
    "words": [
     [
@@ -2903,7 +2903,7 @@
      "Indeed, it"
     ],
     [
-     "تَذۡكِرَةٞ",
+     "تَذۡكِرَةٌ",
      "tadhkiratun",
      "(is) a reminder"
     ]
@@ -2939,7 +2939,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 13,
-   "ar": "فِي صُحُفٖ مُّكَرَّمَةٖ",
+   "ar": "فِي صُحُفٍ مُّكَرَّمَةٍ",
    "en": "It is ˹written˺ on pages held in honour—",
    "words": [
     [
@@ -2948,12 +2948,12 @@
      "In"
     ],
     [
-     "صُحُفٖ",
+     "صُحُفٍ",
      "ṣuḥufin",
      "sheets"
     ],
     [
-     "مُّكَرَّمَةٖ",
+     "مُّكَرَّمَةٍ",
      "mukarramatin",
      "honored"
     ]
@@ -2964,11 +2964,11 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 14,
-   "ar": "مَّرۡفُوعَةٖ مُّطَهَّرَةِۭ",
+   "ar": "مَّرۡفُوعَةٍ مُّطَهَّرَةِۭ",
    "en": "highly esteemed, purified—",
    "words": [
     [
-     "مَّرۡفُوعَةٖ",
+     "مَّرۡفُوعَةٍ",
      "marfūʿatin",
      "Exalted"
     ],
@@ -2984,7 +2984,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 15,
-   "ar": "بِأَيۡدِي سَفَرَةٖ",
+   "ar": "بِأَيۡدِي سَفَرَةٍ",
    "en": "by the hands of angel-scribes,",
    "words": [
     [
@@ -2993,7 +2993,7 @@
      "In (the) hands"
     ],
     [
-     "سَفَرَةٖ",
+     "سَفَرَةٍ",
      "safaratin",
      "(of) scribes"
     ]
@@ -3004,7 +3004,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 16,
-   "ar": "كِرَامِۭ بَرَرَةٖ",
+   "ar": "كِرَامِۭ بَرَرَةٍ",
    "en": "honourable and virtuous.",
    "words": [
     [
@@ -3013,7 +3013,7 @@
      "Noble"
     ],
     [
-     "بَرَرَةٖ",
+     "بَرَرَةٍ",
      "bararatin",
      "dutiful"
     ]
@@ -3259,7 +3259,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 25,
-   "ar": "أَنَّا صَبَبۡنَا ٱلۡمَآءَ صَبّٗا",
+   "ar": "أَنَّا صَبَبۡنَا ٱلۡمَآءَ صَبًّا",
    "en": "how We pour down rain in abundance",
    "words": [
     [
@@ -3278,7 +3278,7 @@
      "the water"
     ],
     [
-     "صَبّٗا",
+     "صَبًّا",
      "ṣabban",
      "(in) abundance"
     ]
@@ -3289,7 +3289,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 26,
-   "ar": "ثُمَّ شَقَقۡنَا ٱلۡأَرۡضَ شَقّٗا",
+   "ar": "ثُمَّ شَقَقۡنَا ٱلۡأَرۡضَ شَقًّا",
    "en": "and meticulously split the earth open ˹for sprouts˺,",
    "words": [
     [
@@ -3308,7 +3308,7 @@
      "the earth"
     ],
     [
-     "شَقّٗا",
+     "شَقًّا",
      "shaqqan",
      "splitting"
     ]
@@ -3319,7 +3319,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 27,
-   "ar": "فَأَنۢبَتۡنَا فِيهَا حَبّٗا",
+   "ar": "فَأَنۢبَتۡنَا فِيهَا حَبًّا",
    "en": "causing grain to grow in it,",
    "words": [
     [
@@ -3333,7 +3333,7 @@
      "therein"
     ],
     [
-     "حَبّٗا",
+     "حَبًّا",
      "ḥabban",
      "grain"
     ]
@@ -3344,16 +3344,16 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 28,
-   "ar": "وَعِنَبٗا وَقَضۡبٗا",
+   "ar": "وَعِنَبًا وَقَضۡبًا",
    "en": "as well as grapes and greens,",
    "words": [
     [
-     "وَعِنَبٗا",
+     "وَعِنَبًا",
      "waʿinaban",
      "And grapes"
     ],
     [
-     "وَقَضۡبٗا",
+     "وَقَضۡبًا",
      "waqaḍban",
      "and green fodder"
     ]
@@ -3364,16 +3364,16 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 29,
-   "ar": "وَزَيۡتُونٗا وَنَخۡلٗا",
+   "ar": "وَزَيۡتُونًا وَنَخۡلًا",
    "en": "and olives and palm trees,",
    "words": [
     [
-     "وَزَيۡتُونٗا",
+     "وَزَيۡتُونًا",
      "wazaytūnan",
      "And olive"
     ],
     [
-     "وَنَخۡلٗا",
+     "وَنَخۡلًا",
      "wanakhlan",
      "and date-palms"
     ]
@@ -3384,7 +3384,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 30,
-   "ar": "وَحَدَآئِقَ غُلۡبٗا",
+   "ar": "وَحَدَآئِقَ غُلۡبًا",
    "en": "and dense orchards,",
    "words": [
     [
@@ -3393,7 +3393,7 @@
      "And gardens"
     ],
     [
-     "غُلۡبٗا",
+     "غُلۡبًا",
      "ghul'ban",
      "(of) thick foliage"
     ]
@@ -3404,16 +3404,16 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 31,
-   "ar": "وَفَٰكِهَةٗ وَأَبّٗا",
+   "ar": "وَفَٰكِهَةً وَأَبًّا",
    "en": "and fruit and fodder—",
    "words": [
     [
-     "وَفَٰكِهَةٗ",
+     "وَفَٰكِهَةً",
      "wafākihatan",
      "And fruits"
     ],
     [
-     "وَأَبّٗا",
+     "وَأَبًّا",
      "wa-abban",
      "and grass"
     ]
@@ -3424,11 +3424,11 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 32,
-   "ar": "مَّتَٰعٗا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
+   "ar": "مَّتَٰعًا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
    "en": "all as ˹a means of˺ sustenance for you and your animals.",
    "words": [
     [
-     "مَّتَٰعٗا",
+     "مَّتَٰعًا",
      "matāʿan",
      "(As) a provision"
     ],
@@ -3549,7 +3549,7 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 37,
-   "ar": "لِكُلِّ ٱمۡرِيٕٖ مِّنۡهُمۡ يَوۡمَئِذٖ شَأۡنٞ يُغۡنِيهِ",
+   "ar": "لِكُلِّ ٱمۡرِيٍٕ مِّنۡهُمۡ يَوۡمَئِذٍ شَأۡنٌ يُغۡنِيهِ",
    "en": "For then everyone will have enough concern of their own.",
    "words": [
     [
@@ -3558,7 +3558,7 @@
      "For every"
     ],
     [
-     "ٱمۡرِيٕٖ",
+     "ٱمۡرِيٍٕ",
      "im'ri-in",
      "man"
     ],
@@ -3568,12 +3568,12 @@
      "among them"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
     [
-     "شَأۡنٞ",
+     "شَأۡنٌ",
      "shanun",
      "(will be) a matter"
     ],
@@ -3589,21 +3589,21 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 38,
-   "ar": "وُجُوهٞ يَوۡمَئِذٖ مُّسۡفِرَةٞ",
+   "ar": "وُجُوهٌ يَوۡمَئِذٍ مُّسۡفِرَةٌ",
    "en": "On that Day ˹some˺ faces will be bright,",
    "words": [
     [
-     "وُجُوهٞ",
+     "وُجُوهٌ",
      "wujūhun",
      "Faces"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
     [
-     "مُّسۡفِرَةٞ",
+     "مُّسۡفِرَةٌ",
      "mus'firatun",
      "(will be) bright"
     ]
@@ -3614,16 +3614,16 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 39,
-   "ar": "ضَاحِكَةٞ مُّسۡتَبۡشِرَةٞ",
+   "ar": "ضَاحِكَةٌ مُّسۡتَبۡشِرَةٌ",
    "en": "laughing and rejoicing,",
    "words": [
     [
-     "ضَاحِكَةٞ",
+     "ضَاحِكَةٌ",
      "ḍāḥikatun",
      "Laughing"
     ],
     [
-     "مُّسۡتَبۡشِرَةٞ",
+     "مُّسۡتَبۡشِرَةٌ",
      "mus'tabshiratun",
      "rejoicing at good news"
     ]
@@ -3634,11 +3634,11 @@
    "surah": 80,
    "surahName": "'Abasa",
    "ayah": 40,
-   "ar": "وَوُجُوهٞ يَوۡمَئِذٍ عَلَيۡهَا غَبَرَةٞ",
+   "ar": "وَوُجُوهٌ يَوۡمَئِذٍ عَلَيۡهَا غَبَرَةٌ",
    "en": "while ˹other˺ faces will be dusty,",
    "words": [
     [
-     "وَوُجُوهٞ",
+     "وَوُجُوهٌ",
      "wawujūhun",
      "And faces"
     ],
@@ -3653,7 +3653,7 @@
      "upon them"
     ],
     [
-     "غَبَرَةٞ",
+     "غَبَرَةٌ",
      "ghabaratun",
      "(will be) dust"
     ]
@@ -3914,7 +3914,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 9,
-   "ar": "بِأَيِّ ذَنۢبٖ قُتِلَتۡ",
+   "ar": "بِأَيِّ ذَنۢبٍ قُتِلَتۡ",
    "en": "for what crime they were put to death,",
    "words": [
     [
@@ -3923,7 +3923,7 @@
      "For what"
     ],
     [
-     "ذَنۢبٖ",
+     "ذَنۢبٍ",
      "dhanbin",
      "sin"
     ],
@@ -4039,7 +4039,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 14,
-   "ar": "عَلِمَتۡ نَفۡسٞ مَّآ أَحۡضَرَتۡ",
+   "ar": "عَلِمَتۡ نَفۡسٌ مَّآ أَحۡضَرَتۡ",
    "en": "˹on that Day˺ each soul will know what ˹deeds˺ it has brought along.",
    "words": [
     [
@@ -4048,7 +4048,7 @@
      "Will know"
     ],
     [
-     "نَفۡسٞ",
+     "نَفۡسٌ",
      "nafsun",
      "a soul"
     ],
@@ -4164,7 +4164,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 19,
-   "ar": "إِنَّهُۥ لَقَوۡلُ رَسُولٖ كَرِيمٖ",
+   "ar": "إِنَّهُۥ لَقَوۡلُ رَسُولٍ كَرِيمٍ",
    "en": "Indeed, this ˹Quran˺ is the Word of ˹Allah delivered by Gabriel,˺ a noble messenger-angel,",
    "words": [
     [
@@ -4178,12 +4178,12 @@
      "(is) surely a word"
     ],
     [
-     "رَسُولٖ",
+     "رَسُولٍ",
      "rasūlin",
      "(of) a Messenger"
     ],
     [
-     "كَرِيمٖ",
+     "كَرِيمٍ",
      "karīmin",
      "noble"
     ]
@@ -4194,7 +4194,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 20,
-   "ar": "ذِي قُوَّةٍ عِندَ ذِي ٱلۡعَرۡشِ مَكِينٖ",
+   "ar": "ذِي قُوَّةٍ عِندَ ذِي ٱلۡعَرۡشِ مَكِينٍ",
    "en": "full of power, held in honour by the Lord of the Throne,",
    "words": [
     [
@@ -4223,7 +4223,7 @@
      "the Throne"
     ],
     [
-     "مَكِينٖ",
+     "مَكِينٍ",
      "makīnin",
      "secure"
     ]
@@ -4234,11 +4234,11 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 21,
-   "ar": "مُّطَاعٖ ثَمَّ أَمِينٖ",
+   "ar": "مُّطَاعٍ ثَمَّ أَمِينٍ",
    "en": "obeyed there ˹in heaven˺, and trustworthy.",
    "words": [
     [
-     "مُّطَاعٖ",
+     "مُّطَاعٍ",
      "muṭāʿin",
      "One to be obeyed"
     ],
@@ -4248,7 +4248,7 @@
      "and"
     ],
     [
-     "أَمِينٖ",
+     "أَمِينٍ",
      "amīnin",
      "trustworthy"
     ]
@@ -4259,7 +4259,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 22,
-   "ar": "وَمَا صَاحِبُكُم بِمَجۡنُونٖ",
+   "ar": "وَمَا صَاحِبُكُم بِمَجۡنُونٍ",
    "en": "And your fellow man is not insane.",
    "words": [
     [
@@ -4273,7 +4273,7 @@
      "(is) your companion"
     ],
     [
-     "بِمَجۡنُونٖ",
+     "بِمَجۡنُونٍ",
      "bimajnūnin",
      "mad"
     ]
@@ -4314,7 +4314,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 24,
-   "ar": "وَمَا هُوَ عَلَى ٱلۡغَيۡبِ بِضَنِينٖ",
+   "ar": "وَمَا هُوَ عَلَى ٱلۡغَيۡبِ بِضَنِينٍ",
    "en": "and he does not withhold ˹what is revealed to him of˺ the unseen.",
    "words": [
     [
@@ -4338,7 +4338,7 @@
      "the unseen"
     ],
     [
-     "بِضَنِينٖ",
+     "بِضَنِينٍ",
      "biḍanīnin",
      "a withholder"
     ]
@@ -4349,7 +4349,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 25,
-   "ar": "وَمَا هُوَ بِقَوۡلِ شَيۡطَٰنٖ رَّجِيمٖ",
+   "ar": "وَمَا هُوَ بِقَوۡلِ شَيۡطَٰنٍ رَّجِيمٍ",
    "en": "And this ˹Quran˺ is not the word of an outcast devil.",
    "words": [
     [
@@ -4368,12 +4368,12 @@
      "(is the) word"
     ],
     [
-     "شَيۡطَٰنٖ",
+     "شَيۡطَٰنٍ",
      "shayṭānin",
      "(of) Shaitaan"
     ],
     [
-     "رَّجِيمٖ",
+     "رَّجِيمٍ",
      "rajīmin",
      "accursed"
     ]
@@ -4404,7 +4404,7 @@
    "surah": 81,
    "surahName": "At-Takwir",
    "ayah": 27,
-   "ar": "إِنۡ هُوَ إِلَّا ذِكۡرٞ لِّلۡعَٰلَمِينَ",
+   "ar": "إِنۡ هُوَ إِلَّا ذِكۡرٌ لِّلۡعَٰلَمِينَ",
    "en": "Surely this ˹Quran˺ is only a reminder to the whole world—",
    "words": [
     [
@@ -4423,7 +4423,7 @@
      "(is) except"
     ],
     [
-     "ذِكۡرٞ",
+     "ذِكۡرٌ",
      "dhik'run",
      "a reminder"
     ],
@@ -4624,7 +4624,7 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 5,
-   "ar": "عَلِمَتۡ نَفۡسٞ مَّا قَدَّمَتۡ وَأَخَّرَتۡ",
+   "ar": "عَلِمَتۡ نَفۡسٌ مَّا قَدَّمَتۡ وَأَخَّرَتۡ",
    "en": "˹then˺ each soul will know what it has sent forth or left behind.",
    "words": [
     [
@@ -4633,7 +4633,7 @@
      "Will know"
     ],
     [
-     "نَفۡسٞ",
+     "نَفۡسٌ",
      "nafsun",
      "a soul"
     ],
@@ -4729,7 +4729,7 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 8,
-   "ar": "فِيٓ أَيِّ صُورَةٖ مَّا شَآءَ رَكَّبَكَ",
+   "ar": "فِيٓ أَيِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ",
    "en": "moulding you in whatever form He willed?",
    "words": [
     [
@@ -4743,7 +4743,7 @@
      "whatever"
     ],
     [
-     "صُورَةٖ",
+     "صُورَةٍ",
      "ṣūratin",
      "form"
     ],
@@ -4824,11 +4824,11 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 11,
-   "ar": "كِرَامٗا كَٰتِبِينَ",
+   "ar": "كِرَامًا كَٰتِبِينَ",
    "en": "honourable angels, recording ˹everything˺.",
    "words": [
     [
-     "كِرَامٗا",
+     "كِرَامًا",
      "kirāman",
      "Noble"
     ],
@@ -4869,7 +4869,7 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 13,
-   "ar": "إِنَّ ٱلۡأَبۡرَارَ لَفِي نَعِيمٖ",
+   "ar": "إِنَّ ٱلۡأَبۡرَارَ لَفِي نَعِيمٍ",
    "en": "Indeed, the virtuous will be in bliss,",
    "words": [
     [
@@ -4888,7 +4888,7 @@
      "(will be) surely in"
     ],
     [
-     "نَعِيمٖ",
+     "نَعِيمٍ",
      "naʿīmin",
      "bliss"
     ]
@@ -4899,7 +4899,7 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 14,
-   "ar": "وَإِنَّ ٱلۡفُجَّارَ لَفِي جَحِيمٖ",
+   "ar": "وَإِنَّ ٱلۡفُجَّارَ لَفِي جَحِيمٍ",
    "en": "and the wicked will be in Hell,",
    "words": [
     [
@@ -4918,7 +4918,7 @@
      "(will be) surely in"
     ],
     [
-     "جَحِيمٖ",
+     "جَحِيمٍ",
      "jaḥīmin",
      "Hellfire"
     ]
@@ -5059,7 +5059,7 @@
    "surah": 82,
    "surahName": "Al-Infitar",
    "ayah": 19,
-   "ar": "يَوۡمَ لَا تَمۡلِكُ نَفۡسٞ لِّنَفۡسٖ شَيۡـٔٗاۖ وَٱلۡأَمۡرُ يَوۡمَئِذٖ لِّلَّهِ",
+   "ar": "يَوۡمَ لَا تَمۡلِكُ نَفۡسٌ لِّنَفۡسٍ شَيۡـًٔاۖ وَٱلۡأَمۡرُ يَوۡمَئِذٍ لِّلَّهِ",
    "en": "˹It is˺ the Day no soul will be of ˹any˺ benefit to another whatsoever, for all authority on that Day belongs to Allah ˹entirely˺.",
    "words": [
     [
@@ -5078,17 +5078,17 @@
      "will have power"
     ],
     [
-     "نَفۡسٞ",
+     "نَفۡسٌ",
      "nafsun",
      "a soul"
     ],
     [
-     "لِّنَفۡسٖ",
+     "لِّنَفۡسٍ",
      "linafsin",
      "for a soul"
     ],
     [
-     "شَيۡـٔٗاۖ",
+     "شَيۡـًٔاۖ",
      "shayan",
      "anything"
     ],
@@ -5098,7 +5098,7 @@
      "and the Command"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
@@ -5114,11 +5114,11 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 1,
-   "ar": "وَيۡلٞ لِّلۡمُطَفِّفِينَ",
+   "ar": "وَيۡلٌ لِّلۡمُطَفِّفِينَ",
    "en": "Woe to the defrauders!",
    "words": [
     [
-     "وَيۡلٞ",
+     "وَيۡلٌ",
      "waylun",
      "Woe"
     ],
@@ -5244,7 +5244,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 5,
-   "ar": "لِيَوۡمٍ عَظِيمٖ",
+   "ar": "لِيَوۡمٍ عَظِيمٍ",
    "en": "for a tremendous Day—",
    "words": [
     [
@@ -5253,7 +5253,7 @@
      "For a Day"
     ],
     [
-     "عَظِيمٖ",
+     "عَظِيمٍ",
      "ʿaẓīmin",
      "Great"
     ]
@@ -5299,7 +5299,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 7,
-   "ar": "كـَلَّآ إِنَّ كِتَٰبَ ٱلۡفُجَّارِ لَفِي سِجِّينٖ",
+   "ar": "كـَلَّآ إِنَّ كِتَٰبَ ٱلۡفُجَّارِ لَفِي سِجِّينٍ",
    "en": "But no! The wicked are certainly bound for Sijjîn ˹in the depths of Hell˺—",
    "words": [
     [
@@ -5328,7 +5328,7 @@
      "(is) surely in"
     ],
     [
-     "سِجِّينٖ",
+     "سِجِّينٍ",
      "sijjīnin",
      "Sijjin"
     ]
@@ -5339,7 +5339,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 8,
-   "ar": "وَمَآ أَدۡرَىٰكَ مَا سِجِّينٞ",
+   "ar": "وَمَآ أَدۡرَىٰكَ مَا سِجِّينٌ",
    "en": "and what will make you realize what Sijjîn is?—",
    "words": [
     [
@@ -5358,7 +5358,7 @@
      "what"
     ],
     [
-     "سِجِّينٞ",
+     "سِجِّينٌ",
      "sijjīnun",
      "(is) Sijjin"
     ]
@@ -5369,16 +5369,16 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 9,
-   "ar": "كِتَٰبٞ مَّرۡقُومٞ",
+   "ar": "كِتَٰبٌ مَّرۡقُومٌ",
    "en": "a fate ˹already˺ sealed.",
    "words": [
     [
-     "كِتَٰبٞ",
+     "كِتَٰبٌ",
      "kitābun",
      "A book"
     ],
     [
-     "مَّرۡقُومٞ",
+     "مَّرۡقُومٌ",
      "marqūmun",
      "written"
     ]
@@ -5389,16 +5389,16 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 10,
-   "ar": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+   "ar": "وَيۡلٌ يَوۡمَئِذٍ لِّلۡمُكَذِّبِينَ",
    "en": "Woe on that Day to the deniers—",
    "words": [
     [
-     "وَيۡلٞ",
+     "وَيۡلٌ",
      "waylun",
      "Woe"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
@@ -5584,7 +5584,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 15,
-   "ar": "كـَلَّآ إِنَّهُمۡ عَن رَّبِّهِمۡ يَوۡمَئِذٖ لَّمَحۡجُوبُونَ",
+   "ar": "كـَلَّآ إِنَّهُمۡ عَن رَّبِّهِمۡ يَوۡمَئِذٍ لَّمَحۡجُوبُونَ",
    "en": "Undoubtedly, they will be sealed off from their Lord on that Day.",
    "words": [
     [
@@ -5608,7 +5608,7 @@
      "their Lord"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
@@ -5769,16 +5769,16 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 20,
-   "ar": "كِتَٰبٞ مَّرۡقُومٞ",
+   "ar": "كِتَٰبٌ مَّرۡقُومٌ",
    "en": "a fate ˹already˺ sealed,",
    "words": [
     [
-     "كِتَٰبٞ",
+     "كِتَٰبٌ",
      "kitābun",
      "A book"
     ],
     [
-     "مَّرۡقُومٞ",
+     "مَّرۡقُومٌ",
      "marqūmun",
      "written"
     ]
@@ -5899,7 +5899,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 25,
-   "ar": "يُسۡقَوۡنَ مِن رَّحِيقٖ مَّخۡتُومٍ",
+   "ar": "يُسۡقَوۡنَ مِن رَّحِيقٍ مَّخۡتُومٍ",
    "en": "They will be given a drink of sealed, pure wine,",
    "words": [
     [
@@ -5913,7 +5913,7 @@
      "of"
     ],
     [
-     "رَّحِيقٖ",
+     "رَّحِيقٍ",
      "raḥīqin",
      "a pure wine"
     ],
@@ -5929,7 +5929,7 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 26,
-   "ar": "خِتَٰمُهُۥ مِسۡكٞۚ وَفِي ذَٰلِكَ فَلۡيَتَنَافَسِ ٱلۡمُتَنَٰفِسُونَ",
+   "ar": "خِتَٰمُهُۥ مِسۡكٌۚ وَفِي ذَٰلِكَ فَلۡيَتَنَافَسِ ٱلۡمُتَنَٰفِسُونَ",
    "en": "whose last sip will smell like musk. So let whoever aspires to this strive ˹diligently˺.",
    "words": [
     [
@@ -5938,7 +5938,7 @@
      "Its seal"
     ],
     [
-     "مِسۡكٞۚ",
+     "مِسۡكٌۚ",
      "mis'kun",
      "(will be of) musk"
     ],
@@ -5994,11 +5994,11 @@
    "surah": 83,
    "surahName": "Al-Mutaffifin",
    "ayah": 28,
-   "ar": "عَيۡنٗا يَشۡرَبُ بِهَا ٱلۡمُقَرَّبُونَ",
+   "ar": "عَيۡنًا يَشۡرَبُ بِهَا ٱلۡمُقَرَّبُونَ",
    "en": "a spring from which those nearest ˹to Allah˺ will drink.",
    "words": [
     [
-     "عَيۡنٗا",
+     "عَيۡنًا",
      "ʿaynan",
      "A spring"
     ],
@@ -6449,7 +6449,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 6,
-   "ar": "يَٰٓأَيُّهَا ٱلۡإِنسَٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدۡحٗا فَمُلَٰقِيهِ",
+   "ar": "يَٰٓأَيُّهَا ٱلۡإِنسَٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدۡحًا فَمُلَٰقِيهِ",
    "en": "O humanity! Indeed, you are labouring restlessly towards your Lord, and will ˹eventually˺ meet the consequences.",
    "words": [
     [
@@ -6483,7 +6483,7 @@
      "your Lord"
     ],
     [
-     "كَدۡحٗا",
+     "كَدۡحًا",
      "kadḥan",
      "(with) exertion"
     ],
@@ -6534,7 +6534,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 8,
-   "ar": "فَسَوۡفَ يُحَاسَبُ حِسَابٗا يَسِيرٗا",
+   "ar": "فَسَوۡفَ يُحَاسَبُ حِسَابًا يَسِيرًا",
    "en": "they will have an easy reckoning,",
    "words": [
     [
@@ -6548,12 +6548,12 @@
      "his account will be taken"
     ],
     [
-     "حِسَابٗا",
+     "حِسَابًا",
      "ḥisāban",
      "an account"
     ],
     [
-     "يَسِيرٗا",
+     "يَسِيرًا",
      "yasīran",
      "easy"
     ]
@@ -6564,7 +6564,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 9,
-   "ar": "وَيَنقَلِبُ إِلَىٰٓ أَهۡلِهِۦ مَسۡرُورٗا",
+   "ar": "وَيَنقَلِبُ إِلَىٰٓ أَهۡلِهِۦ مَسۡرُورًا",
    "en": "and will return to their people joyfully.",
    "words": [
     [
@@ -6583,7 +6583,7 @@
      "his people"
     ],
     [
-     "مَسۡرُورٗا",
+     "مَسۡرُورًا",
      "masrūran",
      "happily"
     ]
@@ -6634,7 +6634,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 11,
-   "ar": "فَسَوۡفَ يَدۡعُواْ ثُبُورٗا",
+   "ar": "فَسَوۡفَ يَدۡعُواْ ثُبُورًا",
    "en": "they will cry for ˹instant˺ destruction,",
    "words": [
     [
@@ -6648,7 +6648,7 @@
      "he will call"
     ],
     [
-     "ثُبُورٗا",
+     "ثُبُورًا",
      "thubūran",
      "(for) destruction"
     ]
@@ -6749,7 +6749,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 15,
-   "ar": "بَلَىٰٓۚ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرٗا",
+   "ar": "بَلَىٰٓۚ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرًا",
    "en": "Yes ˹they would˺! Surely their Lord has always been All-Seeing of them.",
    "words": [
     [
@@ -6778,7 +6778,7 @@
      "of him"
     ],
     [
-     "بَصِيرٗا",
+     "بَصِيرًا",
      "baṣīran",
      "All-Seer"
     ]
@@ -6864,7 +6864,7 @@
    "surah": 84,
    "surahName": "Al-Inshiqaq",
    "ayah": 19,
-   "ar": "لَتَرۡكَبُنَّ طَبَقًا عَن طَبَقٖ",
+   "ar": "لَتَرۡكَبُنَّ طَبَقًا عَن طَبَقٍ",
    "en": "You will certainly pass from one state to another.",
    "words": [
     [
@@ -6883,7 +6883,7 @@
      "from"
     ],
     [
-     "طَبَقٖ",
+     "طَبَقٍ",
      "ṭabaqin",
      "stage"
     ]
@@ -7149,16 +7149,16 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 3,
-   "ar": "وَشَاهِدٖ وَمَشۡهُودٖ",
+   "ar": "وَشَاهِدٍ وَمَشۡهُودٍ",
    "en": "and the witness and what is witnessed!",
    "words": [
     [
-     "وَشَاهِدٖ",
+     "وَشَاهِدٍ",
      "washāhidin",
      "And (the) witness"
     ],
     [
-     "وَمَشۡهُودٖ",
+     "وَمَشۡهُودٍ",
      "wamashhūdin",
      "and what is witnessed"
     ]
@@ -7219,7 +7219,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 6,
-   "ar": "إِذۡ هُمۡ عَلَيۡهَا قُعُودٞ",
+   "ar": "إِذۡ هُمۡ عَلَيۡهَا قُعُودٌ",
    "en": "when they sat around it,",
    "words": [
     [
@@ -7238,7 +7238,7 @@
      "by it"
     ],
     [
-     "قُعُودٞ",
+     "قُعُودٌ",
      "quʿūdun",
      "(were) sitting"
     ]
@@ -7249,7 +7249,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 7,
-   "ar": "وَهُمۡ عَلَىٰ مَا يَفۡعَلُونَ بِٱلۡمُؤۡمِنِينَ شُهُودٞ",
+   "ar": "وَهُمۡ عَلَىٰ مَا يَفۡعَلُونَ بِٱلۡمُؤۡمِنِينَ شُهُودٌ",
    "en": "watching what they had ˹ordered to be˺ done to the believers,",
    "words": [
     [
@@ -7278,7 +7278,7 @@
      "to the believers"
     ],
     [
-     "شُهُودٞ",
+     "شُهُودٌ",
      "shuhūdun",
      "witnesses"
     ]
@@ -7344,7 +7344,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 9,
-   "ar": "ٱلَّذِي لَهُۥ مُلۡكُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِۚ وَٱللَّهُ عَلَىٰ كُلِّ شَيۡءٖ شَهِيدٌ",
+   "ar": "ٱلَّذِي لَهُۥ مُلۡكُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِۚ وَٱللَّهُ عَلَىٰ كُلِّ شَيۡءٍ شَهِيدٌ",
    "en": "˹the One˺ to Whom belongs the kingdom of the heavens and earth. And Allah is a Witness over all things.",
    "words": [
     [
@@ -7388,7 +7388,7 @@
      "every"
     ],
     [
-     "شَيۡءٖ",
+     "شَيۡءٍ",
      "shayin",
      "thing"
     ],
@@ -7484,7 +7484,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 11,
-   "ar": "إِنَّ ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ لَهُمۡ جَنَّٰتٞ تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُۚ ذَٰلِكَ ٱلۡفَوۡزُ ٱلۡكَبِيرُ",
+   "ar": "إِنَّ ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ لَهُمۡ جَنَّٰتٌ تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُۚ ذَٰلِكَ ٱلۡفَوۡزُ ٱلۡكَبِيرُ",
    "en": "Surely those who believe and do good will have Gardens under which rivers flow. That is the greatest triumph.",
    "words": [
     [
@@ -7518,7 +7518,7 @@
      "for them"
     ],
     [
-     "جَنَّٰتٞ",
+     "جَنَّٰتٌ",
      "jannātun",
      "(will be) Gardens"
     ],
@@ -7674,11 +7674,11 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 16,
-   "ar": "فَعَّالٞ لِّمَا يُرِيدُ",
+   "ar": "فَعَّالٌ لِّمَا يُرِيدُ",
    "en": "Doer of whatever He wills.",
    "words": [
     [
-     "فَعَّالٞ",
+     "فَعَّالٌ",
      "faʿʿālun",
      "Doer"
     ],
@@ -7749,7 +7749,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 19,
-   "ar": "بَلِ ٱلَّذِينَ كَفَرُواْ فِي تَكۡذِيبٖ",
+   "ar": "بَلِ ٱلَّذِينَ كَفَرُواْ فِي تَكۡذِيبٍ",
    "en": "Yet the disbelievers ˹still˺ persist in denial.",
    "words": [
     [
@@ -7773,7 +7773,7 @@
      "(are) in"
     ],
     [
-     "تَكۡذِيبٖ",
+     "تَكۡذِيبٍ",
      "takdhībin",
      "denial"
     ]
@@ -7814,7 +7814,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 21,
-   "ar": "بَلۡ هُوَ قُرۡءَانٞ مَّجِيدٞ",
+   "ar": "بَلۡ هُوَ قُرۡءَانٌ مَّجِيدٌ",
    "en": "In fact, this is a glorious Quran,",
    "words": [
     [
@@ -7828,12 +7828,12 @@
      "It"
     ],
     [
-     "قُرۡءَانٞ",
+     "قُرۡءَانٌ",
      "qur'ānun",
      "(is) a Quran"
     ],
     [
-     "مَّجِيدٞ",
+     "مَّجِيدٌ",
      "majīdun",
      "Glorious"
     ]
@@ -7844,7 +7844,7 @@
    "surah": 85,
    "surahName": "Al-Buruj",
    "ayah": 22,
-   "ar": "فِي لَوۡحٖ مَّحۡفُوظِۭ",
+   "ar": "فِي لَوۡحٍ مَّحۡفُوظِۭ",
    "en": "˹recorded˺ in a Preserved Tablet.",
    "words": [
     [
@@ -7853,7 +7853,7 @@
      "In"
     ],
     [
-     "لَوۡحٖ",
+     "لَوۡحٍ",
      "lawḥin",
      "a Tablet"
     ],
@@ -7939,7 +7939,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 4,
-   "ar": "إِن كُلُّ نَفۡسٖ لَّمَّا عَلَيۡهَا حَافِظٞ",
+   "ar": "إِن كُلُّ نَفۡسٍ لَّمَّا عَلَيۡهَا حَافِظٌ",
    "en": "There is no soul without a vigilant angel ˹recording everything˺.",
    "words": [
     [
@@ -7953,7 +7953,7 @@
      "(is) every"
     ],
     [
-     "نَفۡسٖ",
+     "نَفۡسٍ",
      "nafsin",
      "soul"
     ],
@@ -7968,7 +7968,7 @@
      "over it"
     ],
     [
-     "حَافِظٞ",
+     "حَافِظٌ",
      "ḥāfiẓun",
      "(is) a protector"
     ]
@@ -8009,7 +8009,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 6,
-   "ar": "خُلِقَ مِن مَّآءٖ دَافِقٖ",
+   "ar": "خُلِقَ مِن مَّآءٍ دَافِقٍ",
    "en": "˹They were˺ created from a spurting fluid,",
    "words": [
     [
@@ -8023,12 +8023,12 @@
      "from"
     ],
     [
-     "مَّآءٖ",
+     "مَّآءٍ",
      "māin",
      "a water"
     ],
     [
-     "دَافِقٖ",
+     "دَافِقٍ",
      "dāfiqin",
      "ejected"
     ]
@@ -8074,7 +8074,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 8,
-   "ar": "إِنَّهُۥ عَلَىٰ رَجۡعِهِۦ لَقَادِرٞ",
+   "ar": "إِنَّهُۥ عَلَىٰ رَجۡعِهِۦ لَقَادِرٌ",
    "en": "Surely He is fully capable of bringing them back ˹to life˺",
    "words": [
     [
@@ -8093,7 +8093,7 @@
      "return him"
     ],
     [
-     "لَقَادِرٞ",
+     "لَقَادِرٌ",
      "laqādirun",
      "(is) Able"
     ]
@@ -8129,7 +8129,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 10,
-   "ar": "فَمَا لَهُۥ مِن قُوَّةٖ وَلَا نَاصِرٖ",
+   "ar": "فَمَا لَهُۥ مِن قُوَّةٍ وَلَا نَاصِرٍ",
    "en": "Then one will have neither power nor ˹any˺ helper.",
    "words": [
     [
@@ -8148,7 +8148,7 @@
      "any"
     ],
     [
-     "قُوَّةٖ",
+     "قُوَّةٍ",
      "quwwatin",
      "power"
     ],
@@ -8158,7 +8158,7 @@
      "and not"
     ],
     [
-     "نَاصِرٖ",
+     "نَاصِرٍ",
      "nāṣirin",
      "any helper"
     ]
@@ -8219,7 +8219,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 13,
-   "ar": "إِنَّهُۥ لَقَوۡلٞ فَصۡلٞ",
+   "ar": "إِنَّهُۥ لَقَوۡلٌ فَصۡلٌ",
    "en": "Surely this ˹Quran˺ is a decisive word,",
    "words": [
     [
@@ -8228,12 +8228,12 @@
      "Indeed, it"
     ],
     [
-     "لَقَوۡلٞ",
+     "لَقَوۡلٌ",
      "laqawlun",
      "(is) surely a Word"
     ],
     [
-     "فَصۡلٞ",
+     "فَصۡلٌ",
      "faṣlun",
      "decisive"
     ]
@@ -8269,7 +8269,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 15,
-   "ar": "إِنَّهُمۡ يَكِيدُونَ كَيۡدٗا",
+   "ar": "إِنَّهُمۡ يَكِيدُونَ كَيۡدًا",
    "en": "They are certainly devising ˹evil˺ plans,",
    "words": [
     [
@@ -8283,7 +8283,7 @@
      "are plotting"
     ],
     [
-     "كَيۡدٗا",
+     "كَيۡدًا",
      "kaydan",
      "a plot"
     ]
@@ -8294,7 +8294,7 @@
    "surah": 86,
    "surahName": "At-Tariq",
    "ayah": 16,
-   "ar": "وَأَكِيدُ كَيۡدٗا",
+   "ar": "وَأَكِيدُ كَيۡدًا",
    "en": "but I too am planning.",
    "words": [
     [
@@ -8303,7 +8303,7 @@
      "But I am planning"
     ],
     [
-     "كَيۡدٗا",
+     "كَيۡدًا",
      "kaydan",
      "a plan"
     ]
@@ -8809,7 +8809,7 @@
    "surah": 87,
    "surahName": "Al-A'la",
    "ayah": 17,
-   "ar": "وَٱلۡأٓخِرَةُ خَيۡرٞ وَأَبۡقَىٰٓ",
+   "ar": "وَٱلۡأٓخِرَةُ خَيۡرٌ وَأَبۡقَىٰٓ",
    "en": "even though the Hereafter is far better and more lasting.",
    "words": [
     [
@@ -8818,7 +8818,7 @@
      "While the Hereafter"
     ],
     [
-     "خَيۡرٞ",
+     "خَيۡرٌ",
      "khayrun",
      "(is) better"
     ],
@@ -8924,11 +8924,11 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 2,
-   "ar": "وُجُوهٞ يَوۡمَئِذٍ خَٰشِعَةٌ",
+   "ar": "وُجُوهٌ يَوۡمَئِذٍ خَٰشِعَةٌ",
    "en": "On that Day ˹some˺ faces will be downcast,",
    "words": [
     [
-     "وُجُوهٞ",
+     "وُجُوهٌ",
      "wujūhun",
      "Faces"
     ],
@@ -8949,16 +8949,16 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 3,
-   "ar": "عَامِلَةٞ نَّاصِبَةٞ",
+   "ar": "عَامِلَةٌ نَّاصِبَةٌ",
    "en": "˹totally˺ overburdened, exhausted,",
    "words": [
     [
-     "عَامِلَةٞ",
+     "عَامِلَةٌ",
      "ʿāmilatun",
      "Laboring"
     ],
     [
-     "نَّاصِبَةٞ",
+     "نَّاصِبَةٌ",
      "nāṣibatun",
      "exhausted"
     ]
@@ -8969,7 +8969,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 4,
-   "ar": "تَصۡلَىٰ نَارًا حَامِيَةٗ",
+   "ar": "تَصۡلَىٰ نَارًا حَامِيَةً",
    "en": "burning in a scorching Fire,",
    "words": [
     [
@@ -8983,7 +8983,7 @@
      "(in) a Fire"
     ],
     [
-     "حَامِيَةٗ",
+     "حَامِيَةً",
      "ḥāmiyatan",
      "intensely hot"
     ]
@@ -8994,7 +8994,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 5,
-   "ar": "تُسۡقَىٰ مِنۡ عَيۡنٍ ءَانِيَةٖ",
+   "ar": "تُسۡقَىٰ مِنۡ عَيۡنٍ ءَانِيَةٍ",
    "en": "left to drink from a scalding spring.",
    "words": [
     [
@@ -9013,7 +9013,7 @@
      "a spring"
     ],
     [
-     "انِيَةٖ",
+     "انِيَةٍ",
      "āniyatin",
      "boiling"
     ]
@@ -9024,7 +9024,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 6,
-   "ar": "لَّيۡسَ لَهُمۡ طَعَامٌ إِلَّا مِن ضَرِيعٖ",
+   "ar": "لَّيۡسَ لَهُمۡ طَعَامٌ إِلَّا مِن ضَرِيعٍ",
    "en": "They will have no food except a foul, thorny shrub,",
    "words": [
     [
@@ -9053,7 +9053,7 @@
      "from"
     ],
     [
-     "ضَرِيعٖ",
+     "ضَرِيعٍ",
      "ḍarīʿin",
      "a bitter thorny plant"
     ]
@@ -9064,7 +9064,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 7,
-   "ar": "لَّا يُسۡمِنُ وَلَا يُغۡنِي مِن جُوعٖ",
+   "ar": "لَّا يُسۡمِنُ وَلَا يُغۡنِي مِن جُوعٍ",
    "en": "neither nourishing nor satisfying hunger.",
    "words": [
     [
@@ -9093,7 +9093,7 @@
      "from"
     ],
     [
-     "جُوعٖ",
+     "جُوعٍ",
      "jūʿin",
      "hunger"
     ]
@@ -9104,21 +9104,21 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 8,
-   "ar": "وُجُوهٞ يَوۡمَئِذٖ نَّاعِمَةٞ",
+   "ar": "وُجُوهٌ يَوۡمَئِذٍ نَّاعِمَةٌ",
    "en": "On that Day ˹other˺ faces will be glowing with bliss,",
    "words": [
     [
-     "وُجُوهٞ",
+     "وُجُوهٌ",
      "wujūhun",
      "Faces"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
     [
-     "نَّاعِمَةٞ",
+     "نَّاعِمَةٌ",
      "nāʿimatun",
      "(will be) joyful"
     ]
@@ -9129,7 +9129,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 9,
-   "ar": "لِّسَعۡيِهَا رَاضِيَةٞ",
+   "ar": "لِّسَعۡيِهَا رَاضِيَةٌ",
    "en": "˹fully˺ pleased with their striving,",
    "words": [
     [
@@ -9138,7 +9138,7 @@
      "With their effort"
     ],
     [
-     "رَاضِيَةٞ",
+     "رَاضِيَةٌ",
      "rāḍiyatun",
      "satisfied"
     ]
@@ -9149,7 +9149,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 10,
-   "ar": "فِي جَنَّةٍ عَالِيَةٖ",
+   "ar": "فِي جَنَّةٍ عَالِيَةٍ",
    "en": "in an elevated Garden,",
    "words": [
     [
@@ -9163,7 +9163,7 @@
      "a garden"
     ],
     [
-     "عَالِيَةٖ",
+     "عَالِيَةٍ",
      "ʿāliyatin",
      "elevated"
     ]
@@ -9174,7 +9174,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 11,
-   "ar": "لَّا تَسۡمَعُ فِيهَا لَٰغِيَةٗ",
+   "ar": "لَّا تَسۡمَعُ فِيهَا لَٰغِيَةً",
    "en": "where no idle talk will be heard.",
    "words": [
     [
@@ -9193,7 +9193,7 @@
      "therein"
     ],
     [
-     "لَٰغِيَةٗ",
+     "لَٰغِيَةً",
      "lāghiyatan",
      "vain talk"
     ]
@@ -9204,7 +9204,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 12,
-   "ar": "فِيهَا عَيۡنٞ جَارِيَةٞ",
+   "ar": "فِيهَا عَيۡنٌ جَارِيَةٌ",
    "en": "In it will be a running spring,",
    "words": [
     [
@@ -9213,12 +9213,12 @@
      "Therein"
     ],
     [
-     "عَيۡنٞ",
+     "عَيۡنٌ",
      "ʿaynun",
      "(will be) a spring"
     ],
     [
-     "جَارِيَةٞ",
+     "جَارِيَةٌ",
      "jāriyatun",
      "flowing"
     ]
@@ -9229,7 +9229,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 13,
-   "ar": "فِيهَا سُرُرٞ مَّرۡفُوعَةٞ",
+   "ar": "فِيهَا سُرُرٌ مَّرۡفُوعَةٌ",
    "en": "along with thrones raised high,",
    "words": [
     [
@@ -9238,12 +9238,12 @@
      "Therein"
     ],
     [
-     "سُرُرٞ",
+     "سُرُرٌ",
      "sururun",
      "(will be) thrones"
     ],
     [
-     "مَّرۡفُوعَةٞ",
+     "مَّرۡفُوعَةٌ",
      "marfūʿatun",
      "raised high"
     ]
@@ -9254,16 +9254,16 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 14,
-   "ar": "وَأَكۡوَابٞ مَّوۡضُوعَةٞ",
+   "ar": "وَأَكۡوَابٌ مَّوۡضُوعَةٌ",
    "en": "and cups set at hand,",
    "words": [
     [
-     "وَأَكۡوَابٞ",
+     "وَأَكۡوَابٌ",
      "wa-akwābun",
      "And cups"
     ],
     [
-     "مَّوۡضُوعَةٞ",
+     "مَّوۡضُوعَةٌ",
      "mawḍūʿatun",
      "put in place"
     ]
@@ -9274,7 +9274,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 15,
-   "ar": "وَنَمَارِقُ مَصۡفُوفَةٞ",
+   "ar": "وَنَمَارِقُ مَصۡفُوفَةٌ",
    "en": "and ˹fine˺ cushions lined up,",
    "words": [
     [
@@ -9283,7 +9283,7 @@
      "And cushions"
     ],
     [
-     "مَصۡفُوفَةٞ",
+     "مَصۡفُوفَةٌ",
      "maṣfūfatun",
      "lined up"
     ]
@@ -9444,7 +9444,7 @@
    "surah": 88,
    "surahName": "Al-Ghashiyah",
    "ayah": 21,
-   "ar": "فَذَكِّرۡ إِنَّمَآ أَنتَ مُذَكِّرٞ",
+   "ar": "فَذَكِّرۡ إِنَّمَآ أَنتَ مُذَكِّرٌ",
    "en": "So, ˹continue to˺ remind ˹all, O  Prophet˺, for your duty is only to remind.",
    "words": [
     [
@@ -9463,7 +9463,7 @@
      "you"
     ],
     [
-     "مُذَكِّرٞ",
+     "مُذَكِّرٌ",
      "mudhakkirun",
      "(are) a reminder"
     ]
@@ -9629,7 +9629,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 2,
-   "ar": "وَلَيَالٍ عَشۡرٖ",
+   "ar": "وَلَيَالٍ عَشۡرٍ",
    "en": "and the ten nights,",
    "words": [
     [
@@ -9638,7 +9638,7 @@
      "And the nights"
     ],
     [
-     "عَشۡرٖ",
+     "عَشۡرٍ",
      "ʿashrin",
      "ten"
     ]
@@ -9694,7 +9694,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 5,
-   "ar": "هَلۡ فِي ذَٰلِكَ قَسَمٞ لِّذِي حِجۡرٍ",
+   "ar": "هَلۡ فِي ذَٰلِكَ قَسَمٌ لِّذِي حِجۡرٍ",
    "en": "Is all this ˹not˺ a sufficient oath for those who have sense?",
    "words": [
     [
@@ -9713,7 +9713,7 @@
      "that"
     ],
     [
-     "قَسَمٞ",
+     "قَسَمٌ",
      "qasamun",
      "(not) an oath"
     ],
@@ -10209,7 +10209,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 19,
-   "ar": "وَتَأۡكُلُونَ ٱلتُّرَاثَ أَكۡلٗا لَّمّٗا",
+   "ar": "وَتَأۡكُلُونَ ٱلتُّرَاثَ أَكۡلًا لَّمًّا",
    "en": "And you devour ˹others’˺ inheritance greedily,",
    "words": [
     [
@@ -10223,12 +10223,12 @@
      "the inheritance"
     ],
     [
-     "أَكۡلٗا",
+     "أَكۡلًا",
      "aklan",
      "devouring"
     ],
     [
-     "لَّمّٗا",
+     "لَّمًّا",
      "lamman",
      "altogether"
     ]
@@ -10239,7 +10239,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 20,
-   "ar": "وَتُحِبُّونَ ٱلۡمَالَ حُبّٗا جَمّٗا",
+   "ar": "وَتُحِبُّونَ ٱلۡمَالَ حُبًّا جَمًّا",
    "en": "and love wealth fervently.",
    "words": [
     [
@@ -10253,12 +10253,12 @@
      "wealth"
     ],
     [
-     "حُبّٗا",
+     "حُبًّا",
      "ḥubban",
      "(with) love"
     ],
     [
-     "جَمّٗا",
+     "جَمًّا",
      "jamman",
      "immense"
     ]
@@ -10269,7 +10269,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 21,
-   "ar": "كـَلَّآۖ إِذَا دُكَّتِ ٱلۡأَرۡضُ دَكّٗا دَكّٗا",
+   "ar": "كـَلَّآۖ إِذَا دُكَّتِ ٱلۡأَرۡضُ دَكًّا دَكًّا",
    "en": "Enough! When the earth is entirely crushed over and over,",
    "words": [
     [
@@ -10293,12 +10293,12 @@
      "the earth"
     ],
     [
-     "دَكّٗا",
+     "دَكًّا",
      "dakkan",
      "pounded"
     ],
     [
-     "دَكّٗا",
+     "دَكًّا",
      "dakkan",
      "(and) crushed"
     ]
@@ -10309,7 +10309,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 22,
-   "ar": "وَجَآءَ رَبُّكَ وَٱلۡمَلَكُ صَفّٗا صَفّٗا",
+   "ar": "وَجَآءَ رَبُّكَ وَٱلۡمَلَكُ صَفًّا صَفًّا",
    "en": "and your Lord comes ˹to judge˺ with angels, rank upon rank,",
    "words": [
     [
@@ -10328,12 +10328,12 @@
      "and the Angels"
     ],
     [
-     "صَفّٗا",
+     "صَفًّا",
      "ṣaffan",
      "rank"
     ],
     [
-     "صَفّٗا",
+     "صَفًّا",
      "ṣaffan",
      "(upon) rank"
     ]
@@ -10344,7 +10344,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 23,
-   "ar": "وَجِاْيٓءَ يَوۡمَئِذِۭ بِجَهَنَّمَۚ يَوۡمَئِذٖ يَتَذَكَّرُ ٱلۡإِنسَٰنُ وَأَنَّىٰ لَهُ ٱلذِّكۡرَىٰ",
+   "ar": "وَجِاْيٓءَ يَوۡمَئِذِۭ بِجَهَنَّمَۚ يَوۡمَئِذٍ يَتَذَكَّرُ ٱلۡإِنسَٰنُ وَأَنَّىٰ لَهُ ٱلذِّكۡرَىٰ",
    "en": "and Hell is brought forth on that Day—this is when every ˹disbelieving˺ person will remember ˹their own sins˺. But what is the use of remembering then?",
    "words": [
     [
@@ -10363,7 +10363,7 @@
      "Hell"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "That Day"
     ],
@@ -10429,11 +10429,11 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 25,
-   "ar": "فَيَوۡمَئِذٖ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٞ",
+   "ar": "فَيَوۡمَئِذٍ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٌ",
    "en": "On that Day He will punish ˹them˺ severely, like no other,",
    "words": [
     [
-     "فَيَوۡمَئِذٖ",
+     "فَيَوۡمَئِذٍ",
      "fayawma-idhin",
      "So that Day"
     ],
@@ -10453,7 +10453,7 @@
      "(as) His punishment"
     ],
     [
-     "أَحَدٞ",
+     "أَحَدٌ",
      "aḥadun",
      "anyone"
     ]
@@ -10464,7 +10464,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 26,
-   "ar": "وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٞ",
+   "ar": "وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٌ",
    "en": "and bind ˹them˺ tightly, like no other. ",
    "words": [
     [
@@ -10483,7 +10483,7 @@
      "(as) His binding"
     ],
     [
-     "أَحَدٞ",
+     "أَحَدٌ",
      "aḥadun",
      "anyone"
     ]
@@ -10519,7 +10519,7 @@
    "surah": 89,
    "surahName": "Al-Fajr",
    "ayah": 28,
-   "ar": "ٱرۡجِعِيٓ إِلَىٰ رَبِّكِ رَاضِيَةٗ مَّرۡضِيَّةٗ",
+   "ar": "ٱرۡجِعِيٓ إِلَىٰ رَبِّكِ رَاضِيَةً مَّرۡضِيَّةً",
    "en": "Return to your Lord, well pleased ˹with Him˺ and well pleasing ˹to Him˺.",
    "words": [
     [
@@ -10538,12 +10538,12 @@
      "your Lord"
     ],
     [
-     "رَاضِيَةٗ",
+     "رَاضِيَةً",
      "rāḍiyatan",
      "well pleased"
     ],
     [
-     "مَّرۡضِيَّةٗ",
+     "مَّرۡضِيَّةً",
      "marḍiyyatan",
      "and pleasing"
     ]
@@ -10659,11 +10659,11 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 3,
-   "ar": "وَوَالِدٖ وَمَا وَلَدَ",
+   "ar": "وَوَالِدٍ وَمَا وَلَدَ",
    "en": "and by every parent and ˹their˺ child!",
    "words": [
     [
-     "وَوَالِدٖ",
+     "وَوَالِدٍ",
      "wawālidin",
      "And the begetter"
     ],
@@ -10719,7 +10719,7 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 5,
-   "ar": "أَيَحۡسَبُ أَن لَّن يَقۡدِرَ عَلَيۡهِ أَحَدٞ",
+   "ar": "أَيَحۡسَبُ أَن لَّن يَقۡدِرَ عَلَيۡهِ أَحَدٌ",
    "en": "Do they think that no one has power over them,",
    "words": [
     [
@@ -10748,7 +10748,7 @@
      "over him"
     ],
     [
-     "أَحَدٞ",
+     "أَحَدٌ",
      "aḥadun",
      "anyone"
     ]
@@ -10759,7 +10759,7 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 6,
-   "ar": "يَقُولُ أَهۡلَكۡتُ مَالٗا لُّبَدًا",
+   "ar": "يَقُولُ أَهۡلَكۡتُ مَالًا لُّبَدًا",
    "en": "boasting, “I have wasted enormous wealth!”?",
    "words": [
     [
@@ -10773,7 +10773,7 @@
      "I have squandered"
     ],
     [
-     "مَالٗا",
+     "مَالًا",
      "mālan",
      "wealth"
     ],
@@ -10854,11 +10854,11 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 9,
-   "ar": "وَلِسَانٗا وَشَفَتَيۡنِ",
+   "ar": "وَلِسَانًا وَشَفَتَيۡنِ",
    "en": "a tongue, and two lips;",
    "words": [
     [
-     "وَلِسَانٗا",
+     "وَلِسَانًا",
      "walisānan",
      "And a tongue"
     ],
@@ -10969,7 +10969,7 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 14,
-   "ar": "أَوۡ إِطۡعَٰمٞ فِي يَوۡمٖ ذِي مَسۡغَبَةٖ",
+   "ar": "أَوۡ إِطۡعَٰمٌ فِي يَوۡمٍ ذِي مَسۡغَبَةٍ",
    "en": "or to give food in times of famine",
    "words": [
     [
@@ -10978,7 +10978,7 @@
      "Or"
     ],
     [
-     "إِطۡعَٰمٞ",
+     "إِطۡعَٰمٌ",
      "iṭ'ʿāmun",
      "feeding"
     ],
@@ -10988,7 +10988,7 @@
      "in"
     ],
     [
-     "يَوۡمٖ",
+     "يَوۡمٍ",
      "yawmin",
      "a day"
     ],
@@ -10998,7 +10998,7 @@
      "of"
     ],
     [
-     "مَسۡغَبَةٖ",
+     "مَسۡغَبَةٍ",
      "masghabatin",
      "severe hunger"
     ]
@@ -11009,11 +11009,11 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 15,
-   "ar": "يَتِيمٗا ذَا مَقۡرَبَةٍ",
+   "ar": "يَتِيمًا ذَا مَقۡرَبَةٍ",
    "en": "to an orphaned relative",
    "words": [
     [
-     "يَتِيمٗا",
+     "يَتِيمًا",
      "yatīman",
      "An orphan"
     ],
@@ -11034,7 +11034,7 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 16,
-   "ar": "أَوۡ مِسۡكِينٗا ذَا مَتۡرَبَةٖ",
+   "ar": "أَوۡ مِسۡكِينًا ذَا مَتۡرَبَةٍ",
    "en": "or to a poor person in distress,",
    "words": [
     [
@@ -11043,7 +11043,7 @@
      "Or"
     ],
     [
-     "مِسۡكِينٗا",
+     "مِسۡكِينًا",
      "mis'kīnan",
      "a needy person"
     ],
@@ -11053,7 +11053,7 @@
      "in"
     ],
     [
-     "مَتۡرَبَةٖ",
+     "مَتۡرَبَةٍ",
      "matrabatin",
      "misery"
     ]
@@ -11184,7 +11184,7 @@
    "surah": 90,
    "surahName": "Al-Balad",
    "ayah": 20,
-   "ar": "عَلَيۡهِمۡ نَارٞ مُّؤۡصَدَةُۢ",
+   "ar": "عَلَيۡهِمۡ نَارٌ مُّؤۡصَدَةُۢ",
    "en": "The Fire will be sealed over them.",
    "words": [
     [
@@ -11193,7 +11193,7 @@
      "Over them"
     ],
     [
-     "نَارٞ",
+     "نَارٌ",
      "nārun",
      "(will be the) Fire"
     ],
@@ -11354,11 +11354,11 @@
    "surah": 91,
    "surahName": "Ash-Shams",
    "ayah": 7,
-   "ar": "وَنَفۡسٖ وَمَا سَوَّىٰهَا",
+   "ar": "وَنَفۡسٍ وَمَا سَوَّىٰهَا",
    "en": "And by the soul and ˹the One˺ Who fashioned it,",
    "words": [
     [
-     "وَنَفۡسٖ",
+     "وَنَفۡسٍ",
      "wanafsin",
      "And (the) soul"
     ],
@@ -11969,7 +11969,7 @@
    "surah": 92,
    "surahName": "Al-Layl",
    "ayah": 14,
-   "ar": "فَأَنذَرۡتُكُمۡ نَارٗا تَلَظَّىٰ",
+   "ar": "فَأَنذَرۡتُكُمۡ نَارًا تَلَظَّىٰ",
    "en": "And so I have warned you of a raging Fire,",
    "words": [
     [
@@ -11978,7 +11978,7 @@
      "So I warn you"
     ],
     [
-     "نَارٗا",
+     "نَارًا",
      "nāran",
      "(of) a Fire"
     ],
@@ -12099,7 +12099,7 @@
    "surah": 92,
    "surahName": "Al-Layl",
    "ayah": 19,
-   "ar": "وَمَا لِأَحَدٍ عِندَهُۥ مِن نِّعۡمَةٖ تُجۡزَىٰٓ",
+   "ar": "وَمَا لِأَحَدٍ عِندَهُۥ مِن نِّعۡمَةٍ تُجۡزَىٰٓ",
    "en": "not in return for someone’s favours,",
    "words": [
     [
@@ -12123,7 +12123,7 @@
      "any"
     ],
     [
-     "نِّعۡمَةٖ",
+     "نِّعۡمَةٍ",
      "niʿ'matin",
      "favor"
     ],
@@ -12269,7 +12269,7 @@
    "surah": 93,
    "surahName": "Ad-Duhaa",
    "ayah": 4,
-   "ar": "وَلَلۡأٓخِرَةُ خَيۡرٞ لَّكَ مِنَ ٱلۡأُولَىٰ",
+   "ar": "وَلَلۡأٓخِرَةُ خَيۡرٌ لَّكَ مِنَ ٱلۡأُولَىٰ",
    "en": "And the next life is certainly far better for you than this one.",
    "words": [
     [
@@ -12278,7 +12278,7 @@
      "And surely the Hereafter"
     ],
     [
-     "خَيۡرٞ",
+     "خَيۡرٌ",
      "khayrun",
      "(is) better"
     ],
@@ -12334,7 +12334,7 @@
    "surah": 93,
    "surahName": "Ad-Duhaa",
    "ayah": 6,
-   "ar": "أَلَمۡ يَجِدۡكَ يَتِيمٗا فَـَٔاوَىٰ",
+   "ar": "أَلَمۡ يَجِدۡكَ يَتِيمًا فَـَٔاوَىٰ",
    "en": "Did He not find you as an orphan then sheltered you?",
    "words": [
     [
@@ -12348,7 +12348,7 @@
      "He find you"
     ],
     [
-     "يَتِيمٗا",
+     "يَتِيمًا",
      "yatīman",
      "an orphan"
     ],
@@ -12364,7 +12364,7 @@
    "surah": 93,
    "surahName": "Ad-Duhaa",
    "ayah": 7,
-   "ar": "وَوَجَدَكَ ضَآلّٗا فَهَدَىٰ",
+   "ar": "وَوَجَدَكَ ضَآلًّا فَهَدَىٰ",
    "en": "Did He not find you unguided then guided you?",
    "words": [
     [
@@ -12378,7 +12378,7 @@
      "lost"
     ],
     [
-     "لّٗا فَهَدَىٰ",
+     "لًّا فَهَدَىٰ",
      "fahadā",
      "so He guided"
     ]
@@ -12389,7 +12389,7 @@
    "surah": 93,
    "surahName": "Ad-Duhaa",
    "ayah": 8,
-   "ar": "وَوَجَدَكَ عَآئِلٗا فَأَغۡنَىٰ",
+   "ar": "وَوَجَدَكَ عَآئِلًا فَأَغۡنَىٰ",
    "en": "And did He not find you needy then satisfied your needs?",
    "words": [
     [
@@ -12398,7 +12398,7 @@
      "And He found you"
     ],
     [
-     "عَآئِلٗا",
+     "عَآئِلًا",
      "ʿāilan",
      "in need"
     ],
@@ -12639,7 +12639,7 @@
    "surah": 94,
    "surahName": "Ash-Sharh",
    "ayah": 6,
-   "ar": "إِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرٗا",
+   "ar": "إِنَّ مَعَ ٱلۡعُسۡرِ يُسۡرًا",
    "en": "Surely with ˹that˺ hardship comes ˹more˺ ease.",
    "words": [
     [
@@ -12658,7 +12658,7 @@
      "the hardship"
     ],
     [
-     "يُسۡرٗا",
+     "يُسۡرًا",
      "yus'ran",
      "(is) ease"
     ]
@@ -12784,7 +12784,7 @@
    "surah": 95,
    "surahName": "At-Tin",
    "ayah": 4,
-   "ar": "لَقَدۡ خَلَقۡنَا ٱلۡإِنسَٰنَ فِيٓ أَحۡسَنِ تَقۡوِيمٖ",
+   "ar": "لَقَدۡ خَلَقۡنَا ٱلۡإِنسَٰنَ فِيٓ أَحۡسَنِ تَقۡوِيمٍ",
    "en": "Indeed, We created humans in the best form.",
    "words": [
     [
@@ -12813,7 +12813,7 @@
      "(the) best"
     ],
     [
-     "تَقۡوِيمٖ",
+     "تَقۡوِيمٍ",
      "taqwīmin",
      "mould"
     ]
@@ -12854,7 +12854,7 @@
    "surah": 95,
    "surahName": "At-Tin",
    "ayah": 6,
-   "ar": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ فَلَهُمۡ أَجۡرٌ غَيۡرُ مَمۡنُونٖ",
+   "ar": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ فَلَهُمۡ أَجۡرٌ غَيۡرُ مَمۡنُونٍ",
    "en": "except those who believe and do good—they will have a never-ending reward.",
    "words": [
     [
@@ -12898,7 +12898,7 @@
      "never"
     ],
     [
-     "مَمۡنُونٖ",
+     "مَمۡنُونٍ",
      "mamnūnin",
      "ending"
     ]
@@ -13419,11 +13419,11 @@
    "surah": 96,
    "surahName": "Al-'Alaq",
    "ayah": 16,
-   "ar": "نَاصِيَةٖ كَٰذِبَةٍ خَاطِئَةٖ",
+   "ar": "نَاصِيَةٍ كَٰذِبَةٍ خَاطِئَةٍ",
    "en": "a lying, sinful forelock.",
    "words": [
     [
-     "نَاصِيَةٖ",
+     "نَاصِيَةٍ",
      "nāṣiyatin",
      "A forelock"
     ],
@@ -13433,7 +13433,7 @@
      "lying"
     ],
     [
-     "خَاطِئَةٖ",
+     "خَاطِئَةٍ",
      "khāṭi-atin",
      "sinful"
     ]
@@ -13589,11 +13589,11 @@
    "surah": 98,
    "surahName": "Al-Bayyinah",
    "ayah": 2,
-   "ar": "رَسُولٞ مِّنَ ٱللَّهِ يَتۡلُواْ صُحُفٗا مُّطَهَّرَةٗ",
+   "ar": "رَسُولٌ مِّنَ ٱللَّهِ يَتۡلُواْ صُحُفًا مُّطَهَّرَةً",
    "en": "a messenger from Allah, reciting scrolls of ˹utmost˺ purity,",
    "words": [
     [
-     "رَسُولٞ",
+     "رَسُولٌ",
      "rasūlun",
      "A Messenger"
     ],
@@ -13613,12 +13613,12 @@
      "reciting"
     ],
     [
-     "صُحُفٗا",
+     "صُحُفًا",
      "ṣuḥufan",
      "pages"
     ],
     [
-     "مُّطَهَّرَةٗ",
+     "مُّطَهَّرَةً",
      "muṭahharatan",
      "purified"
     ]
@@ -13629,7 +13629,7 @@
    "surah": 98,
    "surahName": "Al-Bayyinah",
    "ayah": 3,
-   "ar": "فِيهَا كُتُبٞ قَيِّمَةٞ",
+   "ar": "فِيهَا كُتُبٌ قَيِّمَةٌ",
    "en": "containing upright commandments.",
    "words": [
     [
@@ -13638,12 +13638,12 @@
      "Wherein"
     ],
     [
-     "كُتُبٞ",
+     "كُتُبٌ",
      "kutubun",
      "(are) writings"
     ],
     [
-     "قَيِّمَةٞ",
+     "قَيِّمَةٌ",
      "qayyimatun",
      "correct"
     ]
@@ -13954,7 +13954,7 @@
    "surah": 98,
    "surahName": "Al-Bayyinah",
    "ayah": 8,
-   "ar": "جَزَآؤُهُمۡ عِندَ رَبِّهِمۡ جَنَّٰتُ عَدۡنٖ تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُ خَٰلِدِينَ فِيهَآ أَبَدٗاۖ رَّضِيَ ٱللَّهُ عَنۡهُمۡ وَرَضُواْ عَنۡهُۚ ذَٰلِكَ لِمَنۡ خَشِيَ رَبَّهُۥ",
+   "ar": "جَزَآؤُهُمۡ عِندَ رَبِّهِمۡ جَنَّٰتُ عَدۡنٍ تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُ خَٰلِدِينَ فِيهَآ أَبَدًاۖ رَّضِيَ ٱللَّهُ عَنۡهُمۡ وَرَضُواْ عَنۡهُۚ ذَٰلِكَ لِمَنۡ خَشِيَ رَبَّهُۥ",
    "en": "Their reward with their Lord will be Gardens of Eternity, under which rivers flow, to stay there for ever and ever. Allah is pleased with them and they are pleased with Him. This is ˹only˺ for those in awe of their Lord.",
    "words": [
     [
@@ -13978,7 +13978,7 @@
      "Gardens"
     ],
     [
-     "عَدۡنٖ",
+     "عَدۡنٍ",
      "ʿadnin",
      "(of) Eternity"
     ],
@@ -14013,7 +14013,7 @@
      "therein"
     ],
     [
-     "أَبَدٗاۖ",
+     "أَبَدًاۖ",
      "abadan",
      "forever"
     ],
@@ -14154,11 +14154,11 @@
    "surah": 99,
    "surahName": "Az-Zalzalah",
    "ayah": 4,
-   "ar": "يَوۡمَئِذٖ تُحَدِّثُ أَخۡبَارَهَا",
+   "ar": "يَوۡمَئِذٍ تُحَدِّثُ أَخۡبَارَهَا",
    "en": "on that Day the earth will recount everything,",
    "words": [
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "That Day"
     ],
@@ -14209,11 +14209,11 @@
    "surah": 99,
    "surahName": "Az-Zalzalah",
    "ayah": 6,
-   "ar": "يَوۡمَئِذٖ يَصۡدُرُ ٱلنَّاسُ أَشۡتَاتٗا لِّيُرَوۡاْ أَعۡمَٰلَهُمۡ",
+   "ar": "يَوۡمَئِذٍ يَصۡدُرُ ٱلنَّاسُ أَشۡتَاتًا لِّيُرَوۡاْ أَعۡمَٰلَهُمۡ",
    "en": "On that Day people will proceed in separate groups to be shown ˹the consequences of˺ their deeds.",
    "words": [
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "That Day"
     ],
@@ -14228,7 +14228,7 @@
      "the mankind"
     ],
     [
-     "أَشۡتَاتٗا",
+     "أَشۡتَاتًا",
      "ashtātan",
      "(in) scattered groups"
     ],
@@ -14249,7 +14249,7 @@
    "surah": 99,
    "surahName": "Az-Zalzalah",
    "ayah": 7,
-   "ar": "فَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٍ خَيۡرٗا يَرَهُۥ",
+   "ar": "فَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٍ خَيۡرًا يَرَهُۥ",
    "en": "So whoever does an atom’s weight of good will see it.",
    "words": [
     [
@@ -14273,7 +14273,7 @@
      "(of) an atom"
     ],
     [
-     "خَيۡرٗا",
+     "خَيۡرًا",
      "khayran",
      "good"
     ],
@@ -14289,7 +14289,7 @@
    "surah": 99,
    "surahName": "Az-Zalzalah",
    "ayah": 8,
-   "ar": "وَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٖ شَرّٗا يَرَهُۥ",
+   "ar": "وَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٍ شَرًّا يَرَهُۥ",
    "en": "And whoever does an atom’s weight of evil will see it.",
    "words": [
     [
@@ -14308,12 +14308,12 @@
      "(equal to the) weight"
     ],
     [
-     "ذَرَّةٖ",
+     "ذَرَّةٍ",
      "dharratin",
      "(of) an atom"
     ],
     [
-     "شَرّٗا",
+     "شَرًّا",
      "sharran",
      "evil"
     ],
@@ -14329,7 +14329,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 1,
-   "ar": "وَٱلۡعَٰدِيَٰتِ ضَبۡحٗا",
+   "ar": "وَٱلۡعَٰدِيَٰتِ ضَبۡحًا",
    "en": "’ By the galloping, panting horses,",
    "words": [
     [
@@ -14338,7 +14338,7 @@
      "By the racers"
     ],
     [
-     "ضَبۡحٗا",
+     "ضَبۡحًا",
      "ḍabḥan",
      "panting"
     ]
@@ -14349,7 +14349,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 2,
-   "ar": "فَٱلۡمُورِيَٰتِ قَدۡحٗا",
+   "ar": "فَٱلۡمُورِيَٰتِ قَدۡحًا",
    "en": "striking sparks of fire ˹with their hoofs˺,",
    "words": [
     [
@@ -14358,7 +14358,7 @@
      "And the producers of sparks"
     ],
     [
-     "قَدۡحٗا",
+     "قَدۡحًا",
      "qadḥan",
      "striking"
     ]
@@ -14369,7 +14369,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 3,
-   "ar": "فَٱلۡمُغِيرَٰتِ صُبۡحٗا",
+   "ar": "فَٱلۡمُغِيرَٰتِ صُبۡحًا",
    "en": "launching raids at dawn,",
    "words": [
     [
@@ -14378,7 +14378,7 @@
      "And the chargers"
     ],
     [
-     "صُبۡحٗا",
+     "صُبۡحًا",
      "ṣub'ḥan",
      "(at) dawn"
     ]
@@ -14389,7 +14389,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 4,
-   "ar": "فَأَثَرۡنَ بِهِۦ نَقۡعٗا",
+   "ar": "فَأَثَرۡنَ بِهِۦ نَقۡعًا",
    "en": "stirring up ˹clouds of˺ dust,",
    "words": [
     [
@@ -14403,7 +14403,7 @@
      "thereby"
     ],
     [
-     "نَقۡعٗا",
+     "نَقۡعًا",
      "naqʿan",
      "dust"
     ]
@@ -14439,7 +14439,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 6,
-   "ar": "إِنَّ ٱلۡإِنسَٰنَ لِرَبِّهِۦ لَكَنُودٞ",
+   "ar": "إِنَّ ٱلۡإِنسَٰنَ لِرَبِّهِۦ لَكَنُودٌ",
    "en": "Surely humankind is ungrateful to their Lord—",
    "words": [
     [
@@ -14458,7 +14458,7 @@
      "to his Lord"
     ],
     [
-     "لَكَنُودٞ",
+     "لَكَنُودٌ",
      "lakanūdun",
      "(is) surely ungrateful"
     ]
@@ -14469,7 +14469,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 7,
-   "ar": "وَإِنَّهُۥ عَلَىٰ ذَٰلِكَ لَشَهِيدٞ",
+   "ar": "وَإِنَّهُۥ عَلَىٰ ذَٰلِكَ لَشَهِيدٌ",
    "en": "and they certainly attest to this—",
    "words": [
     [
@@ -14488,7 +14488,7 @@
      "that"
     ],
     [
-     "لَشَهِيدٞ",
+     "لَشَهِيدٌ",
      "lashahīdun",
      "surely (is) a witness"
     ]
@@ -14604,7 +14604,7 @@
    "surah": 100,
    "surahName": "Al-'Adiyat",
    "ayah": 11,
-   "ar": "إِنَّ رَبَّهُم بِهِمۡ يَوۡمَئِذٖ لَّخَبِيرُۢ",
+   "ar": "إِنَّ رَبَّهُم بِهِمۡ يَوۡمَئِذٍ لَّخَبِيرُۢ",
    "en": "surely their Lord is All-Aware of them on that Day.",
    "words": [
     [
@@ -14623,7 +14623,7 @@
      "about them"
     ],
     [
-     "يَوۡمَئِذٖ",
+     "يَوۡمَئِذٍ",
      "yawma-idhin",
      "that Day"
     ],
@@ -14799,7 +14799,7 @@
    "surah": 101,
    "surahName": "Al-Qari'ah",
    "ayah": 7,
-   "ar": "فَهُوَ فِي عِيشَةٖ رَّاضِيَةٖ",
+   "ar": "فَهُوَ فِي عِيشَةٍ رَّاضِيَةٍ",
    "en": "they will be in a life of bliss.",
    "words": [
     [
@@ -14813,12 +14813,12 @@
      "(will be) in"
     ],
     [
-     "عِيشَةٖ",
+     "عِيشَةٍ",
      "ʿīshatin",
      "a life"
     ],
     [
-     "رَّاضِيَةٖ",
+     "رَّاضِيَةٍ",
      "rāḍiyatin",
      "pleasant"
     ]
@@ -14859,7 +14859,7 @@
    "surah": 101,
    "surahName": "Al-Qari'ah",
    "ayah": 9,
-   "ar": "فَأُمُّهُۥ هَاوِيَةٞ",
+   "ar": "فَأُمُّهُۥ هَاوِيَةٌ",
    "en": "their home will be the abyss.",
    "words": [
     [
@@ -14868,7 +14868,7 @@
      "His abode"
     ],
     [
-     "هَاوِيَةٞ",
+     "هَاوِيَةٌ",
      "hāwiyatun",
      "(will be the) Pit"
     ]
@@ -15149,11 +15149,11 @@
    "surah": 104,
    "surahName": "Al-Humazah",
    "ayah": 1,
-   "ar": "وَيۡلٞ لِّكُلِّ هُمَزَةٖ لُّمَزَةٍ",
+   "ar": "وَيۡلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ",
    "en": "Woe to every backbiter, slanderer,",
    "words": [
     [
-     "وَيۡلٞ",
+     "وَيۡلٌ",
      "waylun",
      "Woe"
     ],
@@ -15163,7 +15163,7 @@
      "to every"
     ],
     [
-     "هُمَزَةٖ",
+     "هُمَزَةٍ",
      "humazatin",
      "slanderer"
     ],
@@ -15179,7 +15179,7 @@
    "surah": 104,
    "surahName": "Al-Humazah",
    "ayah": 2,
-   "ar": "ٱلَّذِي جَمَعَ مَالٗا وَعَدَّدَهُۥ",
+   "ar": "ٱلَّذِي جَمَعَ مَالًا وَعَدَّدَهُۥ",
    "en": "who amasses wealth ˹greedily˺ and counts it ˹repeatedly˺,",
    "words": [
     [
@@ -15193,7 +15193,7 @@
      "collects"
     ],
     [
-     "مَالٗا",
+     "مَالًا",
      "mālan",
      "wealth"
     ],
@@ -15354,7 +15354,7 @@
    "surah": 104,
    "surahName": "Al-Humazah",
    "ayah": 8,
-   "ar": "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٞ",
+   "ar": "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٌ",
    "en": "It will be sealed over them,",
    "words": [
     [
@@ -15368,7 +15368,7 @@
      "(will be) upon them"
     ],
     [
-     "مُّؤۡصَدَةٞ",
+     "مُّؤۡصَدَةٌ",
      "mu'ṣadatun",
      "closed over"
     ]
@@ -15379,7 +15379,7 @@
    "surah": 104,
    "surahName": "Al-Humazah",
    "ayah": 9,
-   "ar": "فِي عَمَدٖ مُّمَدَّدَةِۭ",
+   "ar": "فِي عَمَدٍ مُّمَدَّدَةِۭ",
    "en": "˹tightly secured˺ with long braces. ",
    "words": [
     [
@@ -15388,7 +15388,7 @@
      "In"
     ],
     [
-     "عَمَدٖ",
+     "عَمَدٍ",
      "ʿamadin",
      "columns"
     ],
@@ -15499,11 +15499,11 @@
    "surah": 107,
    "surahName": "Al-Ma'un",
    "ayah": 4,
-   "ar": "فَوَيۡلٞ لِّلۡمُصَلِّينَ",
+   "ar": "فَوَيۡلٌ لِّلۡمُصَلِّينَ",
    "en": "So woe to those ˹hypocrites˺ who pray",
    "words": [
     [
-     "فَوَيۡلٞ",
+     "فَوَيۡلٌ",
      "fawaylun",
      "So woe"
     ],

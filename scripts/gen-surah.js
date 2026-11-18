@@ -31,6 +31,8 @@ const RANGE_META = {
   "2:255": { id: "kursi", name: "آيَة الكُرْسِيّ", nameEn: "Ayat al-Kursi — The Throne Verse", why: "The greatest verse in the Quran — recited after every salah and before sleep. One long verse, and you already know half its words: الله، لا، إلا، هو، الحي، ما، في، السماوات، الأرض، من، عند، يعلم." },
 };
 
+const cleanTanwin = s => String(s || "").replace(/\u0657/g, "\u064B").replace(/\u065E/g, "\u064C").replace(/\u0656/g, "\u064D");
+
 function clampSentence(s, max = 220) {
   if (!s) return "";
   if (s.length <= max) return s;
@@ -57,7 +59,7 @@ function genSurah(n, range) {
     const words = Object.keys(wbw[ayah]).sort((a, b) => +a - +b).map(w => {
       const it = wbw[ayah][w];
       const mw = (mu.word_by_word || {})[w] || {};
-      const ar = mw.arabic || it.parts.map(p => p.ar).join("");
+      const ar = cleanTanwin(mw.arabic || it.parts.map(p => p.ar).join(""));
       const tr = it.parts.map(p => p.tr).join("-");
       const en = it.parts.map(p => p.en).join(" ").replace(/\s+/g, " ").trim();
       const entry = [ar, tr, en];
@@ -69,7 +71,7 @@ function genSurah(n, range) {
     });
     return {
       ref: `${n}:${ayah}`,
-      ar: mu.arabic || words.map(w => w[0]).join(" "),
+      ar: cleanTanwin(mu.arabic) || words.map(w => w[0]).join(" "),
       // his own AI translation, in full — he wrote these to teach, never truncate them
       en: (trans[ayah] || mu.translation || "").trim(),
       words,

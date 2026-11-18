@@ -40,6 +40,7 @@ const BASE = "https://rkarim25.github.io/Quran/data/surah_";
 const CACHE = process.env.QURAN_CACHE || path.join(require("os").tmpdir(), "quran-corpus");
 
 const stripTashkeel = s => String(s).replace(/[ً-ٰـۖ-ۭ]/g, "");
+const cleanTanwin = s => String(s || "").replace(/\u0657/g, "\u064B").replace(/\u065E/g, "\u064C").replace(/\u0656/g, "\u064D");
 const norm = s => stripTashkeel(s)
   .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي")
   .replace(/[^؀-ۿ\s]/g, "").replace(/\s+/g, " ").trim();
@@ -78,8 +79,8 @@ verses.surahs.forEach(s => s.verses.forEach(v => haveText.add(norm(v.ar))));
       out.push({
         ref: `${surah.id}:${a.ayah}`,
         surah: surah.id, surahName: surah.name_simple, ayah: a.ayah,
-        ar: a.arabic, en: a.translation,
-        words: wbw.map(w => [w.arabic, w.transliteration || "", w.translation || ""]),
+        ar: cleanTanwin(a.arabic), en: a.translation,
+        words: wbw.map(w => [cleanTanwin(w.arabic), w.transliteration || "", w.translation || ""]),
       });
     }
   }

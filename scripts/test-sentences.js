@@ -252,6 +252,10 @@ yes(S.every(s => Array.isArray(s.words) && s.words.length), "every sentence list
     `the nav is exactly the ${NAV.length} destinations he asked for (${links.join(", ")})`);
   yes(!/href="vocab\.html">📖 Vocabulary/.test(app), "the old Vocab Lab is not one of them");
   yes(/sentence-bank\.json/.test(app), "the sentence bank is loaded with the curriculum");
+  for (const jf of ["verses.json", "quran-sentences.json", "sentence-bank.json", "lexicon.json"]) {
+    const raw = fs.readFileSync(path.join(ROOT, "data", jf), "utf8");
+    yes(!/[\u0656\u0657\u065E]/.test(raw), `${jf} uses standard Unicode tanwin (ٌ ً ٍ), never legacy KFGQPC U+0656/0657/065E glyphs`);
+  }
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
