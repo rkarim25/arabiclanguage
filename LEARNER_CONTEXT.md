@@ -14,7 +14,7 @@
 - **Governance (Headmaster Model):**
   - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`⚡ Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free), dynamically linked with Weekly Chapters (`chapters.html`), Master Sentences (`sentences.html`), Vocabulary (`words.html`), Qur'ān (`quran.html`), visual Lesson Cards (`sets.html`), and the `🧑‍🏫 Teacher` Hub (`class.html`), all unified under live read-only **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)**.
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
-- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Tenses)** is active (`0/10` sentences rated in SRS). `4,344` total telemetry events (`5/4` active days this week); `1,268` SRS cards (**`380` 🟢 mastered** across 2+ days & `R ≥ 85%` incl. `64` retired, **`727` 🟡 building/refresh**, **`140` 🔴 needs work**, **`21` ⚪ unseen**); **`57/151` Core Qur'ān words held (`39.7%` of Mushaf occurrences)**; **`0` proven active spoken/typed sentences** out of `41` held on recognition (primary bottleneck). **4-Layer Qur'ān Decoding Engine + 5th Pillar (Mosque/Khutbah/Du'ā)** live across `Practice`, `Commute`, `sets.html`, `sentences.html`, and `quran.html?tab=mosque`. Active Tuesday 17 Nov voice sprint: **Prompt MM**.
+- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Tenses)** is active (`0/10` sentences rated in SRS). `4,417` total telemetry events (`5/4` active days this week, `6` solid wins on Wed 18 Nov); `1,271` SRS cards (**`404` 🟢 mastered** across 2+ days & `R ≥ 85%` incl. `68` retired, **`704` 🟡 building/refresh**, **`142` 🔴 needs work**, **`21` ⚪ unseen**); **`57/151` Core Qur'ān words held (`39.7%` of Mushaf occurrences)**; **`316` composable `i+1` ayahs unlocked**; **`0` proven active spoken/typed sentences** out of `41` held on recognition (primary bottleneck). **4-Layer Qur'ān Decoding Engine + 5th Pillar (Mosque/Khutbah/Du'ā)** live across `Practice`, `Commute`, `sets.html`, `sentences.html`, and `quran.html?tab=mosque`. Active Wednesday 18 Nov voice sprint: **Prompt NN**.
 
 ---
 
@@ -47,20 +47,21 @@ Stay within these domains unless teaching 1 requested word at a time:
 
 ---
 
-## 4. Current Priority Slips & High-Value Mnemonics
+## 4. Current Priority Slips, Nominal Refresh & Today's Wins
 
-- `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د; rated weak in Saturday Batch 1).
+- `المِصْبَاحُ صَغِيرٌ` — *The lamp is small* (nominal sentence, no verb `is`).
+- `أُمِّي مُعَلِّمَةٌ` — *My mother is a teacher* (nominal sentence, feminine `ـة` ending).
+- `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د).
 - `طَابِق` — *floor / storey* (vs `مِصْعَد` lift).
-- `الآنَ` — *now* (`الْآنَ` right now — rated weak in Saturday Batch 1).
-- `مَرَّة` — *time / occasion* (root م-ر-ر: `مَرَّةً أُخْرَى` once more — rated weak in Saturday Batch 2).
-- `الاثْنَيْن` — *Monday* (root ث-ن-ي two, 2nd day of Arab work week — rated weak in Saturday Batch 2).
-- `يَوْمَ الثُّلَاثَاءِ` — *on Tuesday* (root ث-ل-ث three, 3rd day of Arab work week).
-- `كَيْفَ كَانَ يَوْمُكِ؟` — *How was your day?* (to wife Saba; feminine suffix `ـكِ` vs masculine `ـكَ` — slipped in Saturday Batch 2).
+- `الآنَ` — *now* (`الْآنَ` right now).
+- `مَرَّة` — *time / occasion* (root م-ر-ر: `مَرَّةً أُخْرَى` once more).
+- `الاثْنَيْن` — *Monday* (root ث-ن-ي two, 2nd day of Arab work week).
+- `الأَرْبِعَاء` — *Wednesday* (today's workday — `يَوْمُ العَمَلِ` promoted ✓ today!).
+- `كَيْفَ كَانَ يَوْمُكِ؟` — *How was your day?* (to wife Saba; feminine suffix `ـكِ` vs masculine `ـكَ`).
 - `فِيهَا سُرُرٌ مَرْفُوعَةٌ` — *thrones raised high* (Surah Al-Ghāshiyah 88:13; `سُرُر` is the plural of `سَرِير` bed!).
 - `ٱلْمَغْضُوبِ` — *those who earned wrath / anger* (Al-Fātiḥah 1:7; passive participle of root غ-ض-ب anger vs active `أَنْعَمْتَ`).
-- `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`; promoted to ✓ in Monday evening Practice!).
-- `إِلَّا` — *except / but* (Core Qur'ān particle `qc:12`; promoted to ✓ in Monday evening Practice!).
-- `تَقَبَّلَ اللهُ` — *May Allah accept* (Bengali কবুল *kobul* cognate; reply `مِنَّا وَمِنْكُمْ` — promoted to ✓ in Saturday Batch 1!).
+- `عَبَدْتُ اللهَ` — *I worshipped Allah* (past `-tu` of `إِيَّاكَ نَعْبُدُ`; held ✓ today!).
+- `كُلّ` (*every/all*), `شَيْء` (*thing*), `آمَنُوا` (*they believed*), `تَقَبَّلَ اللهُ` (*May Allah accept* — reply `مِنَّا وَمِنْكُمْ`), `إِلَّا` (*except/but*) — **all promoted ✓ in recent Practice!**
 - `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order).
 - `حَفْلَة` — *party / celebration* (shares root ح-ف-ل with *mahfil* مَحْفِل).
 - `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`).

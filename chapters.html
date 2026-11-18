@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwltk6l9">
-  <link rel="stylesheet" href="css/style.css?v=mwltk6l9">
+  <link rel="stylesheet" href="css/fonts.css?v=mwmfoak7">
+  <link rel="stylesheet" href="css/style.css?v=mwmfoak7">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwltk6l9"></script>
-<script src="js/curriculum.js?v=mwltk6l9"></script>
-<script src="js/srs.js?v=mwltk6l9"></script>
-<script src="js/match.js?v=mwltk6l9"></script>
-<script src="js/errors.js?v=mwltk6l9"></script>
-<script src="js/frames.js?v=mwltk6l9"></script>
-<script src="js/app.js?v=mwltk6l9"></script>
-<script src="js/tracker.js?v=mwltk6l9"></script>
-<script src="js/plan.js?v=mwltk6l9"></script>
-<script src="js/account.js?v=mwltk6l9"></script>
+<script src="js/progress-model.js?v=mwmfoak7"></script>
+<script src="js/curriculum.js?v=mwmfoak7"></script>
+<script src="js/srs.js?v=mwmfoak7"></script>
+<script src="js/match.js?v=mwmfoak7"></script>
+<script src="js/errors.js?v=mwmfoak7"></script>
+<script src="js/frames.js?v=mwmfoak7"></script>
+<script src="js/app.js?v=mwmfoak7"></script>
+<script src="js/tracker.js?v=mwmfoak7"></script>
+<script src="js/plan.js?v=mwmfoak7"></script>
+<script src="js/account.js?v=mwmfoak7"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3781,27 +3781,28 @@ function buildChapterAiPrompt(chap) {
   p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
-  p += `   - Priority Drill Challenge (Tuesday 17 Nov Mid-Week Spoken Unlock — Prompt MM):\n`;
-  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + Past Negation & 15 Visual Lesson Cards:\n`;
-  p += `       - 1. Past Negation (lc:negation — unseen on site, priority teach!): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
+  p += `   - Priority Drill Challenge (Wednesday 18 Nov Mid-Week Spoken Unlock — Prompt NN):\n`;
+  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + Nominal Sentences + Past Negation & 15 Visual Lesson Cards:\n`;
+  p += `       - 1. Past Negation (lc:negation — still unseen on site, priority teach!): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
   p += `         a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present, standard MSA & Qur'an like لَمْ يَلِدْ).\n`;
   p += `         b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb, natural spoken MSA).\n`;
   p += `         c) Contrast: لَا أَذْهَبُ (present don't) vs لَنْ أَذْهَبَ (future won't) vs لَيْسَ عِنْدِي (nominal don't have).\n`;
-  p += `       - 2. Verb Tenses incl. She & They (lc:verb-tenses): Past puts person on back (ذَهَبْتُ / ذَهَبَتْ / ذَهَبُوا); Present puts person on front (أَذْهَبُ / تَذْهَبُ / يَذْهَبُونَ); Future clips سَـ (سَأَذْهَبُ). Note: only هُمْ takes plural tail ـُونَ / ـُوا; نَحْنُ is نَذْهَبُ!\n`;
-  p += `       - 3. Core Concept Cards: Price Triplet (ثَمَن value vs سِعْر shop tag vs أُجْرَة taxi fare) · Pronoun Attachments (-ka to man vs -ki to Saba: كَيْفَ كَانَ يَوْمُكِ؟) · Look-Alikes (أَعُودُ plain د return vs أَعُوذُ dotted ذ seek refuge; جَوْزَة walnut vs زَوْجَة wife) · Ṣadr vs Qalb (صُدُور chest courtyard vs قُلُوب locked heart) · Iḍāfah vs Adjective (مِفْتَاحُ الغُرْفَةِ vs الغُرْفَةُ الجَدِيدَةُ).\n`;
-  p += `       - 4. 4-Pillar Qur'ān Decoding & Pillar 5 Mosque Landmarks:\n`;
-  p += `         * Glue Chains (lc:quran-glue-chains): فِيهَا (in it, 88:13) · عَلَيْهِمْ (upon them, 1:7) · لَهُمْ (for them) · إِنَّهُمْ (indeed they) · إِلَّا (except/but — promoted ✓!).\n`;
+  p += `       - 2. Verb Tenses incl. She & They (lc:verb-tenses — due for 2nd-day green!): Past puts person on back (ذَهَبْتُ / ذَهَبَتْ / ذَهَبُوا); Present puts person on front (أَذْهَبُ / تَذْهَبُ / يَذْهَبُونَ); Future clips سَـ (سَأَذْهَبُ). Note: only هُمْ takes plural tail ـُونَ / ـُوا; نَحْنُ is نَذْهَبُ!\n`;
+  p += `       - 3. Nominal Sentences (no verb "is/are" — refresh from this morning's check!): المِصْبَاحُ صَغِيرٌ (The lamp is small) · أُمِّي مُعَلِّمَةٌ (My mother is a teacher) · الحَمْدُ لِلَّهِ (Praise is to Allah).\n`;
+  p += `       - 4. Core Concept Cards: Price Triplet (ثَمَن value vs سِعْر shop tag vs أُجْرَة taxi fare) · Pronoun Attachments (-ka to man vs -ki to Saba: كَيْفَ كَانَ يَوْمُكِ؟) · Look-Alikes (أَعُودُ plain د return vs أَعُوذُ dotted ذ seek refuge; جَوْزَة walnut vs زَوْجَة wife) · Ṣadr vs Qalb (صُدُور chest courtyard vs قُلُوب locked heart) · Iḍāfah vs Adjective (مِفْتَاحُ الغُرْفَةِ vs الغُرْفَةُ الجَدِيدَةُ).\n`;
+  p += `       - 5. 4-Pillar Qur'ān Decoding & Pillar 5 Mosque Landmarks:\n`;
+  p += `         * Glue Chains (lc:quran-glue-chains): فِيهَا (in it, 88:13) · عَلَيْهِمْ (upon them, 1:7) · لَهُمْ (for them) · إِنَّهُمْ (indeed they) · إِلَّا (except/but) · كُلّ (every/all — promoted ✓ today!) · شَيْء (thing — promoted ✓ today!).\n`;
   p += `         * Active Doer vs Passive Done-To (lc:quran-active-passive): حَاسِد (envier 113:5) vs مَغْضُوب (angered-upon 1:7) / مَرْفُوعَة (raised high 88:13: فِيهَا سُرُرٌ مَرْفُوعَةٌ).\n`;
   p += `         * Khutbah & Du'ā Cues (lc:khutbah-roadmap, lc:duas-and-imam): أَمَّا بَعْدُ (as for what follows) · عِبَادَ اللَّهِ (servants of Allah) · رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً.\n`;
-  p += `     * Recent Telemetry Slips Queue (test cleanly out loud twice):\n`;
+  p += `     * Recent Telemetry Slips & Today's Wins to Speak Aloud:\n`;
   p += `       1. مِصْعَد (miṣʿad — lift/elevator, root ص-ع-د) vs طَابِق (floor/storey).\n`;
   p += `       2. الآنَ (al-āna — now/right now: أَيْنَ أَنْتَ الآنَ؟) & مَرَّة (marrah — time/occasion: مَرَّةً أُخْرَى).\n`;
-  p += `       3. الاثْنَيْن (al-ithnayn — Monday) & يَوْمُ الثُّلَاثَاءِ (Tuesday — today's work routine!) vs يَوْمُ العُطْلَةِ (day off).\n`;
+  p += `       3. الأَرْبِعَاء (Wednesday — today!) · يَوْمُ العَمَلِ (work day — promoted ✓ today!) · الاثْنَيْن (Monday) vs يَوْمُ العُطْلَةِ (day off).\n`;
   p += `       4. كَيْفَ كَانَ يَوْمُكِ؟ (How was your day? [to wife Saba, feminine -ki, NEVER -ka!]).\n`;
   p += `       5. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb) & حَفْلَة (party/gathering — mahfil root).\n`;
   p += `       6. عُقَد (knots, 113:4) + حَاسِد (envier, 113:5) + غَاسِق (intense nightfall, 113:3).\n`;
   p += `       7. عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ (morning meeting — root ج-م-ع) & تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (speak slowly).\n`;
-  p += `       8. Proven Wins to Recycle: عَبَدْتُ اللهَ (I worshipped Allah — promoted ✓ Monday!), تَقَبَّلَ اللهُ (May Allah accept — reply مِنَّا وَمِنْكُمْ!), الأَحَدُ لِدَرْسِ العَرَبِيَّةِ.\n\n`;
+  p += `       8. Today's Wins to Recycle Aloud: قَرَأْتُ القُرْآنَ (I read the Qur'ān) · عَبَدْتُ اللهَ (I worshipped Allah) · تَقَبَّلَ اللهُ (May Allah accept — reply مِنَّا وَمِنْكُمْ!) · آمَنُوا (they believed) · شَيْء (thing) · كُلّ (every/all).\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;

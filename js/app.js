@@ -2446,7 +2446,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwltk6l9";
+const DATA_V = "mwmfoak7";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -4574,7 +4574,7 @@ function generateLearnerDossierMarkdown(currentContext) {
   md += `- **5 Negation Pairings (lc:negation):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
   md += `- **Verb Tenses incl. She & They (lc:verb-tenses):** Past = **ذَهَبَتْ / ذَهَبُوا** (-at / -ū), Present = **تَذْهَبُ / يَذْهَبُونَ**, Future = **سَتَذْهَبُ / سَيَذْهَبُونَ** (only هُمْ takes the plural tail -ūna/-ū; نَحْنُ is plain **نَذْهَبُ**).\n`;
   md += `- **4-Pillar Qur'an Ear Moulds & Pillar 5 Mosque Maps:** Glue & Pronoun Chains (**فِيهَا / عَلَيْهِمْ / لَهُمْ / إِنَّهُمْ** — *lc:quran-glue-chains*), Active Doer vs Passive Done-To (**حَاسِد** vs **مَغْضُوب / مَرْفُوعَة** — *lc:quran-active-passive*), Plural Story (*lc:quran-plural-story*), Verb Form Shifts II/IV/X (**عَلَّمَ / أَنْزَلَ / اسْتَغْفَرَ** — *lc:quran-verb-shifts*), plus Friday Khutbah & Imam cues (**أَمَّا بَعْدُ / عِبَادَ اللَّهِ / رَبَّنَا آتِنَا** — *lc:khutbah-roadmap*, *lc:duas-and-imam*).\n`;
-  md += `- **Priority Slips to Weave In:** مِصْعَد (lift/elevator — صَعِدَ ascend), طَابِق (floor/storey), الآنَ (now), مَرَّة (time/occasion: مَرَّةً أُخْرَى), الاثْنَيْن (Monday) / يَوْمَ الثُّلَاثَاءِ (Tuesday), فِيهَا سُرُرٌ مَرْفُوعَةٌ (88:13 thrones raised high), ٱلْمَغْضُوبِ (1:7 angered-upon), أُرَتِّبُ (I tidy — tartīb), حَفْلَة (party — mahfil), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟, تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ. (Recent wins: إِلَّا except/but, عَبَدْتُ اللهَ I worshipped Allah!)\n`;
+  md += `- **Priority Slips & Nominal Refresh to Weave In:** المِصْبَاحُ صَغِيرٌ (The lamp is small — nominal), أُمِّي مُعَلِّمَةٌ (My mother is a teacher — nominal), مِصْعَد (lift/elevator — صَعِدَ ascend), طَابِق (floor/storey), الآنَ (now), مَرَّة (time/occasion: مَرَّةً أُخْرَى), الاثْنَيْن (Monday) / الأَرْبِعَاء (Wednesday), فِيهَا سُرُرٌ مَرْفُوعَةٌ (88:13 thrones raised high), ٱلْمَغْضُوبِ (1:7 angered-upon), أُرَتِّبُ (I tidy — tartīb), حَفْلَة (party — mahfil), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟, تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ. (Recent wins: كُلّ every/all, شَيْء thing, آمَنُوا they believed, تَقَبَّلَ اللهُ, يَوْمُ العَمَلِ work day, عَبَدْتُ اللهَ I worshipped Allah!)\n`;
   md += `- **Look-Alike & Nuance Anchors:** أَعُودُ (plain د = return home) vs أَعُوذُ (dotted ذ = seek refuge); جَوْزَة (ج leads walnut) vs زَوْجَة (ز leads wife); price triplet ثَمَن (value) vs سِعْر (shop tag) vs أُجْرَة (taxi fare); Surah An-Nās صُدُور (outer chest courtyard) vs قُلُوب (locked heart).\n\n`;
   if (currentContext && currentContext.sentences) {
     md += `\n## 6. Current Target Sentences to Practice\n`;

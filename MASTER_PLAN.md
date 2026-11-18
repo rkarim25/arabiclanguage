@@ -7,17 +7,17 @@
 
 ---
 
-## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-17)
+## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-18)
 
-Computed directly from `data:rkarim88@gmail.com` (`4,344` logged events · **`5/4` active days** in the last 7 days · `1,268` SRS cards: **`380` 🟢 green** incl. `64` retired, **`727` 🟡 amber**, **`140` 🔴 red**, **`21` ⚪ grey**):
+Computed directly from `data:rkarim88@gmail.com` (`4,417` logged events · **`5/4` active days** in the last 7 days · `1,271` SRS cards: **`404` 🟢 green** incl. `68` retired, **`704` 🟡 amber**, **`142` 🔴 red**, **`21` ⚪ grey** · `846` Box ≥ 2):
 
 | Stream | Verified Now | Target | Live Diagnosis |
 |---|---|---|---|
 | **Weekly Chapters** | **Ch 1–3 passed (100%)** · **Ch 4 active** (`0/10` rated) | **Ch 1–10** (`≥80%` test) | Survival greetings, food/requests, and hotel/taxi mastered; **Chapter 4 (Daily Routine, Time & Tenses)** queued in `Practice`. |
-| **Vocabulary** | **46 / 554** everyday+core held (`62` seen, `13` slips) · **821** Box ≥ 2 across all decks | **600+** core words held | Strong passive base; `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
-| **Sentences & Speaking** | **41** held (**39 passive**, **`0` proven active** in current ledger) · `42` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`0` `speak-self`/`convo` events in recent weeks). |
-| **Lesson Cards & Grammar** | **4 / 15** Lesson Cards seen (`0` green yet; `lc:negation` still `⚪` unseen) · **1 / 22** grammar frames solid (`tenses` shaky) | **15 cards** · **22 frames** | Priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)**, **Qur'ān Decoding Moulds**, & **Khutbah/Du'ā Roadmaps (`lc:khutbah-roadmap`, `lc:duas-and-imam`)**. |
-| **Qur'ān, Khutbah & Du'ās by Ear** | **57 / 151** Core Qur'ān words held (**39.7%** Mushaf coverage) · **3 / 61** Salah ayahs · **308** `i+1` ayahs unlocked · **0 / 54** Mosque cues seen | **Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains (`lc:quran-glue-chains` seen!) → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs → Friday Khutbah, Common Du'ās & Imam cues (`Practice` + `🚗 Commute`). |
+| **Vocabulary** | **140 / 554** everyday+core held (`208` seen, `8` learning, `60` slips) · **846** Box ≥ 2 across all decks | **600+** core words held | Strong passive base (+24 🟢 green since yesterday, promoted `كُلّ`, `شَيْء`, `آمَنُوا`, `يَوْمُ العَمَلِ`, `هَٰذَا` retired); `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
+| **Sentences & Speaking** | **41** held (**39 passive**, **`0` proven active** in current ledger) · `41` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`0` spoken/typed `sent-drill` completions). Spoken Prompt **NN** targets Ch 4 routine + nominal sentences + `لَمْ / مَا` aloud. |
+| **Lesson Cards & Grammar** | **4 / 15** Lesson Cards seen (`0` green yet; `lc:negation` still `⚪` unseen; `lc:verb-tenses` due for 2nd-day green) · **1 / 22** grammar frames solid (`past vs present` & `nominal` shaky after `1/3` pre-fix attempt) | **15 cards** · **22 frames** | Inline transliteration & forgiving `answerMatchAr()` now live on `grammar.html`; priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)**, **Nominal (`المِصْبَاحُ صَغِيرٌ` / `أُمِّي مُعَلِّمَةٌ`)**, & **Mosque Roadmaps**. |
+| **Qur'ān, Khutbah & Du'ās by Ear** | **57 / 151** Core Qur'ān words held (**39.7%** Mushaf coverage) · **3 / 61** Salah ayahs · **316** `i+1` ayahs unlocked · **0 / 60** Mosque cues seen | **Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains (`lc:quran-glue-chains` seen) → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (316 unlocked!) → Friday Khutbah, Common Du'ās & Imam cues (`Practice` + `🚗 Commute`). |
 
 ---
 
