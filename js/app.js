@@ -2446,7 +2446,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwlsm505";
+const DATA_V = "mwlsuoxu";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2460,7 +2460,7 @@ const LATIN_TO_AR = {
   dh: "ذ", r: "ر", z: "ز", Z: "ظ", s: "س", S: "ص",
   sh: "ش", gh: "غ", f: "ف", q: "ق", k: "ك", l: "ل",
   m: "م", n: "ن", w: "و", y: "ي", Y: "ى", "3": "ع",
-  "'": "ء", "t:": "ة",
+  "'": "ء", "t:": "ة", "h:": "ة",
   "A'": "أ", "a'": "إ", "w'": "ؤ", "y'": "ئ",
   "(la)": "لا", laa: "لا", "la'": "لإ", "lA'": "لأ",
   a: "َ", i: "ِ", u: "ُ", "^": "ْ", "*": "ّ",
@@ -2735,7 +2735,7 @@ function attachPhoneticInput(container, answerInput) {
     <input class="phonetic-box" placeholder="type in English letters → عربي (e.g. Alsuwq qaryb)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <div class="ex-row" style="margin-top:6px">
       <button type="button" class="small kb-toggle">⌨ keys</button>
-      <span style="font-size:12px;color:var(--muted)">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · A=ا</span>
+      <span style="font-size:12px;color:var(--muted)">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · t:/h:=ة · A=ا · aa=ا</span>
     </div>
     <div class="kb-rows" style="display:none"></div>
   `;
@@ -2798,7 +2798,7 @@ function mountTranslitDock(getTarget, forceOpen) {
   wrap.className = "card";
   wrap.style.padding = "10px";
   wrap.innerHTML = `
-    <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Type in <b>English letters</b> — the Arabic appears as you type. <span style="white-space:nowrap">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · A=ا · aa=آ</span></div>
+    <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Type in <b>English letters</b> — the Arabic appears as you type. <span style="white-space:nowrap">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · t:/h:=ة · A=ا · aa=ا</span></div>
     <div class="ex-row">
       <input class="tl-in" placeholder="e.g. Alsuwq qaryb → السوق قريب" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="flex:1;min-width:170px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:16px">
       <button type="button" class="small tl-clear">clear</button>

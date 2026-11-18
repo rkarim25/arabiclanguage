@@ -217,6 +217,11 @@ yes(!sentenceMatchAr("qultu alHaqqa", "قَالُوا الحَقَّ", "قَال
     '"marratan thaaniyatan" (-tan on ة) is accepted for مَرَّةً ثَانِيَةً');
   yes(!answerMatchAr("walid", "وَالِدَةٌ").ok,
     'a bare consonant ending ("walid") is still rejected for feminine وَالِدَةٌ');
+  const taT = latinToArabic("mu3allimat:"), taH = latinToArabic("mu3allimah:");
+  yes(taT.endsWith("ة") && normalizeAr(taT) === normalizeAr("معلمة"),
+    `"mu3allimat:" types taa marbuta directly -> ${taT}`);
+  yes(taH.endsWith("ة") && normalizeAr(taH) === normalizeAr("معلمة"),
+    `"mu3allimah:" also types taa marbuta directly -> ${taH}`);
 }
 
 /* ---------- SPOKEN answers are graded differently from typed ones ----------
