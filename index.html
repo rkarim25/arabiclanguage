@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwlt692q">
-  <link rel="stylesheet" href="css/style.css?v=mwlt692q">
+  <link rel="stylesheet" href="css/fonts.css?v=mwltk6l9">
+  <link rel="stylesheet" href="css/style.css?v=mwltk6l9">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwlt692q"></script>
-<script src="js/curriculum.js?v=mwlt692q"></script>
-<script src="js/srs.js?v=mwlt692q"></script>
-<script src="js/frames.js?v=mwlt692q"></script>
-<script src="js/freetry.js?v=mwlt692q"></script>
-<script src="js/practice.js?v=mwlt692q"></script>
-<script src="js/lesson-cards.js?v=mwlt692q"></script>
-<script src="js/match.js?v=mwlt692q"></script>
-<script src="js/errors.js?v=mwlt692q"></script>
-<script src="js/tryit.js?v=mwlt692q"></script>
-<script src="js/app.js?v=mwlt692q"></script>
-<script src="js/tracker.js?v=mwlt692q"></script>
-<script src="js/plan.js?v=mwlt692q"></script>
-<script src="js/account.js?v=mwlt692q"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwltk6l9"></script>
+<script src="js/curriculum.js?v=mwltk6l9"></script>
+<script src="js/srs.js?v=mwltk6l9"></script>
+<script src="js/frames.js?v=mwltk6l9"></script>
+<script src="js/freetry.js?v=mwltk6l9"></script>
+<script src="js/practice.js?v=mwltk6l9"></script>
+<script src="js/lesson-cards.js?v=mwltk6l9"></script>
+<script src="js/match.js?v=mwltk6l9"></script>
+<script src="js/errors.js?v=mwltk6l9"></script>
+<script src="js/tryit.js?v=mwltk6l9"></script>
+<script src="js/app.js?v=mwltk6l9"></script>
+<script src="js/tracker.js?v=mwltk6l9"></script>
+<script src="js/plan.js?v=mwltk6l9"></script>
+<script src="js/account.js?v=mwltk6l9"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -362,6 +362,7 @@ let BATCH_RATED = new Set();
 let BATCH_DONE_LOGGED = false;
 let IS_ADAPTIVE_PRACTICE = true;
 let SESSION_COOLDOWN = new Set();
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 let currentFilter = "balanced";
 let bankFilter = "all";
 let promptDirection = "en-first";
@@ -605,12 +606,17 @@ function allPracticeItems() {
     /* the plan's core block: ?myday=1 → Practice; &rehearse=1 → only what he proved this week */
     const q = new URLSearchParams(location.search);
     if (q.get("view") === "list" || q.get("view") === "master") { location.replace("sentences.html"); return; }
-    if (!loadFocusedPracticeFromUrl(location.search)) {
-      const reqBatch = parseInt(q.get("batch") || "0", 10);
-      await startMyDay(!!q.get("rehearse"), reqBatch >= 1 ? reqBatch : undefined);
+    const reqBatch = parseInt(q.get("batch") || "0", 10);
+    if (q.get("rehearse")) {
+      await startMyDay(true, reqBatch >= 1 ? reqBatch : undefined);
+    } else if (!restoreNonAdaptiveBatchSession()) {
+      if (!loadFocusedPracticeFromUrl(location.search)) {
+        await startMyDay(false, reqBatch >= 1 ? reqBatch : undefined);
+      }
     }
     renderMotivationStrip();
     renderHomeChapStrip();
+    restorePracticeScrollSpot();
   } catch (e) {
     console.error("Failed to load sentence bank", e);
   }
@@ -680,7 +686,180 @@ function clearPracticeBatchSession() {
   try {
     sessionStorage.removeItem("ats-live-practice-batch");
   } catch (e) {}
+  clearPracticeScrollSpot();
 }
+
+function clearNonAdaptiveBatchSession() {
+  try {
+    sessionStorage.removeItem("ats-live-focused-batch");
+  } catch (e) {}
+}
+
+function saveNonAdaptiveBatchSession() {
+  try {
+    if (IS_ADAPTIVE_PRACTICE || !ACTIVE_SENTENCES || !ACTIVE_SENTENCES.length) return;
+    if (window.TryIt && TryIt.isFree && TryIt.isFree()) return;
+    const titleEl = document.getElementById("sessionTitle");
+    const lgEl = document.getElementById("srsLegend");
+    const data = {
+      url: location.pathname + location.search,
+      filter: currentFilter,
+      promptDirection,
+      focusedSpec: FOCUSED_PRACTICE_SPEC || null,
+      title: titleEl ? titleEl.textContent : "",
+      legendHtml: lgEl ? lgEl.innerHTML : "",
+      items: ACTIVE_SENTENCES.map(s => ({
+        key: s.key,
+        _autoReveal: !!s._autoReveal,
+        lcMode: s.lcMode || null,
+        practiceMode: s.practiceMode || null
+      })),
+      revealed: Array.from(REVEALED),
+      rated: Array.from(BATCH_RATED),
+      doneLogged: !!BATCH_DONE_LOGGED,
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem("ats-live-focused-batch", JSON.stringify(data));
+  } catch (e) {}
+}
+
+function restoreNonAdaptiveBatchSession() {
+  try {
+    const raw = sessionStorage.getItem("ats-live-focused-batch");
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.items) || !data.items.length) return false;
+    if (Date.now() - (data.savedAt || 0) > 4 * 3600 * 1000) { clearNonAdaptiveBatchSession(); return false; }
+    if (data.url !== location.pathname + location.search) return false;
+    const restored = [];
+    for (const entry of data.items) {
+      const base = KEY_ITEM_MAP.get(entry.key);
+      if (!base) return false;
+      const clone = Object.assign({}, base);
+      if (entry._autoReveal) clone._autoReveal = true;
+      if (entry.lcMode) clone.lcMode = entry.lcMode;
+      if (entry.practiceMode) clone.practiceMode = entry.practiceMode;
+      restored.push(clone);
+    }
+    stopAudio();
+    if (window.TryIt) TryIt.endFree();
+    IS_ADAPTIVE_PRACTICE = false;
+    FOCUSED_PRACTICE_SPEC = data.focusedSpec || null;
+    if (data.filter) {
+      currentFilter = data.filter;
+      document.querySelectorAll("#filterChips .chip").forEach(c => c.classList.toggle("active", c.dataset.filter === currentFilter));
+    }
+    if (data.promptDirection && promptDirection !== data.promptDirection) {
+      promptDirection = data.promptDirection;
+      const enBtn = document.getElementById("dirEnFirst");
+      const arBtn = document.getElementById("dirArFirst");
+      if (enBtn) enBtn.classList.toggle("active", promptDirection === "en-first");
+      if (arBtn) arBtn.classList.toggle("active", promptDirection === "ar-first");
+    }
+    REVEALED = new Set(data.revealed || []);
+    BATCH_RATED = new Set(data.rated || []);
+    BATCH_DONE_LOGGED = !!data.doneLogged;
+    ACTIVE_SENTENCES = restored;
+    LAST_BATCH_KEYS = restored.map(x => x.key);
+    const titleEl = document.getElementById("sessionTitle");
+    if (titleEl && data.title) titleEl.textContent = data.title;
+    const lgEl = document.getElementById("srsLegend");
+    if (lgEl && data.legendHtml) lgEl.innerHTML = data.legendHtml;
+    const fb = document.getElementById("focusBanner");
+    if (fb) {
+      if (FOCUSED_PRACTICE_SPEC && typeof renderFocusBannerHtml === "function") {
+        fb.style.display = "block";
+        fb.innerHTML = renderFocusBannerHtml(FOCUSED_PRACTICE_SPEC, restored.length);
+      } else {
+        fb.style.display = "none";
+        fb.innerHTML = "";
+      }
+    }
+    render10Cards();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function savePracticeScrollSpot(clickedEl) {
+  try {
+    let cardEl = clickedEl && clickedEl.closest ? clickedEl.closest(".s-card, .sheet-row") : null;
+    if (!cardEl) {
+      const cards = document.querySelectorAll("#sentenceList .s-card, #sentenceList .sheet-row");
+      for (const c of cards) {
+        const r = c.getBoundingClientRect();
+        if (r.bottom > 70 && r.top < window.innerHeight) { cardEl = c; break; }
+      }
+    }
+    const rect = cardEl ? cardEl.getBoundingClientRect() : null;
+    const st = {
+      url: location.pathname + location.search,
+      filter: currentFilter,
+      scrollY: Math.round(window.scrollY || 0),
+      cardId: cardEl && cardEl.id ? cardEl.id : null,
+      cardTop: rect ? Math.round(rect.top) : null,
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem("ats-practice-scroll", JSON.stringify(st));
+  } catch (e) {}
+}
+
+function clearPracticeScrollSpot() {
+  try {
+    sessionStorage.removeItem("ats-practice-scroll");
+  } catch (e) {}
+}
+
+function restorePracticeScrollSpot() {
+  try {
+    const raw = sessionStorage.getItem("ats-practice-scroll");
+    if (!raw) return false;
+    const st = JSON.parse(raw);
+    if (!st || Date.now() - (st.savedAt || 0) > 4 * 3600 * 1000) {
+      clearPracticeScrollSpot();
+      return false;
+    }
+    if (st.url !== location.pathname + location.search) return false;
+    const apply = () => {
+      const cardEl = st.cardId ? document.getElementById(st.cardId) : null;
+      if (cardEl && st.cardTop != null) {
+        const curTop = cardEl.getBoundingClientRect().top;
+        const targetY = Math.max(0, Math.round((window.scrollY || 0) + (curTop - st.cardTop)));
+        window.scrollTo(0, targetY);
+      } else if (typeof st.scrollY === "number" && st.scrollY > 0) {
+        window.scrollTo(0, st.scrollY);
+      }
+    };
+    apply();
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(apply);
+    setTimeout(apply, 60);
+    setTimeout(() => { apply(); clearPracticeScrollSpot(); }, 180);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+document.addEventListener("click", e => {
+  const a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+  if (!a) return;
+  const href = a.getAttribute("href") || "";
+  if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
+  savePracticeScrollSpot(a);
+}, true);
+
+window.addEventListener("pagehide", () => {
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
+  savePracticeScrollSpot(null);
+});
+
+window.addEventListener("pageshow", e => {
+  if (e.persisted) restorePracticeScrollSpot();
+});
 
 function restorePracticeBatchFromSession() {
   try {
@@ -960,6 +1139,8 @@ window.addEventListener("ats-mood-updated", function () {
 
 function startNextPracticeBatch(nextB) {
   currentFilter = "balanced";
+  clearNonAdaptiveBatchSession();
+  clearPracticeScrollSpot();
   document.querySelectorAll("#filterChips .chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
   loadPracticeBatch(nextB);
   renderMotivationStrip();
@@ -1182,8 +1363,22 @@ function rankFocusItems(pool, srs, now, limit, preserveOrder) {
   return picked.slice(0, limit || 12).map(it => decorateFocusItem(it, srs, now)).filter(Boolean);
 }
 
+function renderFocusBannerHtml(spec, count) {
+  if (!spec) return "";
+  return `
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;border-radius:var(--radius);background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);font-size:13px">
+        <span><b>${escBriefHtml(spec.title)}</b> <span style="color:var(--muted)">· ${count} items · syncs across all tabs</span></span>
+        <span style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
+          ${spec.backHref ? `<a href="${spec.backHref}" class="pt-btn" style="font-size:12px;padding:4px 10px;text-decoration:none">${escBriefHtml(spec.backLabel)}</a>` : ""}
+          <button type="button" class="pt-btn" onclick="clearPracticeFocus()" style="font-size:12px;padding:4px 10px;font-weight:500;color:var(--accent);border-color:var(--accent)">Back to Daily Practice</button>
+        </span>
+      </div>
+    `;
+}
+
 function clearPracticeFocus() {
   clearPracticeBatchSession();
+  clearNonAdaptiveBatchSession();
   FOCUSED_PRACTICE_SPEC = null;
   if (history && history.replaceState) history.replaceState({}, "", location.pathname);
   if (promptDirection !== "en-first") setDirection("en-first");
@@ -1193,6 +1388,8 @@ function clearPracticeFocus() {
 }
 
 function focusPracticeUrl(searchStr) {
+  clearNonAdaptiveBatchSession();
+  clearPracticeScrollSpot();
   if (history && history.replaceState) history.replaceState({}, "", location.pathname + searchStr);
   loadFocusedPracticeFromUrl(searchStr);
   const vp = document.getElementById("focusBanner") || document.getElementById("viewPractice");
@@ -1507,18 +1704,11 @@ function loadFocusedPracticeFromUrl(searchStr) {
   const fb = document.getElementById("focusBanner");
   if (fb) {
     fb.style.display = "block";
-    fb.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;border-radius:var(--radius);background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);font-size:13px">
-        <span><b>${escBriefHtml(title)}</b> <span style="color:var(--muted)">· ${list.length} items · syncs across all tabs</span></span>
-        <span style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
-          ${backHref ? `<a href="${backHref}" class="pt-btn" style="font-size:12px;padding:4px 10px;text-decoration:none">${escBriefHtml(backLabel)}</a>` : ""}
-          <button type="button" class="pt-btn" onclick="clearPracticeFocus()" style="font-size:12px;padding:4px 10px;font-weight:500;color:var(--accent);border-color:var(--accent)">Back to Daily Practice</button>
-        </span>
-      </div>
-    `;
+    fb.innerHTML = renderFocusBannerHtml(FOCUSED_PRACTICE_SPEC, list.length);
   }
 
   render10Cards();
+  saveNonAdaptiveBatchSession();
   return true;
 }
 
@@ -1553,6 +1743,7 @@ function load10Sentences() {
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
   render10Cards();
+  saveNonAdaptiveBatchSession();
 }
 
 let LAST_BATCH_KEYS = [];
@@ -1564,6 +1755,7 @@ function redoBatch() {
   REVEALED.clear();
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
+  clearPracticeScrollSpot();
   const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
   const fullPool = allPracticeItems();
   const chosen = SRS.buildBatch(fullPool, { size: Math.max(BATCH_SIZE, LAST_BATCH_KEYS.length), mode: "redo", redoKeys: LAST_BATCH_KEYS });
@@ -1573,7 +1765,8 @@ function redoBatch() {
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   logEvent({ e: "redo-batch", kind: IS_ADAPTIVE_PRACTICE ? "practice" : "sentences", n: chosen.length, t: Date.now() });
   render10Cards();
-  savePracticeBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
   const list = document.getElementById("sentenceList");
   if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -1882,14 +2075,16 @@ function revealCard(idx) {
     updateSessionProgress();
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
   } else render10Cards();
-  savePracticeBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
   if (s) playCardAudio(idx);
 }
 
 function revealAllCards() {
   ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
   render10Cards();
-  savePracticeBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
 }
 
 function syncPracticeViewTabs() {
@@ -2001,7 +2196,8 @@ function rateSentence(key, g, cardIdx, how, meta) {
     SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
   }
   updateSessionProgress();
-  savePracticeBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
+  else saveNonAdaptiveBatchSession();
 }
 
 function jumpToNextUnrated() {
@@ -2534,6 +2730,8 @@ document.getElementById("filterChips").addEventListener("click", e => {
   document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
   b.classList.add("active");
   currentFilter = b.dataset.filter;
+  clearNonAdaptiveBatchSession();
+  clearPracticeScrollSpot();
   if (wasActive && currentFilter === "balanced") {
     clearPracticeBatchSession();
   }

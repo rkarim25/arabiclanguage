@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwlt692q">
-  <link rel="stylesheet" href="css/style.css?v=mwlt692q">
+  <link rel="stylesheet" href="css/fonts.css?v=mwltk6l9">
+  <link rel="stylesheet" href="css/style.css?v=mwltk6l9">
   <style>
     .g-grid { display: flex; flex-direction: column; gap: 0; }
     .g-card {
@@ -37,11 +37,12 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwlt692q"></script>
-<script src="js/app.js?v=mwlt692q"></script>
-<script src="js/tracker.js?v=mwlt692q"></script>
-<script src="js/plan.js?v=mwlt692q"></script>
+<script src="js/srs.js?v=mwltk6l9"></script>
+<script src="js/app.js?v=mwltk6l9"></script>
+<script src="js/tracker.js?v=mwltk6l9"></script>
+<script src="js/plan.js?v=mwltk6l9"></script>
 <script>
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 renderNav("grammar");
 trackPage("grammar");
 
@@ -171,7 +172,8 @@ function renderList() {
 
 function renderPattern(p) {
   trackPage(`grammar:${p.id}`);
-  window.scrollTo({ top: 0 });
+  window.scrollTo(0, 0);
+  if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => window.scrollTo(0, 0));
   const dock = document.getElementById("kbDock");
   if (dock && dock.firstElementChild) dock.firstElementChild.style.display = "none";
   content.innerHTML = `
@@ -322,6 +324,8 @@ function veItems() {
 }
 function renderVerbEars() {
   trackPage("grammar:verbears");
+  window.scrollTo(0, 0);
+  if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => window.scrollTo(0, 0));
   const dock = document.getElementById("kbDock");
   if (dock && dock.firstElementChild) dock.firstElementChild.style.display = "none";
   const hasVoice = hasArabicVoice();

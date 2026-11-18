@@ -91,6 +91,9 @@ nav {
 @media (prefers-color-scheme: dark) {
   nav { background: var(--bg); }
 }
+[id], .set-row, .lc-wrap, .s-card, .g-card, .q-gram-row {
+  scroll-margin-top: 64px;
+}
 nav .brand {
   font-family: var(--font-serif);
   font-weight: 400;

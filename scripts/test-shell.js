@@ -1063,6 +1063,16 @@ const bank = D("sentence-bank.json");
     /window\.addEventListener\("hashchange",\s*routeQuran\)/.test(quranSrcPen),
     "sets.html and quran.html dynamically handle hash & popstate routing for seamless inter-tab continuity"
   );
+  yes(
+    /scroll-margin-top:\s*64px/.test(cssSrcNow) &&
+    /history\.scrollRestoration\s*=\s*"manual"/.test(grammarSrcPen) &&
+    /history\.scrollRestoration\s*=\s*"manual"/.test(indexSrcPen) &&
+    /function savePracticeScrollSpot\(/.test(indexSrcPen) &&
+    /function restorePracticeScrollSpot\(/.test(indexSrcPen) &&
+    /"ats-practice-scroll"/.test(indexSrcPen) &&
+    /← Back to Practice/.test(setsSrcPen),
+    "sticky-nav scroll-margin-top, manual scrollRestoration, and exact-card Back to Practice scroll spot restoration are wired across index, grammar & sets"
+  );
   const conjJson = D("conjugations.json");
   const conjIds = new Set((conjJson.verbs || []).map(v => v.id));
   const reqVerbs = ["ada", "adha", "tanawala", "saada", "rattaba", "istaghfara", "faddala", "faza", "intazara", "nasiya", "intaha", "qada"];
