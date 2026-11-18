@@ -104,4 +104,30 @@ module.exports = [
     past: { ana: "اشْتَرَيْتُ", anta: "اشْتَرَيْتَ", anti: "اشْتَرَيْتِ", huwa: "اشْتَرَى", hiya: "اشْتَرَتْ", nahnu: "اشْتَرَيْنَا", antum: "اشْتَرَيْتُمْ", hum: "اشْتَرَوْا" },
     pres: { ana: "أَشْتَرِي", anta: "تَشْتَرِي", anti: "تَشْتَرِينَ", huwa: "يَشْتَرِي", hiya: "تَشْتَرِي", nahnu: "نَشْتَرِي", antum: "تَشْتَرُونَ", hum: "يَشْتَرُونَ" },
   },
+
+  // ---------- 12 active everyday & Preply verbs ----------
+  { id: "ada", root: "ع و د", en: "to return, go back", base: "return", pastEn: "returned", past3: "عَادَ", pres3: "يَعُودُ", pastC: "عُد" },
+  { id: "adha", root: "ع و ذ", en: "to seek refuge", base: "seek refuge", pastEn: "sought refuge", past3: "عَاذَ", pres3: "يَعُوذُ", pastC: "عُذ" },
+  { id: "tanawala", root: "ن و ل", en: "to eat, have (a meal)", base: "have a meal", pastEn: "had a meal", past3: "تَنَاوَلَ", pres3: "يَتَنَاوَلُ" },
+  { id: "saada", root: "س ع د", en: "to help, assist", base: "help", pastEn: "helped", past3: "سَاعَدَ", pres3: "يُسَاعِدُ" },
+  { id: "rattaba", root: "ر ت ب", en: "to arrange, tidy up", base: "arrange", pastEn: "arranged", past3: "رَتَّبَ", pres3: "يُرَتِّبُ" },
+  { id: "istaghfara", root: "غ ف ر", en: "to seek forgiveness", base: "seek forgiveness", pastEn: "sought forgiveness", past3: "اسْتَغْفَرَ", pres3: "يَسْتَغْفِرُ" },
+  { id: "faddala", root: "ف ض ل", en: "to prefer", base: "prefer", pastEn: "preferred", past3: "فَضَّلَ", pres3: "يُفَضِّلُ" },
+  { id: "faza", root: "ف و ز", en: "to win, succeed", base: "win", pastEn: "won", past3: "فَازَ", pres3: "يَفُوزُ", pastC: "فُز" },
+  { id: "intazara", root: "ن ظ ر", en: "to wait", base: "wait", pastEn: "waited", past3: "انْتَظَرَ", pres3: "يَنْتَظِرُ" },
+  {
+    id: "nasiya", root: "ن س ي", en: "to forget", base: "forget", pastEn: "forgot", past3: "نَسِيَ", pres3: "يَنْسَى",
+    past: { ana: "نَسِيتُ", anta: "نَسِيتَ", anti: "نَسِيتِ", huwa: "نَسِيَ", hiya: "نَسِيَتْ", nahnu: "نَسِينَا", antum: "نَسِيتُمْ", hum: "نَسُوا" },
+    pres: { ana: "أَنْسَى", anta: "تَنْسَى", anti: "تَنْسَيْنَ", huwa: "يَنْسَى", hiya: "تَنْسَى", nahnu: "نَنْسَى", antum: "تَنْسَوْنَ", hum: "يَنْسَوْنَ" },
+  },
+  {
+    id: "intaha", root: "ن ه ي", en: "to finish, end", base: "finish", pastEn: "finished", past3: "انْتَهَى", pres3: "يَنْتَهِي",
+    past: { ana: "انْتَهَيْتُ", anta: "انْتَهَيْتَ", anti: "انْتَهَيْتِ", huwa: "انْتَهَى", hiya: "انْتَهَتْ", nahnu: "انْتَهَيْنَا", antum: "انْتَهَيْتُمْ", hum: "انْتَهَوْا" },
+    pres: { ana: "أَنْتَهِي", anta: "تَنْتَهِي", anti: "تَنْتَهِينَ", huwa: "يَنْتَهِي", hiya: "تَنْتَهِي", nahnu: "نَنْتَهِي", antum: "تَنْتَهُونَ", hum: "يَنْتَهُونَ" },
+  },
+  {
+    id: "qada", root: "ق ض ي", en: "to spend (time); decree", base: "spend", pastEn: "spent", past3: "قَضَى", pres3: "يَقْضِي",
+    past: { ana: "قَضَيْتُ", anta: "قَضَيْتَ", anti: "قَضَيْتِ", huwa: "قَضَى", hiya: "قَضَتْ", nahnu: "قَضَيْنَا", antum: "قَضَيْتُمْ", hum: "قَضَوْا" },
+    pres: { ana: "أَقْضِي", anta: "تَقْضِي", anti: "تَقْضِينَ", huwa: "يَقْضِي", hiya: "تَقْضِي", nahnu: "نَقْضِي", antum: "تَقْضُونَ", hum: "يَقْضُونَ" },
+  },
 ];

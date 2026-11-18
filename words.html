@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Vocabulary Practice & Master Library — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwlrj335">
-  <link rel="stylesheet" href="css/style.css?v=mwlrj335">
+  <link rel="stylesheet" href="css/fonts.css?v=mwls4lpy">
+  <link rel="stylesheet" href="css/style.css?v=mwls4lpy">
   <style>
     .v-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .v-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -281,16 +281,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwlrj335"></script>
-<script src="js/curriculum.js?v=mwlrj335"></script>
-<script src="js/srs.js?v=mwlrj335"></script>
-<script src="js/match.js?v=mwlrj335"></script>
-<script src="js/errors.js?v=mwlrj335"></script>
-<script src="js/tryit.js?v=mwlrj335"></script>
-<script src="js/app.js?v=mwlrj335"></script>
-<script src="js/tracker.js?v=mwlrj335"></script>
-<script src="js/plan.js?v=mwlrj335"></script>
-<script src="js/account.js?v=mwlrj335"></script>
+<script src="js/progress-model.js?v=mwls4lpy"></script>
+<script src="js/curriculum.js?v=mwls4lpy"></script>
+<script src="js/srs.js?v=mwls4lpy"></script>
+<script src="js/match.js?v=mwls4lpy"></script>
+<script src="js/errors.js?v=mwls4lpy"></script>
+<script src="js/tryit.js?v=mwls4lpy"></script>
+<script src="js/app.js?v=mwls4lpy"></script>
+<script src="js/tracker.js?v=mwls4lpy"></script>
+<script src="js/plan.js?v=mwls4lpy"></script>
+<script src="js/account.js?v=mwls4lpy"></script>
 <script>
 renderNav("words");
 trackPage("words");
@@ -407,7 +407,8 @@ const BATCH_SIZE = 10;
       fetch("data/quran-core.json").then(r => r.json()).catch(() => ({ words: [] })),
       fetch("data/everyday.json").then(r => r.json()).catch(() => ({ groups: [] })),
       fetch("data/families.json").then(r => r.json()).catch(() => ({ families: [] })),
-      loadFamIdx()
+      loadFamIdx(),
+      (typeof loadConj === "function" ? loadConj() : Promise.resolve())
     ]);
 
     const seen = new Set();
@@ -617,6 +618,11 @@ function render10Cards() {
                 </div>
               `;
             })()}
+            ${(() => {
+              const vHit = (typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function") ? findRelevantVerb(w.ar, "") : null;
+              if (!vHit) return '';
+              return `<div class="s-gram-box" style="margin-top:6px;text-align:left" onclick="event.stopPropagation()">${relevantVerbConjHtml(vHit, {})}</div>`;
+            })()}
           `}
           ${TryIt.slotHtml(idx)}
         </td>
@@ -784,6 +790,7 @@ function renderMasterTable() {
     const encAr = encodeURIComponent(w.ar);
     const escKey = String(w.key).replace(/'/g, "\\'");
     const isRevealed = wordReviewMode === "all" || MASTER_REVEALED.has(w.key);
+    const vHit = (isRevealed && typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function") ? findRelevantVerb(w.ar, "") : null;
     const visNote = (w.note && !isTagWordNote(w.note)) ? w.note : "";
     const arCellHtml = (wordReviewMode === "en-only" && !isRevealed)
       ? `<div style="text-align:right">
@@ -806,9 +813,16 @@ function renderMasterTable() {
         <td>${enCellHtml}</td>
         <td>${arCellHtml}</td>
         <td style="text-align:right;white-space:nowrap">
-          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}<button type="button" class="sym-badge" onclick="event.stopPropagation(); playSingle('${encAr}')" title="Listen" aria-label="Listen">🔊</button>${SRS.rateBarHtml(w.key, "rateMasterWord", [encAr], { compact: true, altKeys: wordAltKeys(w.ar) })}</div>
+          <div class="sheet-rate-bar" onclick="event.stopPropagation()">${vHit ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterConjDrawer(${idx})" style="border:none" title="Conjugations of ${vHit.v.past3} / ${vHit.v.pres3}">🔁 ${vHit.v.past3}</button>` : ''}${fam ? `<button type="button" class="wbw-rf-badge" onclick="event.stopPropagation(); toggleMasterRootDrawer(${idx})" style="border:none" title="Explore root ${fam.root}">🌿 ${fam.root}</button>` : ''}<button type="button" class="sym-badge" onclick="event.stopPropagation(); playSingle('${encAr}')" title="Listen" aria-label="Listen">🔊</button>${SRS.rateBarHtml(w.key, "rateMasterWord", [encAr], { compact: true, altKeys: wordAltKeys(w.ar) })}</div>
         </td>
       </tr>
+      ${vHit ? `
+        <tr id="m-cj-${idx}" style="display:none;background:var(--surface-2)">
+          <td colspan="4" style="padding:10px 16px">
+            ${relevantVerbConjHtml(vHit, {})}
+          </td>
+        </tr>
+      ` : ''}
       ${fam ? `
         <tr id="m-rf-${idx}" style="display:none;background:var(--surface-2)">
           <td colspan="4" style="padding:10px 16px">
@@ -839,6 +853,13 @@ function renderMasterTable() {
 
 function toggleMasterRootDrawer(idx) {
   const row = document.getElementById("m-rf-" + idx);
+  if (!row) return;
+  const isHidden = row.style.display === "none" || !row.style.display;
+  row.style.display = isHidden ? "table-row" : "none";
+}
+
+function toggleMasterConjDrawer(idx) {
+  const row = document.getElementById("m-cj-" + idx);
   if (!row) return;
   const isHidden = row.style.display === "none" || !row.style.display;
   row.style.display = isHidden ? "table-row" : "none";

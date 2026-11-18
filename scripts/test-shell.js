@@ -1063,6 +1063,18 @@ const bank = D("sentence-bank.json");
     /window\.addEventListener\("hashchange",\s*routeQuran\)/.test(quranSrcPen),
     "sets.html and quran.html dynamically handle hash & popstate routing for seamless inter-tab continuity"
   );
+  const conjJson = D("conjugations.json");
+  const conjIds = new Set((conjJson.verbs || []).map(v => v.id));
+  const reqVerbs = ["ada", "adha", "tanawala", "saada", "rattaba", "istaghfara", "faddala", "faza", "intazara", "nasiya", "intaha", "qada"];
+  yes(reqVerbs.every(id => conjIds.has(id)), "data/conjugations.json includes all 12 active everyday/Preply verbs");
+  yes(
+    /function findRelevantVerb\(/.test(appSrcNow) &&
+    /function relevantVerbConjHtml\(/.test(appSrcNow) &&
+    /loadConj\(\)/.test(indexSrcPen) && /relevantVerbConjHtml/.test(indexSrcPen) &&
+    /loadConj\(\)/.test(sentSrcPen) && /relevantVerbConjHtml/.test(sentSrcPen) &&
+    /loadConj\(\)/.test(wordsSrcNow) && /relevantVerbConjHtml/.test(wordsSrcNow),
+    "js/app.js exposes findRelevantVerb & relevantVerbConjHtml and index, sentences & words wire verb-specific conjugations"
+  );
 }
 
 console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");

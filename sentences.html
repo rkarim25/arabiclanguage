@@ -15,8 +15,8 @@
   </script>
   <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
   <title>Sentences — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwlrj335">
-  <link rel="stylesheet" href="css/style.css?v=mwlrj335">
+  <link rel="stylesheet" href="css/fonts.css?v=mwls4lpy">
+  <link rel="stylesheet" href="css/style.css?v=mwls4lpy">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -131,16 +131,16 @@
   </div>
 </main>
 
-<script src="js/progress-model.js?v=mwlrj335"></script>
-<script src="js/curriculum.js?v=mwlrj335"></script>
-<script src="js/srs.js?v=mwlrj335"></script>
-<script src="js/frames.js?v=mwlrj335"></script>
-<script src="js/practice.js?v=mwlrj335"></script>
-<script src="js/lesson-cards.js?v=mwlrj335"></script>
-<script src="js/app.js?v=mwlrj335"></script>
-<script src="js/tracker.js?v=mwlrj335"></script>
-<script src="js/plan.js?v=mwlrj335"></script>
-<script src="js/account.js?v=mwlrj335"></script>
+<script src="js/progress-model.js?v=mwls4lpy"></script>
+<script src="js/curriculum.js?v=mwls4lpy"></script>
+<script src="js/srs.js?v=mwls4lpy"></script>
+<script src="js/frames.js?v=mwls4lpy"></script>
+<script src="js/practice.js?v=mwls4lpy"></script>
+<script src="js/lesson-cards.js?v=mwls4lpy"></script>
+<script src="js/app.js?v=mwls4lpy"></script>
+<script src="js/tracker.js?v=mwls4lpy"></script>
+<script src="js/plan.js?v=mwls4lpy"></script>
+<script src="js/account.js?v=mwls4lpy"></script>
 <script>
 renderNav("sentences");
 trackPage("sentences");
@@ -195,7 +195,8 @@ let allTblTrVisible = false;
       fetch("data/grammar.json").then(r => r.json()).catch(() => ({ patterns: [] })),
       fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
       fetch("data/myday.json").then(r => r.json()).catch(() => ({ sentences: [] })),
-      loadFamIdx()
+      loadFamIdx(),
+      (typeof loadConj === "function" ? loadConj() : Promise.resolve())
     ]);
     DATA = senRes;
     CHAPTERS_LIST = (cRes && cRes.chapters) || [];
@@ -341,11 +342,24 @@ function renderGrammarRuleHtml(s) {
   if (!s) return "";
   const patId = s.pattern && s.pattern !== "-" ? s.pattern : null;
   const g = (patId && GRAMMAR_MAP[patId]) || null;
-  if (!g) return "";
-  const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
-  const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
-  const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 <span class="ar-inline" dir="rtl">${g.ar}</span> (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div></details>`;
+  const vHit = (typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function") ? findRelevantVerb(s.ar, s.en) : null;
+  const isVerbPat = !!(g && ["tenses", "who-acts", "past-tu", "imperative"].includes(g.id));
+  if (!g && !vHit) return "";
+  let out = "";
+  if (g) {
+    const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
+    const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
+    const linksHtml = `<a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}`;
+    if (isVerbPat && vHit) {
+      return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>🔁 <span class="ar-inline" dir="rtl">${vHit.v.past3} / ${vHit.v.pres3}</span> (<i>${vHit.v.en}</i> · ${g.shortName})</summary><div style="margin-top:4px">${relevantVerbConjHtml(vHit, { patId: g.id, footerLinksHtml: linksHtml })}</div></details>`;
+    }
+    const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
+    out += `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 <span class="ar-inline" dir="rtl">${g.ar}</span> (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} ${linksHtml}</div></details>`;
+  }
+  if (vHit && !isVerbPat) {
+    out += `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>🔁 Conjugations: <span class="ar-inline" dir="rtl">${vHit.v.past3} / ${vHit.v.pres3}</span> (<i>${vHit.v.en}</i>)</summary><div style="margin-top:4px">${relevantVerbConjHtml(vHit, {})}</div></details>`;
+  }
+  return out;
 }
 
 function setBankFilter(filt, btn) {

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwlrj335">
-  <link rel="stylesheet" href="css/style.css?v=mwlrj335">
+  <link rel="stylesheet" href="css/fonts.css?v=mwls4lpy">
+  <link rel="stylesheet" href="css/style.css?v=mwls4lpy">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwlrj335"></script>
-<script src="js/curriculum.js?v=mwlrj335"></script>
-<script src="js/srs.js?v=mwlrj335"></script>
-<script src="js/frames.js?v=mwlrj335"></script>
-<script src="js/freetry.js?v=mwlrj335"></script>
-<script src="js/practice.js?v=mwlrj335"></script>
-<script src="js/lesson-cards.js?v=mwlrj335"></script>
-<script src="js/match.js?v=mwlrj335"></script>
-<script src="js/errors.js?v=mwlrj335"></script>
-<script src="js/tryit.js?v=mwlrj335"></script>
-<script src="js/app.js?v=mwlrj335"></script>
-<script src="js/tracker.js?v=mwlrj335"></script>
-<script src="js/plan.js?v=mwlrj335"></script>
-<script src="js/account.js?v=mwlrj335"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwls4lpy"></script>
+<script src="js/curriculum.js?v=mwls4lpy"></script>
+<script src="js/srs.js?v=mwls4lpy"></script>
+<script src="js/frames.js?v=mwls4lpy"></script>
+<script src="js/freetry.js?v=mwls4lpy"></script>
+<script src="js/practice.js?v=mwls4lpy"></script>
+<script src="js/lesson-cards.js?v=mwls4lpy"></script>
+<script src="js/match.js?v=mwls4lpy"></script>
+<script src="js/errors.js?v=mwls4lpy"></script>
+<script src="js/tryit.js?v=mwls4lpy"></script>
+<script src="js/app.js?v=mwls4lpy"></script>
+<script src="js/tracker.js?v=mwls4lpy"></script>
+<script src="js/plan.js?v=mwls4lpy"></script>
+<script src="js/account.js?v=mwls4lpy"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -404,7 +404,8 @@ function allPracticeItems() {
       fetch("data/lesson-cards.json").then(r => r.json()).catch(() => ({ cards: [] })),
       fetch("data/frequency.json").then(r => r.json()).catch(() => ({ words: {} })),
       fetch("data/verses.json").then(r => r.json()).catch(() => ({ surahs: [] })),
-      loadFamIdx()
+      loadFamIdx(),
+      (typeof loadConj === "function" ? loadConj() : Promise.resolve())
     ]);
     DATA = senRes;
     FREQ_WORDS = (freqRes && freqRes.words) || {};
@@ -1047,18 +1048,42 @@ function renderGrammarRuleHtml(s, forceCompact) {
   if (!s || s.kind === "word" || s.kind === "grammar" || s.kind === "lesson-card") return "";
   const patId = s.pattern && s.pattern !== "-" ? s.pattern : null;
   const g = (patId && GRAMMAR_MAP[patId]) || s.grammarRule || null;
-  if (!g) return "";
-  const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
-  const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
-  const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
-  const arBadge = `<span class="ar-inline" dir="rtl">${g.ar}</span>`;
+  const vHit = (typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function") ? findRelevantVerb(s.ar, s.en) : null;
+  const isVerbPat = !!(g && ["tenses", "who-acts", "past-tu", "imperative"].includes(g.id));
+  if (!g && !vHit) return "";
+
   const srs = getSrs();
-  const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
-  const isSolid = gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
-  if (!forceCompact && (!isSolid || g.id === "negation")) {
-    return `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${arBadge} (${g.shortName}):</b> ${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div>`;
+  const isSolid = g ? (() => {
+    const gItems = PRACTICE_GRAMMAR.filter(x => x.patId === g.id);
+    return gItems.length > 0 && gItems.every(x => ((srs[x.key] || {}).box || 0) >= 2);
+  })() : true;
+
+  let out = "";
+  if (g) {
+    const lc = LESSON_CARD_LOOKUP.byPattern && LESSON_CARD_LOOKUP.byPattern[g.id];
+    const lcLink = lc ? ` <a class="s-gram-link" href="sets.html#lc-${lc.id}">📇 Lesson Card →</a>` : "";
+    const ruleLinksHtml = `<a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}`;
+    if (isVerbPat && vHit) {
+      const verbBody = relevantVerbConjHtml(vHit, { patId: g.id, footerLinksHtml: ruleLinksHtml });
+      if (!forceCompact && !isSolid) {
+        out += `<div class="s-gram-box" onclick="event.stopPropagation()">${verbBody}</div>`;
+      } else {
+        out += `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>🔁 <span class="ar-inline" dir="rtl">${vHit.v.past3} / ${vHit.v.pres3}</span> (<i>${vHit.v.en}</i> · ${g.shortName})</summary><div style="margin-top:4px">${verbBody}</div></details>`;
+      }
+      return out;
+    }
+    const ruleHtml = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(g.rule) : g.rule;
+    const arBadge = `<span class="ar-inline" dir="rtl">${g.ar}</span>`;
+    if (!forceCompact && (!isSolid || g.id === "negation")) {
+      out += `<div class="s-gram-box" onclick="event.stopPropagation()">📐 <b>Grammar — ${arBadge} (${g.shortName}):</b> ${ruleHtml} ${ruleLinksHtml}</div>`;
+    } else {
+      out += `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${arBadge} (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} ${ruleLinksHtml}</div></details>`;
+    }
   }
-  return `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📐 Grammar: ${arBadge} (${g.shortName})</summary><div style="margin-top:4px">${ruleHtml} <a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(g.id)}">Full rule →</a>${lcLink}</div></details>`;
+  if (vHit && !isVerbPat) {
+    out += `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>🔁 Conjugations: <span class="ar-inline" dir="rtl">${vHit.v.past3} / ${vHit.v.pres3}</span> (<i>${vHit.v.en}</i>)</summary><div style="margin-top:4px">${relevantVerbConjHtml(vHit, {})}</div></details>`;
+  }
+  return out;
 }
 
 function sourceLinkMeta(s) {
@@ -1637,6 +1662,8 @@ function cardHtml(s, idx) {
         ? `<div class="lc-qc-chips" style="justify-content:flex-end" onclick="event.stopPropagation()">${s.speakParts.map(p => `<button type="button" class="lc-qc-chip" dir="rtl" onclick="event.stopPropagation(); LessonCards.speakEncoded('${encodeURIComponent(p).replace(/'/g, "%27")}')">🔊 ${p}</button>`).join("")}</div>`
         : "";
       const fullCardTitle = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.title || "") : (s.title || "");
+      const lcVerbHit = (typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function") ? findRelevantVerb(s.speakAr || s.ar, s.en) : null;
+      const lcVerbHtml = lcVerbHit ? `<div class="s-gram-box" onclick="event.stopPropagation()">${relevantVerbConjHtml(lcVerbHit, { patId: "tenses" })}</div>` : "";
       const fullCardHtml = (window.LessonCards && s.lcCard)
         ? `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📇 Full Lesson Card: ${fullCardTitle}${s.arTitle ? ` · <span class="ar-inline" dir="rtl">${s.arTitle}</span>` : ""}</summary><div style="margin-top:8px">${LessonCards.renderBodyHtml(s.lcCard, { hideHeader: true, hideQuickCheck: true, setsLink: true })}</div></details>`
         : "";
@@ -1662,9 +1689,10 @@ function cardHtml(s, idx) {
               <a class="sym-badge" href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets (${lcSrc})" aria-label="Lesson Card" style="text-decoration:none">↗</a>
             </div>
           </div>
-          ${(noteEnhanced || fullCardHtml) ? `
+          ${(noteEnhanced || lcVerbHtml || fullCardHtml) ? `
             <div class="s-row-extras">
               ${noteEnhanced ? `<div class="s-hint-line">💡 ${noteEnhanced}</div>` : ""}
+              ${lcVerbHtml}
               ${fullCardHtml}
             </div>
           ` : ""}
@@ -1730,16 +1758,24 @@ function cardHtml(s, idx) {
   const showWbwOpen = (!isReadView && isTeach) ? (hasMultiWbw || hasSingleRoot) : false;
   const showTrOpen = !isReadView && isTeach && !!s.tr;
   const gramHtml = isOpen ? renderGrammarRuleHtml(s, false) : "";
+  const gVerbHit = (isOpen && s.kind === "grammar" && ["tenses", "who-acts", "past-tu", "imperative"].includes(s.patId) && typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function")
+    ? findRelevantVerb(s.ar, s.en) : null;
+  const gVerbHtml = gVerbHit
+    ? `<div class="s-gram-box" onclick="event.stopPropagation()">${relevantVerbConjHtml(gVerbHit, { patId: s.patId, footerLinksHtml: `<a class="s-gram-link" href="grammar.html?g=${encodeURIComponent(s.patId)}">Full rule →</a>` })}</div>`
+    : "";
+  const wVerbHit = (isOpen && s.kind === "word" && typeof findRelevantVerb === "function" && typeof relevantVerbConjHtml === "function")
+    ? findRelevantVerb(s.ar, "") : null;
+  const wVerbHtml = wVerbHit ? `<div class="s-gram-box" onclick="event.stopPropagation()">${relevantVerbConjHtml(wVerbHit, {})}</div>` : "";
   const hasWbwBlock = hasMultiWbw || hasSingleRoot;
   const isBoilerplateNote = txt => /^(Top\s+\d+\s+Qur['’]?ān\s+Core|Root:|Chapter\s+\d+:|Preply:|Surah\s+\d+|Qur['’]?an\s+core)/i.test(String(txt || "").trim());
   const visibleNote = (s.note && !isBoilerplateNote(s.note)) ? s.note : "";
   const wordNoteHtml = (s.kind === "word" && visibleNote)
     ? `<div class="s-word-note">${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visibleNote) : visibleNote}</div>`
     : "";
-  const sentNoteHtml = (s.kind !== "word" && visibleNote)
+  const sentNoteHtml = (s.kind !== "word" && visibleNote && !gVerbHtml)
     ? `<div class="s-hint-line">💡 ${typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(visibleNote) : visibleNote}</div>`
     : "";
-  const hasExtras = isOpen && (hasWbwBlock || !!wordNoteHtml || !!sentNoteHtml || !!gramHtml);
+  const hasExtras = isOpen && (hasWbwBlock || !!wordNoteHtml || !!sentNoteHtml || !!gramHtml || !!gVerbHtml || !!wVerbHtml);
   const dockToolsHtml = isOpen && ((s.words && s.words.length > 1) || s.tr || srcMeta)
     ? `<button type="button" class="sym-badge sym-more" onclick="event.stopPropagation(); this.closest('.sym-group').classList.toggle('open')" title="Word breakdown, transliteration &amp; source" aria-label="More">⋯</button><span class="sym-hid">${s.words && s.words.length > 1 ? `<button type="button" class="sym-badge ${showWbwOpen ? 'active' : ''}" id="btn-drill-wbw-${idx}" onclick="event.stopPropagation(); toggleDrillWbw(${idx})" title="Toggle word-by-word breakdown" aria-label="Word breakdown">🧩</button>` : ''}${s.tr ? `<button type="button" class="sym-badge ${showTrOpen ? 'active' : ''}" id="btn-drill-tr-${idx}" onclick="event.stopPropagation(); toggleDrillTr(${idx})" title="Toggle transliteration" aria-label="Transliteration">🔤</button>` : ''}${srcMeta ? `<a class="sym-badge" href="${srcMeta.href}" onclick="event.stopPropagation()" title="${srcMeta.title}" aria-label="${cleanSrcLbl}" style="text-decoration:none">↗</a>` : ''}</span>`
     : '';
@@ -1805,7 +1841,9 @@ function cardHtml(s, idx) {
               </div>
             ` : ''}
             ${wordNoteHtml}
+            ${wVerbHtml}
             ${sentNoteHtml}
+            ${gVerbHtml}
             ${gramHtml}
           </div>
         ` : ''}

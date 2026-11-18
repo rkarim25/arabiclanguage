@@ -208,6 +208,15 @@ try:
 except Exception as e:
     print("Warning: could not parse lesson-cards.json", e)
 
+# Future forms (سَـ + present) of verbs in conjugations.json for inline conjugation playback
+try:
+    for v in loadd("conjugations.json").get("verbs", []):
+        for pk in ("ana", "huwa", "nahnu", "hum"):
+            pr = (v.get("pres") or {}).get(pk)
+            if pr: add("ar", "سَ" + pr)
+except Exception as e:
+    print("Warning: could not parse conjugations.json", e)
+
 os.makedirs(os.path.join(AUDIO, "ar"), exist_ok=True)
 os.makedirs(os.path.join(AUDIO, "en"), exist_ok=True)
 

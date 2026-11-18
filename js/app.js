@@ -2444,7 +2444,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwlrj335";
+const DATA_V = "mwls4lpy";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3634,20 +3634,30 @@ function toggleVocabRootFam(cardIdx) {
    indexes EVERY past/present form — plus the سـ future and و/ف-prefixed
    Quranic forms (وَقَالُوا، فَقَالَ) — so tapping any of them anywhere on the
    site finds the verb and the popover offers the full table. */
-let _conj = null, _conjIdx = null, _conjLoading = null;
+let _conj = null, _conjIdx = null, _conjIdxList = null, _conjById = null, _conjLoading = null;
 function loadConj() {
   if (_conjIdx || _conjLoading) return _conjLoading || Promise.resolve();
   _conjLoading = fetch("data/conjugations.json").then(r => r.json()).then(d => {
     _conj = d;
     _conjIdx = {};
-    const putc = (n, hit) => { if (n && !_conjIdx[n]) _conjIdx[n] = hit; };
-    d.verbs.forEach(v => d.persons.forEach(p => {
-      putc(normalizeAr(v.past[p.key]), { v, person: p, tense: "past" });
-      const pn = normalizeAr(v.pres[p.key]);
-      putc(pn, { v, person: p, tense: "pres" });
-      putc("س" + pn, { v, person: p, tense: "fut" });
-    }));
-  }).catch(() => (_conjIdx = {}));
+    _conjIdxList = {};
+    _conjById = {};
+    const putc = (n, hit) => {
+      if (!n) return;
+      if (!_conjIdx[n]) _conjIdx[n] = hit;
+      if (!_conjIdxList[n]) _conjIdxList[n] = [];
+      _conjIdxList[n].push(hit);
+    };
+    d.verbs.forEach(v => {
+      _conjById[v.id] = v;
+      d.persons.forEach(p => {
+        putc(normalizeAr(v.past[p.key]), { v, person: p, tense: "past" });
+        const pn = normalizeAr(v.pres[p.key]);
+        putc(pn, { v, person: p, tense: "pres" });
+        putc("س" + pn, { v, person: p, tense: "fut" });
+      });
+    });
+  }).catch(() => { _conjIdx = {}; _conjIdxList = {}; _conjById = {}; });
   return _conjLoading;
 }
 function conjLookup(word) {
@@ -3659,17 +3669,154 @@ function conjLookup(word) {
    "books". That is fine for a tap (you tapped that exact word), but NOT for
    labelling a whole row as a verb — so the vocab strips demand the vowels match. */
 function conjLookupStrict(word) {
-  const hit = conjLookup(word);
-  if (!hit) return null;
-  // Vowels must match EXACTLY, final one included. Tempting as it is to forgive a
-  // missing final harakah (فَهِمْت for فَهِمْتُ), it can't be done safely: ذَهَب
-  // "gold" is then indistinguishable from ذَهَبَ "he went", and labelling a noun
-  // as a verb is worse than missing a strip. Tapping the word still finds it.
   const bare = s => String(s).replace(/[ـ\s]/g, "");
   const w = bare(word);
-  const forms = [];
-  for (const p of (_conj ? _conj.persons : [])) { forms.push(hit.v.past[p.key], hit.v.pres[p.key]); }
-  return forms.some(f => bare(f) === w) ? hit : null;
+  if (!_conjIdxList) {
+    const hit = conjLookup(word);
+    if (!hit) return null;
+    const forms = [];
+    for (const p of (_conj ? _conj.persons : [])) { forms.push(hit.v.past[p.key], hit.v.pres[p.key]); }
+    return forms.some(f => bare(f) === w) ? hit : null;
+  }
+  const n = normalizeAr(word);
+  const cands = _conjIdxList[n] || _conjIdxList[n.replace(/^[وف]/, "")] || [];
+  for (const hit of cands) {
+    for (const p of (_conj ? _conj.persons : [])) {
+      if (bare(hit.v.past[p.key]) === w) return { v: hit.v, person: p, tense: "past" };
+      if (bare(hit.v.pres[p.key]) === w) return { v: hit.v, person: p, tense: "pres" };
+    }
+  }
+  return null;
+}
+
+const _CONJ_EXTRA_FORMS = {
+  "قُلْ": { id: "qala", personKey: "anta", tense: "imp" },
+  "اِذْهَبْ": { id: "dhahaba", personKey: "anta", tense: "imp" },
+  "اذْهَبْ": { id: "dhahaba", personKey: "anta", tense: "imp" },
+  "خُذْ": { id: "akhadha", personKey: "anta", tense: "imp" },
+  "خُذْنِي": { id: "akhadha", personKey: "anta", tense: "imp" },
+  "انْتَظِرْ": { id: "intazara", personKey: "anta", tense: "imp" },
+  "اِقْرَأْ": { id: "qaraa", personKey: "anta", tense: "imp" },
+  "اقْرَأْ": { id: "qaraa", personKey: "anta", tense: "imp" },
+  "يَكُنْ": { id: "kana", personKey: "huwa", tense: "juss" },
+  "أَكُنْ": { id: "kana", personKey: "ana", tense: "juss" },
+  "تَكُنْ": { id: "kana", personKey: "anta", tense: "juss" },
+  "يَقُلْ": { id: "qala", personKey: "huwa", tense: "juss" },
+  "أَقُلْ": { id: "qala", personKey: "ana", tense: "juss" },
+  "أَعُدْ": { id: "ada", personKey: "ana", tense: "juss" },
+  "يَعُدْ": { id: "ada", personKey: "huwa", tense: "juss" }
+};
+const _CONJ_AUX_IDS = new Set(["kana", "arada"]);
+
+function findRelevantVerb(arText, fallbackPrompt) {
+  if (!_conj || !_conjIdx) return null;
+  const cleanTok = s => String(s || "").replace(/[ـ\s.،؛؟!«»"'():\[\]←→\/·]/g, "");
+  const matchToken = raw => {
+    const tok = cleanTok(raw);
+    if (!tok || !/[\u0600-\u06FF]/.test(tok)) return null;
+    const ex = _CONJ_EXTRA_FORMS[tok];
+    if (ex && _conjById && _conjById[ex.id]) {
+      return { v: _conjById[ex.id], personKey: ex.personKey, tense: ex.tense, matchedForm: tok };
+    }
+    const st = conjLookupStrict(tok);
+    if (st) return { v: st.v, personKey: st.person && st.person.key, tense: st.tense, matchedForm: tok };
+    if (/^سَ/.test(tok)) {
+      const stF = conjLookupStrict(tok.slice(2));
+      if (stF) return { v: stF.v, personKey: stF.person && stF.person.key, tense: "fut", matchedForm: tok };
+    }
+    if (/^[وف]َ/.test(tok)) {
+      const inner = tok.slice(2);
+      const stC = conjLookupStrict(inner) || (/^سَ/.test(inner) ? conjLookupStrict(inner.slice(2)) : null);
+      if (stC) return { v: stC.v, personKey: stC.person && stC.person.key, tense: /^سَ/.test(inner) ? "fut" : stC.tense, matchedForm: inner };
+    }
+    if (/^[أآتين]/.test(tok)) {
+      const n = normalizeAr(tok);
+      const cands = (_conjIdxList && (_conjIdxList[n] || _conjIdxList[n.replace(/^[وف]/, "")])) || (conjLookup(tok) ? [conjLookup(tok)] : []);
+      const seenV = new Set();
+      for (const cand of cands) {
+        if (!cand || !cand.v || seenV.has(cand.v.id)) continue;
+        seenV.add(cand.v.id);
+        for (const p of (_conj.persons || [])) {
+          const pr = cleanTok(cand.v.pres[p.key]);
+          const juss = pr.replace(/\u064F$/, "\u0652");
+          const subj = pr.replace(/\u064F$/, "\u064E");
+          const plSubj = pr.replace(/\u0648\u0646\u064E$/, "\u0648\u0627");
+          if (tok === juss || tok === subj || tok === plSubj) {
+            return { v: cand.v, personKey: p.key, tense: "pres", matchedForm: tok };
+          }
+        }
+      }
+    }
+    const mObj = tok.match(/^(.+?)(نِي|كَ|كِ|هُمْ|هَا|هُ)$/);
+    if (mObj) {
+      const stO = conjLookupStrict(mObj[1]);
+      if (stO) return { v: stO.v, personKey: stO.person && stO.person.key, tense: stO.tense, matchedForm: mObj[1] };
+    }
+    return null;
+  };
+  const scanText = txt => {
+    if (!txt) return null;
+    let firstAux = null;
+    const toks = String(txt).split(/\s+/);
+    for (const raw of toks) {
+      const hit = matchToken(raw);
+      if (!hit) continue;
+      if (_CONJ_AUX_IDS.has(hit.v.id) && !firstAux) { firstAux = hit; continue; }
+      return hit;
+    }
+    return firstAux;
+  };
+  return scanText(arText) || (fallbackPrompt ? scanText(fallbackPrompt) : null);
+}
+
+function relevantVerbConjHtml(hit, opts) {
+  if (!hit || !hit.v) return "";
+  const v = hit.v;
+  const o = opts || {};
+  const cur = hit.tense === "past" ? v.past[hit.personKey]
+    : hit.tense === "pres" ? v.pres[hit.personKey]
+    : hit.tense === "fut" ? ("سَ" + v.pres[hit.personKey])
+    : hit.matchedForm;
+  const vf = (form, isCur) => {
+    const tr = typeof translitAr === "function" ? translitAr(form) : "";
+    const enc = encodeURIComponent(form).replace(/'/g, "%27");
+    return `<span class="ar-inline" dir="rtl" style="cursor:pointer;${isCur ? "font-weight:700;text-decoration:underline;text-decoration-color:var(--accent);" : ""}" onclick="event.stopPropagation(); speak('${enc}', 0.85)" title="Tap to listen${tr ? ": " + tr : ""}">${form}</span>`;
+  };
+  const trOf = form => (typeof translitAr === "function" ? translitAr(form) : "");
+  const rootDisp = String(v.root || "").replace(/\s+/g, "-");
+  const head = `<div>🔁 <b><span class="ar-inline" dir="rtl">${v.past3} / ${v.pres3}</span></b> (<i>${v.en}</i>${rootDisp ? ` · root <span class="ar-inline" dir="rtl">${rootDisp}</span>` : ""})${o.footerLinksHtml ? " " + o.footerLinksHtml : ""}</div>`;
+  let body = "";
+  if (o.patId === "who-acts") {
+    body = `<div style="margin-top:3px"><b>We (نَحْنُ — نَـ, no tail):</b> Pres ${vf(v.pres.nahnu, cur === v.pres.nahnu)} (<i>${trOf(v.pres.nahnu)}</i>) · Past ${vf(v.past.nahnu, cur === v.past.nahnu)} · Fut ${vf("سَ" + v.pres.nahnu, cur === ("سَ" + v.pres.nahnu))} &nbsp;|&nbsp; <b>They (هُمْ — ـُونَ / ـُوا):</b> Pres ${vf(v.pres.hum, cur === v.pres.hum)} (<i>${trOf(v.pres.hum)}</i>) · Past ${vf(v.past.hum, cur === v.past.hum)} · Fut ${vf("سَ" + v.pres.hum, cur === ("سَ" + v.pres.hum))}</div>`;
+  } else if (o.patId === "past-tu") {
+    body = `<div style="margin-top:3px"><b>I (أَنَا) across tenses:</b> Past ${vf(v.past.ana, true)} (<i>${trOf(v.past.ana)}</i> — "I ${v.pastEn}") ← Pres ${vf(v.pres.ana, cur === v.pres.ana)} (<i>${trOf(v.pres.ana)}</i>) → Fut ${vf("سَ" + v.pres.ana, cur === ("سَ" + v.pres.ana))} (<i>${trOf("سَ" + v.pres.ana)}</i>) · Negate past: <span class="ar-inline" dir="rtl">مَا ${v.past.ana}</span> (never ✗ <span class="ar-inline" dir="rtl">لَا ${v.past.ana}</span>)</div>`;
+  } else {
+    body = `<div style="margin-top:3px"><b>Present:</b> I ${vf(v.pres.ana, cur === v.pres.ana)} (<i>${trOf(v.pres.ana)}</i>) · you/she ${vf(v.pres.anta, cur === v.pres.anta)} · he ${vf(v.pres.huwa, cur === v.pres.huwa)} · we ${vf(v.pres.nahnu, cur === v.pres.nahnu)} · they ${vf(v.pres.hum, cur === v.pres.hum)}</div>`
+      + `<div style="margin-top:2px"><b>Past:</b> I ${vf(v.past.ana, cur === v.past.ana)} (<i>${trOf(v.past.ana)}</i>) · he ${vf(v.past.huwa, cur === v.past.huwa)} · she ${vf(v.past.hiya, cur === v.past.hiya)} · we ${vf(v.past.nahnu, cur === v.past.nahnu)} · they ${vf(v.past.hum, cur === v.past.hum)} &nbsp;·&nbsp; <b>Future:</b> I ${vf("سَ" + v.pres.ana, cur === ("سَ" + v.pres.ana))} · they ${vf("سَ" + v.pres.hum, cur === ("سَ" + v.pres.hum))}</div>`;
+  }
+  const persons = (_conj && _conj.persons) || [];
+  const tbl = persons.length ? `
+    <details style="margin-top:4px" onclick="event.stopPropagation()">
+      <summary style="cursor:pointer;font-size:12px;color:var(--accent);font-weight:500">All 8 persons of <span class="ar-inline" dir="rtl">${v.past3}</span> ▾</summary>
+      <div style="overflow-x:auto;margin-top:4px">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+          <thead><tr style="border-bottom:1px solid var(--border);text-align:left;color:var(--muted)"><th>Person</th><th style="text-align:right">Past</th><th style="text-align:right">Present</th><th style="text-align:right">Future</th></tr></thead>
+          <tbody>
+            ${persons.map(p => {
+              const pa = v.past[p.key], pr = v.pres[p.key], fu = "سَ" + pr;
+              const me = p.key === hit.personKey;
+              return `<tr style="border-bottom:1px solid var(--border-subtle, #eff1f4);${me ? "font-weight:600;background:var(--accent-soft, rgba(51,102,204,0.06));" : ""}">
+                <td style="padding:3px 6px">${p.en}</td>
+                <td style="padding:3px 6px;text-align:right">${vf(pa, cur === pa)} <span style="font-size:11px;color:var(--muted)"><i>${trOf(pa)}</i></span></td>
+                <td style="padding:3px 6px;text-align:right">${vf(pr, cur === pr)} <span style="font-size:11px;color:var(--muted)"><i>${trOf(pr)}</i></span></td>
+                <td style="padding:3px 6px;text-align:right">${vf(fu, cur === fu)} <span style="font-size:11px;color:var(--muted)"><i>${trOf(fu)}</i></span></td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    </details>` : "";
+  return head + body + tbl;
 }
 /* Verbs earn a visible line in the vocab tables, not just a popover you have to
    know to tap (his 2026-08-05 note: "i still dont see words with conjugations
