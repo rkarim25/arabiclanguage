@@ -75,6 +75,14 @@ check("every spoken Arabic example across all Lesson Cards resolves to a real ne
     if (c.quickCheck && c.quickCheck.speakAr) {
       const h = manifest.ar[normAr(c.quickCheck.speakAr)];
       assert(h, `missing manifest entry for Lesson Card ${c.id} quickCheck: ${c.quickCheck.speakAr}`);
+      assert(fs.existsSync(path.join(ROOT, "audio", "ar", h + ".mp3")));
+    }
+    if (c.quickCheck && Array.isArray(c.quickCheck.speakParts)) {
+      for (const p of c.quickCheck.speakParts) {
+        const h = manifest.ar[normAr(p)];
+        assert(h, `missing manifest entry for Lesson Card ${c.id} speakPart: ${p}`);
+        assert(fs.existsSync(path.join(ROOT, "audio", "ar", h + ".mp3")), `missing mp3 for Lesson Card ${c.id} speakPart: ${p}`);
+      }
     }
   }
 });
@@ -157,6 +165,22 @@ check("sets.html, index.html (Practice), and sentences.html load js/lesson-cards
   const mosqueCards = (lcData.cards || []).filter(c => c.category === "mosque");
   assert(mosqueCards.some(c => c.id === "khutbah-roadmap") && mosqueCards.some(c => c.id === "duas-and-imam"),
     "Lesson Cards must include khutbah-roadmap & duas-and-imam in category 'mosque'");
+});
+
+check("built-in Quick Check renders inside Lesson Cards by default and Review-mode Practice reveals Quick Check inline instead of replacing with ذَهَبْتُ table", () => {
+  const vt = lcData.cards.find(c => c.id === "verb-tenses");
+  assert(vt);
+  const fullHtml = LessonCards.renderBodyHtml(vt, {});
+  assert(fullHtml.includes('class="lc-extra lc-qc-box"') && fullHtml.includes("قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ") && (fullHtml.includes('Flip &quot;I read the Qur\'an&quot;') || fullHtml.includes('Flip "I read the Qur\'an"')),
+    "LessonCards.renderBodyHtml must render built-in Quick Check with answerAr");
+  assert(fullHtml.includes("LessonCards.speakParts(") && fullHtml.includes('class="lc-qc-chip"'),
+    "Multi-part Quick Check must render sequential play and per-part audio chips");
+  const hiddenQcHtml = LessonCards.renderBodyHtml(vt, { hideQuickCheck: true });
+  assert(!hiddenQcHtml.includes("lc-qc-box"), "hideQuickCheck: true must suppress built-in Quick Check box");
+
+  const idxHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  assert(idxHtml.includes("Check answer →") && idxHtml.includes("📇 Full Lesson Card:"),
+    "index.html Review-mode Lesson Cards must show 'Check answer →' and reveal Quick Check inline with collapsed 'Full Lesson Card:' drawer");
 });
 
 console.log(`\n✓ ${passed} Lesson Card assertions passed.`);

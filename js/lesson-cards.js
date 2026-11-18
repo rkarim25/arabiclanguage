@@ -67,6 +67,9 @@
 
     .lc-trap { margin-top: 8px; padding: 6px 12px; border-radius: 0; background: var(--amber-soft, #fef6e7); border: none; border-left: 3px solid var(--amber, #ac6600); font-size: 13.5px; color: var(--ink, #202122); line-height: 1.55; }
     .lc-extra { margin-top: 10px; padding: 8px 12px; border-left: 3px solid var(--border-strong, #a2a9b1); background: var(--bg, #ffffff); font-size: 14px; color: var(--ink, #202122); line-height: 1.55; }
+    .lc-qc-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .lc-qc-chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border, #eaecf0); background: var(--paper-elevated, #f8f9fa); border-radius: 2px; padding: 2px 8px; cursor: pointer; font-family: var(--font-ar, serif); font-size: 18px; line-height: 1.5; color: var(--ink, #202122); }
+    .lc-qc-chip:hover { border-color: var(--accent, #3366cc); color: var(--accent, #3366cc); }
     .lc-foot { margin: 14px -20px -16px; padding: 10px 20px; background: rgba(127, 127, 127, 0.06); border-top: 1px solid var(--border, #eaecf0); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-radius: 0 0 2px 2px; }
   `;
 
@@ -94,7 +97,7 @@
   }
 
   function escAttr(s) {
-    return encodeURIComponent(String(s || ""));
+    return encodeURIComponent(String(s || "")).replace(/'/g, "%27");
   }
 
   function renderDiagramHtml(d) {
@@ -189,21 +192,66 @@
           </table>
         </div>
         ${card.trap ? `<div class="lc-trap">⚠️ <b>Watch out:</b> ${enhanceInlineArabic(card.trap)}</div>` : ""}
-        ${o.extraBodyHtml ? `<div class="lc-extra">${o.extraBodyHtml}</div>` : ""}
+        ${o.extraBodyHtml ? `<div class="lc-extra">${o.extraBodyHtml}</div>` : (!o.hideQuickCheck && card.quickCheck && card.quickCheck.answerAr ? `<div class="lc-extra lc-qc-box">${renderQuickCheckHtml(card, o)}</div>` : "")}
         ${o.footerHtml ? `<div class="lc-foot" onclick="event.stopPropagation()">${o.footerHtml}</div>` : ""}
       </div>
     `;
   }
 
+  let _seqToken = 0;
+
   function speakEncoded(encodedAr) {
+    _seqToken++;
     const txt = decodeURIComponent(encodedAr || "");
     if (txt && typeof window !== "undefined" && typeof window.speak === "function") {
       window.speak(txt, 0.85);
     }
   }
 
+  function speakParts(encodedJson) {
+    let parts = [];
+    try {
+      const parsed = JSON.parse(decodeURIComponent(encodedJson || ""));
+      if (Array.isArray(parsed)) parts = parsed.filter(Boolean);
+    } catch (_) {}
+    if (!parts.length) return;
+    if (typeof window === "undefined" || typeof window.speak !== "function") return;
+    const tok = ++_seqToken;
+    const step = i => {
+      if (tok !== _seqToken || i >= parts.length) return;
+      window.speak(parts[i], 0.85, () => {
+        if (tok !== _seqToken || i + 1 >= parts.length) return;
+        setTimeout(() => step(i + 1), 180);
+      });
+    };
+    step(0);
+  }
+
+  function renderQuickCheckHtml(card) {
+    const qc = card && card.quickCheck;
+    if (!qc || !qc.answerAr) return "";
+    const parts = Array.isArray(qc.speakParts) ? qc.speakParts.filter(Boolean) : [];
+    const playClick = parts.length > 1
+      ? `LessonCards.speakParts('${escAttr(JSON.stringify(parts))}')`
+      : `LessonCards.speakEncoded('${escAttr(qc.speakAr || qc.answerAr)}')`;
+    const chipsHtml = parts.length > 1
+      ? `<div class="lc-qc-chips">${parts.map(p => `<button type="button" class="lc-qc-chip" dir="rtl" onclick="event.stopPropagation(); LessonCards.speakEncoded('${escAttr(p)}')">🔊 ${p}</button>`).join("")}</div>`
+      : "";
+    return `
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px">✓ Quick Check — ${enhanceInlineArabic(qc.prompt || "")}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <span class="arabic" dir="rtl" style="font-size:21px;color:var(--ink);line-height:1.7">${qc.answerAr}</span>
+        <button type="button" class="lc-speak-btn" onclick="event.stopPropagation(); ${playClick}" title="Listen">🔊</button>
+      </div>
+      ${chipsHtml}
+      ${qc.tr ? `<div class="lc-ex-tr" dir="ltr" style="text-align:left;margin-top:3px">${qc.tr}</div>` : ""}
+      ${qc.answerEn ? `<div style="font-size:13.5px;color:var(--ink);margin-top:4px">${enhanceInlineArabic(qc.answerEn)}</div>` : ""}
+    `;
+  }
+
   /* Play Mishary Rashid Alafasy recitation for Qur'ān Lesson Card ayah rows; fall back seamlessly to neural TTS */
   function reciteOrSpeak(ayahRef, encodedAr) {
+    _seqToken++;
     const txt = decodeURIComponent(encodedAr || "");
     if (ayahRef && typeof window !== "undefined" && typeof window.reciteVerse === "function") {
       const p = String(ayahRef).split(":").map(Number);
@@ -230,6 +278,7 @@
         effort: 1.0,
         ar: qc.answerAr || (c.rows && c.rows[0] && c.rows[0].ar) || c.arTitle || "",
         speakAr,
+        speakParts: Array.isArray(qc.speakParts) ? qc.speakParts.slice() : null,
         ref: (c.category === "quran" && matchRow) ? matchRow.ayahRef : null,
         en: qc.prompt || `${c.title}: ${c.summary}`,
         tr: qc.tr || "",
@@ -266,8 +315,10 @@
     ensureStyles,
     enhanceInlineArabic,
     renderDiagramHtml,
+    renderQuickCheckHtml,
     renderBodyHtml,
     speakEncoded,
+    speakParts,
     reciteOrSpeak,
     buildPracticePool,
     buildLookup

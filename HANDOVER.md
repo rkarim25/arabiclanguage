@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-17  
+**Last Updated:** 2026-11-18  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -91,6 +91,7 @@
   - Updated `js/app.js` (`generateLearnerDossierMarkdown`) to reflect `15` Lesson Cards, all `13` Salah Surahs + Pillar 5 Mosque cues, live `caps.quran` / `caps.mosque` telemetry, and current slips/anchors.
   - Updated `SPEAK_WITH_AI.md` (Prompt MM current, Prompt LL archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
 - **Sunday 15 Nov Preply Lesson Check:** Passed 2 days ago (`classes.json` latest still `c-2026-10-11`); awaiting Reza's notes/photos to run the ingestion pipeline.
+- **18 Nov 2026 — Lesson Card Quick-Check Inline Reveal & Built-In Quick Check Fix:** Fixed Review-mode Lesson Cards in `index.html` (`s.lcMode !== "teach"`) so cards like `lc:verb-tenses` (`Flip "I read the Qur'an" across Past → Present → Future:`) show `Check answer →` and reveal their exact Quick Check answer (`قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ`) inline with individual `speakParts` audio chips and a collapsed `📇 Full Lesson Card:` drawer instead of replacing the row with the `ذَهَبْتُ` paradigm table. Updated `js/lesson-cards.js` (`renderQuickCheckHtml`, `speakParts`, `renderBodyHtml`) and `data/lesson-cards.json` (`speakParts` on multi-part Quick Checks) so full Lesson Cards on `sets.html` / `quran.html` and Teach-mode Practice also display their Quick Check automatically.
 
 ## 2.1. Historical Milestones & Features Added (16 Nov 2026 — Monday Mid-Week Session & Link Continuity Fix)
 

@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwl0djvk">
-  <link rel="stylesheet" href="css/style.css?v=mwl0djvk">
+  <link rel="stylesheet" href="css/fonts.css?v=mwlrj335">
+  <link rel="stylesheet" href="css/style.css?v=mwlrj335">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwl0djvk"></script>
-<script src="js/curriculum.js?v=mwl0djvk"></script>
-<script src="js/srs.js?v=mwl0djvk"></script>
-<script src="js/frames.js?v=mwl0djvk"></script>
-<script src="js/freetry.js?v=mwl0djvk"></script>
-<script src="js/practice.js?v=mwl0djvk"></script>
-<script src="js/lesson-cards.js?v=mwl0djvk"></script>
-<script src="js/match.js?v=mwl0djvk"></script>
-<script src="js/errors.js?v=mwl0djvk"></script>
-<script src="js/tryit.js?v=mwl0djvk"></script>
-<script src="js/app.js?v=mwl0djvk"></script>
-<script src="js/tracker.js?v=mwl0djvk"></script>
-<script src="js/plan.js?v=mwl0djvk"></script>
-<script src="js/account.js?v=mwl0djvk"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwlrj335"></script>
+<script src="js/curriculum.js?v=mwlrj335"></script>
+<script src="js/srs.js?v=mwlrj335"></script>
+<script src="js/frames.js?v=mwlrj335"></script>
+<script src="js/freetry.js?v=mwlrj335"></script>
+<script src="js/practice.js?v=mwlrj335"></script>
+<script src="js/lesson-cards.js?v=mwlrj335"></script>
+<script src="js/match.js?v=mwlrj335"></script>
+<script src="js/errors.js?v=mwlrj335"></script>
+<script src="js/tryit.js?v=mwlrj335"></script>
+<script src="js/app.js?v=mwlrj335"></script>
+<script src="js/tracker.js?v=mwlrj335"></script>
+<script src="js/plan.js?v=mwlrj335"></script>
+<script src="js/account.js?v=mwlrj335"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -1574,6 +1574,11 @@ function playCardAudio(idx) {
       return;
     }
   }
+  if (Array.isArray(s.speakParts) && s.speakParts.length > 1 && window.LessonCards && typeof LessonCards.speakParts === "function") {
+    LessonCards.speakParts(encodeURIComponent(JSON.stringify(s.speakParts)));
+    logEvent({ e: "audio-play", text: s.speakParts.join(" · "), type: s.kind || "lesson-card", t: Date.now() });
+    return;
+  }
   speak(s.speakAr || s.ar, 0.85);
   logEvent({ e: "audio-play", text: s.speakAr || s.ar, type: s.kind || "sentence", t: Date.now() });
 }
@@ -1603,6 +1608,71 @@ function cardHtml(s, idx) {
     const lcTitle = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.lcMode === "teach" ? (s.title || s.en) : s.en) : (s.lcMode === "teach" ? (s.title || s.en) : s.en);
     const lcHref = (sourceLinkMeta(s) || {}).href || "sets.html";
     const lcSrc = `Lesson Card · ${s.categoryLabel || "Concept"}`;
+    const isTeachLc = s.lcMode === "teach";
+
+    if (!isTeachLc) {
+      if (!isRevealed) {
+        return `
+          <div class="s-card" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+            <div class="s-col-num">${idx + 1}</div>
+            <div class="s-col-prompt">
+              <div class="s-prompt-main">
+                <span class="s-prompt-text">${lcTitle}</span>
+                <a href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets (${lcSrc})" style="font-size:12px;color:var(--muted);text-decoration:none">↗</a>
+              </div>
+            </div>
+            <div class="s-col-answer">
+              <div class="s-ans-row">
+                <button type="button" class="book-cue ar-side" onclick="event.stopPropagation(); revealCard(${idx})">Check answer →</button>
+              </div>
+            </div>
+            <div class="s-col-dock" onclick="event.stopPropagation()">
+              <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+            </div>
+            ${TryIt.slotHtml(idx)}
+          </div>
+        `;
+      }
+      const partsHtml = (Array.isArray(s.speakParts) && s.speakParts.length > 1 && window.LessonCards)
+        ? `<div class="lc-qc-chips" style="justify-content:flex-end" onclick="event.stopPropagation()">${s.speakParts.map(p => `<button type="button" class="lc-qc-chip" dir="rtl" onclick="event.stopPropagation(); LessonCards.speakEncoded('${encodeURIComponent(p).replace(/'/g, "%27")}')">🔊 ${p}</button>`).join("")}</div>`
+        : "";
+      const fullCardTitle = typeof enhanceInlineArabic === "function" ? enhanceInlineArabic(s.title || "") : (s.title || "");
+      const fullCardHtml = (window.LessonCards && s.lcCard)
+        ? `<details class="s-gram-box" onclick="event.stopPropagation()"><summary>📇 Full Lesson Card: ${fullCardTitle}${s.arTitle ? ` · <span class="ar-inline" dir="rtl">${s.arTitle}</span>` : ""}</summary><div style="margin-top:8px">${LessonCards.renderBodyHtml(s.lcCard, { hideHeader: true, hideQuickCheck: true, setsLink: true })}</div></details>`
+        : "";
+      return `
+        <div class="s-card revealed" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
+          <div class="s-col-num">${idx + 1}</div>
+          <div class="s-col-prompt">
+            <div class="s-prompt-main">
+              <span class="s-prompt-text">${lcTitle}</span>
+            </div>
+          </div>
+          <div class="s-col-answer">
+            <div class="s-ans-row">
+              <span class="arabic s-ar-text" dir="rtl" style="cursor:pointer" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Tap to listen">${s.ar}</span>
+            </div>
+            ${partsHtml}
+            ${s.tr ? `<div class="s-tr-line" dir="ltr" style="display:block;text-align:right">${s.tr}</div>` : ""}
+          </div>
+          <div class="s-col-dock" onclick="event.stopPropagation()">
+            <div class="sym-group" style="justify-content:flex-end">
+              <button type="button" class="sym-badge" onclick="event.stopPropagation(); playCardAudio(${idx})" title="Listen to answer" aria-label="Listen">🔊</button>
+              <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: true })}</div>
+              <a class="sym-badge" href="${lcHref}" onclick="event.stopPropagation()" title="Open in Sets (${lcSrc})" aria-label="Lesson Card" style="text-decoration:none">↗</a>
+            </div>
+          </div>
+          ${(noteEnhanced || fullCardHtml) ? `
+            <div class="s-row-extras">
+              ${noteEnhanced ? `<div class="s-hint-line">💡 ${noteEnhanced}</div>` : ""}
+              ${fullCardHtml}
+            </div>
+          ` : ""}
+          ${TryIt.slotHtml(idx)}
+        </div>
+      `;
+    }
+
     if (!isRevealed) {
       return `
         <div class="s-card" id="scard-${idx}" onclick="handleCardClick(${idx}, event)">
@@ -1626,9 +1696,8 @@ function cardHtml(s, idx) {
       `;
     }
     const lcActionsRight = `<button type="button" class="pt-btn" onclick="event.stopPropagation(); REVEALED.delete(${idx}); render10Cards();">Close ▴</button>`;
-    const lcQuickCheck = s.lcMode !== "teach" && s.ar ? `✓ <b>Quick Check:</b> <span class="arabic" dir="rtl" style="font-size:21px;color:var(--ink)">${s.ar}</span>${noteEnhanced ? ` — ${noteEnhanced}` : ""}` : "";
     const lcFooter = `
-      <span style="font-size:12.5px;color:var(--muted);font-weight:500">${s.lcMode === "teach" ? "Read the mental map above, then rate below:" : "Rate recall for this Lesson Card:"}</span>
+      <span style="font-size:12.5px;color:var(--muted);font-weight:500">Read the mental map above, then rate below:</span>
       <div style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap">
         <div class="s-rate-bar">${SRS.rateBarHtml(s.key, "rateSentence", [idx], { compact: false })}</div>
         <button type="button" class="pt-btn" onclick="REVEALED.delete(${idx}); render10Cards();">Collapse ▴</button>
@@ -1641,13 +1710,11 @@ function cardHtml(s, idx) {
               setsLink: true,
               numBadge: idx + 1,
               headerRightHtml: lcActionsRight,
-              extraBodyHtml: lcQuickCheck,
               footerHtml: lcFooter
             })
           : `<div class="lc-wrap" onclick="event.stopPropagation()">
                <div class="lc-top"><span style="display:inline-flex;align-items:center;gap:7px"><span class="lc-num">#${idx + 1}</span><span>${lcTitle}</span></span>${lcActionsRight}</div>
                <div class="s-hint-line">${noteEnhanced}</div>
-               ${lcQuickCheck ? `<div class="lc-extra">${lcQuickCheck}</div>` : ""}
                <div class="lc-foot" onclick="event.stopPropagation()">${lcFooter}</div>
              </div>`}
         ${TryIt.slotHtml(idx)}
@@ -1889,7 +1956,7 @@ function rateSentence(key, g, cardIdx, how, meta) {
     capDrawer.innerHTML = renderCapabilityDrawerHTML();
   }
   updateOverallStats();
-  if (s && s.kind === "lesson-card" && REVEALED.has(cardIdx) && (g === "yes" || g === "solid" || g === "retire")) {
+  if (s && s.kind === "lesson-card" && s.lcMode === "teach" && REVEALED.has(cardIdx) && (g === "yes" || g === "solid" || g === "retire")) {
     REVEALED.delete(cardIdx);
     render10Cards();
   } else {

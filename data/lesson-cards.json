@@ -86,6 +86,10 @@
         "prompt": "Say \"I did not go to work\" in BOTH valid Arabic ways — and remember why لَا ذَهَبْتُ is never used:",
         "answerAr": "لَمْ أَذْهَبْ إِلَى العَمَلِ  /  مَا ذَهَبْتُ إِلَى العَمَلِ",
         "speakAr": "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+        "speakParts": [
+          "لَمْ أَذْهَبْ إِلَى العَمَلِ",
+          "مَا ذَهَبْتُ إِلَى العَمَلِ"
+        ],
         "tr": "lam adhhab ilā l-ʿamali  /  mā dhahabtu ilā l-ʿamali",
         "answerEn": "لَمْ + short present OR مَا + past verb (never ✗ لَا + past, which expresses a wish/curse)."
       },
@@ -192,7 +196,12 @@
         "prompt": "Flip \"I read the Qur'an\" across Past → Present → Future:",
         "answerAr": "قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ",
         "speakAr": "قَرَأْتُ القُرْآنَ",
-        "tr": "qaraʾtu → aqraʾu → sa-aqraʾu l-qurʾāna",
+        "speakParts": [
+          "قَرَأْتُ القُرْآنَ",
+          "أَقْرَأُ القُرْآنَ",
+          "سَأَقْرَأُ القُرْآنَ"
+        ],
+        "tr": "qaraʾtu l-qurʾāna → aqraʾu l-qurʾāna → sa-aqraʾu l-qurʾāna",
         "answerEn": "Past = suffix ـتُ (قَرَأْتُ); Present = prefix أَ (أَقْرَأُ); Future = سَـ + present (سَأَقْرَأُ)."
       },
       "triggers": {
@@ -274,6 +283,10 @@
         "prompt": "Which word do you ask a shopkeeper vs a taxi driver?",
         "answerAr": "فِي السُّوقِ: كَمِ السِّعْرُ؟  /  فِي السَّيَّارَةِ: كَمِ الأُجْرَةُ؟",
         "speakAr": "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟",
+        "speakParts": [
+          "كَمِ السِّعْرُ لِهَذَا؟",
+          "كَمِ الأُجْرَةُ إِلَى الفُنْدُقِ؟"
+        ],
         "tr": "kami s-siʿru (shop) vs kami l-ujratu (taxi fare)",
         "answerEn": "سِعْر = shop/market tag; أُجْرَة = taxi fare/service fee; ثَمَن = value/sum paid."
       },
@@ -360,6 +373,10 @@
         "prompt": "How do you ask Saba \"How was your day?\" vs asking a male colleague?",
         "answerAr": "لِزَوْجَتِكَ: كَيْفَ كَانَ يَوْمُكِ؟  /  لِلرَّجُلِ: كَيْفَ كَانَ يَوْمُكَ؟",
         "speakAr": "كَيْفَ كَانَ يَوْمُكِ؟",
+        "speakParts": [
+          "كَيْفَ كَانَ يَوْمُكِ؟",
+          "كَيْفَ كَانَ يَوْمُكَ؟"
+        ],
         "tr": "kayfa kāna yawmuki (-ki fem.) vs yawmuka (-ka masc.)",
         "answerEn": "ـكِ (-ki with kasrah) for her; ـكَ (-ka with fatḥah) for him."
       },
@@ -534,6 +551,11 @@
         "prompt": "Contrast أَعُودُ vs أَعُوذُ — and what is the Jumu'ah prayer greeting \"May Allah accept\"?",
         "answerAr": "أَعُودُ (أَرْجِعُ إِلَى البَيْتِ) vs أَعُوذُ (بِاللهِ)  ·  تَقَبَّلَ اللهُ",
         "speakAr": "تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ",
+        "speakParts": [
+          "أَعُودُ",
+          "أَعُوذُ",
+          "تَقَبَّلَ اللهُ"
+        ],
         "tr": "aʿūdu (return) vs aʿūdhu (seek refuge) · taqabbala llāh",
         "answerEn": "Plain د = return home; dotted ذ = seek refuge; تَقَبَّلَ اللهُ = May Allah accept (kobul)."
       },
@@ -704,6 +726,10 @@
         "prompt": "How do you politely ask \"Can you help me?\" and \"Speak slowly, please\" in Arabic?",
         "answerAr": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟  ·  تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ",
         "speakAr": "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟",
+        "speakParts": [
+          "هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟",
+          "تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ"
+        ],
         "tr": "hal yumkinuka musāʿadatī? · takallam bi-buṭʾin min faḍlika",
         "answerEn": "يُمْكِنُكَ (mumkin) + مُسَاعَدَتِي (my aid); تَكَلَّمْ بِبُطْءٍ (speak with slowness)."
       },
@@ -1290,6 +1316,10 @@
         "prompt": "What does أَمَّا بَعْدُ signal in a khutbah — and what are the final words telling everyone the iqāmah is next?",
         "answerAr": "أَمَّا بَعْدُ (المَوْضُوعُ يَبْدَأُ) · وَأَقِمِ الصَّلَاةَ",
         "speakAr": "أَمَّا بَعْدُ",
+        "speakParts": [
+          "أَمَّا بَعْدُ",
+          "وَأَقِمِ الصَّلَاةَ"
+        ],
         "tr": "ammā baʿdu (topic starts) · wa-aqimi ṣ-ṣalāh (establish the prayer)",
         "answerEn": "أَمَّا بَعْدُ pivots from opening praise to today's topic; وَأَقِمِ الصَّلَاةَ closes the khutbah right before iqāmah."
       },
@@ -1386,6 +1416,10 @@
         "prompt": "Translate by ear: رَبِّ زِدْنِي عِلْمًا — and explain the ending of أَقِيمُوا الصُّفُوفَ:",
         "answerAr": "رَبِّ زِدْنِي عِلْمًا · أَقِيمُوا الصُّفُوفَ",
         "speakAr": "رَبِّ زِدْنِي عِلْمًا",
+        "speakParts": [
+          "رَبِّ زِدْنِي عِلْمًا",
+          "أَقِيمُوا الصُّفُوفَ"
+        ],
         "tr": "rabbi zidnī ʿilmā · aqīmū ṣ-ṣufūf",
         "answerEn": "'My Lord, increase me in knowledge' (زِدْ command + ـنِي me); أَقِيمُوا uses plural -ū ('you all straighten the rows!')."
       },
