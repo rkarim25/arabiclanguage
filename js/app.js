@@ -544,8 +544,10 @@ function writeMatchAr(typed, targetAr) {
     // which counts (he said the a) and is graded as the ة it spells; a bare
     // consonant ending does not count.
     if (/ة$/.test(sc)) {
-      if (!/[ةهَاۃ]$/.test(String(typedW))) return 0;
-      if (!/[ةه]$/.test(st)) typedW = String(typedW) + "ة";
+      const tanwinTun = /[ًٌٍ]/.test(String(targetW)) && /[تط][َُِ]?ن$/.test(String(typedW));
+      if (!tanwinTun && !/[ةهَاۃ]$/.test(String(typedW))) return 0;
+      if (tanwinTun) typedW = String(typedW).replace(/[تط][َُِ]?ن$/, "ة");
+      else if (!/[ةه]$/.test(st)) typedW = String(typedW) + "ة";
     }
     const a = fold(typedW), b = fold(targetW);
     if (!a || !b) return 0;
@@ -2444,7 +2446,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwls4lpy";
+const DATA_V = "mwlsm505";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -2487,6 +2489,8 @@ function expandArticles(raw) {
     .replace(/([bcdfghjklmnpqrstvwxyz37HSTDZ])'(?=[bcdfghjklmnpqrstvwxyz37HSTDZ])/gi, "$1")
     // hyphen form (optional preposition/space, optional elided 'a'): al- as- bial- bis- wal- "bi as-"
     .replace(new RegExp(`(^|\\s|${_PRE})a?(?:${_SUN})-`, "g"), "$1Al")
+    // standalone plain article typed with a space: "al kitaab" / "al misbaahu" -> "Alkitaab" / "Almisbaahu"
+    .replace(/(^|\s)[aA]l\s+(?=[a-zA-Z235679'])/g, "$1Al")
     // fused, no hyphen, plain article after a preposition: bialkitab walkitab
     .replace(new RegExp(`(${_PRE})al`, "g"), "$1Al")
     // fused, no hyphen, assimilated sun article after a preposition — the article's
@@ -2945,14 +2949,23 @@ function attachInlineTranslit(el, opts) {
   };
   const render = () => { el.value = committed + latinToArabic(raw); suggest(); };
   el.addEventListener("beforeinput", e => {
+    const expected = committed + latinToArabic(raw);
+    if (el.value !== expected) { committed = el.value; raw = ""; }
+    const allSelected = el.value.length > 0 && el.selectionStart === 0 && el.selectionEnd === el.value.length;
     if (e.inputType === "insertText" && e.data != null) {
-      e.preventDefault(); raw += e.data; render();
-    } else if (e.inputType === "deleteContentBackward") {
       e.preventDefault();
-      if (raw) raw = raw.slice(0, -1); else committed = committed.slice(0, -1);
+      if (allSelected) { raw = ""; committed = ""; }
+      raw += e.data; render();
+    } else if (e.inputType === "deleteContentBackward" || (allSelected && e.inputType === "deleteContentForward")) {
+      e.preventDefault();
+      if (allSelected) { raw = ""; committed = ""; }
+      else if (raw) raw = raw.slice(0, -1);
+      else committed = committed.slice(0, -1);
       render();
     } else if (e.inputType === "insertFromPaste" && e.data != null) {
-      e.preventDefault(); raw += e.data; render();
+      e.preventDefault();
+      if (allSelected) { raw = ""; committed = ""; }
+      raw += e.data; render();
     }
     // other input types (line breaks, composition) fall through untouched
   });

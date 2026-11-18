@@ -193,11 +193,30 @@ yes(!sentenceMatchAr("qultu alHaqqa", "قَالُوا الحَقَّ", "قَال
 {
   const css = fs.readFileSync(path.join(ROOT, "css", "style.css"), "utf8");
   yes(/^\.fill-input \{/m.test(css), ".fill-input is styled site-wide, not inside one page's <style>");
-  for (const page of ["sentences.html", "vocab.html"]) {
+  for (const page of fs.readdirSync(ROOT).filter(f => f.endsWith(".html")).sort()) {
     const html = fs.readFileSync(path.join(ROOT, page), "utf8");
     if (!/class="fill-input"/.test(html)) continue;
     yes(/attachInlineTranslit/.test(html), `${page} converts English letters as he types`);
   }
+  const grammarHtml = fs.readFileSync(path.join(ROOT, "grammar.html"), "utf8");
+  yes(/attachInlineTranslit/.test(grammarHtml) && /answerMatchAr/.test(grammarHtml),
+    "grammar.html wires inline transliteration and uses forgiving answerMatchAr grading");
+}
+
+/* ---------- space-separated definite articles & -tun/-tan on taa marbuta ---------- */
+{
+  yes(normalizeAr(latinToArabic("al misbaahu saghiir")) === normalizeAr("المسباه سغير"),
+    `"al misbaahu saghiir" joins the definite article ال cleanly -> ${latinToArabic("al misbaahu saghiir")}`);
+  yes(answerMatchAr("al misbaahu saghiir", "المِصْبَاحُ صَغِيرٌ").ok,
+    '"al misbaahu saghiir" is accepted for المِصْبَاحُ صَغِيرٌ');
+  yes(answerMatchAr("uommiy mu3llimah", "أُمِّي مُعَلِّمَةٌ").ok,
+    '"uommiy mu3llimah" converts and is accepted for أُمِّي مُعَلِّمَةٌ');
+  yes(answerMatchAr("3indii khazaanatun kabiira", "عِندِي خَزَانَةٌ كَبِيرَةٌ").ok,
+    '"3indii khazaanatun kabiira" (-tun on ة) is accepted for عِندِي خَزَانَةٌ كَبِيرَةٌ');
+  yes(answerMatchAr("marratan thaaniyatan", "مَرَّةً ثَانِيَةً").ok,
+    '"marratan thaaniyatan" (-tan on ة) is accepted for مَرَّةً ثَانِيَةً');
+  yes(!answerMatchAr("walid", "وَالِدَةٌ").ok,
+    'a bare consonant ending ("walid") is still rejected for feminine وَالِدَةٌ');
 }
 
 /* ---------- SPOKEN answers are graded differently from typed ones ----------

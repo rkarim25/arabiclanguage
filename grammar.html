@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Grammar — Arabic</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwls4lpy">
-  <link rel="stylesheet" href="css/style.css?v=mwls4lpy">
+  <link rel="stylesheet" href="css/fonts.css?v=mwlsm505">
+  <link rel="stylesheet" href="css/style.css?v=mwlsm505">
   <style>
     .g-grid { display: flex; flex-direction: column; gap: 0; }
     .g-card {
@@ -37,10 +37,10 @@
   <div id="kbDock"></div>
 </main>
 
-<script src="js/srs.js?v=mwls4lpy"></script>
-<script src="js/app.js?v=mwls4lpy"></script>
-<script src="js/tracker.js?v=mwls4lpy"></script>
-<script src="js/plan.js?v=mwls4lpy"></script>
+<script src="js/srs.js?v=mwlsm505"></script>
+<script src="js/app.js?v=mwlsm505"></script>
+<script src="js/tracker.js?v=mwlsm505"></script>
+<script src="js/plan.js?v=mwlsm505"></script>
 <script>
 renderNav("grammar");
 trackPage("grammar");
@@ -107,6 +107,8 @@ async function loadReach() {
 }
 function renderList() {
   trackPage("grammar:list");
+  const dock = document.getElementById("kbDock");
+  if (dock && dock.firstElementChild) dock.firstElementChild.style.display = "none";
   /* THE ORDER IS THE PLAN. His ask, 2026-08-30: "make sure it has the minimum
      required and there is a plan for it to be introduced to me."
 
@@ -170,6 +172,8 @@ function renderList() {
 function renderPattern(p) {
   trackPage(`grammar:${p.id}`);
   window.scrollTo({ top: 0 });
+  const dock = document.getElementById("kbDock");
+  if (dock && dock.firstElementChild) dock.firstElementChild.style.display = "none";
   content.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">
       <div style="display:inline-flex;align-items:center;gap:12px">
@@ -188,6 +192,7 @@ function renderPattern(p) {
     </div>
     <div class="card">
       <h2>1-minute test — type the Arabic</h2>
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">Type directly in each box in <b>English letters</b> — the Arabic appears as you type. <span style="white-space:nowrap">H=ح · kh=خ · th=ث · dh=ذ · sh=ش · gh=غ · 3=ع · S=ص · T=ط · A=ا · aa=آ</span></div>
       <div id="testArea"></div>
       <div class="ex-row" style="margin-top:12px">
         <button class="primary" id="gCheck">✓ Check</button>
@@ -223,14 +228,15 @@ function renderPattern(p) {
     ta.appendChild(div);
   });
 
+  if (typeof attachInlineTranslit === "function") {
+    ta.querySelectorAll(".fill-input").forEach(inp => attachInlineTranslit(inp));
+  }
   lastFocused = lastFocused || ta.querySelector("input");
   const gTarget = () => lastFocused;
   document.getElementById("gKb").onclick = () => mountTranslitDock(gTarget);
-  mountTranslitDock(gTarget, true);
 
-  // he may answer in romanization (the hint itself is shown that way). Long vowels
-  // written as doubles (innā = innaa) stay significant, so إِنَّ vs إِنَّا remains honest;
-  // the lax (length-forgiving) match only applies when no sibling item collides with it.
+  // he may answer in romanization (the hint itself is shown that way) or via inline-converted
+  // Arabic; answerMatchAr handles exact + sound-alike folds, with stripped-commentary rom fallback.
   const rom = s => String(s).toLowerCase()
     .replace(/ā/g, "aa").replace(/ī/g, "ii").replace(/ū/g, "uu")
     .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/g, "");
@@ -240,21 +246,26 @@ function renderPattern(p) {
     p.test.forEach((t, i) => {
       const input = ta.querySelector(`input[data-i="${i}"]`);
       const ans = ta.querySelectorAll(".correct-answer")[i];
-      let ok = normalizeAr(input.value) === normalizeAr(t.ar);
+      const rawVal = input.value;
+      const exact = normalizeAr(rawVal) === normalizeAr(t.ar);
+      const m = exact ? { ok: true, phon: false } : (typeof answerMatchAr === "function" ? answerMatchAr(rawVal, t.ar) : { ok: false });
+      let ok = !!m.ok;
+      let showExact = ok && !exact;
       let romOk = false;
-      if (!ok && rom(input.value).length > 1) {
-        romOk = rom(input.value) === rom(t.hint) ||
-          (lax(input.value) === lax(t.hint) && !p.test.some((o, j) => j !== i && lax(o.hint) === lax(input.value)));
-        ok = romOk;
+      if (!ok && rom(rawVal).length > 1) {
+        const hintHead = String(t.hint || "").split(/[—(]/)[0];
+        romOk = rom(rawVal) === rom(hintHead) ||
+          (lax(rawVal) === lax(hintHead) && !p.test.some((o, j) => j !== i && lax(String(o.hint || "").split(/[—(]/)[0]) === lax(rawVal)));
+        if (romOk) { ok = true; showExact = true; }
       }
       input.classList.remove("ok", "no");
       input.classList.add(ok ? "ok" : "no");
-      ans.classList.toggle("yes-note", romOk);
-      if (romOk) { right++; ans.style.display = "block"; ans.textContent = t.ar; }
+      ans.classList.toggle("yes-note", showExact);
+      if (showExact) { right++; ans.style.display = "block"; ans.textContent = `✓ Right by sound — exact spelling: ${t.ar}`; }
       else if (ok) { right++; ans.style.display = "none"; }
       else { ans.style.display = "block"; ans.textContent = t.ar; }
       if (window.SRS && SRS.rate) SRS.rate(`gt:${p.id}:${i}`, ok ? "yes" : "no");
-      logEvent({ e: "gfill", g: p.id, i, typed: input.value, ok, ...(romOk ? { rom: true } : {}) });
+      logEvent({ e: "gfill", g: p.id, i, typed: rawVal, ok, ...(romOk || m.rom ? { rom: true } : {}), ...(m.phon ? { phon: true } : {}) });
     });
     if (window.SRS && SRS.refreshDots) SRS.refreshDots(ta);
     let scoreMsg = `Score: ${right} / ${p.test.length}` + (right === p.test.length ? " — ممتاز! 🎉" : " — re-read the pattern and try again any time.");
@@ -311,6 +322,8 @@ function veItems() {
 }
 function renderVerbEars() {
   trackPage("grammar:verbears");
+  const dock = document.getElementById("kbDock");
+  if (dock && dock.firstElementChild) dock.firstElementChild.style.display = "none";
   const hasVoice = hasArabicVoice();
   const ROUNDS = 12;
   const order = veItems().sort(() => 0.5 - Math.random()).slice(0, ROUNDS);
