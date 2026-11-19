@@ -183,4 +183,15 @@ check("built-in Quick Check renders inside Lesson Cards by default and Review-mo
     "index.html Review-mode Lesson Cards must show 'Check answer →' and reveal Quick Check inline with collapsed 'Full Lesson Card:' drawer");
 });
 
+check("Pen Note #71 Lesson Cards (lc:verb-patterns & lc:arabic-persons) render cleanly with neural audio & Quick Checks", () => {
+  const vp = lcData.cards.find(c => c.id === "verb-patterns");
+  const ap = lcData.cards.find(c => c.id === "arabic-persons");
+  assert(vp && ap, "both lc:verb-patterns and lc:arabic-persons must exist in lesson-cards.json");
+  const vpHtml = LessonCards.renderBodyHtml(vp, { setsLink: true });
+  assert(vpHtml.includes("تَعَلَّمَ") && vpHtml.includes("أَتَعَلَّمُ") && vpHtml.includes("أَرَادَ") && vpHtml.includes("أُرِيدُ") && vpHtml.includes("ذَهَبَ"));
+  const apHtml = LessonCards.renderBodyHtml(ap, { setsLink: true });
+  assert(apHtml.includes("أَنْتِ") && apHtml.includes("هُمَا") && apHtml.includes("أَنْتُمَا") && apHtml.includes("هُنَّ"));
+  assert(apHtml.includes("reciteOrSpeak('55:13'"), "55:13 dual ayah row must route to Alafasy reciteOrSpeak");
+});
+
 console.log(`\n✓ ${passed} Lesson Card assertions passed.`);

@@ -2446,7 +2446,7 @@ function reciteVerse(surahN, ayah, fallbackText, rate) {
    the lesson looked like unrelated nonsense. Stamping the data URLs makes the
    pairing impossible: a new build asks for a URL the old cache does not hold.
    The service worker still answers offline via its ignoreSearch fallback. */
-const DATA_V = "mwmfoak7";
+const DATA_V = "mwnv6fez";
 if (typeof window !== "undefined" && window.fetch) {
   const _f = window.fetch.bind(window);
   window.fetch = (u, o) => (typeof u === "string" && /^data\/[^?]+\.json$/.test(u))
@@ -3827,6 +3827,7 @@ function relevantVerbConjHtml(hit, opts) {
             }).join("")}
           </tbody>
         </table>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.4">Covers ~97% of everyday speech (incl. <span class="ar-inline" dir="rtl">أَنْتِ</span> for Saba). Need duals (<span class="ar-inline" dir="rtl">هُمَا / أَنْتُمَا</span>) or fem. plurals (<span class="ar-inline" dir="rtl">هُنَّ / أَنْتُنَّ</span>)? <a href="sets.html#lc-arabic-persons" onclick="event.stopPropagation()" style="color:var(--accent)">8 vs 14 Persons card →</a></div>
       </div>
     </details>` : "";
   return head + body + tbl;
@@ -4561,20 +4562,22 @@ function generateLearnerDossierMarkdown(currentContext) {
     md += `## 4. Live Practice Capability & Motivation Snapshot\n`;
     md += `- **Vocabulary:** ${caps.vocab.held} solid, ${caps.vocab.learning} learning, ${caps.vocab.slips} active slips\n`;
     md += `- **Sentences:** ${caps.sentences.held} solid (${caps.sentences.provenActive} proven spoken/typed), ${caps.sentences.slips} slips\n`;
-    md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 15} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
+    md += `- **Lesson Cards & Grammar:** ${(caps.concepts && caps.concepts.lessonCardsSeen) || 0}/${(caps.concepts && caps.concepts.lessonCardsTotal) || 17} Lesson Cards studied, ${(caps.concepts && caps.concepts.grammarPatternsHeld) || 0} grammar rules solid\n`;
     if (caps.quran) md += `- **Qur'an by Ear:** ${caps.quran.coreWordsHeld || 0}/${caps.quran.coreWordsTotal || 151} Core Words (${caps.quran.mushafCoveragePct || 0}% Mushaf coverage) · ${caps.quran.salahAyahsHeld || 0}/${caps.quran.salahAyahsTotal || 61} Salah ayahs held\n`;
-    if (caps.mosque) md += `- **Mosque, Khutbah & Du'as:** ${caps.mosque.seen || 0}/${caps.mosque.total || 54} cues seen · ${caps.mosque.cardsHeld || 0}/${caps.mosque.cardsTotal || 2} cards held\n`;
+    if (caps.mosque) md += `- **Mosque, Khutbah & Du'as:** ${caps.mosque.seen || 0}/${caps.mosque.total || 60} cues seen · ${caps.mosque.cardsHeld || 0}/${caps.mosque.cardsTotal || 2} cards held\n`;
     if (caps.motivation) md += `- **Motivation & Rhythm:** ${caps.motivation.activeDays7d}/4 target days active (7d) · Feeling: ${caps.motivation.todayMood || caps.motivation.lastMood || "steady"} · Mode: ${caps.motivation.modeLabel}\n`;
     if (caps.gaps && caps.gaps.length) md += `- **Current Priority Gaps:** ${caps.gaps.join(" · ")}\n`;
     md += `\n`;
   }
 
-  md += `## 5. Active Focus, 15 Lesson Cards & High-Value Mnemonics\n`;
+  md += `## 5. Active Focus, 17 Lesson Cards & High-Value Mnemonics\n`;
   md += `- **Active Chapter 4 (Daily Routine, Time & Tenses):** Advancing weekly sentences automatically via unified Practice & Commute sessions (Chapters 1–3 mastered 100%).\n`;
+  md += `- **3 Past → Present Verb Engines (lc:verb-patterns — new!):** (1) Plain 3-letter root squeezes 1st letter silent (**ذَهَبَ ← أَذْهَبُ / يَذْهَبُ**); (2) Doubled middle (**عَلَّمَ ← يُعَلِّمُ**) or opening أَ- (**أَرَادَ ← يُرِيدُ / أُرِيدُ**) flips prefix to **yu- / u-** + **-i-**; (3) **تَـ** verbs keep their **تَـ** (**تَعَلَّمَ ← يَتَعَلَّمُ / أَتَعَلَّمُ**; two t's in **تَتَعَلَّمُ**!).\n`;
+  md += `- **8 Core Persons vs All 14 Persons (lc:arabic-persons — new!):** Our 8-person core (**أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ**) covers ~97% of everyday speech (already includes feminine **أَنْتِ** for Saba: **هَلْ ذَهَبْتِ؟ / تَذْهَبِينَ**); duals (**هُمَا / أَنْتُمَا**) & fem. plurals (**هُنَّ / أَنْتُنَّ**) wait for ear recognition.\n`;
   md += `- **5 Negation Pairings (lc:negation):** Past = **لَمْ أَذْهَبْ** (jussive) OR **مَا ذَهَبْتُ** (past) — **NEVER ✗ لَا ذَهَبْتُ** (wish/curse!). Present = **لَا أَذْهَبُ**; Future = **لَنْ أَذْهَبَ**; Nominal = **لَيْسَ**.\n`;
   md += `- **Verb Tenses incl. She & They (lc:verb-tenses):** Past = **ذَهَبَتْ / ذَهَبُوا** (-at / -ū), Present = **تَذْهَبُ / يَذْهَبُونَ**, Future = **سَتَذْهَبُ / سَيَذْهَبُونَ** (only هُمْ takes the plural tail -ūna/-ū; نَحْنُ is plain **نَذْهَبُ**).\n`;
   md += `- **4-Pillar Qur'an Ear Moulds & Pillar 5 Mosque Maps:** Glue & Pronoun Chains (**فِيهَا / عَلَيْهِمْ / لَهُمْ / إِنَّهُمْ** — *lc:quran-glue-chains*), Active Doer vs Passive Done-To (**حَاسِد** vs **مَغْضُوب / مَرْفُوعَة** — *lc:quran-active-passive*), Plural Story (*lc:quran-plural-story*), Verb Form Shifts II/IV/X (**عَلَّمَ / أَنْزَلَ / اسْتَغْفَرَ** — *lc:quran-verb-shifts*), plus Friday Khutbah & Imam cues (**أَمَّا بَعْدُ / عِبَادَ اللَّهِ / رَبَّنَا آتِنَا** — *lc:khutbah-roadmap*, *lc:duas-and-imam*).\n`;
-  md += `- **Priority Slips & Nominal Refresh to Weave In:** المِصْبَاحُ صَغِيرٌ (The lamp is small — nominal), أُمِّي مُعَلِّمَةٌ (My mother is a teacher — nominal), مِصْعَد (lift/elevator — صَعِدَ ascend), طَابِق (floor/storey), الآنَ (now), مَرَّة (time/occasion: مَرَّةً أُخْرَى), الاثْنَيْن (Monday) / الأَرْبِعَاء (Wednesday), فِيهَا سُرُرٌ مَرْفُوعَةٌ (88:13 thrones raised high), ٱلْمَغْضُوبِ (1:7 angered-upon), أُرَتِّبُ (I tidy — tartīb), حَفْلَة (party — mahfil), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟, تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ. (Recent wins: كُلّ every/all, شَيْء thing, آمَنُوا they believed, تَقَبَّلَ اللهُ, يَوْمُ العَمَلِ work day, عَبَدْتُ اللهَ I worshipped Allah!)\n`;
+  md += `- **Priority Slips & Recent Wins to Weave In:** أَرَادَ / يُرِيدُ / أُرِيدُ (wanted/wants), المِصْبَاحُ صَغِيرٌ (The lamp is small — nominal), أُمِّي مُعَلِّمَةٌ (My mother is a teacher — nominal), مِصْعَد (lift/elevator — صَعِدَ ascend), طَابِق (floor/storey), الآنَ (now), مَرَّة (time/occasion: مَرَّةً أُخْرَى), الاثْنَيْن (Monday) / الخَمِيس (Thursday), فِيهَا سُرُرٌ مَرْفُوعَةٌ (88:13 thrones raised high), ٱلْمَغْضُوبِ (1:7 angered-upon), أُرَتِّبُ (I tidy — tartīb), حَفْلَة (party — mahfil), عُقَد (knots — 113:4), كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba vs masculine -ka), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ. (Recent wins: صَلَاة prayer → box 3, أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا 🟢, كُلّ, شَيْء, آمَنُوا, تَقَبَّلَ اللهُ, يَوْمُ العَمَلِ, عَبَدْتُ اللهَ!)\n`;
   md += `- **Look-Alike & Nuance Anchors:** أَعُودُ (plain د = return home) vs أَعُوذُ (dotted ذ = seek refuge); جَوْزَة (ج leads walnut) vs زَوْجَة (ز leads wife); price triplet ثَمَن (value) vs سِعْر (shop tag) vs أُجْرَة (taxi fare); Surah An-Nās صُدُور (outer chest courtyard) vs قُلُوب (locked heart).\n\n`;
   if (currentContext && currentContext.sentences) {
     md += `\n## 6. Current Target Sentences to Practice\n`;

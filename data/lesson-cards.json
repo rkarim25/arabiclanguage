@@ -1438,6 +1438,211 @@
         "chapters": []
       },
       "audioCue": "Lesson Card: The Du'a and Imam Command Kit. Almost every du'a opens with Rabbi meaning my Lord, Rabbana meaning our Lord, or Allahumma meaning O Allah, followed immediately by a bare Arabic command such as ighfir meaning forgive or zidni meaning increase me. When the imam faces the congregation, he switches to plural commands ending in u: istawu means stand straight, taqaddamu means step forward, and aqimu s-sufuf means straighten the rows. Knowing those two command switches unlocks both du'a and live masjid speech."
+    },
+    {
+      "id": "verb-patterns",
+      "category": "grammar",
+      "categoryLabel": "Grammar System",
+      "icon": "⚙️",
+      "title": "Past → Present Verb Patterns: The 3 Engines",
+      "arTitle": "أَوْزَانُ الفِعْلِ: المَاضِي ← المُضَارِع",
+      "summary": "Past-to-present changes follow 3 simple engines: plain 3-letter roots squeeze the 1st vowel silent (ذَهَبَ ← يَذْهَبُ); doubled-middle or أَ- verbs flip to يُـ / أُ (عَلَّمَ ← يُعَلِّمُ, أَرَادَ ← يُرِيدُ); and تَـ verbs keep their تَـ (تَعَلَّمَ ← يَتَعَلَّمُ).",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "1️⃣ ذَهَبَ ← يَذْهَبُ",
+            "title": "Plain 3-Letter Root (Form I)",
+            "desc": "Past: 3 open beats (dha-ha-ba). Present: snap أَ / تَ / يَ / نَ on front and squeeze letter 1 silent (a-dh-habu). Middle vowel (a / i / u) comes by ear."
+          },
+          {
+            "badge": "2️⃣ أَرَادَ ← يُرِيدُ",
+            "title": "\"Yu-\" Engine (Forms II & IV)",
+            "desc": "Doubled middle (عَلَّمَ / رَتَّبَ) or opening أَ (أَرَادَ / أَنْزَلَ) ALWAYS flips the front vowel to يُـ / أُ (yu- / u-) and drops the 2nd vowel to -i- (يُعَلِّمُ, يُرِيدُ)."
+          },
+          {
+            "badge": "3️⃣ تَعَلَّمَ ← يَتَعَلَّمُ",
+            "title": "\"Ta-\" & \"Ista-\" Keepers (Forms V & X)",
+            "desc": "Verbs starting with تَـ (تَعَلَّمَ / تَنَاوَلَ) KEEP تَـ after أَ/يَ (يَتَعَلَّمُ / أَتَعَلَّمُ). Verbs starting with اِسْتَـ (اِسْتَيْقَظَ) drop i- and snap أَ/يَ (يَسْتَيْقِظُ)."
+          }
+        ]
+      },
+      "columns": [
+        "Engine / Clue",
+        "Past → Present Rule",
+        "Live Example (He / I)",
+        "More Verbs You Know"
+      ],
+      "rows": [
+        {
+          "col1": "<b>1. Plain 3-Letter Root</b> (Form I)",
+          "col2": "<code>فَعَلَ</code> ← <code>يَفْعَلُ / يَفْعِلُ / يَفْعُلُ</code> (1st letter silent)",
+          "ar": "ذَهَبَ إِلَى العَمَلِ ← أَذْهَبُ إِلَى العَمَلِ",
+          "tr": "dhahaba → adhhabu ilā l-ʿamali",
+          "col4": "<b>قَرَأَ ← أَقْرَأُ</b> · <b>كَتَبَ ← أَكْتُبُ</b> · <b>جَلَسَ ← أَجْلِسُ</b>"
+        },
+        {
+          "col1": "<b>2a. Doubled Middle</b> (Form II)",
+          "col2": "<code>فَعَّلَ</code> ← <code>يُفَعِّلُ</code> (always <b>yu- / u-</b> + <b>-i-</b>)",
+          "ar": "عَلَّمَ القُرْآنَ ← يُعَلِّمُ القُرْآنَ",
+          "tr": "ʿallama → yuʿallimu l-qurʾāna",
+          "col4": "<b>رَتَّبَ ← أُرَتِّبُ</b> (tidy) · <b>صَلَّى ← أُصَلِّي</b> (pray)"
+        },
+        {
+          "col1": "<b>2b. Opening أَ</b> (Form IV)",
+          "col2": "<code>أَفْعَلَ</code> ← <code>يُفْعِلُ</code> (always <b>yu- / u-</b> + <b>-i-</b>)",
+          "ar": "أَرَادَ السَّفَرَ ← أُرِيدُ السَّفَرَ",
+          "tr": "arāda → urīdu s-safara",
+          "col4": "<b>أَنْزَلَ ← يُنْزِلُ</b> (sent down) · <b>أَعْطَى ← يُعْطِي</b> (gave)"
+        },
+        {
+          "col1": "<b>3a. تَـ Prefix</b> (Form V)",
+          "col2": "<code>تَفَعَّلَ</code> ← <code>يَتَفَعَّلُ</code> (<b>تَـ stays!</b>)",
+          "ar": "تَعَلَّمَ العَرَبِيَّةَ ← أَتَعَلَّمُ العَرَبِيَّةَ",
+          "tr": "taʿallama → ataʿallamu l-ʿarabiyyah",
+          "col4": "<b>تَنَاوَلَ ← أَتَنَاوَلُ</b> (had breakfast) · <b>تَكَلَّمَ ← أَتَكَلَّمُ</b>"
+        },
+        {
+          "col1": "<b>3b. اِسْتَـ Seek</b> (Form X)",
+          "col2": "<code>اِسْتَفْعَلَ</code> ← <code>يَسْتَفْعِلُ</code> (drop <i>i-</i>, snap <b>أَ / يَ</b>)",
+          "ar": "اِسْتَيْقَظَ مُبَكِّرًا ← أَسْتَيْقِظُ مُبَكِّرًا",
+          "tr": "istayqaẓa → astayqiẓu mubakkiran",
+          "col4": "<b>اِسْتَغْفَرَ ← أَسْتَغْفِرُ</b> (ask forgiveness)"
+        }
+      ],
+      "trap": "On a تَـ verb like تَعَلَّمَ, saying \"you/she learns\" stacks TWO t's: تَتَعَلَّمُ (tataʿallamu). And never force yu- onto plain 3-letter verbs — yu- is the exclusive badge of Engine 2 (doubled middle عَلَّمَ or أَ- start أَرَادَ)!",
+      "quickCheck": {
+        "prompt": "Flip these three verbs from Past (he) → Present (I): ذَهَبَ · تَعَلَّمَ · أَرَادَ",
+        "answerAr": "ذَهَبَ ← أَذْهَبُ  ·  تَعَلَّمَ ← أَتَعَلَّمُ  ·  أَرَادَ ← أُرِيدُ",
+        "speakAr": "أَذْهَبُ · أَتَعَلَّمُ · أُرِيدُ",
+        "speakParts": [
+          "ذَهَبَ، أَذْهَبُ",
+          "تَعَلَّمَ، أَتَعَلَّمُ",
+          "أَرَادَ، أُرِيدُ"
+        ],
+        "tr": "dhahaba → adhhabu · taʿallama → ataʿallamu · arāda → urīdu",
+        "answerEn": "Plain 3-letter root = a- (أَذْهَبُ); تَـ verb keeps ta- (أَتَعَلَّمُ); أَ- Form IV flips to u-/yu- (أُرِيدُ)."
+      },
+      "triggers": {
+        "patterns": [
+          "tenses",
+          "who-acts"
+        ],
+        "words": [
+          "أَرَادَ",
+          "أَتَعَلَّمُ",
+          "تَعَلَّمَ",
+          "أُرَتِّبُ",
+          "أَسْتَيْقِظُ",
+          "ذَهَبَ"
+        ],
+        "chapters": [
+          4,
+          6
+        ]
+      },
+      "audioCue": "Lesson card rule: Arabic verbs follow three main engines from past to present. Plain three-letter roots like dhahaba squeeze the first letter silent to adhhabu. Doubled middle or opening alif verbs like allama or arada flip to yu or u, giving yurid or uridu. And ta-verbs like ta-allama keep their ta, becoming yata-allamu or ata-allamu."
+    },
+    {
+      "id": "arabic-persons",
+      "category": "grammar",
+      "categoryLabel": "Grammar System",
+      "icon": "👥",
+      "title": "8 Core Persons vs All 14 Arabic Persons",
+      "arTitle": "الضَّمَائِرُ الثَّمَانِيَةُ وَالأَرْبَعَةَ عَشَرَ",
+      "summary": "Classical Arabic has 14 pronoun slots, but our 8-person core (أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ) already covers ~97% of everyday speech — including feminine أَنْتِ for Saba! Duals and feminine plurals wait for recognition by ear.",
+      "diagram": {
+        "type": "lanes",
+        "lanes": [
+          {
+            "badge": "✅ Tier 1: Core 8 (~97%)",
+            "title": "Speak First (Master These)",
+            "desc": "أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ — covers every normal conversation, including أَنْتِ (you, f.) for Saba."
+          },
+          {
+            "badge": "🟡 Tier 2: Dual (Both / Two)",
+            "title": "هُمَا / أَنْتُمَا (Recognise by Ear)",
+            "desc": "Used only for literally 2 people (ـَا / ـَانِ). Frequent in the Qur'ān (رَبِّكُمَا in Ar-Raḥmān), rare in early speaking."
+          },
+          {
+            "badge": "📖 Tier 3: Fem. Plural",
+            "title": "هُنَّ / أَنْتُنَّ (Qur'ān & Formal)",
+            "desc": "All-female group of 3+ (ـنَ). Any mixed group (even 1 man + 10 women) defaults to هُمْ / أَنْتُمْ."
+          }
+        ]
+      },
+      "columns": [
+        "Person Slot",
+        "Ending / Marker",
+        "Example Sentence",
+        "Do I Need to Learn It Now?"
+      ],
+      "rows": [
+        {
+          "col1": "<b>You (f. sg.) — أَنْتِ</b>",
+          "col2": "Past <code>ـتِ</code> (<i>-ti</i>) · Pres <code>تَـ…ـينَ</code>",
+          "ar": "هَلْ ذَهَبْتِ إِلَى البَيْتِ؟",
+          "tr": "hal dhahabti ilā l-bayti?",
+          "col4": "<b>YES (already in Core 8!)</b> — use with Saba &amp; female tutors"
+        },
+        {
+          "col1": "<b>You (pl.) — أَنْتُمْ</b>",
+          "col2": "Past <code>ـتُمْ</code> · Pres <code>تَـ…ـونَ</code>",
+          "ar": "هَلْ تَذْهَبُونَ إِلَى المَسْجِدِ؟",
+          "tr": "hal tadhhabūna ilā l-masjidi?",
+          "col4": "<b>YES (already in Core 8!)</b> — mixed or male groups"
+        },
+        {
+          "col1": "<b>They (dual) — هُمَا</b>",
+          "col2": "Past <code>ـَا</code> · Pres <code>يَـ…ـانِ</code>",
+          "ar": "هُمَا يَذْهَبَانِ إِلَى المَدْرَسَةِ",
+          "tr": "humā yadhhabāni ilā l-madrasati",
+          "col4": "<b>Ear only for now</b> — literally 2 people"
+        },
+        {
+          "col1": "<b>You two (dual) — أَنْتُمَا</b>",
+          "col2": "Past <code>ـتُمَا</code> · Pres <code>تَـ…ـانِ</code>",
+          "ar": "فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ",
+          "tr": "fa-bi-ayyi ālāʾi rabbikumā tukadhdhibān",
+          "ayahRef": "55:13",
+          "col4": "<b>Qur'ān ear cue</b> (Ar-Raḥmān 55:13 — dual <i>-kumā / -ān</i>)"
+        },
+        {
+          "col1": "<b>They (f. pl.) — هُنَّ</b>",
+          "col2": "Past <code>ـنَ</code> · Pres <code>يَـ…ـنَ</code>",
+          "ar": "هُنَّ يَقْرَأْنَ القُرْآنَ",
+          "tr": "hunna yaqraʾna l-qurʾāna",
+          "col4": "<b>Ear only for now</b> — all-female 3+ (also أَنْتُنَّ)"
+        }
+      ],
+      "trap": "No, 8 persons is NOT too short — every core verb table on this site already includes أَنْتِ (you, female, row #8)! Just don't skip row #8 when speaking to Saba (هَلْ ذَهَبْتِ؟ / كَيْفَ كَانَ يَوْمُكِ؟). Save dual (هُمَا / أَنْتُمَا) and feminine plural (هُنَّ / أَنْتُنَّ) for ear recognition until the Core 8 are automatic.",
+      "quickCheck": {
+        "prompt": "Ask Saba (you, fem.) \"Did you go?\" vs Ask a mixed group \"Did they go?\":",
+        "answerAr": "هَلْ ذَهَبْتِ؟  ·  هَلْ ذَهَبُوا؟",
+        "speakAr": "هَلْ ذَهَبْتِ؟",
+        "speakParts": [
+          "هَلْ ذَهَبْتِ؟",
+          "هَلْ ذَهَبُوا؟"
+        ],
+        "tr": "hal dhahabti? · hal dhahabū?",
+        "answerEn": "أَنْتِ takes -ti (ذَهَبْتِ) in past and -īna (تَذْهَبِينَ) in present; mixed groups use هُمْ (-ū / -ūna)."
+      },
+      "triggers": {
+        "patterns": [
+          "who-acts",
+          "pronouns"
+        ],
+        "words": [
+          "أَنْتِ",
+          "أَنْتُمْ",
+          "هُمْ"
+        ],
+        "chapters": [
+          4,
+          5
+        ]
+      },
+      "audioCue": "Lesson card rule: Classical Arabic has fourteen pronoun slots, but our core eight already cover ninety seven percent of everyday speech, including feminine anti for speaking to your wife. Dual huma and antuma, plus feminine plural hunna, are for recognition by ear until the core eight are automatic."
     }
   ]
 }

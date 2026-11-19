@@ -7,16 +7,16 @@
 
 ---
 
-## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-18)
+## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-19)
 
-Computed directly from `data:rkarim88@gmail.com` (`4,417` logged events · **`5/4` active days** in the last 7 days · `1,271` SRS cards: **`404` 🟢 green** incl. `68` retired, **`704` 🟡 amber**, **`142` 🔴 red**, **`21` ⚪ grey** · `846` Box ≥ 2):
+Computed directly from `data:rkarim88@gmail.com` (`4,441` logged events · **`6/4` active days** in the last 7 days · `1,271` SRS cards: **`404` 🟢 green** incl. `68` retired, **`705` 🟡 amber**, **`143` 🔴 red**, **`19` ⚪ grey** · `849` Box ≥ 2):
 
 | Stream | Verified Now | Target | Live Diagnosis |
 |---|---|---|---|
 | **Weekly Chapters** | **Ch 1–3 passed (100%)** · **Ch 4 active** (`0/10` rated) | **Ch 1–10** (`≥80%` test) | Survival greetings, food/requests, and hotel/taxi mastered; **Chapter 4 (Daily Routine, Time & Tenses)** queued in `Practice`. |
-| **Vocabulary** | **140 / 554** everyday+core held (`208` seen, `8` learning, `60` slips) · **846** Box ≥ 2 across all decks | **600+** core words held | Strong passive base (+24 🟢 green since yesterday, promoted `كُلّ`, `شَيْء`, `آمَنُوا`, `يَوْمُ العَمَلِ`, `هَٰذَا` retired); `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
-| **Sentences & Speaking** | **41** held (**39 passive**, **`0` proven active** in current ledger) · `41` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`0` spoken/typed `sent-drill` completions). Spoken Prompt **NN** targets Ch 4 routine + nominal sentences + `لَمْ / مَا` aloud. |
-| **Lesson Cards & Grammar** | **4 / 15** Lesson Cards seen (`0` green yet; `lc:negation` still `⚪` unseen; `lc:verb-tenses` due for 2nd-day green) · **1 / 22** grammar frames solid (`past vs present` & `nominal` shaky after `1/3` pre-fix attempt) | **15 cards** · **22 frames** | Inline transliteration & forgiving `answerMatchAr()` now live on `grammar.html`; priority systems queued in `Practice`: **Negation (`lc:negation`)**, **Verb Tenses (`lc:verb-tenses`)**, **Nominal (`المِصْبَاحُ صَغِيرٌ` / `أُمِّي مُعَلِّمَةٌ`)**, & **Mosque Roadmaps**. |
+| **Vocabulary** | **141 / 554** everyday+core held (`208` seen, `8` learning, `59` slips) · **849** Box ≥ 2 across all decks | **600+** core words held | Strong passive base (`صَلَاة` promoted to Box 3 today; `أَرَادَ` rated `maybe` → paired with new `lc:verb-patterns`); `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
+| **Sentences & Speaking** | **41** held (**39 passive**, **`0` proven active** in current ledger) · `41` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`0` spoken/typed `sent-drill` completions). Today's win: `أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا` → 🟢 green! Spoken Prompt **OO** targets 3 Verb Engines + `أَنْتِ` + Ch 4 + `لَمْ / مَا` aloud. |
+| **Lesson Cards & Grammar** | **4 / 17** Lesson Cards seen (`0` green yet; `lc:verb-tenses` `maybe` today; `lc:negation` `⚪` unseen; **NEW `lc:verb-patterns` & `lc:arabic-persons`** added for Pen Note #71!) · **1 / 22** grammar frames solid | **17 cards** · **22 frames** | Added `lc:verb-patterns` (3 Past→Present Engines: `ذَهَبَ/عَلَّمَ/أَرَادَ/تَعَلَّمَ`) & `lc:arabic-persons` (8 Core vs 14 Persons incl. `أَنْتِ`) directly from Pen Note #71; priority rules queued in `Practice`. |
 | **Qur'ān, Khutbah & Du'ās by Ear** | **57 / 151** Core Qur'ān words held (**39.7%** Mushaf coverage) · **3 / 61** Salah ayahs · **316** `i+1` ayahs unlocked · **0 / 60** Mosque cues seen | **Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains (`lc:quran-glue-chains` seen) → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (316 unlocked!) → Friday Khutbah, Common Du'ās & Imam cues (`Practice` + `🚗 Commute`). |
 
 ---

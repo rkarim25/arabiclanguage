@@ -204,6 +204,8 @@ try:
             if r.get("ar"): add("ar", r["ar"])
         qc = c.get("quickCheck") or {}
         if qc.get("speakAr"): add("ar", qc["speakAr"])
+        for sp in (qc.get("speakParts") or []):
+            if sp: add("ar", sp)
         if qc.get("prompt"): add("en", qc["prompt"])
 except Exception as e:
     print("Warning: could not parse lesson-cards.json", e)

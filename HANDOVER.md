@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-18  
+**Last Updated:** 2026-11-19  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,19 +77,20 @@
 
 ---
 
-## 2. Current Verified State (18 Nov 2026 — Evening Progress Audit, Speak with AI Prompt NN & Associated Docs)
+## 2. Current Verified State (19 Nov 2026 — Pen Note #71 Processed, 2 New Verb/Person Lesson Cards, Speak with AI Prompt OO & Live Health Audit)
 
-- **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-18T17:16Z`):** `4,417` total telemetry events (**`5/4` active days** in the last 7 days, `6` solid wins today!); `1,271` tracked SRS cards (**`404` 🟢 green** across 2+ days & `R ≥ 85%` incl. `68` retired — up `+24` from yesterday, **`704` 🟡 amber**, **`142` 🔴 red**, **`21` ⚪ grey**; `846` Box ≥ 2). Today's Practice promoted `qc:18 كُلّ`, `ph-deen:7 تَقَبَّلَ الله`, `qc:26 شَيْء`, `s:vb:19 عَبَدْتُ اللهَ`, `qc:28 آمَنُوا`, `gt:tenses:0`, `ev-lesson-routine:1 يَوْمُ العَمَلِ`, and retired `qc:38 هَٰذَا` `⊘`.
+- **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-19T14:18Z`):** `4,441` total telemetry events (**`6/4` active days** in the last 7 days, `2` solid wins today!); `1,271` tracked SRS cards (**`404` 🟢 green** across 2+ days & `R ≥ 85%` incl. `68` retired, **`705` 🟡 amber**, **`143` 🔴 red**, **`19` ⚪ grey**; `849` Box ≥ 2). Today's Practice promoted `qc:57 صَلَاة` to Box 3 and `md:46 أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا.` to Box 2 🟢, while `qc:82 أَرَادَ` and `lc:verb-tenses` were rated `maybe`.
 - **Capabilities & #1 Bottleneck Gap (`Practice.summarizeCapabilities`):**
-  - **Vocabulary & Qur'ān Top 151 Core:** `140/554` everyday+core held (`208` seen, `60` slips); `57/151` Core Qur'ān words held (**`39.7%`** of Mushaf occurrences, `30,737` tokens); **`316`** composable `i+1` ayahs unlocked (up from `308`); `4/15` Lesson Cards seen (`lc:verb-tenses`, `lc:pronoun-attachments`, `lc:sadr-vs-qalb`, `lc:quran-glue-chains` all `🟡` amber; `lc:negation` still `⚪` unseen); `0/60` Mosque/Khutbah/Du'ā cues seen.
-  - **#1 Gap:** **`0` proven active spoken/typed sentences** out of `41` held (`39` passive-only) + **Chapter 4 (`Time, Routine & Actions`) still at `0/10` rated** + `grammar:nominal` (`1/3` pre-fix attempt this morning at `06:45Z`; both `"al misbahi saghir"` and `"ummiy muallima"` verified passing under the `07:24 UK` `b5e7f492` fix!).
-- **Pen Notes & Live Website Health Audit:**
-  - Zero new pen notes (`#71+`) or uploaded images since Pen Note #70 (`2026-11-16`, resolved and verified).
-  - Live site verified healthy (`16/16` automated test suites pass, JS/JSON syntax valid, live `?v=` cache stamp synced).
-- **Speak with AI & Associated Docs Updated (Prompt NN):**
-  - Updated `chapters.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), and `js/app.js` (`generateLearnerDossierMarkdown`) to **Wednesday 18 Nov Mid-Week Spoken Unlock (Prompt NN)** — reflecting live stats (`404` 🟢, `316` `i+1` ayahs), today's wins (`كُلّ`, `شَيْء`, `آمَنُوا`, `يَوْمُ العَمَلِ`, `عَبَدْتُ اللهَ`), Chapter 4 Wednesday routine, nominal sentences (`المِصْبَاحُ صَغِيرٌ`, `أُمِّي مُعَلِّمَةٌ`), `lc:negation`, `lc:verb-tenses`, and 4-Pillar Qur'ān + Mosque cues.
-  - Updated `SPEAK_WITH_AI.md` (Prompt NN current, Prompt MM archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
-- **Sunday 15 Nov Preply Lesson Check:** Passed 3 days ago (`classes.json` latest still `c-2026-10-11`); awaiting Reza's notes/photos if class took place.
+  - **Vocabulary & Qur'ān Top 151 Core:** `141/554` everyday+core held (`208` seen, `8` learning, `59` slips); `57/151` Core Qur'ān words held (**`39.7%`** of Mushaf occurrences, `30,737` tokens); **`316`** composable `i+1` ayahs unlocked; `4/17` Lesson Cards seen (`lc:verb-tenses` `maybe` today; `lc:pronoun-attachments`, `lc:sadr-vs-qalb`, `lc:quran-glue-chains` in `🟡`; `lc:negation` & new `lc:verb-patterns` / `lc:arabic-persons` queued in `⚪`); `0/60` Mosque cues seen.
+  - **#1 Gap:** **`0` proven active spoken/typed sentences** out of `41` held (`39` passive-only) + **Chapter 4 (`Time, Routine & Actions`) still at `0/10` rated** + Past→Present verb form shifts (`lc:verb-tenses` & `qc:82 أَرَادَ` rated `maybe` today) + `lc:negation` unseen.
+- **Pen Note #71 (Processed & Shipped — 2 New Visual Lesson Cards + Conjugation Table Link):**
+  - Reza asked (`2026-11-19T06:48Z` on `index.html`): *(1)* what the general Past → Present verb patterns are (e.g. `تَعَلَّمَ → يَتَعَلَّمُ` vs `ذَهَبَ → أَذْهَبُ` — *"if yes maybe in a lesson card would help ideally"*), and *(2)* whether the 8-person core table is too short compared to the full 14 Arabic persons (dual, feminine plural, m/f `you`).
+  - Added **`lc:verb-patterns`** (*Past → Present Verb Patterns: The 3 Engines* — Form I `ذَهَبَ → أَذْهَبُ`, Form II/IV `yu-/u-` `عَلَّمَ → يُعَلِّمُ` & `أَرَادَ → يُرِيدُ`, Form V/X `تَعَلَّمَ → أَتَعَلَّمُ` & `اِسْتَيْقَظَ → أَسْتَيْقِظُ`) and **`lc:arabic-persons`** (*8 Core Persons vs All 14 Arabic Persons* — showing Core 8 already includes `أَنْتِ` for Saba and covers ~97% of everyday speech, while duals `هُمَا / أَنْتُمَا` & fem. plurals `هُنَّ / أَنْتُنَّ` wait for ear recognition, with Alafasy `55:13` audio) in `data/lesson-cards.json` (`17` Lesson Cards total), updated `scripts/gen-audio.py` to compile `speakParts`, added a direct link inside `relevantVerbConjHtml()` (`js/app.js`), and added regression checks in `scripts/test-lesson-cards.js`.
+- **Speak with AI & Associated Docs Updated (Prompt OO):**
+  - Updated `chapters.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), `js/app.js` (`generateLearnerDossierMarkdown`), `SPEAK_WITH_AI.md` (Prompt OO current, Prompt NN archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
+- **Sunday 15 Nov Preply Lesson Check:** Passed 4 days ago (`classes.json` latest still `c-2026-10-11`); awaiting Reza's notes/photos if class took place.
+
+### 2.0. Earlier 18 Nov Snapshot (Wednesday Progress Audit & Prompt NN)
 
 ### 2.0. Earlier 17–18 Nov Milestones (`sets.html` Fix, Quick Checks, Verb Conjugations, Grammar Typing, KFGQPC Tanwīn, Scroll Continuity)
 
