@@ -1085,7 +1085,67 @@ const bank = D("sentence-bank.json");
     /loadConj\(\)/.test(wordsSrcNow) && /relevantVerbConjHtml/.test(wordsSrcNow),
     "js/app.js exposes findRelevantVerb & relevantVerbConjHtml and index, sentences & words wire verb-specific conjugations"
   );
-}
 
-console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
-process.exit(fails ? 1 : 0);
+  // Note / report submission & class.html HTML integrity guards
+  const classSrcNow = fs.readFileSync(path.join(ROOT, "class.html"), "utf8");
+  const chapSrcNow = fs.readFileSync(path.join(ROOT, "chapters.html"), "utf8");
+  const trackerSrcNow = fs.readFileSync(path.join(ROOT, "js", "tracker.js"), "utf8");
+  yes(
+    /<\/html>\s*$/.test(classSrcNow) &&
+    classSrcNow.indexOf("ats-mastery-updated") > 0 &&
+    classSrcNow.indexOf("ats-mastery-updated") < classSrcNow.lastIndexOf("</script>"),
+    "class.html ends cleanly with </html> and runs ats-mastery-updated inside <script>"
+  );
+  const saveChapMatch = chapSrcNow.match(/async function saveAiVoiceReport\(\)[\s\S]*?\n\}/);
+  const saveClassAiMatch = classSrcNow.match(/async function saveClassAiVoiceReport\(\)[\s\S]*?\n\}/);
+  const submitPreplyMatch = classSrcNow.match(/async function submitPreplyLesson\(\)[\s\S]*?\n\}/);
+  yes(
+    !!(saveChapMatch && /await\s+autoSync\(true\)/.test(saveChapMatch[0]) && !/autoSync\(\)/.test(saveChapMatch[0])),
+    "chapters.html saveAiVoiceReport awaits forced autoSync(true)"
+  );
+  yes(
+    !!(saveClassAiMatch && /await\s+autoSync\(true\)/.test(saveClassAiMatch[0]) && !/autoSync\(\)/.test(saveClassAiMatch[0])),
+    "class.html saveClassAiVoiceReport awaits forced autoSync(true)"
+  );
+  yes(
+    !!(submitPreplyMatch && /await\s+autoSync\(true\)/.test(submitPreplyMatch[0]) && !/autoSync\(\)/.test(submitPreplyMatch[0])),
+    "class.html submitPreplyLesson awaits forced autoSync(true)"
+  );
+
+  const autoSyncBlockMatch = trackerSrcNow.match(/let _syncing =[\s\S]*?\n\}/);
+  yes(!!autoSyncBlockMatch, "js/tracker.js exposes autoSync queue block");
+  if (autoSyncBlockMatch) {
+    let syncCalls = 0;
+    let releaseFirst;
+    const firstGate = new Promise(r => { releaseFirst = r; });
+    const harness = new Function("syncMethod", "store", "SYNC_KEY", "syncNow", autoSyncBlockMatch[0] + "; return autoSync;");
+    const testAutoSync = harness(
+      () => "google",
+      { get: () => 0 },
+      "ats-lastsync",
+      async () => {
+        syncCalls++;
+        if (syncCalls === 1) await firstGate;
+      }
+    );
+    const p1 = testAutoSync(false);
+    const p2 = testAutoSync(true);
+    releaseFirst();
+    yes(typeof p2.then === "function", "js/tracker.js autoSync(true) returns a promise when queued behind an active sync");
+    Promise.all([p1, p2]).then(([r1, r2]) => {
+      if (!r1 || !r2 || syncCalls !== 2) {
+        console.error(`  ✗ autoSync(true) queued follow-up failed: r1=${r1}, r2=${r2}, syncCalls=${syncCalls}`);
+        process.exit(1);
+      }
+      console.log("  ✓ js/tracker.js autoSync(true) queues cleanly while _syncing and resolves true after follow-up sync");
+      console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
+      process.exit(fails ? 1 : 0);
+    }).catch(err => {
+      console.error(err);
+      process.exit(1);
+    });
+  } else {
+    console.log(fails ? `\n${fails} FAILED` : "\nALL TESTS PASS");
+    process.exit(fails ? 1 : 0);
+  }
+}

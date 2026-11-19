@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwnv6fez">
-  <link rel="stylesheet" href="css/style.css?v=mwnv6fez">
+  <link rel="stylesheet" href="css/fonts.css?v=mwo2dpdq">
+  <link rel="stylesheet" href="css/style.css?v=mwo2dpdq">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 500; margin-bottom: 8px; }
     .passage-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 14px 0; }
@@ -567,18 +567,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwnv6fez"></script>
-<script src="js/curriculum.js?v=mwnv6fez"></script>
-<script src="js/srs.js?v=mwnv6fez"></script>
-<script src="js/frames.js?v=mwnv6fez"></script>
-<script src="js/freetry.js?v=mwnv6fez"></script>
-<script src="js/practice.js?v=mwnv6fez"></script>
-<script src="js/lesson-cards.js?v=mwnv6fez"></script>
-<script src="js/app.js?v=mwnv6fez"></script>
-<script src="js/tracker.js?v=mwnv6fez"></script>
-<script src="js/errors.js?v=mwnv6fez"></script>
-<script src="js/plan.js?v=mwnv6fez"></script>
-<script src="js/account.js?v=mwnv6fez"></script>
+<script src="js/progress-model.js?v=mwo2dpdq"></script>
+<script src="js/curriculum.js?v=mwo2dpdq"></script>
+<script src="js/srs.js?v=mwo2dpdq"></script>
+<script src="js/frames.js?v=mwo2dpdq"></script>
+<script src="js/freetry.js?v=mwo2dpdq"></script>
+<script src="js/practice.js?v=mwo2dpdq"></script>
+<script src="js/lesson-cards.js?v=mwo2dpdq"></script>
+<script src="js/app.js?v=mwo2dpdq"></script>
+<script src="js/tracker.js?v=mwo2dpdq"></script>
+<script src="js/errors.js?v=mwo2dpdq"></script>
+<script src="js/plan.js?v=mwo2dpdq"></script>
+<script src="js/account.js?v=mwo2dpdq"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -2575,7 +2575,21 @@ function buildClassAiPrompt(cls) {
   return p;
 }
 
-function saveClassAiVoiceReport() {
+function _reportSyncFeedback(fb, synced, connected, cloudMsg, localPrefix) {
+  if (!fb) return;
+  if (synced) {
+    fb.style.color = "var(--accent)";
+    fb.textContent = cloudMsg;
+  } else if (connected) {
+    fb.style.color = "var(--amber)";
+    fb.textContent = `${localPrefix} — cloud sync will retry automatically (or tap Account → Sync).`;
+  } else {
+    fb.style.color = "var(--amber)";
+    fb.textContent = `${localPrefix} only — sign in on Account (☁) so your coach receives it in the cloud.`;
+  }
+}
+
+async function saveClassAiVoiceReport() {
   const box = document.getElementById("aiClassReportPaste");
   const fb = document.getElementById("aiClassReportFeedback");
   if (!box) return;
@@ -2619,13 +2633,14 @@ function saveClassAiVoiceReport() {
     t: Date.now()
   });
 
-  if (typeof autoSync === "function") autoSync();
-
-  if (fb) {
-    fb.style.color = "var(--accent)";
-    fb.textContent = "✓ Report saved! Coach will tailor your upcoming lessons.";
-    setTimeout(() => { fb.textContent = ""; }, 3500);
+  const connected = typeof syncMethod === "function" && !!syncMethod();
+  let synced = false;
+  if (connected && typeof autoSync === "function") {
+    if (fb) { fb.style.color = "var(--accent)"; fb.textContent = "Sending report to cloud…"; }
+    try { synced = !!(await autoSync(true)); } catch (e) {}
   }
+  _reportSyncFeedback(fb, synced, connected, "✓ Report sent to your coach in the cloud.", "✓ Report saved on this device");
+  if (fb) setTimeout(() => { if (fb) fb.textContent = ""; }, 4500);
   box.value = "";
   renderClassAiReportHistory();
 }
@@ -3042,13 +3057,24 @@ async function submitPreplyLesson() {
   const who = typeof whoami === "function" ? whoami() : null;
   logEvent({ e: "preply-paste", text, imageCount: files.length, imgs, t: Date.now() });
   logEvent({ e: "note", text: ("[Preply lesson] " + text).slice(0, 2000), ctx: { page: "class", kind: "preply-paste" }, user: who ? who.name : undefined, ...(imgs.length ? { imgs } : {}) });
-  if (typeof autoSync === "function") { try { autoSync(true); } catch (e) {} }
-  fb.textContent = `✓ Lesson saved${imgs.length ? ` with ${imgs.length} photo${imgs.length > 1 ? "s" : ""}` : ""} — your coach reads it tonight and builds the next chapter from it.`;
+  const connected = typeof syncMethod === "function" && !!syncMethod();
+  let synced = false;
+  if (connected && typeof autoSync === "function") {
+    fb.textContent = "Sending lesson to cloud…";
+    try { synced = !!(await autoSync(true)); } catch (e) {}
+  }
+  const photoNote = imgs.length ? ` with ${imgs.length} photo${imgs.length > 1 ? "s" : ""}` : "";
+  _reportSyncFeedback(
+    fb,
+    synced,
+    connected,
+    `✓ Lesson sent to your coach in the cloud${photoNote}.`,
+    `✓ Saved on this device${photoNote}`
+  );
   document.getElementById("pasteText").value = "";
   if (fileInput) fileInput.value = "";
 }
+window.addEventListener("ats-mastery-updated", () => { try { renderTeacherBrief(); renderMasterPlan(); } catch (e) {} });
 </script>
 </body>
 </html>
-
-window.addEventListener("ats-mastery-updated", () => { try { renderTeacherBrief(); renderMasterPlan(); } catch (e) {} });

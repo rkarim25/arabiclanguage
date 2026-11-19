@@ -312,11 +312,14 @@ async function syncNow() {
   throw new Error("not-connected");
 }
 
-let _syncing = false, _syncForceQueued = false;
+let _syncing = false, _syncForceQueued = false, _syncForceWaiters = [];
 async function autoSync(force) {
   if (!syncMethod()) return false;
   if (_syncing) {
-    if (force) _syncForceQueued = true;
+    if (force) {
+      _syncForceQueued = true;
+      return new Promise(resolve => _syncForceWaiters.push(resolve));
+    }
     return false;
   }
   const last = store.get(SYNC_KEY, 0);
@@ -327,7 +330,10 @@ async function autoSync(force) {
   _syncing = false;
   if (_syncForceQueued) {
     _syncForceQueued = false;
-    return autoSync(true);
+    const waiters = _syncForceWaiters.splice(0);
+    const nextOk = await autoSync(true);
+    waiters.forEach(fn => fn(nextOk));
+    return nextOk;
   }
   return ok;
 }
