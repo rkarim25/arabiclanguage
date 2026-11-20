@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwo2dpdq">
-  <link rel="stylesheet" href="css/style.css?v=mwo2dpdq">
+  <link rel="stylesheet" href="css/fonts.css?v=mwpajpbr">
+  <link rel="stylesheet" href="css/style.css?v=mwpajpbr">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwo2dpdq"></script>
-<script src="js/curriculum.js?v=mwo2dpdq"></script>
-<script src="js/srs.js?v=mwo2dpdq"></script>
-<script src="js/match.js?v=mwo2dpdq"></script>
-<script src="js/errors.js?v=mwo2dpdq"></script>
-<script src="js/frames.js?v=mwo2dpdq"></script>
-<script src="js/app.js?v=mwo2dpdq"></script>
-<script src="js/tracker.js?v=mwo2dpdq"></script>
-<script src="js/plan.js?v=mwo2dpdq"></script>
-<script src="js/account.js?v=mwo2dpdq"></script>
+<script src="js/progress-model.js?v=mwpajpbr"></script>
+<script src="js/curriculum.js?v=mwpajpbr"></script>
+<script src="js/srs.js?v=mwpajpbr"></script>
+<script src="js/match.js?v=mwpajpbr"></script>
+<script src="js/errors.js?v=mwpajpbr"></script>
+<script src="js/frames.js?v=mwpajpbr"></script>
+<script src="js/app.js?v=mwpajpbr"></script>
+<script src="js/tracker.js?v=mwpajpbr"></script>
+<script src="js/plan.js?v=mwpajpbr"></script>
+<script src="js/account.js?v=mwpajpbr"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3781,31 +3781,27 @@ function buildChapterAiPrompt(chap) {
   p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
-  p += `   - Priority Drill Challenge (Thursday 19 Nov Spoken & Verb-Engine Unlock — Prompt OO):\n`;
-  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + 3 Verb Engines + 8 vs 14 Persons + Past Negation (17 Lesson Cards):\n`;
-  p += `       - 1. 3 Past → Present Verb Engines (lc:verb-patterns — NEW from today's pen note!):\n`;
+  p += `   - Priority Drill Challenge (Friday 20 Nov Jumu'ah & Spoken Unlock — Prompt PP):\n`;
+  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + 3 Verb Engines + 8 vs 14 Persons + Past Negation + Friday Khutbah Cues:\n`;
+  p += `       - 1. Last Night's Fresh Slips & Wins (Thu 19 Nov Batch):\n`;
+  p += `         a) Feminine -ki to wife Saba (🔴 rated 'no' last night!): "كَيْفَ كَانَ يَوْمُكِ؟" (How was your day? -ki to her!) · "هَلْ ذَهَبْتِ؟" · "هَلْ تَذْهَبِينَ؟" — contrast with masculine "-ka" ("كَيْفَ كَانَ يَوْمُكَ؟").\n`;
+  p += `         b) Past vs Present Flip (🟡 'maybe' on gt:tenses:1 & أَرَادَ/يُرِيدُ): drill instant swaps between Past ("ذَهَبْتُ / قَرَأْتُ / أَرَدْتُ") and Present ("أَذْهَبُ / أَقْرَأُ / أُرِيدُ") + Future ("سَأَذْهَبُ / سَأَقْرَأُ").\n`;
+  p += `         c) Daily & Evening Fluency (🟡 'maybe' last night): "أُحِبُّ القَهْوَةَ كَثِيرًا" (I like coffee a lot) · "المَسَاءُ لِلْعَائِلَةِ" (The evening is for the family) · "عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ".\n`;
+  p += `         d) Recycle Last Night's Wins: "عَنْ" (about/from → Box 3!) · "فِيهَا سُرُرٌ مَّرْفُوعَةٌ" (88:13 → 🟢 green!) · "أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا" (🟢 green!) · "صَلَاة" (Box 3) · "المِصْبَاحُ صَغِيرٌ" & "أُمِّي مُعَلِّمَةٌ" (nominal check ✓!).\n`;
+  p += `       - 2. 3 Past → Present Verb Engines (lc:verb-patterns — Pen Note #71):\n`;
   p += `         a) Plain 3-letter root (Form I): ذَهَبَ → أَذْهَبُ / يَذْهَبُ (1st root letter squeezed silent; also قَرَأَ → أَقْرَأُ).\n`;
-  p += `         b) "Yu-" Engine (Forms II & IV): doubled middle (عَلَّمَ → يُعَلِّمُ, رَتَّبَ → أُرَتِّبُ) or opening أَ- (أَرَادَ → يُرِيدُ / أُرِيدُ — reinforce today's slip!) ALWAYS flips to yu-/u- + -i-.\n`;
-  p += `         c) "Ta-" & "Ista-" Keepers (Forms V & X): تَـ verbs KEEP تَـ (تَعَلَّمَ → أَتَعَلَّمُ / يَتَعَلَّمُ — 2 t's in تَتَعَلَّمُ! Today's win: أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا 🟢); اِسْتَـ drops i- (اِسْتَيْقَظَ → أَسْتَيْقِظُ).\n`;
-  p += `       - 2. 8 Core Persons incl. Feminine أَنْتِ (lc:arabic-persons — NEW!) & Verb Tenses (lc:verb-tenses):\n`;
-  p += `         a) Core 8 (أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ) covers ~97% of everyday speech — DON'T skip أَنْتِ with wife Saba (هَلْ ذَهَبْتِ؟ / هَلْ تَذْهَبِينَ؟ / كَيْفَ كَانَ يَوْمُكِ؟)! Duals (هُمَا / أَنْتُمَا) & fem. plurals (هُنَّ / أَنْتُنَّ) are ear-only for now.\n`;
-  p += `         b) Past on back (ذَهَبْتُ / ذَهَبَتْ / ذَهَبُوا), Present on front (أَذْهَبُ / تَذْهَبُ / يَذْهَبُونَ), Future clips سَـ (سَأَذْهَبُ). Only هُمْ takes plural tail; نَحْنُ is plain نَذْهَبُ.\n`;
-  p += `       - 3. Past Negation (lc:negation — still unseen on site, priority teach!): NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid forms:\n`;
-  p += `         a) لَمْ أَذْهَبْ إِلَى العَمَلِ (lam adhhab — لَمْ + jussive present, standard MSA & Qur'an like لَمْ يَلِدْ).\n`;
-  p += `         b) مَا ذَهَبْتُ إِلَى العَمَلِ (mā dhahabtu — مَا + past verb, natural spoken MSA).\n`;
-  p += `         c) Contrast: لَا أَذْهَبُ (present don't) vs لَنْ أَذْهَبَ (future won't) vs لَيْسَ عِنْدِي (nominal don't have).\n`;
-  p += `       - 4. Nominal Sentences & Core Anchors: المِصْبَاحُ صَغِيرٌ (The lamp is small) · أُمِّي مُعَلِّمَةٌ (My mother is a teacher) · Price Triplet (ثَمَن value vs سِعْر shop tag vs أُجْرَة taxi fare) · Look-Alikes (أَعُودُ plain د return vs أَعُوذُ dotted ذ seek refuge; جَوْزَة walnut vs زَوْجَة wife) · Ṣadr vs Qalb (صُدُور vs قُلُوب) · Iḍāfah vs Adjective (مِفْتَاحُ الغُرْفَةِ vs الغُرْفَةُ الجَدِيدَةُ).\n`;
-  p += `       - 5. 4-Pillar Qur'ān Decoding & Pillar 5 Mosque Landmarks:\n`;
-  p += `         * Glue Chains (lc:quran-glue-chains): فِيهَا (in it, 88:13) · عَلَيْهِمْ (upon them, 1:7) · لَهُمْ (for them) · إِنَّهُمْ (indeed they) · إِلَّا (except/but) · كُلّ (every/all) · شَيْء (thing).\n`;
-  p += `         * Active Doer vs Passive Done-To (lc:quran-active-passive): حَاسِد (envier 113:5) vs مَغْضُوب (angered-upon 1:7) / مَرْفُوعَة (raised high 88:13: فِيهَا سُرُرٌ مَرْفُوعَةٌ).\n`;
-  p += `         * Khutbah & Du'ā Cues (lc:khutbah-roadmap, lc:duas-and-imam): أَمَّا بَعْدُ (as for what follows) · عِبَادَ اللَّهِ (servants of Allah) · رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً.\n`;
-  p += `     * Recent Telemetry Slips & Today's Wins to Speak Aloud:\n`;
-  p += `       1. أَرَادَ / يُرِيدُ / أُرِيدُ (wanted/wants — today's slip!) vs أُرِيدُ أَنْ أَتَعَلَّمَ العَرَبِيَّةَ.\n`;
-  p += `       2. مِصْعَد (miṣʿad — lift/elevator, root ص-ع-د) vs طَابِق (floor/storey) · الآنَ (now) · مَرَّة (time/occasion: مَرَّةً أُخْرَى).\n`;
-  p += `       3. الخَمِيس (Thursday — today!) · يَوْمُ العَمَلِ (work day) · الاثْنَيْن (Monday) vs يَوْمُ العُطْلَةِ (day off).\n`;
-  p += `       4. كَيْفَ كَانَ يَوْمُكِ؟ / هَلْ ذَهَبْتِ؟ (feminine -ki / -ti to wife Saba!).\n`;
-  p += `       5. أُرَتِّبُ البَيْتَ / الغُرْفَةَ (I tidy/arrange — root ر-ت-ب tartīb) & حَفْلَة (party/gathering) · عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ.\n`;
-  p += `       6. Today's Wins to Recycle Aloud: صَلَاة (prayer — Box 3 today!) · أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا (🟢 green today!) · قَرَأْتُ القُرْآنَ · عَبَدْتُ اللهَ · تَقَبَّلَ اللهُ (reply مِنَّا وَمِنْكُمْ!) · آمَنُوا.\n\n`;
+  p += `         b) "Yu-" Engine (Forms II & IV): doubled middle (عَلَّمَ → يُعَلِّمُ, رَتَّبَ → أُرَتِّبُ) or opening أَ- (أَرَادَ → يُرِيدُ / أُرِيدُ) ALWAYS flips to yu-/u- + -i-.\n`;
+  p += `         c) "Ta-" & "Ista-" Keepers (Forms V & X): تَـ verbs KEEP تَـ (تَعَلَّمَ → أَتَعَلَّمُ / يَتَعَلَّمُ — 2 t's in تَتَعَلَّمُ!); اِسْتَـ drops i- (اِسْتَيْقَظَ → أَسْتَيْقِظُ).\n`;
+  p += `       - 3. 8 Core Persons incl. Feminine أَنْتِ (lc:arabic-persons) & Past Negation (lc:negation — still unseen!):\n`;
+  p += `         a) Core 8 (أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ) covers ~97% of everyday speech; duals (هُمَا / أَنْتُمَا) & fem. plurals (هُنَّ / أَنْتُنَّ) are ear-only for now.\n`;
+  p += `         b) NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid past negations: "لَمْ أَذْهَبْ إِلَى العَمَلِ" (standard MSA/Qur'an) AND "مَا ذَهَبْتُ إِلَى العَمَلِ" (spoken MSA), vs "لَا أَذْهَبُ" (don't) vs "لَنْ أَذْهَبَ" (won't) vs "لَيْسَ عِنْدِي" (don't have).\n`;
+  p += `       - 4. Friday Jumu'ah, Khutbah & 4-Pillar Qur'ān Ear Cues (lc:khutbah-roadmap, lc:duas-and-imam — 0/60 Mosque cues seen!):\n`;
+  p += `         * Jumu'ah & Khutbah cues: "اليَوْمُ يَوْمُ الجُمُعَةِ" (Today is Friday) · "أَذْهَبُ إِلَى المَسْجِدِ لِصَلَاةِ الجُمُعَةِ" · "أَمَّا بَعْدُ" (as for what follows) · "عِبَادَ اللَّهِ" (servants of Allah) · "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً".\n`;
+  p += `         * Glue Chains (lc:quran-glue-chains) & Active/Passive (lc:quran-active-passive): "فِيهَا" (88:13) · "عَلَيْهِمْ" (1:7) · "لَهُمْ" · "إِلَّا" · "حَاسِد" (113:5) vs "مَغْضُوب" (1:7) / "مَرْفُوعَة" (88:13).\n`;
+  p += `     * Earlier Priority Slips & Anchors to Keep Sharp:\n`;
+  p += `       1. مِصْعَد (lift/elevator) vs طَابِق (floor) · الآنَ (now) · مَرَّة (time/occasion: مَرَّةً أُخْرَى) · الاثْنَيْن (Monday) vs يَوْمُ العُطْلَةِ (day off).\n`;
+  p += `       2. أُرَتِّبُ الغُرْفَةَ (I tidy the room) · حَفْلَة (party) · تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (Speak slowly, please).\n`;
+  p += `       3. Look-Alikes & Price Triplet: أَعُودُ (return) vs أَعُوذُ (seek refuge); جَوْزَة (walnut) vs زَوْجَة (wife); ثَمَن (value) vs سِعْر (tag) vs أُجْرَة (fare); صُدُور vs قُلُوب.\n\n`;
 
   p += `3. Strict Voice Mode Rules:\n`;
   p += `   - Keep every reply strictly under 2 sentences in spoken Modern Standard Arabic (MSA) with full vowels (tashkeel).\n`;

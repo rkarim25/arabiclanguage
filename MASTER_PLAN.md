@@ -7,17 +7,17 @@
 
 ---
 
-## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-19)
+## 1. Live Baseline & Bottleneck Audit (Updated 2026-11-20)
 
-Computed directly from `data:rkarim88@gmail.com` (`4,441` logged events · **`6/4` active days** in the last 7 days · `1,271` SRS cards: **`404` 🟢 green** incl. `68` retired, **`705` 🟡 amber**, **`143` 🔴 red**, **`19` ⚪ grey** · `849` Box ≥ 2):
+Computed directly from `data:rkarim88@gmail.com` (`4,457` logged events · **`5/4` active days** in the last 7 days · `1,271` SRS cards: **`429` 🟢 green** incl. `68` retired, **`683` 🟡 amber**, **`141` 🔴 red**, **`18` ⚪ grey** · `874` Box ≥ 2):
 
 | Stream | Verified Now | Target | Live Diagnosis |
 |---|---|---|---|
 | **Weekly Chapters** | **Ch 1–3 passed (100%)** · **Ch 4 active** (`0/10` rated) | **Ch 1–10** (`≥80%` test) | Survival greetings, food/requests, and hotel/taxi mastered; **Chapter 4 (Daily Routine, Time & Tenses)** queued in `Practice`. |
-| **Vocabulary** | **141 / 554** everyday+core held (`208` seen, `8` learning, `59` slips) · **849** Box ≥ 2 across all decks | **600+** core words held | Strong passive base (`صَلَاة` promoted to Box 3 today; `أَرَادَ` rated `maybe` → paired with new `lc:verb-patterns`); `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
-| **Sentences & Speaking** | **41** held (**39 passive**, **`0` proven active** in current ledger) · `41` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`0` spoken/typed `sent-drill` completions). Today's win: `أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا` → 🟢 green! Spoken Prompt **OO** targets 3 Verb Engines + `أَنْتِ` + Ch 4 + `لَمْ / مَا` aloud. |
-| **Lesson Cards & Grammar** | **4 / 17** Lesson Cards seen (`0` green yet; `lc:verb-tenses` `maybe` today; `lc:negation` `⚪` unseen; **NEW `lc:verb-patterns` & `lc:arabic-persons`** added for Pen Note #71!) · **1 / 22** grammar frames solid | **17 cards** · **22 frames** | Added `lc:verb-patterns` (3 Past→Present Engines: `ذَهَبَ/عَلَّمَ/أَرَادَ/تَعَلَّمَ`) & `lc:arabic-persons` (8 Core vs 14 Persons incl. `أَنْتِ`) directly from Pen Note #71; priority rules queued in `Practice`. |
-| **Qur'ān, Khutbah & Du'ās by Ear** | **57 / 151** Core Qur'ān words held (**39.7%** Mushaf coverage) · **3 / 61** Salah ayahs · **316** `i+1` ayahs unlocked · **0 / 60** Mosque cues seen | **Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains (`lc:quran-glue-chains` seen) → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (316 unlocked!) → Friday Khutbah, Common Du'ās & Imam cues (`Practice` + `🚗 Commute`). |
+| **Vocabulary** | **144 / 691** words held (`210` seen, `11` learning, `55` slips) · **874** Box ≥ 2 across all decks | **600+** core words held | Strong passive base (`عَنْ` → Box 3 & `صَلَاة` → Box 3; `أَرَادَ` rated `maybe` → paired with `lc:verb-patterns`); `Practice` recycles slips (`مِصْعَد`, `طَابِق`, `الآنَ`, `مَرَّة`, `الاثْنَيْن`). |
+| **Sentences & Speaking** | **45** held (**42 passive**, **`3` proven active** in current ledger) · `62` shaky slips | **150+** proven spoken | **#1 Bottleneck:** Passive recognition far outpaces active spoken/typed output (`42/45` passive-only; Thu night slips on `كَيْفَ كَانَ يَوْمُكِ؟` `no`, `أُحِبُّ القَهْوَةَ كَثِيرًا` `maybe`, `المَسَاءُ لِلْعَائِلَةِ` `maybe`). Win: `فِيهَا سُرُرٌ مَّرْفُوعَةٌ` (88:13) → 🟢 green! Spoken Prompt **PP** targets feminine `-ki`, 3 Verb Engines, Ch 4, `لَمْ / مَا` & Friday Jumu'ah cues. |
+| **Lesson Cards & Grammar** | **4 / 17** Lesson Cards seen (`0` green yet; `lc:verb-tenses` `maybe`; `lc:negation`, `lc:verb-patterns` & `lc:arabic-persons` still `⚪` unseen) · **1 / 22** grammar frames solid | **17 cards** · **22 frames** | `gt:tenses:1` rated `maybe` Thu night (`gt:nominal:0` ✓); priority unseen Lesson Cards (`lc:verb-patterns`, `lc:arabic-persons`, `lc:negation`, `lc:khutbah-roadmap`) queued in `Practice`. |
+| **Qur'ān, Khutbah & Du'ās by Ear** | **57 / 151** Core Qur'ān words held (**39.7%** Mushaf coverage) · **3 / 61** Salah ayahs · **317** `i+1` ayahs unlocked · **0 / 60** Mosque cues seen | **Top 151 Core + 13 Salah Surahs + `i+1` Juz' 'Amma + 60 Khutbah/Du'ā/Imam cues** | Engine-first order: Structures & Glue Chains (`lc:quran-glue-chains` seen) → Frequency Core 151 → 13 Salah Anchors → `i+1` composable ayahs (317 unlocked!) → Friday Khutbah, Common Du'ās & Imam cues (`Practice` + `🚗 Commute`). |
 
 ---
 
