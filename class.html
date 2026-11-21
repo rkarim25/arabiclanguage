@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Teacher &amp; Master Plan — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwpajpbr">
-  <link rel="stylesheet" href="css/style.css?v=mwpajpbr">
+  <link rel="stylesheet" href="css/fonts.css?v=mwqpyuah">
+  <link rel="stylesheet" href="css/style.css?v=mwqpyuah">
   <style>
     .class-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 500; margin-bottom: 8px; }
     .passage-box { background: transparent; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 14px 0; margin: 14px 0; }
@@ -567,18 +567,18 @@
   </details>
 </main>
 
-<script src="js/progress-model.js?v=mwpajpbr"></script>
-<script src="js/curriculum.js?v=mwpajpbr"></script>
-<script src="js/srs.js?v=mwpajpbr"></script>
-<script src="js/frames.js?v=mwpajpbr"></script>
-<script src="js/freetry.js?v=mwpajpbr"></script>
-<script src="js/practice.js?v=mwpajpbr"></script>
-<script src="js/lesson-cards.js?v=mwpajpbr"></script>
-<script src="js/app.js?v=mwpajpbr"></script>
-<script src="js/tracker.js?v=mwpajpbr"></script>
-<script src="js/errors.js?v=mwpajpbr"></script>
-<script src="js/plan.js?v=mwpajpbr"></script>
-<script src="js/account.js?v=mwpajpbr"></script>
+<script src="js/progress-model.js?v=mwqpyuah"></script>
+<script src="js/curriculum.js?v=mwqpyuah"></script>
+<script src="js/srs.js?v=mwqpyuah"></script>
+<script src="js/frames.js?v=mwqpyuah"></script>
+<script src="js/freetry.js?v=mwqpyuah"></script>
+<script src="js/practice.js?v=mwqpyuah"></script>
+<script src="js/lesson-cards.js?v=mwqpyuah"></script>
+<script src="js/app.js?v=mwqpyuah"></script>
+<script src="js/tracker.js?v=mwqpyuah"></script>
+<script src="js/errors.js?v=mwqpyuah"></script>
+<script src="js/plan.js?v=mwqpyuah"></script>
+<script src="js/account.js?v=mwqpyuah"></script>
 <script>
 renderNav("classes");
 trackPage("classes");
@@ -2532,11 +2532,11 @@ function buildClassAiPrompt(cls) {
     p += `\nGoal & Voice Mode Instructions:\n`;
     p += `1. Roleplay the situations in the reading with me (ordering food, a trip, shopping on the way), then ask me to narrate MY OWN day in the first-person past tense (ـتُ: سَافَرْتُ، تَنَاوَلْتُ، اشْتَرَيْتُ، سَاعَدْتُ، عُدْتُ).\n`;
     p += `2. Drill variations: swap the food, the time on the clock (السَّاعَةُ السَّادِسَةُ → السَّابِعَةُ), first/second/third, I → we → they, and turn statements into questions with هَلْ / مَتَى / مَاذَا / لِمَاذَا.\n`;
-    p += `3. Spoken & Jumu'ah Unlock Priorities (Friday 20 Nov — Prompt PP):\n`;
-    p += `   - Last Night's Fresh Slips (Thu 19 Nov Batch): كَيْفَ كَانَ يَوْمُكِ؟ (rated 'no' — drill feminine -ki/-ti to Saba vs masculine -ka!), gt:tenses:1 (past ↔ present flips: ذَهَبْتُ/أَذْهَبُ, قَرَأْتُ/أَقْرَأُ, أَرَدْتُ/أُرِيدُ), أُحِبُّ القَهْوَةَ كَثِيرًا (I like coffee a lot), and المَسَاءُ لِلْعَائِلَةِ (The evening is for the family). (Last night's wins: عَنْ → Box 3, فِيهَا سُرُرٌ مَّرْفُوعَةٌ 88:13 → 🟢 green, nominal sentences ✓!)\n`;
-    p += `   - 3 Past → Present Verb Engines (lc:verb-patterns — Pen Note #71): (1) Plain 3-letter root squeezes 1st letter silent (ذَهَبَ → أَذْهَبُ / يَذْهَبُ); (2) Doubled middle (عَلَّمَ → يُعَلِّمُ) or opening أَ- (أَرَادَ → يُرِيدُ / أُرِيدُ) flips to yu-/u- + -i-; (3) تَـ verbs keep تَـ (تَعَلَّمَ → أَتَعَلَّمُ / يَتَعَلَّمُ — 2 t's in تَتَعَلَّمُ!).\n`;
+    p += `3. Spoken & Preply-Eve Unlock Priorities (Saturday 21 Nov — Prompt QQ):\n`;
+    p += `   - Today's Batch 1 & Fresh Slips: كَيْفَ كَانَ يَوْمُكِ؟ (feminine -ki to Saba — lc:pronoun-attachments is in Batch 1 today!), gt:tenses:1 (قَالُوا / ذَهَبْتُ↔أَذْهَبُ / أَرَدْتُ↔أُرِيدُ), gt:nominal:2 (أُمِّي مُعَلِّمَةٌ & المِصْبَاحُ صَغِيرٌ — no "is/are"!), أُحِبُّ القَهْوَةَ كَثِيرًا, and المَسَاءُ لِلْعَائِلَةِ. (Wins to recycle: عَنْ → Box 3, فِيهَا سُرُرٌ مَّرْفُوعَةٌ 88:13 → 🟢 green, صَلَاة → Box 3!)\n`;
+    p += `   - 3 Past → Present Verb Engines (lc:verb-patterns — unseen on site!): (1) Plain 3-letter root squeezes 1st letter silent (ذَهَبَ → أَذْهَبُ / يَذْهَبُ); (2) Doubled middle (عَلَّمَ → يُعَلِّمُ) or opening أَ- (أَرَادَ → يُرِيدُ / أُرِيدُ) flips to yu-/u- + -i-; (3) تَـ verbs keep تَـ (تَعَلَّمَ → أَتَعَلَّمُ / يَتَعَلَّمُ — 2 t's in تَتَعَلَّمُ!).\n`;
     p += `   - 8 Core Persons incl. Feminine أَنْتِ (lc:arabic-persons) & Past Negation (lc:negation — still unseen!): Core 8 covers ~97% of speech — test أَنْتِ with Saba (هَلْ ذَهَبْتِ؟ / كَيْفَ كَانَ يَوْمُكِ؟). NEVER say "✗ لَا ذَهَبْتُ"! Drill both لَمْ أَذْهَبْ إِلَى العَمَلِ AND مَا ذَهَبْتُ إِلَى العَمَلِ vs لَا أَذْهَبُ vs لَنْ أَذْهَبَ vs لَيْسَ عِنْدِي.\n`;
-    p += `   - Friday Jumu'ah, Khutbah & 4-Pillar Qur'an Cues (0/60 Mosque cues seen!): اليَوْمُ يَوْمُ الجُمُعَةِ · أَذْهَبُ إِلَى المَسْجِدِ لِصَلَاةِ الجُمُعَةِ · أَمَّا بَعْدُ · عِبَادَ اللَّهِ · رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً · Glue chains (فِيهَا / عَلَيْهِمْ / لَهُمْ / إِلَّا / كُلّ / شَيْء) · Doer vs Done-To (حَاسِد vs مَغْضُوب / مَرْفُوعَة).\n`;
+    p += `   - Sunday Preply Warm-Up & By-Ear Qur'an Check (0 ear checks in 7d!): اليَوْمُ يَوْمُ السَّبْتِ · غَدًا يَوْمُ الأَحَدِ لِدَرْسِ العَرَبِيَّةِ · أَمَّا بَعْدُ · عِبَادَ اللَّهِ · رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً · ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ (1:2) · فِيهَا سُرُرٌ مَّرْفُوعَةٌ (88:13) · حَاسِد (113:5) vs مَغْضُوب (1:7).\n`;
     p += `   - Earlier Slips & Core Anchors: مِصْعَد (lift) vs طَابِق (floor), الآنَ (now), مَرَّة (occasion), الاثْنَيْن (Monday), أُرَتِّبُ (I tidy), حَفْلَة (party), تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ; Price triplet (ثَمَن / سِعْر / أُجْرَة); look-alikes (أَعُودُ vs أَعُوذُ; جَوْزَة vs زَوْجَة); بَيْضَة.\n`;
   } else {
     p += `Here is the reading dialogue we covered (Samer looking for a flat):\n`;
