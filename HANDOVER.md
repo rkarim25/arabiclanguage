@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-21  
+**Last Updated:** 2026-11-22  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,7 +77,17 @@
 
 ---
 
-## 2. Current Verified State (21 Nov 2026 — Saturday Coach Check, Live Site & Speak with AI Prompt QQ)
+## 2. Current Verified State (22 Nov 2026 — Sunday Coach Check, Live Site & Speak with AI Prompt RR)
+
+- **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-21T17:23:16Z`, computed at `2026-11-22T18:04Z`):** `4,462` total telemetry events (**`3/4` active days** in the last 7 days — Mon, Wed, Thu; `2.9d` since Thu night's completed batch + Sat `17:05Z` Batch 1 opened); `1,271` tracked SRS cards (**`427` 🟢 green** across 2+ days & `R ≥ 85%` incl. `68` retired, **`685` 🟡 amber**, **`141` 🔴 red**, **`18` ⚪ grey**; **`874` Box ≥ 2**). Zero new `#72+` pen notes (`71` total) or voice/Preply pastes in KV (`22` `img:` entries, latest `2026-11-14T07:13Z`).
+- **Capabilities & #1 Bottleneck Gap (`Practice.summarizeCapabilities`):**
+  - **Vocabulary & Qur'ān Top 151 Core:** `140/684` words held (`203` seen, `11` learning, `52` slips); `57/151` Core Qur'ān words held (**`39.7%`** of Mushaf occurrences, `30,737` tokens); **`317`** composable `i+1` ayahs unlocked; `3/61` Salah ayahs held; **`0` Qur'ān ear checks in 7d** (`earChecks7d: 0`); `4/17` Lesson Cards seen (`0` green yet; `13` unseen incl. `lc:verb-patterns`, `lc:arabic-persons`, `lc:negation`, `lc:khutbah-roadmap`); `1/22` grammar rules solid (`shakyPatterns`: `past vs present`, `sentences with no verb at all`); `0/60` Mosque/Khutbah cues seen.
+  - **#1 Gap:** **Active spoken/typed output (`37/40` held sentences passive-only, `2` proven active, `56` slips; Ch 4 `0/10`) + Past↔Present & Feminine `-ki` recall + `0` Qur'ān ear checks in 7d:** Today's queued `Practice` Batch 1 (`11` items: `1` teach + `10` review, `91%` review) targets `lc:pronoun-attachments` (`-ki` to Saba), `gt:tenses:1` (`قَالُوا`), `gt:nominal:2` (`أُمِّي مُعَلِّمَةٌ`), and `s:q:fatiha:1` (`ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ`).
+- **Speak with AI & Associated Docs Updated (Prompt RR — Sunday 22 Nov Evening Spoken Unlock & By-Ear Catch-Up):**
+  - Updated `chapters.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), `js/app.js` (`generateLearnerDossierMarkdown`), `SPEAK_WITH_AI.md` (Option C filled, Prompt RR current, Prompt QQ archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
+- **Sunday Preply Lesson Check:** Today is **Sunday 22 Nov 2026 (18:00Z)** — both **Sunday 22 Nov 07:00 UK** and Sunday 15 Nov classes have passed without logged notes/photos (`classes.json` latest still `c-2026-10-11`); asking Reza first thing for today's Sunday lesson notes/photos.
+
+### 2.0d. Earlier 21 Nov Snapshot (Saturday Coach Check & Prompt QQ)
 
 - **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-21T17:23:16Z`):** `4,462` total telemetry events (**`4/4` active days** in the last 7 days; Sat `17:05Z` Batch 1 opened, `1.9d` since Thu night's completed batch); `1,271` tracked SRS cards (**`429` 🟢 green** across 2+ days & `R ≥ 85%` incl. `68` retired, **`683` 🟡 amber**, **`141` 🔴 red**, **`18` ⚪ grey**; **`874` Box ≥ 2**). Zero new `#72+` pen notes (`71` total) or voice/Preply pastes in KV (`22` `img:` entries, latest `2026-11-14T07:13Z`).
 - **Capabilities & #1 Bottleneck Gap (`Practice.summarizeCapabilities`):**
