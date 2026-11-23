@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Daily Reader — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mws5ekln">
-  <link rel="stylesheet" href="css/style.css?v=mws5ekln">
+  <link rel="stylesheet" href="css/fonts.css?v=mwtkvcaa">
+  <link rel="stylesheet" href="css/style.css?v=mwtkvcaa">
   <style>
     .reader-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border-strong); padding-bottom: 5px; }
     .reader-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -253,16 +253,16 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mws5ekln"></script>
-<script src="js/curriculum.js?v=mws5ekln"></script>
-<script src="js/srs.js?v=mws5ekln"></script>
-<script src="js/match.js?v=mws5ekln"></script>
-<script src="js/errors.js?v=mws5ekln"></script>
-<script src="js/frames.js?v=mws5ekln"></script>
-<script src="js/app.js?v=mws5ekln"></script>
-<script src="js/tracker.js?v=mws5ekln"></script>
-<script src="js/plan.js?v=mws5ekln"></script>
-<script src="js/account.js?v=mws5ekln"></script>
+<script src="js/progress-model.js?v=mwtkvcaa"></script>
+<script src="js/curriculum.js?v=mwtkvcaa"></script>
+<script src="js/srs.js?v=mwtkvcaa"></script>
+<script src="js/match.js?v=mwtkvcaa"></script>
+<script src="js/errors.js?v=mwtkvcaa"></script>
+<script src="js/frames.js?v=mwtkvcaa"></script>
+<script src="js/app.js?v=mwtkvcaa"></script>
+<script src="js/tracker.js?v=mwtkvcaa"></script>
+<script src="js/plan.js?v=mwtkvcaa"></script>
+<script src="js/account.js?v=mwtkvcaa"></script>
 <script>
 renderNav("chapters");
 trackPage("chapters");
@@ -3781,23 +3781,23 @@ function buildChapterAiPrompt(chap) {
   p += `   - Swap pronouns/subjects (e.g. I want ↔ do you want / he wants; I am hungry ↔ are you hungry).\n`;
   p += `   - Substitute objects/nouns (e.g. water ↔ tea / coffee / food; hotel ↔ station / room).\n`;
   p += `   - Practice question formation using هَلْ (is/do?), أَيْنَ (where?), مَتَى (when?), كَمْ (how much/many?).\n`;
-  p += `   - Priority Drill Challenge (Sunday 22 Nov Evening Spoken Unlock & By-Ear Catch-Up — Prompt RR):\n`;
-  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + Batch 1 Refresh + 3 Verb Engines + Feminine -ki + Past Negation:\n`;
-  p += `       - 1. Today's Queued Batch 1 & Fresh Slips to Nail Aloud (Sun 22 Nov):\n`;
-  p += `         a) Feminine -ki to wife Saba (lc:pronoun-attachments — queued in Batch 1!): "كَيْفَ كَانَ يَوْمُكِ؟" (How was your day? -ki to her!) · "هَلْ ذَهَبْتِ؟" · "هَلْ تَذْهَبِينَ؟" — contrast with masculine "-ka" ("كَيْفَ كَانَ يَوْمُكَ؟").\n`;
-  p += `         b) Past vs Present & Nominal Checks (both queued in Batch 1: gt:tenses:1 & gt:nominal:2): swap Past ("قَالُوا / ذَهَبْتُ / قَرَأْتُ / أَرَدْتُ") ↔ Present ("يَقُولُونَ / أَذْهَبُ / أَقْرَأُ / أُرِيدُ") + Future ("سَأَذْهَبُ / سَأَقْرَأُ"), and drill clean nominal sentences with NO "is/are" ("أُمِّي مُعَلِّمَةٌ" · "المِصْبَاحُ صَغِيرٌ").\n`;
+  p += `   - Priority Drill Challenge (Monday 23 Nov Post-Sunday Spoken Unlock & Cold-Ear Reset — Prompt SS):\n`;
+  p += `     * Active Chapter 4 (Daily Routine, Times & Days) + Today's Batch 1 + 3 Verb Engines + Feminine -ki + Past Negation:\n`;
+  p += `       - 1. Today's Queued Batch 1 & Fresh Slips to Nail Aloud (Mon 23 Nov):\n`;
+  p += `         a) Feminine -ki to wife Saba (md:47 — queued in Batch 1!): "كَيْفَ كَانَ يَوْمُكِ؟" (How was your day? -ki to her!) · "هَلْ ذَهَبْتِ؟" · "هَلْ تَذْهَبِينَ؟" — contrast with masculine "-ka" ("كَيْفَ كَانَ يَوْمُكَ؟").\n`;
+  p += `         b) 3-Tense Flips & Nominal Checks (queued in Batch 1: lc:verb-tenses, gt:tenses:1 & gt:nominal:2): flip Past ↔ Present ↔ Future ("قَرَأْتُ القُرْآنَ ← أَقْرَأُ القُرْآنَ ← سَأَقْرَأُ القُرْآنَ" · "قَالُوا / يَقُولُونَ" · "ذَهَبْتُ / أَذْهَبُ" · "أَرَدْتُ / أُرِيدُ"), and speak clean nominal sentences with NO "is/are" ("أُمِّي مُعَلِّمَةٌ" · "الجَوُّ بَارِدٌ اليَوْمَ." · "المِصْبَاحُ صَغِيرٌ").\n`;
   p += `         c) Daily & Evening Fluency: "أُحِبُّ القَهْوَةَ كَثِيرًا" (I like coffee a lot) · "المَسَاءُ لِلْعَائِلَةِ" (The evening is for the family) · "عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ".\n`;
-  p += `         d) Recycle Recent Wins & Core Particles: "عَنْ" (about/from → Box 3!) · "فِيهَا سُرُرٌ مَّرْفُوعَةٌ" (88:13 → 🟢 green!) · "أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا" (🟢 green!) · "صَلَاة" (Box 3) · "فِي / إِنَّ / هَلْ".\n`;
+  p += `         d) Recycle Recent Wins & Core Particles: "عَنْ" (Box 3) · "فِيهَا سُرُرٌ مَّرْفُوعَةٌ" (88:13 → 🟢 green) · "عَبَدْتُ اللهَ" · "تَقَبَّلَ الله" · "صَلَاة" (Box 3) · "فِي / إِنَّ / هَلْ / الآنَ".\n`;
   p += `       - 2. 3 Past → Present Verb Engines (lc:verb-patterns — unseen on site, drill live!) & 8 Core Persons (lc:arabic-persons):\n`;
   p += `         a) Plain 3-letter root (Form I): ذَهَبَ → أَذْهَبُ / يَذْهَبُ (1st root letter squeezed silent; also قَرَأَ → أَقْرَأُ).\n`;
   p += `         b) "Yu-" Engine (Forms II & IV): doubled middle (عَلَّمَ → يُعَلِّمُ, رَتَّبَ → أُرَتِّبُ) or opening أَ- (أَرَادَ → يُرِيدُ / أُرِيدُ) ALWAYS flips to yu-/u- + -i-.\n`;
   p += `         c) "Ta-" & "Ista-" Keepers (Forms V & X): تَـ verbs KEEP تَـ (تَعَلَّمَ → أَتَعَلَّمُ / يَتَعَلَّمُ — 2 t's in تَتَعَلَّمُ!); اِسْتَـ drops i- (اِسْتَيْقَظَ → أَسْتَيْقِظُ).\n`;
   p += `         d) Core 8 (أَنَا · أَنْتَ · أَنْتِ · هُوَ · هِيَ · نَحْنُ · أَنْتُمْ · هُمْ) covers ~97% of speech; duals (هُمَا / أَنْتُمَا) & fem. plurals (هُنَّ / أَنْتُنَّ) are ear-only for now.\n`;
-  p += `       - 3. 5 Arabic Negations (lc:negation — still unseen!) & Sunday Evening / Monday Routine (Ch 4):\n`;
+  p += `       - 3. 5 Arabic Negations (lc:negation — still unseen!) & Monday Work Routine (Ch 4):\n`;
   p += `         a) NEVER say "✗ لَا ذَهَبْتُ"! Drill both valid past negations: "لَمْ أَذْهَبْ إِلَى العَمَلِ" (standard MSA/Qur'an) AND "مَا ذَهَبْتُ إِلَى العَمَلِ" (spoken MSA), vs "لَا أَذْهَبُ" (don't) vs "لَنْ أَذْهَبَ" (won't) vs "لَيْسَ عِنْدِي" (don't have).\n`;
-  p += `         b) Sunday & Monday work warm-up: "اليَوْمُ يَوْمُ الأَحَدِ — دَرْسُ العَرَبِيَّةِ" · "غَدًا يَوْمُ الاِثْنَيْنِ — يَوْمُ العَمَلِ" · "أَسْتَيْقِظُ فِي السَّاعَةِ السَّادِسَةِ صَبَاحًا" · "أُرَتِّبُ الغُرْفَةَ".\n`;
+  p += `         b) Monday routine & Preply debrief: "اليَوْمُ يَوْمُ الاِثْنَيْنِ — يَوْمُ العَمَلِ" · "أَسْتَيْقِظُ فِي السَّاعَةِ السَّادِسَةِ صَبَاحًا" · "أُرَتِّبُ الغُرْفَةَ" · "كَانَ دَرْسُ الأَحَدِ أَمْسِ".\n`;
   p += `       - 4. Quick By-Ear Qur'ān & Mosque Warm-Up (0 ear checks in 7d — catch cold!):\n`;
-  p += `         * Ask 1–2 short ayahs/cues without English first: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ" (1:2) · "فِيهَا سُرُرٌ مَّرْفُوعَةٌ" (88:13) · "حَاسِدٍ إِذَا حَسَدَ" (113:5) · "أَمَّا بَعْدُ" · "عِبَادَ اللَّهِ" · "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً".\n`;
+  p += `         * Ask 1–2 short ayahs/cues without English first: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ" (1:2 — queued in Batch 1!) · "فِيهَا سُرُرٌ مَّرْفُوعَةٌ" (88:13) · "حَاسِدٍ إِذَا حَسَدَ" (113:5) · "أَمَّا بَعْدُ" · "عِبَادَ اللَّهِ" · "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً".\n`;
   p += `     * Earlier Priority Slips & Anchors to Keep Sharp:\n`;
   p += `       1. مِصْعَد (lift/elevator) vs طَابِق (floor) · الآنَ (now) · مَرَّة (time/occasion: مَرَّةً أُخْرَى) · الاثْنَيْن (Monday) vs الجُمُعَة (Friday).\n`;
   p += `       2. حَفْلَة (party) · تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ (Speak slowly, please) · هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟.\n`;
