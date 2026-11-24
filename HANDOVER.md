@@ -1,7 +1,7 @@
 # Handover & Living Architecture — `rkarim25/arabiclanguage`
 
 **Live URL:** https://rkarim25.github.io/arabiclanguage/  
-**Last Updated:** 2026-11-23  
+**Last Updated:** 2026-11-24  
 **Primary Learner:** Reza Karim (`rkarim88@gmail.com`) — senior investment manager with a **young family** and **demanding job** who struggles with consistency · **Secondary Learner:** Saba Khan (`sabatarif.15@gmail.com`, additive-only rule)
 
 ## 0. The Headmaster Charter (Read First)
@@ -77,7 +77,18 @@
 
 ---
 
-## 2. Current Verified State (23 Nov 2026 — Monday Coach Check, Live Site & Speak with AI Prompt SS)
+## 2. Current Verified State (24 Nov 2026 — Tuesday Coach Check, Live Site & Speak with AI Prompt TT)
+
+- **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-24T06:51:10Z`, computed at `2026-11-24T18:04Z`):** `4,501` total telemetry events (**`3/4` active days** in the last 7 days — Wed, Thu, Tue; **`0.5d` gap** after **2 completed Practice batches this morning `06:41–06:51Z`**!); `1,280` tracked SRS cards (**`520` raw / `530` alias-resolved 🟢 green** across 2+ days & `R ≥ 85%` incl. `101` retired — up `+95`!, **`606`/`596` 🟡 amber**, **`137` 🔴 red**, **`17` ⚪ grey**; **`918` Box ≥ 2**). Zero new `#72+` pen notes (`71` total) or voice/Preply pastes in KV (`22` `img:` entries, latest `2026-11-14T07:13Z`).
+- **Today's Morning Wins (`Tue 24 Nov 06:41–06:51Z`) & Capabilities (`Practice.summarizeCapabilities`):**
+  - **Breakthroughs:** Very first green Lesson Card (**`lc:verb-tenses` → Box 3 🟢**), feminine `-ki` (**`md:47` `كَيْفَ كَانَ يَوْمُكِ؟`**) flipped from `no` → `yes` (Box 1), **`أَرَادَ`** (`qc:82` Form IV) flipped from `maybe` → `yes` (Box 1), **`gt:nominal:2` `أُمِّي مُعَلِّمَةٌ`** ✓ + **`nominal` grammar 3/3 (100%)**, **`s:q:fatiha:2` `ٱلرَّحْمَٰنِ ٱلرَّحِيمِ`** → Box 4 🟢, and **`59/151` Core Qur'ān words held (`40.0%` of Mushaf occurrences, `30,959` tokens; `325` `i+1` ayahs unlocked; `5/61` Salah ayahs held)**.
+  - **Vocabulary & Concepts:** `146/691` words held (`211` seen, `13` learning, `52` slips); `1/17` Lesson Cards green (`4/17` seen, `13` unseen incl. `lc:verb-patterns`, `lc:arabic-persons`, `lc:negation`, `lc:khutbah-roadmap`); `1/22` grammar rules solid (`shakyPatterns`: `past vs present`, `sentences with no verb at all`); `0/60` Mosque/Khutbah cues seen; **`0` Qur'ān ear checks in 7d**.
+  - **#1 Gap:** **Past ↔ Present verb flips (`gt:tenses:2` `يَعْلَمُ` rated `no`, `gt:tenses:1` `قَالُوا` rated `maybe`) + `qc:116` `سَأَلَ` (rated `no`) + `44/47` held sentences passive-only (`3` proven active, `60` slips; Ch 4 `0/10`) + `0` Qur'ān ear checks in 7d:** Next queued `Practice` Batch 1 (`11` review items: `qc:6 إِنَّ`, `ph-deen:7 تَقَبَّلَ الله`, `ev-time:0 الآن`, `lc:pronoun-attachments`, `ph-ask:0`, `ev-lesson-home:25 مِصْعَد`, `gt:tenses:2 يَعْلَمُ`, `md:43 الجَوُّ بَارِدٌ اليَوْمَ.`, `md:9 عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ.`, `s:q:fatiha:3 مَٰلِكِ يَوْمِ ٱلدِّينِ`, `gt:nominal:0 المِصْبَاحُ صَغِيرٌ`) targets these directly.
+- **Speak with AI & Associated Docs Updated (Prompt TT — Tuesday 24 Nov Evening Spoken Unlock & Verb-Flip Reset):**
+  - Updated `chapters.html` (`buildChapterAiPrompt`), `class.html` (`buildClassAiPrompt`), `js/app.js` (`generateLearnerDossierMarkdown`), `SPEAK_WITH_AI.md` (Option C filled, Prompt TT current, Prompt SS archived), `LEARNER_CONTEXT.md`, `MASTER_PLAN.md`, and `HANDOVER.md`.
+- **Sunday Preply Lesson Check:** **Sunday 22 Nov 07:00 UK** (and Sun 15 Nov) classes remain unlogged (`classes.json` latest still `c-2026-10-11`); asking Reza first thing for Sunday's lesson notes/photos.
+
+### 2.0f. Earlier 23 Nov Snapshot (Monday Coach Check & Prompt SS)
 
 - **Telemetry & SRS Progress (`data:rkarim88@gmail.com` as of `2026-11-21T17:23:16Z`, computed at `2026-11-23T18:04Z`):** `4,462` total telemetry events (**`2/4` active days** in the last 7 days — Wed & Thu completed batches; `3.9d` since Thu night's completed batch + Sat `17:05Z` Batch 1 opened); `1,271` tracked SRS cards (**`425` raw / `435` alias-resolved 🟢 green** across 2+ days & `R ≥ 85%` incl. `68` retired, **`687`/`677` 🟡 amber**, **`141` 🔴 red**, **`18` ⚪ grey**; **`874` Box ≥ 2**). Zero new `#72+` pen notes (`71` total) or voice/Preply pastes in KV (`22` `img:` entries, latest `2026-11-14T07:13Z`).
 - **Capabilities & #1 Bottleneck Gap (`Practice.summarizeCapabilities`):**

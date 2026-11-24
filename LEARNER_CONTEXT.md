@@ -14,7 +14,7 @@
 - **Governance (Headmaster Model):**
   - **Headmaster, Primary Teacher, Motivator & Mentor:** The AI Coach running `rkarim25.github.io/arabiclanguage` controls 100% of the curriculum and teaches primarily through **`⚡ Practice` sessions** (`index.html` Home on screen + `audio.html?commute=1` hands-free), dynamically linked with Weekly Chapters (`chapters.html`), Master Sentences (`sentences.html`), Vocabulary (`words.html`), Qur'ān (`quran.html`), visual Lesson Cards (`sets.html`), and the `🧑‍🏫 Teacher` Hub (`class.html`), all unified under live read-only **Earned Mastery Dots (`⚪ / 🔴 / 🟡 / 🟢`)**.
   - **Voice Partners & Live Tutors (Your Role Here):** Live Sunday Preply classes and AI Voice sessions serve as high-energy spoken practice under the Headmaster's curriculum — keep turns crisp, encouraging, and aligned to the domains below, then emit the Session Report at the end so the Headmaster can absorb your findings.
-- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Tenses)** is active (`0/10` sentences rated in SRS). `4,462` total telemetry events (`2/4` active days in the last 7d — Wed & Thu active; `3.9d` since Thu night's completed batch where **`عَنْ` → Box 3**, **`فِيهَا سُرُرٌ مَّرْفُوعَةٌ` (88:13) → 🟢 green**, and `gt:nominal:0` ✓!; Sat `17:05Z` Batch 1 opened); `1,271` SRS cards (**`425` raw / `435` alias-resolved 🟢 mastered** across 2+ days & `R ≥ 85%` incl. `68` retired, **`687`/`677` 🟡 building/refresh**, **`141` 🔴 needs work**, **`18` ⚪ unseen**; **`874` Box ≥ 2**); **`144/691` vocab held** (`210` seen, `11` learning, `55` slips); **`57/151` Core Qur'ān words held (`39.7%` of Mushaf occurrences, `30,737` tokens)**; **`323` composable `i+1` ayahs unlocked**; **`0` Qur'ān ear checks in 7d**; **`45` sentences held (`3` proven active spoken/typed, `42` passive-only, `63` slips)**; **`0/60` Mosque/Khutbah cues seen**; **`17` Visual Lesson Cards** (`4/17` seen, `0` green yet; `13` unseen incl. `lc:verb-patterns`, `lc:arabic-persons`, `lc:negation`). **4-Layer Qur'ān Decoding Engine + 5th Pillar (Mosque/Khutbah/Du'ā)** live across `Practice`, `Commute`, `sets.html`, `sentences.html`, and `quran.html?tab=mosque`. Active Monday 23 Nov voice sprint: **Prompt SS**.
+- **Milestones Proven:** Chapters 1, 2, and 3 passed at **100%**; **Chapter 4 (Time, Daily Routine & Tenses)** is active (`0/10` sentences rated in SRS). `4,501` total telemetry events (**`3/4` active days** in the last 7d — Wed, Thu, Tue; **`0.5d` gap** after completing **2 Practice batches this morning Tue 24 Nov `06:41–06:51Z`**!); `1,280` SRS cards (**`520` raw / `530` alias-resolved 🟢 mastered** across 2+ days & `R ≥ 85%` incl. `101` retired — up `+95`!, **`606`/`596` 🟡 building/refresh**, **`137` 🔴 needs work**, **`17` ⚪ unseen**; **`918` Box ≥ 2**); **`146/691` vocab held** (`211` seen, `13` learning, `52` slips); **`59/151` Core Qur'ān words held (`40%` of Mushaf occurrences, `30,959` tokens)**; **`325` composable `i+1` ayahs unlocked**; **`5/61` Salah ayahs held** (`1:1` retired, `1:3` `ٱلرَّحْمَٰنِ ٱلرَّحِيمِ` → Box 4 🟢); **`0` Qur'ān ear checks in 7d**; **`47` sentences held (`3` proven active spoken/typed, `44` passive-only, `60` slips)**; **`0/60` Mosque/Khutbah cues seen**; **`17` Visual Lesson Cards** (**`1/17` held 🟢** — `lc:verb-tenses` unlocked to Box 3 today!, `4/17` seen, `13` unseen incl. `lc:verb-patterns`, `lc:arabic-persons`, `lc:negation`); **`nominal` grammar test 3/3 (100%) today**. **4-Layer Qur'ān Decoding Engine + 5th Pillar (Mosque/Khutbah/Du'ā)** live across `Practice`, `Commute`, `sets.html`, `sentences.html`, and `quran.html?tab=mosque`. Active Tuesday 24 Nov voice sprint: **Prompt TT**.
 
 ---
 
@@ -52,25 +52,18 @@ Stay within these domains unless teaching 1 requested word at a time:
 
 ## 4. Current Priority Slips, Nominal Refresh & Recent Wins
 
-- `كَيْفَ كَانَ يَوْمُكِ؟` / `هَلْ ذَهَبْتِ؟` — *How was your day? / Did you go?* (to wife Saba; feminine suffix `ـكِ` / `ـتِ`, rated `no` Thu night `21:24Z`!).
-- `أَرَادَ / يُرِيدُ / أُرِيدُ` — *wanted / wants / I want* (Form IV `أَفْعَلَ → يُفْعِلُ`, rated `maybe` Thu 19 Nov; paired with `lc:verb-patterns`; plus `gt:tenses:1` past↔present check rated `maybe` Thu night).
-- `أُحِبُّ القَهْوَةَ كَثِيرًا.` — *I like coffee a lot.* (rated `maybe` Thu night).
-- `المَسَاءُ لِلْعَائِلَةِ.` — *The evening is for the family.* (rated `maybe` Thu night).
-- `عَنْ` (*about / from* → **Box 3** Thu night!), `فِيهَا سُرُرٌ مَرْفُوعَةٌ` (Surah Al-Ghāshiyah 88:13 → **🟢 green** Thu night!), `gt:nominal:0` (`المِصْبَاحُ صَغِيرٌ` ✓), `صَلَاة` (*prayer* → Box 3), `أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا` (*I learn a little every day* → 🟢 green!), `عَبَدْتُ اللهَ`, `كُلّ`, `شَيْء`, `آمَنُوا`, `تَقَبَّلَ اللهُ` — **recent Practice wins!**
+- `عَلِمَ → يَعْلَمُ / أَعْلَمُ` — *he knew / knows / I know* (`gt:tenses:2` rated `no` Tue morning `06:50Z` — pair with `gt:tenses:1` `قَالُوا → يَقُولُونَ` rated `maybe` at `06:44Z`!).
+- `سَأَلَ → يَسْأَلُ / سَأَلْتُ` — *he asked / asks / I asked* (`qc:116` / `fam-sal:0` rated `no` Tue morning `06:46Z`).
+- **Today's Morning Wins (`Tue 24 Nov 06:41–06:51Z`):** **`lc:verb-tenses`** (*Past → Present → Future*) → **Box 3 🟢 green** (first green Lesson Card!), **`كَيْفَ كَانَ يَوْمُكِ؟`** (`md:47` feminine `-ki` to wife Saba) flipped from `no` → **`yes` (Box 1)**, **`أَرَادَ`** (`qc:82` Form IV) flipped from `maybe` → **`yes` (Box 1)**, **`أُمِّي مُعَلِّمَةٌ`** (`gt:nominal:2`) → **`yes`** + **`nominal` grammar 3/3 (100%)**, **`ٱلرَّحْمَٰنِ ٱلرَّحِيمِ`** (`s:q:fatiha:2`) → **Box 4 🟢**, **`هَلْ` / `عَبَدْتُ اللهَ` / `تَقَبَّلَ الله`** → **Box 3 🟢**, **`مَا هٰذَا؟`** → **Box 5 🟢**, **`فِي` / `1:2` / `أَتَعَلَّمُ كُلَّ يَوْمٍ قَلِيلًا`** promoted/retired!
+- `أُحِبُّ القَهْوَةَ كَثِيرًا.` — *I like coffee a lot.* · `المَسَاءُ لِلْعَائِلَةِ.` — *The evening is for the family.* · `الجَوُّ بَارِدٌ اليَوْمَ.` (`md:43`, queued in next Batch 1) · `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ` (`md:9`, queued in next Batch 1).
 - `المِصْبَاحُ صَغِيرٌ` — *The lamp is small* (nominal sentence, no verb `is`).
-- `أُمِّي مُعَلِّمَةٌ` — *My mother is a teacher* (nominal sentence, feminine `ـة` ending).
-- `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د).
-- `طَابِق` — *floor / storey* (vs `مِصْعَد` lift).
-- `الآنَ` — *now* (`الْآنَ` right now).
-- `مَرَّة` — *time / occasion* (root م-ر-ر: `مَرَّةً أُخْرَى` once more).
-- `الاثْنَيْن` — *Monday* · `الجُمُعَة` — *Friday / Jumu'ah* (`اليَوْمُ يَوْمُ الجُمُعَةِ`).
-- `ٱلْمَغْضُوبِ` — *those who earned wrath / anger* (Al-Fātiḥah 1:7; passive participle of root غ-ض-ب anger vs active `أَنْعَمْتَ`).
-- `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order).
-- `حَفْلَة` — *party / celebration* (shares root ح-ف-ل with *mahfil* مَحْفِل).
-- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`).
-- `حَاسِد` — *envier* (Surah Al-Falaq 113:5 `حَاسِدٍ إِذَا حَسَدَ`).
-- `غَاسِق` — *intense nightfall* (Surah Al-Falaq 113:3 `غَاسِقٍ إِذَا وَقَبَ`).
-- `عِنْدِي اجْتِمَاعٌ فِي الصَّبَاحِ` — *I have a morning meeting* (root ج-م-ع = *Jumu'ah* gathering — held ✓ in Saturday Batch 1!).
+- `أُمِّي مُعَلِّمَةٌ` — *My mother is a teacher* (nominal sentence, feminine `ـة` ending — ✓ today!).
+- `مِصْعَد` — *lift / elevator* (machine that ascends, root ص-ع-د) · `طَابِق` — *floor / storey*.
+- `الآنَ` — *now* (`الْآنَ` right now) · `مَرَّة` — *time / occasion* (root م-ر-ر: `مَرَّةً أُخْرَى` once more).
+- `الثُّلَاثَاء` — *Tuesday* · `الاثْنَيْن` — *Monday* · `الجُمُعَة` — *Friday / Jumu'ah* · `الأَحَد` — *Sunday*.
+- `ٱلْمَغْضُوبِ` — *those who earned wrath / anger* (Al-Fātiḥah 1:7; passive participle of root غ-ض-ب anger vs active `أَنْعَمْتَ`) · `مَٰلِكِ يَوْمِ ٱلدِّينِ` (1:4 — queued in next Batch 1!).
+- `أُرَتِّبُ` — *I tidy / arrange* (root ر-ت-ب, *tartīb* neat order) · `حَفْلَة` — *party / celebration* (shares root ح-ف-ل with *mahfil* مَحْفِل).
+- `عُقَد` — *knots* (Surah Al-Falaq 113:4 `النَّفَّاثَاتِ فِي الْعُقَدِ`) · `حَاسِد` — *envier* (113:5 `حَاسِدٍ إِذَا حَسَدَ`) · `غَاسِق` — *intense nightfall* (113:3 `غَاسِقٍ إِذَا وَقَبَ`).
 - `هَلْ يُمْكِنُكَ مُسَاعَدَتِي؟` — *Can you help me?* (Bengali মুমকিন *mumkin* + hear **AID** inside *mu-sa-AID-ah*).
 - `تَكَلَّمْ بِبُطْءٍ مِنْ فَضْلِكَ` — *Speak slowly, please* (`بِبُطْءٍ` = with slowness).
 
