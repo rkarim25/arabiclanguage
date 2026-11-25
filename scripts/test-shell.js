@@ -1073,6 +1073,36 @@ const bank = D("sentence-bank.json");
     /← Back to Practice/.test(setsSrcPen),
     "sticky-nav scroll-margin-top, manual scrollRestoration, and exact-card Back to Practice scroll spot restoration are wired across index, grammar & sets"
   );
+  {
+    const vm = require("vm");
+    const dayKeyFnM = indexSrcPen.match(/function localDayKey\(ts\)[\s\S]*?\n\}/);
+    const freshFnM = indexSrcPen.match(/function isBatchSessionFresh\(data,\s*now\)[\s\S]*?\n\}/);
+    yes(!!(dayKeyFnM && freshFnM), "index.html defines localDayKey() and isBatchSessionFresh() for batch day-rollover");
+    if (dayKeyFnM && freshFnM) {
+      const ctx = {};
+      vm.runInNewContext(`${dayKeyFnM[0]}\n${freshFnM[0]}\nthis.localDayKey = localDayKey; this.isBatchSessionFresh = isBatchSessionFresh;`, ctx);
+      const nowMs = new Date(2026, 10, 25, 6, 45, 0).getTime();
+      const todayKey = ctx.localDayKey(nowMs);
+      const yestKey = ctx.localDayKey(nowMs - 24 * 3600 * 1000);
+      yes(!ctx.isBatchSessionFresh({ savedAt: nowMs, lastActiveAt: nowMs, items: [{ key: "x" }] }, nowMs),
+        "legacy batch session without dayKey is rejected immediately on load/refresh");
+      yes(!ctx.isBatchSessionFresh({ dayKey: yestKey, lastActiveAt: nowMs - 1000, savedAt: nowMs - 1000, items: [{ key: "x" }] }, nowMs),
+        "yesterday's batch session is rejected on a new calendar day even if pagehide saved a second ago");
+      yes(ctx.isBatchSessionFresh({ dayKey: todayKey, lastActiveAt: nowMs - 10 * 60 * 1000, savedAt: nowMs - 10 * 60 * 1000, items: [{ key: "x" }] }, nowMs),
+        "same-day batch session within 4h stays fresh so Back navigation restores exact batch");
+      yes(!ctx.isBatchSessionFresh({ dayKey: todayKey, lastActiveAt: nowMs - (4 * 3600 * 1000 + 1000), savedAt: nowMs, items: [{ key: "x" }] }, nowMs),
+        "same-day batch session with lastActiveAt > 4h ago expires even if savedAt was refreshed by pagehide");
+    }
+    yes(
+      /function checkPracticeDayRollover\(/.test(indexSrcPen) &&
+      /addEventListener\("visibilitychange"/.test(indexSrcPen) &&
+      /addEventListener\("focus"/.test(indexSrcPen) &&
+      /addEventListener\("pageshow"/.test(indexSrcPen) &&
+      /if\s*\(CURRENT_BATCH_DAY_KEY\s*&&\s*CURRENT_BATCH_DAY_KEY\s*!==\s*todayKey\)\s*\{\s*clearPracticeBatchSession\(\);\s*return;\s*\}/.test(indexSrcPen) &&
+      /if\s*\(CURRENT_BATCH_DAY_KEY\s*&&\s*CURRENT_BATCH_DAY_KEY\s*!==\s*todayKey\)\s*\{\s*clearPracticeScrollSpot\(\);\s*return;\s*\}/.test(indexSrcPen),
+      "index.html wires checkPracticeDayRollover on visibilitychange/focus/pageshow and refuses to persist stale-day batches or scroll spots"
+    );
+  }
   const conjJson = D("conjugations.json");
   const conjIds = new Set((conjJson.verbs || []).map(v => v.id));
   const reqVerbs = ["ada", "adha", "tanawala", "saada", "rattaba", "istaghfara", "faddala", "faza", "intazara", "nasiya", "intaha", "qada"];

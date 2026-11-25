@@ -8,8 +8,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Practice — Arabic العربية</title>
-  <link rel="stylesheet" href="css/fonts.css?v=mwv0as0f">
-  <link rel="stylesheet" href="css/style.css?v=mwv0as0f">
+  <link rel="stylesheet" href="css/fonts.css?v=mwvrk3bw">
+  <link rel="stylesheet" href="css/style.css?v=mwvrk3bw">
   <style>
     .s-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-strong); }
     .s-header h1 { border-bottom: 0; padding-bottom: 0; margin: 0; }
@@ -301,20 +301,20 @@
   <p id="packLine" style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0">📥 Loading offline audio pack…</p>
 </main>
 
-<script src="js/progress-model.js?v=mwv0as0f"></script>
-<script src="js/curriculum.js?v=mwv0as0f"></script>
-<script src="js/srs.js?v=mwv0as0f"></script>
-<script src="js/frames.js?v=mwv0as0f"></script>
-<script src="js/freetry.js?v=mwv0as0f"></script>
-<script src="js/practice.js?v=mwv0as0f"></script>
-<script src="js/lesson-cards.js?v=mwv0as0f"></script>
-<script src="js/match.js?v=mwv0as0f"></script>
-<script src="js/errors.js?v=mwv0as0f"></script>
-<script src="js/tryit.js?v=mwv0as0f"></script>
-<script src="js/app.js?v=mwv0as0f"></script>
-<script src="js/tracker.js?v=mwv0as0f"></script>
-<script src="js/plan.js?v=mwv0as0f"></script>
-<script src="js/account.js?v=mwv0as0f"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
+<script src="js/progress-model.js?v=mwvrk3bw"></script>
+<script src="js/curriculum.js?v=mwvrk3bw"></script>
+<script src="js/srs.js?v=mwvrk3bw"></script>
+<script src="js/frames.js?v=mwvrk3bw"></script>
+<script src="js/freetry.js?v=mwvrk3bw"></script>
+<script src="js/practice.js?v=mwvrk3bw"></script>
+<script src="js/lesson-cards.js?v=mwvrk3bw"></script>
+<script src="js/match.js?v=mwvrk3bw"></script>
+<script src="js/errors.js?v=mwvrk3bw"></script>
+<script src="js/tryit.js?v=mwvrk3bw"></script>
+<script src="js/app.js?v=mwvrk3bw"></script>
+<script src="js/tracker.js?v=mwvrk3bw"></script>
+<script src="js/plan.js?v=mwvrk3bw"></script>
+<script src="js/account.js?v=mwvrk3bw"></script>  <!-- after tracker.js: plan.js wraps logEvent, which tracker.js defines -->
 <script>
 renderNav("home");
 trackPage("home");
@@ -357,6 +357,21 @@ let WORD_GLOSS_BY_NORM = new Map();
 let FREQ_WORDS = {};
 let ACTIVE_SENTENCES = [];
 let CURRENT_BUILT_BATCH = null;
+let CURRENT_BATCH_DAY_KEY = null;
+let CURRENT_BATCH_CREATED_AT = 0;
+let CURRENT_BATCH_LAST_ACTIVE_AT = 0;
+function localDayKey(ts) {
+  const d = new Date(ts || Date.now());
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function isBatchSessionFresh(data, now) {
+  now = now || Date.now();
+  if (!data || typeof data !== "object") return false;
+  if (!data.dayKey || data.dayKey !== localDayKey(now)) return false;
+  const refTs = data.lastActiveAt || data.createdAt || data.savedAt || 0;
+  if (!refTs || (now - refTs) > 4 * 3600 * 1000) return false;
+  return true;
+}
 let REVEALED = new Set();
 let BATCH_RATED = new Set();
 let BATCH_DONE_LOGGED = false;
@@ -654,9 +669,18 @@ function updateOverallStats() {
 }
 
 /* ADAPTIVE PRACTICE + FILTERED SENTENCE BATCH ENGINE */
-function savePracticeBatchSession() {
+function savePracticeBatchSession(touchActivity) {
   try {
     if (!IS_ADAPTIVE_PRACTICE || !CURRENT_BUILT_BATCH || !ACTIVE_SENTENCES || !ACTIVE_SENTENCES.length) return;
+    const nowTs = Date.now();
+    const todayKey = localDayKey(nowTs);
+    if (CURRENT_BATCH_DAY_KEY && CURRENT_BATCH_DAY_KEY !== todayKey) {
+      clearPracticeBatchSession();
+      return;
+    }
+    if (!CURRENT_BATCH_DAY_KEY) CURRENT_BATCH_DAY_KEY = todayKey;
+    if (!CURRENT_BATCH_CREATED_AT) CURRENT_BATCH_CREATED_AT = nowTs;
+    if (touchActivity || !CURRENT_BATCH_LAST_ACTIVE_AT) CURRENT_BATCH_LAST_ACTIVE_AT = nowTs;
     const sessionData = {
       batchNum: CURRENT_BUILT_BATCH.batchNum || 1,
       title: CURRENT_BUILT_BATCH.title || "Daily Adaptive Practice",
@@ -676,7 +700,10 @@ function savePracticeBatchSession() {
       reviewPct: CURRENT_BUILT_BATCH.reviewPct,
       counts: CURRENT_BUILT_BATCH.counts,
       mode: (CURRENT_BUILT_BATCH.diag && CURRENT_BUILT_BATCH.diag.mode) || "steady",
-      savedAt: Date.now()
+      dayKey: CURRENT_BATCH_DAY_KEY,
+      createdAt: CURRENT_BATCH_CREATED_AT,
+      lastActiveAt: CURRENT_BATCH_LAST_ACTIVE_AT,
+      savedAt: CURRENT_BATCH_LAST_ACTIVE_AT
     };
     sessionStorage.setItem("ats-live-practice-batch", JSON.stringify(sessionData));
   } catch (e) {}
@@ -695,10 +722,19 @@ function clearNonAdaptiveBatchSession() {
   } catch (e) {}
 }
 
-function saveNonAdaptiveBatchSession() {
+function saveNonAdaptiveBatchSession(touchActivity) {
   try {
     if (IS_ADAPTIVE_PRACTICE || !ACTIVE_SENTENCES || !ACTIVE_SENTENCES.length) return;
     if (window.TryIt && TryIt.isFree && TryIt.isFree()) return;
+    const nowTs = Date.now();
+    const todayKey = localDayKey(nowTs);
+    if (CURRENT_BATCH_DAY_KEY && CURRENT_BATCH_DAY_KEY !== todayKey) {
+      clearNonAdaptiveBatchSession();
+      return;
+    }
+    if (!CURRENT_BATCH_DAY_KEY) CURRENT_BATCH_DAY_KEY = todayKey;
+    if (!CURRENT_BATCH_CREATED_AT) CURRENT_BATCH_CREATED_AT = nowTs;
+    if (touchActivity || !CURRENT_BATCH_LAST_ACTIVE_AT) CURRENT_BATCH_LAST_ACTIVE_AT = nowTs;
     const titleEl = document.getElementById("sessionTitle");
     const lgEl = document.getElementById("srsLegend");
     const data = {
@@ -717,7 +753,10 @@ function saveNonAdaptiveBatchSession() {
       revealed: Array.from(REVEALED),
       rated: Array.from(BATCH_RATED),
       doneLogged: !!BATCH_DONE_LOGGED,
-      savedAt: Date.now()
+      dayKey: CURRENT_BATCH_DAY_KEY,
+      createdAt: CURRENT_BATCH_CREATED_AT,
+      lastActiveAt: CURRENT_BATCH_LAST_ACTIVE_AT,
+      savedAt: CURRENT_BATCH_LAST_ACTIVE_AT
     };
     sessionStorage.setItem("ats-live-focused-batch", JSON.stringify(data));
   } catch (e) {}
@@ -729,7 +768,8 @@ function restoreNonAdaptiveBatchSession() {
     if (!raw) return false;
     const data = JSON.parse(raw);
     if (!data || !Array.isArray(data.items) || !data.items.length) return false;
-    if (Date.now() - (data.savedAt || 0) > 4 * 3600 * 1000) { clearNonAdaptiveBatchSession(); return false; }
+    const nowTs = Date.now();
+    if (!isBatchSessionFresh(data, nowTs)) { clearNonAdaptiveBatchSession(); return false; }
     if (data.url !== location.pathname + location.search) return false;
     const restored = [];
     for (const entry of data.items) {
@@ -744,6 +784,9 @@ function restoreNonAdaptiveBatchSession() {
     stopAudio();
     if (window.TryIt) TryIt.endFree();
     IS_ADAPTIVE_PRACTICE = false;
+    CURRENT_BATCH_DAY_KEY = data.dayKey;
+    CURRENT_BATCH_CREATED_AT = data.createdAt || data.savedAt || nowTs;
+    CURRENT_BATCH_LAST_ACTIVE_AT = data.lastActiveAt || data.savedAt || nowTs;
     FOCUSED_PRACTICE_SPEC = data.focusedSpec || null;
     if (data.filter) {
       currentFilter = data.filter;
@@ -784,6 +827,12 @@ function restoreNonAdaptiveBatchSession() {
 
 function savePracticeScrollSpot(clickedEl) {
   try {
+    const nowTs = Date.now();
+    const todayKey = localDayKey(nowTs);
+    if (CURRENT_BATCH_DAY_KEY && CURRENT_BATCH_DAY_KEY !== todayKey) {
+      clearPracticeScrollSpot();
+      return;
+    }
     let cardEl = clickedEl && clickedEl.closest ? clickedEl.closest(".s-card, .sheet-row") : null;
     if (!cardEl) {
       const cards = document.querySelectorAll("#sentenceList .s-card, #sentenceList .sheet-row");
@@ -799,7 +848,8 @@ function savePracticeScrollSpot(clickedEl) {
       scrollY: Math.round(window.scrollY || 0),
       cardId: cardEl && cardEl.id ? cardEl.id : null,
       cardTop: rect ? Math.round(rect.top) : null,
-      savedAt: Date.now()
+      dayKey: CURRENT_BATCH_DAY_KEY || todayKey,
+      savedAt: nowTs
     };
     sessionStorage.setItem("ats-practice-scroll", JSON.stringify(st));
   } catch (e) {}
@@ -816,7 +866,8 @@ function restorePracticeScrollSpot() {
     const raw = sessionStorage.getItem("ats-practice-scroll");
     if (!raw) return false;
     const st = JSON.parse(raw);
-    if (!st || Date.now() - (st.savedAt || 0) > 4 * 3600 * 1000) {
+    const nowTs = Date.now();
+    if (!st || !st.dayKey || st.dayKey !== localDayKey(nowTs) || nowTs - (st.savedAt || 0) > 4 * 3600 * 1000) {
       clearPracticeScrollSpot();
       return false;
     }
@@ -857,7 +908,35 @@ window.addEventListener("pagehide", () => {
   savePracticeScrollSpot(null);
 });
 
+function checkPracticeDayRollover() {
+  const todayKey = localDayKey(Date.now());
+  if (!CURRENT_BATCH_DAY_KEY || CURRENT_BATCH_DAY_KEY === todayKey) return false;
+  clearPracticeBatchSession();
+  clearNonAdaptiveBatchSession();
+  clearPracticeScrollSpot();
+  SESSION_COOLDOWN.clear();
+  if (IS_ADAPTIVE_PRACTICE || !location.search) {
+    currentFilter = "balanced";
+    document.querySelectorAll("#filterChips .chip").forEach(b => b.classList.toggle("active", b.dataset.filter === "balanced"));
+    loadPracticeBatch();
+  }
+  renderMotivationStrip();
+  renderHomeChapStrip();
+  updateOverallStats();
+  window.scrollTo(0, 0);
+  return true;
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) checkPracticeDayRollover();
+});
+
+window.addEventListener("focus", () => {
+  checkPracticeDayRollover();
+});
+
 window.addEventListener("pageshow", e => {
+  if (checkPracticeDayRollover()) return;
   if (e.persisted) restorePracticeScrollSpot();
 });
 
@@ -867,7 +946,8 @@ function restorePracticeBatchFromSession() {
     if (!raw) return false;
     const data = JSON.parse(raw);
     if (!data || !Array.isArray(data.items) || data.items.length === 0) return false;
-    if (Date.now() - (data.savedAt || 0) > 4 * 3600 * 1000) {
+    const nowTs = Date.now();
+    if (!isBatchSessionFresh(data, nowTs)) {
       clearPracticeBatchSession();
       return false;
     }
@@ -889,6 +969,9 @@ function restorePracticeBatchFromSession() {
     if (fb) { fb.style.display = "none"; fb.innerHTML = ""; }
 
     IS_ADAPTIVE_PRACTICE = true;
+    CURRENT_BATCH_DAY_KEY = data.dayKey;
+    CURRENT_BATCH_CREATED_AT = data.createdAt || data.savedAt || nowTs;
+    CURRENT_BATCH_LAST_ACTIVE_AT = data.lastActiveAt || data.savedAt || nowTs;
     REVEALED = new Set(data.revealed || []);
     BATCH_RATED = new Set(data.rated || []);
     BATCH_DONE_LOGGED = !!data.doneLogged;
@@ -945,6 +1028,10 @@ function loadPracticeBatch(explicitBatchNum) {
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
   IS_ADAPTIVE_PRACTICE = true;
+  const _nowB = Date.now();
+  CURRENT_BATCH_DAY_KEY = localDayKey(_nowB);
+  CURRENT_BATCH_CREATED_AT = _nowB;
+  CURRENT_BATCH_LAST_ACTIVE_AT = _nowB;
   const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
 
   const hw = store.get("ats-homework", null);
@@ -994,7 +1081,7 @@ function loadPracticeBatch(explicitBatchNum) {
   }
   logEvent({ e: "practice-batch", batch: built.batchNum, effort: built.effort, budget: built.budget, teachCount: built.teachCount, reviewPct: built.reviewPct, counts: built.counts, mode: built.diag.mode, commuteDebt: !!built.diag.commuteDebt, t: Date.now() });
   render10Cards();
-  savePracticeBatchSession();
+  savePracticeBatchSession(true);
 }
 
 function renderCapabilityDrawerHTML() {
@@ -1681,6 +1768,10 @@ function loadFocusedPracticeFromUrl(searchStr) {
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
   IS_ADAPTIVE_PRACTICE = false;
+  const _nowF = Date.now();
+  CURRENT_BATCH_DAY_KEY = localDayKey(_nowF);
+  CURRENT_BATCH_CREATED_AT = _nowF;
+  CURRENT_BATCH_LAST_ACTIVE_AT = _nowF;
   const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
 
   if (forceDir && promptDirection !== forceDir) {
@@ -1708,7 +1799,7 @@ function loadFocusedPracticeFromUrl(searchStr) {
   }
 
   render10Cards();
-  saveNonAdaptiveBatchSession();
+  saveNonAdaptiveBatchSession(true);
   return true;
 }
 
@@ -1724,6 +1815,10 @@ function load10Sentences() {
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
   IS_ADAPTIVE_PRACTICE = false;
+  const _nowF = Date.now();
+  CURRENT_BATCH_DAY_KEY = localDayKey(_nowF);
+  CURRENT_BATCH_CREATED_AT = _nowF;
+  CURRENT_BATCH_LAST_ACTIVE_AT = _nowF;
   const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
   const srs = getSrs();
   const now = Date.now();
@@ -1743,7 +1838,7 @@ function load10Sentences() {
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   ACTIVE_SENTENCES = chosen.slice(0, BATCH_SIZE);
   render10Cards();
-  saveNonAdaptiveBatchSession();
+  saveNonAdaptiveBatchSession(true);
 }
 
 let LAST_BATCH_KEYS = [];
@@ -1756,6 +1851,10 @@ function redoBatch() {
   BATCH_RATED.clear();
   BATCH_DONE_LOGGED = false;
   clearPracticeScrollSpot();
+  const _nowR = Date.now();
+  CURRENT_BATCH_DAY_KEY = localDayKey(_nowR);
+  CURRENT_BATCH_CREATED_AT = _nowR;
+  CURRENT_BATCH_LAST_ACTIVE_AT = _nowR;
   const fd = document.getElementById("freeDone"); if (fd) fd.innerHTML = "";
   const fullPool = allPracticeItems();
   const chosen = SRS.buildBatch(fullPool, { size: Math.max(BATCH_SIZE, LAST_BATCH_KEYS.length), mode: "redo", redoKeys: LAST_BATCH_KEYS });
@@ -1765,8 +1864,8 @@ function redoBatch() {
   LAST_BATCH_KEYS = chosen.map(x => x.key);
   logEvent({ e: "redo-batch", kind: IS_ADAPTIVE_PRACTICE ? "practice" : "sentences", n: chosen.length, t: Date.now() });
   render10Cards();
-  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
-  else saveNonAdaptiveBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession(true);
+  else saveNonAdaptiveBatchSession(true);
   const list = document.getElementById("sentenceList");
   if (list && list.scrollIntoView) list.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -2075,16 +2174,16 @@ function revealCard(idx) {
     updateSessionProgress();
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);   // stay exactly where he was
   } else render10Cards();
-  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
-  else saveNonAdaptiveBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession(true);
+  else saveNonAdaptiveBatchSession(true);
   if (s) playCardAudio(idx);
 }
 
 function revealAllCards() {
   ACTIVE_SENTENCES.forEach((_, idx) => REVEALED.add(idx));
   render10Cards();
-  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
-  else saveNonAdaptiveBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession(true);
+  else saveNonAdaptiveBatchSession(true);
 }
 
 function syncPracticeViewTabs() {
@@ -2196,8 +2295,8 @@ function rateSentence(key, g, cardIdx, how, meta) {
     SRS.paintBar(document.getElementById("srow-" + cardIdx) || document.getElementById("scard-" + cardIdx), key, nc);
   }
   updateSessionProgress();
-  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession();
-  else saveNonAdaptiveBatchSession();
+  if (IS_ADAPTIVE_PRACTICE) savePracticeBatchSession(true);
+  else saveNonAdaptiveBatchSession(true);
 }
 
 function jumpToNextUnrated() {
